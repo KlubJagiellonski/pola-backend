@@ -1,0 +1,1 @@
+web: gunicorn kupujpolskie.wsgi --log-file -

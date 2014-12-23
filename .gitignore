@@ -1,0 +1,4 @@
+workspace.xml
+tasks.xml
+.idea
+*.pyc
