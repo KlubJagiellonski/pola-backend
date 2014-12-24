@@ -2,3 +2,5 @@ workspace.xml
 tasks.xml
 .idea
 *.pyc
+venv
+local_settings.py
