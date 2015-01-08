@@ -106,6 +106,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+GS1_API_KEY = ''
 
 try:
   from local_settings import *
