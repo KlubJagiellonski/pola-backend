@@ -20,7 +20,7 @@ def product(request, barcode):
             gs1OwnerInfo = gs1Data['Owner'] if ('Owner' in gs1Data) else None
             if gs1OwnerInfo:
                 company = Company.find_by_gs1_owner_info(gs1OwnerInfo)
-                if not company and gs1OwnerInfo['Name']:
+                if not company:
                     company = Company()
                     company.fill_from_gs1(gs1OwnerInfo)
                     company.save()
