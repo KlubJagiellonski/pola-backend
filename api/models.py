@@ -71,7 +71,7 @@ class Product(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company, null=True)
     made_in_poland = models.IntegerField(null=True, default=None, blank=True,
                                          validators=[MinValueValidator(0), MaxValueValidator(100)],
                                          verbose_name="Made in Poland (0-100%)")

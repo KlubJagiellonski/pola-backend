@@ -106,7 +106,10 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-GS1_API_KEY = ''
+try:
+    GS1_API_KEY = os.environ['GS1_API_KEY']
+except:
+    pass
 
 try:
   from local_settings import *
