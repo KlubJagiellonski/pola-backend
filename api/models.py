@@ -76,7 +76,7 @@ class Product(models.Model):
                                          validators=[MinValueValidator(0), MaxValueValidator(100)],
                                          verbose_name="Made in Poland (0-100%)")
     made_in_poland_info = models.TextField(blank=True)
-    image = models.TextField(null=True, blank=True)
+    image = models.URLField(null=True, blank=True)
     gs1_code_type = models.CharField(null=True, blank=True, max_length=255)
     gs1_country = models.CharField(null=True, blank=True, max_length=8)
     gs1_country_name = models.CharField(null=True, blank=True, max_length=255)
