@@ -1,13 +1,18 @@
+from api.error_codes import BARCODE_NOT_VALID
 from api.gs1 import GS1Api
 from api.models import Product, Company
-from api.utils import create_json_http_response
-from django.forms import model_to_dict
+from api.utils import create_json_http_response, create_error_json_http_response, correct_barcode
 
 
 def product(request, barcode):
+    if not correct_barcode(barcode):
+        return create_error_json_http_response(BARCODE_NOT_VALID)
+    
     product = Product.objects.filter(barcode=barcode).first()
     if product is None:
         product = Product(barcode=barcode)
+
+        product.fill_from_barcode(barcode)
 
         gs1Content = GS1Api.get_product_by_gtin(barcode)
 

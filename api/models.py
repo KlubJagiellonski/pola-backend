@@ -1,4 +1,4 @@
-from api.utils import correct_nip
+from api.utils import correct_nip, country_name_from_number_system
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.forms import model_to_dict
@@ -9,18 +9,10 @@ class Company(models.Model):
     name = models.CharField(max_length=255)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    made_in_poland = models.IntegerField(null=True, default=None, blank=True,
-                                         validators=[MinValueValidator(0), MaxValueValidator(100)],
-                                         verbose_name="Made in Poland (0-100%)")
-    made_in_poland_info = models.TextField(blank=True)
     capital_in_poland = models.IntegerField(null=True, default=None, blank=True,
                                             validators=[MinValueValidator(0), MaxValueValidator(100)],
                                             verbose_name="Capital in Poland (0-100%)")
     capital_in_poland_info = models.TextField(blank=True)
-    taxes_in_poland = models.IntegerField(null=True, default=None, blank=True,
-                                          validators=[MinValueValidator(0), MaxValueValidator(100)],
-                                          verbose_name="Taxes paid in Poland (0-100%)")
-    taxes_in_poland_info = models.TextField(blank=True)
     krs_url = models.URLField(null=True, blank=True)
     nip = models.CharField(null=True, blank=True, max_length=12)
     regon = models.CharField(null=True, blank=True, max_length=14)
@@ -86,6 +78,31 @@ class Product(models.Model):
     gs1_www = models.URLField(null=True, blank=True)
     number_of_api_calls = models.PositiveIntegerField(default=0)
     history = HistoricalRecords()
+
+    def fill_from_barcode(self, barcode):
+        number_system = int(barcode[0:3])
+        if number_system == 590:
+            self.made_in_poland = 100
+            self.made_in_poland_info = 'Towar zarejestrowany w polsce'
+        elif number_system >= 200 and number_system <= 299:
+            self.made_in_poland = 50
+            self.made_in_poland_info = 'Towar ważony. Nieznane miejsce rejestracji produktu.'
+        elif number_system == 977:
+            self.made_in_poland = 50
+            self.made_in_poland_info = 'Kod ISSN. Nieznane miejsce rejestracji produktu.'
+        elif number_system == 978:
+            self.made_in_poland = 50
+            self.made_in_poland_info = 'Kod ISBN. Nieznane miejsce rejestracji produktu.'
+        elif number_system == 979:
+            self.made_in_poland = 50
+            self.made_in_poland_info = 'Kod ISMN. Nieznane miejsce rejestracji produktu.'
+        elif number_system > 980:
+            self.made_in_poland = 50
+            self.made_in_poland_info = 'Nieznane miejsce rejestracji produktu.'
+        else:
+            self.made_in_poland = 0
+            self.made_in_poland_info = 'Kraj rejestracji: ' + country_name_from_number_system(number_system)
+
 
     def fill_from_gs1_product_info(self, gs1ProductInfo):
         self.name = gs1ProductInfo['Name']
