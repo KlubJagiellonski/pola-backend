@@ -1,3 +1,4 @@
+# coding=utf-8
 from api.utils import correct_nip, country_name_from_number_system
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models

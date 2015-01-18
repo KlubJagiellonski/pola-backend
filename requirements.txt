@@ -7,3 +7,4 @@ static==0.4
 wsgiref==0.1.2
 django-simple-history==1.5.3
 httplib2==0.9
+barcodenumber==0.1

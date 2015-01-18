@@ -1,25 +1,22 @@
 # coding=utf-8
 import json
 
-from api.ean_validators import EAN13Validator
+import barcodenumber
 from django.http import HttpResponse
 
 
 def create_json_http_response(list):
-    return HttpResponse(json.dumps(json_with_success(list)), content_type="application/json")
-
-
-def json_with_success(result):
-    return {
-        "success": True,
-        "result": result
-    }
+    return HttpResponse(json.dumps(json_result(True, list)), content_type="application/json")
 
 
 def create_error_json_http_response(error_code):
+    return HttpResponse(json.dumps(json_result(False, error_code)), content_type="application/json")
+
+
+def json_result(success, result):
     return {
-        "success": False,
-        "result": error_code
+        "success": success,
+        "result": result
     }
 
 
@@ -32,13 +29,21 @@ def correct_nip(nip):
 
 def correct_barcode(barcode):
     if len(barcode) == 13:
-        return EAN13Validator.validate(barcode)
+        return barcodenumber.check_code_ean13(barcode)
     if len(barcode) == 8:
-        return True
+        return barcodenumber.check_code_ean8(barcode)
     return False
 
 
 country_to_number_system_map = {
+    30: 'Francja',
+    31: 'Francja',
+    32: 'Francja',
+    33: 'Francja',
+    34: 'Francja',
+    35: 'Francja',
+    36: 'Francja',
+    37: 'Francja',
     380: 'Bułgaria',
     383: 'Słowenia',
     385: 'Chorwacja',
