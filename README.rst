@@ -1,8 +1,9 @@
 pola
 ==============================
 
-A short description of the project.
+asystent w zakupach
 
+Staging API: https://pola-staging.herokuapp.com/
 
 LICENSE: BSD
 
@@ -28,7 +29,7 @@ DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS   HSTS_INCLUDE_SUBDOMAINS     n/a         
 DJANGO_SESSION_COOKIE_HTTPONLY          SESSION_COOKIE_HTTPONLY     n/a                                            True
 DJANGO_SESSION_COOKIE_SECURE            SESSION_COOKIE_SECURE       n/a                                            False
 DJANGO_DEFAULT_FROM_EMAIL               DEFAULT_FROM_EMAIL          n/a                                            "pola <noreply@pola.pl>"
-DJANGO_SERVER_EMAIL                     SERVER_EMAIL                n/a                                            "pola <noreply@pola.pl>" 
+DJANGO_SERVER_EMAIL                     SERVER_EMAIL                n/a                                            "pola <noreply@pola.pl>"
 DJANGO_EMAIL_SUBJECT_PREFIX             EMAIL_SUBJECT_PREFIX        n/a                                            "[pola] "
 ======================================= =========================== ============================================== ======================================================================
 
@@ -97,34 +98,6 @@ To run the tests, check your test coverage, and generate an HTML coverage report
     $ coverage html
     $ open htmlcov/index.html
 
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If you'd like to take advantage of live reloading and Sass / Compass CSS compilation you can do so with a little bit of prep work.
-
-Make sure that nodejs_ is installed. Then in the project root run::
-
-    $ npm install
-
-.. _nodejs: http://nodejs.org/download/
-
-If you don't already have it, install `compass` (doesn't hurt if you run this command twice)::
-
-    gem install compass
-
-Now you just need::
-
-    $ grunt serve
-
-The base app will now run as it would with the usual ``manage.py runserver`` but with live reloading and Sass compilation enabled.
-
-To get live reloading to work you'll probably need to install an `appropriate browser extension`_
-
-.. _appropriate browser extension: http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-
-
-
-
-
 
 It's time to write the code!!!
 
@@ -159,9 +132,9 @@ Run these commands to deploy the project to Heroku:
 
     heroku config:set DJANGO_MAILGUN_SERVER_NAME=YOUR_MALGUN_SERVER
     heroku config:set DJANGO_MAILGUN_API_KEY=YOUR_MAILGUN_API_KEY
-    
+
     heroku config:set PYTHONHASHSEED=random
-    
+
     git push heroku master
     heroku run python manage.py migrate
     heroku run python manage.py check --deploy
