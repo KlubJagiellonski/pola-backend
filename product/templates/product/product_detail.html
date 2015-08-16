@@ -1,0 +1,56 @@
+{%extends 'product/base.html' %}
+{% load i18n %}
+{% block breadcrumbs_rows %}
+    <li class="active">{{object}}</a>
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="btn-group">
+            <a href="{% url 'product:delete' product.code %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Delete" %}</a>
+            <a href="{% url 'product:view-history' product.code %}" class="btn btn-primary"><i class="fa fa-clock-o"></i> {% trans "History" %}</a>
+            <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Edit" %}</a>
+        </div>
+    {% endif %}
+    <h1>{{ object.name }}</h1>
+	<div class="panel panel-primary">
+		<!-- Default panel contents -->
+
+		<div class="panel-heading">
+			Metryczka
+		</div>
+		<div class="panel-body"><img src="{{ object.get_image_url }}" alt=""></div>
+		<table class="table">
+			<tr>
+				<td>PK</td><td>{{ object.pk }}</td>
+			</tr>
+			<tr>
+				<td>Name: </td><td>{{ object.name }}</td>
+			</tr>
+			<tr>
+				<td>Code</td><td>{{ object.code }}</td>
+			</tr>
+			{% if object.company %}
+				<tr>
+					<td>Company NIP</td><td>{{ object.company.nip }} </td>
+				</tr>
+				<tr>
+					<td>Company Name: </td><td><a href="{{ object.company.get_absolute_url }}">{{ object.company.name }}</a></td>
+				</tr>
+				<tr>
+					<td>Company Address: </td><td>{{ object.company.address }} </td>
+				</tr>
+				<tr>
+					<td>PL Capital: </td>
+					<td>
+						{% include "partiales/progress-bar.html" with value=object.company.plCapital %}
+					</td>
+				</tr>
+				<tr>
+					<td>PL Capital Notes: </td><td>{{ object.company.plCapital_notes }}</td>
+					<td></td>
+				</tr>
+			{% endif %}
+		</table>
+	</div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{%extends 'product/base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block breadcrumbs_rows %}
+<li><a href="{{object.get_absolute_url }}">{{object}}</a></li>
+<li class="active">{% trans 'Confirm delete'%}</li>
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="btn-group">
+            <a href="{% url 'product:create' %}" class="btn btn-primary"><i class="fa fa-plus"></i> {% trans "Add" %}</a>
+        </div>
+    {% endif %}
+    <h1>{% trans "Product" %}</h1>
+    <div class="row">
+        <div class="col-md-3">
+            {% crispy filter.form %}
+        </div>
+        <div class="col-md-9">
+            <ul>
+            {% for obj in object_list %}
+                <li><a href="{{ obj.get_absolute_url }}"><img src="{{ obj.get_image_url }}" alt="">{{ obj }}</a> ({{ obj.query_count }})</li>
+            {% empty %}
+                <li>{% trans "No product yet." %}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}

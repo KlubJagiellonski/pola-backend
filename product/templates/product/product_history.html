@@ -1,0 +1,17 @@
+{%extends 'product/base.html' %}
+{% load i18n %}
+{% block breadcrumbs_rows %}
+    <li><a href="{{object.get_absolute_url }}">{{object}}</a></li>
+    <li class="active">{% trans 'History' %}</li>
+{% endblock %}
+
+{% block content %}
+<h1>{{ object }}</h1>
+<ul>
+    {% for version  in revision_list %}
+    <li>{{ version }} @ {{ version.revision }} @ {{ version.revision.data_created }} @ {{ version.revision.user }} @ {{ version.revision.comment }} </li>
+    {% empty %}
+    <li>{% trans "No history yet." %}</li>
+    {% endfor %}
+</ul>
+{% endblock content %}

@@ -1,0 +1,47 @@
+{%extends 'company/base.html' %}
+{% load i18n %}
+{% block breadcrumbs_rows %}
+    <li class="active">{{object}}</a>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="btn-group">
+    	<a href="{% url 'company:delete' object.nip %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Delete" %}</a>
+    	<a href="{% url 'company:edit' object.nip %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Edit" %}</a>
+    </div>
+{% endif %}
+<h1>{{ object }}</h1>
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Metryczka
+	</div>
+	<table class="table">
+		<tr>
+			<td>PK: </td><td>{{ object.pk }}</td>
+		</tr>
+		<tr>
+			<td>Name: </td><td>{{ object.name }}</td>
+		</tr>
+		<tr>
+			<td>NIP: </td><td>{{ object.nip }}</td>
+		</tr>
+		<tr>
+			<td>Address: </td><td>{{ object.address }}</td>
+		</tr>
+		<tr>
+			<td>PL Capital: </td><td>{% include "partiales/progress-bar.html" with value=object.plCapital %}</td>
+		</tr>
+		<tr>
+			<td>PL Capital Notes: </td><td>{{ object.plCapital_notes }}</td>
+		</tr>
+	</table>
+</div>
+<ul>
+	{% for product in object.product_set.all %}
+	<li><a href="{{product.get_absolute_url}}">{{product}}</a></li>
+	{% empty%}
+	<li>Nothing</li>
+	{% endfor %}
+</ul>
+{% endblock content %}

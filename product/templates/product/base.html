@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'product:list'%}">{% trans 'Product list' %}</a></li>
+    {% block breadcrumbs_rows%}{% endblock %}
+</ol>
+{% endblock %}

@@ -1,0 +1,24 @@
+{%extends 'company/base.html' %}
+{% load i18n crispy_forms_tags %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="btn-group">
+            <a href="{% url 'company:create' %}" class="btn btn-primary"><i class="fa fa-plus"></i> {% trans "Add" %}</a>
+        </div>
+    {% endif %}
+	<h1>{% trans "Company" %}</h1>
+	<div class="row">
+		<div class="col-md-3">
+			{% crispy filter.form %}
+		</div>
+		<div class="col-md-9">
+			<ul>
+			{% for obj in object_list %}
+				<li><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></li>
+			{% empty %}
+			    <li>{% trans "No companies yet" %}.</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock content %}
