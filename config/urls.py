@@ -22,11 +22,13 @@ urlpatterns = [
     url(r'^users/', include("pola-backend.users.urls", namespace="users")),
     url(r'^accounts/', include('allauth.urls')),
 
+    # statics
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+    static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+
     # Your stuff: custom urls includes go here
 
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
-  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
