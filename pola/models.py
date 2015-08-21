@@ -1,13 +1,31 @@
-from django.db import models
+import binascii
+import os
+
 from os.path import basename
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.forms.models import model_to_dict
 from product.models import Product
 # from django.core.urlresolvers import reverse
 
 
+# Based on:
+# https://github.com/tomchristie/django-rest-framework/blob/master/rest_framework/authtoken/models.py#L16-L41
 class Client(models.Model):
+    token = models.CharField(max_length=40, unique=True,
+                             blank=True, null=True, default=None)
     pass
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = self.generate_key()
+        return super(Client, self).save(*args, **kwargs)
+
+    def generate_key(self):
+        return binascii.hexlify(os.urandom(20)).decode()
+
+    def is_authenticated(self):
+        return True
 
     def to_dict(self):
         dict = model_to_dict(self)

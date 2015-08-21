@@ -6,13 +6,16 @@ from django.conf.urls import include, url, patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name="home"),
-    url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
+    url(r'^$',
+        TemplateView.as_view(template_name='pages/home.html'), name="home"),
+    url(r'^about/$',
+        TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
     # Django Admin
-    url(r'^api/', include('api.urls', namespace='api')),
+    # url(r'^api/', include('api.urls', namespace='api')),
     url(r'^pola/', include('pola.urls', namespace='pola')),
     url(r'^product/', include('product.urls', namespace='product')),
     url(r'^company/', include('company.urls', namespace='company')),
@@ -24,12 +27,23 @@ urlpatterns = [
 
     # Your stuff: custom urls includes go here
 
-]   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
-    + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
+  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-#serving static files
-urlpatterns += patterns('',
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+# api urls
+apiurlpatterns = [
+    url(r'^product/', include('product.api.urls', namespace='product')),
+    url(r'^', include('pola.api.urls', namespace='pola'))
+]
+
+apiurlpatterns = format_suffix_patterns(apiurlpatterns)
+
+urlpatterns += [url(r'^api/', include(apiurlpatterns, namespace='api'))]
+
+# serving static files
+urlpatterns += patterns(
+    '', (r'^static/(?P<path>.*)$',
+         'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
 )
 
 if settings.DEBUG:

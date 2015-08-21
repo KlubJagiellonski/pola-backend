@@ -40,7 +40,8 @@ THIRD_PARTY_APPS = (
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
     'reversion',
-    'django_filters'
+    'django_filters',
+    'rest_framework'
 )
 
 # Apps specific for this project go here.
@@ -262,3 +263,10 @@ LOGGING = {
 
 # Your common stuff: Below this line define 3rd party library settings
 PRODUKTY_W_SIECI_API_KEY = env("GS1_API_KEY")
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'pola.api.authentication.ClientTokenAuthentication',
+    )
+}
