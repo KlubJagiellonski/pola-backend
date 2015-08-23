@@ -10,8 +10,8 @@ admin.site.register(Client, ClientAdmin)
 
 
 class ReportAdmin(admin.ModelAdmin):
-    list_display = (u'id', 'barcode', 'client', 'desciption')
-    list_filter = ('barcode', 'client')
+    list_display = (u'id', 'product', 'client', 'desciption')
+    list_filter = ('product', 'client')
 admin.site.register(Report, ReportAdmin)
 
 

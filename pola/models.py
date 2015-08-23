@@ -33,7 +33,7 @@ class Client(models.Model):
 
 
 class Report(models.Model):
-    barcode = models.ForeignKey(Product)
+    product = models.ForeignKey(Product)
     client = models.ForeignKey(Client)
     desciption = models.TextField()
 
