@@ -25,7 +25,6 @@ class Product(models.Model):
 
     @classmethod
     def get_by_code(cls, code):
-        import ipdb; ipdb.set_trace()
         try:
             return cls.objects.get(code=code)
         except cls.DoesNotExist:
@@ -41,7 +40,6 @@ class Product(models.Model):
 
     @staticmethod
     def create_from_api(code, obj):
-        import ipdb; ipdb.set_trace()
         company_name = obj.get('Data', {}).get('Owner', {}).get('Name', None)
         if company_name:
             company, _ = Company.objects.get_or_create(name=company_name)
