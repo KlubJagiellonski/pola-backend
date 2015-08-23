@@ -5,8 +5,6 @@ from . import views
 
 
 urlpatterns = [
-    url(r'empty$',
-        views.CompanyListView.as_view(), name="list-empty"),
     url(r'create$',
         views.CompanyCreate.as_view(), name="create"),
     url(r'(?P<pk>[-\w]+)/edit$',
