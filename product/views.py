@@ -1,5 +1,4 @@
 from django.http import HttpResponse
-from django.db.models import Count
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -27,7 +26,7 @@ class ProductListView(FilterView):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(ProductListView, self).get_queryset(*args, **kwargs)
-        return qs.annotate(query_count=Count('query__id'))
+        return qs.with_query_count()
 
 
 class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):
