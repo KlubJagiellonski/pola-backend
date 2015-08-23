@@ -3,11 +3,11 @@ import requests
 logger = logging.getLogger(__name__)
 
 
-class Error(Exception):
+class ApiError(Exception):
     pass
 
 
-class ConnectionError(Error):
+class ConnectionError(ApiError):
     pass
 
 

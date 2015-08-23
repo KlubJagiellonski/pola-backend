@@ -23,7 +23,7 @@ class Company(models.Model):
     address = models.TextField()
     plCapital = IntegerRangeField(
         verbose_name=_("Percentage share of Polish capital"),
-        min_value=1, max_value=100)
+        min_value=1, max_value=100, null=True)
     plCapital_notes = models.TextField(
         _("Notes about share of Polish capital"), null=True)
 
