@@ -30,5 +30,10 @@ trim_trailing_whitespace = false
 indent_style = space
 indent_size = 4
 
+[*.js]
+trim_trailing_whitespace = false
+indent_style = space
+indent_size = 4
+
 [Makefile]
 indent_style = tab
