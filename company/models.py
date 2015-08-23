@@ -32,7 +32,7 @@ class Company(models.Model):
         return dict
 
     def get_absolute_url(self):
-        return reverse('company:detail', args=[self.nip])
+        return reverse('company:detail', args=[self.pk])
 
     def __unicode__(self):
         return self.name

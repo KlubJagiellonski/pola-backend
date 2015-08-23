@@ -14,23 +14,19 @@ class CompanyListView(FilterView):
 
 
 class CompanyCreate(CreateView):
-    slug_field = 'nip'
     model = models.Company
     form_class = ProductForm
 
 
 class CompanyUpdate(UpdateView):
-    slug_field = 'nip'
     model = models.Company
     form_class = ProductForm
 
 
 class CompanyDelete(DeleteView):
-    slug_field = 'nip'
     model = models.Company
     success_url = reverse_lazy('company:list')
 
 
 class CompanyDetailView(DetailView):
-    slug_field = 'nip'
     model = models.Company
