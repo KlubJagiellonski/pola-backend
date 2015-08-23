@@ -11,9 +11,9 @@ class ProductDetail(APIView):
     """
     Retrieve a product instance.
     """
-    def get_object(self, slug):
+    def get_object(self, code):
         try:
-            return Product.objects.get(code=slug)
+            return Product.get_by_code(code=code)
         except Product.DoesNotExist:
             raise Http404
 
