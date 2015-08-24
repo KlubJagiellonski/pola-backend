@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Client, Report, Query
-
-
-class ClientAdmin(admin.ModelAdmin):
-    list_display = (u'id', 'token')
-admin.site.register(Client, ClientAdmin)
+from .models import Report, Query
 
 
 class ReportAdmin(admin.ModelAdmin):

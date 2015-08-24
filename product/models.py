@@ -28,26 +28,27 @@ class Product(models.Model):
         try:
             return cls.objects.get(code=code)
         except cls.DoesNotExist:
-            try:
-                product_info = Product._query_api(code)
-                return Product.create_from_api(code, product_info)
-            except ApiError:
-                pass
-        return cls.DoesNotExist(
-                    "%s matching query does not exist." %
-                    cls._meta.object_name
-                 )
+            pass
+        try:
+            product_info = Product._query_api(code)
+            return Product.create_from_api(code, product_info)
+        except ApiError:
+            pass
+        return Product.objects.create(code=code)
 
     @staticmethod
     def create_from_api(code, obj):
-        company_name = obj.get('Data', {}).get('Owner', {}).get('Name', None)
-        if company_name:
-            company, _ = Company.objects.get_or_create(name=company_name)
+        obj_data = obj.get('Data', {}) or {}
+        obj_owner = obj_data.get('Owner', {}) or {}
+        obj_owner_name = obj_owner.get('Name', None)
+        obj_product = obj.get('Product', {}) or {}
+        obj_product_name = obj_product.get('Name', None)
+        if obj_owner_name:
+            company, _ = Company.objects.get_or_create(name=obj_owner_name)
         else:
             company = None
-        name = obj.get('Data', {}).get('Product', {}).get('Name', None)
         return Product.objects.create(
-            name=name,
+            name=obj_product_name,
             code=code,
             company=company)
 
