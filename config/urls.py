@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^pola/', include('pola.urls', namespace='pola')),
     url(r'^product/', include('product.urls', namespace='product')),
     url(r'^company/', include('company.urls', namespace='company')),
+    url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
 
     # User management

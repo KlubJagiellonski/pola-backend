@@ -49,3 +49,5 @@ requests==2.7.0
 # TODO: Consider delete, because djangorestframework has built-in mechanisms
 django-ratelimit==0.6.0
 djangorestframework==3.2.2
+
+django-grappelli==2.7.1
