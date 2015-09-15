@@ -7,18 +7,22 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from rest_framework.urlpatterns import format_suffix_patterns
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name="home"),
+    url(r'^cms/$', login_required(
+        TemplateView.as_view(template_name='pages/home-cms.html')),
+        name="home-cms"),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
     # Django Admin
     # url(r'^api/', include('api.urls', namespace='api')),
-    url(r'^pola/', include('pola.urls', namespace='pola')),
-    url(r'^product/', include('product.urls', namespace='product')),
-    url(r'^company/', include('company.urls', namespace='company')),
+    url(r'^cms/pola/', include('pola.urls', namespace='pola')),
+    url(r'^cms/product/', include('product.urls', namespace='product')),
+    url(r'^cms/company/', include('company.urls', namespace='company')),
     url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
 
