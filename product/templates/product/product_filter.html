@@ -1,11 +1,6 @@
 {%extends 'product/base.html' %}
 {% load i18n crispy_forms_tags %}
 
-{% block breadcrumbs_rows %}
-<li><a href="{{object.get_absolute_url }}">{{object}}</a></li>
-<li class="active">{% trans 'Confirm delete'%}</li>
-{% endblock %}
-
 {% block content %}
     {% if user.is_authenticated %}
         <div class="btn-group">
