@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Report, Query
-
-
-class ReportAdmin(admin.ModelAdmin):
-    list_display = (u'id', 'product', 'client', 'desciption')
-    list_filter = ('product', 'client')
-admin.site.register(Report, ReportAdmin)
+from .models import Query
 
 
 class QueryAdmin(admin.ModelAdmin):

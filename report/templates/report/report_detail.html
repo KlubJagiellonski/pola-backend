@@ -1,0 +1,50 @@
+{%extends 'report/base.html' %}
+{% load i18n %}
+{% block breadcrumbs_rows %}
+<li class="active"><a href="{{ object.get_absolute_url }}">{{object}}</a></li>
+{% endblock %}
+
+{% block content %}
+<h1>{{ object }}</h1>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Metryczka
+    </div>
+    <table class="table">
+        <tr>
+            <td>PK: </td><td>{{ object.pk }}</td>
+        </tr>
+        <tr>
+            <td>Created by: </td><td>{{ object.client }}</td>
+        </tr>
+        <tr>
+            <td>Created at: </td><td>{{ object.created_at }}</td>
+        </tr>
+        {% if object.resolved_at %}
+        <tr>
+            <td>Resolved at: </td><td>{{ object.resolved_at }}</td>
+        </tr>
+        <tr>
+            <td>Resolved by: </td>
+            <td><a href="{{ object.resolved_by.get_absolute_url }}">{{ object.resolved_by }}</a></td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td colspan="2">{{ object.description }}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="row">
+    {% for attachment in object.attachment_set.all %}
+    <div class="col-xs-1 col-md-4 col-lg-3 col-xl-2">
+        <a href="{{ attachment.get_absolute_url }}" class="thumbnail">
+            <img src="{{ attachment.get_absolute_url }}" alt="attachment">
+        </a>
+    </div>
+    {% empty%}
+    <div class="col-xs-12">{% trans "Without attachments" %}</div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,19 @@
+{%extends 'report/base.html' %}
+{% load i18n crispy_forms_tags %}
+{% block content %}
+	<h1>{% trans "Report" %}</h1>
+	<div class="row">
+		<div class="col-md-3">
+			{% crispy filter.form %}
+		</div>
+		<div class="col-md-9">
+			<ul>
+			{% for obj in object_list %}
+				<li><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></li>
+			{% empty %}
+			    <li>{% trans "No reports yet" %}.</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock content %}
