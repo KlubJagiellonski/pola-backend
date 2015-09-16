@@ -8,15 +8,13 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Oldest reports</h3>
             </div>
-            <ul class="list-group">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
+            {% for report in  oldest_reports %}
+                <li class="list-group-item">
+                    <a href="{{ report.get_absolute_url }}">{{ report }} </a>
+                </li>
+            {% endfor %}
             <div class="panel-footer">
-                <a href="">More</a>
+                <a href="{% url 'report:list' %}?status=open&o=-created_at">More</a>
             </div>
         </div>
     </div>
@@ -25,15 +23,13 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Newest reports</h3>
             </div>
-            <ul class="list-group">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
+            {% for report in  newest_reports %}
+                <li class="list-group-item">
+                    <a href="{{ report.get_absolute_url }}">{{ report }} </a>
+                </li>
+            {% endfor %}
             <div class="panel-footer">
-                <a href="">More</a>
+                <a href="{% url 'report:list' %}?status=open&o=created_at">More</a>
             </div>
         </div>
     </div>

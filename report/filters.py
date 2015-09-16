@@ -44,3 +44,15 @@ class ReportFilter(django_filters.FilterSet):
             'created_at',
             'resolved_at',
             'resolved_by']
+        order_by = [
+            ('product', 'Product'),
+            ('-product', 'Product (reversed)'),
+            ('client', 'Client'),
+            ('-client', 'Client (reversed)'),
+            ('created_at', 'Created at'),
+            ('-created_at', 'Created at (reversed)'),
+            ('resolved_at', 'Resolved at'),
+            ('-resolved_at', 'Resolved at (reversed)'),
+            ('resolved_by', 'Resolved by'),
+            ('-resolved_by', 'Resolved by (reversed)'),
+        ]
