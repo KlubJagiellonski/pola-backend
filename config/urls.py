@@ -7,7 +7,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from rest_framework.urlpatterns import format_suffix_patterns
-from django.contrib.auth.decorators import login_required
 from pola.views import FrontPageView
 
 urlpatterns = [
@@ -19,11 +18,10 @@ urlpatterns = [
 
     # Django Admin
     # url(r'^api/', include('api.urls', namespace='api')),
-    url(r'^cms/pola/', include('pola.urls', namespace='pola')),
     url(r'^cms/product/', include('product.urls', namespace='product')),
     url(r'^cms/company/', include('company.urls', namespace='company')),
     url(r'^cms/report/', include('report.urls', namespace='report')),
-    url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
+    url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
 
     # User management
@@ -32,17 +30,14 @@ urlpatterns = [
 
     # Your stuff: custom urls includes go here
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
-  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
 
 # api urls
 apiurlpatterns = [
     url(r'^product/', include('product.api.urls', namespace='product')),
     url(r'^', include('pola.api.urls', namespace='pola'))
 ]
-
 apiurlpatterns = format_suffix_patterns(apiurlpatterns)
-
 urlpatterns += [url(r'^api/', include(apiurlpatterns, namespace='api'))]
 
 # serving static files
@@ -52,6 +47,9 @@ urlpatterns += patterns(
 )
 
 if settings.DEBUG:
+
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [
