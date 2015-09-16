@@ -50,6 +50,13 @@
 					<td>PL Capital Notes: </td><td>{{ object.company.plCapital_notes }}</td>
 					<td></td>
 				</tr>
+            {% else %}
+            <tr>
+                <td>Company</td>
+                <td>
+                    <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Edit" %}</a>
+                </td>
+            </tr>
 			{% endif %}
 		</table>
 	</div>
