@@ -18,6 +18,10 @@
             <td>Created by: </td><td>{{ object.client }}</td>
         </tr>
         <tr>
+            <td>Produkt: </td>
+            <td><a href="{{ object.get_absolute_url }}">{{ object.product }}</a></td>
+        </tr>
+        <tr>
             <td>Created at: </td><td>{{ object.created_at }}</td>
         </tr>
         {% if object.status == object.OPEN %}
