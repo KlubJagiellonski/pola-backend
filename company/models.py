@@ -1,8 +1,10 @@
-from django.db import models
-import reversion
-from django.utils.translation import ugettext_lazy as _
-from django.forms.models import model_to_dict
 from django.core.urlresolvers import reverse
+from django.db import models
+from django.db.models import Count
+from django.forms.models import model_to_dict
+from django.utils.translation import ugettext_lazy as _
+from model_utils.managers import PassThroughManager
+import reversion
 
 
 class IntegerRangeField(models.IntegerField):
@@ -17,6 +19,11 @@ class IntegerRangeField(models.IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
+class CompanyQuerySet(models.query.QuerySet):
+    def with_query_count(self):
+        return self.annotate(query_count=Count('product__query__id'))
+
+
 class Company(models.Model):
     nip = models.CharField(max_length=10, db_index=True)
     name = models.CharField(max_length=64)
@@ -26,6 +33,8 @@ class Company(models.Model):
         min_value=1, max_value=100, null=True)
     plCapital_notes = models.TextField(
         _("Notes about share of Polish capital"), null=True)
+
+    objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
     def to_dict(self):
         dict = model_to_dict(self)
