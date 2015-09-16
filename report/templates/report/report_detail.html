@@ -19,7 +19,7 @@
         </tr>
         <tr>
             <td>Produkt: </td>
-            <td><a href="{{ object.get_absolute_url }}">{{ object.product }}</a></td>
+            <td><a href="{{ object.product.get_absolute_url }}">{{ object.product }}</a></td>
         </tr>
         <tr>
             <td>Created at: </td><td>{{ object.created_at }}</td>
