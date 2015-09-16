@@ -20,7 +20,7 @@
         <tr>
             <td>Created at: </td><td>{{ object.created_at }}</td>
         </tr>
-        {% if object.resolved_at %}
+        {% if object.status == object.OPEN %}
         <tr>
             <td>Resolved at: </td><td>{{ object.resolved_at }}</td>
         </tr>
