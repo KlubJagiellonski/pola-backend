@@ -12,6 +12,10 @@ class CompanyListView(FilterView):
     model = models.Company
     filterset_class = CompanyFilter
 
+    def get_queryset(self, *args, **kwargs):
+        qs = super(CompanyListView, self).get_queryset(*args, **kwargs)
+        return qs.with_query_count()
+
 
 class CompanyCreate(CreateView):
     model = models.Company

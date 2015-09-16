@@ -26,3 +26,13 @@ class CompanyFilter(django_filters.FilterSet):
             'name': ['icontains'],
             'address': ['icontains'],
             'plCapital': []}
+        order_by = (
+            ('nip', _('NIP')),
+            ('-nip', _('NIP (reversed)')),
+            ('name', _('name')),
+            ('-name', _('name (reversed)')),
+            ('plCapital', _('plCapital')),
+            ('-plCapital', _('plCapital  (reversed)')),
+            ('query_count', _('query_count')),
+            ('-query_count', _('query_count (reversed)')),
+        )
