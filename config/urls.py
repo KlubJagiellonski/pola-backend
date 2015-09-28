@@ -28,17 +28,8 @@ urlpatterns = [
     url(r'^users/', include("pola-backend.users.urls", namespace="users")),
     url(r'^accounts/', include('allauth.urls')),
 
-    # Your stuff: custom urls includes go here
-
+    url(r'^api/', include('pola.api.urls', namespace='api'))
 ]
-
-# api urls
-apiurlpatterns = [
-    url(r'^product/', include('product.api.urls', namespace='product')),
-    url(r'^', include('pola.api.urls', namespace='pola'))
-]
-apiurlpatterns = format_suffix_patterns(apiurlpatterns)
-urlpatterns += [url(r'^api/', include(apiurlpatterns, namespace='api'))]
 
 # serving static files
 urlpatterns += patterns(
