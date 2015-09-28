@@ -17,6 +17,7 @@ from . import models
 class ProductDetailView(DetailView):
     slug_field = 'code'
     model = models.Product
+    queryset = models.Product.objects.with_query_count().all()
 
 
 class ProductListView(FilterView):
