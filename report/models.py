@@ -39,6 +39,9 @@ class Report(models.Model):
     def get_absolute_url(self):
         return reverse('report:detail', args=[self.pk])
 
+    def __unicode__(self):
+        return self.desciption[:20] or "None"
+
     OPEN = 1
     RESOLVED = 2
 
