@@ -24,10 +24,7 @@ class ProductListView(FilterView):
     model = models.Product
     filterset_class = ProductFilter
     paginate_by = 25
-
-    def get_queryset(self, *args, **kwargs):
-        qs = super(ProductListView, self).get_queryset(*args, **kwargs)
-        return qs.with_query_count()
+    queryset = models.Product.objects.with_query_count().all()
 
 
 class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):

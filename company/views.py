@@ -11,10 +11,7 @@ from .forms import ProductForm
 class CompanyListView(FilterView):
     model = models.Company
     filterset_class = CompanyFilter
-
-    def get_queryset(self, *args, **kwargs):
-        qs = super(CompanyListView, self).get_queryset(*args, **kwargs)
-        return qs.with_query_count()
+    queryset = models.Company.objects.with_query_count().all()
 
 
 class CompanyCreate(CreateView):
@@ -34,3 +31,4 @@ class CompanyDelete(DeleteView):
 
 class CompanyDetailView(DetailView):
     model = models.Company
+    queryset = models.Company.objects.with_query_count().all()
