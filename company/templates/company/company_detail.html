@@ -30,7 +30,14 @@
 			<td>Address: </td><td>{{ object.address }}</td>
 		</tr>
 		<tr>
-			<td>PL Capital: </td><td>{% include "partiales/progress-bar.html" with value=object.plCapital %}</td>
+			<td>PL Capital: </td>
+            <td>
+            {% if object.plCapital %}
+                {% include "partiales/progress-bar.html" with value=object.plCapital %}
+            {% else %}
+                None
+            {% endif %}
+            </td>
 		</tr>
 		<tr>
 			<td>PL Capital Notes: </td><td>{{ object.plCapital_notes }}</td>

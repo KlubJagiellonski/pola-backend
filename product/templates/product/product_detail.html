@@ -46,12 +46,15 @@
 				<tr>
 					<td>PL Capital: </td>
 					<td>
-						{% include "partiales/progress-bar.html" with value=object.company.plCapital %}
+                        {% if object.company.plCapital %}
+                            {% include "partiales/progress-bar.html" with value=object.company.plCapital %}
+                        {% else %}
+                            None
+                        {% endif %}
 					</td>
 				</tr>
 				<tr>
 					<td>PL Capital Notes: </td><td>{{ object.company.plCapital_notes }}</td>
-					<td></td>
 				</tr>
             {% else %}
             <tr>
