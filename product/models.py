@@ -64,6 +64,6 @@ class Product(models.Model):
         return reverse('product:image', args=[self.code])
 
     def __unicode__(self):
-        return self.name or "None"
+        return self.name or self.code or "None"
 
 reversion.register(Product)
