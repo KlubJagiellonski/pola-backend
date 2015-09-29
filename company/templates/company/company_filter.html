@@ -18,6 +18,7 @@
 			{% empty %}
 			    <li>{% trans "No companies yet" %}.</li>
 			{% endfor %}
+             {% include 'pagination_custom/pager.html' with page=page_obj %}
 			</ul>
 		</div>
 	</div>

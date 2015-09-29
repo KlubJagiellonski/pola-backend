@@ -10,6 +10,7 @@ from .filters import ReportFilter
 class ReportListView(FilterView):
     model = models.Report
     filterset_class = ReportFilter
+    paginate_by = 25
 
 
 class ReportDelete(DeleteView):

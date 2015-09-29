@@ -11,6 +11,7 @@ from .forms import ProductForm
 class CompanyListView(FilterView):
     model = models.Company
     filterset_class = CompanyFilter
+    paginate_by = 25
     queryset = models.Company.objects.with_query_count().all()
 
 

@@ -14,6 +14,7 @@
 			    <li>{% trans "No reports yet" %}.</li>
 			{% endfor %}
 			</ul>
+            {% include 'pagination_custom/pager.html' with page=page_obj %}
 		</div>
 	</div>
 {% endblock content %}

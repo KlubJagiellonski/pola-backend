@@ -51,6 +51,7 @@ LOCAL_APPS = (
     'product',
     'company',
     'report',
+    'pagination_custom',
     'pola-backend.users',  # custom users app
     # Your stuff: custom apps go here
 )
