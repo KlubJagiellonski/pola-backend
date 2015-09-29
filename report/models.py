@@ -29,12 +29,12 @@ class Report(models.Model):
 
     def status(self):
         if self.resolved_at is not None:
-            return self.OPEN
+            return self.RESOLVED
 
         if self.resolved_by is not None:
-            return self.OPEN
+            return self.RESOLVED
 
-        return self.RESOLVED
+        return self.OPEN
 
     def get_absolute_url(self):
         return reverse('report:detail', args=[self.pk])

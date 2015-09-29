@@ -1,8 +1,10 @@
 # Create your views here.
+from datetime import datetime
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from django_filters.views import FilterView
+from pola.views import ActionView
 from . import models
 from .filters import ReportFilter
 
@@ -20,3 +22,17 @@ class ReportDelete(DeleteView):
 
 class ReportDetailView(DetailView):
     model = models.Report
+
+
+class ReportResolveView(ActionView):
+    model = models.Report
+    template_name_suffix = '_resolve'
+    queryset = models.Report.objects.only_open().all()
+
+    def action(self):
+        self.object.resolved_at = datetime.now()
+        self.object.resolved_by = self.request.user
+        self.object.save()
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()

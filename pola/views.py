@@ -1,7 +1,11 @@
+from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpResponseRedirect
+from django.utils.encoding import force_text
 from django.views.generic import TemplateView
+from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResponseMixin
 from braces.views import LoginRequiredMixin
-from product.models import Product
 from company.models import Company
+from product.models import Product
 from report.models import Report
 
 
@@ -23,3 +27,35 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
                                               .filter(plCapital__isnull=True)
                                               .order_by('-query_count')[:10])
         return c
+
+
+class ActionMixin(object):
+    success_url = None
+
+    def action(self):
+        raise ImproperlyConfigured("No action to do. Provide a action body.")
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.action()
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self):
+        if self.success_url:
+            self.success_url = force_text(self.success_url)
+            return self.success_url.format(**self.object.__dict__)
+        else:
+            raise ImproperlyConfigured(
+                "No URL to redirect to. Provide a success_url.")
+
+
+class BaseActionView(ActionMixin, BaseDetailView):
+    """
+    Base view for action on an object.
+    Using this base class requires subclassing to provide a response mixin.
+    """
+
+
+class ActionView(SingleObjectTemplateResponseMixin, BaseActionView):
+    template_name_suffix = '_action'
