@@ -48,7 +48,7 @@
             {% endfor %}
             </ul>
             <div class="panel-footer">
-                <a href="{% url 'product:list' %}?o=query_count">More</a>
+                <a href="{% url 'product:list' %}?o=-query_count">More</a>
             </div>
         </div>
     </div>
@@ -65,7 +65,7 @@
             {% endfor %}
             </ul>
             <div class="panel-footer">
-                <a href="{% url 'company:list' %}?o=query_count">More</a>
+                <a href="{% url 'company:list' %}?o=-query_count">More</a>
             </div>
         </div>
     </div>

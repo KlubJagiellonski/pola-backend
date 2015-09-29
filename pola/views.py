@@ -17,9 +17,9 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['most_popular_products'] = (Product.objects
                                              .with_query_count()
                                              .filter(company__isnull=True)
-                                             .order_by('query_count')[:10])
+                                             .order_by('-query_count')[:10])
         c['most_popular_companies'] = (Company.objects
                                               .with_query_count()
                                               .filter(plCapital__isnull=True)
-                                              .order_by('query_count')[:10])
+                                              .order_by('-query_count')[:10])
         return c
