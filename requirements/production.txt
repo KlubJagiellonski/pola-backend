@@ -17,4 +17,4 @@ Collectfast==0.2.3
 # ---------------
 django-mailgun==0.2.2
 
-
+newrelic
