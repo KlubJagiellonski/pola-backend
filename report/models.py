@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from product.models import Product
+from datetime import datetime
 
 
 class ReportQuerySet(models.QuerySet):
@@ -35,6 +36,12 @@ class Report(models.Model):
             return self.RESOLVED
 
         return self.OPEN
+
+    def resolve(self, user, commit=True):
+        self.resolved_at = datetime.now()
+        self.resolved_by = user
+        if commit:
+            self.save()
 
     def get_absolute_url(self):
         return reverse('report:detail', args=[self.pk])

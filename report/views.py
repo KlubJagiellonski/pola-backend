@@ -1,5 +1,3 @@
-# Create your views here.
-from datetime import datetime
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
@@ -30,9 +28,7 @@ class ReportResolveView(ActionView):
     queryset = models.Report.objects.only_open().all()
 
     def action(self):
-        self.object.resolved_at = datetime.now()
-        self.object.resolved_by = self.request.user
-        self.object.save()
+        self.object.resolve(self.request.user)
 
     def get_success_url(self):
         return self.object.get_absolute_url()
