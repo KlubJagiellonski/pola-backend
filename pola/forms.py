@@ -1,6 +1,9 @@
+from django import forms
+from django.db import transaction
 from django.utils.translation import ugettext as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Reset, Submit
+import reversion
 
 
 class HelperMixin(object):
@@ -39,3 +42,15 @@ class FormHorizontalMixin(HelperMixin):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
         self.helper.field_class = 'col-lg-9'
+
+
+class CommitDescriptionMixin(forms.Form):
+    commit_desc = forms.CharField(label=_('Description of change'),
+                                  max_length=100)
+
+    def save(self, *args, **kwargs):
+        with transaction.atomic(), reversion.create_revision():
+            obj = super(CommitDescriptionMixin, self).save(*args, **kwargs)
+            commit_desc = self.cleaned_data['commit_desc']
+            reversion.set_comment(commit_desc)
+            return obj
