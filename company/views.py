@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from . import models
 from .filters import CompanyFilter
-from .forms import ProductForm
+from .forms import CompanyForm
 
 
 class CompanyListView(FilterView):
@@ -17,12 +17,12 @@ class CompanyListView(FilterView):
 
 class CompanyCreate(CreateView):
     model = models.Company
-    form_class = ProductForm
+    form_class = CompanyForm
 
 
 class CompanyUpdate(UpdateView):
     model = models.Company
-    form_class = ProductForm
+    form_class = CompanyForm
 
 
 class CompanyDelete(DeleteView):
