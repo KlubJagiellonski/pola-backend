@@ -2,6 +2,11 @@
 
 {% load crispy_forms_tags %}
 
+{% block breadcrumbs_rows %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
+    <li class="active">{% trans 'Update form' %}</li>
+{% endblock %}
+
 {% block content %}
 	{% crispy form %}
 {% endblock content %}
