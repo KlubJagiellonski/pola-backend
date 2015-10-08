@@ -11,19 +11,12 @@ make build
 ```
 This command will block the terminal. Please use another terminal for further steps.
 
-## Dump current db from heroku staging (you need to request the access first)
-```
-./utils/dump_db_from_heroku.sh
-```
-
-## Restore the database, set the environment variables
+## Set the environment variables, create the database
 ```
 make enter
-cd utils
-restore_db_from_dump.sh DUMP_FILENAME
-cd ..
 export GS1_API_KEY=KLUCZ_DO_API
 export DATABASE_URL=$(echo "postgres://postgres:postgres@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/pola")
+django-admin migrate
 exit
 ```
 
