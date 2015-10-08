@@ -13,7 +13,7 @@ class CompanyFilter(django_filters.FilterSet):
         self._form.helper = FormHelper(self._form)
         self._form.helper.form_class = 'form'
         self._form.helper.form_method = 'get'
-        self._form.helper.layout.append(Submit('filter', 'Filter',
+        self._form.helper.layout.append(Submit('filter', _('Filter'),
                                                css_class="btn-block"))
         return self._form
 

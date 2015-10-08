@@ -14,11 +14,7 @@
     {% endif %}
     <h1>{{ object }} <small>#{{ object.pk }}</small></h1>
 	<div class="panel panel-primary">
-		<!-- Default panel contents -->
-
-		<div class="panel-heading">
-			Metryczka
-		</div>
+        <div class="panel-heading">{% trans "Data metric" %}</div>
 		<div class="panel-body"><img src="{{ object.get_image_url }}" alt=""></div>
 		<table class="table">
 			<tr>

@@ -52,6 +52,10 @@ class Report(models.Model):
     OPEN = 1
     RESOLVED = 2
 
+    class Meta:
+        verbose_name = _("Report")
+        verbose_name_plural = _("Reports")
+
 
 class Attachment(models.Model):
     report = models.ForeignKey(Report)
@@ -69,5 +73,5 @@ class Attachment(models.Model):
         return self.attachment.url
 
     class Meta:
-        verbose_name = _('Attachment')
-        verbose_name_plural = _('Attachments')
+        verbose_name = _("Report's attachment")
+        verbose_name_plural = _("Report's attachments")

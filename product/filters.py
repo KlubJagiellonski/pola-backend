@@ -20,13 +20,14 @@ class NullProductFilter(django_filters.Filter):
 
 
 class ProductFilter(django_filters.FilterSet):
+    # TODO: Mixins for filter button
     @property
     def form(self):
         self._form = super(ProductFilter, self).form
         self._form.helper = FormHelper(self._form)
         self._form.helper.form_class = 'form'
         self._form.helper.form_method = 'get'
-        self._form.helper.layout.append(Submit('filter', 'Filter',
+        self._form.helper.layout.append(Submit('filter', _('Filter'),
                                                css_class="btn-block"))
         return self._form
 

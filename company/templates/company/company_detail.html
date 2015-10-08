@@ -13,27 +13,25 @@
 {% endif %}
 <h1>{{ object }}  <small>#{{ object.pk }}</small></h1>
 <div class="panel panel-primary">
-	<div class="panel-heading">
-		Metryczka
-	</div>
+	<div class="panel-heading">{% trans "Data metric" %}</div>
 	<table class="table">
 		<tr>
-			<td>PK: </td><td>{{ object.pk }}</td>
+            <td>{% trans "PK: " %}</td><td>{{ object.pk }}</td>
 		</tr>
 		<tr>
-			<td>Name: </td><td>{{ object.name }}</td>
+            <td>{% trans "Name: " %}</td><td>{{ object.name }}</td>
 		</tr>
 		<tr>
-			<td>NIP: </td><td>{{ object.nip }}</td>
+            <td>{% trans "NIP: " %}</td><td>{{ object.nip }}</td>
 		</tr>
 		<tr>
-			<td>Address: </td><td>{{ object.address }}</td>
+            <td>{% trans "Address: " %}</td><td>{{ object.address }}</td>
 		</tr>
         <tr>
-            <td>Query count: </td><td>{{ object.query_count }}</td>
+            <td>{% trans "Query count: " %}</td><td>{{ object.query_count }}</td>
         </tr>
 		<tr>
-			<td>PL Capital: </td>
+            <td>{% trans "PL Capital: " %}</td>
             <td>
             {% if object.plCapital %}
                 {% include "partiales/progress-bar.html" with value=object.plCapital %}
@@ -43,7 +41,7 @@
             </td>
 		</tr>
 		<tr>
-			<td>PL Capital Notes: </td><td>{{ object.plCapital_notes }}</td>
+            <td>{% trans "PL Capital Notes: " %}</td><td>{{ object.plCapital_notes }}</td>
 		</tr>
 	</table>
 </div>
@@ -51,7 +49,7 @@
 	{% for product in object.product_set.all %}
 	<li><a href="{{ product.get_absolute_url }}">{{ product }}</a></li>
 	{% empty%}
-	<li>Nothing</li>
+	<li>{% trans "Nothing" %}</li>
 	{% endfor %}
 </ul>
 {% endblock content %}

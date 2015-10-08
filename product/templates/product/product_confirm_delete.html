@@ -7,7 +7,7 @@
 
 {% block content %}
 <form action="" method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <p>{% blocktrans %}Are you sure you want to delete "{{ object }}"?{% endblocktrans %}</p>
     <input type="submit" value="Confirm" class="btn btn-primary" />
 </form>
 {% endblock %}

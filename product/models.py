@@ -6,6 +6,7 @@ from company.models import Company
 import reversion
 from model_utils.managers import PassThroughManager
 from produkty_w_sieci_api import Client, ApiError
+from django.utils.translation import ugettext_lazy as _
 
 
 class ProductQuerySet(models.query.QuerySet):
@@ -65,5 +66,9 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.name or self.code or "None"
+
+    class Meta:
+        verbose_name = _("Product")
+        verbose_name_plural = _("Products")
 
 reversion.register(Product)
