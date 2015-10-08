@@ -60,3 +60,4 @@ bower_components/
 
 # Media files
 pola-backend/media/
+utils/*.dump
