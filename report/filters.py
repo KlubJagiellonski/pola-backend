@@ -1,8 +1,7 @@
 import django_filters
 from .models import Report
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
 from django.utils.translation import ugettext_lazy as _
+from pola.filters import CrispyFilterMixin
 
 
 class StatusFilter(django_filters.ChoiceFilter):
@@ -22,18 +21,8 @@ class StatusFilter(django_filters.ChoiceFilter):
         return qs
 
 
-class ReportFilter(django_filters.FilterSet):
+class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
     status = StatusFilter()
-
-    @property
-    def form(self):
-        self._form = super(ReportFilter, self).form
-        self._form.helper = FormHelper(self._form)
-        self._form.helper.form_class = 'form'
-        self._form.helper.form_method = 'get'
-        self._form.helper.layout.append(Submit('filter', 'Filter',
-                                               css_class="btn-block"))
-        return self._form
 
     class Meta:
         model = Report

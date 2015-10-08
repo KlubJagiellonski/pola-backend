@@ -4,8 +4,7 @@ import django_filters
 from .models import Product
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from pola.filters import CrispyFilterMixin
 # class CrispyFilterMixin(object):
 #     form_class = 'form-inline'
 
@@ -19,18 +18,7 @@ class NullProductFilter(django_filters.Filter):
         return qs
 
 
-class ProductFilter(django_filters.FilterSet):
-    # TODO: Mixins for filter button
-    @property
-    def form(self):
-        self._form = super(ProductFilter, self).form
-        self._form.helper = FormHelper(self._form)
-        self._form.helper.form_class = 'form'
-        self._form.helper.form_method = 'get'
-        self._form.helper.layout.append(Submit('filter', _('Filter'),
-                                               css_class="btn-block"))
-        return self._form
-
+class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
     company_empty = NullProductFilter()
 
     class Meta:
