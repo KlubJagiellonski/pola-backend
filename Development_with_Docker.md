@@ -17,6 +17,7 @@ make enter
 export GS1_API_KEY=KLUCZ_DO_API
 export DATABASE_URL=$(echo "postgres://postgres:postgres@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/pola")
 django-admin migrate
+django-admin createsuperuser
 exit
 ```
 
