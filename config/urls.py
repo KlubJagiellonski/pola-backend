@@ -6,27 +6,28 @@ from django.conf.urls import include, url, patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
-from rest_framework.urlpatterns import format_suffix_patterns
 from pola.views import FrontPageView
 
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name="home"),
     url(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
+    url(r'^cms/lang/$',
+        TemplateView.as_view(template_name='pages/lang-cms.html'), name="select_lang"),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
-    # Django Admin
-    # url(r'^api/', include('api.urls', namespace='api')),
     url(r'^cms/product/', include('product.urls', namespace='product')),
     url(r'^cms/company/', include('company.urls', namespace='company')),
     url(r'^cms/report/', include('report.urls', namespace='report')),
+
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
 
     # User management
     url(r'^users/', include("pola-backend.users.urls", namespace="users")),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 
     url(r'^api/', include('pola.api.urls', namespace='api'))
 ]

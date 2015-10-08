@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Server Error{% endblock %}
+{% block title %}{% trans "Server Error" %}{% endblock %}
 
 {% block content %}
-<h1>Ooops!!! 500</h1>
+<h1>{% trans "Ooops!!! 500" %}</h1>
 
-<h3>Looks like something went wrong!</h3>
+<h2>{% trans "Looks like something went wrong!" %}</h2>
 
-<p>We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing.</p>
+<p>{% trans "We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing." %}</p>
 {% endblock content %}
 
 
