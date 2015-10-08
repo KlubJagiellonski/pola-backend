@@ -1,6 +1,6 @@
 {%extends 'product/base.html' %}
 
-{% load crispy_forms_tags %}
+{% load i18n crispy_forms_tags %}
 
 {% block breadcrumbs_rows %}
     <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>

@@ -9,7 +9,7 @@
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Resolve</button>
-        <a href="{{ object.get_absolute_url }}" class="btn btn-default"> Back</a>
+        <button type="submit" class="btn btn-primary">{% trans "Resolve" %}</button>
+        <a href="{{ object.get_absolute_url }}" class="btn btn-default">{% trans "Back" %}</a>
     </form>
 {% endblock %}
