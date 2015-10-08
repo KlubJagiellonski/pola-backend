@@ -25,14 +25,36 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 class Company(models.Model):
-    nip = models.CharField(max_length=10, db_index=True)
-    name = models.CharField(max_length=64)
-    address = models.TextField()
+    nip = models.CharField(max_length=10, db_index=True, null=True, blank=True)
+    name = models.CharField(max_length=64, null=True, blank=True)
+    official_name = models.CharField(max_length=64, blank=True, null=True)
+    address = models.TextField(null=True, blank=True)
     plCapital = IntegerRangeField(
         verbose_name=_("Percentage share of Polish capital"),
-        min_value=1, max_value=100, null=True, blank=True)
+        min_value=0, max_value=100, null=True, blank=True)
     plCapital_notes = models.TextField(
-        _("Notes about share of Polish capital"), null=True)
+        _("Notes about share of Polish capital"), null=True, blank=True)
+    plTaxes = IntegerRangeField(
+        verbose_name=_("Payment of taxes and information about registration"),
+        min_value=0, max_value=100, null=True, blank=True)
+    plTaxes_notes = models.TextField(
+        _("Notes about payment of taxes"), null=True, blank=True)
+    plRnD = IntegerRangeField(
+        verbose_name=_("Information about R&D center"),
+        min_value=0, max_value=100, null=True, blank=True)
+    plRnD_notes = models.TextField(
+        _("Notes about R&D center"), null=True, blank=True)
+    plWorkers = IntegerRangeField(
+        verbose_name=_("Information about workers"),
+        min_value=0, max_value=100, null=True, blank=True)
+    plWorkers_notes = models.TextField(
+        _("Notes about workers"), null=True, blank=True)
+    plBrand = IntegerRangeField(
+        verbose_name=_("Information about brand"),
+        min_value=0, max_value=100, null=True, blank=True)
+    plBrand_notes = models.TextField(
+        _("Notes about brand"), null=True, blank=True)
+    verified = models.BooleanField(default=False)
 
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
@@ -47,6 +69,7 @@ class Company(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Companies"
+        verbose_name = _("Company")
+        verbose_name_plural = _("Companies")
 
 reversion.register(Company)
