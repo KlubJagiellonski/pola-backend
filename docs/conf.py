@@ -165,7 +165,7 @@ html_static_path = ['_static']
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'pola-backenddoc'
+htmlhelp_basename = 'poladoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -185,7 +185,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
     ('index',
-     'pola-backend.tex',
+     'pola.tex',
      u'pola Documentation',
      u"Pola Team", 'manual'),
 ]
@@ -216,7 +216,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'pola-backend', u'pola Documentation',
+    ('index', 'pola', u'pola Documentation',
      [u"Pola Team"], 1)
 ]
 
@@ -230,7 +230,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'pola-backend', u'pola Documentation',
+    ('index', 'pola', u'pola Documentation',
      u"Pola Team", 'pola',
      'A short description of the project.', 'Miscellaneous'),
 ]

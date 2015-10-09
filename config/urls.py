@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     # User management
-    url(r'^users/', include("pola-backend.users.urls", namespace="users")),
+    url(r'^users/', include("pola.users.urls", namespace="users")),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 

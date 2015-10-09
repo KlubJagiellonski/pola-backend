@@ -14,7 +14,7 @@ import environ
 from django.utils.translation import ugettext_lazy as _
 
 ROOT_DIR = environ.Path(__file__) - 3  # (/a/b/myfile.py - 3 = /)
-APPS_DIR = ROOT_DIR.path('pola-backend')
+APPS_DIR = ROOT_DIR.path('pola')
 
 env = environ.Env()
 
@@ -53,7 +53,7 @@ LOCAL_APPS = (
     'company',
     'report',
     'pagination_custom',
-    'pola-backend.users',  # custom users app
+    'pola.users',  # custom users app
     # Your stuff: custom apps go here
 )
 
@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
 # MIGRATIONS CONFIGURATION
 # ------------------------------------------------------------------------------
 MIGRATION_MODULES = {
-    'sites': 'pola-backend.contrib.sites.migrations'
+    # 'sites': 'pola.contrib.sites.migrations'
 }
 
 # DEBUG

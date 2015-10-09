@@ -66,7 +66,7 @@ First make sure to create and activate a virtualenv_, then open a terminal at th
 
 Create a local PostgreSQL database::
 
-    $ createdb pola-backend
+    $ createdb pola
 
 Run ``migrate`` on your new database::
 
@@ -165,20 +165,20 @@ You can then deploy by running the following commands.
 
 ..  code-block:: bash
 
-    git remote add dokku dokku@yourservername.com:pola-backend
+    git remote add dokku dokku@yourservername.com:pola
     git push dokku master
-    ssh -t dokku@yourservername.com dokku redis:create pola-backend-redis
-    ssh -t dokku@yourservername.com dokku redis:link pola-backend-redis pola-backend
-    ssh -t dokku@yourservername.com dokku postgres:create pola-backend-postgres
-    ssh -t dokku@yourservername.com dokku postgres:link pola-backend-postgres pola-backend
-    ssh -t dokku@yourservername.com dokku config:set pola-backend DJANGO_SECRET_KEY=RANDOM_SECRET_KEY_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola-backend DJANGO_SETTINGS_MODULE='config.settings.production'
-    ssh -t dokku@yourservername.com dokku config:set pola-backend DJANGO_AWS_ACCESS_KEY_ID=YOUR_AWS_ID_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola-backend DJANGO_AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola-backend DJANGO_AWS_STORAGE_BUCKET_NAME=YOUR_AWS_S3_BUCKET_NAME_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola-backend DJANGO_MAILGUN_API_KEY=YOUR_MAILGUN_API_KEY
-    ssh -t dokku@yourservername.com dokku config:set pola-backend DJANGO_MAILGUN_SERVER_NAME=YOUR_MAILGUN_SERVER
-    ssh -t dokku@yourservername.com dokku run pola-backend python manage.py migrate
-    ssh -t dokku@yourservername.com dokku run pola-backend python manage.py createsuperuser
+    ssh -t dokku@yourservername.com dokku redis:create pola-redis
+    ssh -t dokku@yourservername.com dokku redis:link pola-redis pola
+    ssh -t dokku@yourservername.com dokku postgres:create pola-postgres
+    ssh -t dokku@yourservername.com dokku postgres:link pola-postgres pola
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_SECRET_KEY=RANDOM_SECRET_KEY_HERE
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_SETTINGS_MODULE='config.settings.production'
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_ACCESS_KEY_ID=YOUR_AWS_ID_HERE
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY_HERE
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_STORAGE_BUCKET_NAME=YOUR_AWS_S3_BUCKET_NAME_HERE
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_MAILGUN_API_KEY=YOUR_MAILGUN_API_KEY
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_MAILGUN_SERVER_NAME=YOUR_MAILGUN_SERVER
+    ssh -t dokku@yourservername.com dokku run pola python manage.py migrate
+    ssh -t dokku@yourservername.com dokku run pola python manage.py createsuperuser
 
 When deploying via Dokku make sure you backup your database in some fashion as it is NOT done automatically.

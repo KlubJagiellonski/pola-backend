@@ -77,17 +77,17 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/pola-backend.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/pola.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/pola-backend.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/pola.qhc"
 
 devhelp:
 	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/pola-backend"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/pola-backend"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/pola"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/pola"
 	@echo "# devhelp"
 
 epub:
