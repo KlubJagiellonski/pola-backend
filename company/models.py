@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Count
 from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
@@ -67,6 +67,15 @@ class Company(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, commit_desc=None, *args, **kwargs):
+        if not commit_desc:
+            return super(Company, self).save(*args, **kwargs)
+
+        with transaction.atomic(), reversion.create_revision():
+            obj = super(Company, self).save(*args, **kwargs)
+            reversion.set_comment(commit_desc)
+            return obj
 
     class Meta:
         verbose_name = _("Company")
