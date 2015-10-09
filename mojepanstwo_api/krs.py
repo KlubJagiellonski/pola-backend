@@ -14,9 +14,6 @@ class ConnectionError(ApiError):
 class CompanyNotFound(Exception):
     pass
 
-class CompanyNameNotUnique(Exception):
-    pass
-
 class KrsClient:
     API_URL = 'https://api.mojepanstwo.pl/krs/podmioty'
 
@@ -41,26 +38,34 @@ class KrsClient:
 
     def get_companies_by_name(self, name):
         normalized_name = KrsClient._normalize_name(name)
-        print normalized_name
 
         json = self.query_podmiot('conditions[nazwa]', normalized_name)
 
-        if json['search']['dataobjects'].__len__() != 1:
+        if json['search']['dataobjects'].__len__() == 1:
             json = self.query_podmiot('q', normalized_name)
-
             if json['search']['dataobjects'].__len__() == 0:
                 raise CompanyNotFound()
 
-        data = json['search']['dataobjects'][0]['data']
+        companies = []
+        for i in range(0,json['search']['dataobjects'].__len__()):
+            data = json['search']['dataobjects'][i]['data']
 
-        company = dict()
-        company['nazwa'] = data['krs_podmioty.nazwa']
-        company['nip'] = data['krs_podmioty.nip']
-        company['score'] = json['search']['dataobjects'][0]['score']
-        company['id'] = data['krs_podmioty.id']
-        company['liczba_wspolnikow'] = data['krs_podmioty.liczba_wspolnikow']
+            company = dict()
+            company['nazwa'] = data['krs_podmioty.nazwa']
+            company['nazwa_skrocona'] = data['krs_podmioty.nazwa_skrocona']
+            company['nip'] = data['krs_podmioty.nip']
+            company['adres'] = "ul. {} {} lok. {}\n{} {}\n{}".format(
+                data['krs_podmioty.adres_ulica'], data['krs_podmioty.adres_numer'], data['krs_podmioty.adres_numer'],
+                data['krs_podmioty.adres_kod_pocztowy'], data['krs_podmioty.adres_miejscowosc'],
+                data['krs_podmioty.adres_kraj']
+            )
+            company['score'] = json['search']['dataobjects'][i]['score']
+            company['id'] = data['krs_podmioty.id']
+            company['liczba_wspolnikow'] = data['krs_podmioty.liczba_wspolnikow']
 
-        return company
+            companies.append(company)
+
+        return companies
 
     COMMON_COMPANY_NAME_ENDINGS = ( u' S.A.', u' SPÓŁKA AKCYJNA',
                                     u' Sp. z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
