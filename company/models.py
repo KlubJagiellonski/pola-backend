@@ -36,9 +36,10 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 class Company(models.Model):
-    nip = models.CharField(max_length=10, db_index=True, null=True, blank=True)
-    name = models.CharField(max_length=64, null=True, blank=True)
-    official_name = models.CharField(max_length=64, blank=True, null=True)
+    nip = models.CharField(max_length=10, db_index=True, null=True, blank=True, verbose_name="Company's NIP#")
+    name = models.CharField(max_length=128, null=True, blank=True, db_index=True, verbose_name="Name as retrieved from produkty_w_sieci API")
+    official_name = models.CharField(max_length=128, blank=True, null=True, verbose_name="Official company name")
+    common_name = models.CharField(max_length=128, verbose_name="Common company name")
     address = models.TextField(null=True, blank=True)
     plCapital = IntegerRangeField(
         verbose_name=_("Percentage share of Polish capital"),
