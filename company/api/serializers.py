@@ -9,6 +9,7 @@ class CompanySerializer(serializers.ModelSerializer):
             'id',
             'nip',
             'name',
+            'common_name',
             'official_name',
             'address',
             'plCapital',
