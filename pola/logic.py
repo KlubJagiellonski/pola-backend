@@ -10,12 +10,13 @@ def serialize_product(product):
     if company:
         if company.plRnD and company.plWorkers and company.plCapital and\
             company.plTaxes and company.plBrand:
-            json['plScore'] =  \
-                    .2 * company.plRnD / 100 + \
+            plScore = .2 * company.plRnD / 100 + \
                     .2 * company.plWorkers / 100 + \
                     .3 * company.plCapital / 100 + \
                     .2 * company.plTaxes / 100 + \
                     .1 * company.plBrand / 100
+            json['plScore'] =  int(100 * plScore)
+
             json['verified'] = company.verified
             json['company'] = {}
             json['company']['name'] = company.common_name \
