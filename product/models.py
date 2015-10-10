@@ -7,7 +7,8 @@ import reversion
 from model_utils.managers import PassThroughManager
 from produkty_w_sieci_api import Client, ApiError
 from django.utils.translation import ugettext_lazy as _
-from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, ConnectionError
+from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, \
+    ConnectionError
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
@@ -57,7 +58,10 @@ class Product(models.Model):
                     company.address = companies[0]['adres']
                     company.nip = companies[0]['nip']
 
-                    Company.save(company, commit_desc="Dane firmy pobrane automatycznie poprzez API mojepanstwo.pl ({})".format(companies[0]['url']))
+                    Company.save(company, commit_desc=
+                        "Dane firmy pobrane automatycznie poprzez API "
+                        "mojepanstwo.pl ({})"
+                                 .format(companies[0]['url']))
 
             except (CompanyNotFound, ConnectionError, ApiError):
                 pass

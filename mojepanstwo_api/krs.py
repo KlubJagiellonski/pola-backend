@@ -55,12 +55,16 @@ class KrsClient:
             company['nazwa_skrocona'] = data['krs_podmioty.nazwa_skrocona']
             company['nip'] = data['krs_podmioty.nip']
             company['adres'] = "ul. {} {} lok. {}\n{} {}\n{}".format(
-                data['krs_podmioty.adres_ulica'], data['krs_podmioty.adres_numer'], data['krs_podmioty.adres_numer'],
-                data['krs_podmioty.adres_kod_pocztowy'], data['krs_podmioty.adres_miejscowosc'],
+                data['krs_podmioty.adres_ulica'],
+                data['krs_podmioty.adres_numer'],
+                data['krs_podmioty.adres_numer'],
+                data['krs_podmioty.adres_kod_pocztowy'],
+                data['krs_podmioty.adres_miejscowosc'],
                 data['krs_podmioty.adres_kraj']
             )
             company['id'] = data['krs_podmioty.id']
-            company['liczba_wspolnikow'] = data['krs_podmioty.liczba_wspolnikow']
+            company['liczba_wspolnikow'] = \
+                data['krs_podmioty.liczba_wspolnikow']
 
             company['score'] = json['search']['dataobjects'][i]['score']
             company['url'] = json['search']['dataobjects'][i]['_mpurl']
@@ -69,14 +73,19 @@ class KrsClient:
 
         return companies
 
-    COMMON_COMPANY_NAME_ENDINGS = ( u' S.A.', u' SPÓŁKA AKCYJNA',
-                                    u' Sp. z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-                                    u' Spółka z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-                                    u'Sp. Jawna', u'SPÓŁKA JAWNA',
-                                    u'spółka z ograniczoną odpowiedzialnością sp.k.', u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-                                    u'sp. z o. o. sp.k.', u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-                                    u'Sp. z o.o. sp.k.', u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-                                    u'sp. z o.o. sp. k.', u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+    COMMON_COMPANY_NAME_ENDINGS = \
+        ( u' S.A.', u' SPÓŁKA AKCYJNA',
+          u' Sp. z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+          u' Spółka z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+          u'Sp. Jawna', u'SPÓŁKA JAWNA',
+          u'spółka z ograniczoną odpowiedzialnością sp.k.',
+          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          u'sp. z o. o. sp.k.',
+          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          u'Sp. z o.o. sp.k.',
+          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          u'sp. z o.o. sp. k.',
+          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
 
     )
 
@@ -84,6 +93,9 @@ class KrsClient:
     def _normalize_name(name):
         name = name.upper()
         for i in range(len(KrsClient.COMMON_COMPANY_NAME_ENDINGS)/2):
-            if name.endswith(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2].upper()):
-                return name[:len(name)-len(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2])]+KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2+1].upper()
+            if name.endswith(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2]
+                    .upper()):
+                return name[:len(name)-
+                             len(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2])]\
+                       +KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2+1].upper()
         return name
