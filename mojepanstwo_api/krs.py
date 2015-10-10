@@ -59,9 +59,11 @@ class KrsClient:
                 data['krs_podmioty.adres_kod_pocztowy'], data['krs_podmioty.adres_miejscowosc'],
                 data['krs_podmioty.adres_kraj']
             )
-            company['score'] = json['search']['dataobjects'][i]['score']
             company['id'] = data['krs_podmioty.id']
             company['liczba_wspolnikow'] = data['krs_podmioty.liczba_wspolnikow']
+
+            company['score'] = json['search']['dataobjects'][i]['score']
+            company['url'] = json['search']['dataobjects'][i]['_mpurl']
 
             companies.append(company)
 
