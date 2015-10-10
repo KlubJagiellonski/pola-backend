@@ -50,14 +50,14 @@ class Product(models.Model):
 
             try:
                 krs = KrsClient()
-                companies = krs.get_companies_by_name()
+                companies = krs.get_companies_by_name(obj_owner_name)
                 if companies.__len__() == 1:
                     company.official_name = companies[0]['nazwa']
                     company.common_name = companies[0]['nazwa_skrocona']
                     company.address = companies[0]['adres']
                     company.nip = companies[0]['nip']
 
-                    Company.save(company)
+                    Company.save(company, commit_desc="Dane firmy pobrane automatycznie poprzez API mojepanstwo.pl ({})".format(companies[0]['url']))
 
             except (CompanyNotFound, ConnectionError, ApiError):
                 pass
