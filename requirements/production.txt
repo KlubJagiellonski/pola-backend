@@ -10,11 +10,11 @@ gunicorn==19.3.0
 # Static and Media Storage
 # ------------------------------------------------
 boto==2.38.0
-django-storages-redux==1.2.3
+django-storages-redux==1.3.0
 Collectfast==0.2.3
 
 # Mailgun Support
 # ---------------
-django-mailgun==0.2.2
+django-mailgun==0.8.0
 
-newrelic
+newrelic==2.56.0.42
