@@ -8,6 +8,7 @@ import reversion
 
 
 class IntegerRangeField(models.IntegerField):
+
     def __init__(self, min_value=None, max_value=None, *args, **kwargs):
         super(models.IntegerField, self).__init__(*args, **kwargs)
         self.min_value, self.max_value = min_value, max_value
@@ -20,6 +21,16 @@ class IntegerRangeField(models.IntegerField):
 
 
 class CompanyQuerySet(models.query.QuerySet):
+
+    def get_or_create(self, commit_desc=None, *args, **kwargs):
+        if not commit_desc:
+            return super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
+
+        with transaction.atomic(), reversion.create_revision():
+            obj = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
+            reversion.set_comment(commit_desc)
+            return obj
+
     def with_query_count(self):
         return self.annotate(query_count=Count('product__query__id'))
 
