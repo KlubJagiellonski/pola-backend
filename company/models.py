@@ -77,7 +77,7 @@ class Company(models.Model):
         return reverse('company:detail', args=[self.pk])
 
     def __unicode__(self):
-        return self.name
+        return self.name or self.official_name
 
     def save(self, commit_desc=None, *args, **kwargs):
         if not commit_desc:
