@@ -7,7 +7,8 @@ import reversion
 from model_utils.managers import PassThroughManager
 from produkty_w_sieci_api import Client, ApiError
 from django.utils.translation import ugettext_lazy as _
-
+from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, \
+    ConnectionError
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
@@ -44,10 +45,30 @@ class Product(models.Model):
         obj_owner_name = obj_owner.get('Name', None)
         obj_product = obj.get('Product', {}) or {}
         obj_product_name = obj_product.get('Name', None)
+
         if obj_owner_name:
             company, _ = Company.objects.get_or_create(name=obj_owner_name)
+
+            try:
+                krs = KrsClient()
+                companies = krs.get_companies_by_name(obj_owner_name)
+                if companies.__len__() == 1:
+                    company.official_name = companies[0]['nazwa']
+                    company.common_name = companies[0]['nazwa_skrocona']
+                    company.address = companies[0]['adres']
+                    company.nip = companies[0]['nip']
+
+                    Company.save(company, commit_desc=
+                        "Dane firmy pobrane automatycznie poprzez API "
+                        "mojepanstwo.pl ({})"
+                                 .format(companies[0]['url']))
+
+            except (CompanyNotFound, ConnectionError, ApiError):
+                pass
+
         else:
             company = None
+
         return Product.objects.create(
             name=obj_product_name,
             code=code,
