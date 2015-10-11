@@ -12,11 +12,6 @@ from .forms import ProductForm
 from .filters import ProductFilter
 from .images import Barcode
 from . import models
-from pola import logic
-from django.http import JsonResponse
-from models import Product
-from pola.models import Query
-
 
 class ProductDetailView(DetailView):
     slug_field = 'code'
@@ -70,13 +65,3 @@ def get_image(request, code):
     # data = renderPM.drawToString(barcode, fmt='PNG')
     # response.write(data)
     return response
-
-def get_by_code(request, code):
-    device_id =request.GET['device_id']
-
-    product = Product.get_by_code(code=code)
-    Query.objects.create(client=device_id, product=product)
-
-    result = logic.serialize_product(product)
-
-    return JsonResponse(result)
