@@ -3,9 +3,13 @@ from ..models import Company
 
 
 class CompanySerializer(serializers.ModelSerializer):
+    string_representation = serializers.CharField(
+        source="__unicode__", read_only=True)
+
     class Meta:
         model = Company
         fields = (
+            'string_representation',
             'id',
             'nip',
             'name',
@@ -23,4 +27,4 @@ class CompanySerializer(serializers.ModelSerializer):
             'plBrand',
             'plBrand_notes',
             'verified'
-            )
+        )

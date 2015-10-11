@@ -32,6 +32,9 @@ DJANGO_APPS = (
     # Useful template tags:
     # 'django.contrib.humanize',
 
+    # Must be before django.contrib.admin
+    'autocomplete_light',
+
     # Admin
     'grappelli',
     'django.contrib.admin',
