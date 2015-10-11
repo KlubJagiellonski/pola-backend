@@ -32,7 +32,7 @@ class Client:
             raise ConnectionError({'status_code': resp.status_code})
         json = resp.json()
         if not json.get('IsValid', False):
-            raise ConnectionError({'exception': json['Exception']})
+            return None
         return json
 
     @staticmethod
