@@ -12,4 +12,7 @@ urlpatterns = [
     url(regex=r'update_report$',
         view=views.update_report,
         name="update_report"),
+    url(regex=r'attach_file$',
+        view=views.attach_file,
+        name="attach_file"),
 ]
