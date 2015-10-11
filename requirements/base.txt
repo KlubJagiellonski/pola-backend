@@ -51,4 +51,4 @@ djangorestframework==3.2.4
 django-grappelli==2.7.1
 
 # Autocomplete
-django-autocomplete-light-2.2.10.
+django-autocomplete-light==2.2.10
