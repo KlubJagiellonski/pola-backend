@@ -7,7 +7,25 @@ def serialize_product(product):
             'verified':False}
 
     company = product.company
+
     if company:
+
+        json['company'] = {}
+        json['company']['name'] = company.common_name \
+            if company.common_name \
+            else company.official_name if company.official_name \
+            else company.name
+        json['company']['plRnD'] = company.plRnD
+        json['company']['plRnD_notes'] = company.plRnD_notes
+        json['company']['plWorkers'] = company.plWorkers
+        json['company']['plWorkers_notes'] = company.plWorkers_notes
+        json['company']['plCapital'] = company.plCapital
+        json['company']['plCapital_notes'] = company.plCapital_notes
+        json['company']['plTaxes'] = company.plTaxes
+        json['company']['plTaxes_notes'] = company.plTaxes_notes
+        json['company']['plBrand'] = company.plBrand
+        json['company']['plBrand_notes'] = company.plBrand_notes
+
         if company.plRnD and company.plWorkers and company.plCapital and\
             company.plTaxes and company.plBrand:
             plScore = .2 * company.plRnD / 100 + \
@@ -16,33 +34,15 @@ def serialize_product(product):
                     .2 * company.plTaxes / 100 + \
                     .1 * company.plBrand / 100
             json['plScore'] =  int(100 * plScore)
-
             json['verified'] = company.verified
-            json['company'] = {}
-            json['company']['name'] = company.common_name \
-                if company.common_name \
-                else company.official_name if company.official_name \
-                else company.name
-            json['company']['plRnD'] = company.plRnD
-            json['company']['plRnD_notes'] = company.plRnD_notes
-            json['company']['plWorkers'] = company.plWorkers
-            json['company']['plWorkers_notes'] = company.plWorkers_notes
-            json['company']['plCapital'] = company.plCapital
-            json['company']['plCapital_notes'] = company.plCapital_notes
-            json['company']['plTaxes'] = company.plTaxes
-            json['company']['plTaxes_notes'] = company.plTaxes_notes
-            json['company']['plBrand'] = company.plBrand
-            json['company']['plBrand_notes'] = company.plBrand_notes
-
-
-    for prefix in CODE_PREFIX_TO_COUNTRY.keys():
-        if product.code.startswith(prefix):
-            json['plScore'] = 0
-            json['verified'] = False
-            json['company'] = {}
-            json['company']['name'] = 'Miejsce produkcji: {}'\
-                .format(CODE_PREFIX_TO_COUNTRY[prefix])
-
+    else:
+        for prefix in CODE_PREFIX_TO_COUNTRY.keys():
+            if product.code.startswith(prefix):
+                json['plScore'] = 0
+                json['verified'] = False
+                json['company'] = {}
+                json['company']['name'] = 'Miejsce produkcji: {}'\
+                    .format(CODE_PREFIX_TO_COUNTRY[prefix])
 
     return json
 
