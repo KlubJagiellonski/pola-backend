@@ -37,8 +37,6 @@ django-redis==4.2.0
 redis>=2.10.0
 
 
-
-# Your custom requirements go here
 jsonfield==1.0.3
 django-reversion==1.9.3
 reportlab==3.2.0
@@ -51,3 +49,6 @@ django-ratelimit==0.6.0
 djangorestframework==3.2.4
 
 django-grappelli==2.7.1
+
+# Autocomplete
+django-autocomplete-light-2.2.10.

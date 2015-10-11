@@ -4,9 +4,7 @@ import django_filters
 from .models import Product
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from pola.filters import CrispyFilterMixin
-# class CrispyFilterMixin(object):
-#     form_class = 'form-inline'
+from pola.filters import CrispyFilterMixin, AutocompleteChoiceFilter
 
 
 class NullProductFilter(django_filters.Filter):
@@ -20,6 +18,8 @@ class NullProductFilter(django_filters.Filter):
 
 class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
     company_empty = NullProductFilter()
+    company = AutocompleteChoiceFilter(
+        autocomplete_name="CompanyAutocomplete")
 
     class Meta:
         model = Product

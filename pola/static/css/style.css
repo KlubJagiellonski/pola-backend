@@ -9909,4 +9909,8 @@ button.close {
   content: "";
 }
 
+.form-group .autocomplete-light-widget {
+  width: 100%;
+}
+
 

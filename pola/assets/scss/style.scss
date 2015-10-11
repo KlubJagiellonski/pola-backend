@@ -12,3 +12,7 @@ $navbar-default-link-hover-bg: darken($navbar-default-bg, 10%);
 
 @import 'bootstrap';
 @import 'font-awesome';
+
+.form-group .autocomplete-light-widget {
+	width: 100%;
+}
