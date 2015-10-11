@@ -51,7 +51,9 @@ class Product(models.Model):
             obj_product_name = obj_product.get('Name', None)
 
         if obj_owner_name:
-            company, _ = Company.objects.get_or_create(name=obj_owner_name)
+            company, _ = Company.objects.get_or_create(name=obj_owner_name,
+                commit_desc='Firma utworzona automatycznie na podstawie API'
+                            ' ILiM')
 
             try:
                 krs = KrsClient()
