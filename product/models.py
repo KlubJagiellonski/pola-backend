@@ -7,8 +7,7 @@ import reversion
 from model_utils.managers import PassThroughManager
 from produkty_w_sieci_api import Client, ApiError
 from django.utils.translation import ugettext_lazy as _
-from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, \
-    ConnectionError
+from pola.logic import update_company_from_krs
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
@@ -55,32 +54,20 @@ class Product(models.Model):
                 commit_desc='Firma utworzona automatycznie na podstawie API'
                             ' ILiM')
 
-            try:
-                krs = KrsClient()
-                companies = krs.get_companies_by_name(obj_owner_name)
-                if companies.__len__() == 1:
-                    company.official_name = companies[0]['nazwa']
-                    company.common_name = companies[0]['nazwa_skrocona']
-                    company.address = companies[0]['adres']
-                    company.nip = companies[0]['nip']
-
-                    Company.save(company, commit_desc=
-                        "Dane firmy pobrane automatycznie poprzez API "
-                        "mojepanstwo.pl ({})"
-                                 .format(companies[0]['url']))
-
-            except (CompanyNotFound, ConnectionError, ApiError):
-                pass
-
         else:
             company = None
 
 #TODO: add commit_desc
 
-        return Product.objects.create(
+        product = Product.objects.create(
             name=obj_product_name,
             code=code,
             company=company)
+
+        if company:
+            update_company_from_krs(product, company)
+
+        return product
 
     @staticmethod
     def _query_api(code):
