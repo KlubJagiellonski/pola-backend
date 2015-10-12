@@ -12,10 +12,8 @@ def serialize_product(product):
     if company:
 
         json['company'] = {}
-        json['company']['name'] = company.common_name \
-            if company.common_name \
-            else company.official_name if company.official_name \
-            else company.name
+        json['company']['name'] = company.common_name or company.official_name \
+                                  or company.name
         json['company']['plRnD'] = company.plRnD
         json['company']['plRnD_notes'] = company.plRnD_notes
         json['company']['plWorkers'] = company.plWorkers
