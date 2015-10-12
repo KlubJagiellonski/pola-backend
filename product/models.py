@@ -1,13 +1,10 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Count
-from django.conf import settings
 from company.models import Company
 import reversion
 from model_utils.managers import PassThroughManager
-from produkty_w_sieci_api import Client, ApiError
 from django.utils.translation import ugettext_lazy as _
-from pola.logic import update_company_from_krs
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
@@ -23,56 +20,6 @@ class Product(models.Model):
     company = models.ForeignKey(Company, null=True, blank=True)
 
     objects = PassThroughManager.for_queryset_class(ProductQuerySet)()
-
-    @classmethod
-    def get_by_code(cls, code):
-        try:
-            return cls.objects.get(code=code)
-        except cls.DoesNotExist:
-            pass
-        try:
-            product_info = Product._query_api(code)
-            return Product.create_from_api(code, product_info)
-        except ApiError:
-            pass
-        return Product.objects.create(code=code)
-
-    @staticmethod
-    def create_from_api(code, obj):
-        obj_owner_name = None
-        obj_product_name = None
-
-        if obj:
-            obj_data = obj.get('Data', {}) or {}
-            obj_owner = obj_data.get('Owner', {}) or {}
-            obj_owner_name = obj_owner.get('Name', None)
-            obj_product = obj.get('Product', {}) or {}
-            obj_product_name = obj_product.get('Name', None)
-
-        if obj_owner_name:
-            company, _ = Company.objects.get_or_create(name=obj_owner_name,
-                commit_desc='Firma utworzona automatycznie na podstawie API'
-                            ' ILiM')
-
-        else:
-            company = None
-
-#TODO: add commit_desc
-
-        product = Product.objects.create(
-            name=obj_product_name,
-            code=code,
-            company=company)
-
-        if company:
-            update_company_from_krs(product, company)
-
-        return product
-
-    @staticmethod
-    def _query_api(code):
-        client = Client(settings.PRODUKTY_W_SIECI_API_KEY)
-        return client.get_product_by_gtin(code)
 
     def get_absolute_url(self):
         return reverse('product:detail', args=[self.code])

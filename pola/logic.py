@@ -1,13 +1,62 @@
 # -*- coding: utf-8 -*-
 
 from company.models import Company
+from product.models import Product
 from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, \
     ConnectionError
+from produkty_w_sieci_api import Client, ApiError
+from django.conf import settings
+from report.models import Report
+
+def get_by_code(code):
+    try:
+        return Product.objects.get(code=code)
+    except Product.DoesNotExist:
+        pass
+    try:
+        client = Client(settings.PRODUKTY_W_SIECI_API_KEY)
+        product_info = client.get_product_by_gtin(code)
+        return create_from_api(code, product_info)
+    except ApiError:
+        pass
+    return Product.objects.create(code=code)
+
+def create_from_api(code, obj):
+    obj_owner_name = None
+    obj_product_name = None
+
+    if obj:
+        obj_data = obj.get('Data', {}) or {}
+        obj_owner = obj_data.get('Owner', {}) or {}
+        obj_owner_name = obj_owner.get('Name', None)
+        obj_product = obj.get('Product', {}) or {}
+        obj_product_name = obj_product.get('Name', None)
+
+    if obj_owner_name:
+        company, _ = Company.objects.get_or_create(name=obj_owner_name,
+            commit_desc='Firma utworzona automatycznie na podstawie API'
+                        ' ILiM')
+
+    else:
+        company = None
+
+#TODO: add commit_desc
+
+    product = Product.objects.create(
+        name=obj_product_name,
+        code=code,
+        company=company)
+
+    if company:
+        update_company_from_krs(product, company)
+
+    return product
+
 
 def update_company_from_krs(product, company):
     try:
         krs = KrsClient()
-        companies = krs.get_companies_by_name(obj_owner_name)
+        companies = krs.get_companies_by_name(company.name)
         if companies.__len__() == 1:
             company.official_name = companies[0]['nazwa']
             company.common_name = companies[0]['nazwa_skrocona']
@@ -18,12 +67,26 @@ def update_company_from_krs(product, company):
                 "Dane firmy pobrane automatycznie poprzez API "
                 "mojepanstwo.pl ({})"
                          .format(companies[0]['url']))
-        elif companies.__len__ > 0:
-            report = u'Nowododana firma może być jedną z następujących:\n\n'
+        elif companies.__len__() > 0:
+            description = u'{} - ta firma może być jedną z następujących:\n\n'\
+                .format(company.name)
 
-            for i in range(0,min(companies.__len__,10)):
-                report +=\
-                ''
+            for i in range(0,min(companies.__len__(),10)):
+                description +=\
+                    (u'Nazwa: {}\n'+\
+                u'Skrót: {}\n'+\
+                u'NIP:   {}\n'+\
+                u'Adres: \n{}\n'+\
+                u'Url:   {}\n\n').format(companies[i]['nazwa'],
+                                   companies[i]['nazwa_skrocona'],
+                                   companies[i]['nip'],
+                                   companies[i]['adres'],
+                                   companies[i]['url'])
+
+            report = Report(desciption = description)
+            report.product = product
+            report.client = 'krs-bot'
+            report.save()
 
 
     except (CompanyNotFound, ConnectionError, ApiError):
