@@ -75,6 +75,8 @@ class Product(models.Model):
         else:
             company = None
 
+#TODO: add commit_desc
+
         return Product.objects.create(
             name=obj_product_name,
             code=code,
