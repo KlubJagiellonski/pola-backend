@@ -41,7 +41,7 @@ class KrsClient:
 
         json = self.query_podmiot('conditions[nazwa]', normalized_name)
 
-        if json['search']['dataobjects'].__len__() == 1:
+        if json['search']['dataobjects'].__len__() != 1:
             json = self.query_podmiot('q', normalized_name)
             if json['search']['dataobjects'].__len__() == 0:
                 raise CompanyNotFound()
