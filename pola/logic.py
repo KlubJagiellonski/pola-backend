@@ -1,6 +1,34 @@
 # -*- coding: utf-8 -*-
 
 from company.models import Company
+from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, \
+    ConnectionError
+
+def update_company_from_krs(product, company):
+    try:
+        krs = KrsClient()
+        companies = krs.get_companies_by_name(obj_owner_name)
+        if companies.__len__() == 1:
+            company.official_name = companies[0]['nazwa']
+            company.common_name = companies[0]['nazwa_skrocona']
+            company.address = companies[0]['adres']
+            company.nip = companies[0]['nip']
+
+            Company.save(company, commit_desc=
+                "Dane firmy pobrane automatycznie poprzez API "
+                "mojepanstwo.pl ({})"
+                         .format(companies[0]['url']))
+        elif companies.__len__ > 0:
+            report = u'Nowododana firma może być jedną z następujących:\n\n'
+
+            for i in range(0,min(companies.__len__,10)):
+                report +=\
+                ''
+
+
+    except (CompanyNotFound, ConnectionError, ApiError):
+        pass
+
 
 def serialize_product(product):
     json = {'plScore':None,
