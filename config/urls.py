@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
 
     url(r'^api/', include('pola.api.urls', namespace='api')),
+    url(r'^a/', include('api.urls', namespace='api')),
 
     url(r'^autocomplete/', include('autocomplete_light.urls'))
 ]
