@@ -42,7 +42,7 @@
 				<tr>
                     <td>{% trans "PL Capital: " %}</td>
 					<td>
-                        {% if object.company.plCapital %}
+                        {% if object.company.plCapital == 0 or object.company.plCapital %}
                             {% include "partiales/progress-bar.html" with value=object.company.plCapital %}
                         {% else %}
                             {% trans "None" %}
