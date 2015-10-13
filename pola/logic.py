@@ -6,6 +6,7 @@ from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, \
     ConnectionError
 from produkty_w_sieci_api import Client, ApiError
 from django.conf import settings
+import locale
 from report.models import Report
 
 def get_by_code(code):
@@ -67,6 +68,13 @@ def update_company_from_krs(product, company):
                 "Dane firmy pobrane automatycznie poprzez API "
                 "mojepanstwo.pl ({})"
                          .format(companies[0]['url']))
+
+            shareholders = shareholders_to_str(krs, companies[0]['id'] ,'')
+            if shareholders:
+                create_bot_report(product, u'Wspólnicy spółki {}:\n{}'.
+                                  format(company.name, shareholders))
+
+
         elif companies.__len__() > 0:
             description = u'{} - ta firma może być jedną z następujących:\n\n'\
                 .format(company.name)
@@ -77,21 +85,26 @@ def update_company_from_krs(product, company):
                 u'Skrót: {}\n'+\
                 u'NIP:   {}\n'+\
                 u'Adres: \n{}\n'+\
-                u'Url:   {}\n\n').format(companies[i]['nazwa'],
+                u'Url:   {}\n').format(companies[i]['nazwa'],
                                    companies[i]['nazwa_skrocona'],
                                    companies[i]['nip'],
                                    companies[i]['adres'],
                                    companies[i]['url'])
+                shareholders = shareholders_to_str(krs, companies[i]['id'] ,'')
+                if shareholders:
+                    description += u'Wspólnicy:\n{}'.format(shareholders)
+                description+='\n'
 
-            report = Report(desciption = description)
-            report.product = product
-            report.client = 'krs-bot'
-            report.save()
-
+            create_bot_report(product, description)
 
     except (CompanyNotFound, ConnectionError, ApiError):
         pass
 
+def create_bot_report(product, description):
+    report = Report(desciption = description)
+    report.product = product
+    report.client = 'krs-bot'
+    report.save()
 
 def serialize_product(product):
     json = {'plScore':None,
@@ -135,6 +148,25 @@ def serialize_product(product):
                     .format(CODE_PREFIX_TO_COUNTRY[prefix])
 
     return json
+
+def shareholders_to_str(krs, id, indent):
+    str = ''
+    json = krs.query_shareholders(id)
+    data = json['object']['data']
+    kapital_zakladowy = data['krs_podmioty.wartosc_kapital_zakladowy']
+    wspolnicy = json['object']['layers']['wspolnicy']
+    for wspolnik in wspolnicy:
+        udzialy_wartosc = wspolnik.get('udzialy_wartosc', None)
+        if udzialy_wartosc == None:
+            str+= u'{0}* {1} -------\n'.format(indent, wspolnik['nazwa'])
+        else:
+            str+= u'{0}* {1} {2}/{3} {4:.0f}%\n'.format(indent,
+                    wspolnik['nazwa'],udzialy_wartosc,kapital_zakladowy,
+                    100*locale.atof(udzialy_wartosc)/kapital_zakladowy)
+        if wspolnik['krs_id'] != None:
+            str+=shareholders_to_str(krs, wspolnik['krs_id'], indent+'  ')
+    return str
+
 
 CODE_PREFIX_TO_COUNTRY = {
             "30" : "Francja",
