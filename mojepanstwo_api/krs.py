@@ -99,3 +99,18 @@ class KrsClient:
                              len(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2])]\
                        +KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2+1].upper()
         return name
+
+    def query_shareholders(self, id):
+        params = {
+            'layers': 'wspolnicy'
+            }
+        resp = self.session.get(url=self.url+'/'+id, params=params)
+
+        if resp.status_code != 200:
+            raise ConnectionError({'status_code': resp.status_code})
+
+        json = resp.json()
+        if json['object'] == None or json['object']['layers'] == None or json['object']['data'] == None or json['object']['layers']['wspolnicy'] == None:
+            raise ApiError()
+
+        return json
