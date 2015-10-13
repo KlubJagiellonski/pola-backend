@@ -13,6 +13,7 @@ from .filters import ProductFilter
 from .images import Barcode
 from . import models
 
+
 class ProductDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'code'
     model = models.Product
