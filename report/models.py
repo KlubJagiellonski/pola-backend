@@ -18,7 +18,7 @@ class ReportQuerySet(models.QuerySet):
 
 
 class Report(models.Model):
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, null=True)
     client = models.CharField(max_length=40,
                               blank=True, null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -4,7 +4,8 @@ from company.models import Company
 
 def serialize_product(product):
     json = {'plScore':None,
-            'verified':False}
+            'verified':False,
+            'id':product.id}
 
     company = product.company
 
