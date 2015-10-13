@@ -13,13 +13,13 @@ from .filters import ProductFilter
 from .images import Barcode
 from . import models
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'code'
     model = models.Product
     queryset = models.Product.objects.with_query_count().all()
 
 
-class ProductListView(FilterView):
+class ProductListView(LoginRequiredMixin, FilterView):
     model = models.Product
     filterset_class = ProductFilter
     paginate_by = 25
