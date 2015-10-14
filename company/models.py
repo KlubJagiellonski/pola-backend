@@ -52,11 +52,11 @@ class Company(models.Model):
         min_value=0, max_value=100, null=True, blank=True)
     plCapital_notes = models.TextField(
         _("Notes about share of Polish capital"), null=True, blank=True)
-    plTaxes = IntegerRangeField(
-        verbose_name=_("Payment of taxes and information about registration"),
+    plRegistered = IntegerRangeField(
+        verbose_name=_("Registered in Poland?"),
         min_value=0, max_value=100, null=True, blank=True)
-    plTaxes_notes = models.TextField(
-        _("Notes about payment of taxes"), null=True, blank=True)
+    plRegistered_notes = models.TextField(
+        _("Notes about registered in Poland"), null=True, blank=True)
     plRnD = IntegerRangeField(
         verbose_name=_("Information about R&D center"),
         min_value=0, max_value=100, null=True, blank=True)
@@ -67,11 +67,11 @@ class Company(models.Model):
         min_value=0, max_value=100, null=True, blank=True)
     plWorkers_notes = models.TextField(
         _("Notes about workers"), null=True, blank=True)
-    plBrand = IntegerRangeField(
-        verbose_name=_("Information about brand"),
+    plNotGlobEnt = IntegerRangeField(
+        verbose_name=_("Isn't it a global enterprise?"),
         min_value=0, max_value=100, null=True, blank=True)
-    plBrand_notes = models.TextField(
-        _("Notes about brand"), null=True, blank=True)
+    plNotGlobEnt_notes = models.TextField(
+        _("Notes about global enterprise"), null=True, blank=True)
     verified = models.BooleanField(default=False)
 
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
