@@ -29,3 +29,12 @@ class AutocompleteChoiceFilter(django_filters.ModelChoiceFilter):
         kwargs['queryset'] = autocomplete.choices
         kwargs['widget'] = ChoiceWidget(autocomplete)
         super(AutocompleteChoiceFilter, self).__init__(*args, **kwargs)
+
+
+class NoHelpTextFilterMixin(object):
+    def __init__(self, *args, **kwargs):
+        super(NoHelpTextFilterMixin, self).__init__(*args, **kwargs)
+        for key in self.filters.iteritems():
+            self.filters[key[0]].extra.update(
+                {'help_text': ''}
+            )

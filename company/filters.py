@@ -1,10 +1,12 @@
 import django_filters
 from .models import Company
 from django.utils.translation import ugettext_lazy as _
-from pola.filters import CrispyFilterMixin
+from pola.filters import NoHelpTextFilterMixin, CrispyFilterMixin
 
 
-class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
+class CompanyFilter(NoHelpTextFilterMixin,
+                    CrispyFilterMixin,
+                    django_filters.FilterSet):
 
     plCapital = django_filters.RangeFilter()
 
