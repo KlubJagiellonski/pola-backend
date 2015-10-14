@@ -118,16 +118,22 @@ def serialize_product(product):
         json['company'] = {}
         json['company']['name'] = company.common_name or company.official_name \
                                   or company.name
-        json['company']['plRnD'] = company.plRnD
-        json['company']['plRnD_notes'] = company.plRnD_notes
-        json['company']['plWorkers'] = company.plWorkers
-        json['company']['plWorkers_notes'] = company.plWorkers_notes
         json['company']['plCapital'] = company.plCapital
         json['company']['plCapital_notes'] = company.plCapital_notes
-        json['company']['plTaxes'] = company.plTaxes
-        json['company']['plTaxes_notes'] = company.plTaxes_notes
-        json['company']['plBrand'] = company.plBrand
-        json['company']['plBrand_notes'] = company.plBrand_notes
+        json['company']['plWorkers'] = company.plWorkers
+        json['company']['plWorkers_notes'] = company.plWorkers_notes
+        json['company']['plRnD'] = company.plRnD
+        json['company']['plRnD_notes'] = company.plRnD_notes
+        json['company']['plRegistered'] = company.plRegistered
+        json['company']['plRegistered_notes'] = company.plRegistered_notes
+        json['company']['plNotGlobEnt'] = company.plNotGlobEnt
+        json['company']['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
+
+#TODO: remove after apps start using new API
+        json['company']['plTaxes'] = 0
+        json['company']['plTaxes_notes'] = None
+        json['company']['plBrand'] = 0
+        json['company']['plBrand_notes'] = None
 
         if company.plRnD and company.plWorkers and company.plCapital and\
             company.plTaxes and company.plBrand:
@@ -145,12 +151,13 @@ def serialize_product(product):
     return json
 
 def get_plScore(company):
-    plScore = .2 * company.plRnD / 100 + \
-            .2 * company.plWorkers / 100 + \
-            .3 * company.plCapital / 100 + \
-            .2 * company.plTaxes / 100 + \
-            .1 * company.plBrand / 100
-    return int(100 * plScore)
+    return int(
+        .35 * company.plCapital +
+        .30 * company.plWorkers +
+        .15 * company.plRnD +
+        .10 * company.plRegistered +
+        .10 * company.plNotGlobEnt
+    )
 
 def shareholders_to_str(krs, id, indent):
     str = ''
