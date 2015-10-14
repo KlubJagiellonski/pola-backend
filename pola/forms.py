@@ -72,3 +72,16 @@ class ReadOnlyFieldsMixin(object):
             cleaned_data[field] = getattr(self.instance, field)
 
         return cleaned_data
+
+
+class AutocompleteChoiceField(forms.ModelChoiceField):
+
+    def __init__(self, autocomplete_name, *args, **kwargs):
+        from autocomplete_light.registry import registry
+        from autocomplete_light import ChoiceWidget
+        autocomplete = registry.get_autocomplete_from_arg(autocomplete_name)
+        if 'label' not in kwargs:
+            kwargs['label'] = autocomplete.model._meta.verbose_name
+        kwargs['queryset'] = autocomplete.choices
+        kwargs['widget'] = ChoiceWidget(autocomplete)
+        super(AutocompleteChoiceField, self).__init__(*args, **kwargs)
