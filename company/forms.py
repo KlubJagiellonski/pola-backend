@@ -2,11 +2,16 @@ from django import forms
 
 from . import models
 from pola.forms import (CommitDescriptionMixin,
-                        FormHorizontalMixin, SaveButtonMixin)
+                        FormHorizontalMixin, SaveButtonMixin,
+                        ReadOnlyFieldsMixin)
 
 
-class CompanyForm(SaveButtonMixin, FormHorizontalMixin,
+class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
                   CommitDescriptionMixin, forms.ModelForm):
+    readonly_fields = [
+        'name'
+        ]
+
     class Meta:
         model = models.Company
         fields = [
