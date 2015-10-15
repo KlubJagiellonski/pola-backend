@@ -101,7 +101,7 @@ def update_company_from_krs(product, company):
         pass
 
 def create_bot_report(product, description):
-    report = Report(desciption = description)
+    report = Report(description = description)
     report.product = product
     report.client = 'krs-bot'
     report.save()

@@ -28,7 +28,7 @@ def create_report(request):
     if product_id:
         product = Product.objects.get(pk=product_id)
 
-    report = Report.objects.create(product=product, desciption=description,
+    report = Report.objects.create(product=product, description=description,
                                    client=device_id)
 
     return JsonResponse({'id':report.id})
@@ -46,7 +46,7 @@ def update_report(request):
     if report.client != device_id:
         return HttpResponseForbidden("Device_id mismatch")
 
-    report.desciption = description
+    report.description = description
     report.save()
 
     return JsonResponse({'id':report.id})

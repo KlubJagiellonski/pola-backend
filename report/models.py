@@ -27,7 +27,7 @@ class Report(models.Model):
     resolved_at = models.DateTimeField(null=True, blank=True)
     resolved_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                     null=True, blank=True)
-    desciption = models.TextField()
+    description = models.TextField()
     objects = ReportQuerySet.as_manager()
 
     def status(self):
@@ -49,7 +49,7 @@ class Report(models.Model):
         return reverse('report:detail', args=[self.pk])
 
     def __unicode__(self):
-        return self.desciption[:20] or "None"
+        return self.description[:20] or "None"
 
     OPEN = 1
     RESOLVED = 2
