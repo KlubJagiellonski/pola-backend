@@ -63,11 +63,13 @@ def update_company_from_krs(product, company):
             company.common_name = companies[0]['nazwa_skrocona']
             company.address = companies[0]['adres']
             company.nip = companies[0]['nip']
+            company.plRegistered = 100
 
             Company.save(company, commit_desc=
                 "Dane firmy pobrane automatycznie poprzez API "
                 "mojepanstwo.pl ({})"
-                         .format(companies[0]['url']))
+                         .format(companies[0]['url'])
+                )
 
             shareholders = shareholders_to_str(krs, companies[0]['id'] ,'')
             if shareholders:
