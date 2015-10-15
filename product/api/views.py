@@ -2,6 +2,7 @@ from .serializers import ProductSerializer
 from ..models import Product
 from pola.models import Query
 from rest_framework import viewsets
+from pola.logic import get_by_code
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
@@ -13,7 +14,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_object(self):
         code = self.kwargs['pk']
-        return Product.get_by_code(code=code)
+        return get_by_code(code=code)
 
     def retrieve(self, request, *args, **kwargs):
         product = self.get_object()
