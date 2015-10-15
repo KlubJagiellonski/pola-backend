@@ -177,7 +177,6 @@ def shareholders_to_str(krs, id, indent):
             str+=shareholders_to_str(krs, wspolnik['krs_id'], indent+'  ')
     return str
 
-
 CODE_PREFIX_TO_COUNTRY = {
             "30" : "Francja",
             "31" : "Francja",

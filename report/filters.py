@@ -1,7 +1,9 @@
 import django_filters
 from .models import Report
 from django.utils.translation import ugettext_lazy as _
-from pola.filters import CrispyFilterMixin, AutocompleteChoiceFilter
+from pola.filters import (AutocompleteChoiceFilter,
+                          CrispyFilterMixin,
+                          NoHelpTextFilterMixin)
 
 
 class StatusFilter(django_filters.ChoiceFilter):
@@ -21,7 +23,9 @@ class StatusFilter(django_filters.ChoiceFilter):
         return qs
 
 
-class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
+class ReportFilter(NoHelpTextFilterMixin,
+                   CrispyFilterMixin,
+                   django_filters.FilterSet):
     status = StatusFilter()
     product = AutocompleteChoiceFilter(
         autocomplete_name="ProductAutocomplete")
