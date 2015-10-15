@@ -34,7 +34,7 @@ def create_from_api(code, obj):
         obj_product_name = obj_product.get('Name', None)
 
     if obj_owner_name:
-        company, _ = Company.objects.get_or_create(name=obj_owner_name,
+        company, company_created = Company.objects.get_or_create(name=obj_owner_name,
             commit_desc='Firma utworzona automatycznie na podstawie API'
                         ' ILiM')
 
@@ -48,7 +48,7 @@ def create_from_api(code, obj):
         code=code,
         company=company)
 
-    if company:
+    if company and company_created:
         update_company_from_krs(product, company)
 
     return product
