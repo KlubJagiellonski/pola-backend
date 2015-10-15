@@ -34,7 +34,7 @@
             <td>{% trans "PL Capital: " %}</td>
             <td>
             {% if object.plCapital == 0 or object.plCapital %}
-                {% include "partiales/progress-bar.html" with value=object.plCapital %}
+                {{ object.plCapital }}%
             {% else %}
                 None
             {% endif %}
@@ -43,6 +43,60 @@
 		<tr>
             <td>{% trans "PL Capital Notes: " %}</td><td>{{ object.plCapital_notes }}</td>
 		</tr>
+		<tr>
+            <td>{% trans "PL Workers: " %}</td>
+            <td>
+            {% if object.plWorkers == 0 or object.plWorkers %}
+                {{ object.plWorkers }}%
+            {% else %}
+                None
+            {% endif %}
+            </td>
+		</tr>
+		<tr>
+            <td>{% trans "PL Workers Notes: " %}</td><td>{{ object.plWorkers_notes }}</td>
+		</tr>
+		<tr>
+            <td>{% trans "PL RnD: " %}</td>
+            <td>
+            {% if object.plRnD == 0 or object.plRnD %}
+                {{ object.plRnD }}%
+            {% else %}
+                None
+            {% endif %}
+            </td>
+		</tr>
+		<tr>
+            <td>{% trans "PL RnD Notes: " %}</td><td>{{ object.plRnD_notes }}</td>
+		</tr>
+		<tr>
+            <td>{% trans "PL Registered: " %}</td>
+            <td>
+            {% if object.plRegistered == 0 or object.plRegistered %}
+                {{ object.plRegistered }}%
+            {% else %}
+                None
+            {% endif %}
+            </td>
+		</tr>
+		<tr>
+            <td>{% trans "PL Registered Notes: " %}</td><td>{{ object.plRegistered_notes }}</td>
+		</tr>
+		<tr>
+            <td>{% trans "PL Not Global Ent: " %}</td>
+            <td>
+            {% if object.plNotGlobEnt == 0 or object.plNotGlobEnt %}
+                {{ object.plNotGlobEnt }}%
+            {% else %}
+                None
+            {% endif %}
+            </td>
+		</tr>
+		<tr>
+            <td>{% trans "PL Not Global Ent Notes: " %}</td><td>{{ object.plNotGlobEnt_notes }}</td>
+		</tr>
+
+
 	</table>
 </div>
 <ul>
