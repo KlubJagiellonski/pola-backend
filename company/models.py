@@ -22,13 +22,14 @@ class IntegerRangeField(models.IntegerField):
 
 class CompanyQuerySet(models.query.QuerySet):
 
-    def get_or_create(self, commit_desc=None, *args, **kwargs):
+    def get_or_create(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
             return super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision():
+        with transaction.atomic(), reversion.create_revision(manage_manually=True):
             obj = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
-            reversion.set_comment(commit_desc)
+            reversion.default_revision_manager.save_revision([obj[0]],
+                comment=commit_desc, user=commit_user)
             return obj
 
     def with_query_count(self):
@@ -86,13 +87,14 @@ class Company(models.Model):
     def __unicode__(self):
         return self.common_name or self.official_name or self.name
 
-    def save(self, commit_desc=None, *args, **kwargs):
+    def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
             return super(Company, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision():
+        with transaction.atomic(), reversion.create_revision(manage_manually=True):
             obj = super(Company, self).save(*args, **kwargs)
-            reversion.set_comment(commit_desc)
+            reversion.default_revision_manager.save_revision([self],
+                comment=commit_desc, user=commit_user )
             return obj
 
     class Meta:
