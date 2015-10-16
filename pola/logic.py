@@ -150,6 +150,8 @@ def serialize_product(product):
                 json['company']['name'] = 'Miejsce produkcji: {}'\
                     .format(CODE_PREFIX_TO_COUNTRY[prefix])
 
+    json['report']='ask_for_company' if not json.has_key('company') else False
+
     return json
 
 def get_plScore(company):
