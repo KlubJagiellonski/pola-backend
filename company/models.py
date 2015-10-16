@@ -37,6 +37,7 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 class Company(models.Model):
+    VALUE_0_OR_100 = ((0,0),(100,100))
     nip = models.CharField(max_length=10, db_index=True, null=True,
                            blank=True, verbose_name="Company's NIP#")
     name = models.CharField(max_length=128, null=True, blank=True,
@@ -54,23 +55,23 @@ class Company(models.Model):
     plCapital_notes = models.TextField(
         _("Notes about share of Polish capital"), null=True, blank=True)
     plRegistered = IntegerRangeField(
-        verbose_name=_("Registered in Poland?"),
-        min_value=0, max_value=100, null=True, blank=True)
+        verbose_name=_("Registered in Poland?"), min_value=0, max_value=100,
+        null=True, blank=True, choices=VALUE_0_OR_100)
     plRegistered_notes = models.TextField(
-        _("Notes about registered in Poland"), null=True, blank=True)
+        _("Notes about registered in Poland"), null=True, blank=True, choices=VALUE_0_OR_100)
     plRnD = IntegerRangeField(
-        verbose_name=_("Information about R&D center"),
-        min_value=0, max_value=100, null=True, blank=True)
+        verbose_name=_("Information about R&D center"), min_value=0,
+        max_value=100, null=True, blank=True, choices=VALUE_0_OR_100)
     plRnD_notes = models.TextField(
         _("Notes about R&D center"), null=True, blank=True)
     plWorkers = IntegerRangeField(
-        verbose_name=_("Information about workers"),
-        min_value=0, max_value=100, null=True, blank=True)
+        verbose_name=_("Information about workers"), min_value=0,
+        max_value=100, null=True, blank=True, choices=VALUE_0_OR_100)
     plWorkers_notes = models.TextField(
         _("Notes about workers"), null=True, blank=True)
     plNotGlobEnt = IntegerRangeField(
-        verbose_name=_("Isn't it a global enterprise?"),
-        min_value=0, max_value=100, null=True, blank=True)
+        verbose_name=_("Isn't it a global enterprise?"), min_value=0,
+        max_value=100, null=True, blank=True, choices=VALUE_0_OR_100)
     plNotGlobEnt_notes = models.TextField(
         _("Notes about global enterprise"), null=True, blank=True)
     verified = models.BooleanField(default=False)
