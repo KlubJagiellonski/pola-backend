@@ -111,12 +111,13 @@ def create_bot_report(product, description):
 def serialize_product(product):
     json = {'plScore':None,
             'verified':False,
+            'report':'ask_for_company',
             'id':product.id}
 
     company = product.company
 
     if company:
-
+        json['report'] = False
         json['company'] = {}
         json['company']['name'] = company.common_name or company.official_name \
                                   or company.name
@@ -149,8 +150,6 @@ def serialize_product(product):
                 json['company'] = {}
                 json['company']['name'] = 'Miejsce produkcji: {}'\
                     .format(CODE_PREFIX_TO_COUNTRY[prefix])
-
-    json['report']='ask_for_company' if not json.has_key('company') else False
 
     return json
 
