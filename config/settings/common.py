@@ -233,6 +233,7 @@ AUTHENTICATION_BACKENDS = (
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_ADAPTER = 'pola.custom_allauth.NoSignupAccountAdapter'
 
 # Custom user app defaults
 # Select the correct user model
