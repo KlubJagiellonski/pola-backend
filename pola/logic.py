@@ -115,7 +115,8 @@ def serialize_product(product):
     json = {'plScore':None,
             'verified':False,
             'report':'ask_for_company',
-            'id':product.id}
+            'id':product.id,
+            'code':product.code}
 
     company = product.company
 
