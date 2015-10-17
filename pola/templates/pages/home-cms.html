@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-<h1>{% trans "Fight!" %}</h1>
+<h1>{% trans "Do pracy. Użytkownicy czekają :)" %}</h1>
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Oldest reports" %}</h3>
+                <h3 class="panel-title">{% trans "Najstarsze zgłoszenia" %}</h3>
             </div>
             {% for report in  oldest_reports %}
                 <li class="list-group-item">
-                    <a href="{{ report.get_absolute_url }}">{{ report }} </a>
+                    <a href="{{ report.get_absolute_url }}">{{ report }}, <small>{{ report.get_timedelta}} {% trans "temu" %}</small></a>
                 </li>
             {% endfor %}
             <div class="panel-footer">
-                <a href="{% url 'report:list' %}?status=open&o=-created_at">{% trans "More" %}</a>
+                <a href="{% url 'report:list' %}?status=open&o=created_at">{% trans "Więcej" %}</a>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Newest reports" %}</h3>
+                <h3 class="panel-title">{% trans "Najnowsze zgłoszenia" %}</h3>
             </div>
             {% for report in  newest_reports %}
                 <li class="list-group-item">
-                    <a href="{{ report.get_absolute_url }}">{{ report }} </a>
+                    <a href="{{ report.get_absolute_url }}">{{ report }}, <small>{{ report.get_timedelta}} {% trans "temu" %}</small></a>
                 </li>
             {% endfor %}
             <div class="panel-footer">
-                <a href="{% url 'report:list' %}?status=open&o=created_at">{% trans "More" %}</a>
+                <a href="{% url 'report:list' %}?status=open&o=-created_at">{% trans "Więcej" %}</a>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Most popular products" %}</h3>
+                <h3 class="panel-title">{% trans "Najpopularniejsze produkty bez firmy" %}</h3>
             </div>
             <ul class="list-group">
             {% for product in  most_popular_products %}
@@ -48,14 +48,14 @@
             {% endfor %}
             </ul>
             <div class="panel-footer">
-                <a href="{% url 'product:list' %}?o=-query_count">{% trans "More" %}</a>
+                <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Most popular companies" %}</h3>
+                <h3 class="panel-title">{% trans "Najpopularniejsi niezweryfikowani producenci" %}</h3>
             </div>
             <ul class="list-group">
             {% for company in  most_popular_companies %}
@@ -65,7 +65,7 @@
             {% endfor %}
             </ul>
             <div class="panel-footer">
-                <a href="{% url 'company:list' %}?o=-query_count">{% trans "More" %}</a>
+                <a href="{% url 'company:list' %}?verified=3&o=-query_count">{% trans "More" %}</a>
             </div>
         </div>
     </div>

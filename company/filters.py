@@ -9,14 +9,13 @@ class CompanyFilter(NoHelpTextFilterMixin,
                     django_filters.FilterSet):
 
     plCapital = django_filters.RangeFilter()
+    verified = django_filters.BooleanFilter()
 
     class Meta:
         model = Company
         fields = {
             'nip': ['icontains'],
-            'name': ['icontains'],
-            'address': ['icontains'],
-            'plCapital': []}
+            'name': ['icontains']}
         order_by = (
             ('nip', _('NIP')),
             ('-nip', _('NIP (reversed)')),

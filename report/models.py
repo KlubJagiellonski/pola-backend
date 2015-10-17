@@ -7,7 +7,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from product.models import Product
 from datetime import datetime
-
+from babel.dates import format_timedelta
+from django.utils import timezone
 
 class ReportQuerySet(models.QuerySet):
     def only_open(self):
@@ -49,7 +50,10 @@ class Report(models.Model):
         return reverse('report:detail', args=[self.pk])
 
     def __unicode__(self):
-        return self.description[:20] or "None"
+        return self.description[:40] or "None"
+
+    def get_timedelta(self):
+        return format_timedelta(timezone.now()-self.created_at, locale='pl_PL')
 
     OPEN = 1
     RESOLVED = 2

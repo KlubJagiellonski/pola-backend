@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}pola{% endblock title %}</title>
+    <title>{% block title %}Pola{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,50 +28,7 @@
 
 <body>
 
-    <div class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">{% trans "Toggle navigation" %}</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">{% trans "Pola" %}</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                    <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'home-cms'  %}">{% trans "CMS" %}</a></li>
-                    {% else %}
-                    <li><a href="{% url 'account_login' %}">{% trans "Log In" %}</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
-        {% endfor %}
-        {% endif %}
-        {% block breadcrumbs %}{% endblock %}
-        {% block content %}
-        <p>{% trans "Use this document as a way to quick start any new project." %}</p>
-        {% endblock content %}
-
-    </div> <!-- /container -->
+    <div>Nie jesteśmy jeszcze gotowi. Sprawdź za jakiś czas...</div>
 
     {% block modal %}{% endblock modal %}
 
