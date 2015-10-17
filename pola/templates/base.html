@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}pola{% endblock title %}</title>
+    <title>{% block title %}Pola{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -33,7 +33,7 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                    <span class="sr-only">{% trans "Nawigacja" %}</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -44,21 +44,21 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'home-cms' %}">{% trans "Home" %}</a></li>
-                    <li><a href="{% url 'product:list' %}">{% trans "Product" %}</a></li>
-                    <li><a href="{% url 'company:list' %}">{% trans "Companies" %}</a></li>
-                    <li><a href="{% url 'report:list' %}">{% trans "Reports" %}</a></li>
+                    <li><a href="{% url 'home-cms' %}">{% trans "Start" %}</a></li>
+                    <li><a href="{% url 'product:list' %}">{% trans "Produkty" %}</a></li>
+                    <li><a href="{% url 'company:list' %}">{% trans "Producenci" %}</a></li>
+                    <li><a href="{% url 'report:list' %}">{% trans "Zgłoszenia" %}</a></li>
 
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'select_lang' %}">{% trans "Language" %}</a></li>
+                    <li><a href="{% url 'select_lang' %}">{% trans "Język" %}</a></li>
                     {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a></li>
-                    <li><a href="{% url 'account_logout' %}">{% trans "Logout" %}</a></li>
+                    <li><a href="{% url 'users:detail' request.user.username  %}">{% trans "Profil" %}</a></li>
+                    <li><a href="{% url 'account_logout' %}">{% trans "Wyloguj" %}</a></li>
                     {% else %}
-                    <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
-                    <li><a href="{% url 'account_login' %}">{% trans "Log In" %}</a></li>
+                    <li><a href="{% url 'account_signup' %}">{% trans "Załóż konto" %}</a></li>
+                    <li><a href="{% url 'account_login' %}">{% trans "Zalgouj się" %}</a></li>
                     {% endif %}
                 </ul>
             </div>
