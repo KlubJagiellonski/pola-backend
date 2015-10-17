@@ -52,3 +52,6 @@ django-grappelli==2.7.1
 
 # Autocomplete
 django-autocomplete-light==2.2.10
+
+#Babel
+babel-2.1.1
