@@ -277,5 +277,7 @@ LOGGING = {
     }
 }
 
+IS_PRODUCTION = env("IS_PRODUCTION", default=False)
+
 # Your common stuff: Below this line define 3rd party library settings
 PRODUKTY_W_SIECI_API_KEY = env("GS1_API_KEY")

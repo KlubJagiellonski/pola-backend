@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls import include, url, patterns
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from pola.views import FrontPageView
 
 urlpatterns = [
@@ -32,7 +32,11 @@ urlpatterns = [
 #    url(r'^api/', include('pola.api.urls', namespace='api')),
     url(r'^a/', include('api.urls', namespace='api')),
 
-    url(r'^autocomplete/', include('autocomplete_light.urls'))
+    url(r'^autocomplete/', include('autocomplete_light.urls')),
+
+    url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt",
+                                        content_type='text/plain')),
+    url(r'^favicon.ico$', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
 ]
 
 # serving static files
