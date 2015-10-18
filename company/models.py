@@ -88,7 +88,8 @@ class Company(models.Model):
                  (100,_(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
     plNotGlobEnt_notes = models.TextField(
         _(u"Więcej nt. struktury kapitałowej"), null=True, blank=True)
-    verified = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False,
+        verbose_name=_("Dane zweryfikowane"))
 
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
