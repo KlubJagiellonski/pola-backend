@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse_lazy
+from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.decorators.cache import cache_page
@@ -7,6 +8,7 @@ from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from django.utils.translation import ugettext_lazy as _
 from reportlab.graphics import renderPM
 import reversion
+from reversion.models import Version
 from django_filters.views import FilterView
 from .forms import ProductForm
 from .filters import ProductFilter
@@ -48,15 +50,53 @@ class ProductDelete(LoginRequiredMixin, FormValidMessageMixin,  DeleteView):
     form_valid_message = _(u"Product deleted!")
 
 
-class ProductHistoryView(LoginRequiredMixin, DetailView):
+class ProductHistoryView(LoginRequiredMixin, ListView):
     slug_field = 'code'
-    model = models.Product
+    model = Version
+    revision_model = models.Product
     template_name = 'product/product_history.html'
+
+    def get_object(self):
+        slug_field = self.slug_field
+        slug = self.kwargs['slug']
+        return self.revision_model.objects.get(**{slug_field: slug})
+
+    def get_queryset(self):
+        self.queryset = reversion.get_for_object(self.get_object())
+        return super(ProductHistoryView, self).get_queryset()
 
     def get_context_data(self, **kwargs):
         context = super(ProductHistoryView, self).get_context_data(**kwargs)
-        context['revision_list'] = reversion.get_for_object(self.get_object())
+        context['object'] = self.get_object()
         return context
+
+
+class ProductHistoryDetailAjaxView(LoginRequiredMixin, DetailView):
+    # TODO: Fix display related objects
+    # See:
+    # https://github.com/etianen/django-reversion/blob/master/src/reversion/admin.py#L182-L199
+    model = Version
+    revision_model = models.Product
+    template_name = 'product/product_history_detail.html'
+
+    def get_queryset(self):
+        return reversion.get_for_object(self.get_revision_object())
+
+    def get_revision_object(self):
+        product_code = self.kwargs['code']
+        return self.revision_model.objects.get(code=product_code)
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        revision_id = self.kwargs['pk']
+        return queryset.get(pk=revision_id)
+
+    def get_context_data(self, **kwargs):
+        import ipdb; ipdb.set_trace()
+        return super(
+            ProductHistoryDetailAjaxView,
+            self).get_context_data(**kwargs)
 
 
 @cache_page(0)

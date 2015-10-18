@@ -1,0 +1,43 @@
+<h1>{{ object }}</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Version</th>
+            <th>Version.Revision</th>
+            <th>Data utworzenia</th>
+            <th>Użytkownik</th>
+            <th>Komentarz</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ object }}</td>
+            <td>{{ object.revision }}</td>
+            <td>{{ object.revision.data_created }}</td>
+            <td>{{ object.revision.user }}</td>
+            <td>{{ object.revision.comment }}</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <tr>
+        <th>Company</th>
+        <td>{{ object.field_dict.company }}</td>
+    </tr>
+    <tr>
+        <th>Code</th>
+        <td>{{ object.field_dict.code }}</td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td>{{ object.field_dict.name }}</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td></td>
+    </tr>
+</table>

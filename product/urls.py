@@ -24,6 +24,10 @@ urlpatterns = [
         regex=r'(?P<slug>[-\w]+)/history$',
         view=views.ProductHistoryView.as_view(),
         name="view-history"),
+    url(
+        regex=r'(?P<code>[-\w]+)/history/(?P<pk>[0-9]+)$',
+        view=views.ProductHistoryDetailAjaxView.as_view(),
+        name="view-history-detail"),
     url(regex=r'(?P<slug>[-\w]+)/$',
         view=views.ProductDetailView.as_view(),
         name="detail"),

@@ -7,11 +7,46 @@
 
 {% block content %}
 <h1>{{ object }}</h1>
-<ul>
-    {% for version  in revision_list %}
-    <li>{{ version }} @ {{ version.revision }} @ {{ version.revision.data_created }} @ {{ version.revision.user }} @ {{ version.revision.comment }} </li>
-    {% empty %}
-    <li>{% trans "No history yet." %}</li>
-    {% endfor %}
-</ul>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Historia</div>
+        <!-- Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data utworzenia</th>
+                    <th>Użytkownik</th>
+                    <th>Komentarz</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for version  in object_list %}
+                <tr>
+                    <td><a href="#" class="js-revision-open" data-id="{{ version.id }}">{{ version.revision.date_created }}</a></td>
+                    <td>{{ version.revision.user }}</td>
+                    <td>{{ version.revision.comment }}</td>
+                </tr>
+            {% empty %}
+            <tr>
+                <td colspam="3">Brak historii jeszcze</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>
 {% endblock content %}
+
+{% block modal %}
+<div class="modal fade" id="modal_revision" tabindex="-1" role="dialog" aria-labelledby="modal_revision_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal_revision_label">Modal title</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
