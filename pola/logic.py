@@ -142,9 +142,9 @@ def serialize_product(product):
         json['company']['plBrand'] = 0
         json['company']['plBrand_notes'] = None
 
-        if company.plRnD and company.plWorkers and company.plCapital and\
-            company.plTaxes and company.plBrand:
-            json['plScore'] = get_plScore(company)
+        plScore = get_plScore(company)
+        if plScore:
+            json['plScore'] = plScore
             json['verified'] = company.verified
     else:
         for prefix in CODE_PREFIX_TO_COUNTRY.keys():
@@ -158,13 +158,17 @@ def serialize_product(product):
     return json
 
 def get_plScore(company):
-    return int(
-        .35 * company.plCapital +
-        .30 * company.plWorkers +
-        .15 * company.plRnD +
-        .10 * company.plRegistered +
-        .10 * company.plNotGlobEnt
-    )
+    if company.plCapital and company.plWorkers and company.plRnD and\
+        company.plRegistered and company.plNotGlobEnt:
+        return int(
+            .35 * company.plCapital +
+            .30 * company.plWorkers +
+            .15 * company.plRnD +
+            .10 * company.plRegistered +
+            .10 * company.plNotGlobEnt
+        )
+    else:
+        return None
 
 def shareholders_to_str(krs, id, indent):
     str = ''
