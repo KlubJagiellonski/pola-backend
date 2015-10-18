@@ -14,7 +14,7 @@ class CrispyFilterMixin(object):
         if self.form_class:
             self._form.helper.form_class = 'form'
         self._form.helper.form_method = 'get'
-        self._form.helper.layout.append(Submit('filter', _('Filter')))
+        self._form.helper.layout.append(Submit('filter', _('Filtruj')))
         return self._form
 
 

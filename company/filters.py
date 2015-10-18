@@ -1,28 +1,31 @@
+# -*- coding: utf-8 -*-
+
 import django_filters
 from .models import Company
 from django.utils.translation import ugettext_lazy as _
 from pola.filters import NoHelpTextFilterMixin, CrispyFilterMixin
-
+from distutils.util import strtobool
 
 class CompanyFilter(NoHelpTextFilterMixin,
                     CrispyFilterMixin,
                     django_filters.FilterSet):
 
-    plCapital = django_filters.RangeFilter()
-    verified = django_filters.BooleanFilter()
+    verified = django_filters.TypedChoiceFilter(
+        choices=((None,_("----")),(True,_("Tak")),(False,_("Nie"))),
+        coerce=strtobool,
+        label=_(u"Dane zweryfikowane"))
 
     class Meta:
         model = Company
         fields = {
             'nip': ['icontains'],
-            'name': ['icontains']}
+            'name': ['icontains'],
+            'official_name': ['icontains'],
+            'common_name': ['icontains'],
+        }
         order_by = (
-            ('nip', _('NIP')),
-            ('-nip', _('NIP (reversed)')),
-            ('name', _('name')),
-            ('-name', _('name (reversed)')),
-            ('plCapital', _('plCapital')),
-            ('-plCapital', _('plCapital  (reversed)')),
-            ('query_count', _('query_count')),
-            ('-query_count', _('query_count (reversed)')),
+            ('name', _('Nazwa (A-Z)')),
+            ('-name', _('Nazwa (Z-A)')),
+            ('query_count', _(u'Liczba zapytań (rosnąco)')),
+            ('-query_count', _(u'Liczba zapytań (malejąco)')),
         )

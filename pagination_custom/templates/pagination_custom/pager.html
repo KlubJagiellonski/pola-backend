@@ -4,11 +4,11 @@
 <nav>
     <ul class="pager">
     {% if page.has_previous %}
-        <li><a href="?{% query_update request page=page.previous_page_number %}">{% trans 'previous' %}</a></li>
+        <li><a href="?{% query_update request page=page.previous_page_number %}">{% trans 'Poprzednie' %}</a></li>
     {% endif %}
     <li>{% blocktrans with page.number as page and page.paginator.num_pages as total%}{{page}} of {{total}}{% endblocktrans %}</li>
     {% if page.has_next %}
-        <li><a href="?{% query_update request page=page.next_page_number %}">{% trans 'next'%}</a></li>
+        <li><a href="?{% query_update request page=page.next_page_number %}">{% trans 'Następne'%}</a></li>
     {% endif %}
     </ul>
 </nav>
