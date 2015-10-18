@@ -158,8 +158,11 @@ def serialize_product(product):
     return json
 
 def get_plScore(company):
-    if company.plCapital and company.plWorkers and company.plRnD and\
-        company.plRegistered and company.plNotGlobEnt:
+    if  company.plCapital is not None and\
+        company.plWorkers is not None and\
+        company.plRnD is not None and\
+        company.plRegistered is not None and\
+        company.plNotGlobEnt is not None:
         return int(
             .35 * company.plCapital +
             .30 * company.plWorkers +
