@@ -48,7 +48,7 @@ class FormHorizontalMixin(HelperMixin):
 
 class CommitDescriptionMixin(forms.Form):
     commit_desc = forms.CharField(label=_('Opis zmiany'),
-                                  max_length=100, widget=forms.Textarea)
+                                  widget=forms.Textarea)
 
     def save(self, *args, **kwargs):
         with transaction.atomic(), reversion.create_revision():
