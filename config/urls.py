@@ -34,9 +34,12 @@ urlpatterns = [
 
     url(r'^autocomplete/', include('autocomplete_light.urls')),
 
-    url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt",
-                                        content_type='text/plain')),
-    url(r'^favicon.ico$', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
+    url(r'^robots\.txt$', TemplateView.as_view(
+        template_name="robots.txt" if settings.IS_PRODUCTION
+        else "robots-staging.txt", content_type='text/plain')),
+
+    url(r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL+
+                                            'favicon.ico', permanent=True)),
 ]
 
 # serving static files
