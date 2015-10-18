@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.db.models import Count
@@ -37,43 +39,55 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 class Company(models.Model):
-    VALUE_0_OR_100 = ((0,0),(100,100))
     nip = models.CharField(max_length=10, db_index=True, null=True,
-                           blank=True, verbose_name="Company's NIP#")
+                           blank=True, verbose_name=_(u"NIP/Tax ID"))
     name = models.CharField(max_length=128, null=True, blank=True,
                             db_index=True,
                             verbose_name=
-                            "Name as retrieved from produkty_w_sieci API")
+                            _(u"Nazwa (pobrana z ILiM)"))
     official_name = models.CharField(max_length=128, blank=True, null=True,
-                                     verbose_name="Official company name")
+                                     verbose_name=_(u"Nazwa rejestrowa"))
     common_name = models.CharField(max_length=128, blank=True,
-                                   verbose_name="Common company name")
+                                   verbose_name=_(u"Nazwa dla użytkownika"))
     address = models.TextField(null=True, blank=True)
+
     plCapital = IntegerRangeField(
-        verbose_name=_("Percentage share of Polish capital"),
+        verbose_name=_(u"Udział polskiego kapitału"),
         min_value=0, max_value=100, null=True, blank=True)
     plCapital_notes = models.TextField(
-        _("Notes about share of Polish capital"), null=True, blank=True)
-    plRegistered = IntegerRangeField(
-        verbose_name=_("Registered in Poland?"), min_value=0, max_value=100,
-        null=True, blank=True, choices=VALUE_0_OR_100)
-    plRegistered_notes = models.TextField(
-        _("Notes about registered in Poland"), null=True, blank=True, choices=VALUE_0_OR_100)
-    plRnD = IntegerRangeField(
-        verbose_name=_("Information about R&D center"), min_value=0,
-        max_value=100, null=True, blank=True, choices=VALUE_0_OR_100)
-    plRnD_notes = models.TextField(
-        _("Notes about R&D center"), null=True, blank=True)
+        _(u"Więcej nt. udziału polskiego kapitału"), null=True, blank=True)
+
     plWorkers = IntegerRangeField(
-        verbose_name=_("Information about workers"), min_value=0,
-        max_value=100, null=True, blank=True, choices=VALUE_0_OR_100)
+        verbose_name=_(u"Miejsce produkcji"), min_value=0,
+        max_value=100, null=True, blank=True,
+        choices=((0,_(u"0 - Nie produkuje w Polsce")),
+                 (100,_(u"100 - Produkuje w Polsce"))))
     plWorkers_notes = models.TextField(
-        _("Notes about workers"), null=True, blank=True)
+        _(u"Więcej nt. miejsca produkcji"), null=True, blank=True)
+
+    plRnD = IntegerRangeField(
+        verbose_name=_(u"Wysokopłatne miejsca pracy"), min_value=0,
+        max_value=100, null=True, blank=True,
+        choices=((0,_(u"0 - Nie tworzy wysokopłatnych miejsc pracy w Polsce")),
+                 (100,_(u"100 - Tworzy wysokopłatne miejsca pracy w Polsce"))))
+    plRnD_notes = models.TextField(
+        _(u"Więcej nt. wysokopłatnych miejsc pracy"), null=True, blank=True)
+
+    plRegistered = IntegerRangeField(
+        verbose_name=_(u"Miejsce rejestracji"), min_value=0, max_value=100,
+        null=True, blank=True,
+        choices=((0,_(u"0 - Firma zarejestrowana za granicą")),
+                 (100,_(u"100 - Firma zarejestrowana w Polsce"))))
+    plRegistered_notes = models.TextField(
+        _(u"Więcej nt. miejsca rejestracji"), null=True, blank=True)
+
     plNotGlobEnt = IntegerRangeField(
-        verbose_name=_("Isn't it a global enterprise?"), min_value=0,
-        max_value=100, null=True, blank=True, choices=VALUE_0_OR_100)
+        verbose_name=_(u"Struktura kapitałowa"), min_value=0,
+        max_value=100, null=True, blank=True,
+        choices=((0,_(u"0 - Firma jest częścią zagranicznego koncernu")),
+                 (100,_(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
     plNotGlobEnt_notes = models.TextField(
-        _("Notes about global enterprise"), null=True, blank=True)
+        _(u"Więcej nt. struktury kapitałowej"), null=True, blank=True)
     verified = models.BooleanField(default=False)
 
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
@@ -99,7 +113,7 @@ class Company(models.Model):
             return obj
 
     class Meta:
-        verbose_name = _("Company")
-        verbose_name_plural = _("Companies")
+        verbose_name = _(u"Producent")
+        verbose_name_plural = _(u"Producenci")
 
 reversion.register(Company)

@@ -27,9 +27,14 @@
 </head>
 
 <body>
+    <div class="container">
+        {% if user.is_authenticated %}
+            <a href="{% url 'home-cms' %}" class="btn btn-primary">CMS</a>
+        {% endif%}
+        {% block content %}
 
-    <div>Nie jesteśmy jeszcze gotowi. Sprawdź za jakiś czas...</div>
-
+        {% endblock content%}
+    </div>
     {% block modal %}{% endblock modal %}
 
     {% if debug %}
