@@ -3,12 +3,12 @@
 
 {% block breadcrumbs_rows %}
     <li><a href="{{ obj.get_absolute_url }}">{{ object }}</a></li>
-    <li class="active">{% trans 'Confirm delete' %}</li>
+    <li class="active">{% trans 'Potwierdź usunięcie' %}</li>
 {% endblock %}
 
 {% block content %}
 <form action="" method="post">{% csrf_token %}
-    <p>{% blocktrans %}Are you sure you want to delete "{{ object }}"?{% endblocktrans %}</p>
+    <p>{% blocktrans %}Czy na pewno chcesz usunąć producenta: "{{ object }}"?{% endblocktrans %}</p>
     <input type="submit" value="Confirm" class="btn btn-primary" />
 </form>
 {% endblock %}
