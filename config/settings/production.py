@@ -31,7 +31,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 INSTALLED_APPS += ("djangosecure", )
 
 SECURITY_MIDDLEWARE = (
-    'django.middleware.http.SetRemoteAddrFromForwardedFor'
+    'django.middleware.http.SetRemoteAddrFromForwardedFor',
     'djangosecure.middleware.SecurityMiddleware',
 )
 
