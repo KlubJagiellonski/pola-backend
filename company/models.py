@@ -39,6 +39,7 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 class Company(models.Model):
+
     nip = models.CharField(max_length=10, db_index=True, null=True,
                            blank=True, verbose_name=_(u"NIP/Tax ID"))
     name = models.CharField(max_length=128, null=True, blank=True,
@@ -49,7 +50,8 @@ class Company(models.Model):
                                      verbose_name=_(u"Nazwa rejestrowa"))
     common_name = models.CharField(max_length=128, blank=True,
                                    verbose_name=_(u"Nazwa dla użytkownika"))
-    address = models.TextField(null=True, blank=True)
+    address = models.TextField(null=True, blank=True,
+                               verbose_name=_(u"Adres"))
 
     plCapital = IntegerRangeField(
         verbose_name=_(u"Udział polskiego kapitału"),

@@ -17,92 +17,9 @@
 	<table class="table">
         {% for field in fields %}
 		<tr>
-            <td>{{ field.name }}</td><td></td>
+            <td>{{ field.name }}</td><td>{{ field.value }}</td>
 		</tr>
         {% endfor %}
-
-		<tr>
-            <td>{% trans "PK: " %}</td><td>{{ object.pk }}</td>
-		</tr>
-		<tr>
-            <td>{% trans "Name: " %}</td><td>{{ object.name }}</td>
-		</tr>
-		<tr>
-            <td>{% trans "NIP: " %}</td><td>{{ object.nip }}</td>
-		</tr>
-		<tr>
-            <td>{% trans "Address: " %}</td><td>{{ object.address }}</td>
-		</tr>
-        <tr>
-            <td>{% trans "Query count: " %}</td><td>{{ object.query_count }}</td>
-        </tr>
-		<tr>
-            <td>{% trans "PL Capital: " %}</td>
-            <td>
-            {% if object.plCapital == 0 or object.plCapital %}
-                {{ object.plCapital }}%
-            {% else %}
-                None
-            {% endif %}
-            </td>
-		</tr>
-		<tr>
-            <td>{% trans "PL Capital Notes: " %}</td><td>{{ object.plCapital_notes }}</td>
-		</tr>
-		<tr>
-            <td>{% trans "PL Workers: " %}</td>
-            <td>
-            {% if object.plWorkers == 0 or object.plWorkers %}
-                {{ object.plWorkers }}%
-            {% else %}
-                None
-            {% endif %}
-            </td>
-		</tr>
-		<tr>
-            <td>{% trans "PL Workers Notes: " %}</td><td>{{ object.plWorkers_notes }}</td>
-		</tr>
-		<tr>
-            <td>{% trans "PL RnD: " %}</td>
-            <td>
-            {% if object.plRnD == 0 or object.plRnD %}
-                {{ object.plRnD }}%
-            {% else %}
-                None
-            {% endif %}
-            </td>
-		</tr>
-		<tr>
-            <td>{% trans "PL RnD Notes: " %}</td><td>{{ object.plRnD_notes }}</td>
-		</tr>
-		<tr>
-            <td>{% trans "PL Registered: " %}</td>
-            <td>
-            {% if object.plRegistered == 0 or object.plRegistered %}
-                {{ object.plRegistered }}%
-            {% else %}
-                None
-            {% endif %}
-            </td>
-		</tr>
-		<tr>
-            <td>{% trans "PL Registered Notes: " %}</td><td>{{ object.plRegistered_notes }}</td>
-		</tr>
-		<tr>
-            <td>{% trans "PL Not Global Ent: " %}</td>
-            <td>
-            {% if object.plNotGlobEnt == 0 or object.plNotGlobEnt %}
-                {{ object.plNotGlobEnt }}%
-            {% else %}
-                None
-            {% endif %}
-            </td>
-		</tr>
-		<tr>
-            <td>{% trans "PL Not Global Ent Notes: " %}</td><td>{{ object.plNotGlobEnt_notes }}</td>
-		</tr>
-
-
 	</table>
 </div>
 <ul>

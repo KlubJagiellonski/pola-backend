@@ -30,22 +30,46 @@ class CompanyDelete(LoginRequiredMixin, DeleteView):
     model = Company
     success_url = reverse_lazy('company:list')
 
-class FieldToDisplay:
-    def __init__(self, name):
-        self.name = name
-
-
 class CompanyDetailView(LoginRequiredMixin, DetailView):
     model = Company
     queryset = Company.objects.with_query_count().all()
 
 
     FIELDS_TO_DISPLAY = (
+        'nip',
+        'name',
+        'official_name',
         'common_name',
-        'plRegistered'
+        'address',
+        'plCapital',
+        'plCapital_notes',
+        'plWorkers',
+        'plWorkers_notes',
+        'plRnD',
+        'plRnD_notes',
+        'plRegistered',
+        'plRegistered_notes',
+        'plNotGlobEnt',
+        'plNotGlobEnt_notes',
+        'verified',
     )
-    fields = [FieldToDisplay('kuku2'), FieldToDisplay('kuku3')]
 
-    def __init__(self):
-        for field in CompanyDetailView.FIELDS_TO_DISPLAY:
-            self.fields.append(FieldToDisplay('kuku'))
+    def get_context_data(self, **kwargs):
+        context = super(CompanyDetailView, self).get_context_data(**kwargs)
+        object = context['object']
+
+        fields = []
+
+        for field_name in self.FIELDS_TO_DISPLAY:
+            try:
+                method_display = getattr(object, 'get_'+field_name+'_display')
+                value = method_display()
+            except:
+                value = object.__dict__[field_name]
+            fields.append(
+                {"name":self.model._meta.
+                get_field_by_name(field_name)[0].verbose_name,
+                "value":value})
+
+        context['fields'] = fields
+        return context
