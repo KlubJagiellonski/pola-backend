@@ -39,7 +39,7 @@ urlpatterns = [
         else "robots-staging.txt", content_type='text/plain')),
 
     url(r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL+
-                                            'favicon.ico', permanent=True)),
+                                            'images/favicon.ico', permanent=True)),
 ]
 
 # serving static files
