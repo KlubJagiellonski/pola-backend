@@ -5,6 +5,8 @@ from product.models import Product
 from pola.models import Query
 from report.models import Report, Attachment
 import json
+import os
+import uuid
 
 def get_by_code(request, code):
     device_id =request.GET['device_id']
@@ -62,6 +64,8 @@ def attach_file(request):
         return HttpResponseForbidden("Device_id mismatch")
 
     attachment = Attachment(attachment=request.FILES['file'], report=report)
+    file_name, file_extension = os.path.splitext(attachment.attachment.name)
+    attachment.attachment.name = str(uuid.uuid1()) + file_extension
     attachment.save()
 
     return JsonResponse({'id':attachment.id})
