@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from braces.views import LoginRequiredMixin
 from report.models import Report
-from .models import Company
+from company.models import Company
 from .filters import CompanyFilter
 from .forms import CompanyForm
 
@@ -31,6 +31,10 @@ class CompanyDelete(LoginRequiredMixin, DeleteView):
     model = Company
     success_url = reverse_lazy('company:list')
 
+class FieldToDisplay:
+    def __init__(self, name):
+        self.name = name
+
 
 class CompanyDetailView(LoginRequiredMixin, DetailView):
     model = Company
@@ -41,3 +45,13 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         context['report_list'] = Report.objects.filter(
             product__company=Company.objects.first())
         return context
+
+    FIELDS_TO_DISPLAY = (
+        'common_name',
+        'plRegistered'
+    )
+    fields = [FieldToDisplay('kuku2'), FieldToDisplay('kuku3')]
+
+    def __init__(self):
+        for field in CompanyDetailView.FIELDS_TO_DISPLAY:
+            self.fields.append(FieldToDisplay('kuku'))
