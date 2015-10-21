@@ -7,7 +7,9 @@ from report.models import Report, Attachment
 import json
 import os
 import uuid
+from ratelimit.decorators import ratelimit
 
+@ratelimit(key='ip', rate='2/s')
 def get_by_code(request, code):
     device_id =request.GET['device_id']
 
@@ -19,6 +21,7 @@ def get_by_code(request, code):
     return JsonResponse(result)
 
 @csrf_exempt
+@ratelimit(key='ip', rate='2/s')
 def create_report(request):
     device_id = request.GET['device_id']
 
@@ -36,6 +39,7 @@ def create_report(request):
     return JsonResponse({'id':report.id})
 
 @csrf_exempt
+@ratelimit(key='ip', rate='2/s')
 def update_report(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
