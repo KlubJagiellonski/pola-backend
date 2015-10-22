@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
 from model_utils.managers import PassThroughManager
+from django.core.validators import ValidationError
 import reversion
 
 
@@ -107,7 +108,30 @@ class Company(models.Model):
     def __unicode__(self):
         return self.common_name or self.official_name or self.name
 
+    def clean(self, *args, **kwargs):
+        if self.verified:
+            YOU_CANT_SET_VERIFIED = 'Nie możesz oznaczyć producenta jako ' \
+                            'zweryfikowany jeśli pole >{}< jest nieustalone'
+            if self.plCapital is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.
+                                      format('udział kapitału polskiego'))
+            if self.plWorkers is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.
+                                      format('miejsce produkcji'))
+            if self.plRnD is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.
+                                      format('wysokopłatne miejsca pracy'))
+            if self.plRegistered is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.
+                                      format('miejsce rejestracji'))
+            if self.plNotGlobEnt is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.
+                                      format('struktura kapitałowa'))
+
+        super(Company, self).clean(*args, **kwargs)
+
     def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
+        self.full_clean()
         if not commit_desc:
             return super(Company, self).save(*args, **kwargs)
 
@@ -116,6 +140,8 @@ class Company(models.Model):
             reversion.default_revision_manager.save_revision([self],
                 comment=commit_desc, user=commit_user )
             return obj
+
+
 
     class Meta:
         verbose_name = _(u"Producent")
