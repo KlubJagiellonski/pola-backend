@@ -14,9 +14,13 @@ def get_by_code(request, code):
     device_id =request.GET['device_id']
 
     product = logic.get_by_code(code=code)
-    Query.objects.create(client=device_id, product=product)
 
     result = logic.serialize_product(product)
+
+    Query.objects.create(client=device_id, product=product,
+                         was_verified = result['verified'],
+                         was_590 = code.startswith('590'),
+                         was_plScore = result['plScore'] is not None)
 
     return JsonResponse(result)
 
