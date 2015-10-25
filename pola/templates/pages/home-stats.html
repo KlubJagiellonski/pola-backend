@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block javascript %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('43', {packages: ['corechart','bar']});
+    google.charts.setOnLoadCallback(drawRequests);
+
+function drawRequests() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', '');
+      data.addColumn('number', 'Zapytania');
+      data.addColumn('number', 'Zapytania o kody 590');
+      data.addRows([
+        {% for stat in  stats %}
+            ["{{ stat.get_date}}",{{ stat.no_of_queries}},{{ stat.no_of_590}}],
+        {% endfor %}
+      ]);
+      var options = {
+        height: 300,
+        isStacked: true,
+        chart: {
+          title: 'Zapytania',
+          subtitle: 'Ostatnie 30 dni'
+        },
+      };
+      var material = new google.charts.Bar(document.getElementById('chart_queries'));
+      material.draw(data, options);
+}
+
+google.charts.setOnLoadCallback(drawResponses);
+function drawResponses(){
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', '');
+      data.addColumn('number', 'Wszystkie odpowiedzi');
+      data.addColumn('number', 'Odpowiedzi zweryfikowane');
+      data.addColumn('number', 'Odpowiedzi z Pola Score');
+      data.addRows([
+        {% for stat in  stats %}
+            ["{{ stat.get_date}}",{{ stat.no_of_queries}},{{ stat.no_of_verified}},{{ stat.no_of_plScore}}],
+        {% endfor %}
+      ]);
+      var options = {
+        height: 300,
+        chart: {
+          title: 'Odpowiedzi',
+          subtitle: 'Ostatnie 30 dni'
+        },
+      };
+      var material = new google.charts.Bar(document.getElementById('chart_responses'));
+      material.draw(data, options);
+        }
+
+    google.charts.setOnLoadCallback(drawUsers);
+    function drawUsers(){
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', '');
+      data.addColumn('number', 'Użytkownicy');
+      data.addRows([
+        {% for stat in  stats %}
+            ["{{ stat.get_date}}",{{ stat.no_of_clients}}],
+        {% endfor %}
+      ]);
+      var options = {
+        height: 300,
+        chart: {
+          title: 'Użytkownicy (przynajmniej jeden zeskanowny produkt)',
+          subtitle: 'Ostatnie 30 dni'
+        },
+      };
+      var material = new google.charts.Bar(document.getElementById('chart_users'));
+      material.draw(data, options);
+        }
+
+    google.charts.setOnLoadCallback(drawRest);
+    function drawRest(){
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', '');
+      data.addColumn('number', 'Nowo zeskanowani producenci');
+      data.addColumn('number', 'Nowo zeskanowane produkty');
+      data.addColumn('number', 'Nowo zgłoszenia');
+      data.addRows([
+        {% for stat in  stats %}
+            ["{{ stat.get_date}}",{{ stat.no_of_new_companies}},{{ stat.no_of_new_products}},{{ stat.no_of_new_reports}}],
+        {% endfor %}
+      ]);
+      var options = {
+        height: 300,
+        chart: {
+          title: 'Nowi producenci, produkty, zgłoszenia',
+          subtitle: 'Ostatnie 30 dni'
+        },
+      };
+      var material = new google.charts.Bar(document.getElementById('chart_rest'));
+      material.draw(data, options);
+        }
+</script>
+
+
+{% endblock javascript %}
+
+{% block content %}
+<h1>{% trans "Statystyki" %}</h1><br/>
+
+    <div id="chart_queries"></div>
+    <br/><br/><br/>
+    <div id="chart_responses"></div>
+    <br/><br/><br/>
+    <div id="chart_users"></div>
+    <br/><br/><br/>
+    <div id="chart_rest"></div>
+
+{% endblock content %}

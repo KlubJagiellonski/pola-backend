@@ -7,7 +7,10 @@ from braces.views import LoginRequiredMixin
 from company.models import Company
 from product.models import Product
 from report.models import Report
-
+from pola.models import Stats
+from django.utils import timezone
+from datetime import datetime, timedelta
+from django.core.exceptions import ObjectDoesNotExist
 
 class FrontPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-cms.html'
@@ -27,7 +30,6 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
                                               .filter(verified=False)
                                               .order_by('-query_count')[:10])
         return c
-
 
 class ActionMixin(object):
     success_url = None
@@ -59,3 +61,29 @@ class BaseActionView(ActionMixin, BaseDetailView):
 
 class ActionView(SingleObjectTemplateResponseMixin, BaseActionView):
     template_name_suffix = '_action'
+
+
+class StatsPageView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/home-stats.html'
+
+    def get_context_data(self, *args, **kwargs):
+        c = super(StatsPageView, self).get_context_data(**kwargs)
+
+        stats = []
+
+        date = timezone.now()
+        for i in range(0,30):
+            midnight = datetime(date.year, date.month, date.day) + timedelta(days=1)
+            try:
+                stat = Stats.objects.get(year=date.year, month=date.month, day=date.day)
+            except ObjectDoesNotExist:
+                stat = Stats()
+            if stat.year is None or stat.calculated_at < timezone.make_aware(midnight, timezone.get_default_timezone()):
+                stat.calculate(date.year, date.month, date.day)
+                Stats.save(stat)
+            date = date - timedelta(days=1)
+
+            stats.append(stat)
+
+        c['stats'] = list(reversed(stats))
+        return c

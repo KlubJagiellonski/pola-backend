@@ -40,7 +40,7 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 class Company(models.Model):
-
+    created_at = models.DateTimeField(auto_now_add=True)
     nip = models.CharField(max_length=10, db_index=True, null=True,
                            blank=True, verbose_name=_(u"NIP/Tax ID"))
     name = models.CharField(max_length=128, null=True, blank=True,
