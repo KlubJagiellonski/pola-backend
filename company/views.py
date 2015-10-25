@@ -52,6 +52,7 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         'plNotGlobEnt',
         'plNotGlobEnt_notes',
         'verified',
+        'Editor_notes'
     )
 
     def get_context_data(self, **kwargs):

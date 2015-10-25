@@ -96,6 +96,9 @@ class Company(models.Model):
         verbose_name=_("Dane zweryfikowane"),
         choices=((True,_("Tak")),(False,_("Nie"))))
 
+    Editor_notes = models.TextField(
+        _(u"Notatki redakcji (nie pokazujemy użytkownikom)"), null=True, blank=True)
+
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
     def to_dict(self):

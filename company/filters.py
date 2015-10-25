@@ -22,6 +22,7 @@ class CompanyFilter(NoHelpTextFilterMixin,
             'name': ['icontains'],
             'official_name': ['icontains'],
             'common_name': ['icontains'],
+            'Editor_notes' :['icontains'],
         }
         order_by = (
             ('name', _('Nazwa (A-Z)')),

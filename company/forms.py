@@ -31,4 +31,5 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
             'plNotGlobEnt',
             'plNotGlobEnt_notes',
             'verified',
+            'Editor_notes'
         ]
