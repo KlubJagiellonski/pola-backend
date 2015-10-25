@@ -57,10 +57,11 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CompanyDetailView, self).get_context_data(**kwargs)
-        context['report_list'] = Report.objects.filter(
-            product__company=Company.objects.first())
 
         object = context['object']
+
+        context['report_list'] = Report.objects.filter(
+            product__company=object, resolved_at=None)
 
         fields = []
 
