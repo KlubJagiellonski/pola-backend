@@ -1,6 +1,6 @@
-# from django.utils.translation import ugettext_lazy as _
+# -*- coding: utf-8 -*-
+
 import django_filters
-# from users.filters import UserChoiceFilter
 from .models import Product
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -21,7 +21,7 @@ class NullProductFilter(django_filters.Filter):
 class ProductFilter(NoHelpTextFilterMixin,
                     CrispyFilterMixin,
                     django_filters.FilterSet):
-    company_empty = NullProductFilter()
+    company_empty = NullProductFilter(label="Tylko produkty bez producenta")
     company = AutocompleteChoiceFilter(
         autocomplete_name="CompanyAutocomplete")
 
@@ -29,14 +29,10 @@ class ProductFilter(NoHelpTextFilterMixin,
         model = Product
         fields = ['name', 'code', 'company_empty', 'company']
         order_by = (
-            ('name', _('Name')),
-            ('-name', _('Name (reversed)')),
-            ('code', _('Code')),
-            ('-code', _('Code (reversed)')),
-            ('id', _('ID')),
-            ('-id', _('ID (reversed)')),
-            ('company__name', _('Comapny\'s name')),
-            ('-company__name', _('Comapny\'s name (reversed)')),
-            ('query_count', _('Query count')),
-            ('-query_count', _('Query count (reversed)')),
+            ('name', _('Nazwa (A-Z)')),
+            ('-name', _('Nazawa (Z-A)')),
+            ('company__name', _('Nazwa producenta (A-Z)')),
+            ('-company__name', _('Nazwa producenta (Z-A)')),
+            ('query_count', _(u'Liczba zeskanowań (rosnąco)')),
+            ('-query_count', _(u'Liczba zeskanowań (malejąco)')),
         )

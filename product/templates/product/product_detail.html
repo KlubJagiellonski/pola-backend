@@ -7,56 +7,43 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div class="btn-group">
-            <a href="{% url 'product:delete' product.code %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Delete" %}</a>
-            <a href="{% url 'product:view-history' product.code %}" class="btn btn-primary"><i class="fa fa-clock-o"></i> {% trans "History" %}</a>
-            <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Edit" %}</a>
+            <a href="{% url 'product:delete' product.code %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Usuń" %}</a>
+            <a href="{% url 'product:view-history' product.code %}" class="btn btn-primary"><i class="fa fa-clock-o"></i> {% trans "Historia" %}</a>
+            <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
         </div>
     {% endif %}
     <h1>{{ object }} <small>#{{ object.pk }}</small></h1>
 	<div class="panel panel-primary">
-        <div class="panel-heading">{% trans "Data metric" %}</div>
+        <div class="panel-heading">{% trans "Dane" %}</div>
 		<div class="panel-body"><img src="{{ object.get_image_url }}" alt=""></div>
 		<table class="table">
 			<tr>
-                <td>{% trans "PK: " %}</td><td>{{ object.pk }}</td>
+                <td>{% trans "ID: " %}</td><td>{{ object.pk }}</td>
 			</tr>
 			<tr>
-                <td>{% trans "Name: " %}</td><td>{{ object.name }}</td>
+                <td>{% trans "Nazwa: " %}</td><td>{{ object.name }}</td>
 			</tr>
 			<tr>
-                <td>{% trans "Query count: " %}</td><td>{{ object.query_count }}</td>
+                <td>{% trans "Liczba zeskanowań: " %}</td><td>{{ object.query_count }}</td>
 			</tr>
 			<tr>
-                <td>{% trans "Code: " %}</td><td>{{ object.code }}</td>
+                <td>{% trans "Kod: " %}</td><td>{{ object.code }}</td>
 			</tr>
 			{% if object.company %}
 				<tr>
-                    <td>{% trans "Company NIP: " %}</td><td>{{ object.company.nip }} </td>
+                    <td>{% trans "NIP producenta: " %}</td><td>{{ object.company.nip }} </td>
 				</tr>
 				<tr>
-                    <td>{% trans "Company Name: " %}</td><td><a href="{{ object.company.get_absolute_url }}">{{ object.company.name }}</a></td>
+                    <td>{% trans "Nazwa producenta: " %}</td><td><a href="{{ object.company.get_absolute_url }}">{{ object.company.name }}</a></td>
 				</tr>
 				<tr>
-                    <td>{% trans "Company Address: " %}</td><td>{{ object.company.address }} </td>
-				</tr>
-				<tr>
-                    <td>{% trans "PL Capital: " %}</td>
-					<td>
-                        {% if object.company.plCapital == 0 or object.company.plCapital %}
-                            {% include "partiales/progress-bar.html" with value=object.company.plCapital %}
-                        {% else %}
-                            {% trans "None" %}
-                        {% endif %}
-					</td>
-				</tr>
-				<tr>
-					<td>{% trans "PL Capital Notes: " %}</td><td>{{ object.company.plCapital_notes }}</td>
+                    <td>{% trans "Adres producenta: " %}</td><td>{{ object.company.address }} </td>
 				</tr>
             {% else %}
             <tr>
-                <td>{% trans "Company" %}</td>
+                <td>{% trans "Producent" %}</td>
                 <td>
-                    <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Edit" %}</a>
+                    <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
                 </td>
             </tr>
 			{% endif %}

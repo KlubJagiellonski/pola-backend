@@ -26,9 +26,10 @@ class ProductQuerySet(models.query.QuerySet):
 
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
-    name = models.CharField(max_length=255, null=True)
-    code = models.CharField(max_length=20, db_index=True)
-    company = models.ForeignKey(Company, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
+    code = models.CharField(max_length=20, db_index=True, verbose_name="Kod")
+    company = models.ForeignKey(Company, null=True, blank=True,
+                                verbose_name="Producent")
 
     objects = PassThroughManager.for_queryset_class(ProductQuerySet)()
 
@@ -42,7 +43,7 @@ class Product(models.Model):
         return self.name or self.code or "None"
 
     class Meta:
-        verbose_name = _("Product")
-        verbose_name_plural = _("Products")
+        verbose_name = _("Produkt")
+        verbose_name_plural = _("Produkty")
 
 reversion.register(Product)

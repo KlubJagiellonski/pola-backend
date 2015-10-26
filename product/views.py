@@ -62,7 +62,7 @@ class ProductHistoryView(LoginRequiredMixin, DetailView):
 @cache_page(0)
 def get_image(request, code):
     response = HttpResponse(content_type="image/png")
-    # barcode = Barcode.get_barcode(value=code, width=600)
-    # data = renderPM.drawToString(barcode, fmt='PNG')
-    # response.write(data)
+    barcode = Barcode.get_barcode(value=code, width=250)
+    data = renderPM.drawToString(barcode, fmt='PNG')
+    response.write(data)
     return response

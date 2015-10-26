@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block breadcrumbs_rows %}
     <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
-    <li class="active">{% trans 'History' %}</li>
+    <li class="active">{% trans 'Historia' %}</li>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
     {% for version  in revision_list %}
     <li>{{ version }} @ {{ version.revision }} @ {{ version.revision.data_created }} @ {{ version.revision.user }} @ {{ version.revision.comment }} </li>
     {% empty %}
-    <li>{% trans "No history yet." %}</li>
+    <li>{% trans "Nie ma historii dla tego produktu" %}</li>
     {% endfor %}
 </ul>
 {% endblock content %}
