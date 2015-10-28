@@ -60,12 +60,12 @@
             <ul class="list-group">
             {% for company in  most_popular_companies %}
                 <li class="list-group-item">
-                    <a href="{{ company.get_absolute_url }}">{{ company }} </a>
+                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})</a>
                 </li>
             {% endfor %}
             </ul>
             <div class="panel-footer">
-                <a href="{% url 'company:list' %}?verified=3&o=-query_count">{% trans "More" %}</a>
+                <a href="{% url 'company:list' %}?verified=True&o=-query_count">{% trans "More" %}</a>
             </div>
         </div>
     </div>
