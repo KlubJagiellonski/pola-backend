@@ -5,6 +5,7 @@ from django.utils import timezone
 from company.models import Company
 from report.models import Report
 
+
 class Query(models.Model):
     client = models.CharField(max_length=40,
                               blank=True, null=True, default=None)
@@ -13,6 +14,7 @@ class Query(models.Model):
     was_plScore = models.BooleanField(default=False)
     was_590 = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+
 
 class Stats(models.Model):
     year = models.IntegerField()
@@ -29,7 +31,9 @@ class Stats(models.Model):
     no_of_new_reports = models.IntegerField()
 
     def get_date(self):
-        return '%d %s'%(self.day, datetime(self.year, self.month, self.day).strftime('%b'))
+        return '%d %s' % (
+            self.day,
+            datetime(self.year, self.month, self.day).strftime('%b'))
 
     class Meta:
         unique_together = ('year', 'month', 'day')
@@ -50,6 +54,3 @@ class Stats(models.Model):
         self.no_of_new_companies = Company.objects.filter(created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).distinct('id').count()
         self.no_of_new_products = Product.objects.filter(created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).distinct('id').count()
         self.no_of_new_reports = Report.objects.filter(created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).distinct('id').count()
-
-
-

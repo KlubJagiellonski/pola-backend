@@ -6,6 +6,7 @@ import reversion
 from model_utils.managers import PassThroughManager
 from django.utils.translation import ugettext_lazy as _
 
+
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
         super(ProductQuerySet, self).__init__(*args, **kwargs)
@@ -14,10 +15,11 @@ class ProductQuerySet(models.query.QuerySet):
         if not commit_desc:
             return super(ProductQuerySet, self).create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(manage_manually=True):
+        with (transaction.atomic(),
+              reversion.create_revision(manage_manually=True)):
             obj = super(ProductQuerySet, self).create(*args, **kwargs)
-            reversion.default_revision_manager.save_revision([obj],
-                comment=commit_desc, user=commit_user)
+            reversion.default_revision_manager.save_revision(
+                [obj], comment=commit_desc, user=commit_user)
             return obj
 
     def with_query_count(self):

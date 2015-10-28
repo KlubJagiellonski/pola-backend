@@ -2,7 +2,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_text
 from django.views.generic import TemplateView
-from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResponseMixin
+from django.views.generic.detail import (
+    BaseDetailView, SingleObjectTemplateResponseMixin)
 from braces.views import LoginRequiredMixin
 from company.models import Company
 from product.models import Product
@@ -11,6 +12,7 @@ from pola.models import Stats
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.core.exceptions import ObjectDoesNotExist
+
 
 class FrontPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-cms.html'
@@ -30,6 +32,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
                                               .filter(verified=False)
                                               .order_by('-query_count')[:10])
         return c
+
 
 class ActionMixin(object):
     success_url = None
@@ -72,10 +75,12 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
         stats = []
 
         date = timezone.now()
-        for i in range(0,30):
-            midnight = datetime(date.year, date.month, date.day) + timedelta(days=1)
+        for i in range(0, 30):
+            midnight = datetime(
+                date.year, date.month, date.day) + timedelta(days=1)
             try:
-                stat = Stats.objects.get(year=date.year, month=date.month, day=date.day)
+                stat = Stats.objects.get(
+                    year=date.year, month=date.month, day=date.day)
             except ObjectDoesNotExist:
                 stat = Stats()
             if stat.year is None or stat.calculated_at < timezone.make_aware(midnight, timezone.get_default_timezone()):

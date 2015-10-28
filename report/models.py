@@ -10,6 +10,7 @@ from datetime import datetime
 from babel.dates import format_timedelta
 from django.utils import timezone
 
+
 class ReportQuerySet(models.QuerySet):
     def only_open(self):
         return (self.filter(resolved_at__isnull=True)

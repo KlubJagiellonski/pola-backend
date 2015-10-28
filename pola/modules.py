@@ -3,6 +3,7 @@ from django.http import HttpResponsePermanentRedirect
 
 # from https://github.com/MidwestCommunications/django-hostname-redirects/
 
+
 def _get_redirect(new_hostname, request):
     new_location = '%s://%s%s' % (
         request.is_secure() and 'https' or 'http',
@@ -11,11 +12,12 @@ def _get_redirect(new_hostname, request):
     )
     return HttpResponsePermanentRedirect(new_location)
 
+
 class HostnameRedirectMiddleware(object):
     def process_request(self, request):
         server_name = request.META['HTTP_HOST']
-        catchall = getattr(settings,
-            'CATCHALL_REDIRECT_HOSTNAME', None)
+        catchall = getattr(
+            settings, 'CATCHALL_REDIRECT_HOSTNAME', None)
         # if catchall hostname is set, verify that the current
         # hostname is valid, and redirect if not
         if catchall:
@@ -23,8 +25,12 @@ class HostnameRedirectMiddleware(object):
                 return _get_redirect(catchall, request)
         return None
 
-#from: https://github.com/django/django/blob/91f18400cc0fb37659e2dbaab5484ff2081f1f30/django/middleware/http.py#L33
-#this code is unsafe if we move away from Heroku. Heroku ensures the HTTP_X_FORWARDED_FOR is safe
+# from:
+# https://github.com/django/django/blob/91f18400cc0fb37659e2dbaab5484ff2081f1f30/django/middleware/http.py#L33
+# this code is unsafe if we move away from Heroku.
+# Heroku ensures the HTTP_X_FORWARDED_FOR is safe
+
+
 class SetRemoteAddrFromForwardedFor(object):
     """
     Middleware that sets REMOTE_ADDR based on HTTP_X_FORWARDED_FOR, if the
