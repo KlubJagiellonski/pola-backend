@@ -58,6 +58,7 @@ LOCAL_APPS = (
     'pagination_custom',
     'pola.users',
     'api',
+    'webviews',
     # custom users app
     # Your stuff: custom apps go here
 )
