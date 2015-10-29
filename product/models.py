@@ -27,7 +27,8 @@ class ProductQuerySet(models.query.QuerySet):
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
     name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
-    code = models.CharField(max_length=20, db_index=True, verbose_name="Kod")
+    code = models.CharField(max_length=20, db_index=True, verbose_name="Kod",
+                            unique=True)
     company = models.ForeignKey(Company, null=True, blank=True,
                                 verbose_name="Producent")
 
