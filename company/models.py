@@ -25,14 +25,16 @@ class IntegerRangeField(models.IntegerField):
 
 class CompanyQuerySet(models.query.QuerySet):
 
-    def get_or_create(self, commit_desc=None, commit_user=None, *args, **kwargs):
+    def get_or_create(self, commit_desc=None, commit_user=None,
+                      *args, **kwargs):
         if not commit_desc:
             return super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(manage_manually=True):
+        with transaction.atomic(), reversion.create_revision(
+                manage_manually=True):
             obj = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
-            reversion.default_revision_manager.save_revision([obj[0]],
-                comment=commit_desc, user=commit_user)
+            reversion.default_revision_manager.\
+                save_revision([obj[0]], comment=commit_desc, user=commit_user)
             return obj
 
     def with_query_count(self):
@@ -71,33 +73,36 @@ class Company(models.Model):
     plRnD = IntegerRangeField(
         verbose_name=_(u"Miejsca pracy w BiR w Polsce"), min_value=0,
         max_value=100, null=True, blank=True,
-        choices=((0,_(u"0 - Nie tworzy miejsc pracy w BiR Polsce")),
-                 (100,_(u"100 - Tworzy miejsca pracy w BiR w Polsce"))))
+        choices=((0, _(u"0 - Nie tworzy miejsc pracy w BiR Polsce")),
+                 (100, _(u"100 - Tworzy miejsca pracy w BiR w Polsce"))))
     plRnD_notes = models.TextField(
         _(u"Więcej nt. miejsc pracy w BiR"), null=True, blank=True)
 
     plRegistered = IntegerRangeField(
         verbose_name=_(u"Miejsce rejestracji"), min_value=0, max_value=100,
         null=True, blank=True,
-        choices=((0,_(u"0 - Firma zarejestrowana za granicą")),
-                 (100,_(u"100 - Firma zarejestrowana w Polsce"))))
+        choices=((0, _(u"0 - Firma zarejestrowana za granicą")),
+                 (100, _(u"100 - Firma zarejestrowana w Polsce"))))
     plRegistered_notes = models.TextField(
         _(u"Więcej nt. miejsca rejestracji"), null=True, blank=True)
 
     plNotGlobEnt = IntegerRangeField(
         verbose_name=_(u"Struktura kapitałowa"), min_value=0,
         max_value=100, null=True, blank=True,
-        choices=((0,_(u"0 - Firma jest częścią zagranicznego koncernu")),
-                 (100,_(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
+        choices=((0, _(u"0 - Firma jest częścią zagranicznego koncernu")),
+                 (100,
+                 _(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
     plNotGlobEnt_notes = models.TextField(
         _(u"Więcej nt. struktury kapitałowej"), null=True, blank=True)
 
     verified = models.BooleanField(default=False,
-        verbose_name=_("Dane zweryfikowane"),
-        choices=((True,_("Tak")),(False,_("Nie"))))
+                                   verbose_name=_("Dane zweryfikowane"),
+                                   choices=((True, _("Tak")),
+                                            (False, _("Nie"))))
 
     Editor_notes = models.TextField(
-        _(u"Notatki redakcji (nie pokazujemy użytkownikom)"), null=True, blank=True)
+        _(u"Notatki redakcji (nie pokazujemy użytkownikom)"), null=True,
+        blank=True)
 
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
@@ -114,7 +119,7 @@ class Company(models.Model):
     def clean(self, *args, **kwargs):
         if self.verified:
             YOU_CANT_SET_VERIFIED = 'Nie możesz oznaczyć producenta jako ' \
-                            'zweryfikowany jeśli pole >{}< jest nieustalone'
+                'zweryfikowany jeśli pole >{}< jest nieustalone'
             if self.plCapital is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
                                       format('udział kapitału polskiego'))
@@ -138,13 +143,12 @@ class Company(models.Model):
         if not commit_desc:
             return super(Company, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(manage_manually=True):
+        with transaction.atomic(), reversion.\
+                create_revision(manage_manually=True):
             obj = super(Company, self).save(*args, **kwargs)
-            reversion.default_revision_manager.save_revision([self],
-                comment=commit_desc, user=commit_user )
+            reversion.default_revision_manager.\
+                save_revision([self], comment=commit_desc, user=commit_user)
             return obj
-
-
 
     class Meta:
         verbose_name = _(u"Producent")
