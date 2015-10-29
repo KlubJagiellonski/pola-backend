@@ -12,6 +12,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class FrontPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-cms.html'
 
@@ -30,6 +31,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
                                               .filter(verified=False)
                                               .order_by('-query_count')[:10])
         return c
+
 
 class ActionMixin(object):
     success_url = None
@@ -72,18 +74,23 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
         stats = []
 
         date = timezone.now()
-        for i in range(0,30):
-            midnight = datetime(date.year, date.month, date.day) + timedelta(days=1)
+        for i in range(0, 30):
+            midnight = datetime(date.year, date.month, date.day) + \
+                timedelta(days=1)
             try:
-                stat = Stats.objects.get(year=date.year, month=date.month, day=date.day)
+                stat = Stats.objects.get(
+                    year=date.year, month=date.month, day=date.day)
             except ObjectDoesNotExist:
                 stat = Stats()
-            if stat.year is None or stat.calculated_at < timezone.make_aware(midnight, timezone.get_default_timezone()):
+            if stat.year is None or stat.calculated_at < timezone.\
+                    make_aware(midnight, timezone.get_default_timezone()):
                 stat.calculate(date.year, date.month, date.day)
                 Stats.save(stat)
             date = date - timedelta(days=1)
+            setattr(stat, 'index', i)
 
             stats.append(stat)
 
         c['stats'] = list(reversed(stats))
+        c['stats5'] = [stats[i] for i in range(0, 5)]
         return c

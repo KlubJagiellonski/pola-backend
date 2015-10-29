@@ -5,8 +5,40 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('43', {packages: ['corechart','bar']});
-    google.charts.setOnLoadCallback(drawRequests);
 
+google.charts.setOnLoadCallback(drawPies);
+function drawPies() {
+
+    {% for stat in  stats5 %}
+
+    var data = google.visualization.arrayToDataTable([
+      ['', ''],
+      ['Zweryfikowane',     {{ stat.no_of_verified}}],
+      ['Niezweryfikowane polskie',     {{ stat.no_of_not_verified_590}}],
+      ['Niezweryfikowane zagraniczne',     {{ stat.no_of_not_verified_not_590}}],
+    ]);
+
+    var options = {
+        legend: 'none',
+        width: '200px',
+        height: '200px',
+        title: '{{ stat.get_date}}',
+        slices: {
+            0: { color: 'green' },
+            1: { color: 'red' },
+            2: { color: 'blue' },
+          }
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('pie_responses{{ stat.index }}'));
+
+    chart.draw(data, options);
+
+    {% endfor %}
+
+}
+
+google.charts.setOnLoadCallback(drawRequests);
 function drawRequests() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', '');
@@ -103,6 +135,12 @@ function drawResponses(){
 {% block content %}
 <h1>{% trans "Statystyki" %}</h1><br/>
 
+    <span id="pie_responses0" style="width:200px;height: 200px;float:right"></span>
+    <span id="pie_responses1" style="width:200px;height: 200px;float:right"></span>
+    <span id="pie_responses2" style="width:200px;height: 200px;float:right"></span>
+    <span id="pie_responses3" style="width:200px;height: 200px;float:right"></span>
+    <span id="pie_responses4" style="width:200px;height: 200px;float:right"></span>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
     <div id="chart_queries"></div>
     <br/><br/><br/>
     <div id="chart_responses"></div>

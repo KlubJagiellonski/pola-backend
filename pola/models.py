@@ -5,6 +5,7 @@ from django.utils import timezone
 from company.models import Company
 from report.models import Report
 
+
 class Query(models.Model):
     client = models.CharField(max_length=40,
                               blank=True, null=True, default=None)
@@ -13,6 +14,7 @@ class Query(models.Model):
     was_plScore = models.BooleanField(default=False)
     was_590 = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+
 
 class Stats(models.Model):
     year = models.IntegerField()
@@ -24,12 +26,15 @@ class Stats(models.Model):
     no_of_verified = models.IntegerField()
     no_of_plScore = models.IntegerField()
     no_of_590 = models.IntegerField()
+    no_of_not_verified_590 = models.IntegerField(default=0)
+    no_of_not_verified_not_590 = models.IntegerField(default=0)
     no_of_new_companies = models.IntegerField()
     no_of_new_products = models.IntegerField()
     no_of_new_reports = models.IntegerField()
 
     def get_date(self):
-        return '%d %s'%(self.day, datetime(self.year, self.month, self.day).strftime('%b'))
+        return '%d %s' % (self.day, datetime(self.year, self.month, self.day).
+                          strftime('%b'))
 
     class Meta:
         unique_together = ('year', 'month', 'day')
@@ -42,14 +47,33 @@ class Stats(models.Model):
         self.month = month
         self.day = day
         self.calculated_at = timezone.now()
-        self.no_of_queries = Query.objects.filter(timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight).count()
-        self.no_of_clients = Query.objects.filter(timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight).distinct('client').count()
-        self.no_of_verified = Query.objects.filter(timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight, was_verified=True).count()
-        self.no_of_plScore = Query.objects.filter(timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight, was_plScore=True).count()
-        self.no_of_590 = Query.objects.filter(timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight, was_590=True).count()
-        self.no_of_new_companies = Company.objects.filter(created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).distinct('id').count()
-        self.no_of_new_products = Product.objects.filter(created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).distinct('id').count()
-        self.no_of_new_reports = Report.objects.filter(created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).distinct('id').count()
-
-
-
+        self.no_of_queries = Query.objects.filter(
+            timestamp__gte=today_midnight,
+            timestamp__lt=tomorrow_midnight).count()
+        self.no_of_clients = Query.objects.filter(
+            timestamp__gte=today_midnight,
+            timestamp__lt=tomorrow_midnight).distinct('client').count()
+        self.no_of_verified = Query.objects.filter(
+            timestamp__gte=today_midnight,
+            timestamp__lt=tomorrow_midnight, was_verified=True).count()
+        self.no_of_plScore = Query.objects.filter(
+            timestamp__gte=today_midnight,
+            timestamp__lt=tomorrow_midnight, was_plScore=True).count()
+        self.no_of_590 = Query.objects.filter(
+            timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight,
+            was_590=True).count()
+        self.no_of_not_verified_590 = Query.objects.filter(
+            timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight,
+            was_verified=False, was_590=True).count()
+        self.no_of_not_verified_not_590 = Query.objects.filter(
+            timestamp__gte=today_midnight, timestamp__lt=tomorrow_midnight,
+            was_verified=False, was_590=False).count()
+        self.no_of_new_companies = Company.objects.filter(
+            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight)\
+            .distinct('id').count()
+        self.no_of_new_products = Product.objects.filter(
+            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).\
+            distinct('id').count()
+        self.no_of_new_reports = Report.objects.filter(
+            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).\
+            distinct('id').count()
