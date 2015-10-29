@@ -69,12 +69,12 @@ class Company(models.Model):
         _(u"Więcej nt. miejsca produkcji"), null=True, blank=True)
 
     plRnD = IntegerRangeField(
-        verbose_name=_(u"Wysokopłatne miejsca pracy"), min_value=0,
+        verbose_name=_(u"Miejsca pracy w BiR w Polsce"), min_value=0,
         max_value=100, null=True, blank=True,
-        choices=((0,_(u"0 - Nie tworzy wysokopłatnych miejsc pracy w Polsce")),
-                 (100,_(u"100 - Tworzy wysokopłatne miejsca pracy w Polsce"))))
+        choices=((0,_(u"0 - Nie tworzy miejsc pracy w BiR Polsce")),
+                 (100,_(u"100 - Tworzy miejsca pracy w BiR w Polsce"))))
     plRnD_notes = models.TextField(
-        _(u"Więcej nt. wysokopłatnych miejsc pracy"), null=True, blank=True)
+        _(u"Więcej nt. miejsc pracy w BiR"), null=True, blank=True)
 
     plRegistered = IntegerRangeField(
         verbose_name=_(u"Miejsce rejestracji"), min_value=0, max_value=100,
