@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from company.models import Company
 from report.models import Report
+from django.utils.timezone import get_default_timezone
 
 
 class Query(models.Model):
@@ -33,14 +34,19 @@ class Stats(models.Model):
     no_of_new_reports = models.IntegerField()
 
     def get_date(self):
-        return '%d %s' % (self.day, datetime(self.year, self.month, self.day).
-                          strftime('%b'))
+        return '%d %s' % (
+            self.day,
+            datetime(self.year, self.month, self.day,
+                     tzinfo=get_default_timezone())
+                .strftime('%b')
+        )
 
     class Meta:
         unique_together = ('year', 'month', 'day')
 
     def calculate(self, year, month, day):
-        today_midnight = datetime(year, month, day)
+        today_midnight = datetime(year, month, day,
+                                  tzinfo=get_default_timezone())
         tomorrow_midnight = today_midnight + timedelta(days=1)
 
         self.year = year
