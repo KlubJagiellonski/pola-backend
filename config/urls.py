@@ -5,7 +5,9 @@ from django.conf import settings
 from django.conf.urls import include, url, patterns
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
+from decorator_include import decorator_include
 from pola.views import FrontPageView, StatsPageView
 
 urlpatterns = [
@@ -34,7 +36,8 @@ urlpatterns = [
     url(r'^a/', include('api.urls', namespace='api')),
     url(r'^m/', include('webviews.urls', namespace='webviews')),
 
-    url(r'^autocomplete/', include('autocomplete_light.urls')),
+    url(r'^autocomplete/',
+        decorator_include(login_required, 'autocomplete_light.urls')),
 
     url(r'^robots\.txt$', TemplateView.as_view(
         template_name="robots.txt" if settings.IS_PRODUCTION
