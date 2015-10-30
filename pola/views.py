@@ -32,6 +32,9 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
                                               .with_query_count()
                                               .filter(verified=False)
                                               .order_by('-query_count')[:10])
+        c['no_of_companies'] = Company.objects.count()
+        c['no_of_not_verified_companies'] = Company.objects\
+            .filter(verified=False).count()
         return c
 
 
