@@ -12,6 +12,8 @@ from __future__ import absolute_import, unicode_literals
 
 from boto.s3.connection import OrdinaryCallingFormat
 from django.utils import six
+import os
+import urlparse
 
 
 from .common import *  # noqa
@@ -65,9 +67,7 @@ INSTALLED_APPS += ("gunicorn", )
 # Uploaded Media Files
 # ------------------------
 # See: http://django-storages.readthedocs.org/en/latest/index.html
-INSTALLED_APPS += (
-     'storages',
-)
+INSTALLED_APPS += ('storages',)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')
@@ -120,7 +120,8 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # https://docs.djangoproject.com/en/dev/ref/templates/api/#django.template.loaders.cached.Loader
 TEMPLATES[0]['OPTIONS']['loaders'] = [
     ('django.template.loaders.cached.Loader', [
-        'django.template.loaders.filesystem.Loader', 'django.template.loaders.app_directories.Loader', ]),
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader', ]),
 ]
 
 # DATABASE CONFIGURATION
@@ -130,18 +131,18 @@ DATABASES['default'] = env.db("DATABASE_URL")
 
 # CACHING
 # ------------------------------------------------------------------------------
-# Heroku URL does not pass the DB number, so we parse it in
+redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL',
+                                             'redis://localhost:6959'))
+
 CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "{0}/{1}".format(env.cache_url('REDISTOGO_URL', default="redis://127.0.0.1:6379"), 0),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
-                                        # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': '%s:%s' % (redis_url.hostname, redis_url.port),
+        'OPTIONS': {
+            'DB': 0,
+            'PASSWORD': redis_url.password,
         }
     }
 }
-
 
 # Your production stuff: Below this line define 3rd party library settings
