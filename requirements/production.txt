@@ -17,4 +17,7 @@ Collectfast==0.2.3
 # ---------------
 django-mailgun==0.8.0
 
+# Redis
+django-redis-cache==1.6.3
+
 newrelic==2.56.0.42
