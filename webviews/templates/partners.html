@@ -1,5 +1,21 @@
 {% extends "base-webview.html" %}
+{% load staticfiles %}
 
 {% block content %}
-<div>Partnerzy</div>
+
+<h1>Partnerzy:</h1>
+
+<img src="{% static "images/logo_cakj.png" %}"/>
+<div class="partner">Centrum Analiz Klubu Jagiellońskiego</div>
+<div class="skill">Partner merytoryczny</div>
+<a class="link" href="http://www.cakj.pl">www.cakj.pl</a>
+<p/><p/>
+
+<img class="logo" src="{% static "images/logo_kodujdlapolski.png" %}"/>
+<div class="partner">Koduj dla Polski</div>
+<div class="skill">Partner organizacyjny</div>
+<a class="link" href="http://www.kodujdlapolski.pl">www.kodujdlapolski.pl</a>
+<p/>
+
+
 {% endblock content %}

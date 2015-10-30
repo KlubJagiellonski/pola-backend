@@ -10,7 +10,7 @@ urlpatterns = [
         template_name="kj.html")),
     url(r'^team$', TemplateView.as_view(
         template_name="team.html")),
-    url(r'^team$', TemplateView.as_view(
+    url(r'^partners$', TemplateView.as_view(
         template_name="partners.html")),
         ]
 
