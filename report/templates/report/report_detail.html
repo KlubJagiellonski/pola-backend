@@ -12,24 +12,24 @@
     </div>
     <table class="table">
         <tr>
-            <td>PK: </td><td>{{ object.pk }}</td>
+            <td>Id: </td><td>{{ object.pk }}</td>
         </tr>
         <tr>
-            <td>Client: </td><td>{{ object.client }}</td>
+            <td>Zgłaszający: </td><td>{{ object.client }}</td>
         </tr>
         <tr>
             <td>Produkt: </td>
             <td><a href="{{ object.product.get_absolute_url }}">{{ object.product }}</a></td>
         </tr>
         <tr>
-            <td>Created at: </td><td>{{ object.created_at }}</td>
+            <td>Utworzone: </td><td>{{ object.created_at }}</td>
         </tr>
         {% if object.status == object.RESOLVED %}
         <tr>
-            <td>Resolved at: </td><td>{{ object.resolved_at }}</td>
+            <td>Rozpatrzone: </td><td>{{ object.resolved_at }}</td>
         </tr>
         <tr>
-            <td>Resolved by: </td>
+            <td>Rozpatrzone przez: </td>
             <td><a href="{{ object.resolved_by.get_absolute_url }}">{{ object.resolved_by }}</a></td>
         </tr>
         {% endif %}
@@ -47,12 +47,12 @@
         </a>
     </div>
     {% empty%}
-    <div class="col-xs-12">{% trans "Without attachments" %}</div>
+    <div class="col-xs-12">{% trans "Brak załączników" %}</div>
     {% endfor %}
 </div>
 <div class="btn-group">
     {% if object.status == object.OPEN %}
-    <a href="{% url 'report:resolve' object.pk %}" class="btn btn-primary"><i class="fa fa-thumbs-o-up"></i> {% trans "Resolve" %}</a>
+    <a href="{% url 'report:resolve' object.pk %}" class="btn btn-primary"><i class="fa fa-thumbs-o-up"></i> {% trans "Rozpatrz" %}</a>
     {% endif %}
 </div>
 {% endblock content %}

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import re
 import reversion
 from os.path import basename
@@ -22,13 +24,16 @@ class ReportQuerySet(models.QuerySet):
 
 class Report(models.Model):
     product = models.ForeignKey(Product, null=True)
-    client = models.CharField(max_length=40,
-                              blank=True, null=True, default=None)
-    created_at = models.DateTimeField(auto_now_add=True)
-    resolved_at = models.DateTimeField(null=True, blank=True)
-    resolved_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                    null=True, blank=True)
-    description = models.TextField()
+    client = models.CharField(max_length=40, blank=True, null=True,
+                              default=None, verbose_name=_('Zgłaszający'))
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name=_('Utworzone'))
+    resolved_at = models.DateTimeField(null=True, blank=True,
+                                       verbose_name=_('Rozpatrzone'))
+    resolved_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+                                    blank=True,
+                                    verbose_name=_('Rozpatrzone przez'))
+    description = models.TextField(verbose_name=_('Opis'))
     objects = ReportQuerySet.as_manager()
 
     def status(self):

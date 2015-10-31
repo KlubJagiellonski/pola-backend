@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import django_filters
 from .models import Report
 from django.utils.translation import ugettext_lazy as _
@@ -11,8 +13,8 @@ class StatusFilter(django_filters.ChoiceFilter):
         super(StatusFilter, self).__init__(*args, **kwargs)
         self.extra['choices'] = (
             ('', '---------'),
-            ('open', _('Open')),
-            ('resolved', _('Resolved'))
+            ('open', _('Otwarte')),
+            ('resolved', _('Rozpatrzone'))
         )
 
     def filter(self, qs, value):
@@ -40,14 +42,10 @@ class ReportFilter(NoHelpTextFilterMixin,
             'resolved_at',
             'resolved_by']
         order_by = [
-            ('product', _('Product')),
-            ('-product', _('Product (reversed)')),
-            ('client', _('Client')),
-            ('-client', _('Client (reversed)')),
-            ('created_at', _('Created at')),
-            ('-created_at', _('Created at (reversed)')),
-            ('resolved_at', _('Resolved at')),
-            ('-resolved_at', _('Resolved at (reversed)')),
-            ('resolved_by', _('Resolved by')),
-            ('-resolved_by', _('Resolved by (reversed)')),
+            ('created_at', _('Data utowrzenia')),
+            ('-created_at', _('Data utworzenia (reversed)')),
+            ('resolved_at', _('Data rozpatrzenia')),
+            ('-resolved_at', _('Data rozpatrzenia (reversed)')),
+            ('resolved_by', _(u'Rozpatrujący')),
+            ('-resolved_by', _(u'Rozpatrujący (reversed)')),
         ]
