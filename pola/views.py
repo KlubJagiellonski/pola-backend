@@ -20,14 +20,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         c = super(FrontPageView, self).get_context_data(**kwargs)
-        c['oldest_reports'] = (Report.objects.only_open()
-                                     .order_by('created_at')[:10])
-        c['newest_reports'] = (Report.objects.only_open()
-                                     .order_by('-created_at')[:10])
-        c['most_popular_products'] = (Product.objects
-                                             .with_query_count()
-                                             .filter(company__isnull=True)
-                                             .order_by('-query_count')[:10])
+
         c['most_popular_companies'] = (Company.objects
                                               .with_query_count()
                                               .filter(verified=False)
@@ -35,6 +28,32 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_companies'] = Company.objects.count()
         c['no_of_not_verified_companies'] = Company.objects\
             .filter(verified=False).count()
+        c['no_of_verified_companies'] = Company.objects.\
+            filter(verified=True).count()
+
+        c['newest_reports'] = (Report.objects.only_open()
+                                     .order_by('-created_at')[:10])
+        c['no_of_open_reports'] = Report.objects.only_open().count()
+        c['no_of_resolved_reports'] = Report.objects.only_resolved().count()
+        c['no_of_reports'] = Report.objects.count()
+
+        c['most_popular_590_products'] = (Product.objects.with_query_count()
+                                          .filter(company__isnull=True,
+                                                  code__startswith='590')
+                                          .order_by('-query_count')[:10])
+        c['no_of_most_popular_590_products'] = (Product.objects
+                                                .filter(company__isnull=True,
+                                                        code__startswith='590')
+                                                .count())
+
+        c['most_popular_not_590_products'] = \
+            (Product.objects.with_query_count().filter(company__isnull=True)
+                .exclude(code__startswith='590').order_by('-query_count')[:10])
+        c['no_of_most_popular_not_590_products'] = \
+            (Product.objects.filter(company__isnull=True).
+             exclude(code__startswith='590').count())
+
+
         return c
 
 

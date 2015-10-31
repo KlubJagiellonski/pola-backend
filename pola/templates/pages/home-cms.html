@@ -1,27 +1,29 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-<h1>{% trans "Do pracy. Użytkownicy czekają :)" %}</h1>
+<h3>{% trans "Do pracy. Użytkownicy czekają :)" %}</h3><br/>
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najstarsze, otwarte zgłoszenia" %}</h3>
+                <h3 class="panel-title">{% trans "Najpopularniejsi niezweryfikowani producenci" %} ({{ no_of_not_verified_companies }}+{{ no_of_verified_companies }}={{ no_of_companies }})</h3>
             </div>
-            {% for report in  oldest_reports %}
+            <ul class="list-group">
+            {% for company in  most_popular_companies %}
                 <li class="list-group-item">
-                    <a href="{{ report.get_absolute_url }}">{{ report }}, <small>{{ report.get_timedelta}} {% trans "temu" %}</small></a>
+                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})</a>
                 </li>
             {% endfor %}
+            </ul>
             <div class="panel-footer">
-                <a href="{% url 'report:list' %}?status=open&o=created_at">{% trans "Więcej" %}</a>
+                <a href="{% url 'company:list' %}?verified=True&o=-query_count">{% trans "More" %}</a>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najnowsze, otwarte zgłoszenia" %}</h3>
+                <h3 class="panel-title">{% trans "Najnowsze nierozpatrzone zgłoszenia" %} ({{ no_of_open_reports }}+{{ no_of_resolved_reports }}={{ no_of_reports }})</h3>
             </div>
             {% for report in  newest_reports %}
                 <li class="list-group-item">
@@ -38,12 +40,12 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najpopularniejsze produkty bez firmy" %}</h3>
+                <h3 class="panel-title">{% trans "Najpopularniejsze, polskie (590) produkty bez producenta" %} ({{ no_of_most_popular_590_products }})</h3>
             </div>
             <ul class="list-group">
-            {% for product in  most_popular_products %}
+            {% for product in  most_popular_590_products %}
                 <li class="list-group-item">
-                    <a href="{{ product.get_absolute_url }}">{{ product }} </a>
+                    <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
                 </li>
             {% endfor %}
             </ul>
@@ -55,19 +57,20 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najpopularniejsi niezweryfikowani producenci" %} ({{ no_of_not_verified_companies }}/{{ no_of_companies }})</h3>
+                <h3 class="panel-title">{% trans "Najpopularniejsze, niepolskie (!590) produkty bez producenta" %} ({{ no_of_most_popular_not_590_products }})</h3>
             </div>
             <ul class="list-group">
-            {% for company in  most_popular_companies %}
+            {% for product in  most_popular_not_590_products %}
                 <li class="list-group-item">
-                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})</a>
+                    <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
                 </li>
             {% endfor %}
             </ul>
             <div class="panel-footer">
-                <a href="{% url 'company:list' %}?verified=True&o=-query_count">{% trans "More" %}</a>
+                <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
             </div>
         </div>
     </div>
+
 </div>
 {% endblock content %}
