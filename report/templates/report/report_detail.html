@@ -19,7 +19,10 @@
         </tr>
         <tr>
             <td>Produkt: </td>
-            <td><a href="{{ object.product.get_absolute_url }}">{{ object.product }}</a></td>
+            <td>
+                <a href="{{ object.product.get_absolute_url }}">{{ object.product }}</a>-&gt;
+                <a href="{{ object.product.company.get_absolute_url }}">{{ object.product.company }}</a>
+            </td>
         </tr>
         <tr>
             <td>Utworzone: </td><td>{{ object.created_at }}</td>
