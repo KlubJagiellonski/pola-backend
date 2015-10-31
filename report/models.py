@@ -25,7 +25,7 @@ class ReportQuerySet(models.QuerySet):
 class Report(models.Model):
     product = models.ForeignKey(Product, null=True)
     client = models.CharField(max_length=40, blank=True, null=True,
-                              default=None, verbose_name=_('Zgłaszający'))
+                              default=None, verbose_name=_(u'Zgłaszający'))
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('Utworzone'))
     resolved_at = models.DateTimeField(null=True, blank=True,
