@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -5,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>PolaAAAAAAAAAAAAAAAA</title>
+    <title>Pola. Zabierz ją na zakupy</title>
 
     <link href='https://fonts.googleapis.com/css?family=Lato:400,300,200,100&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link href="/static/css/main-land.min.css" rel="stylesheet">
@@ -25,8 +27,8 @@
             <div class="container">
                 <div class="top-bar-nav top-bar-main">
                     <ul>
-                        <li><a href="#about">O poli</a></li>
-                        <li><a href="#methodology">Metologia</a></li>
+                        <li><a href="#about">O Poli</a></li>
+                        <li><a href="#methodology">Metodologia</a></li>
                         <li><a href="#partners">Partnerzy</a></li>
                         <li><a href="#team">Zespół</a></li>
                     </ul>
@@ -34,21 +36,21 @@
                 <div class="top-bar-nav top-bar-social">
                     <ul>
                         <li>
-                            <a href="">
+                            <a href="mailto:kontakt@pola-app.pl">
                                 <svg role="img" class="icon" title="Mail">
                                     <use xlink:href="#mail"/>
                                 </svg>
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="https://www.facebook.com/app.pola">
                                 <svg role="img" class="icon" title="Facebook">
                                     <use xlink:href="#facebook"/>
                                 </svg>
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="https://twitter.com/pola_app">
                                 <svg role="img" class="icon" title="Twitter">
                                     <use xlink:href="#twitter"/>
                                 </svg>
@@ -67,21 +69,21 @@
                 <div class="social-bar">
                     <ul>
                         <li>
-                            <a href="">
+                            <a href="mailto:kontakt@pola-app.pl">
                                 <svg role="img" class="icon" title="Mail">
                                     <use xlink:href="#mail"/>
                                 </svg>
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="https://www.facebook.com/app.pola">
                                 <svg role="img" class="icon" title="Facebook">
                                     <use xlink:href="#facebook"/>
                                 </svg>
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="https://twitter.com/pola_app">
                                 <svg role="img" class="icon" title="Twitter">
                                     <use xlink:href="#twitter"/>
                                 </svg>
@@ -114,7 +116,7 @@
                 <svg role="img" class="icon header-logo" title="Pola">
                     <use xlink:href="#logo"/>
                 </svg>
-                <h1>Twoja pomoc w polskich zakupach</h1>
+                <h1>Pola. Zabierz ją na zakupy</h1>
                 <ul class="download-links hidden-xs hidden-sm ">
                     <li>
                         <a href=""><img src="/static/images/badge-googleplay.png" alt="" ></a>
@@ -134,8 +136,21 @@
           <p>Każdemu producentowi Pola przypisuje od 0 do 100 punktów. Pierwsze 35 punktów przyznaje proporcjonalnie do udziału polskiego kapitału w konkretnym przedsiębiorstwie. Dalsze 10 punktów otrzymuje ta firma, która jest zarejstrowana w Polsce, a kolejne 30, o ile produkuje w naszym kraju. Dalsze 15 punktów zależy od tego, czy zatrudnia w naszym kraju w obszarze badań i rozwoju. Wreszcie ostatnie 10 punktów otrzymują firmy, które nie są częścią zagranicznych koncernów.</p>
           <p>Liczba punktów zwizualizowna jest przy pomocy czerwonego paska. Dokładamy wszelkich starań aby dane w aplikacji zawsze odpowiadały rzeczywistości i były aktualizowane na bieżąco. Prosimy o zgłoszanie wszelkich uwag i niejasności.</p>
           <h2 id="partners">Partnerzy</h2>
-          <p>Każdemu producentowi Pola przypisuje od 0 do 100 punktów. Pierwsze 35 punktów przyznaje proporcjonalnie do udziału polskiego kapitału w konkretnym przedsiębiorstwie. Dalsze 10 punktów otrzymuje ta firma, która jest zarejstrowana w Polsce, a kolejne 30, o ile produkuje w naszym kraju. Dalsze 15 punktów zależy od tego, czy zatrudnia w naszym kraju w obszarze badań i rozwoju. Wreszcie ostatnie 10 punktów otrzymują firmy, które nie są częścią zagranicznych koncernów.</p>
-          <p>Liczba punktów zwizualizowna jest przy pomocy czerwonego paska. Dokładamy wszelkich starań aby dane w aplikacji zawsze odpowiadały rzeczywistości i były aktualizowane na bieżąco. Prosimy o zgłoszanie wszelkich uwag i niejasności.</p>
+<img class="img75" src="{% static "images/logo_cakj.png" %}"/>
+<div class="skill">Algorytm i metodologia</div>
+<a class="link" href="http://www.cakj.pl">www.cakj.pl</a>
+<div class="break">&nbsp</div>
+<div class="break">&nbsp</div>
+
+<img class="logo, img75" src="{% static "images/logo_ilim.jpg" %}"/>
+<div class="skill">Baza kodów kreskowych i producentów</div>
+<a class="link" href="http://www.ilim.poznan.pl">www.ilim.poznan.pl</a>
+<div class="break">&nbsp</div>
+<div class="break">&nbsp</div>
+
+<img class="logo, img75" src="{% static "images/logo_kodujdlapolski.png" %}"/><p/>
+<div class="skill">Hacknighty i pizza ;-)</div>
+<a class="link" href="http://www.kodujdlapolski.pl">www.kodujdlapolski.pl</a>
           <h2 id="team">Zespół</h2>
           <div class="team">
             <div class="team-group">
@@ -169,8 +184,6 @@
             <div class="team-group">
                 <div class="team-title">redakcja: </div>
                 <ul class="team-list">
-                    <li>Jan Lang</li>
-                    <li>Weronika Olkiewicz</li>
                     <li>Wojtek Skierski</li>
                     <li>Bartek Ząbek</li>
                 </ul>
