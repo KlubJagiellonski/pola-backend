@@ -54,10 +54,12 @@ class KrsClient:
             company['nazwa'] = data['krs_podmioty.nazwa']
             company['nazwa_skrocona'] = data['krs_podmioty.nazwa_skrocona']
             company['nip'] = data['krs_podmioty.nip']
-            company['adres'] = u"ul. {} {} lok. {}\n{} {}\n{}".format(
+            lokal = u" lok. {}".format(data['krs_podmioty.adres_lokal']) if \
+                data['krs_podmioty.adres_lokal'] else u""
+            company['adres'] = u"ul. {} {} {}\n{} {}\n{}".format(
                 data['krs_podmioty.adres_ulica'],
                 data['krs_podmioty.adres_numer'],
-                data['krs_podmioty.adres_numer'],
+                lokal,
                 data['krs_podmioty.adres_kod_pocztowy'],
                 data['krs_podmioty.adres_miejscowosc'],
                 data['krs_podmioty.adres_kraj']
