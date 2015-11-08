@@ -2077,7 +2077,7 @@ svg.icon .stroke-current {
 }
 
 .header {
-  background: url("/static/images/header-bg.jpg");
+  background: url("../images/header-bg.jpg");
   background-size: cover;
   background-position: left center;
   border-bottom: 16px solid #d8002f;

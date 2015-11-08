@@ -9230,6 +9230,6 @@ $(function() {
     xhr.onload = function () {
         container.innerHTML = this.responseText;
     }
-    xhr.open('get', '/static/symbols.svg', true);
+    xhr.open('get', path_config.symbols, true);
     xhr.send();
 })(document)
