@@ -18,6 +18,8 @@
     <meta property="og:locale" content="pl_PL" />
     <meta property="og:image" content="{% static "images/logo.png" %}" />
 
+    <meta name="apple-itunes-app" content="app-id=1038401148">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -71,7 +73,7 @@
                 <svg role="img" class="icon header-logo" title="Pola">
                     <use xlink:href="#logo"/>
                 </svg>
-                <h1 class="page-title">Twoja pomoc<br>w polskich zakupach </h1>
+                <h1 class="page-title">Zabierz ją na zakupy</h1>
                 <div class="social-bar">
                     <ul>
                         <li>
@@ -109,7 +111,7 @@
                 <a href=""><img src="{% static  "images/badge-googleplay.png" %}" alt="" ></a>
             </li>
             <li>
-                <a href=""><img src="{% static "images/badge-appstore.png"%}" alt="" ></a>
+                <a href="https://itunes.apple.com/us/app/pola.-zabierz-ja-na-zakupy/id1038401148?ls=1&mt=8"><img src="{% static "images/badge-appstore.png"%}" alt="" ></a>
             </li>
         </ul>
         <div class="row hidden-xs hidden-sm header-desktop">
@@ -199,7 +201,15 @@
                     <li>Bartek Ząbek</li>
                 </ul>
             </div>
-        </div>
+          </div>
+          <h2 id="partners">Wydawca</h2>
+          <div class="row">
+              <div class="col-xs-12 col-md-6 col-lg-4">
+                <a href="http://www.kj.org.pl">
+                    <img class="img-responsive" style="width:50%;" src="{% static "images/logo_kj.png" %}"/>
+                </a>
+              </div>
+          </div>
     </div>
 </div>
 <div class="end-page"></div>
