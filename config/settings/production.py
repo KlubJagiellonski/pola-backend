@@ -59,7 +59,7 @@ SECURE_SSL_HOST = env("DJANGO_SECURE_SSL_HOST", default=None)
 # ------------------------------------------------------------------------------
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["www.pola-app.pl", "pola-staging.herokuapp.com"]
+ALLOWED_HOSTS = ["www.pola-app.pl", "pola-app.pl" "pola-staging.herokuapp.com"]
 # END SITE CONFIGURATION
 
 INSTALLED_APPS += ("gunicorn", )
