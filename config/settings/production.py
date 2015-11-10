@@ -35,8 +35,8 @@ INSTALLED_APPS += ("djangosecure", )
 SECURITY_MIDDLEWARE = (
     'djangosecure.middleware.SecurityMiddleware',
     'pola.modules.SetRemoteAddrFromForwardedFor',
+    'pola.modules.HostnameRedirectMiddleware',
 )
-
 
 # Make sure djangosecure.middleware.SecurityMiddleware is listed first
 MIDDLEWARE_CLASSES = SECURITY_MIDDLEWARE + MIDDLEWARE_CLASSES
