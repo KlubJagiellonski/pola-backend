@@ -33,8 +33,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 INSTALLED_APPS += ("djangosecure", )
 
 SECURITY_MIDDLEWARE = (
-    'pola.modules.SetRemoteAddrFromForwardedFor',
     'djangosecure.middleware.SecurityMiddleware',
+    'pola.modules.SetRemoteAddrFromForwardedFor',
 )
 
 
@@ -51,7 +51,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
+
 SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+SECURE_SSL_HOST = env("DJANGO_SECURE_SSL_HOST", default=None)
 
 # SITE CONFIGURATION
 # ------------------------------------------------------------------------------

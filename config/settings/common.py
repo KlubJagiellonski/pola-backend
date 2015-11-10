@@ -69,8 +69,6 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
 MIDDLEWARE_CLASSES = (
-    # forcing one hostname on production
-    'pola.modules.HostnameRedirectMiddleware',
     # Make sure djangosecure.middleware.SecurityMiddleware is listed first
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -281,8 +279,6 @@ LOGGING = {
 }
 
 IS_PRODUCTION = env("IS_PRODUCTION", default=False)
-
-CATCHALL_REDIRECT_HOSTNAME = env("CATCHALL_REDIRECT_HOSTNAME", default=None)
 
 # Your common stuff: Below this line define 3rd party library settings
 PRODUKTY_W_SIECI_API_KEY = env("GS1_API_KEY")
