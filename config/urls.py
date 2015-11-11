@@ -12,13 +12,11 @@ from pola.views import FrontPageView, StatsPageView
 
 urlpatterns = [
     url(r'^$',
-        TemplateView.as_view(template_name='pages/home.html'), name="home"),
+        TemplateView.as_view(template_name='index.html'), name="home"),
     url(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/lang/$',
         TemplateView.as_view(template_name='pages/lang-cms.html'), name="select_lang"),
-    url(r'^land/$',
-        TemplateView.as_view(template_name='index2.html'), name="select_lang"),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
