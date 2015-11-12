@@ -112,7 +112,12 @@ class KrsClient:
             raise ConnectionError({'status_code': resp.status_code})
 
         json = resp.json()
-        if json['object'] == None or json['object']['layers'] == None or json['object']['data'] == None or json['object']['layers']['wspolnicy'] == None:
+        try:
+            if json['object'] is None or json['object']['layers'] is None \
+                    or json['object']['data'] is None \
+                    or json['object']['layers']['wspolnicy'] is None:
+                raise ApiError()
+        except:
             raise ApiError()
 
         return json
