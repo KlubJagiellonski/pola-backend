@@ -29,7 +29,7 @@ class KrsClient:
 
         if resp.status_code != 200:
             raise ConnectionError({'status_code': resp.status_code})
-        print resp.url
+
         json = resp.json()
         if json['search'] == None or json['search']['dataobjects'] == None:
             raise ApiError()

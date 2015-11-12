@@ -22,7 +22,8 @@ def get_by_code(code):
         pass
     return Product.objects.create(code=code)
 
-def create_from_api(code, obj):
+
+def create_from_api(code, obj, product=None):
     obj_owner_name = None
     obj_product_name = None
 
@@ -38,18 +39,20 @@ def create_from_api(code, obj):
             name=obj_owner_name,
             commit_desc='Firma utworzona automatycznie na podstawie API'
                         ' ILiM')
-
     else:
         company = None
 
-#TODO: add commit_desc
-
-    product = Product.objects.create(
-        name=obj_product_name,
-        code=code,
-        company=company,
-        commit_desc="Produkt utworzony automatycznie na podstawie skanu "
-                    "użytkownika")
+    if not product:
+        product = Product.objects.create(
+            name=obj_product_name,
+            code=code,
+            company=company,
+            commit_desc="Produkt utworzony automatycznie na podstawie skanu "
+                        "użytkownika")
+    else:
+        product.name = obj_product_name
+        product.company = company
+        product.save()
 
     if company and company_created:
         update_company_from_krs(product, company)
