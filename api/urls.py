@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    url(regex=r'get_by_code/(?P<code>[0-9]+)$',
+    url(regex=r'get_by_code/(?P<code>[0-9]{8,13})$',
         view=views.get_by_code,
         name="get_by_code"),
     url(regex=r'create_report$',
