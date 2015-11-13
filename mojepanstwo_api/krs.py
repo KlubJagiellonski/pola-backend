@@ -106,8 +106,7 @@ class KrsClient:
         params = {
             'layers': 'wspolnicy'
             }
-        api_url = self.url+'/'+id
-        resp = self.session.get(url=api_url, params=params)
+        resp = self.session.get(url=self.url+'/'+id, params=params)
 
         if resp.status_code != 200:
             raise ConnectionError({'status_code': resp.status_code})
@@ -119,6 +118,6 @@ class KrsClient:
                     or json['object']['layers']['wspolnicy'] is None:
                 raise ApiError()
         except KeyError:
-            raise KeyError('Key >wspolnicy< not found for url:'+api_url)
+            raise KeyError('Key >wspolnicy< not found for url:'+resp.url)
 
         return json
