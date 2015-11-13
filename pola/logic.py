@@ -2,9 +2,10 @@
 
 from company.models import Company
 from product.models import Product
-from mojepanstwo_api import KrsClient, ApiError, CompanyNotFound, \
-    ConnectionError
-from produkty_w_sieci_api import Client, ApiError
+from mojepanstwo_api import KrsClient
+from produkty_w_sieci_api import Client
+import produkty_w_sieci_api
+import mojepanstwo_api
 from django.conf import settings
 import locale
 from report.models import Report
@@ -18,7 +19,7 @@ def get_by_code(code):
         client = Client(settings.PRODUKTY_W_SIECI_API_KEY)
         product_info = client.get_product_by_gtin(code)
         return create_from_api(code, product_info)
-    except ApiError:
+    except produkty_w_sieci_api.ApiError:
         pass
     return Product.objects.create(code=code)
 
@@ -98,14 +99,15 @@ def update_company_from_krs(product, company):
                                    companies[i]['nip'],
                                    companies[i]['adres'],
                                    companies[i]['url'])
-                shareholders = shareholders_to_str(krs, companies[i]['id'] ,'')
+                shareholders = shareholders_to_str(krs, companies[i]['id'], '')
                 if shareholders:
                     description += u'Wspólnicy:\n{}'.format(shareholders)
                 description+='\n'
 
             create_bot_report(product, description)
 
-    except (CompanyNotFound, ConnectionError, ApiError):
+    except (mojepanstwo_api.CompanyNotFound, mojepanstwo_api.ConnectionError,
+            mojepanstwo_api.ApiError):
         pass
 
 def create_bot_report(product, description):
