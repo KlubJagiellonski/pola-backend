@@ -83,7 +83,6 @@ def update_company_from_krs(product, company):
                 create_bot_report(product, u'Wspólnicy spółki {}:\n{}'.
                                   format(company.name, shareholders))
 
-
         elif companies.__len__() > 0:
             description = u'{} - ta firma może być jedną z następujących:\n\n'\
                 .format(company.name)
@@ -140,12 +139,6 @@ def serialize_product(product):
         json['company']['plRegistered_notes'] = company.plRegistered_notes
         json['company']['plNotGlobEnt'] = company.plNotGlobEnt
         json['company']['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
-
-#TODO: remove after apps start using new API
-        json['company']['plTaxes'] = 0
-        json['company']['plTaxes_notes'] = None
-        json['company']['plBrand'] = 0
-        json['company']['plBrand_notes'] = None
 
         plScore = get_plScore(company)
         if plScore:
