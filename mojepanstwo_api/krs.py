@@ -118,6 +118,6 @@ class KrsClient:
                     or json['object']['layers']['wspolnicy'] is None:
                 raise ApiError()
         except KeyError:
-            raise KeyError('Key >wspolnicy< not found for url:'+resp.url)
+            raise ApiError()
 
         return json
