@@ -11,6 +11,21 @@ from ratelimit.decorators import ratelimit
 
 
 @ratelimit(key='ip', rate='2/s', block=True)
+def get_by_code_v2(request, code):
+    device_id = request.GET['device_id']
+
+    result, stats, product = logic.get_result_from_code(code)
+
+    if product is not None:
+        Query.objects.create(client=device_id, product=product,
+                             was_verified=stats['was_verified'],
+                             was_590=stats['was_590'],
+                             was_plScore=stats['was_plScore'])
+
+    return JsonResponse(result)
+
+
+@ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code(request, code):
     device_id = request.GET['device_id']
 
