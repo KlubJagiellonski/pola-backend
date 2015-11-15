@@ -6,6 +6,7 @@ from django_filters.views import FilterView
 from braces.views import LoginRequiredMixin
 from report.models import Report
 from company.models import Company
+from pola.concurency import ConcurencyProtectUpdateView
 from .filters import CompanyFilter
 from .forms import CompanyForm
 
@@ -22,9 +23,12 @@ class CompanyCreate(LoginRequiredMixin, CreateView):
     form_class = CompanyForm
 
 
-class CompanyUpdate(LoginRequiredMixin, UpdateView):
+class CompanyUpdate(LoginRequiredMixin,
+                    ConcurencyProtectUpdateView,
+                    UpdateView):
     model = Company
     form_class = CompanyForm
+    concurency_url = reverse_lazy('concurency:lock')
 
 
 class CompanyDelete(LoginRequiredMixin, DeleteView):

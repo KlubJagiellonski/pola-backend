@@ -36,6 +36,7 @@ urlpatterns = [
     # url(r'^api/', include('pola.api.urls', namespace='api')),
     url(r'^a/', include('api.urls', namespace='api')),
     url(r'^m/', include('webviews.urls', namespace='webviews')),
+    url(r'^concurency/', include('pola.concurency.urls', namespace='concurency')),
 
     url(r'^autocomplete/',
         decorator_include(login_required, 'autocomplete_light.urls')),
