@@ -12,12 +12,23 @@ from .forms import ProductForm
 from .filters import ProductFilter
 from .images import Barcode
 from . import models
+from report.models import Report
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'code'
     model = models.Product
     queryset = models.Product.objects.with_query_count().all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+
+        object = context['object']
+
+        context['report_list'] = Report.objects.filter(
+            product=object, resolved_at=None)
+
+        return context
 
 
 class ProductListView(LoginRequiredMixin, FilterView):
