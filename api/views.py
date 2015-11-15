@@ -62,7 +62,7 @@ def update_report(request):
     return JsonResponse({'id':report.id})
 
 @csrf_exempt
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate='5/s', block=True)
 def attach_file(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
