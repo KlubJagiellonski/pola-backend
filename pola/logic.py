@@ -67,10 +67,20 @@ def get_result_from_code(code):
                 result['background_color'] = COLOR_GREY
                 result['report_button_background_color'] = COLOR_RED
                 result['report_button_text_color'] = COLOR_WHITE
+            elif code.startswith('977') or code.startswith('978') \
+                    or code.startswith('979'):
+                # this is an ISBN/ISSN/ISMN number
+                # (book, music album or magazine)
+                result['name'] = 'Kod ISBN/ISSN/ISMN'
+                result['altText'] = 'Zeskanowany kod jest kodem ' \
+                                    'ISBN/ISSN/ISMN dotyczącym książki,  ' \
+                                    'czasopisma lub albumu muzycznego. ' \
+                                    'Pola nie potrafi powiedzieć o nim nic ' \
+                                    'więcej'
             else:
                 # let's try to associate the code with a country
                 for prefix in CODE_PREFIX_TO_COUNTRY.keys():
-                    if product.code.startswith(prefix):
+                    if code.startswith(prefix):
                         result['plScore'] = 0
                         result['name'] = 'Miejsce produkcji: {}' \
                             .format(CODE_PREFIX_TO_COUNTRY[prefix])
