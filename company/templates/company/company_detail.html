@@ -32,7 +32,7 @@
                 {% for product in object.product_set.all %}
                 <li class="list-group-item"><a href="{{ product.get_absolute_url }}">{{ product }}</a></li>
                 {% empty%}
-                <li>{% trans "Nothing" %}</li>
+                <li>{% trans "Nie ma żadnych produktów" %}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -40,13 +40,13 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">Raporty powiązane przez produkty</h3>
+                <h3 class="panel-title">Zgłoszenia powiązane przez produkty</h3>
             </div>
             <ul class="list-group">
                 {% for report in report_list %}
                 <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a></li>
                 {% empty%}
-                <li>{% trans "Nothing" %}</li>
+                <li>{% trans "Nie ma żadnych zgłoszeń" %}</li>
                 {% endfor %}
             </ul>
         </div>

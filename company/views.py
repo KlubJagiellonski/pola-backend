@@ -31,6 +31,7 @@ class CompanyDelete(LoginRequiredMixin, DeleteView):
     model = Company
     success_url = reverse_lazy('company:list')
 
+
 class CompanyDetailView(LoginRequiredMixin, DetailView):
     model = Company
     queryset = Company.objects.with_query_count().all()
@@ -72,9 +73,9 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
             except:
                 value = object.__dict__[field_name]
             fields.append(
-                {"name":self.model._meta.
-                get_field_by_name(field_name)[0].verbose_name,
-                "value":value})
+                {"name": self.model._meta
+                    .get_field_by_name(field_name)[0].verbose_name,
+                 "value": value})
 
         context['fields'] = fields
         return context
