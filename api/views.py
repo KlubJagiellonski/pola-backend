@@ -9,20 +9,22 @@ import os
 import uuid
 from ratelimit.decorators import ratelimit
 
+
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code(request, code):
-    device_id =request.GET['device_id']
+    device_id = request.GET['device_id']
 
     product = logic.get_by_code(code=code)
 
     result = logic.serialize_product(product)
 
     Query.objects.create(client=device_id, product=product,
-                         was_verified = result['verified'],
-                         was_590 = code.startswith('590'),
-                         was_plScore = result['plScore'] is not None)
+                         was_verified=result['verified'],
+                         was_590=code.startswith('590'),
+                         was_plScore=result['plScore'] is not None)
 
     return JsonResponse(result)
+
 
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
@@ -40,7 +42,8 @@ def create_report(request):
     report = Report.objects.create(product=product, description=description,
                                    client=device_id)
 
-    return JsonResponse({'id':report.id})
+    return JsonResponse({'id': report.id})
+
 
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
@@ -59,7 +62,8 @@ def update_report(request):
     report.description = description
     report.save()
 
-    return JsonResponse({'id':report.id})
+    return JsonResponse({'id': report.id})
+
 
 @csrf_exempt
 @ratelimit(key='ip', rate='5/s', block=True)
@@ -77,4 +81,4 @@ def attach_file(request):
     attachment.attachment.name = str(uuid.uuid1()) + file_extension
     attachment.save()
 
-    return JsonResponse({'id':attachment.id})
+    return JsonResponse({'id': attachment.id})
