@@ -6,6 +6,7 @@ from django_filters.views import FilterView
 from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from report.models import Report
 from company.models import Company
+from pola.concurency import ConcurencyProtectUpdateView
 from .filters import CompanyFilter
 from .forms import CompanyForm
 
@@ -27,9 +28,11 @@ class CompanyCreate(LoginRequiredMixin,
 
 class CompanyUpdate(LoginRequiredMixin,
                     FormValidMessageMixin,
+                    ConcurencyProtectUpdateView,
                     UpdateView):
     model = Company
     form_class = CompanyForm
+    concurency_url = reverse_lazy('concurency:lock')
     form_valid_message = u"Firma zaktualizowana!"
 
 
