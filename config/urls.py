@@ -68,7 +68,7 @@ urlpatterns = [
     url(r'^apple-touch-icon-120x120.png$', RedirectView.as_view(
         url=settings.STATIC_URL +
         'favicons/apple-touch-icon-120x120.png', permanent=True)),
-    url(r'^favicons/apple-touch-icon-144x144.png$', RedirectView.as_view(
+    url(r'^apple-touch-icon-144x144.png$', RedirectView.as_view(
         url=settings.STATIC_URL +
         'favicons/apple-touch-icon-144x144.png', permanent=True)),
     url(r'^favicons/apple-touch-icon-152x152.png$', RedirectView.as_view(
