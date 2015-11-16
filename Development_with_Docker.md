@@ -6,6 +6,8 @@ Install and run [Docker](https://docs.docker.com/compose/install/)
 
 ## Build docker image and start it
 ```
+docker-machine start docker-vm
+eval "$(docker-machine env docker-vm)"
 make build
 ./utils/docker_run.sh 
 ```
