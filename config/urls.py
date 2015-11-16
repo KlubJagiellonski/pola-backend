@@ -46,6 +46,38 @@ urlpatterns = [
 
     url(r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL +
         'favicons/favicon.ico', permanent=True)),
+
+    url(r'^apple-touch-icon-57x57.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-57x57.png', permanent=True)),
+    url(r'^apple-touch-icon-60x60.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-60x60.png', permanent=True)),
+    url(r'^apple-touch-icon-72x72.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-72x72.png', permanent=True)),
+    url(r'^apple-touch-icon-76x76.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-76x76.png', permanent=True)),
+    url(r'^apple-touch-icon-114x114.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-114x114.png', permanent=True)),
+    url(r'^apple-touch-icon-120x120.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-120x120.png', permanent=True)),
+    url(r'^favicons/apple-touch-icon-144x144.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/favicons/apple-touch-icon-144x144.png', permanent=True)),
+    url(r'^favicons/apple-touch-icon-152x152.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/favicons/apple-touch-icon-152x152.png', permanent=True)),
+    url(r'^apple-touch-icon-152x152.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-152x152.png', permanent=True)),
+    url(r'^apple-touch-icon-180x180.png$', RedirectView.as_view(
+        url=settings.STATIC_URL +
+        'favicons/apple-touch-icon-180x180.png', permanent=True)),
+
 ]
 
 # serving static files
