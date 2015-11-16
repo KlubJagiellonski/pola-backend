@@ -47,8 +47,7 @@ def get_result_from_code(code):
                 stats['was_plScore'] = True
 
             stats['was_verified'] = company.verified
-            result['background_color'] = COLOR_WHITE if company.verified else \
-                COLOR_GREY
+            result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
 
         else:
             # we don't know the manufacturer
@@ -64,9 +63,8 @@ def get_result_from_code(code):
                                     "produktu. Z góry dziękujemy!"
                 result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego " \
                                         "produktu"
-                result['background_color'] = COLOR_GREY
-                result['report_button_background_color'] = COLOR_RED
-                result['report_button_text_color'] = COLOR_WHITE
+                result['card_type'] = TYPE_GREY
+                result['report_button_type'] = TYPE_RED
             elif code.startswith('977') or code.startswith('978') \
                     or code.startswith('979'):
                 # this is an ISBN/ISSN/ISMN number
@@ -289,15 +287,15 @@ def shareholders_to_str(krs, id, indent):
             str += shareholders_to_str(krs, wspolnik['krs_id'], indent + '  ')
     return str
 
-COLOR_RED = '#D8002F'
-COLOR_WHITE = '#FFFFFF'
-COLOR_GREY = '#333333'
+TYPE_RED = 'type_red'
+TYPE_WHITE = 'type_white'
+TYPE_GREY = 'type_grey'
 
 DEFAULT_RESULT = {
     'product_id': None,
     'code': None,
     'name': None,
-    'background_color': COLOR_WHITE,
+    'card_type': TYPE_WHITE,
     'plScore': None,
 
     'altText': None,
@@ -316,8 +314,7 @@ DEFAULT_RESULT = {
     'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat '
                    'tego produktu',
     'report_button_text': 'Zgłoś',
-    'report_button_background_color': COLOR_WHITE,
-    'report_button_text_color': COLOR_RED,
+    'report_button_type': TYPE_WHITE,
 }
 
 DEFAULT_STATS = {
