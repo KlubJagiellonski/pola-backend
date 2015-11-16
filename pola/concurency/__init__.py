@@ -16,7 +16,7 @@ class BaseConcurency(object):
             'subclasses of BaseConcurency must \
             provide a lock(obj, user) method')
 
-    def unlock(obj, user):
+    def unlock(obj):
         raise NotImplementedError(
             'subclasses of BaseConcurency must \
             provide a unlock(obj, user) method')
@@ -37,7 +37,7 @@ class CacheConcurency(BaseConcurency):
         key = self._make_key(obj)
         return cache.set(key, user.pk)
 
-    def unlock(self, obj, user):
+    def unlock(self, obj):
         key = self._make_key(obj)
         cache.delete(key)
 
