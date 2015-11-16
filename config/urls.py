@@ -16,7 +16,8 @@ urlpatterns = [
     url(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/lang/$',
-        TemplateView.as_view(template_name='pages/lang-cms.html'), name="select_lang"),
+        TemplateView.as_view(template_name='pages/lang-cms.html'),
+        name="select_lang"),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
@@ -32,7 +33,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 
-#    url(r'^api/', include('pola.api.urls', namespace='api')),
+    # url(r'^api/', include('pola.api.urls', namespace='api')),
     url(r'^a/', include('api.urls', namespace='api')),
     url(r'^m/', include('webviews.urls', namespace='webviews')),
 
@@ -43,8 +44,8 @@ urlpatterns = [
         template_name="robots.txt" if settings.IS_PRODUCTION
         else "robots-staging.txt", content_type='text/plain')),
 
-    url(r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL+
-                                            'images/favicon.ico', permanent=True)),
+    url(r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL +
+        'favicons/favicon.ico', permanent=True)),
 ]
 
 # serving static files
@@ -55,8 +56,10 @@ urlpatterns += patterns(
 
 if settings.DEBUG:
 
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [
