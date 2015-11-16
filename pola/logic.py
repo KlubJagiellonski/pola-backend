@@ -11,6 +11,97 @@ import locale
 from report.models import Report
 
 
+def get_result_from_code(code):
+    result = DEFAULT_RESULT.copy()
+    stats = DEFAULT_STATS.copy()
+    product = None
+
+    result['code'] = code
+
+    if code.isdigit() and (len(code) == 8 or len(code) == 13):
+        # code is EAN8 or EAN13
+        product = get_by_code(code)
+        company = product.company
+
+        result['product_id'] = product.id
+        stats['was_590'] = code.startswith('590')
+
+        if company:
+            # we know the manufacturer of the product
+            result['name'] = company.common_name or \
+                company.official_name or company.name
+            result['plCapital'] = company.plCapital
+            result['plCapital_notes'] = company.plCapital_notes
+            result['plWorkers'] = company.plWorkers
+            result['plWorkers_notes'] = company.plWorkers_notes
+            result['plRnD'] = company.plRnD
+            result['plRnD_notes'] = company.plRnD_notes
+            result['plRegistered'] = company.plRegistered
+            result['plRegistered_notes'] = company.plRegistered_notes
+            result['plNotGlobEnt'] = company.plNotGlobEnt
+            result['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
+
+            plScore = get_plScore(company)
+            if plScore:
+                result['plScore'] = plScore
+                stats['was_plScore'] = True
+
+            stats['was_verified'] = company.verified
+            result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
+
+        else:
+            # we don't know the manufacturer
+            if code.startswith('590'):
+                # the code is registered in Poland, we want more data!
+                result['name'] = "Zgłoś nam ten kod!"
+                result['altText'] = "Zeskanowałeś kod, którego nie mamy " \
+                                    "jeszcze w bazie. Bardzo prosimy o " \
+                                    "zgłoszenie nam tego kodu poprzez " \
+                                    "naciśnięcie przycisku >Zgłoś< " \
+                                    "poniżej i wysłania nam zdjęcia zarówno " \
+                                    "kodu kreskowego jak i etykiety z " \
+                                    "produktu. Z góry dziękujemy!"
+                result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego " \
+                                        "produktu"
+                result['card_type'] = TYPE_GREY
+                result['report_button_type'] = TYPE_RED
+            elif code.startswith('977') or code.startswith('978') \
+                    or code.startswith('979'):
+                # this is an ISBN/ISSN/ISMN number
+                # (book, music album or magazine)
+                result['name'] = 'Kod ISBN/ISSN/ISMN'
+                result['altText'] = 'Zeskanowany kod jest kodem ' \
+                                    'ISBN/ISSN/ISMN dotyczącym książki,  ' \
+                                    'czasopisma lub albumu muzycznego. ' \
+                                    'Pola nie potrafi powiedzieć o nim nic ' \
+                                    'więcej'
+            else:
+                # let's try to associate the code with a country
+                for prefix in CODE_PREFIX_TO_COUNTRY.keys():
+                    if code.startswith(prefix):
+                        result['plScore'] = 0
+                        result['name'] = 'Miejsce produkcji: {}' \
+                            .format(CODE_PREFIX_TO_COUNTRY[prefix])
+                        result['altText'] = 'Ten produkt został wyprodukowany ' \
+                                            'przez zagraniczną firmę.'
+                        break
+                else:
+                    # Ups. It seems to be an internal code
+                    result['name'] = 'Kod wewnętrzny'
+                    result['altText'] = 'Zeskanowany kod jest wewnętrznym ' \
+                                        'kodem sieci handlowej. Pola nie ' \
+                                        'potrafi powiedzieć o nim nic więcej'
+
+    else:
+        # not an EAN8 nor EAN13 code. Probably QR code or some error
+        result['name'] = 'Nieprawidłowy kod'
+        result['altText'] = 'Pola rozpoznaje tylko kody kreskowe typu EAN8 i '\
+                            'EAN13. Zeskanowany przez Ciebie kod jest innego '\
+                            'typu. Spróbuj zeskanować kod z czegoś innego'
+
+    return result, stats, product
+
+
 def get_by_code(code):
     try:
         return Product.objects.get(code=code)
@@ -196,6 +287,41 @@ def shareholders_to_str(krs, id, indent):
             str += shareholders_to_str(krs, wspolnik['krs_id'], indent + '  ')
     return str
 
+TYPE_RED = 'type_red'
+TYPE_WHITE = 'type_white'
+TYPE_GREY = 'type_grey'
+
+DEFAULT_RESULT = {
+    'product_id': None,
+    'code': None,
+    'name': None,
+    'card_type': TYPE_WHITE,
+    'plScore': None,
+
+    'altText': None,
+
+    'plCapital': None,
+    'plCapital_notes': None,
+    'plWorkers': None,
+    'plWorkers_notes': None,
+    'plRnD': None,
+    'plRnD_notes': None,
+    'plRegistered': None,
+    'plRegistered_notes': None,
+    'plNotGlobEnt': None,
+    'plNotGlobEnt_notes': None,
+
+    'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat '
+                   'tego produktu',
+    'report_button_text': 'Zgłoś',
+    'report_button_type': TYPE_WHITE,
+}
+
+DEFAULT_STATS = {
+    'was_verified': False,
+    'was_590': False,
+    'was_plScore': False
+}
 
 CODE_PREFIX_TO_COUNTRY = {
     "30": "Francja",

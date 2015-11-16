@@ -4,10 +4,72 @@ from django.views.decorators.csrf import csrf_exempt
 from product.models import Product
 from pola.models import Query
 from report.models import Report, Attachment
+from config import settings
 import json
 import os
 import uuid
+import time
+import base64
+import hmac
+import urllib
+from hashlib import sha1
 from ratelimit.decorators import ratelimit
+
+
+@ratelimit(key='ip', rate='2/s', block=True)
+def get_by_code_v2(request):
+    code = request.GET['code']
+    device_id = request.GET['device_id']
+
+    result, stats, product = logic.get_result_from_code(code)
+
+    if product is not None:
+        Query.objects.create(client=device_id, product=product,
+                             was_verified=stats['was_verified'],
+                             was_590=stats['was_590'],
+                             was_plScore=stats['was_plScore'])
+
+    return JsonResponse(result)
+
+
+@csrf_exempt
+@ratelimit(key='ip', rate='2/s', block=True)
+def attach_file_v2(request):
+    device_id = request.GET['device_id']
+    report_id = request.GET['report_id']
+
+    report = Report.objects.get(pk=report_id)
+
+    if report.client != device_id:
+        return HttpResponseForbidden("Device_id mismatch")
+
+    data = json.loads(request.body)
+    file_ext = data['file_ext']
+    mime_type = data['mime_type']
+
+    object_name = '%s/%s.%s' % (str(report.id), str(uuid.uuid1()), file_ext)
+
+    expires = int(time.time()+60*60*24)
+    amz_headers = "x-amz-acl:public-read"
+
+    string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % \
+                     (mime_type, expires, amz_headers,
+                      settings.AWS_STORAGE_BUCKET_NAME, object_name)
+
+    signature = base64.encodestring(
+        hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(),
+                 string_to_sign.encode('utf8'), sha1).digest())
+    signature = urllib.quote_plus(signature.strip())
+    url = 'https://%s.s3.amazonaws.com/%s' % (settings.AWS_STORAGE_BUCKET_NAME,
+                                              object_name)
+    signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \
+        (url, settings.AWS_ACCESS_KEY_ID, expires, signature),
+
+    attachment = Attachment(report=report)
+    attachment.attachment.name = object_name
+    attachment.save()
+
+    return JsonResponse({'signed_request': signed_request})
 
 
 @ratelimit(key='ip', rate='2/s', block=True)
