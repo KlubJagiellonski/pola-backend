@@ -322,7 +322,7 @@ html {
 }
 
 body {
-  font-family: "Lato", sans-serif;
+  font-family: sans-serif;
   font-size: 25px;
   line-height: 1.42857;
   color: #222222;
@@ -1999,6 +1999,13 @@ address {
     display: none !important;
   }
 }
+body {
+  font-family: Arial, sans-serif;
+}
+.wf-lato-n4-active.wf-lato-n1-active body {
+  font-family: "Lato", sans-serif;
+}
+
 #svg-container {
   height: 0;
   width: 0;
