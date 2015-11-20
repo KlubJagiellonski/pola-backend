@@ -31,22 +31,36 @@ def get_by_code_v2(request):
 
     return JsonResponse(result)
 
-
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
-def attach_file_v2(request):
+def create_report_v2(request):
     device_id = request.GET['device_id']
-    report_id = request.GET['report_id']
-
-    report = Report.objects.get(pk=report_id)
-
-    if report.client != device_id:
-        return HttpResponseForbidden("Device_id mismatch")
 
     data = json.loads(request.body)
-    file_ext = data['file_ext']
-    mime_type = data['mime_type']
+    description = data['description']
+    product_id = data.get('product_id', None)
+    files_count = data.get('files_count', None)
+    file_ext = data.get('file_ext', None)
+    mime_type = data.get('mime_type', None)
 
+    product = None
+    if product_id:
+        product = Product.objects.get(pk=product_id)
+
+    report = Report.objects.create(product=product, description=description,
+                                   client=device_id)
+
+    signed_requests = []
+    if files_count and file_ext and mime_type:
+        for _ in range(0, files_count):
+            signed_request = attach_file_internal(report.id, file_ext, mime_type)
+            signed_requests.append(signed_request)
+
+    return JsonResponse({'id': report.id,
+                         'signed_requests':signed_requests})
+
+
+def attach_file_internal(report_id, file_ext, mime_type):
     object_name = '%s/%s.%s' % (str(report.id), str(uuid.uuid1()), file_ext)
 
     expires = int(time.time()+60*60*24)
@@ -68,6 +82,25 @@ def attach_file_v2(request):
     attachment = Attachment(report=report)
     attachment.attachment.name = object_name
     attachment.save()
+
+    return signed_request
+
+@csrf_exempt
+@ratelimit(key='ip', rate='2/s', block=True)
+def attach_file_v2(request):
+    device_id = request.GET['device_id']
+    report_id = request.GET['report_id']
+
+    report = Report.objects.get(pk=report_id)
+
+    if report.client != device_id:
+        return HttpResponseForbidden("Device_id mismatch")
+
+    data = json.loads(request.body)
+    file_ext = data['file_ext']
+    mime_type = data['mime_type']
+
+    signed_request = attach_file_internal(report_id, file_ext, mime_type)
 
     return JsonResponse({'signed_request': signed_request})
 
