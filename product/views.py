@@ -13,6 +13,7 @@ from .filters import ProductFilter
 from .images import Barcode
 from . import models
 from report.models import Report
+from pola.concurency import ConcurencyProtectUpdateView
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -45,7 +46,10 @@ class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):
     form_valid_message = _(u"Product created!")
 
 
-class ProductUpdate(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
+class ProductUpdate(LoginRequiredMixin,
+                    ConcurencyProtectUpdateView,
+                    FormValidMessageMixin,
+                    UpdateView):
     slug_field = 'code'
     model = models.Product
     form_class = ProductForm
