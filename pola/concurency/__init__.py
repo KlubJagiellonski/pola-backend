@@ -65,14 +65,15 @@ class ConcurencyProtectUpdateView(object):
         concurency_url = self.get_concurency_url()
         if concurency.is_locked(obj, request.user):
             return HttpResponseRedirect(concurency_url)
+        concurency.lock(obj, request.user)
         return super(
             ConcurencyProtectUpdateView,
             self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, *args, **kwargs):
-        super(
-            ConcurencyProtectUpdateView,
-            self).form_valid(*args, **kwargs)
         concurency = self.get_concurency()
         obj = self.get_object()
         concurency.unlock(obj)
+        return super(
+            ConcurencyProtectUpdateView,
+            self).form_valid(*args, **kwargs)
