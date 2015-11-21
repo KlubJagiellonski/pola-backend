@@ -15,7 +15,7 @@ class CompanyNotFound(Exception):
     pass
 
 class KrsClient:
-    API_URL = 'https://api-v3.mojepanstwo.pl/krs/podmioty'
+    API_URL = 'https://api.mojepanstwo.pl/krs/podmioty'
 
     def __init__(self, url=API_URL):
         self.url = url
