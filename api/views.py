@@ -53,15 +53,15 @@ def create_report_v2(request):
     signed_requests = []
     if files_count and file_ext and mime_type:
         for _ in range(0, files_count):
-            signed_request = attach_file_internal(report.id, file_ext, mime_type)
+            signed_request = attach_file_internal(report, file_ext, mime_type)
             signed_requests.append(signed_request)
 
     return JsonResponse({'id': report.id,
                          'signed_requests':signed_requests})
 
 
-def attach_file_internal(report_id, file_ext, mime_type):
-    object_name = '%s/%s.%s' % (str(report_id), str(uuid.uuid1()), file_ext)
+def attach_file_internal(report, file_ext, mime_type):
+    object_name = '%s/%s.%s' % (str(report.id), str(uuid.uuid1()), file_ext)
 
     expires = int(time.time()+60*60*24)
     amz_headers = "x-amz-acl:public-read"
@@ -100,7 +100,7 @@ def attach_file_v2(request):
     file_ext = data['file_ext']
     mime_type = data['mime_type']
 
-    signed_request = attach_file_internal(report_id, file_ext, mime_type)
+    signed_request = attach_file_internal(report, file_ext, mime_type)
 
     return JsonResponse({'signed_request': signed_request})
 
