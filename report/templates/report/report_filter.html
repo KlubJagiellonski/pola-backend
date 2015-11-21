@@ -9,7 +9,12 @@
 		<div class="col-md-9">
 			<ul>
 			{% for obj in object_list %}
-				<li><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></li>
+				<li>
+                    <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
+                    {% if obj.attachment_count %}
+                        <div class="badge badge-info">{{ obj.attachment_count }}</div>
+                    {% endif %}
+                </li>
 			{% empty %}
 			    <li>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</li>
 			{% endfor %}

@@ -12,6 +12,7 @@ class ReportListView(LoginRequiredMixin, FilterView):
     model = models.Report
     filterset_class = ReportFilter
     paginate_by = 25
+    queryset = models.Report.objects.all().prefetch_related('attachment_set')
 
 
 class ReportDelete(LoginRequiredMixin, DeleteView):

@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from report.models import Report
 from company.models import Company
 from .filters import CompanyFilter
@@ -17,19 +17,28 @@ class CompanyListView(LoginRequiredMixin, FilterView):
     queryset = Company.objects.with_query_count().all()
 
 
-class CompanyCreate(LoginRequiredMixin, CreateView):
+class CompanyCreate(LoginRequiredMixin,
+                    FormValidMessageMixin,
+                    CreateView):
     model = Company
     form_class = CompanyForm
+    form_valid_message = u"Firma utworzona!"
 
 
-class CompanyUpdate(LoginRequiredMixin, UpdateView):
+class CompanyUpdate(LoginRequiredMixin,
+                    FormValidMessageMixin,
+                    UpdateView):
     model = Company
     form_class = CompanyForm
+    form_valid_message = u"Firma zaktualizowana!"
 
 
-class CompanyDelete(LoginRequiredMixin, DeleteView):
+class CompanyDelete(LoginRequiredMixin,
+                    FormValidMessageMixin,
+                    DeleteView):
     model = Company
     success_url = reverse_lazy('company:list')
+    form_valid_message = u"Firma skasowana!"
 
 
 class CompanyDetailView(LoginRequiredMixin, DetailView):
