@@ -52,6 +52,9 @@ def create_report_v2(request):
 
     signed_requests = []
     if files_count and file_ext and mime_type:
+        if files_count>10:
+            return HttpResponseForbidden("files_count can be between 0 and 10")
+
         for _ in range(0, files_count):
             signed_request = attach_file_internal(report, file_ext, mime_type)
             signed_requests.append(signed_request)
