@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from product.models import Product
 from pola.models import Query
 from report.models import Report, Attachment
-from config import settings
+from django.conf import settings
 import json
 import os
 import uuid
@@ -104,6 +104,7 @@ def attach_file_v2(request):
 
     return JsonResponse({'signed_request': signed_request})
 
+#--- API v1 (old)
 
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code(request, code):
