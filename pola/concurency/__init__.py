@@ -31,10 +31,8 @@ class CacheConcurency(BaseConcurency):
     def is_locked(self, obj, user):
         key = self._make_key(obj)
         lock_pk = cache.get(key)
-        print "lock cache is null: " + str(lock_pk is None)
         if not lock_pk:
             return False
-        print "lock_pk" + str(lock_pk)
         return user.pk != lock_pk
 
     def lock(self, obj, user):
