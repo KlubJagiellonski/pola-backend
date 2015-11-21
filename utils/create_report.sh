@@ -1,14 +1,17 @@
 #!/bin/sh
 
-curl http://192.168.99.100:8000/a/v2/create_report?device_id=kuba-test -H "Accept: application/json" -H "Content-type: application/json" --data '{
-   "description": "Krzesło małe"
+curl https://pola-staging.herokuapp.com/a/v2/create_report?device_id=kuba-test -H "Accept: application/json" -H "Content-type: application/json" --data '{
+   "description": "Krzesło małe",
+   "files_count": 4,
+   "mime_type": "image/png",
+   "file_ext":"png"
 }'
 
 curl http://localhost:8000/a/update_report?device_id=kuba-test"&"report_id=15 -H "Accept: application/json" -H "Content-type: application/json" --data '{
    "description": "Krzesło małe 2"
 }'
 
-curl http://192.168.99.100:8000/a/v2/attach_file?device_id=kuba-test"&"report_id=3002 -H "Accept: application/json" -H "Content-type: application/json" --data '{
+curl https://pola-staging.herokuapp.com/a/v2/attach_file?device_id=kuba-test"&"report_id=6745 -H "Accept: application/json" -H "Content-type: application/json" --data '{
    "mime_type": "image/png",
    "file_ext":"png"
 }'
