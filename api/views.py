@@ -61,7 +61,7 @@ def create_report_v2(request):
 
 
 def attach_file_internal(report_id, file_ext, mime_type):
-    object_name = '%s/%s.%s' % (str(report.id), str(uuid.uuid1()), file_ext)
+    object_name = '%s/%s.%s' % (str(report_id), str(uuid.uuid1()), file_ext)
 
     expires = int(time.time()+60*60*24)
     amz_headers = "x-amz-acl:public-read"
