@@ -60,6 +60,9 @@ class Report(models.Model):
     def get_timedelta(self):
         return format_timedelta(timezone.now()-self.created_at, locale='pl_PL')
 
+    def attachment_count(self):
+        return self.attachment_set.count()
+
     OPEN = 1
     RESOLVED = 2
 
