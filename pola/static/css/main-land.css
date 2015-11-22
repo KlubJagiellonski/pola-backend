@@ -343,7 +343,7 @@ a {
   text-decoration: none;
 }
 a:hover, a:focus {
-  color: black;
+  color: #a50024;
   text-decoration: underline;
 }
 a:focus {
@@ -567,12 +567,12 @@ mark,
 }
 
 .text-primary {
-  color: black;
+  color: #d8002f;
 }
 
 a.text-primary:hover,
 a.text-primary:focus {
-  color: black;
+  color: #a50024;
 }
 
 .text-success {
@@ -616,12 +616,12 @@ a.text-danger:focus {
 }
 
 .bg-primary {
-  background-color: black;
+  background-color: #d8002f;
 }
 
 a.bg-primary:hover,
 a.bg-primary:focus {
-  background-color: black;
+  background-color: #a50024;
 }
 
 .bg-success {
@@ -2025,6 +2025,10 @@ svg.icon .stroke-current {
   stroke: currentColor;
 }
 
+a {
+  text-decoration: underline;
+}
+
 .page-title {
   text-align: center;
   font-weight: 300;
@@ -2067,6 +2071,14 @@ svg.icon .stroke-current {
 .top-bar-main li {
   padding-right: 17px;
 }
+.top-bar-main a {
+  color: black;
+  text-decoration: none;
+}
+.top-bar-main a:focus, .top-bar-main a:hover {
+  color: black;
+  text-decoration: underline;
+}
 
 .top-bar-social {
   float: right;
@@ -2078,6 +2090,7 @@ svg.icon .stroke-current {
 }
 .top-bar-social a {
   color: #333;
+  text-decoration: none;
 }
 .top-bar-social a:focus, .top-bar-social a:hover {
   color: #1a1a1a;
