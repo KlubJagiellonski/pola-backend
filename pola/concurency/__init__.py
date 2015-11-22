@@ -23,6 +23,8 @@ class BaseConcurency(object):
 
 
 class CacheConcurency(BaseConcurency):
+    timeout = 30 * 60  # 30 minuts * 60 seconds
+
     def _make_key(self, obj):
         obj_name = obj.__class__.__name__
         pk = obj.pk
@@ -37,7 +39,7 @@ class CacheConcurency(BaseConcurency):
 
     def lock(self, obj, user):
         key = self._make_key(obj)
-        return cache.set(key, user.pk)
+        return cache.set(key, user.pk, timeout=self.timeout)
 
     def unlock(self, obj):
         key = self._make_key(obj)
