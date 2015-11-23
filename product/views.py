@@ -53,7 +53,8 @@ class ProductUpdate(LoginRequiredMixin,
     slug_field = 'code'
     model = models.Product
     form_class = ProductForm
-    form_valid_message = _(u"Product updated!")
+    concurency_url = reverse_lazy('concurency:lock')
+    form_valid_message = _(u"Produkt zaktualizowany!")
 
 
 class ProductDelete(LoginRequiredMixin, FormValidMessageMixin,  DeleteView):
