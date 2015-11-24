@@ -58,6 +58,7 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
     queryset = Company.objects.with_query_count().all()
 
     FIELDS_TO_DISPLAY = (
+        'Editor_notes',
         'nip',
         'name',
         'official_name',
@@ -74,7 +75,6 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         'plNotGlobEnt',
         'plNotGlobEnt_notes',
         'verified',
-        'Editor_notes'
     )
 
     def get_context_data(self, **kwargs):
