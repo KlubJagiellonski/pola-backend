@@ -1,5 +1,6 @@
 {%extends 'company/base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 {% block breadcrumbs_rows %}
     <li class="active"><a href="{{ obj.get_absolute_url }}">{{ object }}</a></li>
 {% endblock %}
@@ -11,7 +12,10 @@
         <a href="{% url 'company:edit' object.pk %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
     </div>
 {% endif %}
-<h1>{{ object }}  <small>#{{ object.pk }}</small></h1>
+<h1>
+    {% if object.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ object.locked_by }}"/>{% endif %}
+    {{ object }}  <small>#{{ object.pk }}</small>
+</h1>
 <div class="panel panel-primary">
 	<div class="panel-heading">{% trans "Data metric" %}</div>
 	<table class="table">

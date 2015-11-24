@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load i18n %}
 {% block content %}
 <h3>{% trans "Do pracy. Użytkownicy czekają :)" %}</h3><br/>
@@ -11,7 +12,9 @@
             <ul class="list-group">
             {% for company in  most_popular_companies %}
                 <li class="list-group-item">
-                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})</a>
+                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})
+                    {% if company.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ company.locked_by }}"/>{% endif %}
+                    </a>
                 </li>
             {% endfor %}
             </ul>
@@ -46,11 +49,13 @@
             {% for product in  most_popular_590_products %}
                 <li class="list-group-item">
                     <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
+                    {% if product.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ product.locked_by }}"/>{% endif %}
                 </li>
             {% endfor %}
             </ul>
             <div class="panel-footer">
                 <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
+                {% if product.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ product.locked_by }}"/>{% endif %}
             </div>
         </div>
     </div>
@@ -63,6 +68,7 @@
             {% for product in  most_popular_not_590_products %}
                 <li class="list-group-item">
                     <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
+                    {% if product.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ product.locked_by }}"/>{% endif %}
                 </li>
             {% endfor %}
             </ul>

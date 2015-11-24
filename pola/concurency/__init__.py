@@ -35,11 +35,22 @@ class CacheConcurency(BaseConcurency):
         lock_pk = cache.get(key)
         if not lock_pk:
             return False
-        return user.pk != lock_pk
+        return user.username != lock_pk
+
+    def locked_by(self, obj):
+        key = self._make_key(obj)
+        lock_pk = cache.get(key)
+        return lock_pk
+
+    def add_locked_by(self, dataset):
+        for obj in dataset:
+            obj.locked_by = concurency.locked_by(obj)
+        return dataset
+
 
     def lock(self, obj, user):
         key = self._make_key(obj)
-        return cache.set(key, user.pk, timeout=self.timeout)
+        return cache.set(key, user.username, timeout=self.timeout)
 
     def unlock(self, obj):
         key = self._make_key(obj)
