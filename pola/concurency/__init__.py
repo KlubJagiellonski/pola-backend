@@ -42,12 +42,6 @@ class CacheConcurency(BaseConcurency):
         lock_pk = cache.get(key)
         return lock_pk
 
-    def add_locked_by(self, dataset):
-        for obj in dataset:
-            obj.locked_by = concurency.locked_by(obj)
-        return dataset
-
-
     def lock(self, obj, user):
         key = self._make_key(obj)
         return cache.set(key, user.username, timeout=self.timeout)

@@ -1,5 +1,4 @@
 {%extends 'product/base.html' %}
-{% load staticfiles %}
 {% load i18n crispy_forms_tags %}
 
 {% block content %}
@@ -18,7 +17,7 @@
             {% for obj in object_list %}
                 <li>
                     <a href="{{ obj.get_absolute_url }}">{{ obj }}</a> ({{ obj.query_count }})
-                    {% if obj.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ obj.locked_by }}"/>{% endif %}
+                    {% if obj.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ obj.locked_by }}"></i>{% endif %}
                 </li>
             {% empty %}
                 <li>{% trans "Nic nie znaleziono" %}</li>

@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from model_utils.managers import PassThroughManager
 from django.core.validators import ValidationError
 import reversion
+from pola.concurency import concurency
 
 
 class IntegerRangeField(models.IntegerField):
@@ -112,6 +113,9 @@ class Company(models.Model):
 
     def get_absolute_url(self):
         return reverse('company:detail', args=[self.pk])
+
+    def locked_by(self):
+        return concurency.locked_by(self)
 
     def __unicode__(self):
         return self.common_name or self.official_name or self.name

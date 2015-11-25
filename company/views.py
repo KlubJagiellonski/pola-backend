@@ -9,7 +9,6 @@ from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
 from .filters import CompanyFilter
 from .forms import CompanyForm
-from pola.concurency import concurency
 
 
 class CompanyListView(LoginRequiredMixin, FilterView):
@@ -17,14 +16,6 @@ class CompanyListView(LoginRequiredMixin, FilterView):
     filterset_class = CompanyFilter
     paginate_by = 25
     queryset = Company.objects.with_query_count().all()
-
-    def get_context_data(self, **kwargs):
-        context = super(CompanyListView, self).get_context_data(**kwargs)
-
-        object_list = context['object_list']
-        concurency.add_locked_by(object_list)
-
-        return context
 
 
 class CompanyCreate(LoginRequiredMixin,
@@ -81,8 +72,6 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         context = super(CompanyDetailView, self).get_context_data(**kwargs)
 
         object = context['object']
-
-        concurency.add_locked_by([object])
 
         context['report_list'] = Report.objects.filter(
             product__company=object, resolved_at=None)

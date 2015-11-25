@@ -13,7 +13,7 @@ from .filters import ProductFilter
 from .images import Barcode
 from . import models
 from report.models import Report
-from pola.concurency import ConcurencyProtectUpdateView, concurency
+from pola.concurency import ConcurencyProtectUpdateView
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -26,8 +26,6 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
 
         object = context['object']
 
-        concurency.add_locked_by([object])
-
         context['report_list'] = Report.objects.filter(
             product=object, resolved_at=None)
 
@@ -39,14 +37,6 @@ class ProductListView(LoginRequiredMixin, FilterView):
     filterset_class = ProductFilter
     paginate_by = 25
     queryset = models.Product.objects.with_query_count().all()
-
-    def get_context_data(self, **kwargs):
-        context = super(ProductListView, self).get_context_data(**kwargs)
-
-        object_list = context['object_list']
-        concurency.add_locked_by(object_list)
-
-        return context
 
 
 class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):

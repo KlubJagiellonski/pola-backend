@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load staticfiles %}
 {% load i18n %}
 {% block content %}
 <h3>{% trans "Do pracy. Użytkownicy czekają :)" %}</h3><br/>
@@ -13,7 +12,7 @@
             {% for company in  most_popular_companies %}
                 <li class="list-group-item">
                     <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})
-                    {% if company.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ company.locked_by }}"/>{% endif %}
+                    {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
                     </a>
                 </li>
             {% endfor %}
@@ -49,13 +48,12 @@
             {% for product in  most_popular_590_products %}
                 <li class="list-group-item">
                     <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
-                    {% if product.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ product.locked_by }}"/>{% endif %}
+                    {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
                 </li>
             {% endfor %}
             </ul>
             <div class="panel-footer">
                 <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
-                {% if product.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ product.locked_by }}"/>{% endif %}
             </div>
         </div>
     </div>
@@ -68,7 +66,7 @@
             {% for product in  most_popular_not_590_products %}
                 <li class="list-group-item">
                     <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
-                    {% if product.locked_by %}<img src="{%  static "images/lock.png" %}" title="Edytowane przez: {{ product.locked_by }}"/>{% endif %}
+                    {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
                 </li>
             {% endfor %}
             </ul>

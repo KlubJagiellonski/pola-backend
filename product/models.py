@@ -5,6 +5,7 @@ from company.models import Company
 import reversion
 from model_utils.managers import PassThroughManager
 from django.utils.translation import ugettext_lazy as _
+from pola.concurency import concurency
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
@@ -36,6 +37,9 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('product:detail', args=[self.code])
+
+    def locked_by(self):
+        return concurency.locked_by(self)
 
     def get_image_url(self):
         return reverse('product:image', args=[self.code])
