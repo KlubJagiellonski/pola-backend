@@ -480,7 +480,7 @@ h6 .small, .h6 small,
 }
 
 h1, .h1 {
-  font-size: 65px;
+  font-size: 53px;
 }
 
 h2, .h2 {
@@ -2013,6 +2013,13 @@ body {
   visibility: hidden;
 }
 
+svg .fill-current {
+  fill: currentColor;
+}
+svg .stroke-current {
+  stroke: currentColor;
+}
+
 svg.icon {
   width: 1em;
   height: 1em;
@@ -2066,18 +2073,16 @@ a {
 
 .top-bar-main {
   float: left;
-  padding: 17px;
-}
-.top-bar-main li {
-  padding-right: 17px;
+  margin-left: 5px;
 }
 .top-bar-main a {
+  display: inline-block;
+  padding: 17px 20px;
   color: black;
   text-decoration: none;
 }
 .top-bar-main a:focus, .top-bar-main a:hover {
-  color: black;
-  text-decoration: underline;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .top-bar-social {
@@ -2093,11 +2098,11 @@ a {
   text-decoration: none;
 }
 .top-bar-social a:focus, .top-bar-social a:hover {
-  color: #1a1a1a;
+  color: #a50024;
 }
 
 .header {
-  background: url("../images/header-bg.jpg");
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.3)), url("../images/header-bg.jpg");
   background-size: cover;
   background-position: left center;
   border-bottom: 16px solid #d8002f;
@@ -2106,33 +2111,52 @@ a {
 @media (min-width: 992px) {
   .header {
     margin-bottom: 0;
-    height: 750px;
-    background-position: left center;
+    height: calc(100vh - 250px);
+    background-position: center center;
+  }
+}
+@media (min-width: 1200px) {
+  .header {
+    height: calc(100vh - 200px);
   }
 }
 
 .header-desktop {
   margin-top: -280px;
+  margin-bottom: 100px;
 }
 
 .header-logo {
   display: block;
-  font-size: 150px;
   margin: .5em auto;
+  font-size: 150px;
 }
 @media (min-width: 992px) {
   .header-logo {
-    margin: .5em 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 80px;
+    margin-bottom: 75px;
+    font-size: 150px;
+    padding-top: 30px;
   }
 }
 
 .mockup {
+  position: relative;
+  margin-left: -15px;
   margin-bottom: -200px;
 }
 @media (min-width: 992px) {
   .mockup {
     margin-bottom: 0;
-    margin-top: -50%;
+    margin-top: 100px;
+  }
+}
+@media (min-width: 1200px) {
+  .mockup {
+    margin-top: -40px;
+    margin-bottom: 0px;
   }
 }
 
@@ -2149,7 +2173,8 @@ a {
   padding: 0;
   overflow: hidden;
   text-align: center;
-  font-size: 48px;
+  font-size: 32px;
+  margin-bottom: .6em;
 }
 .social-bar li {
   display: inline-block;
@@ -2159,7 +2184,7 @@ a {
   color: #333;
 }
 .social-bar a:focus, .social-bar a:hover {
-  color: #1a1a1a;
+  color: #4d4d4d;
 }
 
 .download-links {
@@ -2176,7 +2201,7 @@ a {
 @media (min-width: 992px) {
   .download-links img {
     width: auto;
-    height: 80px;
+    height: 70px;
   }
 }
 @media (min-width: 992px) {
@@ -2188,11 +2213,31 @@ a {
   opacity: 0.8;
 }
 
+.downlad-links-mobile {
+  margin-bottom: 80px;
+}
+
+.section {
+  margin-bottom: 90px;
+}
+@media (max-width: 1199px) {
+  .section {
+    font-size: 21px;
+    line-height: 1.7;
+  }
+}
+.section a {
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 1px solid currentColor;
+}
+
 @media (min-width: 992px) {
   .team {
     -webkit-column-count: 2;
        -moz-column-count: 2;
             column-count: 2;
+    margin-bottom: -2em;
   }
 }
 
@@ -2216,25 +2261,55 @@ a {
 }
 
 .partners-list {
-  list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
 }
-.partners-list li {
-  width: 300px;
-  max-width: 100%;
-  margin: 0 1em 2em;
+.partners-list:before, .partners-list:after {
+  content: " ";
+  display: table;
+}
+.partners-list:after {
+  clear: both;
+}
+.partners-list .partner {
+  margin: 0;
+  float: left;
+  margin-bottom: 2em;
+  list-style: none;
+  width: 100%;
+  margin: 0 auto;
+}
+@media (min-width: 992px) {
+  .partners-list .partner {
+    width: 50%;
+  }
+}
+@media (min-width: 1200px) {
+  .partners-list .partner {
+    width: 33.33333%;
+  }
+}
+@media (min-width: 992px) {
+  .partners-list .partner {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
 }
 .partners-list img {
   display: block;
   max-width: 100%;
   height: auto;
 }
+.partners-list a {
+  display: block;
+  border: none;
+}
 .partners-list a:focus, .partners-list a:hover {
   opacity: 0.7;
+}
+
+h2 {
+  margin-bottom: 45px;
 }
 
 

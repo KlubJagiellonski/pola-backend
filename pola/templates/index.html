@@ -55,10 +55,10 @@
       WebFontConfig = {
         google: {
           families: ['Lato:400,300,100:latin,latin-ext']
-        }
-      };
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
+      }
+  };
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
 </head>
 <body>
     <div id="svg-container">
@@ -151,12 +151,12 @@
             </li>
         </ul>
         <div class="row hidden-xs hidden-sm header-desktop">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="mockup">
                     <img src="{% static "images/mockup.png"%}" alt="" class="mockup-img">
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <svg role="img" class="icon header-logo" title="Pola">
                     <use xlink:href="#logo"/>
                 </svg>
@@ -175,94 +175,105 @@
             </div>
         </div>
         <div class="page-content">
-          <h2 id="about">O Poli</h2>
-          <p>Masz dość masówki globalnych koncernów? Szukasz lokalnych firm tworzących unikalne produkty? Pola pomoże Ci odnaleźć polskie wyroby. Zabierając Polę na zakupy odnajdujesz produkty “z duszą” i wspierasz polską gospodarkę. </p>
-          <p>Zeskanuj kod kreskowy z dowolnego produktu i dowiedz się  więcej o firmie, która go wyprodukowała. Pola powie Ci, czy dany producent opiera się na polskim kapitale, ma u nas  swoją produkcję, tworzy wykwalifikowane miejsca pracy, jest częścią zagranicznego koncernu. </p>
-          <p>Jeśli znajdziesz firmę, której nie ma w naszej bazie, koniec znie zgłoś ją do nas. Pomożesz nam w ten sposób uzupełniać  unikalną bazę polskich producentów.</p>
-          <h2 id="methodology">Algorytm</h2>
-          <p>Każdemu producentowi Pola przypisuje od 0 do 100 punktów. Pierwsze 35 punktów przyznaje proporcjonalnie do udziału polskiego kapitału w konkretnym przedsiębiorstwie. Dalsze 10 punktów otrzymuje ta firma, która jest zarejstrowana w Polsce, a kolejne 30, o ile produkuje w naszym kraju. Dalsze 15 punktów zależy od tego, czy zatrudnia w naszym kraju w obszarze badań i rozwoju. Wreszcie ostatnie 10 punktów otrzymują firmy, które nie są częścią zagranicznych koncernów.</p>
-          <p>Liczba punktów zwizualizowna jest przy pomocy czerwonego paska. Dokładamy wszelkich starań aby dane w aplikacji zawsze odpowiadały rzeczywistości i były aktualizowane na bieżąco. Prosimy o zgłoszanie wszelkich uwag i niejasności.</p>
-          <h2 id="approach">Filozofia działania</h2>
-          <p>Staramy się być maksymalnie przejrzyści w naszych działaniach. Całość kodu źródłowego serwisu udostępniamy na zasadach otwartego oprogramowania na <a href="https://github.com/KlubJagiellonski">koncie Klubu Jagiellońskiego</a> w serwisie GitHub. Wktórce planujemy udostępnić w Internecie całość bazy danych producentów wraz z historią zmian i źródłami, na podstawie których podejmujemy decyzję o liczbie punktów, które im przyznajemy. Działamy zgodnie z naszą <a href="{% static "docs/polityka_prywatnosci.pdf" %}">polityką prywatności</a>.</p>
-          <h2 id="partners">Partnerzy</h2>
-          <ul class="partners-list">
-            <li class="partner">
-              <a href="http://www.cakj.pl" class="">
-                <img src="{% static "images/logo_cakj.png" %}">
-              </a>
-              <div class="skill">Algorytm</div>
-            </li>
-            <li class="partner">
-              <a href="http://www.ilim.poznan.pl">
-                <img src="{% static "images/logo_ilim.jpg" %}">
-              </a>
-              <div class="skill">Baza kodów kreskowych i producentów</div>
-            </li>
-            <li class="partner">
-              <a href="http://www.kodujdlapolski.pl">
-                <img src="{% static "images/logo_kodujdlapolski.png" %}">
-              </a>
-              <div class="skill">Otwarte spotkania projektowe dla programistów</div>
-            </li>
-          </ul>
-
-          <h2 id="team">Zespół</h2>
-          <div class="team">
-            <div class="team-group">
-                <div class="team-title">programowanie</div>
-                <ul class="team-list">
-                    <li>Kamil Breguła</li>
-                    <li>Paweł Janeczek</li>
-                    <li>Grzesiek Kapusta</li>
-                    <li>Kuba Lipiński</li>
-                    <li>Michał Tajchert </li>
+            <div class="section" id="about">
+                <h2 id="about">O Poli</h2>
+                <p>Masz dość masówki globalnych koncernów? Szukasz lokalnych firm tworzących unikalne produkty? Pola pomoże Ci odnaleźć polskie wyroby. Zabierając Polę na zakupy odnajdujesz produkty “z duszą” i wspierasz polską gospodarkę. </p>
+                <p>Zeskanuj kod kreskowy z dowolnego produktu i dowiedz się  więcej o firmie, która go wyprodukowała. Pola powie Ci, czy dany producent opiera się na polskim kapitale, ma u nas  swoją produkcję, tworzy wykwalifikowane miejsca pracy, jest częścią zagranicznego koncernu. </p>
+                <p>Jeśli znajdziesz firmę, której nie ma w naszej bazie, koniec znie zgłoś ją do nas. Pomożesz nam w ten sposób uzupełniać  unikalną bazę polskich producentów.</p>
+            </div>
+            <div class="section" id="methodology">
+                <h2>Algorytm</h2>
+                <p>Każdemu producentowi Pola przypisuje od 0 do 100 punktów. Pierwsze 35 punktów przyznaje proporcjonalnie do udziału polskiego kapitału w konkretnym przedsiębiorstwie. Dalsze 10 punktów otrzymuje ta firma, która jest zarejstrowana w Polsce, a kolejne 30, o ile produkuje w naszym kraju. Dalsze 15 punktów zależy od tego, czy zatrudnia w naszym kraju w obszarze badań i rozwoju. Wreszcie ostatnie 10 punktów otrzymują firmy, które nie są częścią zagranicznych koncernów.</p>
+                <p>Liczba punktów zwizualizowna jest przy pomocy czerwonego paska. Dokładamy wszelkich starań aby dane w aplikacji zawsze odpowiadały rzeczywistości i były aktualizowane na bieżąco. Prosimy o zgłoszanie wszelkich uwag i niejasności.</p>
+            </div>
+            <div class="section" id="approach">
+                <h2>Filozofia działania</h2>
+                <p>Staramy się być maksymalnie przejrzyści w naszych działaniach. Całość kodu źródłowego serwisu udostępniamy na zasadach otwartego oprogramowania na <a href="https://github.com/KlubJagiellonski">koncie Klubu Jagiellońskiego</a> w serwisie GitHub. Wktórce planujemy udostępnić w Internecie całość bazy danych producentów wraz z historią zmian i źródłami, na podstawie których podejmujemy decyzję o liczbie punktów, które im przyznajemy. Działamy zgodnie z naszą <a href="{% static "docs/polityka_prywatnosci.pdf" %}">polityką prywatności</a>.</p>
+            </div>
+            <div class="section" id="partners">
+                <h2>Partnerzy</h2>
+                <ul class="partners-list">
+                    <li class="partner">
+                        <a href="http://www.cakj.pl" class="">
+                            <img src="{% static "/static/images/logo_KJ.png" %}">
+                        </a>
+                        <div class="skill">Algorytm</div>
+                    </li>
+                    <li class="partner">
+                        <a href="http://www.ilim.poznan.pl">
+                            <img src="{% static "/static/images/logo_logistyka.png" %}">
+                        </a>
+                        <div class="skill">Baza kodów kreskowych i producentów</div>
+                    </li>
+                    <li class="partner">
+                        <a href="http://www.kodujdlapolski.pl">
+                        <img src="{% static "/static/images/logo_kodujdlapolski.png" %}">
+                        </a>
+                        <div class="skill">Otwarte spotkania projektowe dla programistów</div>
+                    </li>
                 </ul>
             </div>
-            <div class="team-group">
-                <div class="team-title">algorytm:</div>
-                <ul class="team-list">
-                    <li>Piotr Dardziński</li>
-                    <li>Michał Kot</li>
-                    <li>Piotr Mieczkowski</li>
-                    <li>Joanna Szalacha-Jarmużek</li>
-                    <li>Leszek Wojdalski</li>
-                </ul>
+            <div class="section" id="team">
+                <h2>Zespół</h2>
+                <div class="team">
+                    <div class="team-group">
+                        <div class="team-title">programowanie</div>
+                        <ul class="team-list">
+                            <li>Kamil Breguła</li>
+                            <li>Paweł Janeczek</li>
+                            <li>Grzesiek Kapusta</li>
+                            <li>Kuba Lipiński</li>
+                            <li>Michał Tajchert </li>
+                        </ul>
+                    </div>
+                    <div class="team-group">
+                        <div class="team-title">algorytm:</div>
+                        <ul class="team-list">
+                            <li>Piotr Dardziński</li>
+                            <li>Michał Kot</li>
+                            <li>Piotr Mieczkowski</li>
+                            <li>Joanna Szalacha-Jarmużek</li>
+                            <li>Leszek Wojdalski</li>
+                        </ul>
+                    </div>
+                    <div class="team-group">
+                        <div class="team-title">projektowanie:</div>
+                        <ul class="team-list">
+                            <li>Przemek Pomaski</li>
+                        </ul>
+                    </div>
+                    <div class="team-group">
+                        <div class="team-title">koordynacja: </div>
+                        <ul class="team-list">
+                            <li>Kuba Lipiński</li>
+                        </ul>
+                    </div>
+                    <div class="team-group">
+                        <div class="team-title">redakcja: </div>
+                        <ul class="team-list">
+                            <li>Wojtek Skierski</li>
+                            <li>Bartek Ząbek</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="team-group">
-                <div class="team-title">projektowanie:</div>
-                <ul class="team-list">
-                    <li>Przemek Pomaski</li>
-                </ul>
+            <div class="section"  id="partners">
+              <h2 >Wydawca</h2>
+              <div class="row">
+                  <div class="col-xs-12 col-md-6 col-lg-4">
+                    <a href="http://www.kj.org.pl" style="border: none;">
+                        <img class="img-responsive" style="width:50%;" src="{% static "images/logo_kj.png" %}"/>
+                    </a>
+                </div>
             </div>
-            <div class="team-group">
-                <div class="team-title">koordynacja: </div>
-                <ul class="team-list">
-                    <li>Kuba Lipiński</li>
-                </ul>
-            </div>
-            <div class="team-group">
-                <div class="team-title">redakcja: </div>
-                <ul class="team-list">
-                    <li>Wojtek Skierski</li>
-                    <li>Bartek Ząbek</li>
-                </ul>
-            </div>
-          </div>
-          <h2 id="partners">Wydawca</h2>
-          <div class="row">
-              <div class="col-xs-12 col-md-6 col-lg-4">
-                <a href="http://www.kj.org.pl">
-                    <img class="img-responsive" style="width:50%;" src="{% static "images/logo_kj.png" %}"/>
-                </a>
-              </div>
-          </div>
+        </div>
     </div>
 </div>
 <div class="end-page"></div>
 <script type="text/javascript">
-var path_config = {
-    symbols: '{% static "symbols.svg" %}',
-};
+    var path_config = {
+        symbols: '{% static "symbols.svg" %}',
+    };
 </script>
 <script src="{% static "js/script-land.min.js" %}"></script>
 {% include 'partiales/google_analytics.html' %}
