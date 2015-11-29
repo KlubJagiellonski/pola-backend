@@ -25,6 +25,28 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Najpopularniejsi, zweryfikowani producenci bez opisu" %} ({{ no_of_companies_wo_desc }})</h3>
+            </div>
+            <ul class="list-group">
+            {% for company in  companies_wo_desc %}
+                <li class="list-group-item">
+                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})
+                    {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+            <div class="panel-footer">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Najnowsze nierozpatrzone zgłoszenia" %} ({{ no_of_open_reports }}+{{ no_of_resolved_reports }}={{ no_of_reports }})</h3>
             </div>
             {% for report in  newest_reports %}

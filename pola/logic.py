@@ -41,6 +41,25 @@ def get_result_from_code(code):
             result['plNotGlobEnt'] = company.plNotGlobEnt
             result['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
 
+            if company.description:
+                result['description'] = company.description
+            else:
+                desc = ''
+                if company.plCapital_notes:
+                    desc += rem_dbl_newlines(company.plCapital_notes)+u'\n'
+                if company.plWorkers_notes:
+                    desc += rem_dbl_newlines(company.plWorkers_notes)+u'\n'
+                if company.plRnD_notes:
+                    desc += rem_dbl_newlines(company.plRnD_notes)+u'\n'
+                if company.plRegistered_notes:
+                    desc += rem_dbl_newlines(company.plRegistered_notes)+u'\n'
+                if company.plNotGlobEnt_notes:
+                    desc += rem_dbl_newlines(company.plNotGlobEnt_notes)+u'\n'
+
+                result['description'] = desc
+
+            result['sources'] = company.get_sources(raise_exp=False)
+
             plScore = get_plScore(company)
             if plScore:
                 result['plScore'] = plScore
@@ -286,6 +305,9 @@ def shareholders_to_str(krs, id, indent):
         if wspolnik['krs_id'] is not None:
             str += shareholders_to_str(krs, wspolnik['krs_id'], indent + '  ')
     return str
+
+def rem_dbl_newlines(s):
+    return s.replace(u'\r\n\r\n',u'\r\n').replace(u'\n\n',u'\n')
 
 TYPE_RED = 'type_red'
 TYPE_WHITE = 'type_white'

@@ -31,6 +31,15 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_verified_companies'] = Company.objects.\
             filter(verified=True).count()
 
+        c['companies_wo_desc'] = (Company.objects
+                            .with_query_count()
+                            .filter(verified=True, description__isnull=True)
+                            .order_by('-query_count')[:10])
+        c['no_of_companies_wo_desc'] = (Company.objects
+            .filter(verified=True, description__isnull=True)
+                                        .count())
+
+
         c['newest_reports'] = (Report.objects.only_open()
                                      .order_by('-created_at')[:10])
         c['no_of_open_reports'] = Report.objects.only_open().count()

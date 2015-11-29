@@ -35,7 +35,6 @@ class CompanyUpdate(LoginRequiredMixin,
     concurency_url = reverse_lazy('concurency:lock')
     form_valid_message = u"Firma zaktualizowana!"
 
-
 class CompanyDelete(LoginRequiredMixin,
                     FormValidMessageMixin,
                     DeleteView):
@@ -50,22 +49,24 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
 
     FIELDS_TO_DISPLAY = (
         'Editor_notes',
-        'nip',
         'name',
         'official_name',
         'common_name',
-        'address',
         'plCapital',
-        'plCapital_notes',
         'plWorkers',
-        'plWorkers_notes',
         'plRnD',
-        'plRnD_notes',
         'plRegistered',
-        'plRegistered_notes',
         'plNotGlobEnt',
-        'plNotGlobEnt_notes',
+        'description',
+        'sources',
         'verified',
+        'plCapital_notes',
+        'plWorkers_notes',
+        'plRnD_notes',
+        'plRegistered_notes',
+        'plNotGlobEnt_notes',
+        'address',
+        'nip',
     )
 
     def get_context_data(self, **kwargs):

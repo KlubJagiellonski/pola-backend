@@ -44,8 +44,6 @@ class CompanyQuerySet(models.query.QuerySet):
 
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    nip = models.CharField(max_length=10, db_index=True, null=True,
-                           blank=True, verbose_name=_(u"NIP/Tax ID"))
     name = models.CharField(max_length=128, null=True, blank=True,
                             db_index=True,
                             verbose_name=
@@ -54,47 +52,35 @@ class Company(models.Model):
                                      verbose_name=_(u"Nazwa rejestrowa"))
     common_name = models.CharField(max_length=128, blank=True,
                                    verbose_name=_(u"Nazwa dla użytkownika"))
-    address = models.TextField(null=True, blank=True,
-                               verbose_name=_(u"Adres"))
 
     plCapital = IntegerRangeField(
         verbose_name=_(u"Udział polskiego kapitału"),
         min_value=0, max_value=100, null=True, blank=True)
-    plCapital_notes = models.TextField(
-        _(u"Więcej nt. udziału polskiego kapitału"), null=True, blank=True)
-
     plWorkers = IntegerRangeField(
         verbose_name=_(u"Miejsce produkcji"), min_value=0,
         max_value=100, null=True, blank=True,
         choices=((0,_(u"0 - Nie produkuje w Polsce")),
                  (100,_(u"100 - Produkuje w Polsce"))))
-    plWorkers_notes = models.TextField(
-        _(u"Więcej nt. miejsca produkcji"), null=True, blank=True)
-
     plRnD = IntegerRangeField(
         verbose_name=_(u"Miejsca pracy w BiR w Polsce"), min_value=0,
         max_value=100, null=True, blank=True,
         choices=((0, _(u"0 - Nie tworzy miejsc pracy w BiR Polsce")),
                  (100, _(u"100 - Tworzy miejsca pracy w BiR w Polsce"))))
-    plRnD_notes = models.TextField(
-        _(u"Więcej nt. miejsc pracy w BiR"), null=True, blank=True)
-
     plRegistered = IntegerRangeField(
         verbose_name=_(u"Miejsce rejestracji"), min_value=0, max_value=100,
         null=True, blank=True,
         choices=((0, _(u"0 - Firma zarejestrowana za granicą")),
                  (100, _(u"100 - Firma zarejestrowana w Polsce"))))
-    plRegistered_notes = models.TextField(
-        _(u"Więcej nt. miejsca rejestracji"), null=True, blank=True)
-
     plNotGlobEnt = IntegerRangeField(
         verbose_name=_(u"Struktura kapitałowa"), min_value=0,
         max_value=100, null=True, blank=True,
         choices=((0, _(u"0 - Firma jest częścią zagranicznego koncernu")),
                  (100,
                  _(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
-    plNotGlobEnt_notes = models.TextField(
-        _(u"Więcej nt. struktury kapitałowej"), null=True, blank=True)
+
+    description = models.TextField(
+        _(u"Opis producenta"), null=True, blank=True)
+    sources  = models.TextField(_(u"Źródła"), null=True, blank=True)
 
     verified = models.BooleanField(default=False,
                                    verbose_name=_("Dane zweryfikowane"),
@@ -104,6 +90,22 @@ class Company(models.Model):
     Editor_notes = models.TextField(
         _(u"Notatki redakcji (nie pokazujemy użytkownikom)"), null=True,
         blank=True)
+
+    plCapital_notes = models.TextField(
+        _(u"Więcej nt. udziału polskiego kapitału"), null=True, blank=True)
+    plWorkers_notes = models.TextField(
+        _(u"Więcej nt. miejsca produkcji"), null=True, blank=True)
+    plRnD_notes = models.TextField(
+        _(u"Więcej nt. miejsc pracy w BiR"), null=True, blank=True)
+    plRegistered_notes = models.TextField(
+        _(u"Więcej nt. miejsca rejestracji"), null=True, blank=True)
+    plNotGlobEnt_notes = models.TextField(
+        _(u"Więcej nt. struktury kapitałowej"), null=True, blank=True)
+
+    nip = models.CharField(max_length=10, db_index=True, null=True,
+                           blank=True, verbose_name=_(u"NIP/Tax ID"))
+    address = models.TextField(null=True, blank=True,
+                               verbose_name=_(u"Adres"))
 
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
@@ -119,6 +121,34 @@ class Company(models.Model):
 
     def __unicode__(self):
         return self.common_name or self.official_name or self.name
+
+    def get_sources(self, raise_exp = True):
+        ret = {}
+        if not self.sources:
+            return ret
+
+        lines = self.sources.splitlines()
+        for line in lines:
+            line = line.strip()
+            if line == u'':
+                continue
+            s = line.split(u'|')
+            if s.__len__() != 2:
+                if raise_exp:
+                    raise ValidationError('Pole >Źródła< powinno składać się '
+                                          'linii zawierających tytuł odnośnika'
+                                      ' i odnośnik odzielone znakiem | (pipe)')
+                else:
+                    continue
+            if s[0] in ret:
+                if raise_exp:
+                    raise ValidationError('Tytuł odnośnika >%s< występuje'
+                                          ' więcej niż raz' % s[0])
+                else:
+                    continue
+            ret[s[0]] = s[1]
+
+        return ret
 
     def clean(self, *args, **kwargs):
         if self.verified:
@@ -139,6 +169,7 @@ class Company(models.Model):
             if self.plNotGlobEnt is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
                                       format('struktura kapitałowa'))
+            self.get_sources()
 
         super(Company, self).clean(*args, **kwargs)
 
