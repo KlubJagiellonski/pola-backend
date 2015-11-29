@@ -99,10 +99,13 @@ def get_result_from_code(code):
                 for prefix in CODE_PREFIX_TO_COUNTRY.keys():
                     if code.startswith(prefix):
                         result['plScore'] = 0
-                        result['name'] = 'Miejsce produkcji: {}' \
+                        result['card_type'] = TYPE_GREY
+                        result['name'] = 'Miejsce rejestracji: {}' \
                             .format(CODE_PREFIX_TO_COUNTRY[prefix])
                         result['altText'] = 'Ten produkt został wyprodukowany ' \
-                                            'przez zagraniczną firmę.'
+                                            'przez zagraniczną firmę, której ' \
+                                            'miejscem rejestracji jest: {}.'\
+                                        .format(CODE_PREFIX_TO_COUNTRY[prefix])
                         break
                 else:
                     # Ups. It seems to be an internal code
@@ -263,7 +266,7 @@ def serialize_product(product):
                 json['plScore'] = 0
                 json['verified'] = False
                 json['company'] = {}
-                json['company']['name'] = 'Miejsce produkcji: {}' \
+                json['company']['name'] = 'Miejsce rejestracji: {}' \
                     .format(CODE_PREFIX_TO_COUNTRY[prefix])
 
     return json
