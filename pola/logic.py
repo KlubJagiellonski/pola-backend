@@ -182,6 +182,7 @@ def update_company_from_krs(product, company):
             company.address = companies[0]['adres']
             company.nip = companies[0]['nip']
             company.plRegistered = 100
+            company.sources = u"Dane z KRS|%s" % companies[0]['url']
 
             Company.save(company, commit_desc="Dane firmy pobrane "
                                               "automatycznie poprzez API "
