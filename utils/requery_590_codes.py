@@ -9,7 +9,9 @@ from produkty_w_sieci_api import Client
 
 client = Client(settings.PRODUKTY_W_SIECI_API_KEY)
 
-p590 = Product.objects.filter(company__isnull=True, code__startswith='590')
+p590 = Product.objects.with_query_count()\
+    .filter(company__isnull=True, code__startswith='590')\
+    .order_by('-query_count')
 
 for prod in p590:
     print prod.code
