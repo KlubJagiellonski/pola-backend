@@ -92,8 +92,10 @@ def get_result_from_code(code):
                 result['altText'] = 'Zeskanowany kod jest kodem ' \
                                     'ISBN/ISSN/ISMN dotyczącym książki,  ' \
                                     'czasopisma lub albumu muzycznego. ' \
-                                    'Pola nie potrafi powiedzieć o nim nic ' \
-                                    'więcej'
+                                    'Wydawnictwa tego typu nie są aktualnie ' \
+                                    'w obszarze zainteresowań Poli.'
+                result['report_text'] = "To nie jest książka, czasopismo lub "\
+                                        "album muzyczny? Prosimy o zgłoszenie"
             else:
                 # let's try to associate the code with a country
                 for prefix in CODE_PREFIX_TO_COUNTRY.keys():
