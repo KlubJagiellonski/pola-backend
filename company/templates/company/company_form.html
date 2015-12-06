@@ -13,3 +13,26 @@
 {% block content %}
 	{% crispy form %}
 {% endblock content %}
+
+{% block javascript %}
+    {% if not form.instance.description  %}
+    <script>
+    $( document ).ready(function() {
+        $('#div_id_description label').after("<a href='#' onClick ='copy_desc(event);'>Kopiuj</a>")
+    });
+
+    function copy_desc(event)
+    {
+        event.preventDefault();
+        $('#div_id_description textarea').text(
+                '{{ form.instance.plCapital_notes }}\n'+
+                '{{ form.instance.plWorkers_notes }}\n'+
+                '{{ form.instance.plRnD_notes }}\n'+
+                '{{ form.instance.plRegistered_notes }}\n'+
+                '{{ form.instance.plNotGlobEnt_notes }}'
+        )
+        $('#div_id_commit_desc textarea').text('Nowy opis firmy na podstawie opisów w poprzednim formacie')
+    }
+    </script>
+    {%  endif %}
+{% endblock %}
