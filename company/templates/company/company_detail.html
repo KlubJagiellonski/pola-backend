@@ -20,7 +20,7 @@
 	<table class="table">
         {% for field in fields %}
 		<tr>
-            <td>{{ field.name }}</td><td>{{ field.value }}</td>
+            <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
 		</tr>
         {% endfor %}
 	</table>
