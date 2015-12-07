@@ -9,6 +9,7 @@ import mojepanstwo_api
 from django.conf import settings
 import locale
 from report.models import Report
+import re
 
 
 def get_result_from_code(code):
@@ -46,15 +47,17 @@ def get_result_from_code(code):
             else:
                 desc = ''
                 if company.plCapital_notes:
-                    desc += rem_dbl_newlines(company.plCapital_notes)+u'\n'
+                    desc += strip_urls_newlines(company.plCapital_notes)+u'\n'
                 if company.plWorkers_notes:
-                    desc += rem_dbl_newlines(company.plWorkers_notes)+u'\n'
+                    desc += strip_urls_newlines(company.plWorkers_notes)+u'\n'
                 if company.plRnD_notes:
-                    desc += rem_dbl_newlines(company.plRnD_notes)+u'\n'
+                    desc += strip_urls_newlines(company.plRnD_notes)+u'\n'
                 if company.plRegistered_notes:
-                    desc += rem_dbl_newlines(company.plRegistered_notes)+u'\n'
+                    desc +=\
+                        strip_urls_newlines(company.plRegistered_notes)+u'\n'
                 if company.plNotGlobEnt_notes:
-                    desc += rem_dbl_newlines(company.plNotGlobEnt_notes)+u'\n'
+                    desc +=\
+                        strip_urls_newlines(company.plNotGlobEnt_notes)+u'\n'
 
                 result['description'] = desc
 
@@ -312,8 +315,17 @@ def shareholders_to_str(krs, id, indent):
             str += shareholders_to_str(krs, wspolnik['krs_id'], indent + '  ')
     return str
 
-def rem_dbl_newlines(s):
-    return s.replace(u'\r\n\r\n',u'\r\n').replace(u'\n\n',u'\n')
+
+def rem_dbl_newlines(str):
+    return str.replace(u'\r\n\r\n',u'\r\n').replace(u'\n\n',u'\n')
+
+
+def strip_urls_newlines(str):
+    s = re.sub(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', '', str)
+    s = rem_dbl_newlines(s)
+    s = s.strip(' \t\n\r')
+    return s
+
 
 TYPE_RED = 'type_red'
 TYPE_WHITE = 'type_white'
