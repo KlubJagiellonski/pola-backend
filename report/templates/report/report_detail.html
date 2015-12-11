@@ -5,7 +5,18 @@
 {% endblock %}
 
 {% block content %}
+<nav>
+  <ul class="pager">
+    {% if object.get_previous_by_created_at %}
+    <li class="previous"><a href="{{ object.get_previous_by_created_at.get_absolute_url }}" title="{{ object.get_previous_by_created_at }}"><span aria-hidden="true">&larr;</span> Older</a></li>
+    {% endif %}
+    {% if object.get_next_by_created_at %}
+    <li class="next"><a href="{{ object.get_next_by_created_at.get_absolute_url }}" title="{{ object.get_next_by_created_at }}">Newer <span aria-hidden="true">&rarr;</span></a></li>
+    {% endif %}
+  </ul>
+</nav>
 <h1>{{ object }} <small>#{{ object.pk }}</small></h1>
+<div class="cl"
 <div class="panel panel-primary">
     <div class="panel-heading">
         Metryczka
