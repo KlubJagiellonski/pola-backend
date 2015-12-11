@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "font-awesome": "4.4.0",
+    "font-awesome": "~4.5.0",
     "bootstrap-sass": "3.3.5",
     "mousetrap": "~1.5.3"
   }
