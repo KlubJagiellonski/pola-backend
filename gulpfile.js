@@ -46,7 +46,7 @@ var config = (function () {
         script: {
             input: [
                 path.bower + '/jquery/dist/jquery.js',
-                path.bower + '/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+                path.bower + '/bootstrap-sass/assets/javascripts/bootstrap.js',
                 path.bower + '/mousetrap/mousetrap.js',
                 path.assets + '/js/*.js'
             ],
