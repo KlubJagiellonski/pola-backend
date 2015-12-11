@@ -12597,7 +12597,7 @@ if (typeof jQuery === 'undefined') {
 
 (function () {
     console.log("mousetra-by-attribute.js");
-    $('[data-key]').each(function(){
+    $('[data-key-shortcut]').each(function(){
         var $this = $(this);
         console.log($this);
         var key = $this.attr('data-key-shortcut');
