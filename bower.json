@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "font-awesome": "4.4.0",
-    "bootstrap-sass": "3.3.5"
+    "bootstrap-sass": "3.3.5",
+    "mousetrap": "~1.5.3"
   }
 }
