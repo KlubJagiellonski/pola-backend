@@ -122,6 +122,22 @@ class Company(models.Model):
     def __unicode__(self):
         return self.common_name or self.official_name or self.name
 
+    def js_plCapital_notes(self):
+        return self.plCapital_notes.replace('\n', '\\n').replace('\r','\\r')
+
+    def js_plWorkers_notes(self):
+        return self.plWorkers_notes.replace('\n', '\\n').replace('\r','\\r')
+
+    def js_plRnD_notes(self):
+        return self.plRnD_notes.replace('\n', '\\n').replace('\r','\\r')
+
+    def js_plRegistered_notes(self):
+        return self.plRegistered_notes.replace('\n', '\\n').replace('\r','\\r')
+
+    def js_plNotGlobEnt_notes(self):
+        return self.plNotGlobEnt_notes.replace('\n', '\\n').replace('\r','\\r')
+
+
     def get_sources(self, raise_exp = True):
         ret = {}
         if not self.sources:
@@ -135,15 +151,15 @@ class Company(models.Model):
             s = line.split(u'|')
             if s.__len__() != 2:
                 if raise_exp:
-                    raise ValidationError('Pole >Źródła< powinno składać się '
-                                          'linii zawierających tytuł odnośnika'
-                                      ' i odnośnik odzielone znakiem | (pipe)')
+                    raise ValidationError(u'Pole >Źródła< powinno składać się '
+                                          u'linii zawierających tytuł odnośnika'
+                                      u' i odnośnik odzielone znakiem | (pipe)')
                 else:
                     continue
             if s[0] in ret:
                 if raise_exp:
-                    raise ValidationError('Tytuł odnośnika >%s< występuje'
-                                          ' więcej niż raz' % s[0])
+                    raise ValidationError(u'Tytuł odnośnika >{}< występuje'
+                                          u' więcej niż raz'.format(s[0]))
                 else:
                     continue
             ret[s[0]] = s[1]
@@ -152,23 +168,23 @@ class Company(models.Model):
 
     def clean(self, *args, **kwargs):
         if self.verified:
-            YOU_CANT_SET_VERIFIED = 'Nie możesz oznaczyć producenta jako ' \
-                'zweryfikowany jeśli pole >{}< jest nieustalone'
+            YOU_CANT_SET_VERIFIED = u'Nie możesz oznaczyć producenta jako ' \
+                u'zweryfikowany jeśli pole >{}< jest nieustalone'
             if self.plCapital is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format('udział kapitału polskiego'))
+                                      format(u'udział kapitału polskiego'))
             if self.plWorkers is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format('miejsce produkcji'))
+                                      format(u'miejsce produkcji'))
             if self.plRnD is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
                                       format('wysokopłatne miejsca pracy'))
             if self.plRegistered is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format('miejsce rejestracji'))
+                                      format(u'miejsce rejestracji'))
             if self.plNotGlobEnt is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format('struktura kapitałowa'))
+                                      format(u'struktura kapitałowa'))
             self.get_sources()
 
         super(Company, self).clean(*args, **kwargs)
