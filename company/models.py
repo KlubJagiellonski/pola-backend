@@ -123,20 +123,24 @@ class Company(models.Model):
         return self.common_name or self.official_name or self.name
 
     def js_plCapital_notes(self):
-        return self.plCapital_notes.replace('\n', '\\n').replace('\r','\\r')
+        return '' if not self.plCapital_notes else\
+            self.plCapital_notes.replace('\n', '\\n').replace('\r','\\r')
 
     def js_plWorkers_notes(self):
-        return self.plWorkers_notes.replace('\n', '\\n').replace('\r','\\r')
+        return '' if not self.plWorkers_notes else\
+            self.plWorkers_notes.replace('\n', '\\n').replace('\r','\\r')
 
     def js_plRnD_notes(self):
-        return self.plRnD_notes.replace('\n', '\\n').replace('\r','\\r')
+        return '' if not self.plRnD_notes else\
+            self.plRnD_notes.replace('\n', '\\n').replace('\r','\\r')
 
     def js_plRegistered_notes(self):
-        return self.plRegistered_notes.replace('\n', '\\n').replace('\r','\\r')
+        return '' if not self.plRegistered_notes else\
+            self.plRegistered_notes.replace('\n', '\\n').replace('\r','\\r')
 
     def js_plNotGlobEnt_notes(self):
-        return self.plNotGlobEnt_notes.replace('\n', '\\n').replace('\r','\\r')
-
+        return '' if not self.plNotGlobEnt_notes else\
+            self.plNotGlobEnt_notes.replace('\n', '\\n').replace('\r','\\r')
 
     def get_sources(self, raise_exp = True):
         ret = {}
