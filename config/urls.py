@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^cms/product/', include('product.urls', namespace='product')),
     url(r'^cms/company/', include('company.urls', namespace='company')),
     url(r'^cms/report/', include('report.urls', namespace='report')),
+    url(r'^cms/brand/', include('brand.urls', namespace='brand')),
 
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),

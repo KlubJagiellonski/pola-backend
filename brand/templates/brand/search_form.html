@@ -1,0 +1,24 @@
+{%extends 'company/base.html' %}
+
+{% load crispy_forms_tags i18n %}
+
+{% block breadcrumbs_rows %}
+
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 center-block">
+        <form action="{% url 'brand:search' %}" method="get">
+            <div class="input-group">
+               <input type="text" name="q" class="form-control">
+               <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Search!</button>
+               </span>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+{% endblock %}

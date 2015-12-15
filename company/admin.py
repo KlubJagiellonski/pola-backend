@@ -2,7 +2,12 @@
 from django.contrib import admin
 
 from .models import Company
+from brand.models import Brand
 import reversion
+
+
+class BrandInline(admin.TabularInline):
+    model = Brand
 
 
 class CompanyAdmin(reversion.VersionAdmin):
@@ -14,5 +19,8 @@ class CompanyAdmin(reversion.VersionAdmin):
         'plCapital',
         'plCapital_notes',
     )
+    inlines = [
+        BrandInline
+    ]
     search_fields = ('name',)
 admin.site.register(Company, CompanyAdmin)

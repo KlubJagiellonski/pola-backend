@@ -1,0 +1,43 @@
+{%extends 'brand/base.html' %}
+
+{% load crispy_forms_tags i18n %}
+
+{% block breadcrumbs_rows %}
+
+{% endblock %}
+{% block content %}
+    <h1>Wyszukiwarka</h1>
+    <h2>Formularz wyszukiwań</h2>
+    <div>
+        <div class="center-block" style="width: 50%">
+            <form action="{% url 'brand:search' %}" method="get">
+                <div class="input-group">
+                   <input type="text" name="q" class="form-control">
+                   <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Search!</button>
+                   </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h2>Wyniki wyszukiwań</h2>
+    {% if companies %}
+        <div class="list-group">
+        {% for company in companies %}
+            <a href="{{ company.get_absolute_url }}" class="list-group-item">
+                <h3 class="list-group-item-heading">{{ company }}</h3>
+                <p class="list-group-item-text">
+                    {% for brand in company.brand_set.all %}
+                        {{ brand }}
+                    {% endfor %}
+                </p>
+            </a>
+        {% endfor %}
+        </div>
+    {% else %}
+        Brak wyników spełniających kryteria
+    {% endif %}
+{% endblock content %}
+
+{% block javascript %}
+{% endblock %}

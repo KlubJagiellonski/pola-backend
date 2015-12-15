@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'brand:search'%}">{% trans 'Wyszukiwarka marek' %}</a></li>
+    {% block breadcrumbs_rows%}{% endblock %}
+</ol>
+{% endblock %}

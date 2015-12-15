@@ -55,6 +55,7 @@ LOCAL_APPS = (
     'product',
     'company',
     'report',
+    'brand',
     'pagination_custom',
     'pola.users',
     'api',
