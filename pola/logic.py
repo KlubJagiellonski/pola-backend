@@ -78,9 +78,8 @@ def get_result_from_code(code):
                 result['name'] = "Zgłoś nam ten kod!"
                 result['altText'] = "Zeskanowałeś kod, którego nie mamy " \
                                     "jeszcze w bazie. Bardzo prosimy o " \
-                                    "zgłoszenie nam tego kodu poprzez " \
-                                    "naciśnięcie przycisku >Zgłoś< " \
-                                    "poniżej i wysłania nam zdjęcia zarówno " \
+                                    "zgłoszenie tego kodu "\
+                                    "i wysłania zdjęć zarówno " \
                                     "kodu kreskowego jak i etykiety z " \
                                     "produktu. Z góry dziękujemy!"
                 result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego " \
