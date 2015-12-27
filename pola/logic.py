@@ -296,9 +296,9 @@ def get_plScore(company):
 def shareholders_to_str(krs, id, indent):
     str = ''
     json = krs.query_shareholders(id)
-    data = json['object']['data']
+    data = json['data']
     kapital_zakladowy = data['krs_podmioty.wartosc_kapital_zakladowy']
-    wspolnicy = json['object']['layers']['wspolnicy']
+    wspolnicy = json['layers']['wspolnicy']
     for wspolnik in wspolnicy:
         udzialy_wartosc = wspolnik.get('udzialy_wartosc', None)
         if udzialy_wartosc is None:

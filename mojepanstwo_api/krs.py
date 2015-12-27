@@ -15,7 +15,7 @@ class CompanyNotFound(Exception):
     pass
 
 class KrsClient:
-    API_URL = 'https://api.mojepanstwo.pl/krs/podmioty'
+    API_URL = 'https://api-v3.mojepanstwo.pl/dane/krs_podmioty'
 
     def __init__(self, url=API_URL):
         self.url = url
@@ -31,7 +31,8 @@ class KrsClient:
             raise ConnectionError({'status_code': resp.status_code})
 
         json = resp.json()
-        if json['search'] == None or json['search']['dataobjects'] == None:
+
+        if json['Dataobject'] is None:
             raise ApiError()
 
         return json
@@ -39,16 +40,16 @@ class KrsClient:
     def get_companies_by_name(self, name):
         normalized_name = KrsClient._normalize_name(name)
 
-        json = self.query_podmiot('conditions[nazwa]', normalized_name)
+        json = self.query_podmiot('conditions[krs_podmioty.nazwa]', normalized_name)
 
-        if json['search']['dataobjects'].__len__() != 1:
-            json = self.query_podmiot('q', normalized_name)
-            if json['search']['dataobjects'].__len__() == 0:
+        if json['Dataobject'].__len__() != 1:
+            json = self.query_podmiot('conditions[q]', normalized_name)
+            if ['Dataobject'].__len__() == 0:
                 raise CompanyNotFound()
 
         companies = []
-        for i in range(0,json['search']['dataobjects'].__len__()):
-            data = json['search']['dataobjects'][i]['data']
+        for i in range(0,json['Dataobject'].__len__()):
+            data = json['Dataobject'][i]['data']
 
             company = dict()
             company['nazwa'] = data['krs_podmioty.nazwa']
@@ -68,8 +69,8 @@ class KrsClient:
             company['liczba_wspolnikow'] = \
                 data['krs_podmioty.liczba_wspolnikow']
 
-            company['score'] = json['search']['dataobjects'][i]['score']
-            company['url'] = json['search']['dataobjects'][i]['_mpurl']
+            company['score'] = json['Dataobject'][i]['score']
+            company['url'] = json['Dataobject'][i]['mp_url']
 
             companies.append(company)
 
@@ -113,9 +114,7 @@ class KrsClient:
 
         json = resp.json()
         try:
-            if json['object'] is None or json['object']['layers'] is None \
-                    or json['object']['data'] is None \
-                    or json['object']['layers']['wspolnicy'] is None:
+            if json['layers'] is None or json['layers']['wspolnicy'] is None:
                 raise ApiError()
         except KeyError:
             raise ApiError()
