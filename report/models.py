@@ -20,9 +20,15 @@ class ReportQuerySet(models.QuerySet):
     def only_resolved(self):
         return (self.filter(resolved_at__isnull=False)
                     .filter(resolved_by__isnull=False))
+    
+    def unresolved(self):
+        return self.filter(resolved_at=None)
+                    
 
 
 class Report(models.Model):
+    OPEN = 1
+    RESOLVED = 2
     product = models.ForeignKey(Product, null=True)
     client = models.CharField(max_length=40, blank=True, null=True,
                               default=None, verbose_name=_(u'Zgłaszający'))
@@ -37,13 +43,8 @@ class Report(models.Model):
     objects = ReportQuerySet.as_manager()
 
     def status(self):
-        if self.resolved_at is not None:
+        if self.resolved_at is not None or self.resolved_by is not None:
             return self.RESOLVED
-
-        if self.resolved_by is not None:
-            return self.RESOLVED
-
-        return self.OPEN
 
     def resolve(self, user, commit=True):
         self.resolved_at = datetime.now()
@@ -62,9 +63,6 @@ class Report(models.Model):
 
     def attachment_count(self):
         return self.attachment_set.count()
-
-    OPEN = 1
-    RESOLVED = 2
 
     class Meta:
         verbose_name = _("Report")
