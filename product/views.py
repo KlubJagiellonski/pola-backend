@@ -11,29 +11,24 @@ from django_filters.views import FilterView
 from .forms import ProductForm
 from .filters import ProductFilter
 from .images import Barcode
-from . import models
+from .models import Product
 from report.models import Report
 from pola.concurency import ConcurencyProtectUpdateView
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'code'
-    model = models.Product
-    queryset = models.Product.objects.with_query_count().all()
+    model = Product
+    queryset = Product.objects.with_query_count().all()
 
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
-
-        object = context['object']
-
-        context['report_list'] = Report.objects.filter(
-            product=object, resolved_at=None)
-
+        context['report_list'] = Report.objects.filter(product=self.object).unresolved().all()
         return context
 
 
 class ProductListView(LoginRequiredMixin, FilterView):
-    model = models.Product
+    model = Product
     filterset_class = ProductFilter
     paginate_by = 25
     queryset = models.Product.objects.with_query_count().all()
@@ -41,7 +36,7 @@ class ProductListView(LoginRequiredMixin, FilterView):
 
 class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):
     slug_field = 'code'
-    model = models.Product
+    model = Product
     form_class = ProductForm
     form_valid_message = _(u"Product created!")
 
@@ -51,7 +46,7 @@ class ProductUpdate(LoginRequiredMixin,
                     FormValidMessageMixin,
                     UpdateView):
     slug_field = 'code'
-    model = models.Product
+    model = Product
     form_class = ProductForm
     concurency_url = reverse_lazy('concurency:lock')
     form_valid_message = _(u"Produkt zaktualizowany!")
@@ -59,14 +54,14 @@ class ProductUpdate(LoginRequiredMixin,
 
 class ProductDelete(LoginRequiredMixin, FormValidMessageMixin,  DeleteView):
     slug_field = 'code'
-    model = models.Product
+    model = Product
     success_url = reverse_lazy('product:list')
     form_valid_message = _(u"Product deleted!")
 
 
 class ProductHistoryView(LoginRequiredMixin, DetailView):
     slug_field = 'code'
-    model = models.Product
+    model = Product
     template_name = 'product/product_history.html'
 
     def get_context_data(self, **kwargs):
