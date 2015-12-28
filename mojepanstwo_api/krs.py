@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 import logging
 import requests
 logger = logging.getLogger(__name__)
@@ -76,32 +76,29 @@ class KrsClient:
 
         return companies
 
-    COMMON_COMPANY_NAME_ENDINGS = \
-        ( u' S.A.', u' SPÓŁKA AKCYJNA',
-          u' Sp. z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-          u' Spółka z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-          u'Sp. Jawna', u'SPÓŁKA JAWNA',
-          u'spółka z ograniczoną odpowiedzialnością sp.k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'sp. z o. o. sp.k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'Sp. z o.o. sp.k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'sp. z o.o. sp. k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+    COMMON_NAME_ENDINGS = \
+        ( ' S.A.': ' SPÓŁKA AKCYJNA',
+          ' Sp. z o.o.':' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+          ' Spółka z o.o.':' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+          'Sp. Jawna': 'SPÓŁKA JAWNA',
+          'spółka z ograniczoną odpowiedzialnością sp.k.':
+          'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          'sp. z o. o. sp.k.':
+          'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          'Sp. z o.o. sp.k.':
+          'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          'sp. z o.o. sp. k.':
+          'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
 
     )
 
     @staticmethod
     def _normalize_name(name):
         name = name.upper()
-        for i in range(len(KrsClient.COMMON_COMPANY_NAME_ENDINGS)/2):
-            if name.endswith(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2]
-                    .upper()):
-                return name[:len(name)-
-                             len(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2])]\
-                       +KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2+1].upper()
-        return name
+        for key, value in KrsClient.COMMON_NAME_ENDINGS.items():
+            if name.endswith(value):
+                return (name[:len(name)-len(value)] + key).title()
+        return name.title()
 
     def query_shareholders(self, id):
         params = {
