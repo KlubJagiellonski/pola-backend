@@ -27,19 +27,21 @@
             </div>
             <div class="panel-body">
                 <p>{{ obj.description }}</p>
-                {% for attachment in object.attachment_set.all %}
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    <a href="{{ attachment.get_absolute_url }}" class="thumbnail">
-                        <img src="{{ attachment.get_absolute_url }}" alt="attachment">
-                    </a>
+                <div class="row">
+                    {% for attachment in obj.attachment_set.all %}
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ attachment.get_absolute_url }}" class="thumbnail">
+                            <img src="{{ attachment.get_absolute_url }}" alt="attachment">
+                        </a>
+                    </div>
+                    {% empty%}
+                    <div class="col-xs-12">{% trans "Brak załączników" %}</div>
+                    {% endfor %}
                 </div>
-                {% empty%}
-                <div class="col-xs-12">{% trans "Brak załączników" %}</div>
-                {% endfor %}
             </div>
         </div>
         {% empty %}
-        <li>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</li>
+        <p>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</p>
         {% endfor %}
         </form>
         {% include 'pagination_custom/pager.html' with page=page_obj %}
