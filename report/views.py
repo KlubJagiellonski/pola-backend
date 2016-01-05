@@ -29,7 +29,7 @@ class ReportAdvancedListView(LoginRequiredMixin, FilterView):
     def post(self, request, *args, **kwargs):
         messages.success(request, "Raporty zostały skasowane")
         ids = request.POST.getlist('report_to_delete')
-        models.Report.objects.filter(pk__in=ids).delete()
+        models.Report.objects.filter(pk__in=ids).resolve(self.request.user)
         return HttpResponseRedirect(reverse('report:advanced'))
 
 
