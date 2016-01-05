@@ -1,0 +1,55 @@
+{%extends 'report/base.html' %}
+{% load i18n crispy_forms_tags %}
+{% block content %}
+<h1>{% trans "Zgłoszenie" %}</h1>
+<div class="row">
+    <div class="col-md-3">
+        {% crispy filter.form %}
+    </div>
+    <div class="col-md-9">
+        <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-inline">
+            <button class="btn btn-primary">Skasuj zaznaczone</button>
+            <button class="btn btn-primary js-select-all-checkbox">Zaznacz wszystkie</button>
+        </div>
+        {% for obj in object_list %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <div class="checkbox">
+                        <label for="">
+                            <input type="checkbox" name="report_to_delete" value="{{ obj.pk }}">
+                            {{ obj }}
+                        </label>
+                    </div>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <p>{{ obj.description }}</p>
+                {% for attachment in object.attachment_set.all %}
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{{ attachment.get_absolute_url }}" class="thumbnail">
+                        <img src="{{ attachment.get_absolute_url }}" alt="attachment">
+                    </a>
+                </div>
+                {% empty%}
+                <div class="col-xs-12">{% trans "Brak załączników" %}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% empty %}
+        <li>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</li>
+        {% endfor %}
+        </form>
+        {% include 'pagination_custom/pager.html' with page=page_obj %}
+    </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+<script type="text/javascript">
+    $('.js-select-all-checkbox').click(function () {
+        btn.closest('form').find('input[type="checkbox"]').prop('checked', true);
+    });
+</script>
+{% endblock javascript %}
