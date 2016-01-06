@@ -35,6 +35,7 @@ class CompanyUpdate(LoginRequiredMixin,
     concurency_url = reverse_lazy('concurency:lock')
     form_valid_message = u"Firma zaktualizowana!"
 
+
 class CompanyDelete(LoginRequiredMixin,
                     FormValidMessageMixin,
                     DeleteView):

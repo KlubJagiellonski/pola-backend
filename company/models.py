@@ -9,6 +9,7 @@ from model_utils.managers import PassThroughManager
 from django.core.validators import ValidationError
 import reversion
 from pola.concurency import concurency
+from sets import Set
 
 
 class IntegerRangeField(models.IntegerField):
@@ -118,6 +119,28 @@ class Company(models.Model):
 
     def locked_by(self):
         return concurency.locked_by(self)
+
+    def get_brands(self, comma_seperated=True):
+        names = [x.name for x in self.brand_set.all()]
+        if comma_seperated:
+            return ', '.join(names)
+        return names
+
+    def set_brands(self, new_names_str):
+        new_names = [x.strip() for x in new_names_str.split(',')]
+        curr_names = self.get_brands(comma_seperated=False)
+
+        new_names = Set(new_names)
+        curr_names = Set(curr_names)
+
+        to_delete = curr_names - new_names
+        to_add = new_names - curr_names
+
+        from brand.models import Brand
+        new_brands = [Brand(name=x, company=self) for x in to_add]
+
+        self.brand_set.bulk_create(new_brands)
+        self.brand_set.filter(name__in=to_delete).delete()
 
     def __unicode__(self):
         return self.common_name or self.official_name or self.name
