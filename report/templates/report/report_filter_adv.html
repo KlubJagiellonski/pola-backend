@@ -50,8 +50,9 @@
 {% endblock content %}
 {% block javascript %}
 <script type="text/javascript">
-    $('.js-select-all-checkbox').click(function () {
-        btn.closest('form').find('input[type="checkbox"]').prop('checked', true);
+    $('.js-select-all-checkbox').click(function (ev) {
+        ev.preventDefault();
+        $(this).closest('form').find('input[type="checkbox"]').prop('checked', true);
     });
 </script>
 {% endblock javascript %}
