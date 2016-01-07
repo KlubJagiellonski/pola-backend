@@ -31,12 +31,15 @@ class ReportFilter(NoHelpTextFilterMixin,
     status = StatusFilter()
     product = AutocompleteChoiceFilter(
         autocomplete_name="ProductAutocomplete")
+    product__company = AutocompleteChoiceFilter(
+        autocomplete_name="CompanyAutocomplete")
 
     class Meta:
         model = Report
         fields = [
             'status',
             'product',
+            'product__company',
             'client',
             'created_at',
             'resolved_at',
