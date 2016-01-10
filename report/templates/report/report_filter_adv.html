@@ -39,6 +39,9 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="panel-footer">
+                <a href="{{ obj.get_absolute_url }}">Więcej literek <i class="fa fa-stethoscope"></i></a>
+            </div>
         </div>
         {% empty %}
         <p>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</p>
