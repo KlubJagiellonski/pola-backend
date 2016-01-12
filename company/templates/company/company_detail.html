@@ -44,6 +44,7 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">Zgłoszenia powiązane przez produkty</h3>
+                <a href="/cms/report/advanced/?status=open&product__company={{ object.pk }}">Pokaż wszystkie</a>
             </div>
             <ul class="list-group">
                 {% for report in report_list %}

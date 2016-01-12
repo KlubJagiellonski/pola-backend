@@ -27,10 +27,10 @@ class ReportAdvancedListView(LoginRequiredMixin, FilterView):
     queryset = models.Report.objects.all().prefetch_related('attachment_set')
 
     def post(self, request, *args, **kwargs):
-        messages.success(request, "Raporty zostały skasowane")
-        ids = request.POST.getlist('report_to_delete')
+        messages.success(request, "Raporty zostały rozpatrzone")
+        ids = request.POST.getlist('report_to_resolve')
         models.Report.objects.filter(pk__in=ids).resolve(self.request.user)
-        return HttpResponseRedirect(reverse('report:advanced'))
+        return HttpResponseRedirect(request.get_full_path())
 
 
 class ReportDelete(LoginRequiredMixin, DeleteView):
