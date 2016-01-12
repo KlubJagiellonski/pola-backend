@@ -37,7 +37,7 @@
                     <td>{% trans "NIP producenta: " %}</td><td>{{ object.company.nip }} </td>
 				</tr>
 				<tr>
-                    <td>{% trans "Nazwa producenta: " %}</td><td><a href="{{ object.company.get_absolute_url }}">{{ object.company.name }}</a></td>
+                    <td>{% trans "Nazwa producenta: " %}</td><td><a href="{{ object.company.get_absolute_url }}">{{ object.company }}</a></td>
 				</tr>
 				<tr>
                     <td>{% trans "Adres producenta: " %}</td><td>{{ object.company.address }} </td>
