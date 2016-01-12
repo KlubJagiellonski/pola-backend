@@ -60,11 +60,6 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         'description',
         'sources',
         'verified',
-        'plCapital_notes',
-        'plWorkers_notes',
-        'plRnD_notes',
-        'plRegistered_notes',
-        'plNotGlobEnt_notes',
         'address',
         'nip',
     )
