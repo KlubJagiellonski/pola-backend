@@ -13,6 +13,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import get_default_timezone
+from django.db import connection
 
 class FrontPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-cms.html'
@@ -117,4 +118,35 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
 
         c['stats'] = list(reversed(stats))
         c['stats5'] = [stats[i] for i in range(0, 5)]
+        return c
+
+
+class EditorsStatsPageView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/home-editors-stats.html'
+
+    def query_log(self, id):
+        cursor = connection.cursor()
+
+        cursor.execute(
+            "select to_char(reversion_revision.date_created, \'YYYY-MM\'),"
+                "username, count(*) "
+            "from users_user "
+            "join reversion_revision on users_user.id=user_id "
+            "join reversion_version on reversion_revision.id = "
+                "reversion_version.revision_id "
+            "where reversion_version.content_type_id=%s "
+            "group by to_char(reversion_revision.date_created, \'YYYY-MM\'), "
+                "username "
+            "order by 1 desc, 3 desc;", [id])
+
+        columns = [col[0] for col in cursor.description]
+
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    def get_context_data(self, *args, **kwargs):
+        c = super(EditorsStatsPageView, self).get_context_data(**kwargs)
+
+        c['company_log'] = self.query_log(16)
+        c['product_log'] = self.query_log(15)
+
         return c

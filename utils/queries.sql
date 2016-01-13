@@ -1,4 +1,29 @@
-select username, count(*) from users_user join reversion_revision
-on users_user.id=user_id group by username order by 2 desc;
+-- company
+select to_char(reversion_revision.date_created, 'YYYY-MM'), username, count(*)
+from users_user
+join reversion_revision on users_user.id=user_id
+join reversion_version on reversion_revision.id = reversion_version.revision_id
+where reversion_version.content_type_id=16
+group by to_char(reversion_revision.date_created, 'YYYY-MM'), username
+order by 1 desc, 3 desc;
+
+-- product
+select to_char(reversion_revision.date_created, 'YYYY-MM'), username, count(*)
+from users_user
+join reversion_revision on users_user.id=user_id
+join reversion_version on reversion_revision.id = reversion_version.revision_id
+where reversion_version.content_type_id=15
+group by to_char(reversion_revision.date_created, 'YYYY-MM'), username
+order by 1 desc, 3 desc;
+
+-- report
+select to_char(reversion_revision.date_created, 'YYYY-MM'), username, count(*)
+from users_user
+join reversion_revision on users_user.id=user_id
+join reversion_version on reversion_revision.id = reversion_version.revision_id
+where reversion_version.content_type_id=17
+group by to_char(reversion_revision.date_created, 'YYYY-MM'), username
+order by 1 desc, 3 desc;
+
 
 select name from company_company where "plCapital"=0 and "plNotGlobEnt"=100;
