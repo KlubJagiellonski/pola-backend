@@ -17,12 +17,10 @@ group by to_char(reversion_revision.date_created, 'YYYY-MM'), username
 order by 1 desc, 3 desc;
 
 -- report
-select to_char(reversion_revision.date_created, 'YYYY-MM'), username, count(*)
+select to_char(report_report.resolved_at, 'YYYY-MM'), username, count(*)
 from users_user
-join reversion_revision on users_user.id=user_id
-join reversion_version on reversion_revision.id = reversion_version.revision_id
-where reversion_version.content_type_id=17
-group by to_char(reversion_revision.date_created, 'YYYY-MM'), username
+join report_report on users_user.id=report_report.resolved_by_id
+group by to_char(report_report.resolved_at, 'YYYY-MM'), username
 order by 1 desc, 3 desc;
 
 

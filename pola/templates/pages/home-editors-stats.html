@@ -30,5 +30,17 @@
         </table>
     </div>
 
+	<div class="panel panel-primary">
+        <div class="panel-heading">{% trans "Liczba rozpatrzonych raportów" %}</div>
+		<table class="table">
+            {% for log in  report_log %}
+			<tr>
+                <td>{{ log.to_char }}</td>
+                <td>{{ log.username }}</td>
+            <td>{{ log.count }}</td>
+			</tr>
+            {% endfor %}
+        </table>
+    </div>
 
 {% endblock content %}

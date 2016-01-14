@@ -124,10 +124,17 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
 class EditorsStatsPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-editors-stats.html'
 
-    def query_log(self, id):
+    def execute_query(self, sql, params):
         cursor = connection.cursor()
 
-        cursor.execute(
+        cursor.execute(sql, params)
+
+        columns = [col[0] for col in cursor.description]
+
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    def query_log(self, id):
+        return self.execute_query(
             "select to_char(reversion_revision.date_created, \'YYYY-MM\'),"
                 "username, count(*) "
             "from users_user "
@@ -139,14 +146,17 @@ class EditorsStatsPageView(LoginRequiredMixin, TemplateView):
                 "username "
             "order by 1 desc, 3 desc;", [id])
 
-        columns = [col[0] for col in cursor.description]
-
-        return [dict(zip(columns, row)) for row in cursor.fetchall()]
-
     def get_context_data(self, *args, **kwargs):
         c = super(EditorsStatsPageView, self).get_context_data(**kwargs)
 
         c['company_log'] = self.query_log(16)
         c['product_log'] = self.query_log(15)
+        c['report_log'] = self.execute_query(
+            "select to_char(report_report.resolved_at, 'YYYY-MM'), username, "
+                "count(*) "
+            "from users_user "
+            "join report_report on users_user.id=report_report.resolved_by_id "
+            "group by to_char(report_report.resolved_at, 'YYYY-MM'), username "
+            "order by 1 desc, 3 desc;", None)
 
         return c
