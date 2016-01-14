@@ -7,6 +7,8 @@ from . import views
 urlpatterns = [
     url(r'create$',
         views.CompanyCreate.as_view(), name="create"),
+    url(r'create_from_krs$',
+        views.CompanyCreateFromKRSView.as_view(), name="create_from_krs"),
     url(r'(?P<pk>[-\w]+)/edit$',
         views.CompanyUpdate.as_view(), name="edit"),
     url(r'(?P<pk>[-\w]+)/delete$',

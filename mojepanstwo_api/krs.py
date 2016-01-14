@@ -37,6 +37,32 @@ class KrsClient:
 
         return json
 
+    def json_to_company(self, json, i):
+        data = json['Dataobject'][i]['data']
+
+        company = dict()
+        company['nazwa'] = data['krs_podmioty.nazwa']
+        company['nazwa_skrocona'] = data['krs_podmioty.nazwa_skrocona']
+        company['nip'] = data['krs_podmioty.nip']
+        lokal = u" lok. {}".format(data['krs_podmioty.adres_lokal']) if \
+            data['krs_podmioty.adres_lokal'] else u""
+        company['adres'] = u"ul. {} {} {}\n{} {}\n{}".format(
+            data['krs_podmioty.adres_ulica'],
+            data['krs_podmioty.adres_numer'],
+            lokal,
+            data['krs_podmioty.adres_kod_pocztowy'],
+            data['krs_podmioty.adres_miejscowosc'],
+            data['krs_podmioty.adres_kraj']
+        )
+        company['id'] = data['krs_podmioty.id']
+        company['liczba_wspolnikow'] = \
+            data['krs_podmioty.liczba_wspolnikow']
+
+        company['score'] = json['Dataobject'][i]['score']
+        company['url'] = json['Dataobject'][i]['mp_url']
+
+        return company
+
     def get_companies_by_name(self, name):
         normalized_name = KrsClient._normalize_name(name)
 
@@ -49,29 +75,7 @@ class KrsClient:
 
         companies = []
         for i in range(0,json['Dataobject'].__len__()):
-            data = json['Dataobject'][i]['data']
-
-            company = dict()
-            company['nazwa'] = data['krs_podmioty.nazwa']
-            company['nazwa_skrocona'] = data['krs_podmioty.nazwa_skrocona']
-            company['nip'] = data['krs_podmioty.nip']
-            lokal = u" lok. {}".format(data['krs_podmioty.adres_lokal']) if \
-                data['krs_podmioty.adres_lokal'] else u""
-            company['adres'] = u"ul. {} {} {}\n{} {}\n{}".format(
-                data['krs_podmioty.adres_ulica'],
-                data['krs_podmioty.adres_numer'],
-                lokal,
-                data['krs_podmioty.adres_kod_pocztowy'],
-                data['krs_podmioty.adres_miejscowosc'],
-                data['krs_podmioty.adres_kraj']
-            )
-            company['id'] = data['krs_podmioty.id']
-            company['liczba_wspolnikow'] = \
-                data['krs_podmioty.liczba_wspolnikow']
-
-            company['score'] = json['Dataobject'][i]['score']
-            company['url'] = json['Dataobject'][i]['mp_url']
-
+            company = self.json_to_company(json, i)
             companies.append(company)
 
         return companies

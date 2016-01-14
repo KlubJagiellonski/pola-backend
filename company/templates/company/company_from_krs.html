@@ -1,0 +1,18 @@
+{%extends 'company/base.html' %}
+
+{% load crispy_forms_tags i18n %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li>{% trans 'Dodaj firmę na podstawie nr KRS lub NIP:' %}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+    <form action="create_from_krs" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Dodaj" name="submit"/>
+    </form>
+{% endblock content %}
+
