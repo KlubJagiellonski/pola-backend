@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
 
+    url(r'^django-rq/', include('django_rq.urls')),
+
     # User management
     url(r'^users/', include("pola.users.urls", namespace="users")),
     url(r'^accounts/', include('allauth.urls')),
