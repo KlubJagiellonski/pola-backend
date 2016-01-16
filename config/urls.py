@@ -89,7 +89,7 @@ urlpatterns = [
 ]
 
 if settings.IS_PRODUCTION:
-    urlpatterns += url(r'^django-rq/', include('django_rq.urls'))
+    urlpatterns += [url(r'^django-rq/', include('django_rq.urls'))]
 
 # serving static files
 urlpatterns += patterns(
