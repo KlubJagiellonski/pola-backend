@@ -152,7 +152,7 @@ CACHES = {
 
 RQ_QUEUES = {
     'default': {
-        'URL': redis_url
+        'URL': os.environ.get('REDISTOGO_URL', 'redis://localhost:6959')
     },
 }
 
