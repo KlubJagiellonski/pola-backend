@@ -30,9 +30,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # django-secure
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ("djangosecure",
-                   'django_rq'
-                   )
+INSTALLED_APPS += ("djangosecure",)
 
 SECURITY_MIDDLEWARE = (
     'djangosecure.middleware.SecurityMiddleware',
@@ -148,12 +146,6 @@ CACHES = {
             'PASSWORD': redis_url.password,
         }
     }
-}
-
-RQ_QUEUES = {
-    'default': {
-        'URL': os.environ.get('REDISTOGO_URL', 'redis://localhost:6959')
-    },
 }
 
 # Your production stuff: Below this line define 3rd party library settings

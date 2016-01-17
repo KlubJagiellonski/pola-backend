@@ -183,8 +183,6 @@ def create_from_api(code, obj, product=None):
             if company and \
                     strip_dbl_spaces(product.company.name) != \
                     strip_dbl_spaces(obj_owner_name):
-                print product.company.name
-                print company.name
                 create_bot_report(product,
                                   "Wg. najnowszego odpytania w bazie ILiM "
                                   "producent tego produktu to:\"{}\"".format(
