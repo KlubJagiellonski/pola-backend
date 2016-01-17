@@ -6,6 +6,7 @@ import reversion
 from model_utils.managers import PassThroughManager
 from django.utils.translation import ugettext_lazy as _
 from pola.concurency import concurency
+from django.utils import timezone
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
@@ -27,6 +28,7 @@ class ProductQuerySet(models.query.QuerySet):
 
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
+    ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
     name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
     code = models.CharField(max_length=20, db_index=True, verbose_name="Kod",
                             unique=True)

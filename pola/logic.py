@@ -169,8 +169,29 @@ def create_from_api(code, obj, product=None):
             commit_desc="Produkt utworzony automatycznie na podstawie skanu "
                         "użytkownika")
     else:
-        product.name = obj_product_name
-        product.company = company
+        if product.name:
+            if obj_product_name and product.name != obj_product_name:
+                create_bot_report(product,
+                                  "Wg. najnowszego odpytania w bazie ILiM "
+                                  "nazwa tego produktu to:\"{}\"".format(
+                                      obj_product_name
+                                  ))
+        else:
+            product.name = obj_product_name
+
+        if product.company:
+            if company and \
+                    strip_dbl_spaces(product.company.name) != \
+                    strip_dbl_spaces(obj_owner_name):
+                print product.company.name
+                print company.name
+                create_bot_report(product,
+                                  "Wg. najnowszego odpytania w bazie ILiM "
+                                  "producent tego produktu to:\"{}\"".format(
+                                      obj_owner_name
+                                  ))
+        else:
+            product.company = company
         product.save()
 
     if company and company_created:
@@ -318,6 +339,8 @@ def shareholders_to_str(krs, id, indent):
 def rem_dbl_newlines(str):
     return str.replace(u'\r\n\r\n',u'\r\n').replace(u'\n\n',u'\n')
 
+def strip_dbl_spaces(str):
+    return re.sub(' +', ' ', str)
 
 def strip_urls_newlines(str):
     s = re.sub(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', '', str)
