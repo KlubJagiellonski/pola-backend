@@ -121,8 +121,7 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
         return c
 
 
-class EditorsStatsPageView(LoginRequiredMixin, TemplateView):
-    template_name = 'pages/home-editors-stats.html'
+class QueryStatsPageView(LoginRequiredMixin, TemplateView):
 
     def execute_query(self, sql, params):
         cursor = connection.cursor()
@@ -132,6 +131,10 @@ class EditorsStatsPageView(LoginRequiredMixin, TemplateView):
         columns = [col[0] for col in cursor.description]
 
         return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+
+class EditorsStatsPageView(QueryStatsPageView):
+    template_name = 'pages/home-editors-stats.html'
 
     def query_log(self, id):
         return self.execute_query(
@@ -147,7 +150,7 @@ class EditorsStatsPageView(LoginRequiredMixin, TemplateView):
             "order by 1 desc, 3 desc;", [id])
 
     def get_context_data(self, *args, **kwargs):
-        c = super(EditorsStatsPageView, self).get_context_data(**kwargs)
+        c = super(QueryStatsPageView, self).get_context_data(**kwargs)
 
         c['company_log'] = self.query_log(16)
         c['product_log'] = self.query_log(15)
@@ -158,5 +161,20 @@ class EditorsStatsPageView(LoginRequiredMixin, TemplateView):
             "join report_report on users_user.id=report_report.resolved_by_id "
             "group by to_char(report_report.resolved_at, 'YYYY-MM'), username "
             "order by 1 desc, 3 desc;", None)
+
+        return c
+
+
+class AdminStatsPageView(QueryStatsPageView):
+    template_name = 'pages/home-admin-stats.html'
+
+    def get_context_data(self, *args, **kwargs):
+        c = super(QueryStatsPageView, self).get_context_data(**kwargs)
+
+        c['ilim_log'] = self.execute_query(
+            "select to_char(ilim_queried_at, 'YYYY-MM-DD'), count(*) "
+            "from product_product "
+            "group by to_char(ilim_queried_at, 'YYYY-MM-DD') "
+            "order by 1 desc",None)
 
         return c
