@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from product.models import Product
+from company.models import Company
 from pola.logic import create_from_api
 from django.conf import settings
 from produkty_w_sieci_api import Client
 from django.utils import timezone
 from datetime import timedelta
+from django.core.exceptions import ObjectDoesNotExist
 
 REQUERY_590_FREQUENCY = 7
 REQUERY_590_LIMIT = 100
@@ -68,3 +70,32 @@ def requery_products(products):
                 print "."
         else:
             print ";"
+
+def update_from_kbpoz(db_filename):
+    with open(db_filename) as f:
+        for line in f:
+            split = line.split('\t')
+            gtin = split[0].strip()
+            if len(gtin)>13:
+                gtin = gtin[1:]
+
+            if len(split)>1:
+                nip = split[1].strip()
+
+                try:
+                    prod = Product.objects.get(code=gtin)
+                    if not prod.company and nip != "":
+                        try:
+                            company = Company.objects.get(nip=nip)
+                            print gtin+" "+nip
+                            print company
+                            prod.company = company
+                            prod.ilim_queried_at = timezone.now()
+                            Product.save(prod, commit_desc="Produkt przypisany "
+                                              "do producenta na podstawie bazy "
+                                              "KBPOZ")
+                        except ObjectDoesNotExist:
+                            pass
+
+                except ObjectDoesNotExist:
+                    pass

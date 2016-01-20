@@ -49,6 +49,18 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name or self.code or "None"
 
+    def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
+        if not commit_desc:
+            return super(Product, self).save(*args, **kwargs)
+
+        with transaction.atomic(), reversion.\
+                create_revision(manage_manually=True):
+            obj = super(Product, self).save(*args, **kwargs)
+            reversion.default_revision_manager.\
+                save_revision([self], comment=commit_desc, user=commit_user)
+            return obj
+
+
     class Meta:
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
