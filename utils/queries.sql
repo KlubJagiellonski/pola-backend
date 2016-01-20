@@ -23,5 +23,10 @@ join report_report on users_user.id=report_report.resolved_by_id
 group by to_char(report_report.resolved_at, 'YYYY-MM'), username
 order by 1 desc, 3 desc;
 
+-- requery ilim
+select to_char(ilim_queried_at, 'YYYY-MM-DD'), count(*)
+from product_product
+group by to_char(ilim_queried_at, 'YYYY-MM-DD')
+order by 1 desc;
 
 select name from company_company where "plCapital"=0 and "plNotGlobEnt"=100;
