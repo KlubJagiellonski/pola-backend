@@ -172,7 +172,7 @@ def create_from_api(code, obj, product=None):
         if product.name:
             if obj_product_name and product.name != obj_product_name:
                 create_bot_report(product,
-                                  "Wg. najnowszego odpytania w bazie ILiM "
+                                  u"Wg. najnowszego odpytania w bazie ILiM "
                                   "nazwa tego produktu to:\"{}\"".format(
                                       obj_product_name
                                   ))
@@ -181,10 +181,9 @@ def create_from_api(code, obj, product=None):
 
         if product.company:
             if company and \
-                    strip_dbl_spaces(product.company.name) != \
-                    strip_dbl_spaces(obj_owner_name):
+                not ilim_compare_str(product.company.name, obj_owner_name):
                 create_bot_report(product,
-                                  "Wg. najnowszego odpytania w bazie ILiM "
+                                  u"Wg. najnowszego odpytania w bazie ILiM "
                                   "producent tego produktu to:\"{}\"".format(
                                       obj_owner_name
                                   ))
@@ -338,7 +337,12 @@ def rem_dbl_newlines(str):
     return str.replace(u'\r\n\r\n',u'\r\n').replace(u'\n\n',u'\n')
 
 def strip_dbl_spaces(str):
-    return re.sub(' +', ' ', str)
+    return re.sub(' +', ' ', str).strip()
+
+def ilim_compare_str(s1, s2):
+    s1 = strip_dbl_spaces(s1)
+    s2 = strip_dbl_spaces(s2)
+    return s1.upper() == s2.upper()
 
 def strip_urls_newlines(str):
     s = re.sub(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', '', str)
