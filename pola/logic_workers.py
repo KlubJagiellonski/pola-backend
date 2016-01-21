@@ -2,12 +2,13 @@
 
 from product.models import Product
 from company.models import Company
-from pola.logic import create_from_api
+from pola.logic import create_from_api, update_company_from_krs
 from django.conf import settings
 from produkty_w_sieci_api import Client
 from django.utils import timezone
 from datetime import timedelta
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 
 REQUERY_590_FREQUENCY = 7
 REQUERY_590_LIMIT = 100
@@ -85,8 +86,16 @@ def update_from_kbpoz(db_filename):
                 try:
                     prod = Product.objects.get(code=gtin)
                     if not prod.company and nip != "":
-                        try:
-                            company = Company.objects.get(nip=nip)
+                        with transaction.atomic():
+                            try:
+                                company = Company.objects.get(nip=nip)
+                            except ObjectDoesNotExist:
+                                company = Company.objects.create(nip = nip)
+                                if not update_company_from_krs(prod, company):
+                                    company.delete()
+                                    continue
+                                print "!"
+
                             print gtin+" "+nip
                             print company
                             prod.company = company
@@ -94,8 +103,6 @@ def update_from_kbpoz(db_filename):
                             Product.save(prod, commit_desc="Produkt przypisany "
                                               "do producenta na podstawie bazy "
                                               "KBPOZ")
-                        except ObjectDoesNotExist:
-                            pass
 
                 except ObjectDoesNotExist:
                     pass

@@ -200,7 +200,12 @@ def create_from_api(code, obj, product=None):
 def update_company_from_krs(product, company):
     try:
         krs = KrsClient()
-        companies = krs.get_companies_by_name(company.name)
+        if company.name:
+            companies = krs.get_companies_by_name(company.name)
+        elif company.nip:
+            companies = krs.get_companies_by_nip(company.nip)
+        else:
+            return False
         if companies.__len__() == 1:
             company.official_name = companies[0]['nazwa']
             company.common_name = companies[0]['nazwa_skrocona']
@@ -218,6 +223,7 @@ def update_company_from_krs(product, company):
             if shareholders:
                 create_bot_report(product, u'Wspólnicy spółki {}:\n{}'.
                                   format(company.name, shareholders))
+            return True
 
         elif companies.__len__() > 0:
             description = u'{} - ta firma może być jedną z następujących:\n\n' \
@@ -244,6 +250,8 @@ def update_company_from_krs(product, company):
     except (mojepanstwo_api.CompanyNotFound, mojepanstwo_api.ConnectionError,
             mojepanstwo_api.ApiError):
         pass
+
+    return False
 
 
 def create_bot_report(product, description):

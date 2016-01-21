@@ -73,6 +73,14 @@ class KrsClient:
             if ['Dataobject'].__len__() == 0:
                 raise CompanyNotFound()
 
+        return self.get_companies_by_json(json)
+
+    def get_companies_by_nip(self, nip):
+        json = self.query_podmiot('conditions[krs_podmioty.nip]', nip)
+
+        return self.get_companies_by_json(json)
+
+    def get_companies_by_json(self, json):
         companies = []
         for i in range(0,json['Dataobject'].__len__()):
             company = self.json_to_company(json, i)
