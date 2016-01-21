@@ -19,6 +19,8 @@ class CompanyListView(LoginRequiredMixin, FilterView):
     model = Company
     filterset_class = CompanyFilter
     paginate_by = 25
+    queryset = Company.objects.with_query_count().all()
+
 
 class CompanyCreate(LoginRequiredMixin,
                     FormValidMessageMixin,
