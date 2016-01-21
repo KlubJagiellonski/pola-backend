@@ -13,4 +13,5 @@ django-debug-toolbar==1.4.0
 # improved REPL
 ipdb==0.8.1
 
-
+#getting rid of InsecurePlatformWarning
+ndg-httpsclient==0.4.0
