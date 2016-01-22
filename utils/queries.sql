@@ -30,3 +30,12 @@ group by to_char(ilim_queried_at, 'YYYY-MM-DD')
 order by 1 desc;
 
 select name from company_company where "plCapital"=0 and "plNotGlobEnt"=100;
+
+-- look for escaped characters in database
+select name, official_name, common_name, address
+from company_company
+where name like '%&%;%' or
+official_name like '%&%;%' or
+common_name like '%&%;%' OR
+address like '%&%;%'
+;

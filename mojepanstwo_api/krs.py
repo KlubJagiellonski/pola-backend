@@ -41,18 +41,19 @@ class KrsClient:
         data = json['Dataobject'][i]['data']
 
         company = dict()
-        company['nazwa'] = data['krs_podmioty.nazwa']
-        company['nazwa_skrocona'] = data['krs_podmioty.nazwa_skrocona']
+        company['nazwa'] = KrsClient.unescape(data['krs_podmioty.nazwa'])
+        company['nazwa_skrocona'] = \
+            KrsClient.unescape(data['krs_podmioty.nazwa_skrocona'])
         company['nip'] = data['krs_podmioty.nip']
         lokal = u" lok. {}".format(data['krs_podmioty.adres_lokal']) if \
             data['krs_podmioty.adres_lokal'] else u""
-        company['adres'] = u"ul. {} {} {}\n{} {}\n{}".format(
+        company['adres'] = KrsClient.unescape(u"ul. {} {} {}\n{} {}\n{}".format(
             data['krs_podmioty.adres_ulica'],
             data['krs_podmioty.adres_numer'],
             lokal,
             data['krs_podmioty.adres_kod_pocztowy'],
             data['krs_podmioty.adres_miejscowosc'],
-            data['krs_podmioty.adres_kraj']
+            data['krs_podmioty.adres_kraj'])
         )
         company['id'] = data['krs_podmioty.id']
         company['liczba_wspolnikow'] = \
@@ -87,6 +88,11 @@ class KrsClient:
             companies.append(company)
 
         return companies
+
+    #remove unnecessary mojepanstwo escape
+    @staticmethod
+    def unescape(s):
+        return s.replace('&amp;','&')
 
     COMMON_COMPANY_NAME_ENDINGS = \
         ( u' S.A.', u' SPÓŁKA AKCYJNA',
