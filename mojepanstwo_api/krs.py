@@ -95,31 +95,28 @@ class KrsClient:
         return s.replace('&amp;','&')
 
     COMMON_COMPANY_NAME_ENDINGS = \
-        ( u' S.A.', u' SPÓŁKA AKCYJNA',
-          u' Sp. z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-          u' Spółka z o.o.',u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-          u'Sp. Jawna', u'SPÓŁKA JAWNA',
-          u'spółka z ograniczoną odpowiedzialnością sp.k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'sp. z o. o. sp.k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'Sp. z o.o. sp.k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'sp. z o.o. sp. k.',
-          u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-
-    )
+        { u' S.A.':u' SPÓŁKA AKCYJNA',
+          u' Sp. z o.o.' : u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+          u' Spółka z o.o.' : u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+          u'Sp. Jawna' : u'SPÓŁKA JAWNA',
+          u'spółka z ograniczoną odpowiedzialnością sp.k.' :
+            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          u'sp. z o. o. sp.k.' :
+            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          u'Sp. z o.o. sp.k.' :
+            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+          u'sp. z o.o. sp. k.' :
+            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
+          }
 
     @staticmethod
     def _normalize_name(name):
         name = name.upper()
-        for i in range(len(KrsClient.COMMON_COMPANY_NAME_ENDINGS)/2):
-            if name.endswith(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2]
-                    .upper()):
-                return name[:len(name)-
-                             len(KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2])]\
-                       +KrsClient.COMMON_COMPANY_NAME_ENDINGS[i*2+1].upper()
+        for key, value in KrsClient.COMMON_COMPANY_NAME_ENDINGS.items():
+            if name.endswith(key.upper()):
+                return name[:len(name)-len(key)] + value
         return name
+
 
     def query_shareholders(self, id):
         params = {
