@@ -9,19 +9,23 @@ from pola.filters import (AutocompleteChoiceFilter,
                           NoHelpTextFilterMixin)
 
 
-class NullProductFilter(django_filters.Filter):
+class NullFilter(django_filters.Filter):
     field_class = forms.BooleanField
+
+    def __init__(self, null_field, *args, **kwargs):
+        self.null_field = null_field
+        super(NullFilter, self).__init__(field, *args, **kwargs)
 
     def filter(self, qs, value):
         if value:
-            return qs.filter(company=None)
+            return qs.filter(**{self.null_field: None})
         return qs
 
 
 class ProductFilter(NoHelpTextFilterMixin,
                     CrispyFilterMixin,
                     django_filters.FilterSet):
-    company_empty = NullProductFilter(label="Tylko produkty bez producenta")
+    company_empty = NullFilter(null_field='company', label="Tylko produkty bez producenta")
     company = AutocompleteChoiceFilter(
         autocomplete_name="CompanyAutocomplete")
 
