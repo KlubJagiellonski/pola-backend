@@ -57,15 +57,20 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">Zgłoszenia:</h3><a href="/cms/report/advanced/?status=open&product={{ object.pk }}">Pokaż wszystkie</a>
+                <a class="btn btn-xs btn-info pull-right" href="/cms/report/advanced/?status=open&product={{ object.pk }}">Pokaż wszystkie</a>
+                <h3 class="panel-title">Zgłoszenia:</h3>
             </div>
+            {% if report_list %}
             <ul class="list-group">
                 {% for report in report_list %}
                 <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a></li>
-                {% empty%}
-                <li>{% trans "Nie ma żadnych zgłoszeń" %}</li>
                 {% endfor %}
             </ul>
+            {% else %}
+            <div class="panel-body">
+                {% trans "Nie ma żadnych zgłoszeń" %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
