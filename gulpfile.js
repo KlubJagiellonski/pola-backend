@@ -107,4 +107,4 @@ gulp.task('watch', function () {
     });
 });
 
-gulp.task('default', ['bower', 'icons', 'js', 'scss', 'watch']);
+gulp.task('default', ['server', 'bower', 'icons', 'js', 'scss', 'watch']);
