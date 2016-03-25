@@ -1,17 +1,10 @@
 "use strict";
 var fs = require('fs'),
+    path = require('path'),
     gulp = require('gulp'),
-    sass = require('gulp-ruby-sass'),
-    notify = require("gulp-notify"),
-    bower = require('gulp-bower'),
-    watch = require('gulp-watch'),
-    uglify = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    rename = require('gulp-rename'),
-    minifycss = require('gulp-minify-css'),
-    prefix = require('gulp-autoprefixer'),
-    livereload = require('gulp-livereload'),
-    csslint = require('gulp-csslint'),
+    $ = require('gulp-load-plugins')(),
+    browserSync = require('browser-sync').create(),
+    livereload = browserSync.stream,
     json = JSON.parse(fs.readFileSync('./package.json'));
 
 var config = (function () {
@@ -50,10 +43,7 @@ var config = (function () {
                 path.bower + '/mousetrap/mousetrap.js',
                 path.assets + '/js/*.js'
             ],
-            output: {
-                dir: path.static + "/js",
-                filename: 'script.js'
-            },
+            output: path.static + "/js/script.js",
             watch: [
                 path.assets + '/js/*.js'
             ]
@@ -61,8 +51,14 @@ var config = (function () {
     };
 }());
 
+gulp.task('server', function () {
+    browserSync.init({
+        proxy: 'localhost:8000'
+    });
+});
+
 gulp.task('bower', function () {
-    return bower(config.path.bower);
+    return $.bower(config.path.bower);
 });
 
 gulp.task('icons', function () {
@@ -71,18 +67,20 @@ gulp.task('icons', function () {
 });
 
 gulp.task('js', function () {
+    var directory = path.dirname(config.script.output);
+    var filename = path.basename(config.script.output);
     return gulp.src(config.script.input)
-        .pipe(concat(config.script.output.filename))
-        .pipe(gulp.dest(config.script.output.dir))
+        .pipe($.concat(filename))
+        .pipe(gulp.dest(directory))
         .pipe(livereload())
-        .pipe(uglify())
-        .pipe(rename({extname: '.min.js'}))
-        .pipe(gulp.dest(config.script.output.dir))
+        .pipe($.uglify())
+        .pipe($.rename({extname: '.min.js'}))
+        .pipe(gulp.dest(directory))
         .pipe(livereload());
 });
 
 gulp.task('scss', function () {
-    return sass(
+    return $.rubySass(
         config.scss.input,
         {
             style: 'expanded',
@@ -90,18 +88,17 @@ gulp.task('scss', function () {
             sourcemap: true
         }
     )
-        .pipe(prefix("last 1 version", "> 1%", "ie 8", "ie 7"))
+        .pipe($.autoprefixer("last 1 version", "> 1%", "ie 8", "ie 7"))
         .pipe(gulp.dest(config.scss.output))
         .pipe(livereload())
-        .pipe(rename({extname: '.min.css'}))
-        .pipe(minifycss())
+        .pipe($.rename({extname: '.min.css'}))
+        .pipe($.minifyCss())
         .pipe(gulp.dest(config.scss.output))
         .pipe(livereload());
 });
 
 // Rerun the task when a file changes
 gulp.task('watch', function () {
-    livereload.listen();
     config.scss.watch.forEach(function (path) {
         gulp.watch(path, ['scss']);
     });
