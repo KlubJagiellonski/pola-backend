@@ -1,6 +1,7 @@
 "use strict";
 var fs = require('fs'),
     path = require('path'),
+    merge = require('merge-stream'),
     gulp = require('gulp'),
     $ = require('gulp-load-plugins')(),
     browserSync = require('browser-sync').create(),
@@ -13,13 +14,17 @@ var config = (function () {
     var path = {
         bower: './bower_components/',
         assets: './' + appName + '/assets',
-        static: './' + appName + '/static'
+        static: './' + appName + '/static',
+        template: './' + appName + '/templates'
     };
 
     return {
         path: path,
         scss: {
-            input: path.assets + '/scss/style.scss',
+            input: [
+                path.assets + '/scss/style.scss',
+                path.assets + '/scss/landing.scss',
+            ],
             include: [
                 path.bower + '/bootstrap-sass/assets/stylesheets',
                 path.bower + '/font-awesome/scss',
@@ -30,23 +35,39 @@ var config = (function () {
                 path.assets + '/scss/**.scss'
             ]
         },
+        script: {
+            input: {
+                backend: [
+                    path.bower + '/jquery/dist/jquery.js',
+                    path.bower + '/bootstrap-sass/assets/javascripts/bootstrap.js',
+                    path.bower + '/mousetrap/mousetrap.js',
+                    path.assets + '/js/*.js'
+                ],
+                landing: [
+                    path.bower + "/jquery/dist/jquery.js",
+                    // path.bower + "/bootstrap-sass/assets/javascripts/bootstrap.js",
+                    path.assets + "/js/landing/*.js"
+                ]
+            },
+            output: path.static + "/js/",
+            watch: [
+                path.assets + '/js/*.js'
+            ]
+        },
         icons: {
             input: [
                 path.bower + '/font-awesome/fonts/**.*'
             ],
             output: path.static + "/fonts"
         },
-        script: {
-            input: [
-                path.bower + '/jquery/dist/jquery.js',
-                path.bower + '/bootstrap-sass/assets/javascripts/bootstrap.js',
-                path.bower + '/mousetrap/mousetrap.js',
-                path.assets + '/js/*.js'
-            ],
-            output: path.static + "/js/script.js",
-            watch: [
-                path.assets + '/js/*.js'
-            ]
+        images: {
+            input: path.assets + "/images/*",
+            output: path.static + "/images/"
+        },
+        symbols: {
+            input: path.assets + "/svg/*.svg",
+            output: path.static + "/symbols.svg",
+            watch: path.assets + "/svg/*.svg"
         }
     };
 }());
@@ -67,16 +88,20 @@ gulp.task('icons', function () {
 });
 
 gulp.task('js', function () {
-    var directory = path.dirname(config.script.output);
-    var filename = path.basename(config.script.output);
-    return gulp.src(config.script.input)
-        .pipe($.concat(filename))
-        .pipe(gulp.dest(directory))
-        .pipe(livereload())
-        .pipe($.uglify())
-        .pipe($.rename({extname: '.min.js'}))
-        .pipe(gulp.dest(directory))
-        .pipe(livereload());
+    var streams = merge();
+    for(var name in config.script.input){
+        var filename = name + '.js';
+        var stream = gulp.src(config.script.input[name])
+            .pipe($.concat(filename))
+            .pipe(gulp.dest(config.script.output))
+            .pipe(livereload())
+            .pipe($.uglify())
+            .pipe($.rename({extname: '.min.js'}))
+            .pipe(gulp.dest(config.script.output))
+            .pipe(livereload());
+        streams.add(stream);
+    };
+    return streams;
 });
 
 gulp.task('scss', function () {
@@ -97,6 +122,31 @@ gulp.task('scss', function () {
         .pipe(livereload());
 });
 
+gulp.task("images", function () {
+    return gulp.src(config.images.input)
+        .pipe($.imagemin())
+        .pipe(gulp.dest(config.images.output));
+});
+
+gulp.task("symbols", function () {
+    return gulp
+        .src(config.symbols.input)
+        .pipe($.svgmin(function (file) {
+            var prefix = path.basename(file.relative, path.extname(file.relative));
+            return {
+                plugins: [{
+                    cleanupIDs: {
+                        prefix: prefix + "-",
+                        minify: true
+                    }
+                }]
+            };
+        }))
+        .pipe($.svgstore())
+        .pipe($.rename(path.basename(config.symbols.output)))
+        .pipe(gulp.dest(path.dirname(config.symbols.output)));
+});
+
 // Rerun the task when a file changes
 gulp.task('watch', function () {
     config.scss.watch.forEach(function (path) {
@@ -107,4 +157,6 @@ gulp.task('watch', function () {
     });
 });
 
-gulp.task('default', ['server', 'bower', 'icons', 'js', 'scss', 'watch']);
+gulp.task('build', ['bower', 'icons', 'images', 'js', 'scss']);
+
+gulp.task('default', ['server', 'build', 'watch']);
