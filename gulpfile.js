@@ -92,7 +92,7 @@ gulp.task('scss', function () {
         .pipe(gulp.dest(config.scss.output))
         .pipe(livereload())
         .pipe($.rename({extname: '.min.css'}))
-        .pipe($.minifyCss())
+        .pipe($.cleanCss())
         .pipe(gulp.dest(config.scss.output))
         .pipe(livereload());
 });
