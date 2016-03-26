@@ -42,7 +42,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
                                           .filter(company__isnull=True,
                                                   code__startswith='590')
                                           .order_by('-query_count')[:10])
-        c['no_of_most_popular_590_products'] = (Product.objects
+        c['no_of_590_products'] = (Product.objects
                                                 .filter(company__isnull=True,
                                                         code__startswith='590')
                                                 .count())
@@ -50,7 +50,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['most_popular_not_590_products'] =\
             (Product.objects.with_query_count().filter(company__isnull=True)
                 .exclude(code__startswith='590').order_by('-query_count')[:10])
-        c['no_of_most_popular_not_590_products'] = \
+        c['no_of_not_590_products'] = \
             (Product.objects.filter(company__isnull=True).
              exclude(code__startswith='590').count())
 
