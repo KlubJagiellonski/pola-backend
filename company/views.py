@@ -1,5 +1,5 @@
 # Create your views here.
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
     ProcessFormView
@@ -8,7 +8,6 @@ from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from report.models import Report
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
-from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, QueryDict
 from .filters import CompanyFilter
@@ -32,8 +31,9 @@ class CompanyCreate(LoginRequiredMixin,
     def get_initial(self):
         initials = {}
         for field_name in CompanyDetailView.FIELDS_TO_DISPLAY:
-            initials[field_name]= self.request.GET.get(field_name)
+            initials[field_name] = self.request.GET.get(field_name)
         return initials
+
 
 class CompanyCreateFromKRSView(LoginRequiredMixin, ProcessFormView):
     form_class = CompanyCreateFromKRSForm
@@ -54,7 +54,7 @@ class CompanyCreateFromKRSView(LoginRequiredMixin, ProcessFormView):
             q['nip'] = company['nip']
             q['address'] = company['adres']
 
-            return HttpResponseRedirect(u'/cms/company/create?'+q.urlencode())
+            return HttpResponseRedirect('/cms/company/create?' + q.urlencode())
 
         return render(request, self.template_name, {'form': form})
 
@@ -67,6 +67,7 @@ class CompanyUpdate(LoginRequiredMixin,
     form_class = CompanyForm
     concurency_url = reverse_lazy('concurency:lock')
     form_valid_message = u"Firma zaktualizowana!"
+
 
 class CompanyDelete(LoginRequiredMixin,
                     FormValidMessageMixin,
@@ -109,7 +110,8 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
 
         for field_name in self.FIELDS_TO_DISPLAY:
             try:
-                method_display = getattr(object, 'get_'+field_name+'_display')
+                method_display = getattr(
+                    object, 'get_' + field_name + '_display')
                 value = method_display()
             except:
                 value = object.__dict__[field_name]

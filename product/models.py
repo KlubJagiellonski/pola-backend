@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from pola.concurency import concurency
 from django.utils import timezone
 
+
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
         super(ProductQuerySet, self).__init__(*args, **kwargs)
@@ -18,8 +19,10 @@ class ProductQuerySet(models.query.QuerySet):
 
         with transaction.atomic(), reversion.create_revision(manage_manually=True):
             obj = super(ProductQuerySet, self).create(*args, **kwargs)
-            reversion.default_revision_manager.save_revision([obj],
-                comment=commit_desc, user=commit_user)
+            revision_manager = reversion.default_revision_manager
+            revision_manager.save_revision([obj],
+                                           comment=commit_desc,
+                                           user=commit_user)
             return obj
 
     def with_query_count(self):
@@ -59,7 +62,6 @@ class Product(models.Model):
             reversion.default_revision_manager.\
                 save_revision([self], comment=commit_desc, user=commit_user)
             return obj
-
 
     class Meta:
         verbose_name = _("Produkt")

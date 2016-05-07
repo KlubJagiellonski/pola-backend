@@ -12,5 +12,4 @@ urlpatterns = [
         template_name="team.html")),
     url(r'^partners$', TemplateView.as_view(
         template_name="partners.html")),
-        ]
-
+]
