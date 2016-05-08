@@ -5,6 +5,8 @@ from . import views
 
 
 urlpatterns = [
+    url(r'advanced/$',
+        views.ReportAdvancedListView.as_view(), name="advanced"),
     url(r'(?P<pk>[-\w]+)/delete$',
         views.ReportDelete.as_view(), name="delete"),
     url(r'(?P<pk>[-\w]+)/resolve/$',

@@ -123,6 +123,16 @@ function drawResponses(){
           title: 'Nowi producenci, produkty, zgłoszenia',
           subtitle: 'Ostatnie 30 dni'
         },
+        series: {
+            0: { axis: 'user' }, 
+            1: { axis: 'product' }, 
+            1: { axis: 'report' }
+        },
+        y: {
+          company: {},
+          product: {}, 
+          report: {} 
+        }
       };
       var material = new google.charts.Bar(document.getElementById('chart_rest'));
       material.draw(data, options);

@@ -1,4 +1,8 @@
-from django.core.urlresolvers import reverse_lazy
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from django.contrib import messages
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from django_filters.views import FilterView
@@ -13,6 +17,20 @@ class ReportListView(LoginRequiredMixin, FilterView):
     filterset_class = ReportFilter
     paginate_by = 25
     queryset = models.Report.objects.all().prefetch_related('attachment_set')
+
+
+class ReportAdvancedListView(LoginRequiredMixin, FilterView):
+    model = models.Report
+    filterset_class = ReportFilter
+    paginate_by = 25
+    template_name_suffix = '_filter_adv'
+    queryset = models.Report.objects.all().prefetch_related('attachment_set')
+
+    def post(self, request, *args, **kwargs):
+        messages.success(request, "Raporty zostały rozpatrzone")
+        ids = request.POST.getlist('report_to_resolve')
+        models.Report.objects.filter(pk__in=ids).resolve(self.request.user)
+        return HttpResponseRedirect(request.get_full_path())
 
 
 class ReportDelete(LoginRequiredMixin, DeleteView):

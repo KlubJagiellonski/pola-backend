@@ -78,9 +78,8 @@ def get_result_from_code(code):
                 result['name'] = "Zgłoś nam ten kod!"
                 result['altText'] = "Zeskanowałeś kod, którego nie mamy " \
                                     "jeszcze w bazie. Bardzo prosimy o " \
-                                    "zgłoszenie nam tego kodu poprzez " \
-                                    "naciśnięcie przycisku >Zgłoś< " \
-                                    "poniżej i wysłania nam zdjęcia zarówno " \
+                                    "zgłoszenie tego kodu "\
+                                    "i wysłania zdjęć zarówno " \
                                     "kodu kreskowego jak i etykiety z " \
                                     "produktu. Z góry dziękujemy!"
                 result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego " \
@@ -170,8 +169,26 @@ def create_from_api(code, obj, product=None):
             commit_desc="Produkt utworzony automatycznie na podstawie skanu "
                         "użytkownika")
     else:
-        product.name = obj_product_name
-        product.company = company
+        if product.name:
+            if obj_product_name and product.name != obj_product_name:
+                create_bot_report(product,
+                                  u"Wg. najnowszego odpytania w bazie ILiM "
+                                  "nazwa tego produktu to:\"{}\"".format(
+                                      obj_product_name
+                                  ))
+        else:
+            product.name = obj_product_name
+
+        if product.company:
+            if company and \
+                not ilim_compare_str(product.company.name, obj_owner_name):
+                create_bot_report(product,
+                                  u"Wg. najnowszego odpytania w bazie ILiM "
+                                  "producent tego produktu to:\"{}\"".format(
+                                      obj_owner_name
+                                  ))
+        else:
+            product.company = company
         product.save()
 
     if company and company_created:
@@ -183,7 +200,12 @@ def create_from_api(code, obj, product=None):
 def update_company_from_krs(product, company):
     try:
         krs = KrsClient()
-        companies = krs.get_companies_by_name(company.name)
+        if company.name:
+            companies = krs.get_companies_by_name(company.name)
+        elif company.nip:
+            companies = krs.get_companies_by_nip(company.nip)
+        else:
+            return False
         if companies.__len__() == 1:
             company.official_name = companies[0]['nazwa']
             company.common_name = companies[0]['nazwa_skrocona']
@@ -201,6 +223,7 @@ def update_company_from_krs(product, company):
             if shareholders:
                 create_bot_report(product, u'Wspólnicy spółki {}:\n{}'.
                                   format(company.name, shareholders))
+            return True
 
         elif companies.__len__() > 0:
             description = u'{} - ta firma może być jedną z następujących:\n\n' \
@@ -227,6 +250,8 @@ def update_company_from_krs(product, company):
     except (mojepanstwo_api.CompanyNotFound, mojepanstwo_api.ConnectionError,
             mojepanstwo_api.ApiError):
         pass
+
+    return False
 
 
 def create_bot_report(product, description):
@@ -297,9 +322,9 @@ def get_plScore(company):
 def shareholders_to_str(krs, id, indent):
     str = ''
     json = krs.query_shareholders(id)
-    data = json['object']['data']
+    data = json['data']
     kapital_zakladowy = data['krs_podmioty.wartosc_kapital_zakladowy']
-    wspolnicy = json['object']['layers']['wspolnicy']
+    wspolnicy = json['layers']['wspolnicy']
     for wspolnik in wspolnicy:
         udzialy_wartosc = wspolnik.get('udzialy_wartosc', None)
         if udzialy_wartosc is None:
@@ -319,6 +344,13 @@ def shareholders_to_str(krs, id, indent):
 def rem_dbl_newlines(str):
     return str.replace(u'\r\n\r\n',u'\r\n').replace(u'\n\n',u'\n')
 
+def strip_dbl_spaces(str):
+    return re.sub(' +', ' ', str).strip()
+
+def ilim_compare_str(s1, s2):
+    s1 = strip_dbl_spaces(s1)
+    s2 = strip_dbl_spaces(s2)
+    return s1.upper() == s2.upper()
 
 def strip_urls_newlines(str):
     s = re.sub(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', '', str)

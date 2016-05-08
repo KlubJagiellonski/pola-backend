@@ -87,9 +87,9 @@
     {% block modal %}{% endblock modal %}
 
     {% if debug %}
-    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/backend.js' %}"></script>
     {% else %}
-    <script src="{% static 'js/script.min.js' %}"></script>
+    <script src="{% static 'js/backend.min.js' %}"></script>
     {% endif %}
     {% block javascript %}
 

@@ -6,7 +6,16 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najpopularniejsi niezweryfikowani producenci" %} ({{ no_of_not_verified_companies }}+{{ no_of_verified_companies }}={{ no_of_companies }})</h3>
+                <h3 class="panel-title">
+                    {% trans "Najpopularniejsi niezweryfikowani producenci" %}
+                    (
+                    <abbr title="{% trans "Liczba firm niezweryfikowanych" %}">{{ no_of_not_verified_companies }}</abbr>
+                    +
+                    <abbr title="{% trans "Liczba zweryfikowanych firm" %}">{{ no_of_verified_companies }}</abbr>
+                    =
+                    <abbr title="{% trans "Liczba wszystkich firm" %}">{{ no_of_companies }}</abbr>
+                    )
+                </h3>
             </div>
             <ul class="list-group">
             {% for company in  most_popular_companies %}
@@ -25,29 +34,16 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najpopularniejsi, zweryfikowani producenci bez opisu" %} ({{ no_of_companies_wo_desc }})</h3>
-            </div>
-            <ul class="list-group">
-            {% for company in  companies_wo_desc %}
-                <li class="list-group-item">
-                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})
-                    {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-            <div class="panel-footer">
-                &nbsp;
-            </div>
-        </div>
-    </div>
-
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najnowsze nierozpatrzone zgłoszenia" %} ({{ no_of_open_reports }}+{{ no_of_resolved_reports }}={{ no_of_reports }})</h3>
+                <h3 class="panel-title">
+                    {% trans "Najnowsze nierozpatrzone zgłoszenia" %}
+                    (
+                    <abbr title="{% trans "Liczba otwartych raportów" %}">{{ no_of_open_reports }}</abbr>
+                    +
+                    <abbr title="{% trans "Liczba zamkniętych raportów" %}">{{ no_of_resolved_reports }}</abbr>
+                    =
+                    <abbr title="{% trans "Liczba wszystkich raportów" %}">{{ no_of_reports }}</abbr>
+                    )
+                </h3>
             </div>
             {% for report in  newest_reports %}
                 <li class="list-group-item">
@@ -64,7 +60,12 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najpopularniejsze, polskie (590) produkty bez producenta" %} ({{ no_of_most_popular_590_products }})</h3>
+                <h3 class="panel-title">
+                    {% trans "Najpopularniejsze, polskie (590) produkty bez producenta" %}
+                    (
+                    <abbr title="{% trans "Liczba kodów polskich bez producenta" %}">{{ no_of_590_products }}</abbr>
+                    )
+                </h3>
             </div>
             <ul class="list-group">
             {% for product in  most_popular_590_products %}
@@ -82,7 +83,12 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Najpopularniejsze, niepolskie (!590) produkty bez producenta" %} ({{ no_of_most_popular_not_590_products }})</h3>
+                <h3 class="panel-title">
+                    {% trans "Najpopularniejsze, niepolskie (!590) produkty bez producenta" %}
+                    (
+                    <abbr title="{% trans "Liczba nie polskich produktów bez producenta" %}">{{ no_of_not_590_products }}</abbr>
+                    )
+                </h3>
             </div>
             <ul class="list-group">
             {% for product in  most_popular_not_590_products %}

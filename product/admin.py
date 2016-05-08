@@ -6,7 +6,7 @@ import reversion
 
 class ProductAdmin(reversion.VersionAdmin):
     list_display = (
-        u'id',
+        'id',
         'name',
         'code',
         'company',

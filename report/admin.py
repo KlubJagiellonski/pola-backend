@@ -16,7 +16,7 @@ admin.site.register(Attachment, AttachmentAdmin)
 
 class ReportAdmin(admin.ModelAdmin):
     list_display = (
-        u'id',
+        'id',
         'product',
         'client',
         'created_at',

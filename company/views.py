@@ -1,14 +1,17 @@
 # Create your views here.
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
+    ProcessFormView
 from django_filters.views import FilterView
 from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from report.models import Report
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
+from django.shortcuts import render
+from django.http import HttpResponseRedirect, QueryDict
 from .filters import CompanyFilter
-from .forms import CompanyForm
+from .forms import CompanyForm, CompanyCreateFromKRSForm
 
 
 class CompanyListView(LoginRequiredMixin, FilterView):
@@ -24,6 +27,36 @@ class CompanyCreate(LoginRequiredMixin,
     model = Company
     form_class = CompanyForm
     form_valid_message = u"Firma utworzona!"
+
+    def get_initial(self):
+        initials = {}
+        for field_name in CompanyDetailView.FIELDS_TO_DISPLAY:
+            initials[field_name] = self.request.GET.get(field_name)
+        return initials
+
+
+class CompanyCreateFromKRSView(LoginRequiredMixin, ProcessFormView):
+    form_class = CompanyCreateFromKRSForm
+    template_name = 'company/company_from_krs.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            company = form.cleaned_data['company']
+            q = QueryDict(mutable=True)
+            q['official_name'] = company['nazwa']
+            q['common_name'] = company['nazwa_skrocona']
+            q['sources'] = u"Dane z KRS|%s" % company['url']
+            q['nip'] = company['nip']
+            q['address'] = company['adres']
+
+            return HttpResponseRedirect('/cms/company/create?' + q.urlencode())
+
+        return render(request, self.template_name, {'form': form})
 
 
 class CompanyUpdate(LoginRequiredMixin,
@@ -61,11 +94,6 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         'description',
         'sources',
         'verified',
-        'plCapital_notes',
-        'plWorkers_notes',
-        'plRnD_notes',
-        'plRegistered_notes',
-        'plNotGlobEnt_notes',
         'address',
         'nip',
     )
@@ -82,7 +110,8 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
 
         for field_name in self.FIELDS_TO_DISPLAY:
             try:
-                method_display = getattr(object, 'get_'+field_name+'_display')
+                method_display = getattr(
+                    object, 'get_' + field_name + '_display')
                 value = method_display()
             except:
                 value = object.__dict__[field_name]

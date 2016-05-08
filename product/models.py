@@ -6,6 +6,8 @@ import reversion
 from model_utils.managers import PassThroughManager
 from django.utils.translation import ugettext_lazy as _
 from pola.concurency import concurency
+from django.utils import timezone
+
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
@@ -17,8 +19,10 @@ class ProductQuerySet(models.query.QuerySet):
 
         with transaction.atomic(), reversion.create_revision(manage_manually=True):
             obj = super(ProductQuerySet, self).create(*args, **kwargs)
-            reversion.default_revision_manager.save_revision([obj],
-                comment=commit_desc, user=commit_user)
+            revision_manager = reversion.default_revision_manager
+            revision_manager.save_revision([obj],
+                                           comment=commit_desc,
+                                           user=commit_user)
             return obj
 
     def with_query_count(self):
@@ -27,6 +31,7 @@ class ProductQuerySet(models.query.QuerySet):
 
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
+    ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
     name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
     code = models.CharField(max_length=20, db_index=True, verbose_name="Kod",
                             unique=True)
@@ -46,6 +51,17 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.name or self.code or "None"
+
+    def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
+        if not commit_desc:
+            return super(Product, self).save(*args, **kwargs)
+
+        with transaction.atomic(), reversion.\
+                create_revision(manage_manually=True):
+            obj = super(Product, self).save(*args, **kwargs)
+            reversion.default_revision_manager.\
+                save_revision([self], comment=commit_desc, user=commit_user)
+            return obj
 
     class Meta:
         verbose_name = _("Produkt")

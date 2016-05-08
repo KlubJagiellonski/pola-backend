@@ -57,7 +57,7 @@ class ProductUpdate(LoginRequiredMixin,
     form_valid_message = _(u"Produkt zaktualizowany!")
 
 
-class ProductDelete(LoginRequiredMixin, FormValidMessageMixin,  DeleteView):
+class ProductDelete(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     slug_field = 'code'
     model = models.Product
     success_url = reverse_lazy('product:list')

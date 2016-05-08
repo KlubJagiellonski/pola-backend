@@ -2352,4 +2352,13 @@ h2 {
   margin-bottom: 45px;
 }
 
+.notice-support {
+  background: #d8002f;
+  color: white;
+  padding: 1em 0;
+}
+.notice-support a {
+  color: inherit;
+}
+
 
