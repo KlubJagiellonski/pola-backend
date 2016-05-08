@@ -5,6 +5,11 @@ from product.models import Product
 from pola.models import Query
 from report.models import Report, Attachment
 from django.conf import settings
+from django.views.generic import View
+
+from braces import views
+
+from company.models import Company
 import json
 import os
 import uuid
@@ -181,3 +186,26 @@ def attach_file(request):
     attachment.save()
 
     return JsonResponse({'id': attachment.id})
+
+
+class SearchAPI(views.JSONResponseMixin, View):
+    def get(self, request, *args, **kwargs):
+        keyword = request.GET.get('q')
+        if not keyword:
+            json_dict = {
+                'status': 'fail',
+                'message': "You must provide a keyword by `q` parameter"
+            }
+            return self.render_json_response(json_dict)
+
+        companies = Company.objects.search_by_name(keyword)
+        serialized = [{
+            'id': item.id,
+            'name': str(item),
+            'brands': [str(b) for b in item.brand_set.all()]
+        } for item in companies]
+        response = {
+            'status': 'ok',
+            'data': serialized
+        }
+        return self.render_json_response(response)

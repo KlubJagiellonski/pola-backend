@@ -3,6 +3,7 @@
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.db.models import Count
+from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
 from model_utils.managers import PassThroughManager
@@ -39,18 +40,37 @@ class CompanyQuerySet(models.query.QuerySet):
                 save_revision([obj[0]], comment=commit_desc, user=commit_user)
             return obj
 
+    def search_by_name(self, keyword):
+        where = Q(name__icontains=keyword)
+        where = where | Q(official_name__icontains=keyword)
+        where = where | Q(common_name__icontains=keyword)
+        where = where | Q(brand__name__icontains=keyword)
+        if self.isEan(keyword):
+                where = where | Q(product__code=keyword)
+        return self.filter(where).distinct('id').prefetch_related('brand_set')
+
+    def isEan(self, keyword):
+        return keyword.isdigit() and (len(keyword) == 13 or len(keyword) == 8)
+
     def with_query_count(self):
         return self.annotate(query_count=Count('product__query__id'))
 
 
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=128, null=True, blank=True,
+    name = models.CharField(max_length=128,
+                            null=True,
+                            blank=True,
                             db_index=True,
                             verbose_name=_(u"Nazwa (pobrana z ILiM)"))
-    official_name = models.CharField(max_length=128, blank=True, null=True,
+    official_name = models.CharField(max_length=128,
+                                     db_index=True,
+                                     blank=True,
+                                     null=True,
                                      verbose_name=_(u"Nazwa rejestrowa"))
-    common_name = models.CharField(max_length=128, blank=True,
+    common_name = models.CharField(max_length=128,
+                                   db_index=True,
+                                   blank=True,
                                    verbose_name=_(u"Nazwa dla użytkownika"))
 
     plCapital = IntegerRangeField(

@@ -3,6 +3,12 @@ from . import views
 
 
 urlpatterns = [
+
+    # API - Frontend
+    url(
+        regex=r'front/search$',
+        view=views.SearchAPI.as_view(),
+        name="front_search"),
     # API v2
     url(regex=r'v2/get_by_code$', view=views.get_by_code_v2,
         name="get_by_code_v2"),
