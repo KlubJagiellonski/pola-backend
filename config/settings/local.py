@@ -7,6 +7,7 @@ Local settings
 - Add Django Debug Toolbar
 - Add django-extensions as app
 '''
+import os
 
 from .common import *  # noqa
 
@@ -59,4 +60,26 @@ INSTALLED_APPS += ('django_extensions', )
 # ------------------------------------------------------------------------------
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
+if 'SQL_LOG' in os.environ:
+    LOGGING = {
+        'version': 1,
+        'filters': {
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue',
+            }
+        },
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+            }
+        },
+        'loggers': {
+            'django.db.backends': {
+                'level': 'DEBUG',
+                'handlers': ['console'],
+            }
+        }
+    }
 # Your local stuff: Below this line define 3rd party library settings
