@@ -593,10 +593,10 @@ $label-link-hover-color:      #fff !default;
 //##
 
 //** Padding applied to the modal body
-$modal-inner-padding:         15px !default;
+$modal-inner-padding:         15px 15px 31px 15px !default;
 
 //** Padding applied to the modal title
-$modal-title-padding:         15px !default;
+$modal-title-padding:         31px 15px 15px 15px !default;
 //** Modal title line-height
 $modal-title-line-height:     $line-height-base !default;
 
@@ -612,7 +612,7 @@ $modal-backdrop-bg:           #000 !default;
 //** Modal backdrop opacity
 $modal-backdrop-opacity:      .5 !default;
 //** Modal header border color
-$modal-header-border-color:   #e5e5e5 !default;
+$modal-header-border-color:   transparent !default;
 //** Modal footer border color
 $modal-footer-border-color:   $modal-header-border-color !default;
 

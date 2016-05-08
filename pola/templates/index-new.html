@@ -1,0 +1,387 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Pola. Zabierz ją na zakupy</title>
+
+    <link href="{% static "css/landing.min.css"%}" rel="stylesheet">
+
+    <meta property="og:title" content="Pola. Zabierz ją na zakupy" />
+    <meta property="og:description" content="Masz dość masówki globalnych koncernów? Szukasz lokalnych firm tworzących unikalne produkty? Pola pomoże Ci odnaleźć polskie wyroby. Zabierając Polę na zakupy odnajdujesz produkty “z duszą” i wspierasz polską gospodarkę. Zeskanuj kod kreskowy z dowolnego produktu i dowiedz się więcej o firmie, która go wyprodukowała. Pola powie Ci, czy dany producent opiera się na polskim kapitale, ma u nas swoją produkcję, tworzy wykwalifikowane miejsca pracy, jest częścią zagranicznego koncernu." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:image" content="{% static "images/og_image.png" %}" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pola_app">
+    <meta name="twitter:title" content="Pola. Zabierz ją na zakupy">
+    <meta name="twitter:description" content="Masz dość masówki globalnych koncernów? Szukasz lokalnych firm tworzących unikalne produkty? Pola pomoże Ci odnaleźć polskie wyroby. Zabierając Polę na zakupy odnajdujesz produkty “z duszą” i wspierasz polską gospodarkę. Zeskanuj kod kreskowy z dowolnego produktu i dowiedz się więcej o firmie, która go wyprodukowała. Pola powie Ci, czy dany producent opiera się na polskim kapitale, ma u nas swoją produkcję, tworzy wykwalifikowane miejsca pracy, jest częścią zagranicznego koncernu.">
+    <meta name="twitter:image" content="{% static "images/og_image.png" %}">
+
+    <meta name="apple-itunes-app" content="app-id=1038401148">
+
+    <!-- Generated at http://realfavicongenerator.net/-->
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static "favicons/apple-touch-icon-57x57.png" %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static "favicons/apple-touch-icon-60x60.png" %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static "favicons/apple-touch-icon-72x72.png" %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static "favicons/apple-touch-icon-76x76.png" %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static "favicons/apple-touch-icon-114x114.png" %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static "favicons/apple-touch-icon-120x120.png" %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static "favicons/apple-touch-icon-144x144.png" %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static "favicons/apple-touch-icon-152x152.png" %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon-180x180.png" %}">
+    <link rel="icon" type="image/png" href="{% static "favicons/favicon-32x32.png" %}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{% static "favicons/android-chrome-192x192.png" %}" sizes="192x192">
+    <link rel="icon" type="image/png" href="{% static "favicons/favicon-96x96.png" %}" sizes="96x96">
+    <link rel="icon" type="image/png" href="{% static "favicons/favicon-16x16.png" %}" sizes="16x16">
+    <link rel="manifest" href="{% static "favicons/manifest.json" %}">
+    <link rel="mask-icon" href="{% static "favicons/safari-pinned-tab.svg" %}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="{%  static "/mstile-144x144.png" %}">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      WebFontConfig = {
+        google: {
+          families: ['Lato:400,300,100:latin,latin-ext']
+      }
+  };
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
+</head>
+<body>
+    <div id="svg-container">
+    </div>
+    <div class="header">
+        <div class="top-bar">
+            <div class="container">
+                <div class="top-bar-nav top-bar-main">
+                    <ul>
+                        <li><a href="#about">O Poli</a></li>
+                        <li><a href="#methodology">Metodologia</a></li>
+                        <li><a href="#partners">Partnerzy</a></li>
+                        <li><a href="#team">Zespół</a></li>
+                    </ul>
+                </div>
+                <div class="top-bar-nav top-bar-social">
+                    <ul>
+                        <li>
+                            <a href="mailto:kontakt@pola-app.pl">
+                                <svg role="img" class="icon" title="Mail">
+                                    <use xlink:href="#mail"/>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com/app.pola">
+                                <svg role="img" class="icon" title="Facebook">
+                                    <use xlink:href="#facebook"/>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/pola_app">
+                                <svg role="img" class="icon" title="Twitter">
+                                    <use xlink:href="#twitter"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="header-mobile visible-sm-block visible-xs-block">
+                <svg role="img" class="icon header-logo" title="Pola">
+                    <use xlink:href="#logo"/>
+                </svg>
+                <h1 class="page-title">Zabierz ją na zakupy</h1>
+                <div class="social-bar">
+                    <ul>
+                        <li>
+                            <a href="mailto:kontakt@pola-app.pl">
+                                <svg role="img" class="icon" title="Mail">
+                                    <use xlink:href="#mail"/>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com/app.pola">
+                                <svg role="img" class="icon" title="Facebook">
+                                    <use xlink:href="#facebook"/>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/pola_app">
+                                <svg role="img" class="icon" title="Twitter">
+                                    <use xlink:href="#twitter"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mockup">
+                    <img src="{%  static "images/mockup.png" %}" alt="" class="mockup-img">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ul class="download-links visible-xs-block visible-sm-block ">
+            <li>
+                <a href="https://play.google.com/store/apps/details?id=pl.pola_app"><img src="{% static  "images/badge-googleplay.png" %}" alt="" ></a>
+            </li>
+            <li>
+                <a href="https://itunes.apple.com/us/app/pola.-zabierz-ja-na-zakupy/id1038401148?ls=1&mt=8"><img src="{% static "images/badge-appstore.png"%}" alt="" ></a>
+            </li>
+            <li>
+                <a href="https://www.microsoft.com/pl-pl/store/apps/pola/9nblggh697n1"><img src="{% static "images/badge-windows-phone.png" %}" alt="" ></a>
+            </li>
+        </ul>
+        <div class="row hidden-xs hidden-sm header-desktop">
+            <div class="col-md-3">
+                <div class="mockup">
+                    <img src="{% static "images/mockup.png"%}" alt="" class="mockup-img">
+                </div>
+            </div>
+            <div class="col-md-9">
+                <svg role="img" class="icon header-logo" title="Pola">
+                    <use xlink:href="#logo"/>
+                </svg>
+                <h1>Pola. Zabierz ją na zakupy</h1>
+                <ul class="download-links hidden-xs hidden-sm ">
+                    <li>
+                        <a href="https://play.google.com/store/apps/details?id=pl.pola_app"><img src="{% static "images/badge-googleplay.png" %}" alt="" ></a>
+                    </li>
+                    <li>
+                        <a href="https://itunes.apple.com/us/app/pola.-zabierz-ja-na-zakupy/id1038401148?ls=1&mt=8"><img src="{% static "images/badge-appstore.png" %}" alt="" ></a>
+                    </li>
+                    <li>
+                        <a href="https://www.microsoft.com/pl-pl/store/apps/pola/9nblggh697n1"><img src="{% static "images/badge-windows-phone.png" %}" alt="" ></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="section" id="search">
+                <h2>Wyszukiwarka</h2>
+                <div class="row">
+                    <div class="col-xs-12 col-md-push-3 col-md-6">
+                        <form method="get" action="/" class="search-form">
+                            <label for="field_search" class="sr-only">Nazwa firmy lub kod kreskowy</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary js-search-camera" type="button" title="Szukaj przez kod">
+                                        <svg role="img" class="icon">
+                                            <use xlink:href="#barcode"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                                <input id="field_search" type="text" class="form-control search-input" placeholder="Firma lub kod kreskowy">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary js-search" type="submit" title="Szukaj">
+                                        <svg role="img" class="icon">
+                                            <use xlink:href="#magnifier"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="search-view">
+                    <h3>Wyniki wyszukiwań</h3>
+                    <ul class="search-list"></ul>
+                    <div class="search-message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="end-page"></div>
+
+<div class="modal fade" id="camera-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Wyszukiwanie przez zdjęcie</h4>
+            </div>
+            <div class="modal-body">
+                <div class="search-viewport"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var path_config = {
+        symbols: '{% static "symbols.svg" %}',
+    };
+</script>
+<script src="{% static "js/landing.js" %}"></script>
+<script src="https://serratus.github.io/quaggaJS/examples/js/quagga.js" type="text/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>
+<style type="text/css" >
+.search-viewport {
+  width: auto;
+}
+
+.search-viewport canvas, video {
+  width: 640px;
+  max-width: 100%;
+}
+.search-viewport canvas.drawingBuffer, video.drawingBuffer {
+  margin-left: -640px;
+  display: none;
+}
+</style>
+<script type="text/javascript">
+   (function($){
+        var App = {
+            init: function (camera) {
+                this.camera = camera;
+                this.main = $('#search');
+                this.form = this.main.find('form');
+                this.input = this.form.find('.search-input');
+                this.cameraBtn = this.form.find('.js-search-camera');
+                this.search = this.form.find('.js-search');
+                this.view = this.main.find('.search-view');
+                this.list = this.view.find('.search-list');
+                this.message = this.view.find('.search-message');
+                this.view.hide();
+                console.log(this);
+                this.registerListener();
+            },
+            registerListener: function () {
+                this.form.on('submit', this.onSubmit.bind(this));
+                this.cameraBtn.on('click', this.onCameraBtn.bind(this));
+            },
+            onCameraBtn: function () {
+                this.camera.find(this.onCameraFind.bind(this));
+            },
+            onCameraFind: function (code) {
+                this.input.val(code);
+                this.doSearch(code)
+            },
+            onSubmit: function(ev) {
+                ev.preventDefault();
+                var value = this.input.val();
+                this.doSearch(value);
+                return false;
+            },
+            doSearch: function(keyword) {
+                console.log("doSearch", arguments);
+                $.getJSON('{% url 'api:front_search' %}?q=' + keyword)
+                .then(
+                    this.handleResult.bind(this),
+                    this.handleError.bind(this)
+                    );
+            },
+            handleResult: function (response) {
+                this.view.show();
+                if(response.status == 'ok'){
+                    console.log(response.data.length);
+                    if(response.data.length > 0){
+                        this.showResult(response.data);
+                    }else{
+                        this.showMessage("Niestety nie znależlismy producenta.");
+                    }
+                }else{
+                    this.showMessage(response.message);
+                }
+            },
+            showMessage: function (msg) {
+                this.message.show().text(msg);
+                this.list.empty().hide();
+            },
+            showResult: function (items) {
+                this.message.hide();
+                this.list.empty().append(
+                    $.map(items, function (item){
+                        var brands = (item.brands || []).join(', ');
+                        return '<li><a href="#">' + item.name + '</a> ' + brands + '</li>';
+                    })
+                );
+            },
+            handleError: function () {
+                this.showMessage("Problemy z połączeniem");
+            }
+        };
+
+        var Camera = {
+            init: function () {
+                this.initialized = false;
+                this.listeners = [];
+                this.viewport = document.querySelector('.search-viewport');
+                $('#camera-modal').on('hidden.bs.modal', function (e) {
+                    Quagga.stop();
+                });
+            },
+            camera_init : function () {
+                this.initialized = true;
+                Quagga.init(
+                    {
+                        inputStream : {
+                            name : "Live",
+                            type : "LiveStream",
+                            target: this.viewport
+                        },
+                        decoder : {
+                            readers : ["ean_reader"],
+                            multiple: false
+                        }
+                    },
+                    (function(err) {
+                        if (err) {
+                            console.log("Quagga.callback", err);
+                            return;
+                        }
+                        this.start();
+                    }).bind(this)
+                );
+                Quagga.onProcessed(console.log.bind(console, "Quagga.onProcessed"));
+                Quagga.onDetected(function (result) {
+                    console.log("Quagga.onDetected: ", result);
+                    this.listeners.forEach(function(fn){
+                        fn(result.codeResult.code);
+                    });
+                    this.listeners = [];
+                    this.stop();
+                }.bind(this));
+            },
+            stop: function () {
+                $('#camera-modal').modal('hide');
+            },
+            start: function () {
+                $('#camera-modal').modal();
+                if(this.initialized){
+                    Quagga.start();
+                }else{
+                    this.camera_init();
+                }
+            },
+            find: function (listener) {
+                this.listeners.push(listener);
+                this.start();
+            }
+        };
+        Camera.init();
+        App.init(Camera);
+
+    }) (jQuery);
+</script>
+{% include 'partiales/google_analytics.html' %}
+</body>
+</html>

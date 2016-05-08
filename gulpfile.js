@@ -45,7 +45,8 @@ var config = (function () {
                 ],
                 landing: [
                     path.bower + "/jquery/dist/jquery.js",
-                    // path.bower + "/bootstrap-sass/assets/javascripts/bootstrap.js",
+                    path.bower + "/bootstrap-sass/assets/javascripts/bootstrap/transition.js",
+                    path.bower + "/bootstrap-sass/assets/javascripts/bootstrap/modal.js",
                     path.assets + "/js/landing/*.js"
                 ]
             },

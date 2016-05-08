@@ -307,3 +307,20 @@ h2{
         color: inherit;
     }
 }
+
+// Modal theme
+.modal-content{
+    border-radius: 0;
+}
+.modal-content:before, .modal-content:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    border-bottom: 16px solid #d8002f;
+}
+.modal-content:before {
+    top: 0;
+}
+.modal-content:after{
+    bottom: 0;
+}
