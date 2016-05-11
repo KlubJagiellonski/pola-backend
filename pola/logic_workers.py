@@ -10,7 +10,7 @@ from datetime import timedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
-REQUERY_590_FREQUENCY = 7
+REQUERY_590_FREQUENCY = 1
 REQUERY_590_LIMIT = 1000
 REQUERY_ALL_FREQUENCY = 30
 REQUERY_ALL_LIMIT = 0
