@@ -11,9 +11,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
 REQUERY_590_FREQUENCY = 7
-REQUERY_590_LIMIT = 100
+REQUERY_590_LIMIT = 1000
 REQUERY_ALL_FREQUENCY = 30
-REQUERY_ALL_LIMIT = 100
+REQUERY_ALL_LIMIT = 1000
 
 # usage:
 # python manage.py shell
