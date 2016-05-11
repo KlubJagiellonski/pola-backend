@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
 REQUERY_590_FREQUENCY = 1
-REQUERY_590_LIMIT = 1000
+REQUERY_590_LIMIT = 800
 REQUERY_ALL_FREQUENCY = 30
 REQUERY_ALL_LIMIT = 0
 
@@ -27,10 +27,12 @@ def requery_590_codes():
     print "Starting requering 590 codes..."
 
     p590 = Product.objects\
-        .filter(company__isnull=True, code__startswith='590',
-                ilim_queried_at__lt=
-                timezone.now()-timedelta(days=REQUERY_590_FREQUENCY))\
-                [:REQUERY_590_LIMIT]
+        .filter(
+#        company__isnull=True,
+        code__startswith='590',
+        ilim_queried_at__lt=
+        timezone.now()-timedelta(days=REQUERY_590_FREQUENCY))\
+        [:REQUERY_590_LIMIT]
 
     requery_products(p590)
 
