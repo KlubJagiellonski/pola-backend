@@ -13,7 +13,7 @@ from django.db import transaction
 REQUERY_590_FREQUENCY = 7
 REQUERY_590_LIMIT = 1000
 REQUERY_ALL_FREQUENCY = 30
-REQUERY_ALL_LIMIT = 1000
+REQUERY_ALL_LIMIT = 0
 
 # usage:
 # python manage.py shell
