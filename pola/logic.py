@@ -180,7 +180,7 @@ def create_from_api(code, obj, product=None):
             product.name = obj_product_name
 
         if product.company:
-            if company and \
+            if company and obj_owner_name and\
                 not ilim_compare_str(product.company.name, obj_owner_name):
                 create_bot_report(product,
                                   u"Wg. najnowszego odpytania w bazie ILiM "
