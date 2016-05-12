@@ -34,6 +34,8 @@ def requery_590_codes():
         timezone.now()-timedelta(days=REQUERY_590_FREQUENCY))\
         [:REQUERY_590_LIMIT]
 
+#    p590 = products = Product.objects.filter(code='5909990022380')
+
     requery_products(p590)
 
     print "Finished requering 590 codes..."
