@@ -32,6 +32,7 @@ def requery_590_codes():
         code__startswith='590',
         ilim_queried_at__lt=
         timezone.now()-timedelta(days=REQUERY_590_FREQUENCY))\
+        .order_by('ilim_queried_at')\
         [:REQUERY_590_LIMIT]
 
 #    p590 = products = Product.objects.filter(code='5909990022380')
