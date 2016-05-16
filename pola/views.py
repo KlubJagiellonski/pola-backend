@@ -22,7 +22,6 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c = super(FrontPageView, self).get_context_data(**kwargs)
 
         c['most_popular_companies'] = (Company.objects
-                                          .with_query_count()
                                           .filter(verified=False)
                                           .order_by('-query_count')[:10])
 

@@ -65,7 +65,7 @@ class Product(models.Model):
     def recalculate_query_count():
         with connection.cursor() as cursor:
             cursor.execute(
-                'update product_product set query_count = (select count(*) '
+                'update product_product set query_count = (select count(id) '
                 'from pola_query '
                 'where pola_query.product_id=product_product.id)')
 
