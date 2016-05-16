@@ -20,7 +20,7 @@ class Client:
         self.session = requests.Session()
 
     def get_product_by_gtin(self, code):
-        url = self.host + "GetProductByGTIN"
+        url = self.host + "GetExpandedProductByGTIN"
         params = {
             'gs1Key': self.api_key,
             'gtin': Client._normalize_gtin(code)
