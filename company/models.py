@@ -2,7 +2,8 @@
 
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
-from django.db.models import Count
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
 from model_utils.managers import PassThroughManager
@@ -39,7 +40,7 @@ class CompanyQuerySet(models.query.QuerySet):
             return obj
 
     def with_query_count(self):
-        return self.annotate(query_count=Count('product__query__id'))
+        return self.annotate(query_count=Coalesce(Sum('product__query_count'),0))
 
 
 class Company(models.Model):

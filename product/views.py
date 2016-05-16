@@ -19,7 +19,7 @@ from pola.concurency import ConcurencyProtectUpdateView
 class ProductDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'code'
     model = models.Product
-    queryset = models.Product.objects.with_query_count().all()
+    queryset = models.Product.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
@@ -36,7 +36,7 @@ class ProductListView(LoginRequiredMixin, FilterView):
     model = models.Product
     filterset_class = ProductFilter
     paginate_by = 25
-    queryset = models.Product.objects.with_query_count().all()
+    queryset = models.Product.objects.all()
 
 
 class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):
