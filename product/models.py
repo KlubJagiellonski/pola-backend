@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models, transaction, connection
-from django.db.models import Count
+from django.db.models import Count, F
 from company.models import Company
 import reversion
 from model_utils.managers import PassThroughManager
@@ -57,11 +57,9 @@ class Product(models.Model):
                 save_revision([self], comment=commit_desc, user=commit_user)
             return obj
 
-    def increase_query_count(self):
-        with connection.cursor() as cursor:
-            cursor.execute('update product_product '
-                           'set query_count=query_count+1 where id=%s',
-                           [self.id])
+    def increment_query_count(self):
+        self.query_count = F('query_count') + 1
+        self.save()
 
     @staticmethod
     def recalculate_query_count():
