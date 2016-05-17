@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models, transaction, connection
-from django.db.models import Count, F
+from django.db.models import F
 from company.models import Company
 import reversion
 from model_utils.managers import PassThroughManager

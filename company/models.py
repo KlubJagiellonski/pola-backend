@@ -2,6 +2,7 @@
 
 from django.core.urlresolvers import reverse
 from django.db import models, transaction, connection
+from django.db.models import F
 from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
 from model_utils.managers import PassThroughManager
