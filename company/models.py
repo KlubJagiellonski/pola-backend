@@ -43,8 +43,7 @@ class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=128, null=True, blank=True,
                             db_index=True,
-                            verbose_name=
-                            _(u"Nazwa (pobrana z ILiM)"))
+                            verbose_name=_(u"Nazwa (pobrana z ILiM)"))
     official_name = models.CharField(max_length=128, blank=True, null=True,
                                      verbose_name=_(u"Nazwa rejestrowa"))
     common_name = models.CharField(max_length=128, blank=True,
@@ -56,8 +55,8 @@ class Company(models.Model):
     plWorkers = IntegerRangeField(
         verbose_name=_(u"Miejsce produkcji"), min_value=0,
         max_value=100, null=True, blank=True,
-        choices=((0,_(u"0 - Nie produkuje w Polsce")),
-                 (100,_(u"100 - Produkuje w Polsce"))))
+        choices=((0, _(u"0 - Nie produkuje w Polsce")),
+                 (100, _(u"100 - Produkuje w Polsce"))))
     plRnD = IntegerRangeField(
         verbose_name=_(u"Miejsca pracy w BiR w Polsce"), min_value=0,
         max_value=100, null=True, blank=True,
@@ -73,11 +72,11 @@ class Company(models.Model):
         max_value=100, null=True, blank=True,
         choices=((0, _(u"0 - Firma jest częścią zagranicznego koncernu")),
                  (100,
-                 _(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
+                  _(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
 
     description = models.TextField(
         _(u"Opis producenta"), null=True, blank=True)
-    sources  = models.TextField(_(u"Źródła"), null=True, blank=True)
+    sources = models.TextField(_(u"Źródła"), null=True, blank=True)
 
     verified = models.BooleanField(default=False,
                                    verbose_name=_("Dane zweryfikowane"),
@@ -138,25 +137,25 @@ class Company(models.Model):
 
     def js_plCapital_notes(self):
         return '' if not self.plCapital_notes else\
-            self.plCapital_notes.replace('\n', '\\n').replace('\r','\\r')
+            self.plCapital_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plWorkers_notes(self):
         return '' if not self.plWorkers_notes else\
-            self.plWorkers_notes.replace('\n', '\\n').replace('\r','\\r')
+            self.plWorkers_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plRnD_notes(self):
         return '' if not self.plRnD_notes else\
-            self.plRnD_notes.replace('\n', '\\n').replace('\r','\\r')
+            self.plRnD_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plRegistered_notes(self):
         return '' if not self.plRegistered_notes else\
-            self.plRegistered_notes.replace('\n', '\\n').replace('\r','\\r')
+            self.plRegistered_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plNotGlobEnt_notes(self):
         return '' if not self.plNotGlobEnt_notes else\
-            self.plNotGlobEnt_notes.replace('\n', '\\n').replace('\r','\\r')
+            self.plNotGlobEnt_notes.replace('\n', '\\n').replace('\r', '\\r')
 
-    def get_sources(self, raise_exp = True):
+    def get_sources(self, raise_exp=True):
         ret = {}
         if not self.sources:
             return ret
@@ -171,7 +170,7 @@ class Company(models.Model):
                 if raise_exp:
                     raise ValidationError(u'Pole >Źródła< powinno składać się '
                                           u'linii zawierających tytuł odnośnika'
-                                      u' i odnośnik odzielone znakiem | (pipe)')
+                                          u' i odnośnik odzielone znakiem | (pipe)')
                 else:
                     continue
             if s[0] in ret:

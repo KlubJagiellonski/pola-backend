@@ -19,6 +19,7 @@ class SetRemoteAddrFromForwardedFor(object):
     anybody can "fake" their IP address. Only use this when you can absolutely
     trust the value of HTTP_X_FORWARDED_FOR.
     """
+
     def process_request(self, request):
         try:
             real_ip = request.META['HTTP_X_FORWARDED_FOR']
@@ -44,7 +45,7 @@ class HostnameRedirectMiddleware(object):
     def process_request(self, request):
         server_name = request.META['HTTP_HOST']
         catchall = getattr(settings,
-            'SECURE_SSL_HOST', None)
+                           'SECURE_SSL_HOST', None)
         # if catchall hostname is set, verify that the current
         # hostname is valid, and redirect if not
         if catchall:

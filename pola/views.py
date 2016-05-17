@@ -15,6 +15,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import get_default_timezone
 from django.db import connection
 
+
 class FrontPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-cms.html'
 
@@ -22,9 +23,8 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c = super(FrontPageView, self).get_context_data(**kwargs)
 
         c['most_popular_companies'] = (Company.objects
-                                          .filter(verified=False)
-                                          .order_by('-query_count')[:10])
-
+                                       .filter(verified=False)
+                                       .order_by('-query_count')[:10])
         c['no_of_companies'] = Company.objects.count()
         c['no_of_not_verified_companies'] = Company.objects\
             .filter(verified=False).count()
@@ -38,13 +38,13 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_reports'] = Report.objects.count()
 
         c['most_popular_590_products'] =  (Product.objects
-                                          .filter(company__isnull=True,
-                                                  code__startswith='590')
+                                           .filter(company__isnull=True,
+                                                   code__startswith='590')
                                           .order_by('-query_count')[:10])
         c['no_of_590_products'] = (Product.objects
-                                                .filter(company__isnull=True,
-                                                        code__startswith='590')
-                                                .count())
+                                   .filter(company__isnull=True,
+                                           code__startswith='590')
+                                   .count())
 
         c['most_popular_not_590_products'] =\
             (Product.objects.filter(company__isnull=True)
@@ -138,14 +138,14 @@ class EditorsStatsPageView(QueryStatsPageView):
     def query_log(self, id):
         return self.execute_query(
             "select to_char(reversion_revision.date_created, \'YYYY-MM\'),"
-                "username, count(*) "
+            "username, count(*) "
             "from users_user "
             "join reversion_revision on users_user.id=user_id "
             "join reversion_version on reversion_revision.id = "
-                "reversion_version.revision_id "
+            "reversion_version.revision_id "
             "where reversion_version.content_type_id=%s "
             "group by to_char(reversion_revision.date_created, \'YYYY-MM\'), "
-                "username "
+            "username "
             "order by 1 desc, 3 desc;", [id])
 
     def get_context_data(self, *args, **kwargs):
@@ -155,7 +155,7 @@ class EditorsStatsPageView(QueryStatsPageView):
         c['product_log'] = self.query_log(15)
         c['report_log'] = self.execute_query(
             "select to_char(report_report.resolved_at, 'YYYY-MM'), username, "
-                "count(*) "
+            "count(*) "
             "from users_user "
             "join report_report on users_user.id=report_report.resolved_by_id "
             "group by to_char(report_report.resolved_at, 'YYYY-MM'), username "
@@ -174,6 +174,6 @@ class AdminStatsPageView(QueryStatsPageView):
             "select to_char(ilim_queried_at, 'YYYY-MM-DD'), count(*) "
             "from product_product "
             "group by to_char(ilim_queried_at, 'YYYY-MM-DD') "
-            "order by 1 desc",None)
+            "order by 1 desc", None)
 
         return c
