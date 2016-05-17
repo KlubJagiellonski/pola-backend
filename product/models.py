@@ -58,16 +58,10 @@ class Product(models.Model):
             return obj
 
     def increment_query_count(self):
-        self.query_count = F('query_count') + 1
-        self.save()
-
-    @staticmethod
-    def recalculate_query_count():
         with connection.cursor() as cursor:
             cursor.execute(
-                'update product_product set query_count = (select count(id) '
-                'from pola_query '
-                'where pola_query.product_id=product_product.id)')
+                'update product_product set query_count = query_count +1 '
+                'where id=%s', [self.id])
 
     class Meta:
         verbose_name = _("Produkt")

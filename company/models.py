@@ -109,8 +109,10 @@ class Company(models.Model):
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
     def increment_query_count(self):
-        self.query_count = F('query_count') + 1
-        self.save()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'update company_company set query_count = query_count +1 '
+                'where id=%s', [self.id])
 
     @staticmethod
     def recalculate_query_count():
