@@ -27,7 +27,17 @@ class ProductFilter(NoHelpTextFilterMixin,
 
     class Meta:
         model = Product
-        fields = ['name', 'code', 'company_empty', 'company']
+        #         fields = {
+        #     'nip': ['icontains'],
+        #     'name': ['icontains'],
+        #     'official_name': ['icontains'],
+        #     'common_name': ['icontains'],
+        #     'Editor_notes': ['icontains'],
+        # }
+        fields = {
+            'name': ['icontains'],
+            'code': ['icontains'],
+        }
         order_by = (
             ('name', _('Nazwa (A-Z)')),
             ('-name', _('Nazawa (Z-A)')),
