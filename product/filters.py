@@ -27,13 +27,6 @@ class ProductFilter(NoHelpTextFilterMixin,
 
     class Meta:
         model = Product
-        #         fields = {
-        #     'nip': ['icontains'],
-        #     'name': ['icontains'],
-        #     'official_name': ['icontains'],
-        #     'common_name': ['icontains'],
-        #     'Editor_notes': ['icontains'],
-        # }
         fields = {
             'name': ['icontains'],
             'code': ['icontains'],
