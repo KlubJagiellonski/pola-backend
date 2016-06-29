@@ -8,11 +8,12 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from decorator_include import decorator_include
-from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView
+from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView, SearchView
 
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='index.html'), name="home"),
+    url(r'^search$', SearchView.as_view(), name='search'),
     url(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),

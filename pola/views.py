@@ -1,19 +1,45 @@
-from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_text
+from django.utils import timezone
+
+from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic.list import ListView
 from django.views.generic import TemplateView
-from django.views.generic.detail import (
-    BaseDetailView, SingleObjectTemplateResponseMixin)
+from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResponseMixin
+from django.db import connection
+
 from braces.views import LoginRequiredMixin
 from company.models import Company
 from product.models import Product
 from report.models import Report
 from pola.models import Stats
-from django.utils import timezone
+from pola.forms import SearchForm
 from datetime import datetime, timedelta
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.timezone import get_default_timezone
-from django.db import connection
+
+
+class SearchView(ListView):
+    template_name = 'search.html'
+    form_class = SearchForm
+    model = Product
+    paginate_by = 10
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request, args, kwargs)
+
+    def get_queryset(self):
+        form = self.form_class(self.request.POST)
+        if form.is_valid():
+            return Product.objects.filter(name__icontains=form.cleaned_data['query']).prefetch_related('company')
+        return Product.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data(**kwargs)
+        context.update({
+            'form': self.form_class(self.request.POST or None),
+            'query': self.request.POST.get('query')
+        })
+        return context
 
 
 class FrontPageView(LoginRequiredMixin, TemplateView):
@@ -100,7 +126,7 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
         for i in range(0, 30):
             midnight = datetime(
                 date.year, date.month, date.day,
-                tzinfo=get_default_timezone()) + \
+                tzinfo=timezone.get_default_timezone()) + \
                 timedelta(days=1)
             try:
                 stat = Stats.objects.get(

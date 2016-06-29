@@ -2207,6 +2207,14 @@ a {
   margin: 0 auto;
 }
 
+.pagination {
+  text-align: center;
+  margin: 15px 0;
+}
+.pagination .page-links form {
+  display: inline;
+}
+
 .social-bar ul {
   display: block;
   margin: 0;
@@ -2274,9 +2282,8 @@ a {
 
 @media (min-width: 992px) {
   .team {
-    -webkit-column-count: 2;
-       -moz-column-count: 2;
-            column-count: 2;
+    -moz-column-count: 2;
+         column-count: 2;
     margin-bottom: -2em;
   }
 }
@@ -2288,8 +2295,7 @@ a {
 .team-group {
   overflow: hidden;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-          break-inside: avoid-column;
+  break-inside: avoid-column;
   padding-bottom: 2em;
 }
 
@@ -2352,3 +2358,11 @@ h2 {
   margin-bottom: 45px;
 }
 
+.notice-support {
+  background: #d8002f;
+  color: white;
+  padding: 1em 0;
+}
+.notice-support a {
+  color: inherit;
+}

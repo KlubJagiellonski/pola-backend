@@ -164,6 +164,16 @@ a{
     margin: 0 auto;
 }
 
+.pagination{
+    text-align: center;
+    margin: 15px 0;
+
+    .page-links{
+        form{
+            display: inline;
+        }
+    }
+}
 
 // Social bar.
 .social-bar{

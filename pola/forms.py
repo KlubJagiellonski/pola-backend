@@ -76,6 +76,10 @@ class ReadOnlyFieldsMixin(object):
         return cleaned_data
 
 
+class SearchForm(forms.Form):
+    query = forms.CharField()
+
+
 class AutocompleteChoiceField(forms.ModelChoiceField):
 
     def __init__(self, autocomplete_name, *args, **kwargs):
