@@ -12,7 +12,6 @@ from pola.concurency import concurency
 
 
 class IntegerRangeField(models.IntegerField):
-
     def __init__(self, min_value=None, max_value=None, *args, **kwargs):
         super(models.IntegerField, self).__init__(*args, **kwargs)
         self.min_value, self.max_value = min_value, max_value
@@ -25,17 +24,14 @@ class IntegerRangeField(models.IntegerField):
 
 
 class CompanyQuerySet(models.query.QuerySet):
-
     def get_or_create(self, commit_desc=None, commit_user=None,
                       *args, **kwargs):
         if not commit_desc:
             return super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(
-                manage_manually=True):
+        with transaction.atomic(), reversion.create_revision(manage_manually=True):
             obj = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
-            reversion.default_revision_manager.\
-                save_revision([obj[0]], comment=commit_desc, user=commit_user)
+            reversion.default_revision_manager.save_revision([obj[0]], comment=commit_desc, user=commit_user)
             return obj
 
 
@@ -104,7 +100,6 @@ class Company(models.Model):
                                verbose_name=_(u"Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
-
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
 
     def increment_query_count(self):
@@ -121,7 +116,6 @@ class Company(models.Model):
                 'from product_product '
                 'where product_product.company_id=company_company.id)')
 
-
     def to_dict(self):
         dict = model_to_dict(self)
         return dict
@@ -136,23 +130,23 @@ class Company(models.Model):
         return self.common_name or self.official_name or self.name
 
     def js_plCapital_notes(self):
-        return '' if not self.plCapital_notes else\
+        return '' if not self.plCapital_notes else \
             self.plCapital_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plWorkers_notes(self):
-        return '' if not self.plWorkers_notes else\
+        return '' if not self.plWorkers_notes else \
             self.plWorkers_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plRnD_notes(self):
-        return '' if not self.plRnD_notes else\
+        return '' if not self.plRnD_notes else \
             self.plRnD_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plRegistered_notes(self):
-        return '' if not self.plRegistered_notes else\
+        return '' if not self.plRegistered_notes else \
             self.plRegistered_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def js_plNotGlobEnt_notes(self):
-        return '' if not self.plNotGlobEnt_notes else\
+        return '' if not self.plNotGlobEnt_notes else \
             self.plNotGlobEnt_notes.replace('\n', '\\n').replace('\r', '\\r')
 
     def get_sources(self, raise_exp=True):
@@ -186,7 +180,7 @@ class Company(models.Model):
     def clean(self, *args, **kwargs):
         if self.verified:
             YOU_CANT_SET_VERIFIED = u'Nie możesz oznaczyć producenta jako ' \
-                u'zweryfikowany jeśli pole >{}< jest nieustalone'
+                                    u'zweryfikowany jeśli pole >{}< jest nieustalone'
             if self.plCapital is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
                                       format(u'udział kapitału polskiego'))
@@ -211,15 +205,14 @@ class Company(models.Model):
         if not commit_desc:
             return super(Company, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.\
-                create_revision(manage_manually=True):
+        with transaction.atomic(), reversion.create_revision(manage_manually=True):
             obj = super(Company, self).save(*args, **kwargs)
-            reversion.default_revision_manager.\
-                save_revision([self], comment=commit_desc, user=commit_user)
+            reversion.default_revision_manager.save_revision([self], comment=commit_desc, user=commit_user)
             return obj
 
     class Meta:
         verbose_name = _(u"Producent")
         verbose_name_plural = _(u"Producenci")
+
 
 reversion.register(Company)
