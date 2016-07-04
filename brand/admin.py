@@ -4,10 +4,10 @@ from django.contrib import admin
 from .models import Brand
 
 
-class ReportAdmin(admin.ModelAdmin):
+class BrandAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'company',
     )
     list_filter = ('company',)
-admin.site.register(Brand, ReportAdmin)
+admin.site.register(Brand, BrandAdmin)
