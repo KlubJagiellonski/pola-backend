@@ -139,18 +139,14 @@ class Company(models.Model):
     def locked_by(self):
         return concurency.locked_by(self)
 
-    def get_brands(self, comma_seperated=True):
-        names = [x.name for x in self.brand_set.all()]
-        if comma_seperated:
-            return ', '.join(names)
-        return names
+    def get_brands(self):
+        return set([x.name for x in self.brand_set.all()])
 
     def set_brands(self, new_names_str):
         new_names = [x.strip() for x in new_names_str.split(',')]
-        curr_names = self.get_brands(comma_seperated=False)
 
-        new_names = Set(new_names)
-        curr_names = Set(curr_names)
+        new_names = set(new_names)
+        curr_names = set(self.get_brands())
 
         to_delete = curr_names - new_names
         to_add = new_names - curr_names

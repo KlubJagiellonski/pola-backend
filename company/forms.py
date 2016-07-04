@@ -20,7 +20,8 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
     def __init__(self, *args, **kwargs):
         super(CompanyForm, self).__init__(*args, **kwargs)
         if self.instance:
-            self.fields['brands'].initial = self.instance.get_brands()
+            self.fields['brands'].initial = ', '.join(
+                self.instance.get_brands())
 
     def save(self, *args, **kwargs):
         self.instance.set_brands(self.cleaned_data['brands'])
