@@ -41,6 +41,9 @@ var config = (function () {
                     path.bower + '/jquery/dist/jquery.js',
                     path.bower + '/bootstrap-sass/assets/javascripts/bootstrap.js',
                     path.bower + '/mousetrap/mousetrap.js',
+                    path.bower + "/microplugin/src/microplugin.js", 
+                    path.bower + "/sifter/sifter.js", 
+                    path.bower + "/selectize/dist/js/selectize.js", 
                     path.assets + '/js/*.js'
                 ],
                 landing: [
