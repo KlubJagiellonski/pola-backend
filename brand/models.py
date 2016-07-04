@@ -1,4 +1,6 @@
+from django.core.urlresolvers import reverse
 from django.db import models
+
 from company.models import Company
 
 
@@ -9,3 +11,8 @@ class Brand(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        if self.company_id:
+            return reverse('company:detail', args=[self.company_id])
+        return None
