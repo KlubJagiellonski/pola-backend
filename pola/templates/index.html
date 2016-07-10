@@ -327,6 +327,9 @@
     var path_config = {
         symbols: '{% static "symbols.svg" %}',
     };
+    var url_config = {
+        api_front_search: '{% url 'api:front_search' %}'
+    }
 </script>
 {% if debug %}
 <script src="{% static 'js/landing.js' %}"></script>

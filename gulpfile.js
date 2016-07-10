@@ -41,21 +41,21 @@ var config = (function () {
                     path.bower + '/jquery/dist/jquery.js',
                     path.bower + '/bootstrap-sass/assets/javascripts/bootstrap.js',
                     path.bower + '/mousetrap/mousetrap.js',
-                    path.bower + "/microplugin/src/microplugin.js", 
-                    path.bower + "/sifter/sifter.js", 
-                    path.bower + "/selectize/dist/js/selectize.js", 
+                    path.bower + "/microplugin/src/microplugin.js",
+                    path.bower + "/sifter/sifter.js",
+                    path.bower + "/selectize/dist/js/selectize.js",
                     path.assets + '/js/*.js'
                 ],
                 landing: [
                     path.bower + "/jquery/dist/jquery.js",
                     path.bower + "/bootstrap-sass/assets/javascripts/bootstrap/transition.js",
                     path.bower + "/bootstrap-sass/assets/javascripts/bootstrap/modal.js",
-                    path.assets + "/js/landing/*.js"
+                    path.assets + "/js/landing/{*.js,*.es6}"
                 ]
             },
             output: path.static + "/js/",
             watch: [
-                path.assets + '/js/*.js'
+                path.assets + '/js/{*.js,*.es6}'
             ]
         },
         icons: {
@@ -92,10 +92,14 @@ gulp.task('icons', function () {
 });
 
 gulp.task('js', function () {
+    var es6 = $.filter(['**/*.es6'], {restore: true});
     var streams = merge();
     for(var name in config.script.input){
         var filename = name + '.js';
         var stream = gulp.src(config.script.input[name])
+            .pipe(es6)
+            .pipe($.babel({ presets: ['es2015'] }))
+            .pipe(es6.restore)
             .pipe($.concat(filename))
             .pipe(gulp.dest(config.script.output))
             .pipe(livereload())

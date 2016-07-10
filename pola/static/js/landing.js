@@ -10280,3 +10280,172 @@ $(function() {
     xhr.open('get', path_config.symbols, true);
     xhr.send();
 })(document)
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+(function ($) {
+    var App = function () {
+        function App(camera) {
+            _classCallCheck(this, App);
+
+            this.camera = camera;
+            this.main = $('#search');
+            this.form = this.main.find('form');
+            this.input = this.form.find('.search-input');
+            this.cameraBtn = this.form.find('.js-search-camera');
+            this.search = this.form.find('.js-search');
+            this.view = this.main.find('.search-view');
+            this.list = this.view.find('.search-list');
+            this.message = this.view.find('.search-message');
+            this.registerListener();
+            this.view.hide();
+        }
+
+        _createClass(App, [{
+            key: 'registerListener',
+            value: function registerListener() {
+                this.form.on('submit', this.onSubmit.bind(this));
+                this.cameraBtn.on('click', this.onCameraBtn.bind(this));
+            }
+        }, {
+            key: 'onCameraBtn',
+            value: function onCameraBtn() {
+                this.camera.find(this.onCameraFind.bind(this));
+            }
+        }, {
+            key: 'onCameraFind',
+            value: function onCameraFind(code) {
+                this.input.val(code);
+                this.doSearch(code);
+            }
+        }, {
+            key: 'onSubmit',
+            value: function onSubmit(ev) {
+                ev.preventDefault();
+                var value = this.input.val();
+                this.doSearch(value);
+                return false;
+            }
+        }, {
+            key: 'doSearch',
+            value: function doSearch(keyword) {
+                $.getJSON(url_config.api.front_search + encodeURIComponent(keyword)).then(this.handleResult.bind(this), this.handleError.bind(this));
+            }
+        }, {
+            key: 'handleResult',
+            value: function handleResult(response) {
+                this.view.show();
+                if (response.status == 'ok') {
+                    if (response.data.length > 0) {
+                        this.showResult(response.data);
+                    } else {
+                        this.showMessage('Niestety nie znaleźlismy producenta.');
+                    }
+                } else {
+                    this.showMessage(response.message);
+                }
+            }
+        }, {
+            key: 'showMessage',
+            value: function showMessage(msg) {
+                this.message.show().text(msg);
+                this.list.empty().hide();
+            }
+        }, {
+            key: 'showResult',
+            value: function showResult(items) {
+                this.message.hide();
+                this.list.show();
+                this.list.empty().append($.map(items, function (item) {
+                    var brands = (item.brands || []).join(', ');
+                    return '<li><a href="#">' + item.name + '</a> ' + brands + '</li>';
+                }));
+            }
+        }, {
+            key: 'handleError',
+            value: function handleError() {
+                this.showMessage('Problemy z połączeniem');
+            }
+        }]);
+
+        return App;
+    }();
+
+    ;
+
+    var Camera = function () {
+        function Camera() {
+            _classCallCheck(this, Camera);
+
+            this.initialized = false;
+            this.listeners = [];
+            this.viewport = document.querySelector('.search-viewport');
+            $('#camera-modal').on('hidden.bs.modal', function (e) {
+                Quagga.stop();
+            });
+        }
+
+        _createClass(Camera, [{
+            key: 'camera_init',
+            value: function camera_init() {
+                var _this = this;
+
+                this.initialized = true;
+                Quagga.init({
+                    inputStream: {
+                        name: 'Live',
+                        type: 'LiveStream',
+                        target: this.viewport
+                    },
+                    decoder: {
+                        readers: ['ean_reader'],
+                        multiple: false
+                    }
+                }, function (err) {
+                    if (err) {
+                        return;
+                    }
+                    _this.start();
+                });
+                Quagga.onDetected(function (result) {
+                    _this.listeners.forEach(function (fn) {
+                        return fn(result.codeResult.code);
+                    });
+                    _this.listeners = [];
+                    _this.stop();
+                });
+            }
+        }, {
+            key: 'stop',
+            value: function stop() {
+                $('#camera-modal').modal('hide');
+            }
+        }, {
+            key: 'start',
+            value: function start() {
+                $('#camera-modal').modal();
+                if (this.initialized) {
+                    Quagga.start();
+                } else {
+                    this.camera_init();
+                }
+            }
+        }, {
+            key: 'find',
+            value: function find(listener) {
+                this.listeners.push(listener);
+                this.start();
+            }
+        }]);
+
+        return Camera;
+    }();
+
+    ;
+    var camera = new Camera();
+    var app = new App(App);
+})(jQuery);
