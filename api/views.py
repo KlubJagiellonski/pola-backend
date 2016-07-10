@@ -200,6 +200,7 @@ def attach_file(request):
 
 
 class SearchAPI(views.JSONResponseMixin, View):
+    @ratelimit(key='ip', rate='5/s', block=True)
     def get(self, request, *args, **kwargs):
         keyword = request.GET.get('q')
         if not keyword:
@@ -214,10 +215,6 @@ class SearchAPI(views.JSONResponseMixin, View):
                      'product': Product.objects.search_by_name(keyword)}
 
         serialized = []
-        # [{    'id': item.id,
-        #     'name': str(item),
-        #     'type': 'company',
-        # } for item in companies]
 
         for type, query in querysets.iteritems():
             serialized.extend([{'id': item.id, 'name': str(item), 'type': type} for item in query])
