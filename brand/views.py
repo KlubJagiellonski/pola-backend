@@ -5,12 +5,14 @@ from django.http import Http404
 from django.shortcuts import render_to_response
 from django_filters.views import FilterView
 
-from brand.models import Brand
+from .models import Brand
+from .filters import BrandFilter
 from company.models import Company
 
 
 class BrandListView(LoginRequiredMixin, FilterView):
     model = Brand
+    filterset_class = BrandFilter
     paginate_by = 25
 
 
