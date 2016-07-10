@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.core.urlresolvers import reverse
-from django.db import models, transaction
 from django.db.models import Count
 from django.db.models import Q
+from django.db import models, transaction, connection
+from django.db.models import F
 from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
 from model_utils.managers import PassThroughManager
@@ -44,13 +45,7 @@ class CompanyQuerySet(models.query.QuerySet):
         where = Q(name__icontains=keyword)
         where = where | Q(official_name__icontains=keyword)
         where = where | Q(common_name__icontains=keyword)
-        where = where | Q(brand__name__icontains=keyword)
-        if self.isEan(keyword):
-                where = where | Q(product__code=keyword)
-        return self.filter(where).distinct('id').prefetch_related('brand_set')
-
-    def isEan(self, keyword):
-        return keyword.isdigit() and (len(keyword) == 13 or len(keyword) == 8)
+        return self.filter(where).distinct('id')
 
     def with_query_count(self):
         return self.annotate(query_count=Count('product__query__id'))
@@ -126,8 +121,25 @@ class Company(models.Model):
                            blank=True, verbose_name=_(u"NIP/Tax ID"))
     address = models.TextField(null=True, blank=True,
                                verbose_name=_(u"Adres"))
+    query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
+
 
     objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
+
+    def increment_query_count(self):
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'update company_company set query_count = query_count +1 '
+                'where id=%s', [self.id])
+
+    @staticmethod
+    def recalculate_query_count():
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'update company_company set query_count = (select count(id) '
+                'from product_product '
+                'where product_product.company_id=company_company.id)')
+
 
     def to_dict(self):
         dict = model_to_dict(self)

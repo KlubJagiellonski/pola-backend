@@ -7,7 +7,6 @@
 {% endblock %}
 {% block content %}
     <h1>Wyszukiwarka</h1>
-    <h2>Formularz wyszukiwań</h2>
     <div>
         <div class="center-block" style="width: 50%">
             <form action="{% url 'brand:search' %}" method="get">
@@ -20,7 +19,7 @@
             </form>
         </div>
     </div>
-    <h2>Wyniki wyszukiwań</h2>
+    <h3>Wyniki wyszukiwań</h3>
     {% if companies %}
         <div class="list-group">
         {% for company in companies %}

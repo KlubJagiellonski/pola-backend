@@ -1,0 +1,23 @@
+{%extends 'brand/base.html' %}
+{% load i18n crispy_forms_tags %}
+{% block content %}
+	<h1>{% trans "Marki" %}</h1>
+	<div class="row">
+		<div class="col-md-3">
+			{% crispy filter.form %}
+		</div>
+		<div class="col-md-9">
+			<ul>
+			{% for obj in object_list %}
+				<li>
+                    <a href="{{ obj.get_absolute_url }}">{{ obj }} ({{ obj.query_count }})</a>
+                    {% if obj.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ obj.locked_by }}"></i>{% endif %}
+                </li>
+			{% empty %}
+			    <li>{% trans "Nie znaleziono producentów spełniających zadane kryteria" %}.</li>
+			{% endfor %}
+             {% include 'pagination_custom/pager.html' with page=page_obj %}
+			</ul>
+		</div>
+	</div>
+{% endblock content %}

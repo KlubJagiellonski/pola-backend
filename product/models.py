@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
-from django.db import models, transaction
-from django.db.models import Count
+from django.db import models, transaction, connection
+from django.db.models import Q
 from company.models import Company
 import reversion
 from model_utils.managers import PassThroughManager
@@ -12,6 +12,16 @@ from django.utils import timezone
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
         super(ProductQuerySet, self).__init__(*args, **kwargs)
+
+    def search_by_name(self, keyword):
+        if self.is_ean(keyword):
+            return self.filter(Q(code=keyword)).distinct('id')
+        else:
+            return self.none()
+
+    @staticmethod
+    def is_ean(keyword):
+        return keyword.isdigit() and (len(keyword) == 13 or len(keyword) == 8)
 
     def create(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
@@ -25,9 +35,6 @@ class ProductQuerySet(models.query.QuerySet):
                                            user=commit_user)
             return obj
 
-    def with_query_count(self):
-        return self.annotate(query_count=Count('query__id'))
-
 
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
@@ -37,6 +44,7 @@ class Product(models.Model):
                             unique=True)
     company = models.ForeignKey(Company, null=True, blank=True,
                                 verbose_name="Producent")
+    query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
     objects = PassThroughManager.for_queryset_class(ProductQuerySet)()
 
@@ -62,6 +70,12 @@ class Product(models.Model):
             reversion.default_revision_manager.\
                 save_revision([self], comment=commit_desc, user=commit_user)
             return obj
+
+    def increment_query_count(self):
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'update product_product set query_count = query_count +1 '
+                'where id=%s', [self.id])
 
     class Meta:
         verbose_name = _("Produkt")

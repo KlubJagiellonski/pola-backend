@@ -1,3 +1,4 @@
+from brand.models import Brand
 from pola import logic
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
@@ -33,6 +34,11 @@ def get_by_code_v2(request):
                              was_verified=stats['was_verified'],
                              was_590=stats['was_590'],
                              was_plScore=stats['was_plScore'])
+
+    if product:
+        product.increment_query_count()
+        if product.company:
+            product.company.increment_query_count()
 
     return JsonResponse(result)
 
@@ -127,6 +133,11 @@ def get_by_code(request, code):
                          was_590=code.startswith('590'),
                          was_plScore=result['plScore'] is not None)
 
+    if product:
+        product.increment_query_count()
+        if product.company:
+            product.company.increment_query_count()
+
     return JsonResponse(result)
 
 
@@ -189,6 +200,7 @@ def attach_file(request):
 
 
 class SearchAPI(views.JSONResponseMixin, View):
+    @ratelimit(key='ip', rate='5/s', block=True)
     def get(self, request, *args, **kwargs):
         keyword = request.GET.get('q')
         if not keyword:
@@ -198,12 +210,15 @@ class SearchAPI(views.JSONResponseMixin, View):
             }
             return self.render_json_response(json_dict)
 
-        companies = Company.objects.search_by_name(keyword)
-        serialized = [{
-            'id': item.id,
-            'name': str(item),
-            'brands': [str(b) for b in item.brand_set.all()]
-        } for item in companies]
+        querysets = {'company': Company.objects.search_by_name(keyword),
+                     'brand': Brand.objects.search_by_name(keyword),
+                     'product': Product.objects.search_by_name(keyword)}
+
+        serialized = []
+
+        for type, query in querysets.iteritems():
+            serialized.extend([{'id': item.id, 'name': str(item), 'type': type} for item in query])
+
         response = {
             'status': 'ok',
             'data': serialized
