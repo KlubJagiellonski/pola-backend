@@ -1,12 +1,12 @@
+import reversion
 from django.core.urlresolvers import reverse
 from django.db import models, transaction, connection
 from django.db.models import Q
-from company.models import Company
-import reversion
-from model_utils.managers import PassThroughManager
-from django.utils.translation import ugettext_lazy as _
-from pola.concurency import concurency
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+
+from company.models import Company
+from pola.concurency import concurency
 
 
 class ProductQuerySet(models.query.QuerySet):
@@ -46,7 +46,7 @@ class Product(models.Model):
                                 verbose_name="Producent")
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
-    objects = PassThroughManager.for_queryset_class(ProductQuerySet)()
+    objects = ProductQuerySet.as_manager()
 
     def get_absolute_url(self):
         return reverse('product:detail', args=[self.code])
@@ -64,10 +64,10 @@ class Product(models.Model):
         if not commit_desc:
             return super(Product, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.\
-                create_revision(manage_manually=True):
+        with transaction.atomic(), reversion. \
+            create_revision(manage_manually=True):
             obj = super(Product, self).save(*args, **kwargs)
-            reversion.default_revision_manager.\
+            reversion.default_revision_manager. \
                 save_revision([self], comment=commit_desc, user=commit_user)
             return obj
 
@@ -80,5 +80,6 @@ class Product(models.Model):
     class Meta:
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
+
 
 reversion.register(Product)
