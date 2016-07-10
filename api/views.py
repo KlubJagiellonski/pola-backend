@@ -34,6 +34,11 @@ def get_by_code_v2(request):
                              was_590=stats['was_590'],
                              was_plScore=stats['was_plScore'])
 
+    if product:
+        product.increment_query_count()
+        if product.company:
+            product.company.increment_query_count()
+
     return JsonResponse(result)
 
 @csrf_exempt
@@ -126,6 +131,11 @@ def get_by_code(request, code):
                          was_verified=result['verified'],
                          was_590=code.startswith('590'),
                          was_plScore=result['plScore'] is not None)
+
+    if product:
+        product.increment_query_count()
+        if product.company:
+            product.company.increment_query_count()
 
     return JsonResponse(result)
 

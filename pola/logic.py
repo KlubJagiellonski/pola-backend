@@ -150,7 +150,7 @@ def create_from_api(code, obj, product=None):
         obj_data = obj.get('Data', {}) or {}
         obj_owner = obj_data.get('Owner', {}) or {}
         obj_owner_name = obj_owner.get('Name', None)
-        obj_product = obj.get('Product', {}) or {}
+        obj_product = obj_data.get('Product', {}) or {}
         obj_product_name = obj_product.get('Name', None)
 
     if obj_owner_name:
@@ -180,7 +180,7 @@ def create_from_api(code, obj, product=None):
             product.name = obj_product_name
 
         if product.company:
-            if company and \
+            if company and product.company.name and obj_owner_name and\
                 not ilim_compare_str(product.company.name, obj_owner_name):
                 create_bot_report(product,
                                   u"Wg. najnowszego odpytania w bazie ILiM "
