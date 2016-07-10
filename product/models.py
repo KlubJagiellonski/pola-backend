@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models, transaction, connection
-from django.db.models import F
+from django.db.models import Q
 from company.models import Company
 import reversion
 from model_utils.managers import PassThroughManager
@@ -13,6 +13,16 @@ class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
         super(ProductQuerySet, self).__init__(*args, **kwargs)
 
+    def search_by_name(self, keyword):
+        if self.is_ean(keyword):
+            return self.filter(Q(code=keyword)).distinct('id')
+        else:
+            return self.none()
+
+    @staticmethod
+    def is_ean(keyword):
+        return keyword.isdigit() and (len(keyword) == 13 or len(keyword) == 8)
+
     def create(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
             return super(ProductQuerySet, self).create(*args, **kwargs)
@@ -24,6 +34,7 @@ class ProductQuerySet(models.query.QuerySet):
                                            comment=commit_desc,
                                            user=commit_user)
             return obj
+
 
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )

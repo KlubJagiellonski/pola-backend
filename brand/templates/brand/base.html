@@ -4,6 +4,7 @@
 {% block breadcrumbs %}
 <ol class="breadcrumb">
     <li><a href="{% url 'brand:search'%}">{% trans 'Wyszukiwarka marek' %}</a></li>
+    <li><a href="{% url 'brand:list'%}">{% trans 'Lista marek' %}</a></li>
     {% block breadcrumbs_rows%}{% endblock %}
 </ol>
 {% endblock %}

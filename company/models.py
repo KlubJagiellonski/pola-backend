@@ -45,13 +45,7 @@ class CompanyQuerySet(models.query.QuerySet):
         where = Q(name__icontains=keyword)
         where = where | Q(official_name__icontains=keyword)
         where = where | Q(common_name__icontains=keyword)
-        where = where | Q(brand__name__icontains=keyword)
-        if self.isEan(keyword):
-                where = where | Q(product__code=keyword)
-        return self.filter(where).distinct('id').prefetch_related('brand_set')
-
-    def isEan(self, keyword):
-        return keyword.isdigit() and (len(keyword) == 13 or len(keyword) == 8)
+        return self.filter(where).distinct('id')
 
     def with_query_count(self):
         return self.annotate(query_count=Count('product__query__id'))

@@ -1,3 +1,4 @@
+from brand.models import Brand
 from pola import logic
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
@@ -208,12 +209,19 @@ class SearchAPI(views.JSONResponseMixin, View):
             }
             return self.render_json_response(json_dict)
 
-        companies = Company.objects.search_by_name(keyword)
-        serialized = [{
-            'id': item.id,
-            'name': str(item),
-            'brands': [str(b) for b in item.brand_set.all()]
-        } for item in companies]
+        querysets = {'company': Company.objects.search_by_name(keyword),
+                     'brand': Brand.objects.search_by_name(keyword),
+                     'product': Product.objects.search_by_name(keyword)}
+
+        serialized = []
+        # [{    'id': item.id,
+        #     'name': str(item),
+        #     'type': 'company',
+        # } for item in companies]
+
+        for type, query in querysets.iteritems():
+            serialized.extend([{'id': item.id, 'name': str(item), 'type': type} for item in query])
+
         response = {
             'status': 'ok',
             'data': serialized

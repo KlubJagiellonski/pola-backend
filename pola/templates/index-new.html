@@ -261,7 +261,6 @@
                 this.list = this.view.find('.search-list');
                 this.message = this.view.find('.search-message');
                 this.view.hide();
-                console.log(this);
                 this.registerListener();
             },
             registerListener: function () {
@@ -282,7 +281,6 @@
                 return false;
             },
             doSearch: function(keyword) {
-                console.log("doSearch", arguments);
                 $.getJSON('{% url 'api:front_search' %}?q=' + keyword)
                 .then(
                     this.handleResult.bind(this),
@@ -292,7 +290,6 @@
             handleResult: function (response) {
                 this.view.show();
                 if(response.status == 'ok'){
-                    console.log(response.data.length);
                     if(response.data.length > 0){
                         this.showResult(response.data);
                     }else{
@@ -308,6 +305,7 @@
             },
             showResult: function (items) {
                 this.message.hide();
+                this.list.show();
                 this.list.empty().append(
                     $.map(items, function (item){
                         var brands = (item.brands || []).join(', ');
@@ -345,15 +343,12 @@
                     },
                     (function(err) {
                         if (err) {
-                            console.log("Quagga.callback", err);
                             return;
                         }
                         this.start();
                     }).bind(this)
                 );
-                Quagga.onProcessed(console.log.bind(console, "Quagga.onProcessed"));
                 Quagga.onDetected(function (result) {
-                    console.log("Quagga.onDetected: ", result);
                     this.listeners.forEach(function(fn){
                         fn(result.codeResult.code);
                     });
