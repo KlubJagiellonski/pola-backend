@@ -119,7 +119,8 @@ class Company(models.Model):
     def recalculate_query_count():
         with connection.cursor() as cursor:
             cursor.execute(
-                'update company_company set query_count = (select count(id) '
+                'update company_company set query_count = '
+                '(select coalesce(sum(query_count),0) '
                 'from product_product '
                 'where product_product.company_id=company_company.id)')
 
