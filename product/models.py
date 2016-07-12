@@ -66,6 +66,14 @@ class Product(models.Model):
                 'update product_product set query_count = query_count +1 '
                 'where id=%s', [self.id])
 
+    @staticmethod
+    def recalculate_query_count():
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'update product_product set query_count = (select count(id) '
+                'from pola_query '
+                'where pola_query.product_id=product_product.id)')
+
     class Meta:
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
