@@ -34,8 +34,10 @@ class CompanyQuerySet(models.query.QuerySet):
         with transaction.atomic(), reversion.create_revision(
                 manage_manually=True):
             obj = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
-            reversion.default_revision_manager.\
-                save_revision([obj[0]], comment=commit_desc, user=commit_user)
+            if obj[1]:
+                reversion.default_revision_manager.\
+                    save_revision([obj[0]], comment=commit_desc,
+                                  user=commit_user)
             return obj
 
 
