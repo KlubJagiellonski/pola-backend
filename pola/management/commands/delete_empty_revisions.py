@@ -23,5 +23,6 @@ class Command(BaseCommand):
                 if first_record:
                     first_record=False
                 else:
+                    version.revision.delete()
                     version.delete()
                     print '.',
