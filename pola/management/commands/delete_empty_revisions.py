@@ -21,12 +21,18 @@ class Command(BaseCommand):
                        revision__comment='Firma utworzona automatycznie na '
                                          'podstawie API ILiM',
                        revision__user__isnull=True)\
+                .values('id','revision_id')\
                 .order_by('revision__date_created')
             first_record = True
-            for version in versions:
-                if first_record:
-                    first_record=False
-                else:
-                    version.revision.delete()
-                    version.delete()
-                    print '.',
+            with connection.cursor() as cursor:
+                for version in versions:
+                    if first_record:
+                        first_record=False
+                    else:
+                        cursor.execute(
+                            'delete from reversion_version where id=%s',
+                            [version['id']])
+                        cursor.execute(
+                            'delete from reversion_revision where id=%s',
+                            [version['revision_id']])
+                        print '.',
