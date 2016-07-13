@@ -23,16 +23,16 @@ class Command(BaseCommand):
                        revision__user__isnull=True)\
                 .values('id','revision_id')\
                 .order_by('revision__date_created')
-            first_record = True
+            record_no = 0
             with connection.cursor() as cursor:
                 for version in versions:
-                    if first_record:
-                        first_record=False
-                    else:
+                    if record_no>0:
                         cursor.execute(
                             'delete from reversion_version where id=%s',
                             [version['id']])
                         cursor.execute(
                             'delete from reversion_revision where id=%s',
                             [version['revision_id']])
-                        print '.',
+                        if record_no%50==0:
+                            print '.',
+                    record_no+=1
