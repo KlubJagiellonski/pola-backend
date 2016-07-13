@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from company.models import Company
 from reversion.models import Version
-
+from django.db import connection
 
 class Command(BaseCommand):
     help = 'Deletes empty revisions'
