@@ -14,7 +14,7 @@ class Command(BaseCommand):
             .order_by('id')
         for company in companies:
             if company.name:
-                print "{} {}".format(company.name.encode('UTF-8'), company.id)
+                print "{} (id:{})".format(company.name.encode('UTF-8'), company.id)
             versions = Version.objects.\
                 filter(object_id_int=company.pk,
                        content_type_id=16,
