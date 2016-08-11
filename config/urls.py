@@ -10,6 +10,12 @@ from django.views.generic import TemplateView, RedirectView
 from decorator_include import decorator_include
 from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView
 
+from django.http import HttpResponse
+
+def acme_challenge(request):
+    return HttpResponse('TOABt7fou4XMoL9wqkd5K0RhqsE4lNTcZ8__kLBaM7I.-VhQ0YacOFgguRkUs5YEGZkZDmjKhGVHS5e8EAZDUkg')
+
+
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='index.html'), name="home"),
@@ -87,6 +93,8 @@ urlpatterns = [
         url=settings.STATIC_URL +
         'favicons/browserconfig.xml', permanent=True)),
 
+    url(r'^.well-known/acme-challenge/TOABt7fou4XMoL9wqkd5K0RhqsE4lNTcZ8__kLBaM7I',
+        acme_challenge, name='acme_challenge'),
 ]
 
 # serving static files
