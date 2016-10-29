@@ -12,6 +12,6 @@ modify pola/urls.py according to instructions
 
 sudo cp /etc/letsencrypt/live/www.pola-app.pl/* .
 
-heroku certs:update fullchain.pem privkey.pem -a pola-app
+heroku certs:update fullchain.pem privkey.pem -a pola-app --confirm pola-app
 
 heroku config:set DJANGO_SECURE_SSL_REDIRECT=True -a pola-app
