@@ -12,9 +12,6 @@ from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, Admin
 
 from django.http import HttpResponse
 
-def acme_challenge(request):
-    return HttpResponse('TOABt7fou4XMoL9wqkd5K0RhqsE4lNTcZ8__kLBaM7I.-VhQ0YacOFgguRkUs5YEGZkZDmjKhGVHS5e8EAZDUkg')
-
 
 urlpatterns = [
     url(r'^$',
@@ -92,9 +89,6 @@ urlpatterns = [
     url(r'^browserconfig.xml$', RedirectView.as_view(
         url=settings.STATIC_URL +
         'favicons/browserconfig.xml', permanent=True)),
-
-    url(r'^.well-known/acme-challenge/TOABt7fou4XMoL9wqkd5K0RhqsE4lNTcZ8__kLBaM7I',
-        acme_challenge, name='acme_challenge'),
 ]
 
 # serving static files
