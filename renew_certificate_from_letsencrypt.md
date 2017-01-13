@@ -7,5 +7,5 @@ chmod a+x certbot-auto
 sudo cp /etc/letsencrypt/live/www.pola-app.pl/fullchain.pem .
 sudo cp /etc/letsencrypt/live/www.pola-app.pl/privkey.pem .
 
-heroku certs:update fullchain.pem privkey.pem -a pola-app
+heroku certs:update fullchain.pem privkey.pem -a pola-app --confirm pola-app
 
