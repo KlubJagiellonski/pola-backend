@@ -23,6 +23,7 @@ class Command(BaseCommand):
                        revision__user__isnull=True)\
                 .values('id','revision_id')\
                 .order_by('revision__date_created')
+
             record_no = 0
             with connection.cursor() as cursor:
                 for version in versions:
