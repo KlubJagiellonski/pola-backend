@@ -1,17 +1,17 @@
 # Local development dependencies go here
 -r base.txt
-coverage==4.0.0
-Sphinx
+#coverage==4.0.0
+#Sphinx
 django-extensions==1.5.7
-Werkzeug==0.10.4
-django-test-plus==1.0.9
-factory_boy==2.5.2
+#Werkzeug==0.10.4
+#django-test-plus==1.0.9
+#factory_boy==2.5.2
 
 # django-debug-toolbar that works with Django 1.5+
 django-debug-toolbar==1.4.0
 
 # improved REPL
-ipdb==0.8.1
+#ipdb==0.8.1
 
 #getting rid of InsecurePlatformWarning
-ndg-httpsclient==0.4.0
+#ndg-httpsclient==0.4.0
