@@ -73,7 +73,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
 
     signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
 
-    attachment = AIAttachment(report=report)
+    attachment = AIAttachment(ai_pics=ai_pics)
     attachment.attachment.name = object_name
     attachment.save()
 
