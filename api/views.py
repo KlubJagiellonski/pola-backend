@@ -75,6 +75,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
 
     attachment = AIAttachment(ai_pics=ai_pics)
     attachment.attachment.name = object_name
+    attach_file.file_no = file_no
     attachment.save()
 
     return signed_request

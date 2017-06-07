@@ -39,6 +39,7 @@ class AIPics(models.Model):
 
 class AIAttachment(models.Model):
     ai_pics = models.ForeignKey(AIPics)
+    file_no = models.IntegerField(null=False, default=0)
     attachment = models.FileField(
         upload_to="ai/%Y/%m/%d", verbose_name=_("File"))
 
