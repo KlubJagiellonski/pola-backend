@@ -70,7 +70,6 @@ def add_ai_pics(request):
 def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
     object_name = '%s/%s_%s_%s.%s' % (str(ai_pics.product.code),
                 str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext)
-    object_name = '%s/%s.%s' % (str(ai_pics.id), str(uuid.uuid1()), file_ext)
 
     signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
 
