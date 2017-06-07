@@ -1,4 +1,4 @@
-from pola import logic
+from pola import logic, logic_ai
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from product.models import Product
@@ -15,6 +15,18 @@ import urllib
 from hashlib import sha1
 from ratelimit.decorators import ratelimit
 
+# API v3
+
+@ratelimit(key='ip', rate='2/s', block=True)
+def get_by_code_v3(request):
+
+    result = get_by_code_v2(request)
+
+    result = logic_ai.add_ask_for_pics(result)
+
+    return result
+
+# API v2
 
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code_v2(request):
