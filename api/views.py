@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from product.models import Product
 from pola.models import Query
 from report.models import Report, Attachment
+from ai_pics.models import AIPics, AIAttachment
 from django.conf import settings
 import json
 import os
@@ -17,19 +18,77 @@ from ratelimit.decorators import ratelimit
 
 # API v3
 
+@csrf_exempt
+@ratelimit(key='ip', rate='2/s', block=True)
+def add_ai_pics(request):
+    device_id = request.GET['device_id']
+
+    data = json.loads(request.body)
+    product_id = data.get('product_id')
+    files_count = data['files_count']
+    file_ext = data['file_ext']
+    mime_type = data['mime_type']
+
+    original_width = data['original_width']
+    original_height = data['original_height']
+
+    #TODO: add some down scaling if needed
+    width = original_width
+    height = original_height
+
+    device_name = data['device_name']
+    flash_used = data.get('flash_used', None)
+    was_portrait = data.get('was_portrait', None)
+
+    product = Product.objects.get(pk=product_id)
+
+    ai_pics = AIPics.objects.create(product=product,
+                                    client=device_id,
+                                    original_width= original_width,
+                                    original_height= original_height,
+                                    width= width,
+                                    height= height,
+                                    device_name= device_name,
+                                    flash_used= flash_used,
+                                    was_portrait= was_portrait
+                                    )
+
+    signed_requests = []
+    if files_count and file_ext and mime_type:
+        if files_count > 24:
+            return HttpResponseForbidden("files_count can be between 0 and 24")
+
+        for i in range(0, files_count):
+            signed_request = attach_pic_internal(ai_pics, i, file_ext, mime_type)
+            signed_requests.append(signed_request)
+
+    return JsonResponse({'width': width,
+                         'height': height,
+                         'signed_requests': signed_requests})
+
+
+def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
+    object_name = '%s/%s_%s_%s.%s' % (str(ai_pics.product.code),
+                str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext)
+
+    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
+
+    attachment = AIAttachment(report=report)
+    attachment.attachment.name = object_name
+    attachment.save()
+
+    return signed_request
+
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code_v3(request):
 
-    result = get_by_code_v2(request)
+    result = get_by_code_internal(request, ai_supported = True)
 
-    result = logic_ai.add_ask_for_pics(result)
-
-    return result
+    return JsonResponse(result)
 
 # API v2
 
-@ratelimit(key='ip', rate='2/s', block=True)
-def get_by_code_v2(request):
+def get_by_code_internal(request, ai_supported = False):
     code = request.GET['code']
     device_id = request.GET['device_id']
 
@@ -45,6 +104,16 @@ def get_by_code_v2(request):
         product.increment_query_count()
         if product.company:
             product.company.increment_query_count()
+
+    if product and ai_supported:
+        result = logic_ai.add_ask_for_pics(result)
+
+    return result
+
+@ratelimit(key='ip', rate='2/s', block=True)
+def get_by_code_v2(request):
+
+    result = get_by_code_internal(request)
 
     return JsonResponse(result)
 
@@ -83,12 +152,22 @@ def create_report_v2(request):
 def attach_file_internal(report, file_ext, mime_type):
     object_name = '%s/%s.%s' % (str(report.id), str(uuid.uuid1()), file_ext)
 
-    expires = int(time.time()+60*60*24)
+    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME)
+
+    attachment = Attachment(report=report)
+    attachment.attachment.name = object_name
+    attachment.save()
+
+    return signed_request
+
+
+def create_signed_request(mime_type, object_name, bucket_name):
+    expires = int(time.time() + 60 * 60 * 24)
     amz_headers = "x-amz-acl:public-read"
 
     string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % \
                      (mime_type, expires, amz_headers,
-                      settings.AWS_STORAGE_BUCKET_NAME, object_name)
+                      bucket_name, object_name)
 
     signature = base64.encodestring(
         hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(),
@@ -97,12 +176,7 @@ def attach_file_internal(report, file_ext, mime_type):
     url = 'https://%s.s3.amazonaws.com/%s' % (settings.AWS_STORAGE_BUCKET_NAME,
                                               object_name)
     signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \
-        (url, settings.AWS_ACCESS_KEY_ID, expires, signature),
-
-    attachment = Attachment(report=report)
-    attachment.attachment.name = object_name
-    attachment.save()
-
+                     (url, settings.AWS_ACCESS_KEY_ID, expires, signature),
     return signed_request
 
 @csrf_exempt
