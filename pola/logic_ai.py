@@ -1,4 +1,4 @@
-
+import random
 
 def add_ask_for_pics(result):
     if random.choice([True, False]):
