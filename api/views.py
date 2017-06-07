@@ -173,7 +173,7 @@ def create_signed_request(mime_type, object_name, bucket_name):
         hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(),
                  string_to_sign.encode('utf8'), sha1).digest())
     signature = urllib.quote_plus(signature.strip())
-    url = 'https://%s.s3.amazonaws.com/%s' % (settings.AWS_STORAGE_BUCKET_NAME,
+    url = 'https://%s.s3.amazonaws.com/%s' % (bucket_name,
                                               object_name)
     signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \
                      (url, settings.AWS_ACCESS_KEY_ID, expires, signature),
