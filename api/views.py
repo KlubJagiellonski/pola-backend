@@ -178,6 +178,7 @@ def create_signed_request(mime_type, object_name, bucket_name):
                                               object_name)
     signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \
                      (url, settings.AWS_ACCESS_KEY_ID, expires, signature),
+    print signed_request
     return signed_request
 
 @csrf_exempt
