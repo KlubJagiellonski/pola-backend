@@ -178,6 +178,10 @@ def create_signed_request(mime_type, object_name, bucket_name):
                                               object_name)
     signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \
                      (url, settings.AWS_ACCESS_KEY_ID, expires, signature),
+    print bucket_name
+    print object_name
+    print settings.AWS_ACCESS_KEY_ID
+    print settings.AWS_SECRET_ACCESS_KEY[5:]
     print signed_request
     return signed_request
 
