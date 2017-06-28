@@ -28,11 +28,11 @@ class Command(BaseCommand):
             desc = Set()
             for report in reports:
 
-                if report['description'] in desc:
-                    print report['description'] + ' - deleted'
+                if report.description in desc:
+                    print report.description + ' - deleted'
                     report.delete()
                 else:
-                    print report['description']
-                    desc.add(report['description'])
+                    print report.description
+                    desc.add(report.description)
 
             break
