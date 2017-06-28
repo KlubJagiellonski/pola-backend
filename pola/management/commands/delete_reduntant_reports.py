@@ -10,7 +10,10 @@ class Command(BaseCommand):
         parser.add_argument('last_product_id')
 
     def handle(self, *args, **options):
-        products = Product.objects.filter(pk__gte=options["last_product_id"])\
+        print 'Starting...'
+
+        products = Product.objects.filter(pk__gte=options["last_product_id"]) \
+            .values('id', 'name') \
             .order_by('id')
 
         for product in products:
