@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from product.models import Product
 from report.models import Report
 from django.db import connection
+from sets import Set
 
 class Command(BaseCommand):
     help = 'Deletes redundant reports'
@@ -25,7 +26,7 @@ class Command(BaseCommand):
                 .values('id','description')\
                 .order_by('created_at')
 
-            desc = []
+            desc = Set()
             for report in reports:
 
                 if report['description'] in desc:
