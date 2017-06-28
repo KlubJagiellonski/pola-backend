@@ -18,21 +18,21 @@ class Command(BaseCommand):
 
         for product in products:
 
-            print "{} (id:{})".format(product.name.encode('UTF-8') if product.name else '', product.id)
+            print "{} (id:{})".format(product['name'].encode('UTF-8') if product['name'] else '', product['id'])
 
             reports = Report.objects\
-                .filter(product=product, client='krs-bot')\
+                .filter(pk=product['id'], client='krs-bot')\
                 .values('id','description')\
                 .order_by('created_at')
 
             desc = []
             for report in reports:
 
-                if report.description in desc:
-                    print report.description + ' - deleted'
+                if report['description'] in desc:
+                    print report['description'] + ' - deleted'
                     report.delete()
                 else:
-                    print report.description
-                    desc.insert(report.description)
+                    print report['description']
+                    desc.insert(report['description'])
 
             break
