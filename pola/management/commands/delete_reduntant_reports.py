@@ -33,6 +33,6 @@ class Command(BaseCommand):
                     report.delete()
                 else:
                     print report['description']
-                    desc.insert(report['description'])
+                    desc.add(report['description'])
 
             break
