@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
         products = Product.objects.filter(pk__gte=options["last_product_id"]) \
             .values('id', 'name') \
-            .order_by('id')
+            .order_by('id').iterator()
 
         for product in products:
 
