@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         companies = Company.objects.filter(pk__gte=options["last_company_id"])\
-            .order_by('id')
+            .order_by('id').iterator()
         for company in companies:
             if company.name:
                 print "{} (id:{})".format(company.name.encode('UTF-8'), company.id)
