@@ -23,7 +23,6 @@ class Command(BaseCommand):
 
             reports = Report.objects\
                 .filter(product__id=product['id'], client='krs-bot')\
-                .values('id','description')\
                 .order_by('created_at')
 
             desc = Set()
