@@ -174,8 +174,9 @@ def create_from_api(code, obj, product=None):
                 create_bot_report(product,
                                   u"Wg. najnowszego odpytania w bazie ILiM "
                                   "nazwa tego produktu to:\"{}\"".format(
-                                      obj_product_name
-                                  ))
+                                      obj_product_name),
+                                  check_if_already_exists=not company_created
+                                  )
         else:
             product.name = obj_product_name
 
@@ -185,8 +186,9 @@ def create_from_api(code, obj, product=None):
                 create_bot_report(product,
                                   u"Wg. najnowszego odpytania w bazie ILiM "
                                   "producent tego produktu to:\"{}\"".format(
-                                      obj_owner_name
-                                  ))
+                                      obj_owner_name),
+                                  check_if_already_exists= not company_created
+                                  )
         else:
             product.company = company
         product.save()
@@ -254,7 +256,11 @@ def update_company_from_krs(product, company):
     return False
 
 
-def create_bot_report(product, description):
+def create_bot_report(product, description, check_if_already_exists=false):
+    if check_if_already_exists and\
+        Report.filter(product=product, client='krs-bot', description=description).exists():
+        return
+
     report = Report(description=description)
     report.product = product
     report.client = 'krs-bot'
