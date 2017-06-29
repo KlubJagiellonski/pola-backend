@@ -256,7 +256,7 @@ def update_company_from_krs(product, company):
     return False
 
 
-def create_bot_report(product, description, check_if_already_exists=false):
+def create_bot_report(product, description, check_if_already_exists=False):
     if check_if_already_exists and\
         Report.filter(product=product, client='krs-bot', description=description).exists():
         return
