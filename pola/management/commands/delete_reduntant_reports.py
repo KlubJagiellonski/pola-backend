@@ -34,5 +34,3 @@ class Command(BaseCommand):
                 else:
                     print report.description
                     desc.add(report.description)
-
-            break
