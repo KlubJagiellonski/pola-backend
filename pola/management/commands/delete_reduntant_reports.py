@@ -29,8 +29,8 @@ class Command(BaseCommand):
             for report in reports:
 
                 if report.description in desc:
-                    print report.description + ' - deleted'
+                    print report.description.encode('utf-8') + ' - deleted'
                     report.delete()
                 else:
-                    print report.description
+                    print report.description.encode('utf-8')
                     desc.add(report.description)
