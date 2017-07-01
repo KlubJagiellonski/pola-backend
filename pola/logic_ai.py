@@ -11,5 +11,6 @@ def add_ask_for_pics(result):
             'Nakręć film obracając produkt tak jak na ' \
             'przykładzie poniżej. Postaraj się nie zasłaniać produktu.'
         result['ask_for_pics_button_start'] = 'Nakręć film'
+        result['max_pic_size'] = 800
 
     return result

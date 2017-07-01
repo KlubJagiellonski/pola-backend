@@ -32,9 +32,8 @@ def add_ai_pics(request):
     original_width = data['original_width']
     original_height = data['original_height']
 
-    #TODO: add some down scaling if needed
-    width = original_width
-    height = original_height
+    width = data['width']
+    height = data['height']
 
     device_name = data['device_name']
     flash_used = data.get('flash_used', None)
