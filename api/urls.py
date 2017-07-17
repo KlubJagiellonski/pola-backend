@@ -6,7 +6,7 @@ urlpatterns = [
     # API v3
     url(regex=r'v3/get_by_code$', view=views.get_by_code_v3,
         name="get_by_code_v3"),
-    url(regex=r'v3/create_report$', view=views.create_report_v2,
+    url(regex=r'v3/create_report$', view=views.create_report_v3,
         name="create_report_v2"),
     url(regex=r'v3/update_report$', view=views.update_report,
         name="update_report"),

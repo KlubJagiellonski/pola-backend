@@ -81,10 +81,17 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
 
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code_v3(request):
+    noai = request.GET.get('noai')
 
-    result = get_by_code_internal(request, ai_supported = True)
+    result = get_by_code_internal(request, ai_supported=noai is None)
 
     return JsonResponse(result)
+
+@csrf_exempt
+@ratelimit(key='ip', rate='2/s', block=True)
+def create_report_v3(request):
+    return create_report_internal(request)
+
 
 # API v2
 
@@ -120,6 +127,9 @@ def get_by_code_v2(request):
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
 def create_report_v2(request):
+    return create_report_internal(request, extra_comma=True)
+
+def create_report_internal(request, extra_comma=False):
     device_id = request.GET['device_id']
 
     data = json.loads(request.body)
@@ -142,17 +152,17 @@ def create_report_v2(request):
             return HttpResponseForbidden("files_count can be between 0 and 10")
 
         for _ in range(0, files_count):
-            signed_request = attach_file_internal(report, file_ext, mime_type)
+            signed_request = attach_file_internal(report, file_ext, mime_type, extra_comma)
             signed_requests.append(signed_request)
 
     return JsonResponse({'id': report.id,
                          'signed_requests':signed_requests})
 
 
-def attach_file_internal(report, file_ext, mime_type):
+def attach_file_internal(report, file_ext, mime_type, extra_comma=False):
     object_name = '%s/%s.%s' % (str(report.id), str(uuid.uuid1()), file_ext)
 
-    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME)
+    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME, extra_comma)
 
     attachment = Attachment(report=report)
     attachment.attachment.name = object_name
@@ -161,7 +171,7 @@ def attach_file_internal(report, file_ext, mime_type):
     return signed_request
 
 
-def create_signed_request(mime_type, object_name, bucket_name):
+def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False):
     expires = int(time.time() + 60 * 60 * 24)
     amz_headers = "x-amz-acl:public-read"
 
@@ -176,7 +186,10 @@ def create_signed_request(mime_type, object_name, bucket_name):
     url = 'https://%s.s3.amazonaws.com/%s' % (bucket_name,
                                               object_name)
     signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \
-                     (url, settings.AWS_ACCESS_KEY_ID, expires, signature),
+                     (url, settings.AWS_ACCESS_KEY_ID, expires, signature)
+
+    if extra_comma:
+        signed_request = signed_request,
 
     return signed_request
 
@@ -195,7 +208,7 @@ def attach_file_v2(request):
     file_ext = data['file_ext']
     mime_type = data['mime_type']
 
-    signed_request = attach_file_internal(report, file_ext, mime_type)
+    signed_request = attach_file_internal(report, file_ext, mime_type, extra_comma=True)
 
     return JsonResponse({'signed_request': signed_request})
 
