@@ -14,7 +14,7 @@ def send_ai_pics(product, device_name, original_width, original_height,
 
     files = ''
     for filename in filenames:
-        files += filename+'\n'
+        files += filename.split('?')[0]+'\n'
 
     url = 'https://slack.com/api/chat.postMessage?'+\
         urlencode({
