@@ -43,7 +43,7 @@ reportlab==3.2.0
 django_filter==0.11.0
 
 # API
-requests==2.8.0
+requests==2.18.1
 # TODO: Consider delete, because djangorestframework has built-in mechanisms
 django-ratelimit==0.6.0
 djangorestframework==3.2.4
@@ -56,3 +56,6 @@ django_decorator_include==1.0
 
 #Babel
 Babel==2.1.1
+
+#RQ
+rq==0.8.0

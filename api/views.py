@@ -15,6 +15,9 @@ import hmac
 import urllib
 from hashlib import sha1
 from ratelimit.decorators import ratelimit
+from rq import Queue
+from pola.rq_worker import conn
+from pola.rq_tasks import get_url
 
 # API v3
 
@@ -84,6 +87,9 @@ def get_by_code_v3(request):
     noai = request.GET.get('noai')
 
     result = get_by_code_internal(request, ai_supported=noai is None)
+
+    q = Queue(connection=conn)
+    result = q.enqueue(get_url, 'http://heroku.com')
 
     return JsonResponse(result)
 
