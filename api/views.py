@@ -66,9 +66,7 @@ def add_ai_pics(request):
     slack.send_ai_pics(str(product), device_name, original_width, original_height, width, height,
                        files_count, file_ext, mime_type, signed_requests)
 
-    return JsonResponse({'width': width,
-                         'height': height,
-                         'signed_requests': signed_requests})
+    return JsonResponse({'signed_requests': signed_requests})
 
 
 def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
