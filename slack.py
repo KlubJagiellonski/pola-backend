@@ -38,4 +38,4 @@ def send_ai_pics(product, device_name, original_width, original_height,
         })
 
     #requests.get(url)
-    q.enqueue(get_url_at_time(), url, datetime.utcnow()+timedelta(seconds=15))
+    q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=15))
