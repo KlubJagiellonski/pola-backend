@@ -1,10 +1,11 @@
 from django.conf import settings
 from rq import Queue
 from pola.rq_worker import conn
-from pola.rq_tasks import get_url
+from pola.rq_tasks import get_url_at_time
 import requests
 from urllib import urlencode
 import json
+from datetime import datetime, timedelta
 
 q = Queue(connection=conn)
 
@@ -27,16 +28,14 @@ def send_ai_pics(product, device_name, original_width, original_height,
             'text':'Product: *{}*\n'
                    'Device: *{}*\n'
                    'Dimensions: *{}x{}* (Original: {}x{})\n'
-                   '*{} {}* files ({})\n'
-                   '{}'
+                   '*{} {}* files ({})'
                 .format(product, device_name,
                         width, height,
                         original_width, original_height,
                         files_count, file_ext, mime_type,
-                        files
                         ),
             'attachments': json.dumps(files)
         })
 
     #requests.get(url)
-    q.enqueue(get_url, url)
+    q.enqueue(get_url_at_time(), url, datetime.utcnow()+timedelta(seconds=15))
