@@ -115,8 +115,8 @@ def get_by_code_internal(request, ai_supported = False):
         if product.company:
             product.company.increment_query_count()
 
-    if product and ai_supported and 'plScore' in result and result['plScore']:
-        result = logic_ai.add_ask_for_pics(result)
+    if ai_supported:
+        result = logic_ai.add_ask_for_pics(product, result)
 
     return result
 

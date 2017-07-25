@@ -29,6 +29,8 @@ class AIPics(models.Model):
     flash_used = models.NullBooleanField()
     was_portrait = models.NullBooleanField()
 
+    is_valid = models.NullBooleanField()
+
     def attachment_count(self):
         return self.attachment_set.count()
 

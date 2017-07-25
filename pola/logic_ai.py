@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 import random
 
-def add_ask_for_pics(result):
-    if random.choice([True, False]):
+QUERY_COUNT_THRESHOLD = 1000
+DESIRED_AI_PICS_COUNT = 2000
+
+def add_ask_for_pics(product, result):
+    if product and product.name \
+        and 'plScore' in result and result['plScore']\
+        and product.query_count > QUERY_COUNT_THRESHOLD\
+        and random.randint(0, DESIRED_AI_PICS_COUNT) > product.ai_pics_count:
+
         ai = result['ai'] = {}
         ai['ask_for_pics'] = True
         ai['ask_for_pics_preview'] = 'Naucz Polę tego produktu'

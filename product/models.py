@@ -34,6 +34,7 @@ class Product(models.Model):
     company = models.ForeignKey(Company, null=True, blank=True,
                                 verbose_name="Producent")
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
+    ai_pics_count = models.PositiveIntegerField(null=False, default=0)
 
     objects = PassThroughManager.for_queryset_class(ProductQuerySet)()
 
@@ -73,6 +74,16 @@ class Product(models.Model):
                 'update product_product set query_count = (select count(id) '
                 'from pola_query '
                 'where pola_query.product_id=product_product.id)')
+
+    @staticmethod
+    def recalculate_ai_pics_count():
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'update product_product set ai_pics_count = (select count(id) '
+                'from ai_pics_aipics '
+                'where ai_pics_aipics.product_id=product_product.id and '
+                '(ai_pics_aipics.is_valid=TRUE or ai_pics_aipics.is_valid IS NULL))')
+
 
     class Meta:
         verbose_name = _("Produkt")
