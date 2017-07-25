@@ -15,9 +15,7 @@ import hmac
 import urllib
 from hashlib import sha1
 from ratelimit.decorators import ratelimit
-from rq import Queue
-from pola.rq_worker import conn
-from pola.rq_tasks import get_url
+import slack
 
 # API v3
 
@@ -64,6 +62,10 @@ def add_ai_pics(request):
             signed_request = attach_pic_internal(ai_pics, i, file_ext, mime_type)
             signed_requests.append(signed_request)
 
+
+    slack.send_ai_pics(str(product), device_name, original_width, original_height, width, height,
+                       files_count, file_ext, mime_type, signed_requests)
+
     return JsonResponse({'width': width,
                          'height': height,
                          'signed_requests': signed_requests})
@@ -87,9 +89,6 @@ def get_by_code_v3(request):
     noai = request.GET.get('noai')
 
     result = get_by_code_internal(request, ai_supported=noai is None)
-
-    q = Queue(connection=conn)
-    q.enqueue(get_url, 'http://heroku.com')
 
     return JsonResponse(result)
 
