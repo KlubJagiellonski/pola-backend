@@ -4,6 +4,7 @@ from pola.rq_worker import conn
 from pola.rq_tasks import get_url
 import requests
 from urllib import urlencode
+import json
 
 q = Queue(connection=conn)
 
@@ -12,9 +13,11 @@ def send_ai_pics(product, device_name, original_width, original_height,
                  files_count, file_ext, mime_type,
                  filenames):
 
-    files = ''
+    files = []
+    i = 1
     for filename in filenames:
-        files += filename.split('?')[0]+'\n'
+        files.append({'title':'{}'.format(i), 'image_url':filename.split('?')[0]})
+        i += 1
 
     url = 'https://slack.com/api/chat.postMessage?'+\
         urlencode({
@@ -23,17 +26,17 @@ def send_ai_pics(product, device_name, original_width, original_height,
             'username':'New AI pics',
             'text':'Product: *{}*\n'
                    'Device: *{}*\n'
-                   'Dimensions: *{}x{}* ({}x{})\n'
+                   'Dimensions: *{}x{}* (Original: {}x{})\n'
                    '*{} {}* files ({})\n'
                    '{}'
                 .format(product, device_name,
-                        original_width, original_height,
                         width, height,
+                        original_width, original_height,
                         files_count, file_ext, mime_type,
                         files
-                        )
+                        ),
+            'attachments': json.dumps(files)
         })
-
 
     #requests.get(url)
     q.enqueue(get_url, url)
