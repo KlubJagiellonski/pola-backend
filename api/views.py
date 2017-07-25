@@ -89,7 +89,7 @@ def get_by_code_v3(request):
     result = get_by_code_internal(request, ai_supported=noai is None)
 
     q = Queue(connection=conn)
-    result = q.enqueue(get_url, 'http://heroku.com')
+    q.enqueue(get_url, 'http://heroku.com')
 
     return JsonResponse(result)
 
