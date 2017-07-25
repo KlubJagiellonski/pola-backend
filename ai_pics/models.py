@@ -9,6 +9,7 @@ from product.models import Product
 from datetime import datetime
 from babel.dates import format_timedelta
 from django.utils import timezone
+from babel.dates import format_timedelta
 
 
 class AIPics(models.Model):
@@ -34,6 +35,10 @@ class AIPics(models.Model):
     def attachment_count(self):
         return self.attachment_set.count()
 
+    def get_timedelta(self):
+        return format_timedelta(timezone.now() - self.created_at,
+                                locale='pl_PL')
+
     class Meta:
         verbose_name = _("AIPics")
         verbose_name_plural = _("AIPics")
@@ -53,7 +58,7 @@ class AIAttachment(models.Model):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):
-        return self.attachment.url
+        return 'https://{}.s3.amazonaws.com/{}'.format(settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
 
     class Meta:
         verbose_name = _("AIPics's attachment")

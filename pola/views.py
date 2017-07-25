@@ -9,6 +9,7 @@ from company.models import Company
 from product.models import Product
 from report.models import Report
 from pola.models import Stats
+from ai_pics.models import AIPics, AIAttachment
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.core.exceptions import ObjectDoesNotExist
@@ -175,5 +176,17 @@ class AdminStatsPageView(QueryStatsPageView):
             "from product_product "
             "group by to_char(ilim_queried_at, 'YYYY-MM-DD') "
             "order by 1 desc", None)
+
+        return c
+
+class AIPicsPageView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/home-ai-pics.html'
+
+    def get_context_data(self, *args, **kwargs):
+        c = super(TemplateView, self).get_context_data(**kwargs)
+
+        c['aipics'] = (AIPics.objects
+                        .filter(is_valid__isnull=True)
+                        .order_by('-id')[:10])
 
         return c

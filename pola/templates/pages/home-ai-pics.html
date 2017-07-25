@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Zdjęcia AI" %}</h1><br/>
+
+	<div class="panel panel-primary">
+        <ul class="list-group">
+        {% for aipic in  aipics %}
+            <li class="list-group-item">
+                <div><strong>{{ aipic.product.name }}</strong></div>
+                <div><small>{% trans "Wysłane z " %}{{ aipic.device_name }} {{ aipic.get_timedelta}} {% trans "temu" %}</small></div>
+                <div>
+                {% for attachment in aipic.aiattachment_set.all %}
+                    <span>
+                    <img style="width:200px" src="{{ attachment.get_absolute_url }}">
+                    </span>
+                {% endfor %}
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+
+{% endblock content %}

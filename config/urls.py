@@ -8,7 +8,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from decorator_include import decorator_include
-from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView
+from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView, AIPicsPageView
 
 from django.http import HttpResponse
 
@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),
     url(r'^cms/admin-stats$', AdminStatsPageView.as_view(), name="home-admin-stats"),
+    url(r'^cms/ai-pics$', AIPicsPageView.as_view(), name="home-ai-pics"),
     url(r'^cms/lang/$',
         TemplateView.as_view(template_name='pages/lang-cms.html'),
         name="select_lang"),
