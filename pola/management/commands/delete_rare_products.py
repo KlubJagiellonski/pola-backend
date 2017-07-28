@@ -48,6 +48,8 @@ class Command(BaseCommand):
                             'delete from reversion_revision where id=%s',
                             [version['revision_id']])
                     cursor.execute(
+                        'delete from pola_query where product_id=%s',
+                        [product_id])
+                    cursor.execute(
                         'delete from product_product where id=%s',
-                        [product_id]
-                    )
+                        [product_id])
