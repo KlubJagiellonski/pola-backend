@@ -15,6 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with connection.cursor() as c:
+            i = 0
             c.execute(
                 "SELECT id "
                 "FROM product_product "
@@ -29,12 +30,12 @@ class Command(BaseCommand):
                 if not row:
                     return
 
-                product_id = row[0]
-#                print product_id
-                sys.stdout.write('.')
-                sys.stdout.flush()
-#                return
+                if i%100 == 0:
+                    sys.stdout.write('.')
+                    sys.stdout.flush()
+                i+=1
 
+                product_id = row[0]
                 versions = Version.objects.\
                     filter(object_id_int=product_id,
                            content_type_id=15)\
