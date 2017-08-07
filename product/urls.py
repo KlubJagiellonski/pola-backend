@@ -2,6 +2,7 @@
 from django.conf.urls import url
 
 from . import views
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     url(
@@ -10,7 +11,7 @@ urlpatterns = [
         name="create"),
     url(
         regex=r'(?P<code>[-\w]+)/image$',
-        view=views.get_image,
+        view=login_required(views.get_image),
         name="image"),
     url(
         regex=r'(?P<slug>[-\w]+)/edit$',

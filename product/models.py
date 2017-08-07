@@ -25,6 +25,7 @@ class ProductQuerySet(models.query.QuerySet):
                                            user=commit_user)
             return obj
 
+
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
