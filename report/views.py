@@ -8,15 +8,15 @@ from django.views.generic.edit import DeleteView
 from django_filters.views import FilterView
 from pola.views import ActionView
 from braces.views import LoginRequiredMixin
-from . import models
+from .models import Report
 from .filters import ReportFilter
 
 
 class ReportListView(LoginRequiredMixin, FilterView):
-    model = models.Report
+    model = Report
     filterset_class = ReportFilter
     paginate_by = 25
-    queryset = models.Report.objects.all().prefetch_related('attachment_set')
+    queryset = Report.objects.prefetch_related('attachment_set').all()
 
 
 class ReportAdvancedListView(LoginRequiredMixin, FilterView):
@@ -34,16 +34,16 @@ class ReportAdvancedListView(LoginRequiredMixin, FilterView):
 
 
 class ReportDelete(LoginRequiredMixin, DeleteView):
-    model = models.Report
+    model = Report
     success_url = reverse_lazy('report:list')
 
 
 class ReportDetailView(LoginRequiredMixin, DetailView):
-    model = models.Report
+    model = Report
 
 
 class ReportResolveView(LoginRequiredMixin, ActionView):
-    model = models.Report
+    model = Report
     template_name_suffix = '_resolve'
     queryset = models.Report.objects.only_open().all()
 
