@@ -20,18 +20,20 @@ class CompanyListView(LoginRequiredMixin, FilterView):
     paginate_by = 25
 
 
-class CompanyCreate(LoginRequiredMixin,
+class GetInitalFormMixin(object):
+    def get_initial(self):
+        initials = super(GetInitalFormMixin, self).get_initial()
+        initials.update(self.request.GET.dict())
+        return initials
+
+
+class CompanyCreate(GetInitalFormMixin,
+                    LoginRequiredMixin,
                     FormValidMessageMixin,
                     CreateView):
     model = Company
     form_class = CompanyForm
     form_valid_message = u"Firma utworzona!"
-
-    def get_initial(self):
-        initials = {}
-        for field_name in CompanyDetailView.FIELDS_TO_DISPLAY:
-            initials[field_name] = self.request.GET.get(field_name)
-        return initials
 
 
 class CompanyCreateFromKRSView(LoginRequiredMixin, ProcessFormView):
@@ -76,10 +78,31 @@ class CompanyDelete(LoginRequiredMixin,
     form_valid_message = u"Firma skasowana!"
 
 
-class CompanyDetailView(LoginRequiredMixin, DetailView):
+class FieldsDisplayMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(FieldsDisplayMixin, self).get_context_data(**kwargs);
+        fields = []
+        obj = self.get_object()
+        for field_name in self.fields_to_display:
+            try:
+                method_display = getattr(
+                    obj, 'get_' + field_name + '_display')
+                value = method_display()
+            except:
+                value = obj.__dict__[field_name]
+            fields.append(
+                {"name": self.model._meta
+                    .get_field_by_name(field_name)[0].verbose_name,
+                 "value": value})
+
+        context['fields'] = fields
+        return context
+
+
+class CompanyDetailView(FieldsDisplayMixin, LoginRequiredMixin, DetailView):
     model = Company
 
-    FIELDS_TO_DISPLAY = (
+    fields_to_display = (
         'Editor_notes',
         'name',
         'official_name',
@@ -99,24 +122,7 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(CompanyDetailView, self).get_context_data(**kwargs)
 
-        object = context['object']
-
         context['report_list'] = Report.objects.filter(
-            product__company=object, resolved_at=None)
+            product__company=self.get_object(), resolved_at=None)
 
-        fields = []
-
-        for field_name in self.FIELDS_TO_DISPLAY:
-            try:
-                method_display = getattr(
-                    object, 'get_' + field_name + '_display')
-                value = method_display()
-            except:
-                value = object.__dict__[field_name]
-            fields.append(
-                {"name": self.model._meta
-                    .get_field_by_name(field_name)[0].verbose_name,
-                 "value": value})
-
-        context['fields'] = fields
         return context
