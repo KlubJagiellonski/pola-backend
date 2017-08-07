@@ -56,6 +56,27 @@ class CompanyUpdateTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, T
         self.url = reverse('company:edit', kwargs={'pk': self.instance.pk})
 
 
+class ConcurencyComapnyUpdateTestCase(TestCase):
+    user_factory = UserFactory
+
+    def setUp(self):
+        super(ConcurencyComapnyUpdateTestCase, self).setUp()
+        self.instance = CompanyFactory()
+
+    def test_restrictions(self):
+        user1 = self.make_user('u1')
+        user2 = self.make_user('u2')
+        url = reverse('company:edit', kwargs={'pk': self.instance.pk})
+
+        with self.login(username=user1.username):
+            response = self.get(url)
+            self.response_200(response)
+
+        with self.login(username=user2.username):
+            response = self.get(url)
+            self.response_302(response)
+
+
 class CompanyDeleteViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_confirm_delete.html'
 
