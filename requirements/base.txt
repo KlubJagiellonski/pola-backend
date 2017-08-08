@@ -58,4 +58,4 @@ django_decorator_include==1.0
 Babel==2.1.1
 
 #RQ
-rq==0.8.0
+rq==0.8.1
