@@ -33,7 +33,7 @@ class ReportAdvancedListView(LoginRequiredMixin, FilterView):
         return HttpResponseRedirect(request.get_full_path())
 
 
-class ReportDelete(LoginRequiredMixin, DeleteView):
+class ReportDeleteView(LoginRequiredMixin, DeleteView):
     model = models.Report
     success_url = reverse_lazy('report:list')
 

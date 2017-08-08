@@ -23,7 +23,7 @@ class ReportQuerySet(models.QuerySet):
                     .filter(resolved_by__isnull=False))
 
     def resolve(self, user):
-        return self.update(resolved_at=datetime.now(),
+        return self.update(resolved_at=timezone.now(),
                            resolved_by=user)
 
 
@@ -51,7 +51,7 @@ class Report(models.Model):
         return self.OPEN
 
     def resolve(self, user, commit=True):
-        self.resolved_at = datetime.now()
+        self.resolved_at = timezone.now()
         self.resolved_by = user
         if commit:
             self.save()
