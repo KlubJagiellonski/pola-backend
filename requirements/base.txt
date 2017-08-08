@@ -22,14 +22,14 @@ Pillow==2.9.0
 django-allauth==0.23.0
 
 # For the persistence stores
-psycopg2==2.6.1
+psycopg2==2.7.3
 
 # Unicode slugification
 unicode-slugify==0.1.3
 django-autoslug==1.8.0
 
 # Time zones support
-pytz==2015.6
+pytz==2017.2
 
 # Redis support
 django-redis==4.2.0
@@ -52,7 +52,7 @@ django-autocomplete-light==3.2.9
 django_decorator_include==1.2
 
 #Babel
-Babel==2.1.1
+Babel==2.4.0
 
 #RQ
 rq==0.8.1
