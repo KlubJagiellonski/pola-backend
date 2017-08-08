@@ -9,8 +9,7 @@ django-secure==1.0.1
 
 # Forms
 django-braces==1.8.1
-django-crispy-forms==1.5.2
-django-floppyforms==1.5.2
+django-crispy-forms==1.6.1
 
 # Models
 django-model-utils==2.3.1
