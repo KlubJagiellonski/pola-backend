@@ -1,14 +1,13 @@
 # Create your views here.
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
-    ProcessFormView
+    , FormView
 from django_filters.views import FilterView
 from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from report.models import Report
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
-from django.shortcuts import render
 from django.http import HttpResponseRedirect, QueryDict
 from .filters import CompanyFilter
 from .forms import CompanyForm, CompanyCreateFromKRSForm
@@ -36,28 +35,21 @@ class CompanyCreate(GetInitalFormMixin,
     form_valid_message = u"Firma utworzona!"
 
 
-class CompanyCreateFromKRSView(LoginRequiredMixin, ProcessFormView):
+class CompanyCreateFromKRSView(LoginRequiredMixin, FormView):
     form_class = CompanyCreateFromKRSForm
     template_name = 'company/company_from_krs.html'
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form, *args, **kwargs):
+        company = form.cleaned_data['company']
+        q = QueryDict('', mutable=True)
+        q['official_name'] = company['nazwa']
+        q['common_name'] = company['nazwa_skrocona']
+        q['sources'] = u"Dane z KRS|%s" % company['url']
+        q['nip'] = company['nip']
+        q['address'] = company['adres']
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            company = form.cleaned_data['company']
-            q = QueryDict(mutable=True)
-            q['official_name'] = company['nazwa']
-            q['common_name'] = company['nazwa_skrocona']
-            q['sources'] = u"Dane z KRS|%s" % company['url']
-            q['nip'] = company['nip']
-            q['address'] = company['adres']
+        return HttpResponseRedirect(reverse('company:create') + '?' + q.urlencode())
 
-            return HttpResponseRedirect('/cms/company/create?' + q.urlencode())
-
-        return render(request, self.template_name, {'form': form})
 
 
 class CompanyUpdate(LoginRequiredMixin,

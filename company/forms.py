@@ -6,7 +6,7 @@ from mojepanstwo_api import KrsClient
 from . import models
 from pola.forms import (CommitDescriptionMixin,
                         FormHorizontalMixin, SaveButtonMixin,
-                        ReadOnlyFieldsMixin)
+                        ReadOnlyFieldsMixin, SingleButtonMixin)
 
 
 class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
@@ -35,11 +35,11 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
         ]
 
 
-class CompanyCreateFromKRSForm(forms.Form):
-    is_krs = forms.ChoiceField(widget=forms.RadioSelect, label="Identyfikator",
+class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.Form):
+    is_krs = forms.ChoiceField(widget=forms.RadioSelect, label="Typ",
                                choices=((1, 'KRS'), (0, 'NIP')),
                                initial=1)
-    no = forms.CharField(max_length=20, label="", required=False)
+    no = forms.CharField(label="Numer", max_length=20, required=False)
 
     def clean(self):
         cleaned_data = super(CompanyCreateFromKRSForm, self).clean()
