@@ -40,7 +40,7 @@ redis>=2.10.0
 jsonfield==1.0.3
 django-reversion==1.9.3
 reportlab==3.2.0
-django_filter==0.11.0
+django-filter==1.0.4
 
 # API
 requests==2.18.1

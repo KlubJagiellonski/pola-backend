@@ -7,8 +7,7 @@ from company.models import Company
 from .models import Product
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from pola.filters import (CrispyFilterMixin,
-                          NoHelpTextFilterMixin)
+from pola.filters import (CrispyFilterMixin)
 
 
 class NullProductFilter(django_filters.Filter):
@@ -20,8 +19,7 @@ class NullProductFilter(django_filters.Filter):
         return qs
 
 
-class ProductFilter(NoHelpTextFilterMixin,
-                    CrispyFilterMixin,
+class ProductFilter(CrispyFilterMixin,
                     django_filters.FilterSet):
     company_empty = NullProductFilter(label="Tylko produkty bez producenta")
 

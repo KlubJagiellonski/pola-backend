@@ -15,12 +15,3 @@ class CrispyFilterMixin(object):
         self._form.helper.form_method = 'get'
         self._form.helper.layout.append(Submit('filter', _('Filtruj')))
         return self._form
-
-
-class NoHelpTextFilterMixin(object):
-    def __init__(self, *args, **kwargs):
-        super(NoHelpTextFilterMixin, self).__init__(*args, **kwargs)
-        for key in self.filters.iteritems():
-            self.filters[key[0]].extra.update(
-                {'help_text': ''}
-            )

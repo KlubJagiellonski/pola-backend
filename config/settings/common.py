@@ -246,6 +246,8 @@ LOGIN_URL = 'account_login'
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
+# Django Filter
+FILTERS_DISABLE_HELP_TEXT = True
 
 # LOGGING CONFIGURATION
 # ------------------------------------------------------------------------------

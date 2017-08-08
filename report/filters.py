@@ -7,8 +7,7 @@ from company.models import Company
 from product.models import Product
 from .models import Report
 from django.utils.translation import ugettext_lazy as _
-from pola.filters import (CrispyFilterMixin,
-                          NoHelpTextFilterMixin)
+from pola.filters import CrispyFilterMixin
 
 
 class StatusFilter(django_filters.ChoiceFilter):
@@ -28,8 +27,7 @@ class StatusFilter(django_filters.ChoiceFilter):
         return qs
 
 
-class ReportFilter(NoHelpTextFilterMixin,
-                   CrispyFilterMixin,
+class ReportFilter(CrispyFilterMixin,
                    django_filters.FilterSet):
     status = StatusFilter()
     product = django_filters.ModelChoiceFilter(
