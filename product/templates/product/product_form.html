@@ -14,3 +14,7 @@
 {% block content %}
 	{% crispy form %}
 {% endblock content %}
+
+{% block javascript %}
+    {{ form.media }}
+{% endblock javascript %}

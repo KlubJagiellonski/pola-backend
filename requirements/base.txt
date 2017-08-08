@@ -51,7 +51,7 @@ djangorestframework==3.2.4
 django-grappelli==2.10.1
 
 # Autocomplete
-django-autocomplete-light==2.2.10
+django-autocomplete-light==3.2.9
 django_decorator_include==1.2
 
 #Babel

@@ -9,6 +9,8 @@ urlpatterns = [
         regex=r'create$',
         view=views.ProductCreate.as_view(),
         name="create"),
+    url(r'^product-autocomplete/$',
+        views.ProductAutocomplete.as_view(), name='product-autocomplete'),
     url(
         regex=r'(?P<code>[-\w]+)/image$',
         view=login_required(views.get_image),

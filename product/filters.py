@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import django_filters
+from dal import autocomplete
+
+from company.models import Company
 from .models import Product
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from pola.filters import (AutocompleteChoiceFilter,
-                          CrispyFilterMixin,
+from pola.filters import (CrispyFilterMixin,
                           NoHelpTextFilterMixin)
 
 
@@ -22,8 +24,10 @@ class ProductFilter(NoHelpTextFilterMixin,
                     CrispyFilterMixin,
                     django_filters.FilterSet):
     company_empty = NullProductFilter(label="Tylko produkty bez producenta")
-    company = AutocompleteChoiceFilter(
-        autocomplete_name="CompanyAutocomplete")
+
+    company = django_filters.ModelChoiceFilter(
+        queryset=Company.objects.all(),
+        widget=autocomplete.ModelSelect2(url='company:company-autocomplete'))
 
     class Meta:
         model = Product

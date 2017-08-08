@@ -1,3 +1,5 @@
+from dal import autocomplete
+from django.db.models import Q
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.detail import DetailView
@@ -8,6 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 from reportlab.graphics import renderPM
 import reversion
 from django_filters.views import FilterView
+
+from product.models import Product
 from .forms import ProductForm
 from .filters import ProductFilter
 from .images import Barcode
@@ -80,3 +84,17 @@ def get_image(request, code):
     data = renderPM.drawToString(barcode, fmt='PNG')
     response.write(data)
     return response
+
+
+class ProductAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Product.objects.all()
+
+        if self.q:
+            where = Q(name__icontains=self.q)
+            where = where | Q(company__name__icontains=self.q)
+            where = where | Q(company__official_name__icontains=self.q)
+            where = where | Q(company__common_name__icontains=self.q)
+            qs = qs.filter(where)
+
+        return qs

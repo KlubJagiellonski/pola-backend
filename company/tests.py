@@ -202,3 +202,7 @@ class CompanyCreateFromKRSFormTestCase(TestCase):
             data = {'is_krs' : '0', 'no': 123}
             form = CompanyCreateFromKRSForm(data=data)
             self.assertTrue(form.is_valid())
+
+
+class CompanyAutocomplete(PermissionMixin, TestCase):
+    url = reverse_lazy('company:company-autocomplete')

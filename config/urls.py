@@ -44,9 +44,6 @@ urlpatterns = [
     url(r'^m/', include('webviews.urls', namespace='webviews')),
     url(r'^concurency/', include('pola.concurency.urls', namespace='concurency')),
 
-    url(r'^autocomplete/',
-        decorator_include(login_required, 'autocomplete_light.urls')),
-
     url(r'^robots\.txt$', TemplateView.as_view(
         template_name="robots.txt" if settings.IS_PRODUCTION
         else "robots-staging.txt", content_type='text/plain')),

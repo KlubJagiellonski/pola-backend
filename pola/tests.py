@@ -42,10 +42,6 @@ class AboutTestCase(TemplateUsedMixin, TestCase):
     template_name = 'pages/about.html'
 
 
-class AutocompleteTestCase(PermissionMixin, TestCase):
-    url = '/autocomplete/CompanyAutocomplete/'
-
-
 class FaviconsTestCase(TestCase):
     def test_redirect_happens(self):
         from config.urls import FAVICON_FILES

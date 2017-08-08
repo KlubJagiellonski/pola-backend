@@ -33,7 +33,8 @@ DJANGO_APPS = (
     # 'django.contrib.humanize',
 
     # Must be before django.contrib.admin
-    'autocomplete_light',
+    'dal',
+    'dal_select2',
 
     # Admin
     'grappelli',

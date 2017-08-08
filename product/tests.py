@@ -83,3 +83,7 @@ class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
 class ProductListViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     url = reverse_lazy('product:list')
     template_name = 'product/product_filter.html'
+
+
+class CompanyAutocomplete(PermissionMixin, TestCase):
+    url = reverse_lazy('product:product-autocomplete')
