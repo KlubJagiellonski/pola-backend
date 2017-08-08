@@ -52,7 +52,7 @@ django-grappelli==2.7.1
 
 # Autocomplete
 django-autocomplete-light==2.2.10
-django_decorator_include==1.0
+django_decorator_include==1.2
 
 #Babel
 Babel==2.1.1
