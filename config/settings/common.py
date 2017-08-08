@@ -46,8 +46,7 @@ THIRD_PARTY_APPS = (
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
     'reversion',
-    'django_filters',
-    'rest_framework'
+    'django_filters'
 )
 
 # Apps specific for this project go here.

@@ -44,9 +44,7 @@ django_filter==0.11.0
 
 # API
 requests==2.18.1
-# TODO: Consider delete, because djangorestframework has built-in mechanisms
 django-ratelimit==0.6.0
-djangorestframework==3.2.4
 
 django-grappelli==2.10.1
 
