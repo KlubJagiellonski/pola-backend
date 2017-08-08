@@ -57,13 +57,42 @@ class Krs:
     def __init__(self, client=None):
         self.client = client or ApiClient()
 
-    def json_to_company(self, json):
+    def get_companies_by_name(self, name):
+        return self.get_companies_by_krs_name(name) or \
+            self.get_companies_by_search(name)
+
+    def get_companies_by_search(self, name):
+        normalized_name = Krs._normalize_name(name)
+        response = self.client.send_request('dane/krs_podmioty', 'conditions[q]', normalized_name)
+        return self._parse_companies_response(response)
+
+    def get_companies_by_krs_name(self, name):
+        normalized_name = Krs._normalize_name(name)
+        response = self.client.send_request('dane/krs_podmioty', 'conditions[krs_podmioty.nazwa]', normalized_name)
+        return self._parse_companies_response(response)
+
+    def get_companies_by_krs_no(self, name):
+        normalized_name = Krs._normalize_name(name)
+        response = self.client.send_request('dane/krs_podmioty', 'conditions[krs_podmioty.krs]', normalized_name)
+        return self._parse_companies_response(response)
+
+    def get_companies_by_nip(self, nip):
+        json = self.client.send_request('dane/krs_podmioty', 'conditions[krs_podmioty.nip]', nip)
+        return self._parse_companies_response(json)
+
+    def query_shareholders(self, id):
+        return self.client.send_request('dane/krs_podmioty/' + id, 'layers', 'wspolnicy')
+
+    def _parse_companies_response(self, json):
+        return map(lambda o: self._json_to_company(o['data']), json['Dataobject'])
+
+    def _json_to_company(self, json):
         company = dict()
-        company['nazwa'] = Krs.unescape(json['krs_podmioty.nazwa'])
+        company['nazwa'] = Krs._unescape(json['krs_podmioty.nazwa'])
         company['nazwa_skrocona'] = \
-            Krs.unescape(json['krs_podmioty.nazwa_skrocona'])
+            Krs._unescape(json['krs_podmioty.nazwa_skrocona'])
         company['nip'] = json['krs_podmioty.nip']
-        company['adres'] = self.simplifyAddress(json)
+        company['adres'] = self._simplify_address(json)
         company['id'] = json['krs_podmioty.id']
         company['liczba_wspolnikow'] = \
             json['krs_podmioty.liczba_wspolnikow']
@@ -72,10 +101,10 @@ class Krs:
 
         return CompanyInfo(**company)
 
-    def simplifyAddress(self, data):
+    def _simplify_address(self, data):
         lokal = u" lok. {}".format(data['krs_podmioty.adres_lokal']) if \
             data['krs_podmioty.adres_lokal'] else u""
-        adres = Krs.unescape(u"ul. {} {} {}\n{} {}\n{}".format(
+        adres = Krs._unescape(u"ul. {} {} {}\n{} {}\n{}".format(
             data['krs_podmioty.adres_ulica'],
             data['krs_podmioty.adres_numer'],
             lokal,
@@ -85,36 +114,9 @@ class Krs:
         )
         return adres
 
-    def get_companies_by_name(self, name):
-        return self.get_companies_by_krs_name(name) or \
-            self.get_companies_by_search(name)
-
-    def get_companies_by_search(self, name):
-        normalized_name = Krs._normalize_name(name)
-        response = self.client.send_request('dane/krs_podmioty', 'conditions[q]', normalized_name)
-        return self.parse_companies_response(response)
-
-    def get_companies_by_krs_name(self, name):
-        normalized_name = Krs._normalize_name(name)
-        response = self.client.send_request('dane/krs_podmioty', 'conditions[krs_podmioty.nazwa]', normalized_name)
-        return self.parse_companies_response(response)
-
-    def get_companies_by_krs_no(self, name):
-        normalized_name = Krs._normalize_name(name)
-        response = self.client.send_request('dane/krs_podmioty', 'conditions[krs_podmioty.krs]', normalized_name)
-        return self.parse_companies_response(response)
-
-    def get_companies_by_nip(self, nip):
-        json = self.client.send_request('dane/krs_podmioty', 'conditions[krs_podmioty.nip]', nip)
-        return self.parse_companies_response(json)
-
-    def parse_companies_response(self, json):
-        return map(lambda o: self.json_to_company(o['data']), json['Dataobject'])
-
-
     #remove unnecessary mojepanstwo escape
     @staticmethod
-    def unescape(s):
+    def _unescape(s):
         return s.replace('&amp;', '&')
 
     COMMON_COMPANY_NAME_ENDINGS = \
@@ -140,5 +142,3 @@ class Krs:
                 return name[:len(name)-len(key)] + value
         return name
 
-    def query_shareholders(self, id):
-        return self.client.send_request('dane/krs_podmioty/' + id, 'layers', 'wspolnicy')
