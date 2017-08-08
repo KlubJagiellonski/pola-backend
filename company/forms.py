@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from mojepanstwo_api import KrsClient
-from . import models
+
+from mojepanstwo_api2.krs import Krs
 from pola.forms import (CommitDescriptionMixin,
                         FormHorizontalMixin, SaveButtonMixin,
                         ReadOnlyFieldsMixin, SingleButtonMixin)
+from . import models
 
 
 class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
@@ -43,27 +44,29 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
 
     def clean(self):
         cleaned_data = super(CompanyCreateFromKRSForm, self).clean()
-        krs = KrsClient()
-        if cleaned_data['is_krs'] == '1':
-            json = krs.query_podmiot(
-                'conditions[krs_podmioty.krs]', cleaned_data['no'])
-        else:
-            json = krs.query_podmiot(
-                'conditions[krs_podmioty.nip]', cleaned_data['no'])
 
-        if json is None or json['Count'] == 0:
+        is_krs = cleaned_data['is_krs'] == '1'
+        no = cleaned_data['no']
+        companies = self.get_companies_from_api(is_krs, no)
+        if len(companies) == 0:
             raise forms.ValidationError(
                 "Nie znaleziono firmy o danym numerze KRS/NIP", 'error')
-        if json is None or json['Count'] > 1:
+        if len(companies) >= 2:
             raise forms.ValidationError(
                 "Jest wiele firm o tym numerze KRS/NIP (!)", 'error')
+        first_company = companies[0]
 
-        company = krs.json_to_company(json, 0)
-        cleaned_data['company'] = company
+        cleaned_data['company'] = first_company._asdict()
 
-        c = models.Company.objects.filter(nip=company['nip']).count()
-        if c > 0:
+        if models.Company.objects.filter(nip=int(first_company.nip)).exists():
             raise forms.ValidationError(
                 u"Ta firma istnieje już w naszej bazie", 'error')
 
         return cleaned_data
+
+    def get_companies_from_api(self, is_krs, no):
+        client = Krs()
+        if is_krs:
+            return client.get_companies_by_krs_no(no)
+        return client.get_companies_by_nip(no)
+

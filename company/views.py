@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
-    , FormView
+    FormView
 from django_filters.views import FilterView
 from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from report.models import Report

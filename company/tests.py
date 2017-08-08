@@ -1,7 +1,11 @@
 from django.core.urlresolvers import reverse, reverse_lazy
+from mock import patch
 from test_plus.test import TestCase
 
+
+from mojepanstwo_api2.krs import CompanyInfo
 from company.factories import CompanyFactory
+from company.forms import CompanyCreateFromKRSForm
 from company.models import Company
 from pola.users.factories import StaffFactory, UserFactory
 
@@ -102,3 +106,80 @@ class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('company:list')
     template_name = 'company/company_filter.html'
 
+
+class CompanyCreateFromKRSFormTestCase(TestCase):
+    def test_existings_compnay_in_db(self):
+        CompanyFactory(nip=123)
+        r = [
+            CompanyInfo(**{
+                "id": 1,
+                "nazwa": "AA",
+                "nazwa_skrocona": "BB",
+                "nip": "123",
+                "adres":"AAAA",
+                "liczba_wspolnikow": 3,
+                "score": "333",
+                "url": ""
+            })
+        ]
+        with patch('mojepanstwo_api2.krs.Krs.get_companies_by_krs_no') as mock_tool:
+            mock_tool.return_value = r
+            data = {'is_krs' : '1', 'no': 123}
+            form = CompanyCreateFromKRSForm(data=data)
+            self.assertFalse(form.is_valid())
+
+    def test_multiple_company(self):
+        r = [
+            CompanyInfo(**{
+                "id": 1,
+                "nazwa": "AA",
+                "nazwa_skrocona": "BB",
+                "nip": "123",
+                "adres":"AAAA",
+                "liczba_wspolnikow": 3,
+                "score": "333",
+                "url": ""
+            }),
+            CompanyInfo(**{
+                "id": 1,
+                "nazwa": "AA",
+                "nazwa_skrocona": "BB",
+                "nip": "321",
+                "adres": "AAAA",
+                "liczba_wspolnikow": 3,
+                "score": "333",
+                "url": ""
+            }),
+        ]
+        with patch('mojepanstwo_api2.krs.Krs.get_companies_by_krs_no') as mock_tool:
+            mock_tool.return_value = r
+            data = {'is_krs' : '1', 'no': 123}
+            form = CompanyCreateFromKRSForm(data=data)
+            self.assertFalse(form.is_valid())
+
+    def test_no_company_in_remote_api(self):
+        r = []
+        with patch('mojepanstwo_api2.krs.Krs.get_companies_by_krs_no') as mock_tool:
+            mock_tool.return_value = r
+            data = {'is_krs' : '1', 'no': 123}
+            form = CompanyCreateFromKRSForm(data=data)
+            self.assertFalse(form.is_valid())
+
+    def test_success(self):
+        r = [
+            CompanyInfo(**{
+                "id": 1,
+                "nazwa": "AA",
+                "nazwa_skrocona": "BB",
+                "nip": "123",
+                "adres":"AAAA",
+                "liczba_wspolnikow": 3,
+                "score": "333",
+                "url": ""
+            })
+        ]
+        with patch('mojepanstwo_api2.krs.Krs.get_companies_by_krs_no') as mock_tool:
+            mock_tool.return_value = r
+            data = {'is_krs' : '1', 'no': 123}
+            form = CompanyCreateFromKRSForm(data=data)
+            self.assertTrue(form.is_valid())
