@@ -67,6 +67,6 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
     def get_companies_from_api(self, is_krs, no):
         client = Krs()
         if is_krs:
-            return client.get_companies_by_krs_no(no)
-        return client.get_companies_by_nip(no)
+            return client.get_companies(krs_no=no)
+        return client.get_companies(nip_no=no)
 
