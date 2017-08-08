@@ -1,9 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.db import models, transaction, connection
-from django.db.models import F
 from company.models import Company
 import reversion
-from model_utils.managers import PassThroughManager
 from django.utils.translation import ugettext_lazy as _
 from pola.concurency import concurency
 from django.utils import timezone
@@ -37,7 +35,7 @@ class Product(models.Model):
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
 
-    objects = PassThroughManager.for_queryset_class(ProductQuerySet)()
+    objects = ProductQuerySet.as_manager()
 
     def get_absolute_url(self):
         return reverse('product:detail', args=[self.code])

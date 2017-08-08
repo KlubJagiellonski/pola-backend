@@ -12,7 +12,7 @@ django-braces==1.8.1
 django-crispy-forms==1.6.1
 
 # Models
-django-model-utils==2.3.1
+django-model-utils==3.0.0
 
 # Images
 Pillow==2.9.0
