@@ -7,10 +7,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
-from decorator_include import decorator_include
 from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView, AIPicsPageView
-
-from django.http import HttpResponse
 
 
 urlpatterns = [
