@@ -2,11 +2,13 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.conf.urls import include, url, patterns
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
+from django.views.static import serve
+
 from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView, AIPicsPageView
 
 
@@ -67,17 +69,16 @@ for filename in FAVICON_FILES:
         url=settings.STATIC_URL + 'favicons/' + filename, permanent=True)))
 
 # serving static files
-urlpatterns += patterns(
-    '', (r'^static/(?P<path>.*)$',
-         'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-)
+urlpatterns += [
+    url(r'^static/(?P<path>.*)$',
+         serve, {'document_root': settings.STATIC_ROOT}),
+]
 
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns += patterns(
-        '',
+    urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
-    )
+    ]
     urlpatterns += static(settings.STATIC_URL,
                           document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL,

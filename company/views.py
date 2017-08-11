@@ -86,7 +86,7 @@ class FieldsDisplayMixin(object):
                 value = obj.__dict__[field_name]
             fields.append(
                 {"name": self.model._meta
-                    .get_field_by_name(field_name)[0].verbose_name,
+                    .get_field(field_name).verbose_name,
                  "value": value})
 
         context['fields'] = fields

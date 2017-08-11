@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+from reversion.admin import VersionAdmin
+
 from .models import Product
-import reversion
 
 
-class ProductAdmin(reversion.VersionAdmin):
+class ProductAdmin(VersionAdmin):
     list_display = (
         'id',
         'name',

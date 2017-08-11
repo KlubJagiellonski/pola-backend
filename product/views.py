@@ -8,7 +8,7 @@ from django.views.decorators.cache import cache_page
 from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from django.utils.translation import ugettext_lazy as _
 from reportlab.graphics import renderPM
-import reversion
+from reversion import revisions as reversion
 from django_filters.views import FilterView
 
 from product.models import Product

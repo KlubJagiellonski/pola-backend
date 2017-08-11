@@ -5,7 +5,7 @@ from django.db import models, transaction, connection
 from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import ValidationError
-import reversion
+from reversion import revisions as reversion
 from pola.concurency import concurency
 
 
@@ -38,7 +38,7 @@ class CompanyQuerySet(models.query.QuerySet):
                                   user=commit_user)
             return obj
 
-
+@reversion.register
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=128, null=True, blank=True,
@@ -223,4 +223,4 @@ class Company(models.Model):
         verbose_name = _(u"Producent")
         verbose_name_plural = _(u"Producenci")
 
-reversion.register(Company)
+

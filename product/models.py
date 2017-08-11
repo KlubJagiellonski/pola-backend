@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.db import models, transaction, connection
 from company.models import Company
-import reversion
+from reversion import revisions as reversion
 from django.utils.translation import ugettext_lazy as _
 from pola.concurency import concurency
 from django.utils import timezone
@@ -23,7 +23,7 @@ class ProductQuerySet(models.query.QuerySet):
                                            user=commit_user)
             return obj
 
-
+@reversion.register
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
@@ -88,4 +88,4 @@ class Product(models.Model):
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
 
-reversion.register(Product)
+

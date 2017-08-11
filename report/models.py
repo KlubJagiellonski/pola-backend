@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import reversion
+from reversion.signals import post_revision_commit
 from os.path import basename
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -112,7 +112,7 @@ def on_revision_commit(instances, revision, **kwargs):
     if command.lower() == 'close':
         handle_command_close(revision, command, pk)
 
-reversion.post_revision_commit.connect(on_revision_commit)
+post_revision_commit.connect(on_revision_commit)
 
 
 def handle_command_close(revision, command, pk):
