@@ -20,4 +20,4 @@ django-mailgun==0.9.1
 # Redis
 django-redis-cache==1.7.1
 
-newrelic==2.56.0.42
+newrelic==2.90.0.75
