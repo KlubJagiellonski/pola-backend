@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('device_name', models.CharField(max_length=100)),
                 ('flash_used', models.NullBooleanField()),
                 ('was_portrait', models.NullBooleanField()),
-                ('product', models.ForeignKey(to='product.Product')),
+                ('product', models.ForeignKey(to='product.Product', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'AIPics',
@@ -45,6 +45,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='aiattachment',
             name='ai_pics',
-            field=models.ForeignKey(to='ai_pics.AIPics'),
+            field=models.ForeignKey(to='ai_pics.AIPics', on_delete=models.CASCADE),
         ),
     ]

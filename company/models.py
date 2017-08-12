@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from django.core.urlresolvers import reverse
-from django.db import models, transaction, connection
+from django.db import models, connection
 from django.forms.models import model_to_dict
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import ValidationError
 from reversion import revisions as reversion

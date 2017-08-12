@@ -10,7 +10,7 @@ from django.utils.timezone import get_default_timezone
 class Query(models.Model):
     client = models.CharField(max_length=40,
                               blank=True, null=True, default=None)
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     was_verified = models.BooleanField(default=False)
     was_plScore = models.BooleanField(default=False)
     was_590 = models.BooleanField(default=False)

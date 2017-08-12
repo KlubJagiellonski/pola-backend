@@ -5,9 +5,10 @@ from django.http import HttpResponsePermanentRedirect
 # 91f18400cc0fb37659e2dbaab5484ff2081f1f30/django/middleware/http.py#L33
 # this code is unsafe if we move away from Heroku. Heroku ensures the
 # HTTP_X_FORWARDED_FOR is safe
+from django.utils.deprecation import MiddlewareMixin
 
 
-class SetRemoteAddrFromForwardedFor(object):
+class SetRemoteAddrFromForwardedFor(MiddlewareMixin):
     """
     Middleware that sets REMOTE_ADDR based on HTTP_X_FORWARDED_FOR, if the
     latter is set. This is useful if you're sitting behind a reverse proxy that
@@ -41,7 +42,7 @@ def _get_redirect(new_hostname, request):
     return HttpResponsePermanentRedirect(new_location)
 
 
-class HostnameRedirectMiddleware(object):
+class HostnameRedirectMiddleware(MiddlewareMixin):
     def process_request(self, request):
         server_name = request.META['HTTP_HOST']
         catchall = getattr(settings,

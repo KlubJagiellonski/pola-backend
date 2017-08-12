@@ -2,18 +2,15 @@
 
 from os.path import basename
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from product.models import Product
-from datetime import datetime
-from babel.dates import format_timedelta
 from django.utils import timezone
 from babel.dates import format_timedelta
 
 
 class AIPics(models.Model):
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=False, null=False,
                               verbose_name=_(u'Zgłaszający'))
 
@@ -45,7 +42,7 @@ class AIPics(models.Model):
 
 
 class AIAttachment(models.Model):
-    ai_pics = models.ForeignKey(AIPics)
+    ai_pics = models.ForeignKey(AIPics, on_delete=models.CASCADE)
     file_no = models.IntegerField(null=False, default=0)
     attachment = models.FileField(
         upload_to="ai/%Y/%m/%d", verbose_name=_("File"))

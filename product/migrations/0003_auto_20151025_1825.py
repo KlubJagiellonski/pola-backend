@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='company',
-            field=models.ForeignKey(verbose_name=b'Producent', blank=True, to='company.Company', null=True),
+            field=models.ForeignKey(verbose_name=b'Producent', blank=True, to='company.Company', null=True, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='product',

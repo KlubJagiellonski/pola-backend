@@ -32,8 +32,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('resolved_at', models.DateTimeField(null=True, blank=True)),
                 ('desciption', models.TextField()),
-                ('product', models.ForeignKey(to='product.Product')),
-                ('resolved_by', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('product', models.ForeignKey(to='product.Product', on_delete=models.CASCADE)),
+                ('resolved_by', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Report',
@@ -43,6 +43,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attachment',
             name='report',
-            field=models.ForeignKey(to='report.Report'),
+            field=models.ForeignKey(to='report.Report', on_delete=models.CASCADE),
         ),
     ]

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
@@ -28,22 +27,22 @@ urlpatterns = [
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
-    url(r'^cms/product/', include('product.urls', namespace='product')),
-    url(r'^cms/company/', include('company.urls', namespace='company')),
-    url(r'^cms/report/', include('report.urls', namespace='report')),
+    url(r'^cms/product/', ('product.urls', 'product', 'product')),
+    url(r'^cms/company/', ('company.urls', 'company', 'company')),
+    url(r'^cms/report/', ('report.urls', 'report', 'report')),
 
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 
     # User management
-    url(r'^users/', include("pola.users.urls", namespace="users")),
+    url(r'^users/', ('pola.users.urls', 'pola.users', 'users')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 
     # url(r'^api/', include('pola.api.urls', namespace='api')),
-    url(r'^a/', include('api.urls', namespace='api')),
-    url(r'^m/', include('webviews.urls', namespace='webviews')),
-    url(r'^concurency/', include('pola.concurency.urls', namespace='concurency')),
+    url(r'^a/', ('api.urls', 'api', 'api')),
+    url(r'^m/', ('webviews.urls', 'webviews', 'webviews')),
+    url(r'^concurency/', ('pola.concurency.urls', 'pola.concurency', 'concurency')),
 
     url(r'^robots\.txt$', TemplateView.as_view(
         template_name="robots.txt" if settings.IS_PRODUCTION

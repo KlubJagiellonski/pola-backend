@@ -4,10 +4,10 @@ import re
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from reversion.models import Revision
 from os.path import basename
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from product.models import Product
@@ -30,7 +30,7 @@ class ReportQuerySet(models.QuerySet):
 
 
 class Report(models.Model):
-    product = models.ForeignKey(Product, null=True)
+    product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=True, null=True,
                               default=None, verbose_name=_(u'Zgłaszający'))
     created_at = models.DateTimeField(auto_now_add=True,
@@ -39,7 +39,8 @@ class Report(models.Model):
                                        verbose_name=_('Rozpatrzone'))
     resolved_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
                                     blank=True,
-                                    verbose_name=_('Rozpatrzone przez'))
+                                    verbose_name=_('Rozpatrzone przez'),
+                                    on_delete=models.CASCADE)
     description = models.TextField(verbose_name=_('Opis'))
     objects = ReportQuerySet.as_manager()
 
@@ -80,7 +81,7 @@ class Report(models.Model):
 
 
 class Attachment(models.Model):
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)
     attachment = models.FileField(
         upload_to="reports/%Y/%m/%d", verbose_name=_("File"))
 
