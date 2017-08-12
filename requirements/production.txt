@@ -15,7 +15,7 @@ Collectfast==0.5.2
 
 # Mailgun Support
 # ---------------
-django-mailgun==0.8.0
+django-mailgun==0.9.1
 
 # Redis
 django-redis-cache==1.6.3
