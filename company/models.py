@@ -29,14 +29,14 @@ class CompanyQuerySet(models.query.QuerySet):
         if not commit_desc:
             return super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(
-                manage_manually=True):
-            obj = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
-            if obj[1]:
-                reversion.default_revision_manager.\
-                    save_revision([obj[0]], comment=commit_desc,
-                                  user=commit_user)
-            return obj
+        with reversion.create_revision(manage_manually=True, atomic=True):
+            obj, created = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
+            if created:
+                reversion.set_comment(commit_desc)
+                reversion.set_user(commit_user)
+                reversion.add_to_revision(obj)
+            return obj, created
+
 
 @reversion.register
 class Company(models.Model):
@@ -121,7 +121,6 @@ class Company(models.Model):
                 '(select coalesce(sum(query_count),0) '
                 'from product_product '
                 'where product_product.company_id=company_company.id)')
-
 
     def to_dict(self):
         dict = model_to_dict(self)
@@ -212,15 +211,16 @@ class Company(models.Model):
         if not commit_desc:
             return super(Company, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.\
-                create_revision(manage_manually=True):
+        with reversion.create_revision(manage_manually=True, atomic=True):
             obj = super(Company, self).save(*args, **kwargs)
-            reversion.default_revision_manager.\
-                save_revision([self], comment=commit_desc, user=commit_user)
+            reversion.set_comment(commit_desc)
+            reversion.set_user(commit_user)
+            reversion.add_to_revision(obj)
             return obj
 
     class Meta:
         verbose_name = _(u"Producent")
         verbose_name_plural = _(u"Producenci")
+        ordering = ['-created_at']
 
 

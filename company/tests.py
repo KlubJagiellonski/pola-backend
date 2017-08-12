@@ -1,11 +1,15 @@
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import request
+from django.test import override_settings
+from django_webtest import WebTest, WebTestMixin
 from mock import patch
+from reversion.models import Version
 from test_plus.test import TestCase
 
 
 from mojepanstwo_api2.krs import CompanyInfo
 from company.factories import CompanyFactory
-from company.forms import CompanyCreateFromKRSForm
+from company.forms import CompanyCreateFromKRSForm, CompanyForm
 from company.models import Company
 from pola.users.factories import StaffFactory, UserFactory
 
@@ -52,12 +56,58 @@ class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, TestC
 
 
 class CompanyUpdateTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
-    url = reverse_lazy('company:edit')
     template_name = 'company/company_form.html'
 
     def setUp(self):
         super(CompanyUpdateTestCase, self).setUp()
         self.url = reverse('company:edit', kwargs={'pk': self.instance.pk})
+
+
+class CompanyUpdateWebTestCase(WebTestMixin, TestCase):
+    def setUp(self):
+        super(CompanyUpdateWebTestCase, self).setUp()
+        self.instance = CompanyFactory(name="company_name")
+        self.url = reverse('company:edit', kwargs={'pk': self.instance.pk})
+        self.user = StaffFactory()
+
+    def test_form_success(self):
+        page = self.app.get(self.url, user=self.user)
+        page.form['official_name'] = "New name"
+        page.form['commit_desc'] = "Commit description"
+        page = page.form.submit()
+
+        self.assertRedirects(page, self.instance.get_absolute_url())
+        self.instance.refresh_from_db()
+        versions = Version.objects.get_for_object(self.instance)
+        self.assertEqual(versions[0].revision.comment, "Commit description")
+        self.assertEqual(versions[0].revision.user, self.user)
+        self.assertEqual(self.instance.official_name, "New name")
+
+    @override_settings(LANGUAGE_CODE='en-EN')
+    def test_form_commit_desc_required(self):
+        page = self.app.get(self.url, user=self.user)
+        page.form['official_name'] = "New name"
+        page = page.form.submit()
+
+        self.assertContains(page, "This field is required.")
+
+        page.form['commit_desc'] = "AAA"
+        page = page.form.submit()
+
+        self.assertRedirects(page, self.instance.get_absolute_url())
+
+    @override_settings(LANGUAGE_CODE='en-EN')
+    def test_form_readonly_fields(self):
+        page = self.app.get(self.url, user=self.user)
+        self.assertEqual(page.form['name'].attrs['disabled'], 'true')
+
+        page.form['name'] = "789789789"
+        page.form['commit_desc'] = "Commit desc"
+        page = page.form.submit()
+
+        self.assertRedirects(page, self.instance.get_absolute_url())
+        self.instance.refresh_from_db()
+        self.assertEqual(self.instance.name, "company_name")
 
 
 class ConcurencyComapnyUpdateTestCase(TestCase):

@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import re
-from reversion.signals import post_revision_commit
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from reversion.models import Revision
 from os.path import basename
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from product.models import Product
-from datetime import datetime
 from babel.dates import format_timedelta
 from django.utils import timezone
 
@@ -74,6 +76,7 @@ class Report(models.Model):
     class Meta:
         verbose_name = _("Report")
         verbose_name_plural = _("Reports")
+        ordering = ['-created_at']
 
 
 class Attachment(models.Model):
@@ -100,8 +103,9 @@ class Attachment(models.Model):
 COMMAND_REGEXP = re.compile(r'(?P<command>\w+)\s?\#(?P<pk>[0-9]+)', re.I)
 
 
-def on_revision_commit(instances, revision, **kwargs):
-    comment = revision.comment
+@receiver(post_save, sender=Revision)
+def on_revision_commit(instance, *args, **kwargs):
+    comment = instance.comment
     search = COMMAND_REGEXP.search(comment)
     if not search:
         return
@@ -110,9 +114,7 @@ def on_revision_commit(instances, revision, **kwargs):
     pk = search.group('pk')
 
     if command.lower() == 'close':
-        handle_command_close(revision, command, pk)
-
-post_revision_commit.connect(on_revision_commit)
+        handle_command_close(instance, command, pk)
 
 
 def handle_command_close(revision, command, pk):

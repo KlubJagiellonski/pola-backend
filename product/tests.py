@@ -1,8 +1,12 @@
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.test import override_settings
+from django_webtest import WebTestMixin
+from reversion.models import Version
 from test_plus.test import TestCase
 
 from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
+from product.models import Product
 
 
 class PermissionMixin(object):
@@ -62,6 +66,53 @@ class ProductUpdateTestCase(PermissionMixin, InstanceMixin, TestCase):
     def setUp(self):
         super(ProductUpdateTestCase, self).setUp()
         self.url = reverse('product:edit', args=[self.instance.code])
+
+
+class ProductUpdateWebTestCase(WebTestMixin, TestCase):
+    def setUp(self):
+        super(ProductUpdateWebTestCase, self).setUp()
+        self.instance = ProductFactory(code="123")
+        self.url = reverse('product:edit', args=[self.instance.code])
+        self.user = StaffFactory()
+
+    def test_form_success(self):
+        page = self.app.get(self.url, user=self.user)
+        page.form['name'] = "New name"
+        page.form['commit_desc'] = "Commit description"
+        page = page.form.submit()
+
+        self.assertRedirects(page, self.instance.get_absolute_url())
+        self.instance.refresh_from_db()
+        versions = Version.objects.get_for_object(self.instance)
+        self.assertEqual(versions[0].revision.comment, "Commit description")
+        self.assertEqual(versions[0].revision.user, self.user)
+        self.assertEqual(self.instance.name, "New name")
+
+    @override_settings(LANGUAGE_CODE='en-EN')
+    def test_form_commit_desc_required(self):
+        page = self.app.get(self.url, user=self.user)
+        page.form['name'] = "New name"
+        page = page.form.submit()
+
+        self.assertContains(page, "This field is required.")
+
+        page.form['commit_desc'] = "AAA"
+        page = page.form.submit()
+
+        self.assertRedirects(page, self.instance.get_absolute_url())
+
+    @override_settings(LANGUAGE_CODE='en-EN')
+    def test_form_readonly_fields(self):
+        page = self.app.get(self.url, user=self.user)
+        self.assertEqual(page.form['code'].attrs['disabled'], 'true')
+
+        page.form['code'] = "789789789"
+        page.form['commit_desc'] = "Commit desc"
+        page = page.form.submit()
+
+        self.assertRedirects(page, self.instance.get_absolute_url())
+        self.instance.refresh_from_db()
+        self.assertEqual(self.instance.code, "123")
 
 
 class ProductHistoryViewTestCase(PermissionMixin, InstanceMixin, TestCase):

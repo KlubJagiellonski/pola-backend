@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.db import models, transaction, connection
+from django.db import models, connection
 from company.models import Company
 from reversion import revisions as reversion
 from django.utils.translation import ugettext_lazy as _
@@ -15,13 +15,13 @@ class ProductQuerySet(models.query.QuerySet):
         if not commit_desc:
             return super(ProductQuerySet, self).create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(manage_manually=True):
+        with reversion.create_revision(manage_manually=True, atomic=True):
             obj = super(ProductQuerySet, self).create(*args, **kwargs)
-            revision_manager = reversion.default_revision_manager
-            revision_manager.save_revision([obj],
-                                           comment=commit_desc,
-                                           user=commit_user)
+            reversion.set_comment(commit_desc)
+            reversion.set_user(commit_user)
+            reversion.add_to_revision(obj)
             return obj
+
 
 @reversion.register
 class Product(models.Model):
@@ -53,11 +53,11 @@ class Product(models.Model):
         if not commit_desc:
             return super(Product, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.\
-                create_revision(manage_manually=True):
+        with reversion.create_revision(manage_manually=True, atomic=True):
             obj = super(Product, self).save(*args, **kwargs)
-            reversion.default_revision_manager.\
-                save_revision([self], comment=commit_desc, user=commit_user)
+            reversion.set_comment(commit_desc)
+            reversion.set_user(commit_user)
+            reversion.add_to_revision(obj)
             return obj
 
     def increment_query_count(self):
@@ -87,5 +87,5 @@ class Product(models.Model):
     class Meta:
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
-
+        ordering = ['-created_at']
 

@@ -51,7 +51,7 @@ class CommitDescriptionMixin(forms.Form):
                                   widget=forms.Textarea)
 
     def save(self, *args, **kwargs):
-        with transaction.atomic(), reversion.create_revision():
+        with reversion.create_revision(atomic=True):
             obj = super(CommitDescriptionMixin, self).save(*args, **kwargs)
             commit_desc = self.cleaned_data['commit_desc']
             reversion.set_comment(commit_desc)

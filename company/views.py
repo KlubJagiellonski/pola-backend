@@ -53,7 +53,6 @@ class CompanyCreateFromKRSView(LoginRequiredMixin, FormView):
         return HttpResponseRedirect(reverse('company:create') + '?' + q.urlencode())
 
 
-
 class CompanyUpdate(LoginRequiredMixin,
                     FormValidMessageMixin,
                     ConcurencyProtectUpdateView,

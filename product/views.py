@@ -8,8 +8,8 @@ from django.views.decorators.cache import cache_page
 from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from django.utils.translation import ugettext_lazy as _
 from reportlab.graphics import renderPM
-from reversion import revisions as reversion
 from django_filters.views import FilterView
+from reversion.models import Version
 
 from product.models import Product
 from .forms import ProductForm
@@ -27,10 +27,10 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
 
-        object = context['object']
+        obj = context['object']
 
         context['report_list'] = Report.objects.filter(
-            product=object, resolved_at=None)
+            product=obj, resolved_at=None)
 
         return context
 
@@ -73,7 +73,7 @@ class ProductHistoryView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductHistoryView, self).get_context_data(**kwargs)
-        context['revision_list'] = reversion.get_for_object(self.get_object())
+        context['revision_list'] = Version.objects.get_for_object(self.get_object())
         return context
 
 
