@@ -4,9 +4,9 @@
 schedule: every week
 
 requirements:
-  - requirements/base.txt:
-  - requirements/local.txt:
-  - requirements/production.txt:
-  - requirements/test.txt:
+  - requirements/base.txt
+  - requirements/local.txt
+  - requirements/production.txt
+  - requirements/test.txt
 
 label_prs: update
