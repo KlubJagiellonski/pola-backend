@@ -1,10 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_text
 from django.views.generic import TemplateView
 from django.views.generic.detail import (
     BaseDetailView, SingleObjectTemplateResponseMixin)
-from braces.views import LoginRequiredMixin
 from company.models import Company
 from product.models import Product
 from report.models import Report

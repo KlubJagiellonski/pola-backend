@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from django_filters.views import FilterView
 from pola.views import ActionView
-from braces.views import LoginRequiredMixin
 from . import models
 from .filters import ReportFilter
 

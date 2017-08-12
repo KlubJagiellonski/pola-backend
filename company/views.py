@@ -1,12 +1,13 @@
 # Create your views here.
 from dal import autocomplete
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.db.models import Q
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
     FormView
 from django_filters.views import FilterView
-from braces.views import LoginRequiredMixin, FormValidMessageMixin
+from braces.views import FormValidMessageMixin
 from report.models import Report
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
