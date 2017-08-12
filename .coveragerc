@@ -1,3 +1,5 @@
 [run]
-include = pola/*
+include = ./*
 omit = *migrations*
+plugins =
+    django_coverage_plugin
