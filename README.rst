@@ -1,5 +1,16 @@
-pola
+Pola
 ==============================
+
+.. image:: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/shield.svg
+     :target: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/
+     :alt: Updates
+
+.. image:: https://img.shields.io/github/issues/KlubJagiellonski/pola-backend.svg
+     :target: https://github.com/KlubJagiellonski/pola-backend/issues
+     :alt: GitHub issues counter
+
+.. image:: https://img.shields.io/github/license/KlubJagiellonski/pola-backend.svg
+     :alt: License
 
 asystent w zakupach
 
