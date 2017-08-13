@@ -1,3 +1,5 @@
+from functools import reduce
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q

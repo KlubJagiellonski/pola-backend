@@ -18,16 +18,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='code',
-            field=models.CharField(max_length=20, verbose_name=b'Kod', db_index=True),
+            field=models.CharField(max_length=20, verbose_name='Kod', db_index=True),
         ),
         migrations.AlterField(
             model_name='product',
             name='company',
-            field=models.ForeignKey(verbose_name=b'Producent', blank=True, to='company.Company', null=True, on_delete=models.CASCADE),
+            field=models.ForeignKey(verbose_name='Producent', blank=True, to='company.Company', null=True, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='product',
             name='name',
-            field=models.CharField(max_length=255, null=True, verbose_name=b'Nazwa'),
+            field=models.CharField(max_length=255, null=True, verbose_name='Nazwa'),
         ),
     ]

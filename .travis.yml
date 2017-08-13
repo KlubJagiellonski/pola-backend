@@ -1,0 +1,36 @@
+language: python
+python: 2.7
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+services:
+  - postgresql
+
+env:
+  fast_finish: true
+  global:
+    - DATABASE_URL="postgres:///pola_backend"
+  matrix:
+    - TOX_ENV=flake8
+    - TOX_ENV=py27-dj110-coveralls
+    - TOX_ENV=py27-dj111-coveralls
+    - TOX_ENV=py34-dj110-coveralls
+    - TOX_ENV=py34-dj111-coveralls
+    - TOX_ENV=py34-djmaster-coveralls
+
+matrix:
+  allow_failures:
+    - env: TOX_ENV=flake8
+    - env: TOX_ENV=py34-djmaster-coveralls
+
+
+install:
+  - pip install -U pip wheel
+  - pip install tox
+script:
+  - tox -e $TOX_ENV
+
+after_script:
+- rm $HOME/.cache/pip/log/*

@@ -1,1 +1,1 @@
-from krs import *
+from .krs import *

@@ -3,6 +3,7 @@
 from django.db import models, connection
 from django.forms.models import model_to_dict
 from django.urls import reverse
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import ValidationError
 from reversion import revisions as reversion
@@ -39,6 +40,7 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 @reversion.register
+@python_2_unicode_compatible
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=128, null=True, blank=True,
@@ -132,7 +134,7 @@ class Company(models.Model):
     def locked_by(self):
         return concurency.locked_by(self)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.common_name or self.official_name or self.name
 
     def js_plCapital_notes(self):

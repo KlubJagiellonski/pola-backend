@@ -3,6 +3,7 @@
 from os.path import basename
 from django.conf import settings
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from product.models import Product
 from django.utils import timezone
@@ -41,6 +42,7 @@ class AIPics(models.Model):
         verbose_name_plural = _("AIPics")
 
 
+@python_2_unicode_compatible
 class AIAttachment(models.Model):
     ai_pics = models.ForeignKey(AIPics, on_delete=models.CASCADE)
     file_no = models.IntegerField(null=False, default=0)
@@ -51,7 +53,7 @@ class AIAttachment(models.Model):
     def filename(self):
         return basename(self.attachment.name)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):

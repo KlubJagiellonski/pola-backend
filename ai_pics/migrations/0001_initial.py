@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='AIAttachment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('attachment', models.FileField(upload_to=b'ai/%Y/%m/%d', verbose_name='File')),
+                ('attachment', models.FileField(upload_to='ai/%Y/%m/%d', verbose_name='File')),
             ],
             options={
                 'verbose_name': "AIPics's attachment",

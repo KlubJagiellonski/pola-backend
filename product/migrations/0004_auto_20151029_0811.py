@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='code',
-            field=models.CharField(unique=True, max_length=20, verbose_name=b'Kod', db_index=True),
+            field=models.CharField(unique=True, max_length=20, verbose_name='Kod', db_index=True),
         ),
     ]

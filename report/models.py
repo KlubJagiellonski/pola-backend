@@ -5,6 +5,7 @@ import re
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils.encoding import python_2_unicode_compatible
 from reversion.models import Revision
 from os.path import basename
 from django.conf import settings
@@ -29,6 +30,7 @@ class ReportQuerySet(models.QuerySet):
                            resolved_by=user)
 
 
+@python_2_unicode_compatible
 class Report(models.Model):
     product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=True, null=True,
@@ -62,7 +64,7 @@ class Report(models.Model):
     def get_absolute_url(self):
         return reverse('report:detail', args=[self.pk])
 
-    def __unicode__(self):
+    def __str__(self):
         return self.description[:40] or "None"
 
     def get_timedelta(self):
@@ -80,6 +82,7 @@ class Report(models.Model):
         ordering = ['-created_at']
 
 
+@python_2_unicode_compatible
 class Attachment(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
     attachment = models.FileField(
@@ -89,7 +92,7 @@ class Attachment(models.Model):
     def filename(self):
         return basename(self.attachment.name)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):
