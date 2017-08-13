@@ -137,7 +137,7 @@ class ProductListViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_filter.html'
 
 
-class ProductAutocomplete(PermissionMixin, TestCase):
+class ProductAutocompleteTestCase(PermissionMixin, TestCase):
     url = reverse_lazy('product:product-autocomplete')
 
     def test_filters(self):
@@ -151,54 +151,34 @@ class ProductAutocomplete(PermissionMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
-            {
-                'pagination':
-                    {'more': False},
-                'results': [
-                    {'text': 'A1', 'id': '1'}
-                ]
-            }
+            self._get_expected_result([('1', 'A1')])
         )
 
         response = self.client.get("%s?q=%s" % (self.url, "B2"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
-            {
-                'pagination':
-                    {'more': False},
-                'results': [
-                    {'text': 'A2', 'id': '2'}
-                ]
-            }
+            self._get_expected_result([('2', 'A2')])
         )
 
         response = self.client.get("%s?q=%s" % (self.url, "B3"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
-            {
-                'pagination':
-                    {'more': False},
-                'results': [
-                    {'text': 'A3', 'id': '3'}
-                ]
-            }
+            self._get_expected_result([('3', 'A3')])
         )
 
         response = self.client.get("%s?q=%s" % (self.url, "B4"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
-            {
-                'pagination':
-                    {'more': False},
-                'results': [
-                    {'text': 'A4', 'id': '4'}
-                ]
-            }
+            self._get_expected_result([('4', 'A4')])
         )
 
-
-
-
+    def _get_expected_result(self, elements):
+        return {
+            'pagination':
+                {'more': False},
+            'results':
+                [{'text': o[1], 'id': o[0]} for o in elements]
+        }
