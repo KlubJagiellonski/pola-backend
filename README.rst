@@ -1,6 +1,14 @@
 Pola
 ==============================
 
+.. image:: https://travis-ci.org/KlubJagiellonski/pola-backend.svg?branch=master
+    :target: https://travis-ci.org/KlubJagiellonski/pola-backend
+    :alt: Build Status
+
+.. image:: https://coveralls.io/repos/github/KlubJagiellonski/pola-backend/badge.svg?branch=master
+    :target: https://coveralls.io/github/KlubJagiellonski/pola-backend?branch=master
+    :alt: Coverage Status
+
 .. image:: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/shield.svg
      :target: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/
      :alt: Updates
