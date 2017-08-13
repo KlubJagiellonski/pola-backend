@@ -12,6 +12,7 @@ from reportlab.graphics import renderPM
 from django_filters.views import FilterView
 from reversion.models import Version
 
+from pola.views import ExprAutocompleteMixin
 from product.models import Product
 from .forms import ProductForm
 from .filters import ProductFilter
@@ -87,15 +88,11 @@ def get_image(request, code):
     return response
 
 
-class ProductAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        qs = Product.objects.all()
-
-        if self.q:
-            where = Q(name__icontains=self.q)
-            where = where | Q(company__name__icontains=self.q)
-            where = where | Q(company__official_name__icontains=self.q)
-            where = where | Q(company__common_name__icontains=self.q)
-            qs = qs.filter(where)
-
-        return qs
+class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
+    search_expr = [
+        'name__icontains',
+        'company__name__icontains',
+        'company__official_name__icontains',
+        'company__common_name__icontains',
+    ]
+    model = Product

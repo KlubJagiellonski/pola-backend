@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_text
 from django.views.generic import TemplateView
@@ -55,6 +56,27 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
              exclude(code__startswith='590').count())
 
         return c
+
+
+class ExprAutocompleteMixin(object):
+    def get_search_expr(self):
+        if not hasattr(self, 'search_expr'):
+            raise ImproperlyConfigured('{0} is missing a {0}.search_expr. Define '
+                                       '{0}.search_expr or override {0}.get_search_expr().'
+                                       ''.format(self.__class__.__name__))
+        return self.search_expr
+
+    def get_filters(self):
+        q = [Q(**{x: self.q}) for x in self.get_search_expr()]
+        return reduce(lambda x, y: x | y, q)
+
+    def get_queryset(self):
+        qs = self.model.objects.all()
+
+        if self.q:
+            qs = qs.filter(self.get_filters())
+
+        return qs
 
 
 class ActionMixin(object):
@@ -178,6 +200,7 @@ class AdminStatsPageView(QueryStatsPageView):
             "order by 1 desc", None)
 
         return c
+
 
 class AIPicsPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-ai-pics.html'

@@ -4,6 +4,7 @@ from django_webtest import WebTestMixin
 from reversion.models import Version
 from test_plus.test import TestCase
 
+from company.factories import CompanyFactory
 from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
 from product.models import Product
@@ -136,5 +137,68 @@ class ProductListViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_filter.html'
 
 
-class CompanyAutocomplete(PermissionMixin, TestCase):
+class ProductAutocomplete(PermissionMixin, TestCase):
     url = reverse_lazy('product:product-autocomplete')
+
+    def test_filters(self):
+        self.login()
+        ProductFactory(id=1, name="A1")
+        ProductFactory(id=2, name="A2", company=CompanyFactory(name="PrefixB2"))
+        ProductFactory(id=3, name="A3", company=CompanyFactory(official_name="B3Suffix"))
+        ProductFactory(id=4, name="A4", company=CompanyFactory(common_name="PefixB4Suffix"))
+
+        response = self.client.get("%s?q=%s" % (self.url, "A1"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {
+                'pagination':
+                    {'more': False},
+                'results': [
+                    {'text': 'A1', 'id': '1'}
+                ]
+            }
+        )
+
+        response = self.client.get("%s?q=%s" % (self.url, "B2"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {
+                'pagination':
+                    {'more': False},
+                'results': [
+                    {'text': 'A2', 'id': '2'}
+                ]
+            }
+        )
+
+        response = self.client.get("%s?q=%s" % (self.url, "B3"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {
+                'pagination':
+                    {'more': False},
+                'results': [
+                    {'text': 'A3', 'id': '3'}
+                ]
+            }
+        )
+
+        response = self.client.get("%s?q=%s" % (self.url, "B4"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {
+                'pagination':
+                    {'more': False},
+                'results': [
+                    {'text': 'A4', 'id': '4'}
+                ]
+            }
+        )
+
+
+
+

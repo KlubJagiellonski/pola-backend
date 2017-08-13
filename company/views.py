@@ -8,6 +8,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
     FormView
 from django_filters.views import FilterView
 from braces.views import FormValidMessageMixin
+
+from pola.views import ExprAutocompleteMixin
 from report.models import Report
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
@@ -122,18 +124,11 @@ class CompanyDetailView(FieldsDisplayMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class CompanyAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        # Don't forget to filter out results depending on the visitor !
-        if not self.request.user.is_authenticated():
-            return Company.objects.none()
+class CompanyAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
+    search_expr = [
+        'name__icontains',
+        'official_name__icontains',
+        'common_name__icontains',
+    ]
+    model = Company
 
-        qs = Company.objects.all()
-
-        if self.q:
-            where = Q(name__icontains=self.q)
-            where = where | Q(official_name__icontains=self.q)
-            where = where | Q(common_name__icontains=self.q)
-            qs = qs.filter(where)
-
-        return qs
