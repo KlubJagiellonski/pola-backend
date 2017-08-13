@@ -10,8 +10,8 @@ from django.views.defaults import bad_request, permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django.views.static import serve
 
-from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView, AIPicsPageView
-
+from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView, \
+    AIPicsPageView
 
 urlpatterns = [
     url(r'^$',

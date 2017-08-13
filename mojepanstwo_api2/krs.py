@@ -5,6 +5,7 @@ import logging
 from collections import namedtuple
 
 import requests
+
 logger = logging.getLogger(__name__)
 
 
@@ -55,7 +56,7 @@ class Krs:
         self.client = client or ApiClient()
 
     def get_companies(self, **kwargs):
-        conditions={}
+        conditions = {}
 
         if 'search_terms' in kwargs:
             conditions['q'] = Krs._normalize_name(kwargs['search_terms'])
@@ -110,7 +111,7 @@ class Krs:
         )
         return adres
 
-    #remove unnecessary mojepanstwo escape
+    # remove unnecessary mojepanstwo escape
     @staticmethod
     def _unescape(s):
         return s.replace('&amp;', '&')
@@ -140,6 +141,5 @@ class Krs:
         name = name.upper()
         for key, value in Krs.COMMON_COMPANY_NAME_ENDINGS.items():
             if name.endswith(key.upper()):
-                return name[:len(name)-len(key)] + value
+                return name[:len(name) - len(key)] + value
         return name
-

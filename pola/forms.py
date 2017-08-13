@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django import forms
-from django.db import transaction
-from django.utils.translation import ugettext as _
+import reversion
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Reset, Submit
-import reversion
+from django import forms
+from django.utils.translation import ugettext as _
 
 
 class HelperMixin(object):

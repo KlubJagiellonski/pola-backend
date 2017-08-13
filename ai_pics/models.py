@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from os.path import basename
+
+from babel.dates import format_timedelta
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
 from product.models import Product
-from django.utils import timezone
-from babel.dates import format_timedelta
 
 
 class AIPics(models.Model):
@@ -57,7 +59,8 @@ class AIAttachment(models.Model):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):
-        return 'https://{}.s3.amazonaws.com/{}'.format(settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
+        return 'https://{}.s3.amazonaws.com/{}'.format(
+            settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
 
     class Meta:
         verbose_name = _("AIPics's attachment")

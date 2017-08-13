@@ -7,7 +7,6 @@ from test_plus.test import TestCase
 from company.factories import CompanyFactory
 from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
-from product.models import Product
 
 
 class PermissionMixin(object):

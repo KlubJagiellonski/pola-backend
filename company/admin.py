@@ -15,4 +15,6 @@ class CompanyAdmin(VersionAdmin):
         'plCapital_notes',
     )
     search_fields = ('name',)
+
+
 admin.site.register(Company, CompanyAdmin)

@@ -1,16 +1,14 @@
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import request
 from django.test import override_settings
-from django_webtest import WebTest, WebTestMixin
+from django_webtest import WebTestMixin
 from mock import patch
 from reversion.models import Version
 from test_plus.test import TestCase
 
-
-from mojepanstwo_api2.krs import CompanyInfo
 from company.factories import CompanyFactory
-from company.forms import CompanyCreateFromKRSForm, CompanyForm
+from company.forms import CompanyCreateFromKRSForm
 from company.models import Company
+from mojepanstwo_api2.krs import CompanyInfo
 from pola.users.factories import StaffFactory, UserFactory
 
 

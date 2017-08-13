@@ -1,21 +1,19 @@
 # Create your views here.
+from braces.views import FormValidMessageMixin
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse_lazy, reverse
-from django.db.models import Q
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, QueryDict
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
-    FormView
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django_filters.views import FilterView
-from braces.views import FormValidMessageMixin
 
-from pola.views import ExprAutocompleteMixin
-from report.models import Report
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
-from django.http import HttpResponseRedirect, QueryDict
+from pola.views import ExprAutocompleteMixin
+from report.models import Report
 from .filters import CompanyFilter
-from .forms import CompanyForm, CompanyCreateFromKRSForm
+from .forms import CompanyCreateFromKRSForm, CompanyForm
 
 
 class CompanyListView(LoginRequiredMixin, FilterView):
@@ -76,7 +74,7 @@ class CompanyDelete(LoginRequiredMixin,
 
 class FieldsDisplayMixin(object):
     def get_context_data(self, **kwargs):
-        context = super(FieldsDisplayMixin, self).get_context_data(**kwargs);
+        context = super(FieldsDisplayMixin, self).get_context_data(**kwargs)
         fields = []
         obj = self.get_object()
         for field_name in self.fields_to_display:
@@ -124,11 +122,11 @@ class CompanyDetailView(FieldsDisplayMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class CompanyAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
+class CompanyAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin,
+                          autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',
         'official_name__icontains',
         'common_name__icontains',
     ]
     model = Company
-

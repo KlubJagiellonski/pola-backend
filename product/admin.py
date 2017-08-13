@@ -14,4 +14,6 @@ class ProductAdmin(VersionAdmin):
     )
     list_filter = ('company',)
     search_fields = ('name',)
+
+
 admin.site.register(Product, ProductAdmin)

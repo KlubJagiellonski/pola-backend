@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from company.models import Company
-from product.models import Product
-from mojepanstwo_api import KrsClient
-from produkty_w_sieci_api import Client
-import produkty_w_sieci_api
-import mojepanstwo_api
-from django.conf import settings
 import locale
-from report.models import Report
 import re
+
+from django.conf import settings
+
+import mojepanstwo_api
+import produkty_w_sieci_api
+from company.models import Company
+from mojepanstwo_api import KrsClient
+from product.models import Product
+from produkty_w_sieci_api import Client
+from report.models import Report
 
 
 def get_result_from_code(code):
@@ -47,17 +49,17 @@ def get_result_from_code(code):
             else:
                 desc = ''
                 if company.plCapital_notes:
-                    desc += strip_urls_newlines(company.plCapital_notes)+u'\n'
+                    desc += strip_urls_newlines(company.plCapital_notes) + u'\n'
                 if company.plWorkers_notes:
-                    desc += strip_urls_newlines(company.plWorkers_notes)+u'\n'
+                    desc += strip_urls_newlines(company.plWorkers_notes) + u'\n'
                 if company.plRnD_notes:
-                    desc += strip_urls_newlines(company.plRnD_notes)+u'\n'
+                    desc += strip_urls_newlines(company.plRnD_notes) + u'\n'
                 if company.plRegistered_notes:
                     desc +=\
-                        strip_urls_newlines(company.plRegistered_notes)+u'\n'
+                        strip_urls_newlines(company.plRegistered_notes) + u'\n'
                 if company.plNotGlobEnt_notes:
                     desc +=\
-                        strip_urls_newlines(company.plNotGlobEnt_notes)+u'\n'
+                        strip_urls_newlines(company.plNotGlobEnt_notes) + u'\n'
 
                 result['description'] = desc
 
@@ -109,7 +111,7 @@ def get_result_from_code(code):
                         result['altText'] = 'Ten produkt został wyprodukowany ' \
                                             'przez zagraniczną firmę, której ' \
                                             'miejscem rejestracji jest: {}.'\
-                                        .format(CODE_PREFIX_TO_COUNTRY[prefix])
+                                            .format(CODE_PREFIX_TO_COUNTRY[prefix])
                         break
                 else:
                     # Ups. It seems to be an internal code
@@ -181,8 +183,10 @@ def create_from_api(code, obj, product=None):
             product.name = obj_product_name
 
         if product.company:
-            if company and product.company.name and obj_owner_name and\
-                not ilim_compare_str(product.company.name, obj_owner_name):
+            if company and product.company.name \
+                and obj_owner_name \
+                and not ilim_compare_str(
+                    product.company.name, obj_owner_name):
                 create_bot_report(product,
                                   u"Wg. najnowszego odpytania w bazie ILiM "
                                   "producent tego produktu to:\"{}\"".format(
@@ -257,8 +261,8 @@ def update_company_from_krs(product, company):
 
 
 def create_bot_report(product, description, check_if_already_exists=False):
-    if check_if_already_exists and\
-        Report.filter(product=product, client='krs-bot', description=description).exists():
+    if check_if_already_exists \
+        and Report.filter(product=product, client='krs-bot', description=description).exists():
         return
 
     report = Report(description=description)
@@ -359,7 +363,13 @@ def ilim_compare_str(s1, s2):
     return s1.upper() == s2.upper()
 
 def strip_urls_newlines(str):
-    s = re.sub(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', '', str)
+    s = re.sub(
+        r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|'
+        r'(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’'
+        r']))',
+        '',
+        str
+    )
     s = rem_dbl_newlines(s)
     s = s.strip(' \t\n\r')
     return s

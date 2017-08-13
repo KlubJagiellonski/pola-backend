@@ -1,10 +1,12 @@
-from django.db import models
-from product.models import Product
 from datetime import datetime, timedelta
+
+from django.db import models
 from django.utils import timezone
-from company.models import Company
-from report.models import Report
 from django.utils.timezone import get_default_timezone
+
+from company.models import Company
+from product.models import Product
+from report.models import Report
 
 
 class Query(models.Model):

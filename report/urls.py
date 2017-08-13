@@ -3,7 +3,6 @@ from django.conf.urls import url
 
 from . import views
 
-
 urlpatterns = [
     url(r'advanced/$',
         views.ReportAdvancedListView.as_view(), name="advanced"),

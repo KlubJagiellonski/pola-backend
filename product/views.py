@@ -1,24 +1,24 @@
+from braces.views import FormValidMessageMixin
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.decorators.cache import cache_page
-from braces.views import FormValidMessageMixin
 from django.utils.translation import ugettext_lazy as _
-from reportlab.graphics import renderPM
+from django.views.decorators.cache import cache_page
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django_filters.views import FilterView
+from reportlab.graphics import renderPM
 from reversion.models import Version
 
+from pola.concurency import ConcurencyProtectUpdateView
 from pola.views import ExprAutocompleteMixin
 from product.models import Product
-from .forms import ProductForm
-from .filters import ProductFilter
-from .images import Barcode
-from . import models
 from report.models import Report
-from pola.concurency import ConcurencyProtectUpdateView
+from . import models
+from .filters import ProductFilter
+from .forms import ProductForm
+from .images import Barcode
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -87,7 +87,8 @@ def get_image(request, code):
     return response
 
 
-class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
+class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin,
+                          autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',
         'company__name__icontains',

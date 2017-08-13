@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import re
+from os.path import basename
 
+from babel.dates import format_timedelta
+from django.conf import settings
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
-from reversion.models import Revision
-from os.path import basename
-from django.conf import settings
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from product.models import Product
-from babel.dates import format_timedelta
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
+from reversion.models import Revision
+
+from product.models import Product
 
 
 class ReportQuerySet(models.QuerySet):

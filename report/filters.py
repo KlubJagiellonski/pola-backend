@@ -2,12 +2,12 @@
 
 import django_filters
 from dal import autocomplete
+from django.utils.translation import ugettext_lazy as _
 
 from company.models import Company
+from pola.filters import CrispyFilterMixin
 from product.models import Product
 from .models import Report
-from django.utils.translation import ugettext_lazy as _
-from pola.filters import CrispyFilterMixin
 
 
 class StatusFilter(django_filters.ChoiceFilter):

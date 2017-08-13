@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from company.models import Company
-from mojepanstwo_api import KrsClient
-from pola import logic
+# from company.models import Company
+# from mojepanstwo_api import KrsClient
+# from pola import logic
 
 # usage:
 # export PYTHONIOENCODING=UTF-8

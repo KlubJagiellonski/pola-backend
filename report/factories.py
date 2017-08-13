@@ -1,8 +1,6 @@
-import datetime
-from django.utils import timezone
-
 import factory
 import factory.fuzzy
+from django.utils import timezone
 
 from pola.users.factories import UserFactory
 from product.factories import ProductFactory

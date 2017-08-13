@@ -1,8 +1,7 @@
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.encoding import force_text
-from django.views.generic.edit import BaseUpdateView
 from django.http import HttpResponseRedirect
+from django.utils.encoding import force_text
 
 
 class BaseConcurency(object):

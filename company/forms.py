@@ -4,9 +4,9 @@
 from django import forms
 
 from mojepanstwo_api2.krs import Krs
-from pola.forms import (CommitDescriptionMixin,
-                        FormHorizontalMixin, SaveButtonMixin,
-                        ReadOnlyFieldsMixin, SingleButtonMixin)
+from pola.forms import CommitDescriptionMixin, FormHorizontalMixin, ReadOnlyFieldsMixin, \
+    SaveButtonMixin, SingleButtonMixin
+
 from . import models
 
 
@@ -69,4 +69,3 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
         if is_krs:
             return client.get_companies(krs_no=no)
         return client.get_companies(nip_no=no)
-

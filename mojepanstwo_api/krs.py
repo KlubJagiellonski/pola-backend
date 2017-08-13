@@ -2,17 +2,23 @@
 # -*- coding: utf-8 -*-
 
 import logging
+
 import requests
+
 logger = logging.getLogger(__name__)
+
 
 class ApiError(Exception):
     pass
 
+
 class ConnectionError(ApiError):
     pass
 
+
 class CompanyNotFound(Exception):
     pass
+
 
 class KrsClient:
     API_URL = 'https://api-v3.mojepanstwo.pl/dane/krs_podmioty'
@@ -24,7 +30,7 @@ class KrsClient:
     def query_podmiot(self, param, value):
         params = {
             param: value
-            }
+        }
         resp = self.session.get(url=self.url, params=params)
 
         if resp.status_code != 200:
@@ -83,30 +89,35 @@ class KrsClient:
 
     def get_companies_by_json(self, json):
         companies = []
-        for i in range(0,json['Dataobject'].__len__()):
+        for i in range(0, json['Dataobject'].__len__()):
             company = self.json_to_company(json, i)
             companies.append(company)
 
         return companies
 
-    #remove unnecessary mojepanstwo escape
+    # remove unnecessary mojepanstwo escape
     @staticmethod
     def unescape(s):
-        return s.replace('&amp;','&')
+        return s.replace('&amp;', '&')
 
     COMMON_COMPANY_NAME_ENDINGS = \
-        { u' S.A.':u' SPÓŁKA AKCYJNA',
-          u' Sp. z o.o.' : u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-          u' Spółka z o.o.' : u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-          u'Sp. Jawna' : u'SPÓŁKA JAWNA',
-          u'spółka z ograniczoną odpowiedzialnością sp.k.' :
-            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'sp. z o. o. sp.k.' :
-            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'Sp. z o.o. sp.k.' :
-            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-          u'sp. z o.o. sp. k.' :
-            u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
+        {
+            u' S.A.':
+                u' SPÓŁKA AKCYJNA',
+            u' Sp. z o.o.':
+                u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+            u' Spółka z o.o.':
+                u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+            u'Sp. Jawna':
+                u'SPÓŁKA JAWNA',
+            u'spółka z ograniczoną odpowiedzialnością sp.k.':
+                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            u'sp. z o. o. sp.k.':
+                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            u'Sp. z o.o. sp.k.':
+                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            u'sp. z o.o. sp. k.':
+                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
           }
 
     @staticmethod
@@ -114,15 +125,12 @@ class KrsClient:
         name = name.upper()
         for key, value in KrsClient.COMMON_COMPANY_NAME_ENDINGS.items():
             if name.endswith(key.upper()):
-                return name[:len(name)-len(key)] + value
+                return name[:len(name) - len(key)] + value
         return name
 
-
     def query_shareholders(self, id):
-        params = {
-            'layers': 'wspolnicy'
-            }
-        resp = self.session.get(url=self.url+'/'+id, params=params)
+        params = {'layers': 'wspolnicy'}
+        resp = self.session.get(url=self.url + '/' + id, params=params)
 
         if resp.status_code != 200:
             raise ConnectionError({'status_code': resp.status_code})

@@ -1,12 +1,12 @@
-from django.db import models, connection
+from django.db import connection, models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
+from reversion import revisions as reversion
 
 from company.models import Company
-from reversion import revisions as reversion
-from django.utils.translation import ugettext_lazy as _
 from pola.concurency import concurency
-from django.utils import timezone
 
 
 class ProductQuerySet(models.query.QuerySet):
@@ -91,4 +91,3 @@ class Product(models.Model):
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
         ordering = ['-created_at']
-

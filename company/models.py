@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from django.db import models, connection
+from django.core.validators import ValidationError
+from django.db import connection, models
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import ValidationError
 from reversion import revisions as reversion
+
 from pola.concurency import concurency
 
 
@@ -105,7 +106,6 @@ class Company(models.Model):
     address = models.TextField(null=True, blank=True,
                                verbose_name=_(u"Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
-
 
     objects = CompanyQuerySet.as_manager()
 
@@ -224,5 +224,3 @@ class Company(models.Model):
         verbose_name = _(u"Producent")
         verbose_name_plural = _(u"Producenci")
         ordering = ['-created_at']
-
-

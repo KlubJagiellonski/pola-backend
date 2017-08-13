@@ -1,23 +1,24 @@
+from datetime import datetime, timedelta
 from functools import reduce
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 from django.utils.encoding import force_text
+from django.utils.timezone import get_default_timezone
 from django.views.generic import TemplateView
 from django.views.generic.detail import (
     BaseDetailView, SingleObjectTemplateResponseMixin)
+
+from ai_pics.models import AIPics
 from company.models import Company
+from pola.models import Stats
 from product.models import Product
 from report.models import Report
-from pola.models import Stats
-from ai_pics.models import AIPics, AIAttachment
-from django.utils import timezone
-from datetime import datetime, timedelta
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.timezone import get_default_timezone
-from django.db import connection
 
 
 class FrontPageView(LoginRequiredMixin, TemplateView):
@@ -41,13 +42,15 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_resolved_reports'] = Report.objects.only_resolved().count()
         c['no_of_reports'] = Report.objects.count()
 
-        c['most_popular_590_products'] =  (Product.objects
-                                           .filter(company__isnull=True,
-                                                   code__startswith='590')
+        c['most_popular_590_products'] = (Product.objects
+                                          .filter(
+                                                company__isnull=True,
+                                                code__startswith='590')
                                           .order_by('-query_count')[:10])
         c['no_of_590_products'] = (Product.objects
-                                   .filter(company__isnull=True,
-                                           code__startswith='590')
+                                   .filter(
+                                        company__isnull=True,
+                                        code__startswith='590')
                                    .count())
 
         c['most_popular_not_590_products'] =\
