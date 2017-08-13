@@ -158,100 +158,58 @@ class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
 
 
 class CompanyCreateFromKRSFormTestCase(TestCase):
-    def test_existings_compnay_in_db(self):
+
+    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    def test_existings_compnay_in_db(self, mock_tool):
         CompanyFactory(nip=123)
-        r = [
-            CompanyInfo(**{
-                "id": 1,
-                "nazwa": "AA",
-                "nazwa_skrocona": "BB",
-                "nip": "123",
-                "adres":"AAAA",
-                "liczba_wspolnikow": 3,
-                "score": "333",
-                "url": ""
-            })
-        ]
-        with patch('mojepanstwo_api2.krs.Krs.get_companies') as mock_tool:
-            mock_tool.return_value = r
-            data = {'is_krs' : '1', 'no': 123}
-            form = CompanyCreateFromKRSForm(data=data)
-            self.assertFalse(form.is_valid())
+        mock_tool.return_value = [self._get_mock()]
+        data = {'is_krs' : '1', 'no': 123}
+        form = CompanyCreateFromKRSForm(data=data)
+        self.assertFalse(form.is_valid())
 
-    def test_multiple_company(self):
-        r = [
-            CompanyInfo(**{
-                "id": 1,
-                "nazwa": "AA",
-                "nazwa_skrocona": "BB",
-                "nip": "123",
-                "adres":"AAAA",
-                "liczba_wspolnikow": 3,
-                "score": "333",
-                "url": ""
-            }),
-            CompanyInfo(**{
-                "id": 1,
-                "nazwa": "AA",
-                "nazwa_skrocona": "BB",
-                "nip": "321",
-                "adres": "AAAA",
-                "liczba_wspolnikow": 3,
-                "score": "333",
-                "url": ""
-            }),
+    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    def test_multiple_company(self, mock_tool):
+        mock_tool.return_value = [
+            self._get_mock(),
+            self._get_mock(),
         ]
-        with patch('mojepanstwo_api2.krs.Krs.get_companies') as mock_tool:
-            mock_tool.return_value = r
-            data = {'is_krs' : '1', 'no': 123}
-            form = CompanyCreateFromKRSForm(data=data)
-            self.assertFalse(form.is_valid())
+        data = {'is_krs' : '1', 'no': 123}
+        form = CompanyCreateFromKRSForm(data=data)
+        self.assertFalse(form.is_valid())
 
-    def test_no_company_in_remote_api(self):
-        r = []
-        with patch('mojepanstwo_api2.krs.Krs.get_companies') as mock_tool:
-            mock_tool.return_value = r
-            data = {'is_krs' : '1', 'no': 123}
-            form = CompanyCreateFromKRSForm(data=data)
-            self.assertFalse(form.is_valid())
+    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    def test_no_company_in_remote_api(self, mock_tool):
+        mock_tool.return_value = []
+        data = {'is_krs' : '1', 'no': 123}
+        form = CompanyCreateFromKRSForm(data=data)
+        self.assertFalse(form.is_valid())
 
-    def test_success(self):
-        r = [
-            CompanyInfo(**{
-                "id": 1,
-                "nazwa": "AA",
-                "nazwa_skrocona": "BB",
-                "nip": "123",
-                "adres":"AAAA",
-                "liczba_wspolnikow": 3,
-                "score": "333",
-                "url": ""
-            })
-        ]
-        with patch('mojepanstwo_api2.krs.Krs.get_companies') as mock_tool:
-            mock_tool.return_value = r
-            data = {'is_krs' : '1', 'no': 123}
-            form = CompanyCreateFromKRSForm(data=data)
-            self.assertTrue(form.is_valid())
+    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    def test_success(self, mock_tool):
+        mock_tool.return_value = [self._get_mock()]
+        data = {'is_krs' : '1', 'no': 123}
+        form = CompanyCreateFromKRSForm(data=data)
+        self.assertTrue(form.is_valid())
 
-    def test_success_by_nip(self):
-        r = [
-            CompanyInfo(**{
-                "id": 1,
-                "nazwa": "AA",
-                "nazwa_skrocona": "BB",
-                "nip": "123",
-                "adres":"AAAA",
-                "liczba_wspolnikow": 3,
-                "score": "333",
-                "url": ""
-            })
-        ]
-        with patch('mojepanstwo_api2.krs.Krs.get_companies') as mock_tool:
-            mock_tool.return_value = r
-            data = {'is_krs' : '0', 'no': 123}
-            form = CompanyCreateFromKRSForm(data=data)
-            self.assertTrue(form.is_valid())
+    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    def test_success_by_nip(self, mock_tool):
+        mock_tool.return_value = [self._get_mock()]
+        data = {'is_krs' : '0', 'no': 123}
+        form = CompanyCreateFromKRSForm(data=data)
+        self.assertTrue(form.is_valid())
+
+    def _get_mock(self):
+        data = {
+            "id": 1,
+            "nazwa": "AA",
+            "nazwa_skrocona": "BB",
+            "nip": "123",
+            "adres": "AAAA",
+            "liczba_wspolnikow": 3,
+            "score": "333",
+            "url": ""
+        }
+        return CompanyInfo(**data)
 
 
 class CompanyAutocomplete(PermissionMixin, TestCase):
