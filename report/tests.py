@@ -1,5 +1,7 @@
+# coding=utf-8
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.encoding import force_text
+from django_webtest import WebTestMixin
 from test_plus.test import TestCase
 
 from pola.users.factories import StaffFactory, UserFactory
@@ -38,12 +40,25 @@ class InstanceMixin(object):
         self.assertContains(resp, force_text(self.instance))
 
 
-class ReportListViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
+class ReportListViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, WebTestMixin, TestCase):
     url = reverse_lazy('report:list')
     template_name = 'report/report_filter.html'
 
+    # def test_empty(self):
+    #     self.login()
+    #     resp = self.client.get(self.url)
+    #     self.assertContains(resp, "Nie znaleziono zgłoszeń spełniających te kryteria")
+    #
+    def test_filled(self):
+        products = ReportFactory.create_batch(100)
+        page = self.app.get(self.url, user=self.user)
+        self.assertTrue("1 z 5" in page)
+        self.assertTrue(str(products[-1]) in page)
+        page2 = page.click("Następne")
+        page2.click("Poprzednie")
 
-class ReportAdvancedListViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+
+class ReportAdvancedListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('report:advanced')
     template_name = 'report/report_filter_adv.html'
 
@@ -56,6 +71,19 @@ class ReportAdvancedListViewTestCase(PermissionMixin, TemplateUsedMixin, TestCas
         })
 
         self.assertEqual(len(Report.objects.only_resolved()), 10)
+
+    def test_empty(self):
+        self.login()
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "Nie znaleziono zgłoszeń spełniających te kryteria")
+
+    def test_filled(self):
+        products = ReportFactory.create_batch(100)
+        page = self.app.get(self.url, user=self.user)
+        self.assertTrue("1 z 4" in str(page))
+        self.assertTrue(str(products[-1]) in page)
+        page2 = page.click("Następne")
+        page2.click("Poprzednie")
 
 
 class ReportDeleteViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):

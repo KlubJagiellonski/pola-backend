@@ -29,13 +29,13 @@ class GetInitalFormMixin(object):
         return initials
 
 
-# class CompanyCreate(GetInitalFormMixin,
-#                     LoginRequiredMixin,
-#                     FormValidMessageMixin,
-#                     CreateView):
-#     model = Company
-#     form_class = CompanyForm
-#     form_valid_message = u"Firma utworzona!"
+class CompanyCreate(GetInitalFormMixin,
+                    LoginRequiredMixin,
+                    FormValidMessageMixin,
+                    CreateView):
+    model = Company
+    form_class = CompanyForm
+    form_valid_message = u"Firma utworzona!"
 
 
 class CompanyCreateFromKRSView(LoginRequiredMixin, FormView):
