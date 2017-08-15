@@ -141,6 +141,7 @@ SELECT count(*)
 FROM product_product
 WHERE company_id IS NULL AND name IS NULL
  AND (select count(*) from report_report where product_id=product_product.id)=0
+ AND (select count(*) from ai_pics_aipics where product_id=product_product.id)=0
  AND (select count(*) from pola_query where product_id=product_product.id) <
  (12*date_part('year',age(created_at))+ date_part('month',age(created_at)))
 limit 10;
