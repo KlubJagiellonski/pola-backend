@@ -19,6 +19,9 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 RUN apt-get install -y build-essential libssl-dev libffi-dev python-dev
 
+#Required by Pillow
+RUN apt-get install -y libjpeg-turbo8-dev
+
 ADD / /app
 ADD /requirements.txt /app/
 WORKDIR /app
