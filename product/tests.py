@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.test import override_settings
 from django_webtest import WebTestMixin
@@ -131,9 +132,22 @@ class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
         self.url = reverse('product:detail', args=[self.instance.code])
 
 
-class ProductListViewTestCase(PermissionMixin, InstanceMixin, TestCase):
+class ProductListViewTestCase(PermissionMixin, WebTestMixin, TestCase):
     url = reverse_lazy('product:list')
     template_name = 'product/product_filter.html'
+
+    def test_empty(self):
+        self.login()
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "Nic nie znaleziono")
+
+    def test_filled(self):
+        products = ProductFactory.create_batch(100)
+        page = self.app.get(self.url, user=self.user)
+        # self.assertTrue("1 z 4" in page)
+        self.assertTrue(str(products[-1]) in page)
+        page2 = page.click("Następne")
+        page2.click("Poprzednie")
 
 
 class ProductAutocompleteTestCase(PermissionMixin, TestCase):

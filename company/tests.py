@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.test import override_settings
 from django_webtest import WebTestMixin
@@ -43,14 +44,43 @@ class InstanceMixin(object):
         self.assertContains(resp, self.instance.official_name)
 
 
-class CompanyCreatelViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+class CompanyCreateViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('company:create')
     template_name = 'company/company_form.html'
 
 
-class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('company:create_from_krs')
     template_name = 'company/company_from_krs.html'
+
+    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    def test_success_by_nip(self, mock_tool):
+        mock_tool.return_value = [self._get_mock()]
+
+        page = self.app.get(self.url, user=self.user)
+        page.form['is_krs'] = 0
+        page.form['no'] = "123"
+        page = page.form.submit()
+
+        self.assertTrue(page.url.count("TEST1") == 1)
+        self.assertTrue(page.url.count("TEST2") == 1)
+        self.assertTrue(page.url.count("TEST3") == 1)
+        self.assertTrue(page.url.count("123") == 1)
+        self.assertTrue(page.url.count("URL") == 1)
+        self.assertTrue(page.url.count(reverse('company:create')) == 1)
+
+    def _get_mock(self):
+        data = {
+            "id": 1,
+            "nazwa": "TEST1",
+            "nazwa_skrocona": "TEST2",
+            "nip": "123",
+            "adres": "TEST3",
+            "liczba_wspolnikow": 3,
+            "score": "333",
+            "url": "URL"
+        }
+        return CompanyInfo(**data)
 
 
 class CompanyUpdateTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
@@ -150,9 +180,22 @@ class CompanyDetailViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixi
         self.url = reverse('company:detail', kwargs={'pk': self.instance.pk})
 
 
-class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('company:list')
     template_name = 'company/company_filter.html'
+
+    def test_empty(self):
+        self.login()
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "Nie znaleziono producentów spełniających zadane kryteria")
+
+    def test_filled(self):
+        products = CompanyFactory.create_batch(100)
+        page = self.app.get(self.url, user=self.user)
+        # self.assertTrue("1 z 4" in page)
+        self.assertTrue(str(products[-1]) in page)
+        page2 = page.click("Następne")
+        page2.click("Poprzednie")
 
 
 class CompanyCreateFromKRSFormTestCase(TestCase):
