@@ -12,6 +12,8 @@ from .models import Report
 
 class StatusFilter(django_filters.ChoiceFilter):
     def __init__(self, *args, **kwargs):
+        if not 'label' in kwargs:
+            kwargs['label'] = _('Status')
         super(StatusFilter, self).__init__(*args, **kwargs)
         self.extra['choices'] = (
             ('', '---------'),
