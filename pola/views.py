@@ -14,12 +14,14 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import (
     BaseDetailView, SingleObjectTemplateResponseMixin)
 
-from ai_pics.models import AIPics
+from ai_pics.models import AIPics, AIAttachment
 from company.models import Company
 from pola.models import Stats
 from product.models import Product
 from report.models import Report
 
+from boto.s3.connection import S3Connection, Bucket, Key
+from django.conf import settings
 
 class FrontPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-cms.html'
@@ -213,8 +215,73 @@ class AIPicsPageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         c = super(TemplateView, self).get_context_data(**kwargs)
 
-        c['aipics'] = (AIPics.objects
+        if 'is_valid' in self.request.GET:
+            if self.request.GET['is_valid']=='1':
+                aipics = (AIPics.objects
+                        .filter(is_valid=True)
+                        .order_by('-id')[:20])
+                is_valid = True
+            else:
+                aipics = (AIPics.objects
+                          .filter(is_valid=False)
+                          .order_by('-id')[:20])
+                is_valid = False
+        else:
+            aipics = (AIPics.objects
                         .filter(is_valid__isnull=True)
-                        .order_by('-id')[:10])
+                        .order_by('-id')[:20])
+            is_valid = None
+
+        c['is_valid'] = is_valid
+        c['aipics'] = aipics
 
         return c
+
+    def post(self, request):
+        if request.method == 'POST':
+            if 'set_aipic_valid' in request.POST:
+                aipic_id = request.POST['set_aipic_valid']
+                aipic = AIPics.objects.get(id=aipic_id)
+                aipic.is_valid = True
+                aipic.save()
+            elif 'set_aipic_not_valid' in request.POST:
+                aipic_id = request.POST['set_aipic_not_valid']
+                aipic = AIPics.objects.get(id=aipic_id)
+                aipic.is_valid = False
+                aipic.save()
+            elif 'set_aipic_unverified' in request.POST:
+                aipic_id = request.POST['set_aipic_unverified']
+                aipic = AIPics.objects.get(id=aipic_id)
+                aipic.is_valid = None
+                aipic.save()
+            elif 'delete_attachment' in request.POST:
+                conn = S3Connection(settings.AWS_ACCESS_KEY_ID,
+                                    settings.AWS_SECRET_ACCESS_KEY)
+                bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
+                key = Key(bucket)
+
+                attachment_id = request.POST['delete_attachment']
+                attachment = AIAttachment.objects.get(id=attachment_id)
+
+                key.key = attachment.attachment
+                bucket.delete_key(key)
+
+                attachment.delete()
+            elif 'delete_aipic' in request.POST:
+                conn = S3Connection(settings.AWS_ACCESS_KEY_ID,
+                                    settings.AWS_SECRET_ACCESS_KEY)
+                bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
+                key = Key(bucket)
+
+                aipic_id = request.POST['delete_aipic']
+
+                attachments = AIAttachment.objects.filter(ai_pics_id=aipic_id)
+                for attachment in attachments:
+                    key.key = attachment.attachment
+                    bucket.delete_key(key)
+
+                aipic = AIPics.objects.get(id=aipic_id)
+                aipic.delete()
+
+        return  HttpResponseRedirect(request.get_full_path())
+
