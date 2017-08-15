@@ -43,9 +43,9 @@ class InstanceMixin(object):
         self.assertContains(resp, self.instance.official_name)
 
 
-class CompanyCreatelViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
-    url = reverse_lazy('company:create')
-    template_name = 'company/company_form.html'
+# class CompanyCreateViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+#     url = reverse_lazy('company:create')
+#     template_name = 'company/company_form.html'
 
 
 class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
