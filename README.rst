@@ -1,5 +1,24 @@
-pola
+Pola
 ==============================
+
+.. image:: https://travis-ci.org/KlubJagiellonski/pola-backend.svg?branch=master
+    :target: https://travis-ci.org/KlubJagiellonski/pola-backend
+    :alt: Build Status
+
+.. image:: https://coveralls.io/repos/github/KlubJagiellonski/pola-backend/badge.svg?branch=master
+    :target: https://coveralls.io/github/KlubJagiellonski/pola-backend?branch=master
+    :alt: Coverage Status
+
+.. image:: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/shield.svg
+     :target: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/
+     :alt: Updates
+
+.. image:: https://img.shields.io/github/issues/KlubJagiellonski/pola-backend.svg
+     :target: https://github.com/KlubJagiellonski/pola-backend/issues
+     :alt: GitHub issues counter
+
+.. image:: https://img.shields.io/github/license/KlubJagiellonski/pola-backend.svg
+     :alt: License
 
 asystent w zakupach
 

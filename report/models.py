@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import re
-import reversion
 from os.path import basename
-from django.conf import settings
-from django.core.urlresolvers import reverse
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from product.models import Product
-from datetime import datetime
+
 from babel.dates import format_timedelta
+from django.conf import settings
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
+from reversion.models import Revision
+
+from product.models import Product
 
 
 class ReportQuerySet(models.QuerySet):
@@ -23,12 +27,13 @@ class ReportQuerySet(models.QuerySet):
                     .filter(resolved_by__isnull=False))
 
     def resolve(self, user):
-        return self.update(resolved_at=datetime.now(),
+        return self.update(resolved_at=timezone.now(),
                            resolved_by=user)
 
 
+@python_2_unicode_compatible
 class Report(models.Model):
-    product = models.ForeignKey(Product, null=True)
+    product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=True, null=True,
                               default=None, verbose_name=_(u'Zgłaszający'))
     created_at = models.DateTimeField(auto_now_add=True,
@@ -37,7 +42,8 @@ class Report(models.Model):
                                        verbose_name=_('Rozpatrzone'))
     resolved_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
                                     blank=True,
-                                    verbose_name=_('Rozpatrzone przez'))
+                                    verbose_name=_('Rozpatrzone przez'),
+                                    on_delete=models.CASCADE)
     description = models.TextField(verbose_name=_('Opis'))
     objects = ReportQuerySet.as_manager()
 
@@ -51,7 +57,7 @@ class Report(models.Model):
         return self.OPEN
 
     def resolve(self, user, commit=True):
-        self.resolved_at = datetime.now()
+        self.resolved_at = timezone.now()
         self.resolved_by = user
         if commit:
             self.save()
@@ -59,7 +65,7 @@ class Report(models.Model):
     def get_absolute_url(self):
         return reverse('report:detail', args=[self.pk])
 
-    def __unicode__(self):
+    def __str__(self):
         return self.description[:40] or "None"
 
     def get_timedelta(self):
@@ -74,10 +80,12 @@ class Report(models.Model):
     class Meta:
         verbose_name = _("Report")
         verbose_name_plural = _("Reports")
+        ordering = ['-created_at']
 
 
+@python_2_unicode_compatible
 class Attachment(models.Model):
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)
     attachment = models.FileField(
         upload_to="reports/%Y/%m/%d", verbose_name=_("File"))
 
@@ -85,7 +93,7 @@ class Attachment(models.Model):
     def filename(self):
         return basename(self.attachment.name)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):
@@ -100,8 +108,9 @@ class Attachment(models.Model):
 COMMAND_REGEXP = re.compile(r'(?P<command>\w+)\s?\#(?P<pk>[0-9]+)', re.I)
 
 
-def on_revision_commit(instances, revision, **kwargs):
-    comment = revision.comment
+@receiver(post_save, sender=Revision)
+def on_revision_commit(instance, *args, **kwargs):
+    comment = instance.comment
     search = COMMAND_REGEXP.search(comment)
     if not search:
         return
@@ -110,9 +119,7 @@ def on_revision_commit(instances, revision, **kwargs):
     pk = search.group('pk')
 
     if command.lower() == 'close':
-        handle_command_close(revision, command, pk)
-
-reversion.post_revision_commit.connect(on_revision_commit)
+        handle_command_close(instance, command, pk)
 
 
 def handle_command_close(revision, command, pk):

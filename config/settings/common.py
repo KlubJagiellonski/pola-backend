@@ -33,7 +33,8 @@ DJANGO_APPS = (
     # 'django.contrib.humanize',
 
     # Must be before django.contrib.admin
-    'autocomplete_light',
+    'dal',
+    'dal_select2',
 
     # Admin
     'grappelli',
@@ -45,8 +46,7 @@ THIRD_PARTY_APPS = (
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
     'reversion',
-    'django_filters',
-    'rest_framework'
+    'django_filters'
 )
 
 # Apps specific for this project go here.
@@ -58,6 +58,7 @@ LOCAL_APPS = (
     'ai_pics',
     'pagination_custom',
     'pola.users',
+    'pola.concurency',
     'api',
     'webviews',
     # custom users app
@@ -69,7 +70,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     # Make sure djangosecure.middleware.SecurityMiddleware is listed first
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -246,6 +247,8 @@ LOGIN_URL = 'account_login'
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
+# Django Filter
+FILTERS_DISABLE_HELP_TEXT = True
 
 # LOGGING CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -282,7 +285,7 @@ LOGGING = {
 IS_PRODUCTION = env("IS_PRODUCTION", default=False)
 
 # Your common stuff: Below this line define 3rd party library settings
-PRODUKTY_W_SIECI_API_KEY = env("GS1_API_KEY")
+PRODUKTY_W_SIECI_API_KEY = env("GS1_API_KEY", default=None)
 
-SLACK_TOKEN = env("SLACK_TOKEN")
-SLACK_CHANNEL_AI_PICS = env("SLACK_CHANNEL_AI_PICS")
+SLACK_TOKEN = env("SLACK_TOKEN", default=None)
+SLACK_CHANNEL_AI_PICS = env("SLACK_CHANNEL_AI_PICS", default=None)

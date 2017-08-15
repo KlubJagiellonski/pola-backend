@@ -1,61 +1,54 @@
-# Bleeding edge Django
-django==1.8.3
-
 # Configuration
-django-environ==0.4.0
+django-environ==0.4.3
 django-secure==1.0.1
 
 
 
 # Forms
-django-braces==1.8.1
-django-crispy-forms==1.5.2
-django-floppyforms==1.5.2
+django-braces==1.11.0
+django-crispy-forms==1.6.1
 
 # Models
-django-model-utils==2.3.1
+django-model-utils==3.0.0
 
 # Images
-Pillow==2.9.0
+Pillow==4.2.1
 
 # For user registration, either via email or social
 # Well-built with regular release cycles!
-django-allauth==0.23.0
+django-allauth==0.32.0
 
 # For the persistence stores
-psycopg2==2.6.1
+psycopg2==2.7.3
 
 # Unicode slugification
 unicode-slugify==0.1.3
-django-autoslug==1.8.0
+django-autoslug==1.9.3
 
 # Time zones support
-pytz==2015.6
+pytz==2017.2
 
 # Redis support
-django-redis==4.2.0
+django-redis==4.8.0
 redis>=2.10.0
 
 
-jsonfield==1.0.3
-django-reversion==1.9.3
-reportlab==3.2.0
-django_filter==0.11.0
+jsonfield==2.0.2
+django-reversion==2.0.9
+reportlab==3.4.0
+django-filter==1.0.4
 
 # API
-requests==2.18.1
-# TODO: Consider delete, because djangorestframework has built-in mechanisms
-django-ratelimit==0.6.0
-djangorestframework==3.2.4
+requests==2.18.3
+django-ratelimit==1.0.1
 
-django-grappelli==2.7.1
+django-grappelli==2.10.1
 
 # Autocomplete
-django-autocomplete-light==2.2.10
-django_decorator_include==1.0
+django-autocomplete-light==3.2.9
 
 #Babel
-Babel==2.1.1
+Babel==2.4.0
 
 #RQ
-rq==0.8.0
+rq==0.8.1

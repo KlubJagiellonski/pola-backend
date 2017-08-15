@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
 
 from . import views
 
@@ -8,9 +9,11 @@ urlpatterns = [
         regex=r'create$',
         view=views.ProductCreate.as_view(),
         name="create"),
+    url(r'^product-autocomplete/$',
+        views.ProductAutocomplete.as_view(), name='product-autocomplete'),
     url(
         regex=r'(?P<code>[-\w]+)/image$',
-        view=views.get_image,
+        view=login_required(views.get_image),
         name="image"),
     url(
         regex=r'(?P<slug>[-\w]+)/edit$',

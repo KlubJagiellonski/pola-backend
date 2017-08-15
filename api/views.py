@@ -1,21 +1,24 @@
-from pola import logic, logic_ai
-from django.http import JsonResponse, HttpResponseForbidden
-from django.views.decorators.csrf import csrf_exempt
-from product.models import Product
-from pola.models import Query
-from report.models import Report, Attachment
-from ai_pics.models import AIPics, AIAttachment
-from django.conf import settings
-import json
-import os
-import uuid
-import time
 import base64
 import hmac
+import json
+import os
+import time
 import urllib
+import uuid
 from hashlib import sha1
+
+from django.conf import settings
+from django.http import HttpResponseForbidden, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from ratelimit.decorators import ratelimit
+
 import slack
+from ai_pics.models import AIPics, AIAttachment
+from pola import logic, logic_ai
+from pola.models import Query
+from product.models import Product
+from report.models import Report, Attachment
+
 
 # API v3
 
@@ -42,16 +45,17 @@ def add_ai_pics(request):
 
     product = Product.objects.get(pk=product_id)
 
-    ai_pics = AIPics.objects.create(product=product,
-                                    client=device_id,
-                                    original_width= original_width,
-                                    original_height= original_height,
-                                    width= width,
-                                    height= height,
-                                    device_name= device_name,
-                                    flash_used= flash_used,
-                                    was_portrait= was_portrait
-                                    )
+    ai_pics = AIPics.objects.create(
+        product=product,
+        client=device_id,
+        original_width=original_width,
+        original_height=original_height,
+        width=width,
+        height=height,
+        device_name=device_name,
+        flash_used=flash_used,
+        was_portrait=was_portrait
+    )
 
     signed_requests = []
     if files_count and file_ext and mime_type:
@@ -82,6 +86,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
 
     return signed_request
 
+
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code_v3(request):
     noai = request.GET.get('noai')
@@ -89,6 +94,7 @@ def get_by_code_v3(request):
     result = get_by_code_internal(request, ai_supported=noai is None)
 
     return JsonResponse(result)
+
 
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
@@ -120,6 +126,7 @@ def get_by_code_internal(request, ai_supported = False):
 
     return result
 
+
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code_v2(request):
 
@@ -127,10 +134,12 @@ def get_by_code_v2(request):
 
     return JsonResponse(result)
 
+
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
 def create_report_v2(request):
     return create_report_internal(request, extra_comma=True)
+
 
 def create_report_internal(request, extra_comma=False):
     device_id = request.GET['device_id']
@@ -151,7 +160,7 @@ def create_report_internal(request, extra_comma=False):
 
     signed_requests = []
     if files_count and file_ext and mime_type:
-        if files_count>10:
+        if files_count > 10:
             return HttpResponseForbidden("files_count can be between 0 and 10")
 
         for _ in range(0, files_count):
@@ -196,6 +205,7 @@ def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False
 
     return signed_request
 
+
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
 def attach_file_v2(request):
@@ -215,7 +225,8 @@ def attach_file_v2(request):
 
     return JsonResponse({'signed_request': signed_request})
 
-#--- API v1 (old)
+# --- API v1 (old)
+
 
 @ratelimit(key='ip', rate='2/s', block=True)
 def get_by_code(request, code):

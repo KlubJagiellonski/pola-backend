@@ -1,0 +1,32 @@
+language: python
+python: 2.7
+cache:
+  directories:
+  - "$HOME/.cache/pip"
+services:
+- postgresql
+env:
+  fast_finish: true
+  global:
+  - DATABASE_URL="postgres:///pola_backend"
+  matrix:
+  - TOX_ENV=flake8
+  - TOX_ENV=py27-dj110-coveralls
+  - TOX_ENV=py27-dj111-coveralls
+  - TOX_ENV=py34-dj110-coveralls
+  - TOX_ENV=py34-dj111-coveralls
+  - TOX_ENV=py34-djmaster-coveralls
+matrix:
+  allow_failures:
+  - env: TOX_ENV=flake8
+  - env: TOX_ENV=py34-djmaster-coveralls
+install:
+- pip install -U pip wheel
+- pip install tox
+script:
+- tox -e $TOX_ENV
+after_script:
+- rm $HOME/.cache/pip/log/*
+notifications:
+  slack:
+    secure: eUMw66ZqzCF2dAA57pB1cCBQUGl7tN6F6TqL90eKgwxGlPy1Nf4gALgVOTGFy7VuJJtLt0wA+DRzx2iST4i1iEypCF9m8vl4aiG3f2+As4mPd9aABZFR6JEZ5CHdgoj7f/C6fiJGXvDz/jAYahApP4qBT53V4B3b7Zd5kjannWckRlEWh2EoCPhbqUWQZbN06FVFUZKZOcb751zhwKZDcaebuZm3e9cRlA28KPVFSzuKoL2nWydhokeYNYMP50xzCUWV35aoPa2N0rUGEBmDUt1A6bZE3ecqQ+fLIA+Somp4yshdzvTNoefp+Bepk2oufrQ8D4sMyVoMH/da39oGcsFTRjLceO4eoQVIs9bkVTLXxP6OqCWp0O0OsYK9mFvU4iv2JVcb0QmKtoaic0dCygISH8YzOCHItk3LtUo7fvlAThrx4lXKq01ZxHup1UYMUW1rDzTyIxnfcWNqhzGRovQYvu3dZeg0cdbUASS1S/lFG73BIUWJRjFLpznzgkgPxfRR4uIZBBFJlsPgCLW+xN8lWbr+Q6z4Q//db3UoCir5BT8XDe8rhN5EQ414KtIqiU8CBPoXTuEg2bPjCBM2MMO0qUKxPc25iR1gckYDBZb4PAGCjbHztGrhp3Dokzr3bL/3K2ED6dQG8w+1j7RVPYiXg1ygJF11P10EDWac/54=

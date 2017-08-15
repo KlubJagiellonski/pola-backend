@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+from reversion.admin import VersionAdmin
 
 from .models import Company
-import reversion
 
 
-class CompanyAdmin(reversion.VersionAdmin):
+class CompanyAdmin(VersionAdmin):
     list_display = (
         u'id',
         'nip',
@@ -15,4 +15,6 @@ class CompanyAdmin(reversion.VersionAdmin):
         'plCapital_notes',
     )
     search_fields = ('name',)
+
+
 admin.site.register(Company, CompanyAdmin)

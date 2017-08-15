@@ -1,20 +1,24 @@
+from datetime import datetime, timedelta
+from functools import reduce
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection
+from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 from django.utils.encoding import force_text
+from django.utils.timezone import get_default_timezone
 from django.views.generic import TemplateView
 from django.views.generic.detail import (
     BaseDetailView, SingleObjectTemplateResponseMixin)
-from braces.views import LoginRequiredMixin
+
+from ai_pics.models import AIPics
 from company.models import Company
+from pola.models import Stats
 from product.models import Product
 from report.models import Report
-from pola.models import Stats
-from ai_pics.models import AIPics, AIAttachment
-from django.utils import timezone
-from datetime import datetime, timedelta
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.timezone import get_default_timezone
-from django.db import connection
 
 
 class FrontPageView(LoginRequiredMixin, TemplateView):
@@ -38,13 +42,15 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_resolved_reports'] = Report.objects.only_resolved().count()
         c['no_of_reports'] = Report.objects.count()
 
-        c['most_popular_590_products'] =  (Product.objects
-                                           .filter(company__isnull=True,
-                                                   code__startswith='590')
+        c['most_popular_590_products'] = (Product.objects
+                                          .filter(
+                                                company__isnull=True,
+                                                code__startswith='590')
                                           .order_by('-query_count')[:10])
         c['no_of_590_products'] = (Product.objects
-                                   .filter(company__isnull=True,
-                                           code__startswith='590')
+                                   .filter(
+                                        company__isnull=True,
+                                        code__startswith='590')
                                    .count())
 
         c['most_popular_not_590_products'] =\
@@ -55,6 +61,27 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
              exclude(code__startswith='590').count())
 
         return c
+
+
+class ExprAutocompleteMixin(object):
+    def get_search_expr(self):
+        if not hasattr(self, 'search_expr'):
+            raise ImproperlyConfigured('{0} is missing a {0}.search_expr. Define '
+                                       '{0}.search_expr or override {0}.get_search_expr().'
+                                       ''.format(self.__class__.__name__))
+        return self.search_expr
+
+    def get_filters(self):
+        q = [Q(**{x: self.q}) for x in self.get_search_expr()]
+        return reduce(lambda x, y: x | y, q)
+
+    def get_queryset(self):
+        qs = self.model.objects.all()
+
+        if self.q:
+            qs = qs.filter(self.get_filters())
+
+        return qs
 
 
 class ActionMixin(object):
@@ -178,6 +205,7 @@ class AdminStatsPageView(QueryStatsPageView):
             "order by 1 desc", None)
 
         return c
+
 
 class AIPicsPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-ai-pics.html'

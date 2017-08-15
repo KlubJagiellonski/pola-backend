@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from django_filters.views import FilterView
+
 from pola.views import ActionView
-from braces.views import LoginRequiredMixin
 from . import models
 from .filters import ReportFilter
 
@@ -33,7 +34,7 @@ class ReportAdvancedListView(LoginRequiredMixin, FilterView):
         return HttpResponseRedirect(request.get_full_path())
 
 
-class ReportDelete(LoginRequiredMixin, DeleteView):
+class ReportDeleteView(LoginRequiredMixin, DeleteView):
     model = models.Report
     success_url = reverse_lazy('report:list')
 

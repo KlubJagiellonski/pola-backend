@@ -1,16 +1,18 @@
-from django.db import models
-from product.models import Product
 from datetime import datetime, timedelta
+
+from django.db import models
 from django.utils import timezone
-from company.models import Company
-from report.models import Report
 from django.utils.timezone import get_default_timezone
+
+from company.models import Company
+from product.models import Product
+from report.models import Report
 
 
 class Query(models.Model):
     client = models.CharField(max_length=40,
                               blank=True, null=True, default=None)
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     was_verified = models.BooleanField(default=False)
     was_plScore = models.BooleanField(default=False)
     was_590 = models.BooleanField(default=False)

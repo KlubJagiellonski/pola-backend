@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from django.core.urlresolvers import reverse
-from django.db import models, transaction, connection
-from django.db.models import F
-from django.forms.models import model_to_dict
-from django.utils.translation import ugettext_lazy as _
-from model_utils.managers import PassThroughManager
 from django.core.validators import ValidationError
-import reversion
+from django.db import connection, models
+from django.forms.models import model_to_dict
+from django.urls import reverse
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
+from reversion import revisions as reversion
+
 from pola.concurency import concurency
 
 
@@ -31,16 +31,17 @@ class CompanyQuerySet(models.query.QuerySet):
         if not commit_desc:
             return super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(
-                manage_manually=True):
-            obj = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
-            if obj[1]:
-                reversion.default_revision_manager.\
-                    save_revision([obj[0]], comment=commit_desc,
-                                  user=commit_user)
-            return obj
+        with reversion.create_revision(manage_manually=True, atomic=True):
+            obj, created = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
+            if created:
+                reversion.set_comment(commit_desc)
+                reversion.set_user(commit_user)
+                reversion.add_to_revision(obj)
+            return obj, created
 
 
+@reversion.register
+@python_2_unicode_compatible
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=128, null=True, blank=True,
@@ -106,8 +107,7 @@ class Company(models.Model):
                                verbose_name=_(u"Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
-
-    objects = PassThroughManager.for_queryset_class(CompanyQuerySet)()
+    objects = CompanyQuerySet.as_manager()
 
     def increment_query_count(self):
         with connection.cursor() as cursor:
@@ -124,7 +124,6 @@ class Company(models.Model):
                 'from product_product '
                 'where product_product.company_id=company_company.id)')
 
-
     def to_dict(self):
         dict = model_to_dict(self)
         return dict
@@ -135,7 +134,7 @@ class Company(models.Model):
     def locked_by(self):
         return concurency.locked_by(self)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.common_name or self.official_name or self.name
 
     def js_plCapital_notes(self):
@@ -214,15 +213,14 @@ class Company(models.Model):
         if not commit_desc:
             return super(Company, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.\
-                create_revision(manage_manually=True):
+        with reversion.create_revision(manage_manually=True, atomic=True):
             obj = super(Company, self).save(*args, **kwargs)
-            reversion.default_revision_manager.\
-                save_revision([self], comment=commit_desc, user=commit_user)
+            reversion.set_comment(commit_desc)
+            reversion.set_user(commit_user)
+            reversion.add_to_revision(obj)
             return obj
 
     class Meta:
         verbose_name = _(u"Producent")
         verbose_name_plural = _(u"Producenci")
-
-reversion.register(Company)
+        ordering = ['-created_at']

@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='report',
             name='product',
-            field=models.ForeignKey(to='product.Product', null=True),
+            field=models.ForeignKey(to='product.Product', null=True, on_delete=models.CASCADE),
         ),
     ]

@@ -1,12 +1,12 @@
-from django.core.urlresolvers import reverse
-from django.db import models, transaction, connection
-from django.db.models import F
-from company.models import Company
-import reversion
-from model_utils.managers import PassThroughManager
-from django.utils.translation import ugettext_lazy as _
-from pola.concurency import concurency
+from django.db import connection, models
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
+from reversion import revisions as reversion
+
+from company.models import Company
+from pola.concurency import concurency
 
 
 class ProductQuerySet(models.query.QuerySet):
@@ -17,14 +17,16 @@ class ProductQuerySet(models.query.QuerySet):
         if not commit_desc:
             return super(ProductQuerySet, self).create(*args, **kwargs)
 
-        with transaction.atomic(), reversion.create_revision(manage_manually=True):
+        with reversion.create_revision(manage_manually=True, atomic=True):
             obj = super(ProductQuerySet, self).create(*args, **kwargs)
-            revision_manager = reversion.default_revision_manager
-            revision_manager.save_revision([obj],
-                                           comment=commit_desc,
-                                           user=commit_user)
+            reversion.set_comment(commit_desc)
+            reversion.set_user(commit_user)
+            reversion.add_to_revision(obj)
             return obj
 
+
+@reversion.register
+@python_2_unicode_compatible
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, )
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
@@ -32,11 +34,12 @@ class Product(models.Model):
     code = models.CharField(max_length=20, db_index=True, verbose_name="Kod",
                             unique=True)
     company = models.ForeignKey(Company, null=True, blank=True,
-                                verbose_name="Producent")
+                                verbose_name="Producent",
+                                on_delete=models.CASCADE)
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
 
-    objects = PassThroughManager.for_queryset_class(ProductQuerySet)()
+    objects = ProductQuerySet.as_manager()
 
     def get_absolute_url(self):
         return reverse('product:detail', args=[self.code])
@@ -47,18 +50,18 @@ class Product(models.Model):
     def get_image_url(self):
         return reverse('product:image', args=[self.code])
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name or self.code or "None"
 
     def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
             return super(Product, self).save(*args, **kwargs)
 
-        with transaction.atomic(), reversion.\
-                create_revision(manage_manually=True):
+        with reversion.create_revision(manage_manually=True, atomic=True):
             obj = super(Product, self).save(*args, **kwargs)
-            reversion.default_revision_manager.\
-                save_revision([self], comment=commit_desc, user=commit_user)
+            reversion.set_comment(commit_desc)
+            reversion.set_user(commit_user)
+            reversion.add_to_revision(obj)
             return obj
 
     def increment_query_count(self):
@@ -84,9 +87,7 @@ class Product(models.Model):
                 'where ai_pics_aipics.product_id=product_product.id and '
                 '(ai_pics_aipics.is_valid=TRUE or ai_pics_aipics.is_valid IS NULL))')
 
-
     class Meta:
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
-
-reversion.register(Product)
+        ordering = ['-created_at']

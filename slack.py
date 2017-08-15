@@ -3,7 +3,10 @@ from rq import Queue
 from pola.rq_worker import conn
 from pola.rq_tasks import get_url_at_time
 import requests
-from urllib import urlencode
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 import json
 from datetime import datetime, timedelta
 

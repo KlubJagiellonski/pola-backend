@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from os.path import basename
+
+from babel.dates import format_timedelta
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from product.models import Product
-from datetime import datetime
-from babel.dates import format_timedelta
 from django.utils import timezone
-from babel.dates import format_timedelta
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
+
+from product.models import Product
 
 
 class AIPics(models.Model):
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=False, null=False,
                               verbose_name=_(u'Zgłaszający'))
 
@@ -44,8 +44,9 @@ class AIPics(models.Model):
         verbose_name_plural = _("AIPics")
 
 
+@python_2_unicode_compatible
 class AIAttachment(models.Model):
-    ai_pics = models.ForeignKey(AIPics)
+    ai_pics = models.ForeignKey(AIPics, on_delete=models.CASCADE)
     file_no = models.IntegerField(null=False, default=0)
     attachment = models.FileField(
         upload_to="ai/%Y/%m/%d", verbose_name=_("File"))
@@ -54,11 +55,12 @@ class AIAttachment(models.Model):
     def filename(self):
         return basename(self.attachment.name)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):
-        return 'https://{}.s3.amazonaws.com/{}'.format(settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
+        return 'https://{}.s3.amazonaws.com/{}'.format(
+            settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
 
     class Meta:
         verbose_name = _("AIPics's attachment")

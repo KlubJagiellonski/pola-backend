@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import django_filters
-from .models import Company
-from django.utils.translation import ugettext_lazy as _
-from pola.filters import NoHelpTextFilterMixin, CrispyFilterMixin
 from distutils.util import strtobool
 
+import django_filters
+from django.utils.translation import ugettext_lazy as _
 
-class CompanyFilter(NoHelpTextFilterMixin,
-                    CrispyFilterMixin,
+from pola.filters import CrispyFilterMixin
+from .models import Company
+
+
+class CompanyFilter(CrispyFilterMixin,
                     django_filters.FilterSet):
 
     verified = django_filters.TypedChoiceFilter(

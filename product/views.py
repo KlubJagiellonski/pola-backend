@@ -1,19 +1,24 @@
+from braces.views import FormValidMessageMixin
+from dal import autocomplete
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.core.urlresolvers import reverse_lazy
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.decorators.cache import cache_page
-from braces.views import LoginRequiredMixin, FormValidMessageMixin
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from reportlab.graphics import renderPM
-import reversion
+from django.views.decorators.cache import cache_page
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django_filters.views import FilterView
-from .forms import ProductForm
-from .filters import ProductFilter
-from .images import Barcode
-from . import models
-from report.models import Report
+from reportlab.graphics import renderPM
+from reversion.models import Version
+
 from pola.concurency import ConcurencyProtectUpdateView
+from pola.views import ExprAutocompleteMixin
+from product.models import Product
+from report.models import Report
+from . import models
+from .filters import ProductFilter
+from .forms import ProductForm
+from .images import Barcode
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -23,10 +28,10 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
 
-        object = context['object']
+        obj = context['object']
 
         context['report_list'] = Report.objects.filter(
-            product=object, resolved_at=None)
+            product=obj, resolved_at=None)
 
         return context
 
@@ -69,7 +74,7 @@ class ProductHistoryView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductHistoryView, self).get_context_data(**kwargs)
-        context['revision_list'] = reversion.get_for_object(self.get_object())
+        context['revision_list'] = Version.objects.get_for_object(self.get_object())
         return context
 
 
@@ -80,3 +85,14 @@ def get_image(request, code):
     data = renderPM.drawToString(barcode, fmt='PNG')
     response.write(data)
     return response
+
+
+class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin,
+                          autocomplete.Select2QuerySetView):
+    search_expr = [
+        'name__icontains',
+        'company__name__icontains',
+        'company__official_name__icontains',
+        'company__common_name__icontains',
+    ]
+    model = Product

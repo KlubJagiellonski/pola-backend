@@ -1,8 +1,10 @@
-from django.core.management.base import BaseCommand, CommandError
+from sets import Set
+
+from django.core.management.base import BaseCommand
+
 from product.models import Product
 from report.models import Report
-from django.db import connection
-from sets import Set
+
 
 class Command(BaseCommand):
     help = 'Deletes redundant reports'
@@ -19,7 +21,8 @@ class Command(BaseCommand):
 
         for product in products:
 
-            print "{} (id:{})".format(product['name'].encode('UTF-8') if product['name'] else '', product['id'])
+            print "{} (id:{})".format(product['name'].encode('UTF-8')
+                                      if product['name'] else '', product['id'])
 
             reports = Report.objects\
                 .filter(product__id=product['id'], client='krs-bot')\

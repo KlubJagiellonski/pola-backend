@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django import forms
-from django.db import transaction
-from django.utils.translation import ugettext as _
+import reversion
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Reset, Submit
-import reversion
+from django import forms
+from django.utils.translation import ugettext as _
 
 
 class HelperMixin(object):
@@ -51,7 +50,7 @@ class CommitDescriptionMixin(forms.Form):
                                   widget=forms.Textarea)
 
     def save(self, *args, **kwargs):
-        with transaction.atomic(), reversion.create_revision():
+        with reversion.create_revision(atomic=True):
             obj = super(CommitDescriptionMixin, self).save(*args, **kwargs)
             commit_desc = self.cleaned_data['commit_desc']
             reversion.set_comment(commit_desc)
@@ -64,7 +63,7 @@ class ReadOnlyFieldsMixin(object):
     def __init__(self, *args, **kwargs):
         super(ReadOnlyFieldsMixin, self).__init__(*args, **kwargs)
         for field in (field
-            for name, field in self.fields.iteritems() if name in self.readonly_fields):
+            for name, field in self.fields.items() if name in self.readonly_fields):
             field.widget.attrs['disabled'] = 'true'
             field.required = False
 
@@ -74,16 +73,3 @@ class ReadOnlyFieldsMixin(object):
             cleaned_data[field] = getattr(self.instance, field)
 
         return cleaned_data
-
-
-class AutocompleteChoiceField(forms.ModelChoiceField):
-
-    def __init__(self, autocomplete_name, *args, **kwargs):
-        from autocomplete_light.registry import registry
-        from autocomplete_light import ChoiceWidget
-        autocomplete = registry.get_autocomplete_from_arg(autocomplete_name)
-        if 'label' not in kwargs:
-            kwargs['label'] = autocomplete.model._meta.verbose_name
-        kwargs['queryset'] = autocomplete.choices
-        kwargs['widget'] = ChoiceWidget(autocomplete)
-        super(AutocompleteChoiceField, self).__init__(*args, **kwargs)

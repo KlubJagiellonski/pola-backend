@@ -1,17 +1,19 @@
 # Create your views here.
-from django.core.urlresolvers import reverse_lazy
+from braces.views import FormValidMessageMixin
+from dal import autocomplete
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, QueryDict
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, \
-    ProcessFormView
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django_filters.views import FilterView
-from braces.views import LoginRequiredMixin, FormValidMessageMixin
-from report.models import Report
+
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, QueryDict
+from pola.views import ExprAutocompleteMixin
+from report.models import Report
 from .filters import CompanyFilter
-from .forms import CompanyForm, CompanyCreateFromKRSForm
+from .forms import CompanyCreateFromKRSForm, CompanyForm
 
 
 class CompanyListView(LoginRequiredMixin, FilterView):
@@ -20,42 +22,36 @@ class CompanyListView(LoginRequiredMixin, FilterView):
     paginate_by = 25
 
 
-class CompanyCreate(LoginRequiredMixin,
+class GetInitalFormMixin(object):
+    def get_initial(self):
+        initials = super(GetInitalFormMixin, self).get_initial()
+        initials.update(self.request.GET.dict())
+        return initials
+
+
+class CompanyCreate(GetInitalFormMixin,
+                    LoginRequiredMixin,
                     FormValidMessageMixin,
                     CreateView):
     model = Company
     form_class = CompanyForm
     form_valid_message = u"Firma utworzona!"
 
-    def get_initial(self):
-        initials = {}
-        for field_name in CompanyDetailView.FIELDS_TO_DISPLAY:
-            initials[field_name] = self.request.GET.get(field_name)
-        return initials
 
-
-class CompanyCreateFromKRSView(LoginRequiredMixin, ProcessFormView):
+class CompanyCreateFromKRSView(LoginRequiredMixin, FormView):
     form_class = CompanyCreateFromKRSForm
     template_name = 'company/company_from_krs.html'
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form, *args, **kwargs):
+        company = form.cleaned_data['company']
+        q = QueryDict('', mutable=True)
+        q['official_name'] = company['nazwa']
+        q['common_name'] = company['nazwa_skrocona']
+        q['sources'] = u"Dane z KRS|%s" % company['url']
+        q['nip'] = company['nip']
+        q['address'] = company['adres']
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            company = form.cleaned_data['company']
-            q = QueryDict(mutable=True)
-            q['official_name'] = company['nazwa']
-            q['common_name'] = company['nazwa_skrocona']
-            q['sources'] = u"Dane z KRS|%s" % company['url']
-            q['nip'] = company['nip']
-            q['address'] = company['adres']
-
-            return HttpResponseRedirect('/cms/company/create?' + q.urlencode())
-
-        return render(request, self.template_name, {'form': form})
+        return HttpResponseRedirect(reverse('company:create') + '?' + q.urlencode())
 
 
 class CompanyUpdate(LoginRequiredMixin,
@@ -76,10 +72,31 @@ class CompanyDelete(LoginRequiredMixin,
     form_valid_message = u"Firma skasowana!"
 
 
-class CompanyDetailView(LoginRequiredMixin, DetailView):
+class FieldsDisplayMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(FieldsDisplayMixin, self).get_context_data(**kwargs)
+        fields = []
+        obj = self.get_object()
+        for field_name in self.fields_to_display:
+            try:
+                method_display = getattr(
+                    obj, 'get_' + field_name + '_display')
+                value = method_display()
+            except:
+                value = obj.__dict__[field_name]
+            fields.append(
+                {"name": self.model._meta
+                    .get_field(field_name).verbose_name,
+                 "value": value})
+
+        context['fields'] = fields
+        return context
+
+
+class CompanyDetailView(FieldsDisplayMixin, LoginRequiredMixin, DetailView):
     model = Company
 
-    FIELDS_TO_DISPLAY = (
+    fields_to_display = (
         'Editor_notes',
         'name',
         'official_name',
@@ -99,24 +116,17 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(CompanyDetailView, self).get_context_data(**kwargs)
 
-        object = context['object']
-
         context['report_list'] = Report.objects.filter(
-            product__company=object, resolved_at=None)
+            product__company=self.get_object(), resolved_at=None)
 
-        fields = []
-
-        for field_name in self.FIELDS_TO_DISPLAY:
-            try:
-                method_display = getattr(
-                    object, 'get_' + field_name + '_display')
-                value = method_display()
-            except:
-                value = object.__dict__[field_name]
-            fields.append(
-                {"name": self.model._meta
-                    .get_field_by_name(field_name)[0].verbose_name,
-                 "value": value})
-
-        context['fields'] = fields
         return context
+
+
+class CompanyAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin,
+                          autocomplete.Select2QuerySetView):
+    search_expr = [
+        'name__icontains',
+        'official_name__icontains',
+        'common_name__icontains',
+    ]
+    model = Company

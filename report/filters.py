@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import django_filters
-from .models import Report
+from dal import autocomplete
 from django.utils.translation import ugettext_lazy as _
-from pola.filters import (AutocompleteChoiceFilter,
-                          CrispyFilterMixin,
-                          NoHelpTextFilterMixin)
+
+from company.models import Company
+from pola.filters import CrispyFilterMixin
+from product.models import Product
+from .models import Report
 
 
 class StatusFilter(django_filters.ChoiceFilter):
@@ -25,14 +27,15 @@ class StatusFilter(django_filters.ChoiceFilter):
         return qs
 
 
-class ReportFilter(NoHelpTextFilterMixin,
-                   CrispyFilterMixin,
+class ReportFilter(CrispyFilterMixin,
                    django_filters.FilterSet):
     status = StatusFilter()
-    product = AutocompleteChoiceFilter(
-        autocomplete_name="ProductAutocomplete")
-    product__company = AutocompleteChoiceFilter(
-        autocomplete_name="CompanyAutocomplete")
+    product = django_filters.ModelChoiceFilter(
+        queryset=Product.objects.all(),
+        widget=autocomplete.ModelSelect2(url='product:product-autocomplete'))
+    product__company = django_filters.ModelChoiceFilter(
+        queryset=Company.objects.all(),
+        widget=autocomplete.ModelSelect2(url='company:company-autocomplete'))
 
     class Meta:
         model = Report
