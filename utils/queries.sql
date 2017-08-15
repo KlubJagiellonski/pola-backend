@@ -108,3 +108,39 @@ select sum(n_live_tup) from pg_stat_user_tables;
 select product_id,count(*) from report_report
  join report_attachment on report_attachment.report_id = report_report.id
 group by product_id order by count(*) desc;
+
+update product_product set query_count = (select count(id)
+from pola_query
+where pola_query.product_id=product_product.id)
+
+
+  select count(*) from product_product
+  where query_count <4 and company_id is null and (select count(*) from report_report where report_report.product_id=product_product.id)=0;
+
+select date_part('year', created_at) as year, date_part('month', created_at) as month, count(*)
+from product_product
+group by year, month
+order by 1,2;
+
+SELECT schemaname,relname,n_live_tup
+  FROM pg_stat_user_tables
+  ORDER BY n_live_tup DESC limit 4;
+
+ schemaname |      relname       | n_live_tup
+------------+--------------------+------------
+ public     | pola_query         |   10772597
+ public     | product_product    |    6099783
+ public     | reversion_version  |    4880335
+ public     | reversion_revision |    4876212
+ public     | report_attachment  |     144507
+ public     | report_report      |     111171
+(6 rows)
+
+
+SELECT count(*)
+FROM product_product
+WHERE company_id IS NULL AND name IS NULL
+ AND (select count(*) from report_report where product_id=product_product.id)=0
+ AND (select count(*) from pola_query where product_id=product_product.id) <
+ (12*date_part('year',age(created_at))+ date_part('month',age(created_at)))
+limit 10;
