@@ -18,6 +18,9 @@ class Query(models.Model):
     was_590 = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        get_latest_by = 'timestamp'
+
 
 class Stats(models.Model):
     year = models.IntegerField()
