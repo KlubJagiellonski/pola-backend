@@ -81,6 +81,7 @@ class Report(models.Model):
         verbose_name = _("Report")
         verbose_name_plural = _("Reports")
         ordering = ['-created_at']
+        get_latest_by = 'created_at'
 
 
 @python_2_unicode_compatible
