@@ -180,7 +180,8 @@ def create_from_api(code, obj, product=None):
                                   check_if_already_exists=not company_created
                                   )
         else:
-            product.name = obj_product_name
+            if obj_product_name != code:
+                product.name = obj_product_name
 
         if product.company:
             if company and product.company.name \
