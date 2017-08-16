@@ -6,6 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
 from django.db.models import Q
+from django.db.models.functions import Length
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.utils.encoding import force_text
@@ -38,11 +39,10 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_verified_companies'] = Company.objects.\
             filter(verified=True).count()
 
-        c['newest_reports'] = (Report.objects.only_open()
-                                     .order_by('-created_at')[:10])
-        c['no_of_open_reports'] = Report.objects.only_open().count()
-        c['no_of_resolved_reports'] = Report.objects.only_resolved().count()
-        c['no_of_reports'] = Report.objects.count()
+        c['products_with_most_open_reports'] = \
+            Product.objects.raw('select *, '
+                                '(select count(*) from report_report where product_id=product_product.id and resolved_at is NULL) as no_of_open_reports '
+                                'from product_product order by no_of_open_reports desc limit 10')
 
         c['most_popular_590_products'] = (Product.objects
                                           .filter(
@@ -61,6 +61,19 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_not_590_products'] = \
             (Product.objects.filter(company__isnull=True).
              exclude(code__startswith='590').count())
+
+        c['companies_by_name_length'] =\
+            (Company.objects.annotate(name_length=Length('common_name')).order_by('-name_length'))[:10]
+
+        c['most_popular_products_without_name'] =\
+            (Product.objects.filter(name__isnull=True)\
+                .order_by('-query_count')[:10])
+
+        c['newest_reports'] = (Report.objects.only_open()
+                                     .order_by('-created_at')[:10])
+        c['no_of_open_reports'] = Report.objects.only_open().count()
+        c['no_of_resolved_reports'] = Report.objects.only_resolved().count()
+        c['no_of_reports'] = Report.objects.count()
 
         return c
 
