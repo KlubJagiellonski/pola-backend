@@ -66,6 +66,7 @@ def add_ai_pics(request):
             signed_request = attach_pic_internal(ai_pics, i, file_ext, mime_type)
             signed_requests.append(signed_request)
 
+    product.increment_ai_pics_count()
 
     slack.send_ai_pics(str(product), device_name, original_width, original_height, width, height,
                        files_count, file_ext, mime_type, signed_requests)

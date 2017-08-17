@@ -145,3 +145,12 @@ WHERE company_id IS NULL AND name IS NULL
  AND (select count(*) from pola_query where product_id=product_product.id) <
  (12*date_part('year',age(created_at))+ date_part('month',age(created_at)))
 limit 10;
+
+SELECT product_product.code, name, count(*) as cnt
+FROM product_product
+join ai_pics_aipics on product_product.id = product_id
+join ai_pics_aiattachment on ai_pics_aipics.id = ai_pics_id
+where product_product.name is not null and (is_valid=TRUE OR is_valid is NULL)
+group by product_product.code, name
+order by cnt desc
+limit 10;
