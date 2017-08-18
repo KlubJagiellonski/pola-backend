@@ -27,7 +27,7 @@ from report.models import Report, Attachment
 def add_ai_pics(request):
     device_id = request.GET['device_id']
 
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode("utf-8"))
     product_id = data.get('product_id')
     files_count = data['files_count']
     file_ext = data['file_ext']
@@ -145,7 +145,7 @@ def create_report_v2(request):
 def create_report_internal(request, extra_comma=False):
     device_id = request.GET['device_id']
 
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode("utf-8"))
     description = data['description']
     product_id = data.get('product_id', None)
     files_count = data.get('files_count', None)
@@ -218,7 +218,7 @@ def attach_file_v2(request):
     if report.client != device_id:
         return HttpResponseForbidden("Device_id mismatch")
 
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode("utf-8"))
     file_ext = data['file_ext']
     mime_type = data['mime_type']
 
@@ -255,7 +255,7 @@ def get_by_code(request, code):
 def create_report(request):
     device_id = request.GET['device_id']
 
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode("utf-8"))
     description = data['description']
     product_id = data.get('product_id', None)
 
@@ -275,7 +275,7 @@ def update_report(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
 
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode("utf-8"))
     description = data['description']
 
     report = Report.objects.get(pk=report_id)
