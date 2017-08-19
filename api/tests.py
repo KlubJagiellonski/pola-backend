@@ -222,7 +222,7 @@ class attach_fileTestCase(TestCase):
         self.report = ReportFactory()
 
     def test_success_attach_file(self):
-        file = SimpleUploadedFile("image1.jpeg", "file_content", content_type="image/jpeg")
+        file = SimpleUploadedFile("image1.jpeg", b"file_content", content_type="image/jpeg")
         resp = self.client.post(
             self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
             {'file': file}
@@ -232,7 +232,7 @@ class attach_fileTestCase(TestCase):
         self.assertEqual(resp.json(), {"id": attachment.pk})
 
     def test_rate_limit(self):
-        file = SimpleUploadedFile("image1.jpeg", "file_content", content_type="image/jpeg")
+        file = SimpleUploadedFile("image1.jpeg", b"file_content", content_type="image/jpeg")
         for _ in range(5):
             resp = self.client.post(
                 self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
