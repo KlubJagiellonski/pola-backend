@@ -2,13 +2,15 @@
 import json
 
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 from mock import patch
 from test_plus.test import TestCase
 
 from company.factories import CompanyFactory
 from pola.models import Query
 from product.factories import ProductFactory
-from report.models import Report
+from report.factories import ReportFactory
+from report.models import Report, Attachment
 
 
 class JsonRequestMixin(object):
@@ -178,10 +180,69 @@ class create_reportTestCase(JsonRequestMixin, TestCase):
         return self.json_request(url, data=r_json)
 
 
-class update_reportTestCase(TestCase):
+class update_reportTestCase(JsonRequestMixin, TestCase):
     url = '/a/update_report'
+
+    def setUp(self):
+        super(update_reportTestCase, self).setUp()
+        cache.clear()
+        self.report = ReportFactory()
+
+    def test_success_update(self):
+        resp = self.json_request(
+            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+            data={'description': "New description"}
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json(), {"id": self.report.pk})
+        self.report.refresh_from_db()
+        self.assertEqual(self.report.description, "New description")
+
+    def test_rate_limit(self):
+        for _ in range(2):
+            resp = self.json_request(
+                self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+                data={'description': "New description"}
+            )
+            self.assertEqual(resp.status_code, 200)
+
+        resp = self.json_request(
+            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+            data={'description': "New description"}
+        )
+        self.assertEqual(resp.status_code, 403)
 
 
 class attach_fileTestCase(TestCase):
     url = '/a/attach_file'
+
+    def setUp(self):
+        super(attach_fileTestCase, self).setUp()
+        cache.clear()
+        self.report = ReportFactory()
+
+    def test_success_attach_file(self):
+        file = SimpleUploadedFile("image1.jpeg", "file_content", content_type="image/jpeg")
+        resp = self.client.post(
+            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+            {'file': file}
+        )
+        attachment = Attachment.objects.last()
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json(), {"id": attachment.pk})
+
+    def test_rate_limit(self):
+        file = SimpleUploadedFile("image1.jpeg", "file_content", content_type="image/jpeg")
+        for _ in range(5):
+            resp = self.client.post(
+                self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+                {'file': file}
+            )
+            self.assertEqual(resp.status_code, 200)
+
+        resp = self.client.post(
+            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+            {'file': file}
+        )
+        self.assertEqual(resp.status_code, 403)
 
