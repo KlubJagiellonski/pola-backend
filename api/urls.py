@@ -3,6 +3,9 @@ from . import views
 
 
 urlpatterns = [
+    url(regex=r'v3/get_ai_pics$', view=views.get_ai_pics,
+        name="get_ai_pics"),
+
     # API v3
     url(regex=r'v3/get_by_code$', view=views.get_by_code_v3,
         name="get_by_code_v3"),

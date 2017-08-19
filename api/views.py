@@ -8,6 +8,7 @@ import uuid
 from hashlib import sha1
 
 from django.conf import settings
+from django.db.models import Q
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ratelimit.decorators import ratelimit
@@ -19,6 +20,30 @@ from pola.models import Query
 from product.models import Product
 from report.models import Report, Attachment
 
+@csrf_exempt
+def get_ai_pics(request):
+    if settings.AI_SHARED_SECRET == '':
+        return HttpResponseForbidden()
+
+    shared_secret = request.POST['shared_secret']
+    if shared_secret != settings.AI_SHARED_SECRET:
+        return HttpResponseForbidden()
+
+    attachments = AIAttachment.objects \
+        .select_related('ai_pics', 'ai_pics__product') \
+        .filter(Q(ai_pics__is_valid = True) | Q(ai_pics__is_valid__isnull = True)) \
+
+    aipics = []
+    for attachment in attachments:
+        aipics.append(
+            {
+                'code' : attachment.ai_pics.product.code,
+                'product_name' : attachment.ai_pics.product.name,
+                'url' : attachment.get_absolute_url()
+            }
+        )
+
+    return JsonResponse({'aipics' : aipics})
 
 # API v3
 
