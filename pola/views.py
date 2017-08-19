@@ -232,17 +232,20 @@ class AIPicsPageView(LoginRequiredMixin, TemplateView):
             if self.request.GET['is_valid']=='1':
                 aipics = (AIPics.objects
                         .filter(is_valid=True)
-                        .order_by('-id')[:20])
+                          .prefetch_related('aiattachment_set')
+                        .order_by('-id')[:10])
                 is_valid = True
             else:
                 aipics = (AIPics.objects
                           .filter(is_valid=False)
-                          .order_by('-id')[:20])
+                          .prefetch_related('aiattachment_set')
+                          .order_by('-id')[:10])
                 is_valid = False
         else:
             aipics = (AIPics.objects
                         .filter(is_valid__isnull=True)
-                        .order_by('-id')[:20])
+                        .prefetch_related('aiattachment_set')
+                        .order_by('-id')[:10])
             is_valid = None
 
         c['is_valid'] = is_valid
