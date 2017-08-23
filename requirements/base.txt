@@ -1,6 +1,5 @@
 # Configuration
 django-environ==0.4.3
-django-secure==1.0.1
 
 
 
