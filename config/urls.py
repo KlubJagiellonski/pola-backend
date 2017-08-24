@@ -10,8 +10,7 @@ from django.views.defaults import bad_request, permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django.views.static import serve
 
-from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView, \
-    AIPicsPageView
+from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView
 
 urlpatterns = [
     url(r'^$',
@@ -20,7 +19,6 @@ urlpatterns = [
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),
     url(r'^cms/admin-stats$', AdminStatsPageView.as_view(), name="home-admin-stats"),
-    url(r'^cms/ai-pics$', AIPicsPageView.as_view(), name="home-ai-pics"),
     url(r'^cms/lang/$', login_required(
         TemplateView.as_view(template_name='pages/lang-cms.html')),
         name="select_lang"),
@@ -30,6 +28,7 @@ urlpatterns = [
     url(r'^cms/product/', ('product.urls', 'product', 'product')),
     url(r'^cms/company/', ('company.urls', 'company', 'company')),
     url(r'^cms/report/', ('report.urls', 'report', 'report')),
+    url(r'^cms/ai_pics/', ('ai_pics.urls', 'ai_pics', 'ai_pics')),
 
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/', admin.site.urls),
