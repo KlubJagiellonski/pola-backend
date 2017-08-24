@@ -1,42 +1,36 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
-from django.views.generic import TemplateView
-
-from ai_pics.models import AIPics, AIAttachment
 from boto.s3.connection import S3Connection, Bucket, Key
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.utils.functional import cached_property
+from django.views.generic import ListView
+
+from ai_pics.models import AIPics, AIAttachment
 
 
-class AIPicsPageView(LoginRequiredMixin, TemplateView):
-    template_name = 'ai_pics/home-ai-pics.html'
+class AIPicsPageView(LoginRequiredMixin, ListView):
+    ordering = '-id'
+    paginate_by = 10
+    model = AIPics
+
+    def get_queryset(self):
+        qs = super(AIPicsPageView, self).get_queryset()
+        if self.state == 'valid':
+            qs = qs.filter(is_valid=True)
+        elif self.state == 'invalid':
+            qs = qs.filter(is_valid=False)
+        else:
+            qs = qs.filter(is_valid__isnull=True)
+
+        return qs.prefetch_related('aiattachment_set')
+
+    @cached_property
+    def state(self):
+        return self.request.GET.get('state', 'unknown')
 
     def get_context_data(self, *args, **kwargs):
-        c = super(AIPicsPageView, self).get_context_data(**kwargs)
-
-        if 'is_valid' in self.request.GET:
-            if self.request.GET['is_valid']=='1':
-                aipics = (AIPics.objects
-                                .filter(is_valid=True)
-                                .prefetch_related('aiattachment_set')
-                                .order_by('-id')[:10])
-                is_valid = True
-            else:
-                aipics = (AIPics.objects
-                          .filter(is_valid=False)
-                          .prefetch_related('aiattachment_set')
-                          .order_by('-id')[:10])
-                is_valid = False
-        else:
-            aipics = (AIPics.objects
-                            .filter(is_valid__isnull=True)
-                            .prefetch_related('aiattachment_set')
-                            .order_by('-id')[:10])
-            is_valid = None
-
-        c['is_valid'] = is_valid
-        c['aipics'] = aipics
-
-        return c
+        kwargs['state'] = self.state
+        return super(AIPicsPageView, self).get_context_data(**kwargs)
 
     def post(self, request):
         action_name = self.request.POST['action']

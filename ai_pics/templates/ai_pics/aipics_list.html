@@ -35,24 +35,33 @@
         .aipic[data-state="unknown"] [data-action="set_aipic_state"][data-new-state="unknown"]{
             display: none;
         }
-
-
-
     </style>
 {% endblock css %}
 
 {% block content %}
     <h1>{% trans "Zdjęcia AI" %}</h1><br/>
 
-    <div>
-        {% if is_valid == None %}<strong>Niezweryfikowane</strong>{% else %}<a href="?">Niezweryfikowane</a>{% endif %} |
-        {% if is_valid == 1 %}<strong>OK</strong>{% else %}<a href="?is_valid=1">OK</a>{% endif %} |
-        {% if is_valid == 0 %}<strong>Nie OK</strong>{% else %}<a href="?is_valid=0">Nie OK</a>{% endif %}
-    </div>
+    <ul class="nav nav-tabs">
+        <li role="presentation"{% if state == "unknown" %} class="active"{% endif %}>
+            <a href="?state=unknown">
+                <i class="fa fa-circle-o"></i> Niezweryfikowane
+            </a>
+        </li>
+        <li role="presentation"{% if state == "valid" %} class="active"{% endif %}>
+            <a href="?state=valid">
+                <i class="fa fa-check"></i> OK
+            </a>
+        </li>
+        <li role="presentation"{% if state == "invalid" %} class="active"{% endif %}>
+            <a href="?state=invalid">
+                <i class="fa fa-times"></i> Nie OK
+            </a>
+        </li>
+    </ul>
 
 	<div class="panel panel-primary">
         <ul class="list-group">
-        {% for aipic in  aipics %}
+        {% for aipic in object_list %}
             <li class="list-group-item aipic" data-state="{{ aipic.state }}" data-id="{{ aipic.id }}">
                 <p>
                     <strong>{{ aipic.product.name }}</strong>
@@ -93,6 +102,8 @@
         {% endfor %}
         </ul>
     </div>
+
+    {% include 'pagination_custom/pager.html' with page=page_obj %}
 
 {% endblock content %}
 
