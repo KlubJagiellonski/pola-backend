@@ -13,6 +13,11 @@ from product.models import Product
 
 
 class AIPics(models.Model):
+    STATES = (
+        ('valid', 'Valid'),
+        ('invalid', 'Invalid'),
+        ('unknown', 'Unknown'),
+    )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=False, null=False,
                               verbose_name=_(u'Zgłaszający'))
@@ -35,9 +40,21 @@ class AIPics(models.Model):
     def attachment_count(self):
         return self.attachment_set.count()
 
-    def get_timedelta(self):
-        return format_timedelta(timezone.now() - self.created_at,
-                                locale='pl_PL')
+    @property
+    def state(self):
+        if self.is_valid == True:
+            return 'valid'
+        if self.is_valid == False:
+            return 'invalid'
+        return 'unknown'
+
+    @state.setter
+    def state(self, value):
+        if value == 'valid':
+            self.is_valid = True
+        if value == 'invalid':
+            self.is_valid = False
+        self.is_valid = None
 
     class Meta:
         verbose_name = _("AIPics")

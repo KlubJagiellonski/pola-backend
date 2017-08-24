@@ -1,8 +1,48 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n humanize %}
+
+{% block css %}
+    {{ block.super }}
+    <style>
+        .img-actions {
+            position: relative;
+            float:left;
+            height: 100%
+        }
+        .img-actions__button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 2em;
+            height: 2em;
+            margin: .5em;
+            color: white;
+            text-align: center;
+            line-height: 2em;
+            border-radius: 50%;
+            background: #d9534f;
+        }
+        .img-actions__button:hover {
+            color: white;
+            background: #c9302c;
+        }
+        .aipic[data-state="valid"] [data-action="set_aipic_state"][data-new-state="valid"]{
+            display: none;
+        }
+        .aipic[data-state="invalid"] [data-action="set_aipic_state"][data-new-state="invalid"]{
+            display: none;
+        }
+        .aipic[data-state="unknown"] [data-action="set_aipic_state"][data-new-state="unknown"]{
+            display: none;
+        }
+
+
+
+    </style>
+{% endblock css %}
 
 {% block content %}
-<h1>{% trans "Zdjęcia AI" %}</h1><br/>
+    <h1>{% trans "Zdjęcia AI" %}</h1><br/>
 
     <div>
         {% if is_valid == None %}<strong>Niezweryfikowane</strong>{% else %}<a href="?">Niezweryfikowane</a>{% endif %} |
@@ -13,45 +53,128 @@
 	<div class="panel panel-primary">
         <ul class="list-group">
         {% for aipic in  aipics %}
-            <li class="list-group-item">
-                <div style="clear:both;"><strong>{{ aipic.product.name }}</strong></div>
-                <div><small>{% trans "Wysłane " %}{{ aipic.get_timedelta}} {% trans "temu z " %}{{ aipic.device_name }}</small></div>
-                    {% if aipic.is_valid != True %}
-                    <form style="display:inline" action="" method="POST">
-                      {% csrf_token %}
-                    <button type="submit" name="set_aipic_valid" value="{{ aipic.id }}">{% trans "OK" %}</button>
-                    </form>
-                    {% endif %}
-                    {% if aipic.is_valid != False %}
-                    <form style="display:inline" action="" method="POST">
-                      {% csrf_token %}
-                    <button type="submit" name="set_aipic_not_valid" value="{{ aipic.id }}">{% trans "Nie OK" %}</button>
-                    </form>
-                    {% endif %}
-                    {% if aipic.is_valid != None %}
-                    <form style="display:inline" action="" method="POST">
-                      {% csrf_token %}
-                    <button type="submit" name="set_aipic_unverified" value="{{ aipic.id }}">{% trans "?" %}</button>
-                    </form>
-                    {% endif %}
-                    <form style="display:inline" action="" method="POST">
-                      {% csrf_token %}
-                    <button type="submit" name="delete_aipic" value="{{ aipic.id }}">{% trans "Usuń" %}</button>
-                    </form>
+            <li class="list-group-item aipic" data-state="{{ aipic.state }}" data-id="{{ aipic.id }}">
+                <p>
+                    <strong>{{ aipic.product.name }}</strong>
+                </p>
+                <p>
+                    <small>Wysłane {{ aipic.created_at | naturaltime }} z {{ aipic.device_name }}</small>
+                </p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="valid">
+                        <i class="fa fa-check"></i> Set Valid
+                    </a>
+                    <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="invalid">
+                        <i class="fa fa-times"></i>
+                        Set Invalid
+                    </a>
+                    <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="unknown">
+                        <i class="fa fa-circle-o"></i>
+                        Set Unknown
+                    </a>
+                    <a href="#" class="btn btn-danger" data-action="delete_aipic">
+                        <i class="fa fa-trash"></i>
+                        Delete
+                    </a>
+                </div>
+
                 <div style="overflow: hidden;">
                 {% for attachment in aipic.aiattachment_set.all %}
-                    <div style="position: relative;float:left;height: 100%">
-                    <img style="width:300px" src="{{ attachment.get_absolute_url }}">
-                    <form action="" method="POST" style="position:absolute; right: 0; top:0; z-index:10;">
-                      {% csrf_token %}
-                    <button type="submit" name="delete_attachment" value="{{ attachment.id }}">{% trans "Usuń" %}</button>
-                    </form>
+                    <div class="img-actions attachment" data-id="{{ attachment.id }}">
+                        <img style="width:300px" src="{{ attachment.get_absolute_url }}">
+                        <a href="#" class="img-actions__button" data-action="delete_attachment">
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </div>
                 {% endfor %}
                 </div>
             </li>
+
         {% endfor %}
         </ul>
     </div>
 
 {% endblock content %}
+
+{% block javascript %}
+    <script>
+        function parseCookie() {
+            return document.cookie.split(';')
+                .map(d => d.trim())
+                .map(d => {
+                    var sepIndex = d.indexOf('=');
+                    return sepIndex < 0 ? [d, ''] : [d.substr(0, sepIndex), d.substr(sepIndex + 1)]
+                }).reduce((acc, d) => {
+                    acc[d[0]] = d[1];
+                    return acc;
+                }, {})
+        }
+        function getCsrfToken() {
+            return parseCookie()['csrftoken']
+        }
+        $(function() {
+            $('.list-group').on('click', '[data-action="delete_attachment"]', function(ev) {
+                ev.preventDefault();
+                var $target = $(this);
+                var $attachment = $target.closest('.attachment');
+                var id = $attachment.data('id');
+                $.ajax({
+                  method: "POST",
+                  url: document.location,
+                  data: { action: 'delete_attachment', id: id },
+                  headers: {
+                    'X-CSRFToken' : getCsrfToken()
+                  }
+                })
+                .done(function( msg ) {
+                    $attachment.fadeOut("normal", function() {
+                        $attachment.remove();
+                    });
+                });
+            });
+        });
+        $(function() {
+            $('.list-group').on('click', '[data-action="delete_aipic"]', function(ev) {
+                ev.preventDefault();
+                var $target = $(this);
+                var $aipic = $target.closest('.aipic');
+                var id = $aipic.data('id');
+                $.ajax({
+                  method: "POST",
+                  url: document.location,
+                  data: { action: 'delete_aipic', id: id },
+                  headers: {
+                    'X-CSRFToken' : getCsrfToken()
+                  }
+                })
+                .done(function( msg ) {
+                    $aipic.fadeOut("normal", function() {
+                        $aipic.remove();
+                    });
+                });
+            });
+        });
+        $(function() {
+            $('.list-group').on('click', '[data-action="set_aipic_state"]', function(ev) {
+                ev.preventDefault();
+                var $target = $(this);
+                var $aipic = $target.closest('.aipic');
+                var action_name = $target.data('action');
+                var id = $aipic.data('id');
+                var state = $target.data('new-state');
+
+                $.ajax({
+                  method: "POST",
+                  url: document.location,
+                  data: { action: action_name, id: id, state: state },
+                  headers: {
+                    'X-CSRFToken' : getCsrfToken()
+                  }
+                })
+                .done(function( msg ) {
+                    $aipic.attr('data-state', state);
+                });
+            });
+        });
+    </script>
+{% endblock javascript %}
