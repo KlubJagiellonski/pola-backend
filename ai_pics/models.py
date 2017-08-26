@@ -52,8 +52,10 @@ class AIPics(models.Model):
     def state(self, value):
         if value == 'valid':
             self.is_valid = True
+            return
         if value == 'invalid':
             self.is_valid = False
+            return
         self.is_valid = None
 
     class Meta:
