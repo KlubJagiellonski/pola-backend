@@ -44,7 +44,7 @@ django-grappelli==2.10.1
 django-autocomplete-light==3.2.9
 
 #Babel
-Babel==2.4.0
+Babel==2.5.0
 
 #RQ
 rq==0.8.1
