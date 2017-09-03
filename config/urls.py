@@ -86,8 +86,8 @@ if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [
-        url(r'^400/$', bad_request),
-        url(r'^403/$', permission_denied),
-        url(r'^404/$', page_not_found),
+        url(r'^400/$', bad_request, kwargs={'exception': Exception("Bad request")}),
+        url(r'^403/$', permission_denied, kwargs={'exception': Exception("Permission Denied")}),
+        url(r'^404/$', page_not_found, kwargs={'exception': Exception("Page not found")}),
         url(r'^500/$', server_error),
     ]
