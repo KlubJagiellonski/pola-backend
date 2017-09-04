@@ -29,7 +29,10 @@ class ProductFilter(CrispyFilterMixin,
 
     class Meta:
         model = Product
-        fields = ['name', 'code', 'company_empty', 'company']
+        fields = {
+            'name': ['icontains'],
+            'code': ['icontains'],
+        }
         order_by = (
             ('name', _('Nazwa (A-Z)')),
             ('-name', _('Nazawa (Z-A)')),
