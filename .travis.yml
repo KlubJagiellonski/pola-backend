@@ -24,7 +24,7 @@ install:
 - pip install -U pip wheel
 - pip install tox
 script:
-- tox -e $TOX_ENV
+- travis_retry tox -e $TOX_ENV
 after_script:
 - rm $HOME/.cache/pip/log/*
 notifications:
