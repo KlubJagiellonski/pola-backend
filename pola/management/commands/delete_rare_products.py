@@ -41,7 +41,7 @@ class Command(BaseCommand):
 
                 product_id = row[0]
                 versions = Version.objects.\
-                    filter(object_id_int=product_id,
+                    filter(object_id=product_id,
                            content_type_id=15)\
                     .values('id', 'revision_id').iterator()
                 with connection.cursor() as cursor:

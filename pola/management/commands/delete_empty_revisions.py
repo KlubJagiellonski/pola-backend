@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 print "{} (id:{})".format(company.name.encode('UTF-8'), company.id)
             versions = Version.objects.\
                 filter(
-                    object_id_int=company.pk,
+                    object_id=company.pk,
                     content_type_id=16,
                     revision__comment='Firma utworzona automatycznie na podstawie API ILiM',
                     revision__user__isnull=True
