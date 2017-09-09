@@ -39,6 +39,7 @@ def get_ai_pics(request):
             {
                 'code' : attachment.ai_pics.product.code,
                 'product_name' : attachment.ai_pics.product.name,
+                'company_id' : attachment.ai_pics.product.company_id,
                 'url' : attachment.get_absolute_url()
             }
         )
