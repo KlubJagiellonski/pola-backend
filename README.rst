@@ -85,7 +85,7 @@ First make sure to create and activate a virtualenv_, then open a terminal at th
 
 Create a local PostgreSQL database::
 
-    $ createdb pola
+    $ createdb pola -h localhost -U postgres
 
 Run ``migrate`` on your new database::
 
