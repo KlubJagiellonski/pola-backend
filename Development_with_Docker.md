@@ -14,6 +14,7 @@ make build
 This command will block the terminal. Please use another terminal for further steps.
 ## Create db in database container
 ```
+docker exec -it pola-app-db bash
 createdb pola -h localhost -U postgres
 ```
 
