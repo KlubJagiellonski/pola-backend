@@ -2,7 +2,7 @@
 -r base.txt
 coverage==4.4.1
 #Sphinx
-django-extensions==1.9.0
+django-extensions==1.9.1
 Werkzeug==0.12.2
 django-test-plus==1.0.18
 #factory_boy==2.5.2
