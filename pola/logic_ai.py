@@ -6,16 +6,16 @@ QUERY_COUNT_THRESHOLD = 1000
 DESIRED_AI_PICS_COUNT = 2000
 
 preview_texts = [
-    'Naucz Polę tego produktu',
-    'Pomóż Poli stać się lepszą',
-    'Pola potrzebuje Twojej pomocy',
-    'Pola pomaga. Pomóż Poli',
-    'Poświęć Poli 10 sekund',
-    'Naciśnij aby pomóc Poli',
-    'Polą Cię potrzebuję',
-    'Co Ty możesz zrobić dla Poli?',
-    'A teraz zeskanuj całą lodówkę',
-    'A teraz zeskanuj całą łazienkę',
+    u'Naucz Polę tego produktu',
+    u'Pomóż Poli stać się lepszą',
+    u'Pola potrzebuje Twojej pomocy',
+    u'Pola pomaga. Pomóż Poli',
+    u'Poświęć Poli 10 sekund',
+    u'Naciśnij aby pomóc Poli',
+    u'Polą Cię potrzebuję',
+    u'Co Ty możesz zrobić dla Poli?',
+    u'A teraz zeskanuj całą lodówkę',
+    u'A teraz zeskanuj całą łazienkę',
 ]
 
 def add_ask_for_pics(product, result):
@@ -36,7 +36,7 @@ def add_ask_for_pics(product, result):
         ai['ask_for_pics_button_start'] = 'Nakręć film'
         ai['max_pic_size'] = 800
 
-        slack.send_ai_pics_request(u'{} ({})'.format(str(product), product.code),
+        slack.send_ai_pics_request(u'{} ({})'.format(product.name, product.code),
                                    ai['ask_for_pics_preview'])
 
     return result

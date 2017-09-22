@@ -50,9 +50,8 @@ def send_ai_pics_request(product, preview_text):
             'token':settings.SLACK_TOKEN,
             'channel':settings.SLACK_CHANNEL_AI_PICS,
             'username':'AI pics Requested',
-            'text':'Product: *{}*\n'\
-                   'Preview text: *{}*'
-                .format(product, preview_text),
+            'text':'Product: *{}*\nPreview text: *{}*'
+                .format(product.encode('utf-8'), preview_text.encode('utf-8')),
         })
 
     #requests.get(url)
