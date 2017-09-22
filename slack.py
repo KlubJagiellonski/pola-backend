@@ -42,3 +42,17 @@ def send_ai_pics(product, device_name, original_width, original_height,
 
     #requests.get(url)
     q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=15))
+
+def send_ai_pics_request(product):
+
+    url = 'https://slack.com/api/chat.postMessage?'+\
+        urlencode({
+            'token':settings.SLACK_TOKEN,
+            'channel':settings.SLACK_CHANNEL_AI_PICS,
+            'username':'AI pics Requested',
+            'text':'Product: *{}*\n'
+                .format(product),
+        })
+
+    #requests.get(url)
+    q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=0))
