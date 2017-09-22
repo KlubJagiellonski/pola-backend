@@ -23,6 +23,6 @@ def add_ask_for_pics(product, result):
         ai['ask_for_pics_button_start'] = 'Nakręć film'
         ai['max_pic_size'] = 800
 
-    slack.send_ai_pics_request(str(product))
+        slack.send_ai_pics_request(str(product))
 
     return result
