@@ -19,9 +19,9 @@ preview_texts = [
 ]
 
 def add_ask_for_pics(product, result):
-    if product and product.name \
+    if product and product.name and product.company \
         and 'plScore' in result and result['plScore']\
-        and product.query_count > QUERY_COUNT_THRESHOLD\
+        and product.company.query_count > QUERY_COUNT_THRESHOLD\
         and random.randint(0, DESIRED_AI_PICS_COUNT) > product.ai_pics_count:
 
         ai = result['ai'] = {}
