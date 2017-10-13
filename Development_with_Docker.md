@@ -12,14 +12,19 @@ make build
 ./utils/docker_run.sh 
 ```
 This command will block the terminal. Please use another terminal for further steps.
+## Create db in database container
+```
+docker exec -it pola-app-db bash
+createdb pola -h localhost -U postgres
+```
 
 ## Set the environment variables, create the database
 ```
 make enter
 export GS1_API_KEY=KLUCZ_DO_API
 export DATABASE_URL=$(echo "postgres://postgres:postgres@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/pola")
-django-admin migrate
-django-admin createsuperuser
+python manage.py migrate
+python manage.py createsuperuser
 exit
 ```
 
