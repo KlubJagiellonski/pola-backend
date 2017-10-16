@@ -22,4 +22,4 @@ django-redis-cache==1.7.1
 
 newrelic==2.94.0.79
 
-django==1.11.5
+django==1.11.6
