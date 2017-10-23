@@ -5,7 +5,7 @@ django-environ==0.4.4
 
 # Forms
 django-braces==1.11.0
-django-crispy-forms==1.6.1
+django-crispy-forms==1.7.0
 
 # Models
 django-model-utils==3.0.0
@@ -32,7 +32,7 @@ redis>=2.10.0
 jsonfield==2.0.2
 django-reversion==2.0.10
 reportlab==3.4.0
-django-filter==1.0.4
+django-filter==1.1.0
 
 # API
 requests==2.18.4
