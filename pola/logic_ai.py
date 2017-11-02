@@ -12,10 +12,9 @@ preview_texts = [
     u'Pola pomaga. Pomóż Poli',
     u'Poświęć Poli 10 sekund',
     u'Naciśnij aby pomóc Poli',
-    u'Polą Cię potrzebuje',
+    u'Pola Cię potrzebuje',
     u'Co Ty możesz zrobić dla Poli?',
-    u'A teraz zeskanuj całą lodówkę',
-    u'A teraz zeskanuj całą łazienkę',
+    u'Rozwijaj z nami Polę!',
 ]
 
 def add_ask_for_pics(product, result):
