@@ -36,7 +36,7 @@ django-filter==1.1.0
 
 # API
 requests==2.18.4
-django-ratelimit==1.0.1
+django-ratelimit==1.1.0
 
 django-grappelli==2.10.1
 
