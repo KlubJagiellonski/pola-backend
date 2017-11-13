@@ -1,6 +1,6 @@
 # Test dependencies go here.
 -r base.txt
-flake8==3.4.1
+flake8==3.5.0
 django-test-plus==1.0.20
 factory_boy==2.9.2
 mock==2.0.0
