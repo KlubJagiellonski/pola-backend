@@ -1,5 +1,6 @@
 {%extends 'company/base.html' %}
 {% load i18n %}
+
 {% block breadcrumbs_rows %}
     <li class="active"><a href="{{ obj.get_absolute_url }}">{{ object }}</a></li>
 {% endblock %}
@@ -12,7 +13,7 @@
         {% endif %}
         {% if perms.company.change_company %}
             <a href="{% url 'company:edit' object.pk %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
-        {% end %}
+        {% endif %}
     </div>
 {% endif %}
 <h1>
@@ -42,13 +43,13 @@
                             <a href="{{ product.get_absolute_url }}">{{ product }}</a>
                         </li>
                     {% empty%}
-                        <li>{% trans "Nie ma żadnych produktów" %}</li>
+                        <li class="list-group-item">{% trans "Nie ma żadnych produktów" %}</li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
     {% endif %}
-    {% if perms.report.view_report %
+    {% if perms.report.view_report %}
         <div class="col-md-6">
             <div class="panel panel-info">
                 <div class="panel-heading">

@@ -146,8 +146,8 @@ class ConcurencyComapnyUpdateTestCase(TestCase):
         self.instance = CompanyFactory()
 
     def test_restrictions(self):
-        user1 = self.make_user('u1')
-        user2 = self.make_user('u2')
+        user1 = self.make_user('u1', perms=['company.view_company', 'company.change_company'])
+        user2 = self.make_user('u2', perms=['company.view_company', 'company.change_company'])
         url = reverse('company:edit', kwargs={'pk': self.instance.pk})
 
         with self.login(username=user1.username):

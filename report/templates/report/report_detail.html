@@ -1,5 +1,7 @@
 {%extends 'report/base.html' %}
+
 {% load i18n %}
+
 {% block breadcrumbs_rows %}
     <li class="active"><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
 {% endblock %}
@@ -36,7 +38,7 @@
                     {{ object.product }}
                 {% if perms.product.view_product %}</a>{% endif %}
                 -&gt;
-                {% if perms.company.view_company %}<a href="{{ object.product.company.get_absolute_url }}">
+                {% if perms.company.view_company %}<a href="{{ object.product.company.get_absolute_url }}">{% endif %}
                     {{ object.product.company }}
                 {% if perms.company.view_company %}</a>{% endif %}
             </td>
