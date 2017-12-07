@@ -4,10 +4,10 @@
 
 {% block breadcrumbs_rows %}
     {% if object %}
-    <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
-    <li class="active">{% trans 'Zmień' %}</li>
+        <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
+        <li class="active">{% trans 'Zmień' %}</li>
     {% else %}
-    <li class="active">{% trans 'Dodaj' %}</li>
+        <li class="active">{% trans 'Dodaj' %}</li>
     {% endif %}
 {% endblock %}
 

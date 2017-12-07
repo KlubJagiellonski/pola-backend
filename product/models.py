@@ -98,3 +98,9 @@ class Product(models.Model):
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
         ordering = ['-created_at']
+        permissions = (
+            ("view_product", "Can see all product"),
+            # ("add_product", "Can add a new product"),
+            # ("change_product", "Can edit the product"),
+            # ("delete_product", "Can delete the product"),
+        )

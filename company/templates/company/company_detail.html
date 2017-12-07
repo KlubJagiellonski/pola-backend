@@ -7,8 +7,12 @@
 {% block content %}
 {% if user.is_authenticated %}
     <div class="btn-group">
-        <a href="{% url 'company:delete' object.pk %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Usuń" %}</a>
-        <a href="{% url 'company:edit' object.pk %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+        {% if perms.company.delete_company %}
+            <a href="{% url 'company:delete' object.pk %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Usuń" %}</a>
+        {% endif %}
+        {% if perms.company.change_company %}
+            <a href="{% url 'company:edit' object.pk %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+        {% end %}
     </div>
 {% endif %}
 <h1>
@@ -26,39 +30,45 @@
 	</table>
 </div>
 <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">Produkty</h3>
+    {% if perms.product.view_product %}
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Produkty</h3>
+                </div>
+                <ul class="list-group">
+                    {% for product in object.product_set.all %}
+                        <li class="list-group-item">
+                            <a href="{{ product.get_absolute_url }}">{{ product }}</a>
+                        </li>
+                    {% empty%}
+                        <li>{% trans "Nie ma żadnych produktów" %}</li>
+                    {% endfor %}
+                </ul>
             </div>
-            <ul class="list-group">
-                {% for product in object.product_set.all %}
-                <li class="list-group-item"><a href="{{ product.get_absolute_url }}">{{ product }}</a></li>
-                {% empty%}
-                <li>{% trans "Nie ma żadnych produktów" %}</li>
-                {% endfor %}
-            </ul>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <a class="btn btn-xs btn-info pull-right" href="/cms/report/advanced/?status=open&product__company={{ object.pk }}">Pokaż wszystkie</a>
-                <h3 class="panel-title">Zgłoszenia powiązane przez produkty</h3>
+    {% endif %}
+    {% if perms.report.view_report %
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <a class="btn btn-xs btn-info pull-right" href="/cms/report/advanced/?status=open&product__company={{ object.pk }}">Pokaż wszystkie</a>
+                    <h3 class="panel-title">Zgłoszenia powiązane przez produkty</h3>
+                </div>
+                {% if report_list %}
+                <ul class="list-group">
+                    {% for report in report_list %}
+                    <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="panel-body">
+                    {% trans "Nie ma żadnych zgłoszeń" %}
+                </div>
+                {% endif %}
             </div>
-            {% if report_list %}
-            <ul class="list-group">
-                {% for report in report_list %}
-                <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a></li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <div class="panel-body">
-                {% trans "Nie ma żadnych zgłoszeń" %}
-            </div>
-            {% endif %}
         </div>
-    </div>
+    {% endif %}
 
 </div>
 {% endblock content %}

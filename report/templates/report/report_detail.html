@@ -8,13 +8,14 @@
 <nav>
   <ul class="pager">
     {% if object.get_previous_by_created_at %}
-    <li class="previous"><a href="{{ object.get_previous_by_created_at.get_absolute_url }}" title="{{ object.get_previous_by_created_at }}"><span aria-hidden="true" data-key-shortcut="left">&larr;</span> Older</a></li>
+        <li class="previous"><a href="{{ object.get_previous_by_created_at.get_absolute_url }}" title="{{ object.get_previous_by_created_at }}"><span aria-hidden="true" data-key-shortcut="left">&larr;</span> Older</a></li>
     {% endif %}
     {% if object.get_next_by_created_at %}
-    <li class="next"><a href="{{ object.get_next_by_created_at.get_absolute_url }}" title="{{ object.get_next_by_created_at }}" data-key-shortcut="right">Newer <span aria-hidden="true">&rarr;</span></a></li>
+        <li class="next"><a href="{{ object.get_next_by_created_at.get_absolute_url }}" title="{{ object.get_next_by_created_at }}" data-key-shortcut="right">Newer <span aria-hidden="true">&rarr;</span></a></li>
     {% endif %}
   </ul>
 </nav>
+
 <h1>{{ object }} <small>#{{ object.pk }}</small></h1>
 
 <div class="panel panel-primary">
@@ -31,8 +32,13 @@
         <tr>
             <td>Produkt: </td>
             <td>
-                <a href="{{ object.product.get_absolute_url }}">{{ object.product }}</a>-&gt;
-                <a href="{{ object.product.company.get_absolute_url }}">{{ object.product.company }}</a>
+                {% if perms.product.view_product %}<a href="{{ object.product.get_absolute_url }}">{% endif %}
+                    {{ object.product }}
+                {% if perms.product.view_product %}</a>{% endif %}
+                -&gt;
+                {% if perms.company.view_company %}<a href="{{ object.product.company.get_absolute_url }}">
+                    {{ object.product.company }}
+                {% if perms.company.view_company %}</a>{% endif %}
             </td>
         </tr>
         <tr>
@@ -64,9 +70,11 @@
     <div class="col-xs-12">{% trans "Brak załączników" %}</div>
     {% endfor %}
 </div>
-<div class="btn-group">
-    {% if object.status == object.OPEN %}
-    <a href="{% url 'report:resolve' object.pk %}" class="btn btn-primary"><i class="fa fa-thumbs-o-up"></i> {% trans "Rozpatrz" %}</a>
-    {% endif %}
-</div>
+{% if perms.report.change_report %}
+    <div class="btn-group">
+        {% if object.status == object.OPEN %}
+            <a href="{% url 'report:resolve' object.pk %}" class="btn btn-primary"><i class="fa fa-thumbs-o-up"></i> {% trans "Rozpatrz" %}</a>
+        {% endif %}
+    </div>
+{% endif %}
 {% endblock content %}

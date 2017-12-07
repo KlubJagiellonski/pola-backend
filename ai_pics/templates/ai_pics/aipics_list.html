@@ -70,6 +70,7 @@
                     <small>Wysłane {{ aipic.created_at | naturaltime }} z {{ aipic.device_name }}</small>
                 </p>
                 <div class="btn-group">
+                    {% if perms.ai_pics.aipics_change %}
                     <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="valid">
                         <i class="fa fa-check"></i> Set Valid
                     </a>
@@ -81,19 +82,24 @@
                         <i class="fa fa-circle-o"></i>
                         Set Unknown
                     </a>
+                    {% endif %}
+                    {% if perms.ai_pics.aipics_delete %}
                     <a href="#" class="btn btn-danger" data-action="delete_aipic">
                         <i class="fa fa-trash"></i>
                         Delete
                     </a>
+                    {% endif %}
                 </div>
 
                 <div style="overflow: hidden;">
                 {% for attachment in aipic.aiattachment_set.all %}
                     <div class="img-actions attachment" data-id="{{ attachment.id }}">
                         <img style="width:300px" src="{{ attachment.get_absolute_url }}">
+                        {% if perms.ai_pics.aiattachment_delete %}
                         <a href="#" class="img-actions__button" data-action="delete_attachment">
                             <i class="fa fa-trash"></i>
                         </a>
+                        {% endif %}
                     </div>
                 {% endfor %}
                 </div>

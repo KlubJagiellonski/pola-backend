@@ -1,7 +1,7 @@
 # Create your views here.
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect, QueryDict
 from django.views.generic.detail import DetailView
@@ -16,7 +16,10 @@ from .filters import CompanyFilter
 from .forms import CompanyCreateFromKRSForm, CompanyForm
 
 
-class CompanyListView(LoginRequiredMixin, FilterView):
+class CompanyListView(LoginRequiredMixin,
+                      PermissionRequiredMixin,
+                      FilterView):
+    permission_required = 'company.view_company'
     model = Company
     filterset_class = CompanyFilter
     paginate_by = 25
@@ -31,14 +34,19 @@ class GetInitalFormMixin(object):
 
 class CompanyCreate(GetInitalFormMixin,
                     LoginRequiredMixin,
+                    PermissionRequiredMixin,
                     FormValidMessageMixin,
                     CreateView):
+    permission_required = 'company.add_company'
     model = Company
     form_class = CompanyForm
     form_valid_message = u"Firma utworzona!"
 
 
-class CompanyCreateFromKRSView(LoginRequiredMixin, FormView):
+class CompanyCreateFromKRSView(LoginRequiredMixin,
+                               PermissionRequiredMixin,
+                               FormView):
+    permission_required = 'company.add_company'
     form_class = CompanyCreateFromKRSForm
     template_name = 'company/company_from_krs.html'
 
@@ -56,8 +64,10 @@ class CompanyCreateFromKRSView(LoginRequiredMixin, FormView):
 
 class CompanyUpdate(LoginRequiredMixin,
                     FormValidMessageMixin,
+                    PermissionRequiredMixin,
                     ConcurencyProtectUpdateView,
                     UpdateView):
+    permission_required = 'company.change_company'
     model = Company
     form_class = CompanyForm
     concurency_url = reverse_lazy('concurency:lock')
@@ -66,7 +76,9 @@ class CompanyUpdate(LoginRequiredMixin,
 
 class CompanyDelete(LoginRequiredMixin,
                     FormValidMessageMixin,
+                    PermissionRequiredMixin,
                     DeleteView):
+    permission_required = 'company.delete_company'
     model = Company
     success_url = reverse_lazy('company:list')
     form_valid_message = u"Firma skasowana!"
@@ -93,8 +105,12 @@ class FieldsDisplayMixin(object):
         return context
 
 
-class CompanyDetailView(FieldsDisplayMixin, LoginRequiredMixin, DetailView):
+class CompanyDetailView(FieldsDisplayMixin,
+                        LoginRequiredMixin,
+                        PermissionRequiredMixin,
+                        DetailView):
     model = Company
+    permission_required = 'company.view_company'
 
     fields_to_display = (
         'Editor_notes',
@@ -122,7 +138,8 @@ class CompanyDetailView(FieldsDisplayMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class CompanyAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin,
+class CompanyAutocomplete(LoginRequiredMixin,
+                          ExprAutocompleteMixin,
                           autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',

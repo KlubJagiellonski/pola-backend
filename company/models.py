@@ -224,3 +224,9 @@ class Company(models.Model):
         verbose_name = _(u"Producent")
         verbose_name_plural = _(u"Producenci")
         ordering = ['-created_at']
+        permissions = (
+            ("view_company", "Can see all company"),
+            # ("add_company", "Can add a new company"),
+            # ("change_company", "Can edit the company"),
+            # ("delete_company", "Can delete the company"),
+        )

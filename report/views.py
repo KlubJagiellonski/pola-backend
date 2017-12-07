@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
@@ -13,14 +13,20 @@ from report.models import Report
 from .filters import ReportFilter
 
 
-class ReportListView(LoginRequiredMixin, FilterView):
+class ReportListView(LoginRequiredMixin,
+                     PermissionRequiredMixin,
+                     FilterView):
+    permission_required = 'report.view_report'
     model = Report
     filterset_class = ReportFilter
     paginate_by = 25
     queryset = Report.objects.prefetch_related('attachment_set').all()
 
 
-class ReportAdvancedListView(LoginRequiredMixin, FilterView):
+class ReportAdvancedListView(LoginRequiredMixin,
+                             PermissionRequiredMixin,
+                             FilterView):
+    permission_required = 'report.view_report'
     model = Report
     filterset_class = ReportFilter
     paginate_by = 25
@@ -34,16 +40,25 @@ class ReportAdvancedListView(LoginRequiredMixin, FilterView):
         return HttpResponseRedirect(request.get_full_path())
 
 
-class ReportDeleteView(LoginRequiredMixin, DeleteView):
+class ReportDeleteView(LoginRequiredMixin,
+                       PermissionRequiredMixin,
+                       DeleteView):
+    permission_required = 'report.delete_report'
     model = Report
     success_url = reverse_lazy('report:list')
 
 
-class ReportDetailView(LoginRequiredMixin, DetailView):
+class ReportDetailView(LoginRequiredMixin,
+                       PermissionRequiredMixin,
+                       DetailView):
+    permission_required = 'report.view_report'
     model = Report
 
 
-class ReportResolveView(LoginRequiredMixin, ActionView):
+class ReportResolveView(LoginRequiredMixin,
+                        PermissionRequiredMixin,
+                        ActionView):
+    permission_required = 'report.change_report'
     model = Report
     template_name_suffix = '_resolve'
     queryset = Report.objects.only_open().all()
