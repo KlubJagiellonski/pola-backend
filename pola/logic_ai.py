@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import random
-import slack
 
 QUERY_COUNT_THRESHOLD = 1000
 DESIRED_AI_PICS_COUNT = 2000
@@ -34,8 +33,5 @@ def add_ask_for_pics(product, result):
         ai['ask_for_pics_product'] = u'Uczysz Polę produktu: {}'.format(product.name)
         ai['ask_for_pics_button_start'] = 'Nakręć film'
         ai['max_pic_size'] = 800
-
-        slack.send_ai_pics_request(u'{} ({})'.format(product.name, product.code),
-                                   ai['ask_for_pics_preview'])
 
     return result

@@ -13,7 +13,6 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ratelimit.decorators import ratelimit
 
-import slack
 from ai_pics.models import AIPics, AIAttachment
 from pola import logic, logic_ai
 from pola.models import Query
@@ -93,9 +92,6 @@ def add_ai_pics(request):
             signed_requests.append(signed_request)
 
     product.increment_ai_pics_count()
-
-    slack.send_ai_pics(str(product), device_name, original_width, original_height, width, height,
-                       files_count, file_ext, mime_type, signed_requests)
 
     return JsonResponse({'signed_requests': signed_requests})
 
