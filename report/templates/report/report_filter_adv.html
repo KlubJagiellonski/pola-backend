@@ -10,7 +10,9 @@
         <form action="" method="post" onsubmit="return confirm('Czy na pewno chcesz rozpatrzyć wszystkie zaznaczone raporty?');">
         {% csrf_token %}
         <div class="form-inline">
-            <button class="btn btn-primary">Rozpatrz zaznaczone</button>
+            {% if perms.report.change_report %}
+                <button class="btn btn-primary">Rozpatrz zaznaczone</button>
+            {% endif %}
             <button class="btn btn-primary js-select-all-checkbox">Zaznacz wszystkie</button>
             <button class="btn btn-primary js-unselect-all-checkbox">Odznacz wszystkie</button>
         </div>

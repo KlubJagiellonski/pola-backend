@@ -1,6 +1,6 @@
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -21,7 +21,10 @@ from .forms import ProductForm
 from .images import Barcode
 
 
-class ProductDetailView(LoginRequiredMixin, DetailView):
+class ProductDetailView(LoginRequiredMixin,
+                        PermissionRequiredMixin,
+                        DetailView):
+    permission_required = 'product.view_product'
     slug_field = 'code'
     model = models.Product
 
@@ -36,13 +39,20 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ProductListView(LoginRequiredMixin, FilterView):
+class ProductListView(LoginRequiredMixin,
+                      PermissionRequiredMixin,
+                      FilterView):
+    permission_required = 'product.view_product'
     model = models.Product
     filterset_class = ProductFilter
     paginate_by = 25
 
 
-class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):
+class ProductCreate(LoginRequiredMixin,
+                    PermissionRequiredMixin,
+                    FormValidMessageMixin,
+                    CreateView):
+    permission_required = 'product.add_product'
     slug_field = 'code'
     model = models.Product
     form_class = ProductForm
@@ -50,9 +60,11 @@ class ProductCreate(LoginRequiredMixin, FormValidMessageMixin, CreateView):
 
 
 class ProductUpdate(LoginRequiredMixin,
+                    PermissionRequiredMixin,
                     ConcurencyProtectUpdateView,
                     FormValidMessageMixin,
                     UpdateView):
+    permission_required = 'product.change_product'
     slug_field = 'code'
     model = models.Product
     form_class = ProductForm
@@ -60,14 +72,21 @@ class ProductUpdate(LoginRequiredMixin,
     form_valid_message = _(u"Produkt zaktualizowany!")
 
 
-class ProductDelete(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
+class ProductDelete(LoginRequiredMixin,
+                    PermissionRequiredMixin,
+                    FormValidMessageMixin,
+                    DeleteView):
+    permission_denied_message = 'product.delete_product'
     slug_field = 'code'
     model = models.Product
     success_url = reverse_lazy('product:list')
     form_valid_message = _(u"Product deleted!")
 
 
-class ProductHistoryView(LoginRequiredMixin, DetailView):
+class ProductHistoryView(LoginRequiredMixin,
+                         PermissionRequiredMixin,
+                         DetailView):
+    permission_required = 'product.view_product'
     slug_field = 'code'
     model = models.Product
     template_name = 'product/product_history.html'
@@ -87,7 +106,8 @@ def get_image(request, code):
     return response
 
 
-class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin,
+class ProductAutocomplete(LoginRequiredMixin,
+                          ExprAutocompleteMixin,
                           autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',

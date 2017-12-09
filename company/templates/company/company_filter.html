@@ -1,10 +1,16 @@
 {%extends 'company/base.html' %}
+
 {% load i18n crispy_forms_tags %}
+
 {% block content %}
 
-    <div class="btn-group">
-        <a href="{% url 'company:create_from_krs' %}" class="btn btn-primary"><i class="fa fa-plus"></i> {% trans "Dodaj z KRS..." %}</a>
-    </div>
+    {% if perms.company.add_company %}
+        <div class="btn-group">
+            <a href="{% url 'company:create_from_krs' %}" class="btn btn-primary">
+                <i class="fa fa-plus"></i> {% trans "Dodaj z KRS..." %}
+            </a>
+        </div>
+    {% endif %}
 
 	<h1>{% trans "Producenci" %}</h1>
 
@@ -14,15 +20,16 @@
 		</div>
 		<div class="col-md-9">
 			<ul>
-			{% for obj in object_list %}
-				<li>
-                    <a href="{{ obj.get_absolute_url }}">{{ obj }} ({{ obj.query_count }})</a>
-                    {% if obj.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ obj.locked_by }}"></i>{% endif %}
-                </li>
-			{% empty %}
-			    <li>{% trans "Nie znaleziono producentów spełniających zadane kryteria" %}.</li>
-			{% endfor %}
-             {% include 'pagination_custom/pager.html' with page=page_obj %}
+                {% for obj in object_list %}
+                    <li>
+                        <a href="{{ obj.get_absolute_url }}">{{ obj }} ({{ obj.query_count }})</a>
+                        {% if obj.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ obj.locked_by }}"></i>{% endif %}
+                    </li>
+                {% empty %}
+                    <li>{% trans "Nie znaleziono producentów spełniających zadane kryteria" %}.</li>
+                {% endfor %}
+
+                {% include 'pagination_custom/pager.html' with page=page_obj %}
 			</ul>
 		</div>
 	</div>

@@ -14,3 +14,4 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 class StaffFactory(UserFactory):
     is_staff = True
+    is_superuser = True

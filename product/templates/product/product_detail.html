@@ -7,9 +7,13 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div class="btn-group">
-            <a href="{% url 'product:delete' product.code %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Usuń" %}</a>
+            {% if perms.product.delete_product %}
+                <a href="{% url 'product:delete' product.code %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Usuń" %}</a>
+            {% endif %}
             <a href="{% url 'product:view-history' product.code %}" class="btn btn-primary"><i class="fa fa-clock-o"></i> {% trans "Historia" %}</a>
-            <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+            {% if perms.product.change_product %}
+                <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+            {% endif %}
         </div>
     {% endif %}
     <h1>
@@ -37,7 +41,12 @@
                     <td>{% trans "NIP producenta: " %}</td><td>{{ object.company.nip }} </td>
 				</tr>
 				<tr>
-                    <td>{% trans "Nazwa producenta: " %}</td><td><a href="{{ object.company.get_absolute_url }}">{{ object.company }}</a></td>
+                    <td>{% trans "Nazwa producenta: " %}</td>
+                    <td>
+                        {% if perms.company.view_company %}<a href="{{ object.company.get_absolute_url }}"> {% endif %}
+                            {{ object.company }}
+                        {% if perms.company.view_company %}</a>{% endif %}
+                    </td>
 				</tr>
 				<tr>
                     <td>{% trans "Adres producenta: " %}</td><td>{{ object.company.address }} </td>
@@ -46,33 +55,36 @@
             <tr>
                 <td>{% trans "Producent" %}</td>
                 <td>
-                    <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+                    {% if perms.product.change_product %}
+                        <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+                    {% endif %}
                 </td>
             </tr>
 			{% endif %}
 		</table>
 	</div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <a class="btn btn-xs btn-info pull-right" href="/cms/report/advanced/?status=open&product={{ object.pk }}">Pokaż wszystkie</a>
-                <h3 class="panel-title">Zgłoszenia:</h3>
+    {% if perms.report.report_view %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <a class="btn btn-xs btn-info pull-right" href="/cms/report/advanced/?status=open&product={{ object.pk }}">Pokaż wszystkie</a>
+                        <h3 class="panel-title">Zgłoszenia:</h3>
+                    </div>
+                    {% if report_list %}
+                    <ul class="list-group">
+                        {% for report in report_list %}
+                        <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div class="panel-body">
+                        {% trans "Nie ma żadnych zgłoszeń" %}
+                    </div>
+                    {% endif %}
+                </div>
             </div>
-            {% if report_list %}
-            <ul class="list-group">
-                {% for report in report_list %}
-                <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a></li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <div class="panel-body">
-                {% trans "Nie ma żadnych zgłoszeń" %}
-            </div>
-            {% endif %}
         </div>
-    </div>
-</div>
-
+    {% endif %}
 {% endblock content %}

@@ -46,10 +46,18 @@
             <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'home-cms' %}">{% trans "Start" %}</a></li>
-                    <li><a href="{% url 'product:list' %}">{% trans "Produkty" %}</a></li>
-                    <li><a href="{% url 'company:list' %}">{% trans "Producenci" %}</a></li>
-                    <li><a href="{% url 'report:list' %}">{% trans "Zgłoszenia" %}</a></li>
-                    <li><a href="{% url 'ai_pics:list' %}">{% trans "Zdjęcia AI" %}</a></li>
+                    {% if perms.product.view_product %}
+                        <li><a href="{% url 'product:list' %}">{% trans "Produkty" %}</a></li>
+                    {% endif %}
+                    {% if perms.company.view_company %}
+                        <li><a href="{% url 'company:list' %}">{% trans "Producenci" %}</a></li>
+                    {% endif %}
+                    {% if perms.report.view_report %}
+                        <li><a href="{% url 'report:list' %}">{% trans "Zgłoszenia" %}</a></li>
+                    {% endif %}
+                    {% if perms.ai_pics.view_aipics %}
+                        <li><a href="{% url 'ai_pics:list' %}">{% trans "Zdjęcia AI" %}</a></li>
+                    {% endif %}
                     <li><a href="{% url 'home-stats' %}">{% trans "Statystyki" %}</a></li>
                 </ul>
 

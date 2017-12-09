@@ -1,6 +1,6 @@
 from boto.s3.connection import S3Connection, Bucket, Key
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.utils.functional import cached_property
 from django.views.generic import ListView
@@ -8,7 +8,10 @@ from django.views.generic import ListView
 from ai_pics.models import AIPics, AIAttachment
 
 
-class AIPicsPageView(LoginRequiredMixin, ListView):
+class AIPicsPageView(LoginRequiredMixin,
+                     PermissionRequiredMixin,
+                     ListView):
+    permission_required = 'ai_pics.aipics_view'
     ordering = '-id'
     paginate_by = 10
     model = AIPics
@@ -41,6 +44,8 @@ class AIPicsPageView(LoginRequiredMixin, ListView):
         return self.get(request)
 
     def action_set_aipic_state(self, request):
+        if not self.request.user.has_perm('ai_pics.change_aipics'):
+            return self.handle_no_permission()
         id = request.POST['id']
         state = request.POST['state']
         aipic = AIPics.objects.get(id=id)
@@ -49,6 +54,8 @@ class AIPicsPageView(LoginRequiredMixin, ListView):
         return JsonResponse({'ok': True})
 
     def action_delete_attachment(self, request):
+        if not self.request.user.has_perm('ai_pics.delete_aiattachment'):
+            return self.handle_no_permission()
         key = Key(self._bucket)
 
         id = request.POST['id']
@@ -61,6 +68,8 @@ class AIPicsPageView(LoginRequiredMixin, ListView):
         return JsonResponse({'ok': True})
 
     def action_delete_aipic(self, request):
+        if not self.request.user.has_perm('ai_pics.delete_aipics'):
+            return self.handle_no_permission()
         key = Key(self._bucket)
 
         id = request.POST['id']

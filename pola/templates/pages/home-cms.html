@@ -3,163 +3,175 @@
 {% block content %}
 <h3>{% trans "Do pracy. Użytkownicy czekają :)" %}</h3><br/>
 <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Najpopularniejsi niezweryfikowani producenci" %}
-                    (
-                    <abbr title="{% trans "Liczba firm niezweryfikowanych" %}">{{ no_of_not_verified_companies }}</abbr>
-                    +
-                    <abbr title="{% trans "Liczba zweryfikowanych firm" %}">{{ no_of_verified_companies }}</abbr>
-                    =
-                    <abbr title="{% trans "Liczba wszystkich firm" %}">{{ no_of_companies }}</abbr>
-                    )
-                </h3>
-            </div>
-            <ul class="list-group">
-            {% for company in  most_popular_companies %}
-                <li class="list-group-item">
-                    <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})
-                    {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-            <div class="panel-footer">
-                <a href="{% url 'company:list' %}?verified=False&o=-query_count">{% trans "More" %}</a>
+    {% if perms.company.view_company %}
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Najpopularniejsi niezweryfikowani producenci" %}
+                        (
+                        <abbr title="{% trans "Liczba firm niezweryfikowanych" %}">{{ no_of_not_verified_companies }}</abbr>
+                        +
+                        <abbr title="{% trans "Liczba zweryfikowanych firm" %}">{{ no_of_verified_companies }}</abbr>
+                        =
+                        <abbr title="{% trans "Liczba wszystkich firm" %}">{{ no_of_companies }}</abbr>
+                        )
+                    </h3>
+                </div>
+                <ul class="list-group">
+                {% for company in  most_popular_companies %}
+                    <li class="list-group-item">
+                        <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }})
+                        {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="panel-footer">
+                    <a href="{% url 'company:list' %}?verified=False&o=-query_count">{% trans "More" %}</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Produkty z nierozpatrzonymi zgłoszeniami" %}
-                </h3>
+    {% endif %}
+    {% if perms.product.view_product %}
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Produkty z nierozpatrzonymi zgłoszeniami" %}
+                    </h3>
+                </div>
+                {% for product in  products_with_most_open_reports %}
+                    <li class="list-group-item">
+                        <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) ({{ product.no_of_open_reports }}) </a>
+                        {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
+                    </li>
+                {% endfor %}
             </div>
-            {% for product in  products_with_most_open_reports %}
-                <li class="list-group-item">
-                    <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) ({{ product.no_of_open_reports }}) </a>
-                    {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
-                </li>
-            {% endfor %}
         </div>
-    </div>
+    {% endif %}
 </div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Najpopularniejsze, polskie (590) produkty bez producenta" %}
-                    (
-                    <abbr title="{% trans "Liczba kodów polskich bez producenta" %}">{{ no_of_590_products }}</abbr>
-                    )
-                </h3>
+
+{% if perms.product.view_product %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Najpopularniejsze, polskie (590) produkty bez producenta" %}
+                        (
+                        <abbr title="{% trans "Liczba kodów polskich bez producenta" %}">{{ no_of_590_products }}</abbr>
+                        )
+                    </h3>
+                </div>
+                <ul class="list-group">
+                {% for product in  most_popular_590_products %}
+                    <li class="list-group-item">
+                        <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
+                        {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="panel-footer">
+                    <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
+                </div>
             </div>
-            <ul class="list-group">
-            {% for product in  most_popular_590_products %}
-                <li class="list-group-item">
-                    <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
-                    {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-            <div class="panel-footer">
-                <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
+        </div>
+
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Najpopularniejsze, niepolskie (!590) produkty bez producenta" %}
+                        (
+                        <abbr title="{% trans "Liczba nie polskich produktów bez producenta" %}">{{ no_of_not_590_products }}</abbr>
+                        )
+                    </h3>
+                </div>
+                <ul class="list-group">
+                {% for product in  most_popular_not_590_products %}
+                    <li class="list-group-item">
+                        <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
+                        {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="panel-footer">
+                    <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Najpopularniejsze, niepolskie (!590) produkty bez producenta" %}
-                    (
-                    <abbr title="{% trans "Liczba nie polskich produktów bez producenta" %}">{{ no_of_not_590_products }}</abbr>
-                    )
-                </h3>
-            </div>
-            <ul class="list-group">
-            {% for product in  most_popular_not_590_products %}
-                <li class="list-group-item">
-                    <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
-                    {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-            <div class="panel-footer">
-                <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
-            </div>
-        </div>
-    </div>
-</div>
+{% endif %}
 
 <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Producenci z długimi nazwami" %}
-                </h3>
+    {% if perms.company.view_company %}
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Producenci z długimi nazwami" %}
+                    </h3>
+                </div>
+                <ul class="list-group">
+                {% for company in  companies_by_name_length %}
+                    <li class="list-group-item">
+                        <a href="{{ company.get_absolute_url }}">{{ company.common_name }} ({{ company.query_count }})
+                        {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
             </div>
-            <ul class="list-group">
-            {% for company in  companies_by_name_length %}
-                <li class="list-group-item">
-                    <a href="{{ company.get_absolute_url }}">{{ company.common_name }} ({{ company.query_count }})
-                    {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Najpopularniejsze produkty bez nazwy" %}
-                </h3>
+    {% endif %}
+    {% if perms.product.view_product %}
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Najpopularniejsze produkty bez nazwy" %}
+                    </h3>
+                </div>
+                <ul class="list-group">
+                {% for product in  most_popular_products_without_name %}
+                    <li class="list-group-item">
+                        <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
+                        {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
             </div>
-            <ul class="list-group">
-            {% for product in  most_popular_products_without_name %}
-                <li class="list-group-item">
-                    <a href="{{ product.get_absolute_url }}">{{ product }} ({{ product.query_count }}) </a>
-                    {% if product.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ product.locked_by }}"></i>{% endif %}
-                </li>
-            {% endfor %}
-            </ul>
         </div>
-    </div>
+    {% endif %}
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Najnowsze nierozpatrzone zgłoszenia" %}
-                    (
-                    <abbr title="{% trans "Liczba otwartych raportów" %}">{{ no_of_open_reports }}</abbr>
-                    +
-                    <abbr title="{% trans "Liczba zamkniętych raportów" %}">{{ no_of_resolved_reports }}</abbr>
-                    =
-                    <abbr title="{% trans "Liczba wszystkich raportów" %}">{{ no_of_reports }}</abbr>
-                    )
-                </h3>
-            </div>
-            {% for report in  newest_reports %}
-                <li class="list-group-item">
-                    <a href="{{ report.get_absolute_url }}">{{ report }}, <small>{{ report.get_timedelta}} {% trans "temu" %}</small></a>
-                </li>
-            {% endfor %}
-            <div class="panel-footer">
-                <a href="{% url 'report:list' %}?status=open&o=-created_at">{% trans "Więcej" %}</a>
+{% if perms.report.view_report %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Najnowsze nierozpatrzone zgłoszenia" %}
+                        (
+                        <abbr title="{% trans "Liczba otwartych raportów" %}">{{ no_of_open_reports }}</abbr>
+                        +
+                        <abbr title="{% trans "Liczba zamkniętych raportów" %}">{{ no_of_resolved_reports }}</abbr>
+                        =
+                        <abbr title="{% trans "Liczba wszystkich raportów" %}">{{ no_of_reports }}</abbr>
+                        )
+                    </h3>
+                </div>
+                {% for report in  newest_reports %}
+                    <li class="list-group-item">
+                        <a href="{{ report.get_absolute_url }}">{{ report }}, <small>{{ report.get_timedelta}} {% trans "temu" %}</small></a>
+                    </li>
+                {% endfor %}
+                <div class="panel-footer">
+                    <a href="{% url 'report:list' %}?status=open&o=-created_at">{% trans "Więcej" %}</a>
+                </div>
             </div>
         </div>
     </div>
-
-
-</div>
+{% endif %}
 {% endblock content %}
