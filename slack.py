@@ -56,3 +56,16 @@ def send_ai_pics_request(product, preview_text):
 
     #requests.get(url)
     q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=0))
+
+def send_ai_pics_stats(msg):
+
+    url = 'https://slack.com/api/chat.postMessage?'+\
+        urlencode({
+            'token':settings.SLACK_TOKEN,
+            'channel':settings.SLACK_CHANNEL_AI_STATS,
+            'username':'AI Stats',
+            'text': msg.encode('utf-8'),
+        })
+
+    requests.get(url)
+    #q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=0))

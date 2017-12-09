@@ -288,4 +288,4 @@ IS_PRODUCTION = env("IS_PRODUCTION", default=False)
 PRODUKTY_W_SIECI_API_KEY = env("GS1_API_KEY", default=None)
 
 SLACK_TOKEN = env("SLACK_TOKEN", default=None)
-SLACK_CHANNEL_AI_PICS = env("SLACK_CHANNEL_AI_PICS", default=None)
+SLACK_CHANNEL_AI_STATS = env("SLACK_CHANNEL_AI_STATS", default=None)
