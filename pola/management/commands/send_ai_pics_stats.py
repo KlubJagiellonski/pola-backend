@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with connection.cursor() as cursor:
-            for i in range(10,40,10):
+            for i in range(0,40,10):
                 cursor.execute(""
                     "select sum(query_count), sum(query_count*enough_ai_pics) from "
                     "("
