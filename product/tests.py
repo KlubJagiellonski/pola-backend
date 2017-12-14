@@ -6,21 +6,9 @@ from reversion.models import Version
 from test_plus.test import TestCase
 
 from company.factories import CompanyFactory
+from pola.tests import PermissionMixin
 from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
-
-
-class PermissionMixin(object):
-    def setUp(self):
-        super(PermissionMixin, self).setUp()
-        self.user = StaffFactory()
-
-    def login(self, username=None):
-        self.client.login(username=username or self.user.username, password='pass')
-
-    def test_anonymous_denied(self):
-        resp = self.client.get(self.url)
-        self.assertEqual(resp.status_code, 302)
 
 
 class TemplateUsedMixin(object):

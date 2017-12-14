@@ -10,14 +10,14 @@ from django_filters.views import FilterView
 
 from company.models import Company
 from pola.concurency import ConcurencyProtectUpdateView
+from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ExprAutocompleteMixin
 from report.models import Report
 from .filters import CompanyFilter
 from .forms import CompanyCreateFromKRSForm, CompanyForm
 
 
-class CompanyListView(LoginRequiredMixin,
-                      PermissionRequiredMixin,
+class CompanyListView(LoginPermissionRequiredMixin,
                       FilterView):
     permission_required = 'company.view_company'
     model = Company
@@ -33,8 +33,7 @@ class GetInitalFormMixin(object):
 
 
 class CompanyCreate(GetInitalFormMixin,
-                    LoginRequiredMixin,
-                    PermissionRequiredMixin,
+                    LoginPermissionRequiredMixin,
                     FormValidMessageMixin,
                     CreateView):
     permission_required = 'company.add_company'
@@ -43,8 +42,7 @@ class CompanyCreate(GetInitalFormMixin,
     form_valid_message = u"Firma utworzona!"
 
 
-class CompanyCreateFromKRSView(LoginRequiredMixin,
-                               PermissionRequiredMixin,
+class CompanyCreateFromKRSView(LoginPermissionRequiredMixin,
                                FormView):
     permission_required = 'company.add_company'
     form_class = CompanyCreateFromKRSForm
@@ -62,9 +60,8 @@ class CompanyCreateFromKRSView(LoginRequiredMixin,
         return HttpResponseRedirect(reverse('company:create') + '?' + q.urlencode())
 
 
-class CompanyUpdate(LoginRequiredMixin,
+class CompanyUpdate(LoginPermissionRequiredMixin,
                     FormValidMessageMixin,
-                    PermissionRequiredMixin,
                     ConcurencyProtectUpdateView,
                     UpdateView):
     permission_required = 'company.change_company'
@@ -74,9 +71,8 @@ class CompanyUpdate(LoginRequiredMixin,
     form_valid_message = u"Firma zaktualizowana!"
 
 
-class CompanyDelete(LoginRequiredMixin,
+class CompanyDelete(LoginPermissionRequiredMixin,
                     FormValidMessageMixin,
-                    PermissionRequiredMixin,
                     DeleteView):
     permission_required = 'company.delete_company'
     model = Company
@@ -106,8 +102,7 @@ class FieldsDisplayMixin(object):
 
 
 class CompanyDetailView(FieldsDisplayMixin,
-                        LoginRequiredMixin,
-                        PermissionRequiredMixin,
+                        LoginPermissionRequiredMixin,
                         DetailView):
     model = Company
     permission_required = 'company.view_company'

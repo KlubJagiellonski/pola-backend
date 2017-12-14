@@ -12,6 +12,7 @@ from reportlab.graphics import renderPM
 from reversion.models import Version
 
 from pola.concurency import ConcurencyProtectUpdateView
+from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ExprAutocompleteMixin
 from product.models import Product
 from report.models import Report
@@ -21,8 +22,7 @@ from .forms import ProductForm
 from .images import Barcode
 
 
-class ProductDetailView(LoginRequiredMixin,
-                        PermissionRequiredMixin,
+class ProductDetailView(LoginPermissionRequiredMixin,
                         DetailView):
     permission_required = 'product.view_product'
     slug_field = 'code'
@@ -39,8 +39,7 @@ class ProductDetailView(LoginRequiredMixin,
         return context
 
 
-class ProductListView(LoginRequiredMixin,
-                      PermissionRequiredMixin,
+class ProductListView(LoginPermissionRequiredMixin,
                       FilterView):
     permission_required = 'product.view_product'
     model = models.Product
@@ -48,8 +47,7 @@ class ProductListView(LoginRequiredMixin,
     paginate_by = 25
 
 
-class ProductCreate(LoginRequiredMixin,
-                    PermissionRequiredMixin,
+class ProductCreate(LoginPermissionRequiredMixin,
                     FormValidMessageMixin,
                     CreateView):
     permission_required = 'product.add_product'
@@ -59,8 +57,7 @@ class ProductCreate(LoginRequiredMixin,
     form_valid_message = _(u"Product created!")
 
 
-class ProductUpdate(LoginRequiredMixin,
-                    PermissionRequiredMixin,
+class ProductUpdate(LoginPermissionRequiredMixin,
                     ConcurencyProtectUpdateView,
                     FormValidMessageMixin,
                     UpdateView):
@@ -72,8 +69,7 @@ class ProductUpdate(LoginRequiredMixin,
     form_valid_message = _(u"Produkt zaktualizowany!")
 
 
-class ProductDelete(LoginRequiredMixin,
-                    PermissionRequiredMixin,
+class ProductDelete(LoginPermissionRequiredMixin,
                     FormValidMessageMixin,
                     DeleteView):
     permission_denied_message = 'product.delete_product'
@@ -83,8 +79,7 @@ class ProductDelete(LoginRequiredMixin,
     form_valid_message = _(u"Product deleted!")
 
 
-class ProductHistoryView(LoginRequiredMixin,
-                         PermissionRequiredMixin,
+class ProductHistoryView(LoginPermissionRequiredMixin,
                          DetailView):
     permission_required = 'product.view_product'
     slug_field = 'code'
