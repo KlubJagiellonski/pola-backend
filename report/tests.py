@@ -4,22 +4,10 @@ from django.utils.encoding import force_text
 from django_webtest import WebTestMixin
 from test_plus.test import TestCase
 
-from pola.users.factories import StaffFactory, UserFactory
+from pola.tests import PermissionMixin
+from pola.users.factories import UserFactory
 from report.factories import ReportFactory, ResolvedReportFactory
 from report.models import Report
-
-
-class PermissionMixin(object):
-    def setUp(self):
-        super(PermissionMixin, self).setUp()
-        self.user = StaffFactory()
-
-    def login(self, username=None):
-        self.client.login(username=username or self.user.username, password='pass')
-
-    def test_anonymous_denied(self):
-        resp = self.client.get(self.url)
-        self.assertEqual(resp.status_code, 302)
 
 
 class TemplateUsedMixin(object):

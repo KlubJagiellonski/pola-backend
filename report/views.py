@@ -8,13 +8,13 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from django_filters.views import FilterView
 
+from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ActionView
 from report.models import Report
 from .filters import ReportFilter
 
 
-class ReportListView(LoginRequiredMixin,
-                     PermissionRequiredMixin,
+class ReportListView(LoginPermissionRequiredMixin,
                      FilterView):
     permission_required = 'report.view_report'
     model = Report
@@ -23,8 +23,7 @@ class ReportListView(LoginRequiredMixin,
     queryset = Report.objects.prefetch_related('attachment_set').all()
 
 
-class ReportAdvancedListView(LoginRequiredMixin,
-                             PermissionRequiredMixin,
+class ReportAdvancedListView(LoginPermissionRequiredMixin,
                              FilterView):
     permission_required = 'report.view_report'
     model = Report
@@ -40,23 +39,20 @@ class ReportAdvancedListView(LoginRequiredMixin,
         return HttpResponseRedirect(request.get_full_path())
 
 
-class ReportDeleteView(LoginRequiredMixin,
-                       PermissionRequiredMixin,
+class ReportDeleteView(LoginPermissionRequiredMixin,
                        DeleteView):
     permission_required = 'report.delete_report'
     model = Report
     success_url = reverse_lazy('report:list')
 
 
-class ReportDetailView(LoginRequiredMixin,
-                       PermissionRequiredMixin,
+class ReportDetailView(LoginPermissionRequiredMixin,
                        DetailView):
     permission_required = 'report.view_report'
     model = Report
 
 
-class ReportResolveView(LoginRequiredMixin,
-                        PermissionRequiredMixin,
+class ReportResolveView(LoginPermissionRequiredMixin,
                         ActionView):
     permission_required = 'report.change_report'
     model = Report
