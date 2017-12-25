@@ -1,5 +1,4 @@
 language: python
-python: 3.6
 
 cache:
   directories:
@@ -8,33 +7,39 @@ cache:
 services:
 - postgresql
 
-addons:
-  apt:
-    packages:
-    - python2.7
-    - python3.5
-    - python3.6
-
 env:
   fast_finish: true
   global:
   - DATABASE_URL="postgres:///pola_backend"
-  matrix:
-  - TOX_ENV=flake8
-  - TOX_ENV=py27-dj110-coveralls
-  - TOX_ENV=py36-dj110-coveralls
-  - TOX_ENV=py27-dj111-coveralls
-  - TOX_ENV=py36-dj111-coveralls
-  - TOX_ENV=py35-dj20-coveralls
-  - TOX_ENV=py36-dj20-coveralls
-  - TOX_ENV=py35-djmaster-coveralls
-  - TOX_ENV=py36-djmaster-coveralls
 
 matrix:
+  include:
+  - python: 3.6
+    env: TOX_ENV=flake8
+  - python: 2.7
+    env: TOX_ENV=py27-dj110-coveralls
+  - python: 3.6
+    env: TOX_ENV=py36-dj110-coveralls
+  - python: 2.7
+    env: TOX_ENV=py27-dj111-coveralls
+  - python: 3.6
+    env: TOX_ENV=py36-dj111-coveralls
+  - python: 3.5
+    env: TOX_ENV=py35-dj20-coveralls
+  - python: 3.6
+    env: TOX_ENV=py36-dj20-coveralls
+  - python: 3.5
+    env: TOX_ENV=py35-djmaster-coveralls
+  - python: 3.6
+    env: TOX_ENV=py36-djmaster-coveralls
+
   allow_failures:
-  - env: TOX_ENV=flake8
-  - env: TOX_ENV=py35-djmaster-coveralls
-  - env: TOX_ENV=py36-djmaster-coveralls
+  - python: 3.6
+    env: TOX_ENV=flake8
+  - python: 3.5
+    env: TOX_ENV=py35-djmaster-coveralls
+  - python: 3.6
+    env: TOX_ENV=py36-djmaster-coveralls
 
 install:
 - pip install -U pip wheel
