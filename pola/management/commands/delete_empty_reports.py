@@ -15,7 +15,7 @@ class Command(BaseCommand):
         parser.add_argument('no_of_days_back')
 
     def handle(self, *args, **options):
-        print 'Loading list of S3 files'
+        print('Loading list of S3 files')
 
         conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
         bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_NAME)
@@ -24,7 +24,7 @@ class Command(BaseCommand):
         for key in bucket.list():
             s3_files.add(key.name)
 
-        print 'Loaded {} S3 files'.format(len(s3_files))
+        print('Loaded {} S3 files'.format(len(s3_files)))
 
         startdate = timezone.now() - timedelta(days=int(options["no_of_days_back"]))
         attachments = Attachment.objects.select_related('report')\
@@ -37,7 +37,7 @@ class Command(BaseCommand):
                 sys.stdout.write('+')
             sys.stdout.flush()
 
-        print 'Deleting empty reports'
+        print('Deleting empty reports')
         with connection.cursor() as cursor:
              cursor.execute(
                 "delete from report_report WHERE "

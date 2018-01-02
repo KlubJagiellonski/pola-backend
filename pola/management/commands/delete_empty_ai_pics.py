@@ -26,7 +26,7 @@ class Command(BaseCommand):
             .filter(ai_pics__created_at__gte=startdate)
         for attachment in attachments:
             if attachment.attachment not in s3_files:
-                print attachment.attachment
+                print(attachment.attachment)
                 attachment.delete()
 
         with connection.cursor() as cursor:

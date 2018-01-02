@@ -29,7 +29,7 @@ REQUERY_ALL_LIMIT = 100
 
 
 def requery_590_codes():
-    print "Starting requering 590 codes..."
+    print("Starting requering 590 codes...")
 
     p590 = Product.objects\
         .filter(
@@ -42,11 +42,11 @@ def requery_590_codes():
 
     requery_products(p590)
 
-    print "Finished requering 590 codes..."
+    print("Finished requering 590 codes...")
 
 
 def requery_all_codes():
-    print "Starting requering all codes..."
+    print("Starting requering all codes...")
 
     products = Product.objects\
         .filter(
@@ -57,14 +57,14 @@ def requery_all_codes():
 
     requery_products(products)
 
-    print "Finished requering all codes..."
+    print("Finished requering all codes...")
 
 
 def requery_products(products):
     client = Client(settings.PRODUKTY_W_SIECI_API_KEY)
 
     for prod in products:
-        print prod.code + " -> ",
+        print(prod.code + " -> ",)
 
         prod.ilim_queried_at = timezone.now()
         prod.save()
@@ -76,11 +76,11 @@ def requery_products(products):
             p = create_from_api(prod.code, product_info, product=prod)
 
             if p.company and p.company.name:
-                print p.company.name.encode('utf-8')
+                print(p.company.name.encode('utf-8'))
             else:
-                print "."
+                print(".")
         else:
-            print ";"
+            print(";")
 
 
 def update_from_kbpoz(db_filename):
@@ -105,10 +105,10 @@ def update_from_kbpoz(db_filename):
                                 if not update_company_from_krs(prod, company):
                                     company.delete()
                                     continue
-                                print "!"
+                                print("!")
 
-                            print gtin + " " + nip
-                            print company
+                            print(gtin + " " + nip)
+                            print(company)
                             prod.company = company
                             prod.ilim_queried_at = timezone.now()
                             Product.save(
