@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand, CommandError
 from boto.s3.connection import S3Connection, Bucket, Key
 from django.conf import settings
 from report.models import Report, Attachment
-from sets import Set
 from django.db import connection
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -20,7 +19,7 @@ class Command(BaseCommand):
         conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
         bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_NAME)
 
-        s3_files = Set()
+        s3_files = set()
         for key in bucket.list():
             s3_files.add(key.name)
 
