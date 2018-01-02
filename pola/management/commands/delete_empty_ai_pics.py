@@ -16,7 +16,7 @@ class Command(BaseCommand):
         conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
         bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
 
-        s3_files = Set()
+        s3_files = set()
         for key in bucket.list():
             s3_files.add(key.name)
 
