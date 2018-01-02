@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.test import override_settings
 from django_webtest import WebTestMixin
 from mock import patch

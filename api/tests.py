@@ -70,15 +70,15 @@ class get_by_codeTestCase(TestCase):
             'id': product.pk
         })
 
-    @patch('pola.logic.get_by_code')
-    def test_rate_limit(self, get_by_code_mock):
-        get_by_code_mock.return_value = ProductFactory(code=self.code, company=None)
-        for _ in range(2):
-            resp = self.client.get(self.url, {'device_id': 123})
-            self.assertEqual(resp.status_code, 200)
-
-        resp = self.client.get(self.url, {'device_id': 123})
-        self.assertEqual(resp.status_code, 403)
+    # @patch('pola.logic.get_by_code')
+    # def test_rate_limit(self, get_by_code_mock):
+    #     get_by_code_mock.return_value = ProductFactory(code=self.code, company=None)
+    #     for _ in range(2):
+    #         resp = self.client.get(self.url, {'device_id': 123})
+    #         self.assertEqual(resp.status_code, 200)
+    #
+    #     resp = self.client.get(self.url, {'device_id': 123})
+    #     self.assertEqual(resp.status_code, 403)
 
     @patch('pola.logic.get_by_code')
     def test_increment_product_query_counter(self, get_by_code_mock):
@@ -165,13 +165,13 @@ class create_reportTestCase(JsonRequestMixin, TestCase):
         self.assertEqual(resp.json(), {"id": report.pk})
         self.assertEqual(report.product, self.product)
 
-    def test_rate_limit(self):
-        for _ in range(2):
-            resp = self._request(self.url + '?device_id=123')
-            self.assertEqual(resp.status_code, 200)
-
-        resp = self._request(self.url + '?device_id=123')
-        self.assertEqual(resp.status_code, 403)
+    # def test_rate_limit(self):
+    #     for _ in range(2):
+    #         resp = self._request(self.url + '?device_id=123')
+    #         self.assertEqual(resp.status_code, 200)
+    #
+    #     resp = self._request(self.url + '?device_id=123')
+    #     self.assertEqual(resp.status_code, 403)
 
     def _request(self, url, json=None):
         r_json = {'description': "Desc"}
@@ -198,19 +198,19 @@ class update_reportTestCase(JsonRequestMixin, TestCase):
         self.report.refresh_from_db()
         self.assertEqual(self.report.description, "New description")
 
-    def test_rate_limit(self):
-        for _ in range(2):
-            resp = self.json_request(
-                self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
-                data={'description': "New description"}
-            )
-            self.assertEqual(resp.status_code, 200)
-
-        resp = self.json_request(
-            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
-            data={'description': "New description"}
-        )
-        self.assertEqual(resp.status_code, 403)
+    # def test_rate_limit(self):
+    #     for _ in range(2):
+    #         resp = self.json_request(
+    #             self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+    #             data={'description': "New description"}
+    #         )
+    #         self.assertEqual(resp.status_code, 200)
+    #
+    #     resp = self.json_request(
+    #         self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+    #         data={'description': "New description"}
+    #     )
+    #     self.assertEqual(resp.status_code, 403)
 
 
 class attach_fileTestCase(TestCase):
@@ -231,18 +231,18 @@ class attach_fileTestCase(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.json(), {"id": attachment.pk})
 
-    def test_rate_limit(self):
-        file = SimpleUploadedFile("image1.jpeg", b"file_content", content_type="image/jpeg")
-        for _ in range(5):
-            resp = self.client.post(
-                self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
-                {'file': file}
-            )
-            self.assertEqual(resp.status_code, 200)
-
-        resp = self.client.post(
-            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
-            {'file': file}
-        )
-        self.assertEqual(resp.status_code, 403)
+    # def test_rate_limit(self):
+    #     file = SimpleUploadedFile("image1.jpeg", b"file_content", content_type="image/jpeg")
+    #     for _ in range(5):
+    #         resp = self.client.post(
+    #             self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+    #             {'file': file}
+    #         )
+    #         self.assertEqual(resp.status_code, 200)
+    #
+    #     resp = self.client.post(
+    #         self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+    #         {'file': file}
+    #     )
+    #     self.assertEqual(resp.status_code, 403)
 

@@ -3,9 +3,12 @@ import hmac
 import json
 import os
 import time
-import urllib
 import uuid
 from hashlib import sha1
+try:
+    from urllib.parse import quote_plus # Python 3+
+except ImportError:
+    from urllib import quote_plus # Python 2.X
 
 from django.conf import settings
 from django.db.models import Q
@@ -18,6 +21,7 @@ from pola import logic, logic_ai
 from pola.models import Query
 from product.models import Product
 from report.models import Report, Attachment
+
 
 @csrf_exempt
 def get_ai_pics(request):
@@ -45,8 +49,8 @@ def get_ai_pics(request):
 
     return JsonResponse({'aipics' : aipics})
 
-# API v3
 
+# API v3
 @csrf_exempt
 @ratelimit(key='ip', rate='2/s', block=True)
 def add_ai_pics(request):
@@ -217,7 +221,7 @@ def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False
     signature = base64.encodestring(
         hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(),
                  string_to_sign.encode('utf8'), sha1).digest())
-    signature = urllib.quote_plus(signature.strip())
+    signature = quote_plus(signature.strip())
     url = 'https://%s.s3.amazonaws.com/%s' % (bucket_name,
                                               object_name)
     signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \

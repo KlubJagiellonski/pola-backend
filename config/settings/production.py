@@ -13,7 +13,10 @@ from __future__ import absolute_import, unicode_literals
 from boto.s3.connection import OrdinaryCallingFormat
 from django.utils import six
 import os
-import urlparse
+try:
+    from urllib import parse as urlparse
+except ImportError:
+    from urlparse import urlparse
 
 
 from .common import *  # noqa
@@ -27,10 +30,6 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # This ensures that Django will be able to detect a secure connection
 # properly on Heroku.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# django-secure
-# ------------------------------------------------------------------------------
-INSTALLED_APPS += ("djangosecure",)
 
 SECURITY_MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
