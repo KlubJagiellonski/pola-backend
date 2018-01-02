@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand, CommandError
 from boto.s3.connection import S3Connection, Bucket, Key
 from django.conf import settings
 from ai_pics.models import AIPics, AIAttachment
-from sets import Set
 from django.db import connection
 from datetime import datetime, timedelta
 from django.utils import timezone
