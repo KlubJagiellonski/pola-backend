@@ -38,7 +38,7 @@ django-filter==1.1.0
 requests==2.18.4
 django-ratelimit==1.1.0
 
-django-grappelli==2.10.1
+django-grappelli==2.11.1
 
 # Autocomplete
 django-autocomplete-light==3.2.10
