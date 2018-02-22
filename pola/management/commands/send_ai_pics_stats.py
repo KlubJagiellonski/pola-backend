@@ -8,8 +8,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with connection.cursor() as cursor:
+            cursor.execute(
+                "select count(*) as c0, count(distinct ai_pics_aipics.id) as c1, count(distinct product_id) as c2 " 
+                "from ai_pics_aipics " 
+                "join ai_pics_aiattachment on ai_pics_aipics.id = ai_pics_id "
+                "where ai_pics_aipics.created_at > current_timestamp - interval '1 day' "
+            )
+            row = cursor.fetchone()
+            msg = 'W ciągu ostatniej doby użytkownicy Poli przysłali {} zdjęć w {} sesjach dla {} produktów.'\
+                .format(row[0],row[1],row[2])
+            send_ai_pics_stats(msg)
+
             for i in range(0,40,10):
-                cursor.execute(""
+                cursor.execute(
                     "select sum(query_count), sum(query_count*enough_ai_pics) from "
                     "("
                     "select count(distinct pola_query.id) as query_count, "
