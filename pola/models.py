@@ -83,8 +83,8 @@ class Stats(models.Model):
             created_at__gte=today_midnight, created_at__lt=tomorrow_midnight)\
             .order_by('id').distinct('id').count()
         self.no_of_new_products = Product.objects.filter(
-            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight). \
+            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight)\
             .order_by('id').distinct('id').count()
         self.no_of_new_reports = Report.objects.filter(
-            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight). \
+            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight)\
             .order_by('id').distinct('id').count()
