@@ -8,11 +8,11 @@ django-braces==1.12.0
 django-crispy-forms==1.7.0
 
 # Models
-django-model-utils==3.0.0
+django-model-utils==3.1.1
 
 # For user registration, either via email or social
 # Well-built with regular release cycles!
-django-allauth==0.34.0
+django-allauth==0.35.0
 
 # For the persistence stores
 psycopg2==2.7.3.2
@@ -30,7 +30,7 @@ redis>=2.10.0
 
 
 jsonfield==2.0.2
-django-reversion==2.0.12
+django-reversion==2.0.13
 reportlab==3.4.0
 django-filter==1.1.0
 
@@ -38,13 +38,13 @@ django-filter==1.1.0
 requests==2.18.4
 django-ratelimit==1.1.0
 
-django-grappelli==2.10.1
+django-grappelli==2.11.1
 
 # Autocomplete
 django-autocomplete-light==3.2.10
 
 #Babel
-Babel==2.5.1
+Babel==2.5.3
 
 #RQ
 rq==0.10.0
