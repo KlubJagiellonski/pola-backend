@@ -81,10 +81,10 @@ class Stats(models.Model):
             was_verified=False, was_590=False).count()
         self.no_of_new_companies = Company.objects.filter(
             created_at__gte=today_midnight, created_at__lt=tomorrow_midnight)\
-            .distinct('id').count()
+            .order_by('id').distinct('id').count()
         self.no_of_new_products = Product.objects.filter(
-            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).\
-            distinct('id').count()
+            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight). \
+            .order_by('id').distinct('id').count()
         self.no_of_new_reports = Report.objects.filter(
-            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight).\
-            distinct('id').count()
+            created_at__gte=today_midnight, created_at__lt=tomorrow_midnight). \
+            .order_by('id').distinct('id').count()
