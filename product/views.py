@@ -72,7 +72,7 @@ class ProductUpdate(LoginPermissionRequiredMixin,
 class ProductDelete(LoginPermissionRequiredMixin,
                     FormValidMessageMixin,
                     DeleteView):
-    permission_denied_message = 'product.delete_product'
+    permission_required = 'product.delete_product'
     slug_field = 'code'
     model = models.Product
     success_url = reverse_lazy('product:list')

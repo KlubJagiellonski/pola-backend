@@ -9,6 +9,7 @@ from company.factories import CompanyFactory
 from pola.tests import PermissionMixin
 from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
+from product.models import Product
 
 
 class TemplateUsedMixin(object):
@@ -118,6 +119,21 @@ class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     def setUp(self):
         super(ProductDetailViewTestCase, self).setUp()
         self.url = reverse('product:detail', args=[self.instance.code])
+
+
+class ProductDeleteViewTestCase(PermissionMixin, InstanceMixin, TestCase):
+    template_name = 'product/product_detail.html'
+
+    def setUp(self):
+        super(ProductDeleteViewTestCase, self).setUp()
+        self.url = reverse('product:delete', args=[self.instance.code])
+
+    def test_success_delete(self):
+        self.login()
+        resp = self.post(self.url, follow=True)
+        self.assertRedirects(resp, expected_url=reverse('product:list'))
+        self.assertContains(resp, "Product deleted!")
+        self.assertFalse(Product.objects.filter(pk=self.instance.pk).exists())
 
 
 class ProductListViewTestCase(PermissionMixin, WebTestMixin, TestCase):
