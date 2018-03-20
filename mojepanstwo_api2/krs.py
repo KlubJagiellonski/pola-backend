@@ -70,7 +70,7 @@ class Krs:
         if 'krs_nip' in kwargs:
             conditions['krs_podmioty.nip'] = kwargs['krs_name']
 
-        response = self.client.send_request('dane/krs_podmioty', conditions=conditions)
+        response = self.client.send_request('dane/krs_podmioty', data={'conditions': conditions})
         return self._parse_companies_response(response)
 
     def get_companies_by_name(self, name):
@@ -78,7 +78,7 @@ class Krs:
             self.get_companies(search_terms=name)
 
     def query_shareholders(self, id):
-        return self.client.send_request('dane/krs_podmioty/' + id, layers='wspolnicy')
+        return self.client.send_request('dane/krs_podmioty/' + id, data={'layers': 'wspolnicy'})
 
     def _parse_companies_response(self, json):
         return map(lambda o: self._json_to_company(o), json['Dataobject'])
