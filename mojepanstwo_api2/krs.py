@@ -81,7 +81,7 @@ class Krs:
         return self.client.send_request('dane/krs_podmioty/' + id, data={'layers': 'wspolnicy'})
 
     def _parse_companies_response(self, json):
-        return map(lambda o: self._json_to_company(o), json['Dataobject'])
+        return [self._json_to_company(x) for x in json['Dataobject']]
 
     def _json_to_company(self, json):
         company = dict()
@@ -99,16 +99,16 @@ class Krs:
         return CompanyInfo(**company)
 
     def _simplify_address(self, data):
-        lokal = u" lok. {}".format(data['krs_podmioty.adres_lokal']) if \
-            data['krs_podmioty.adres_lokal'] else u""
+
         adres = Krs._unescape(u"ul. {} {} {}\n{} {}\n{}".format(
-            data['krs_podmioty.adres_ulica'],
-            data['krs_podmioty.adres_numer'],
-            lokal,
-            data['krs_podmioty.adres_kod_pocztowy'],
-            data['krs_podmioty.adres_miejscowosc'],
-            data['krs_podmioty.adres_kraj'])
+            data['data']['krs_podmioty.adres_ulica'],
+            data['data']['krs_podmioty.adres_numer'],
+            data['data'].get('krs_podmioty.adres_lokal', ""),
+            data['data']['krs_podmioty.adres_kod_pocztowy'],
+            data['data']['krs_podmioty.adres_miejscowosc'],
+            data['data']['krs_podmioty.adres_kraj'])
         )
+
         return adres
 
     # remove unnecessary mojepanstwo escape
