@@ -76,7 +76,6 @@ class Product(models.Model):
                 'update product_product set ai_pics_count = ai_pics_count +1 '
                 'where id=%s', [self.id])
 
-
     @staticmethod
     def recalculate_query_count():
         with connection.cursor() as cursor:

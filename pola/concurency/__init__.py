@@ -49,6 +49,7 @@ class CacheConcurency(BaseConcurency):
         key = self._make_key(obj)
         cache.delete(key)
 
+
 concurency = CacheConcurency()
 
 

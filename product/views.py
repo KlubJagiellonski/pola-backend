@@ -1,6 +1,6 @@
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _

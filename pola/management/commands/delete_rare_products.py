@@ -37,7 +37,7 @@ class Command(BaseCommand):
                 if i % 100 == 0:
                     sys.stdout.write('.')
                     sys.stdout.flush()
-                i+=1
+                i += 1
 
                 product_id = row[0]
                 versions = Version.objects.\

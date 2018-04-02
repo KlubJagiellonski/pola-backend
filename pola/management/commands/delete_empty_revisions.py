@@ -16,7 +16,7 @@ class Command(BaseCommand):
             .order_by('id')
         for company in companies:
             if company.name:
-                print "{} (id:{})".format(company.name.encode('UTF-8'), company.id)
+                print("{} (id:{})".format(company.name.encode('UTF-8'), company.id))
             versions = Version.objects.\
                 filter(
                     object_id=company.pk,
@@ -40,5 +40,5 @@ class Command(BaseCommand):
                             [version['revision_id']]
                         )
                         if record_no % 50 == 0:
-                            print '.',
-                    record_no+=1
+                            print('.', end=' ')
+                    record_no += 1

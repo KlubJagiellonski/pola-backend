@@ -24,7 +24,7 @@ class Client:
         params = {
             'gs1Key': self.api_key,
             'gtin': Client._normalize_gtin(code)
-            }
+        }
         resp = self.session.get(url=url, params=params)
         # import ipdb; ipdb.set_trace()
         logger.info('GS1 resp:' + str(resp.status_code))

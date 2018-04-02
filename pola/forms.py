@@ -63,7 +63,7 @@ class ReadOnlyFieldsMixin(object):
     def __init__(self, *args, **kwargs):
         super(ReadOnlyFieldsMixin, self).__init__(*args, **kwargs)
         for field in (field
-            for name, field in self.fields.items() if name in self.readonly_fields):
+                      for name, field in self.fields.items() if name in self.readonly_fields):
             field.widget.attrs['disabled'] = 'true'
             field.required = False
 

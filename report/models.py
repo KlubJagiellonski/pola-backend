@@ -69,7 +69,7 @@ class Report(models.Model):
         return self.description[:40] or "None"
 
     def get_timedelta(self):
-        return format_timedelta(timezone.now()-self.created_at, locale='pl_PL')
+        return format_timedelta(timezone.now() - self.created_at, locale='pl_PL')
 
     def attachment_count(self):
         return self.attachment_set.count()

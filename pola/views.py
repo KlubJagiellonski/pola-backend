@@ -36,20 +36,24 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         c['no_of_verified_companies'] = Company.objects.\
             filter(verified=True).count()
 
+        sq = 'select count(*) from report_report where product_id=product_product.id and resolved_at is NULL'
         c['products_with_most_open_reports'] = \
-            Product.objects.raw('select *, '
-                                '(select count(*) from report_report where product_id=product_product.id and resolved_at is NULL) as no_of_open_reports '
-                                'from product_product order by no_of_open_reports desc limit 10')
+            Product.objects.raw('select '
+                                '*, '
+                                '(' + sq + ') as no_of_open_reports '
+                                'from '
+                                'product_product '
+                                'order by no_of_open_reports desc limit 10')
 
         c['most_popular_590_products'] = (Product.objects
                                           .filter(
-                                                company__isnull=True,
-                                                code__startswith='590')
+                                              company__isnull=True,
+                                              code__startswith='590')
                                           .order_by('-query_count')[:10])
         c['no_of_590_products'] = (Product.objects
                                    .filter(
-                                        company__isnull=True,
-                                        code__startswith='590')
+                                       company__isnull=True,
+                                       code__startswith='590')
                                    .count())
 
         c['most_popular_not_590_products'] =\
@@ -63,7 +67,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
             (Company.objects.annotate(name_length=Length('common_name')).order_by('-name_length'))[:10]
 
         c['most_popular_products_without_name'] =\
-            (Product.objects.filter(name__isnull=True)\
+            (Product.objects.filter(name__isnull=True)
                 .order_by('-query_count')[:10])
 
         c['newest_reports'] = (Report.objects.only_open()

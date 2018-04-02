@@ -134,7 +134,7 @@ class Krs:
                 u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
             u'sp. z o.o. sp. k.':
                 u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
-          }
+        }
 
     @staticmethod
     def _normalize_name(name):

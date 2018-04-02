@@ -2,10 +2,8 @@
 
 from os.path import basename
 
-from babel.dates import format_timedelta
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -42,11 +40,11 @@ class AIPics(models.Model):
 
     @property
     def state(self):
-        if self.is_valid == True:
+        if self.is_valid is None:
+            return 'unknown'
+        if self.is_valid:
             return 'valid'
-        if self.is_valid == False:
-            return 'invalid'
-        return 'unknown'
+        return 'invalid'
 
     @state.setter
     def state(self, value):
@@ -67,6 +65,7 @@ class AIPics(models.Model):
             # ("change_aipics", "Can edit the AIPics"),
             # ("delete_aipics", "Can delete the AIPics"),
         )
+
 
 @python_2_unicode_compatible
 class AIAttachment(models.Model):

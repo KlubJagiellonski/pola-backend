@@ -70,7 +70,7 @@ def requery_products(products):
         prod.save()
 
         if prod.code.isdigit() \
-            and (len(prod.code) == 8 or len(prod.code) == 13):
+                and (len(prod.code) == 8 or len(prod.code) == 13):
             product_info = client.get_product_by_gtin(prod.code)
 
             p = create_from_api(prod.code, product_info, product=prod)

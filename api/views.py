@@ -6,9 +6,9 @@ import time
 import uuid
 from hashlib import sha1
 try:
-    from urllib.parse import quote_plus # Python 3+
+    from urllib.parse import quote_plus  # Python 3+
 except ImportError:
-    from urllib import quote_plus # Python 2.X
+    from urllib import quote_plus  # Python 2.X
 
 from django.conf import settings
 from django.db.models import Q
@@ -34,20 +34,20 @@ def get_ai_pics(request):
 
     attachments = AIAttachment.objects \
         .select_related('ai_pics', 'ai_pics__product') \
-        .filter(Q(ai_pics__is_valid = True) | Q(ai_pics__is_valid__isnull = True)) \
+        .filter(Q(ai_pics__is_valid=True) | Q(ai_pics__is_valid__isnull=True)) \
 
     aipics = []
     for attachment in attachments:
         aipics.append(
             {
-                'code' : attachment.ai_pics.product.code,
-                'product_name' : attachment.ai_pics.product.name,
-                'company_id' : attachment.ai_pics.product.company_id,
-                'url' : attachment.get_absolute_url()
+                'code': attachment.ai_pics.product.code,
+                'product_name': attachment.ai_pics.product.name,
+                'company_id': attachment.ai_pics.product.company_id,
+                'url': attachment.get_absolute_url()
             }
         )
 
-    return JsonResponse({'aipics' : aipics})
+    return JsonResponse({'aipics': aipics})
 
 
 # API v3
@@ -102,7 +102,7 @@ def add_ai_pics(request):
 
 def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
     object_name = '%s/%s_%s_%s.%s' % (str(ai_pics.product.code),
-                str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext)
+                                      str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext)
 
     signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
 
@@ -131,7 +131,7 @@ def create_report_v3(request):
 
 # API v2
 
-def get_by_code_internal(request, ai_supported = False):
+def get_by_code_internal(request, ai_supported=False):
     code = request.GET['code']
     device_id = request.GET['device_id']
 
@@ -195,7 +195,7 @@ def create_report_internal(request, extra_comma=False):
             signed_requests.append(signed_request)
 
     return JsonResponse({'id': report.id,
-                         'signed_requests':signed_requests})
+                         'signed_requests': signed_requests})
 
 
 def attach_file_internal(report, file_ext, mime_type, extra_comma=False):

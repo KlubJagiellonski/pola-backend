@@ -1,11 +1,14 @@
-from django.core.management.base import BaseCommand, CommandError
-from boto.s3.connection import S3Connection, Bucket, Key
-from django.conf import settings
-from report.models import Report, Attachment
-from django.db import connection
-from datetime import datetime, timedelta
-from django.utils import timezone
 import sys
+from datetime import timedelta
+
+from boto.s3.connection import S3Connection, Bucket
+from django.conf import settings
+from django.core.management.base import BaseCommand
+from django.db import connection
+from django.utils import timezone
+
+from report.models import Attachment
+
 
 class Command(BaseCommand):
     help = 'Deletes empty reports'
@@ -38,7 +41,7 @@ class Command(BaseCommand):
 
         print('Deleting empty reports')
         with connection.cursor() as cursor:
-             cursor.execute(
+            cursor.execute(
                 "delete from report_report WHERE "
                 "(description is NULL or description = '') AND "
                 "(select count(*) from report_attachment where report_id=report_report.id) =0"

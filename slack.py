@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 
 q = Queue(connection=conn)
 
+
 def send_ai_pics(product, device_name, original_width, original_height,
                  width, height,
                  files_count, file_ext, mime_type,
@@ -20,52 +21,54 @@ def send_ai_pics(product, device_name, original_width, original_height,
     files = []
     i = 1
     for filename in filenames:
-        files.append({'title':'{}'.format(i), 'image_url':filename.split('?')[0].encode('utf-8')})
+        files.append({'title': '{}'.format(i), 'image_url': filename.split('?')[0].encode('utf-8')})
         i += 1
 
-    url = 'https://slack.com/api/chat.postMessage?'+\
+    url = 'https://slack.com/api/chat.postMessage?' +\
         urlencode({
-            'token':settings.SLACK_TOKEN,
-            'channel':settings.SLACK_CHANNEL_AI_PICS,
-            'username':'New AI pics',
-            'text':'Product: *{}*\n'
-                   'Device: *{}*\n'
-                   'Dimensions: *{}x{}* (Original: {}x{})\n'
-                   '*{} {}* files ({})'
-                .format(product, device_name,
+            'token': settings.SLACK_TOKEN,
+            'channel': settings.SLACK_CHANNEL_AI_PICS,
+            'username': 'New AI pics',
+            'text': 'Product: *{}*\n'
+            'Device: *{}*\n'
+            'Dimensions: *{}x{}* (Original: {}x{})\n'
+            '*{} {}* files ({})'
+            .format(product, device_name,
                         width, height,
                         original_width, original_height,
                         files_count, file_ext, mime_type,
-                        ),
+                    ),
             'attachments': json.dumps(files)
         })
 
-    #requests.get(url)
-    q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=15))
+    # requests.get(url)
+    q.enqueue(get_url_at_time, url, datetime.utcnow() + timedelta(seconds=15))
+
 
 def send_ai_pics_request(product, preview_text):
 
-    url = 'https://slack.com/api/chat.postMessage?'+\
+    url = 'https://slack.com/api/chat.postMessage?' +\
         urlencode({
-            'token':settings.SLACK_TOKEN,
-            'channel':settings.SLACK_CHANNEL_AI_PICS,
-            'username':'AI pics Requested',
-            'text':'Product: *{}*\nPreview text: *{}*'
-                .format(product.encode('utf-8'), preview_text.encode('utf-8')),
+            'token': settings.SLACK_TOKEN,
+            'channel': settings.SLACK_CHANNEL_AI_PICS,
+            'username': 'AI pics Requested',
+            'text': 'Product: *{}*\nPreview text: *{}*'
+            .format(product.encode('utf-8'), preview_text.encode('utf-8')),
         })
 
-    #requests.get(url)
-    q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=0))
+    # requests.get(url)
+    q.enqueue(get_url_at_time, url, datetime.utcnow() + timedelta(seconds=0))
+
 
 def send_ai_pics_stats(msg):
 
-    url = 'https://slack.com/api/chat.postMessage?'+\
+    url = 'https://slack.com/api/chat.postMessage?' +\
         urlencode({
-            'token':settings.SLACK_TOKEN,
-            'channel':settings.SLACK_CHANNEL_AI_STATS,
-            'username':'AI Stats',
+            'token': settings.SLACK_TOKEN,
+            'channel': settings.SLACK_CHANNEL_AI_STATS,
+            'username': 'AI Stats',
             'text': msg.encode('utf-8'),
         })
 
     requests.get(url)
-    #q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=0))
+    # q.enqueue(get_url_at_time, url, datetime.utcnow()+timedelta(seconds=0))

@@ -192,7 +192,7 @@ def create_from_api(code, obj, product=None):
                                   u"Wg. najnowszego odpytania w bazie ILiM "
                                   "producent tego produktu to:\"{}\"".format(
                                       obj_owner_name),
-                                  check_if_already_exists= not company_created
+                                  check_if_already_exists=not company_created
                                   )
         else:
             product.company = company
@@ -263,7 +263,7 @@ def update_company_from_krs(product, company):
 
 def create_bot_report(product, description, check_if_already_exists=False):
     if check_if_already_exists \
-        and Report.filter(product=product, client='krs-bot', description=description).exists():
+            and Report.filter(product=product, client='krs-bot', description=description).exists():
         return
 
     report = Report(description=description)
@@ -353,15 +353,18 @@ def shareholders_to_str(krs, id, indent):
 
 
 def rem_dbl_newlines(str):
-    return str.replace(u'\r\n\r\n',u'\r\n').replace(u'\n\n',u'\n')
+    return str.replace(u'\r\n\r\n', u'\r\n').replace(u'\n\n', u'\n')
+
 
 def strip_dbl_spaces(str):
     return re.sub(' +', ' ', str).strip()
+
 
 def ilim_compare_str(s1, s2):
     s1 = strip_dbl_spaces(s1)
     s2 = strip_dbl_spaces(s2)
     return s1.upper() == s2.upper()
+
 
 def strip_urls_newlines(str):
     s = re.sub(

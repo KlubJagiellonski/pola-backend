@@ -71,7 +71,7 @@ for filename in FAVICON_FILES:
 # serving static files
 urlpatterns += [
     url(r'^static/(?P<path>.*)$',
-         serve, {'document_root': settings.STATIC_ROOT}),
+        serve, {'document_root': settings.STATIC_ROOT}),
 ]
 
 if settings.DEBUG:

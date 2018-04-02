@@ -1,1 +1,1 @@
-from .MainClass import *
+from .MainClass import *  # noqa

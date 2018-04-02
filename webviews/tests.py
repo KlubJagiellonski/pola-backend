@@ -31,5 +31,3 @@ class WebViewsTeamTestCase(TemplateUsedMixin, TestCase):
 class WebViewsPartnersTestCase(TemplateUsedMixin, TestCase):
     template_name = 'partners.html'
     url = reverse_lazy('webviews:partners')
-
-

@@ -58,7 +58,7 @@ class get_by_codeTestCase(TestCase):
 
     @patch('pola.logic.get_by_code')
     def test_not_found_product(self, get_by_code_mock):
-        product = ProductFactory(code=self.code, company=None);
+        product = ProductFactory(code=self.code, company=None)
         get_by_code_mock.return_value = product
         resp = self.client.get(self.url, {'device_id': 123})
 
@@ -88,12 +88,12 @@ class get_by_codeTestCase(TestCase):
         self.assertEqual(p.query_count, 0)
         self.client.get(self.url, {'device_id': 123})
 
-        p.refresh_from_db();
+        p.refresh_from_db()
         self.assertEqual(p.query_count, 1)
 
         self.client.get(self.url, {'device_id': 123})
 
-        p.refresh_from_db();
+        p.refresh_from_db()
         self.assertEqual(p.query_count, 2)
 
     @patch('pola.logic.get_by_code')
@@ -105,12 +105,12 @@ class get_by_codeTestCase(TestCase):
         self.assertEqual(c.query_count, 0)
         self.client.get(self.url, {'device_id': 123})
 
-        c.refresh_from_db();
+        c.refresh_from_db()
         self.assertEqual(c.query_count, 1)
 
         self.client.get(self.url, {'device_id': 123})
 
-        c.refresh_from_db();
+        c.refresh_from_db()
         self.assertEqual(c.query_count, 2)
 
     @patch('pola.logic.get_by_code')
@@ -245,4 +245,3 @@ class attach_fileTestCase(TestCase):
     #         {'file': file}
     #     )
     #     self.assertEqual(resp.status_code, 403)
-

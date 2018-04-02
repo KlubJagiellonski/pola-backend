@@ -1,10 +1,13 @@
-from django.core.management.base import BaseCommand, CommandError
-from boto.s3.connection import S3Connection, Bucket, Key
+from datetime import timedelta
+
+from boto.s3.connection import S3Connection, Bucket
 from django.conf import settings
-from ai_pics.models import AIPics, AIAttachment
+from django.core.management.base import BaseCommand
 from django.db import connection
-from datetime import datetime, timedelta
 from django.utils import timezone
+
+from ai_pics.models import AIAttachment
+
 
 class Command(BaseCommand):
     help = 'Deletes empty AI pics'

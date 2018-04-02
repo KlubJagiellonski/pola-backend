@@ -25,7 +25,7 @@ from .common import *  # noqa
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 # Raises ImproperlyConfigured exception if DJANGO_SECRET_KEY not in os.environ
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECRET_KEY = env("DJANGO_SECRET_KEY")  # noqa: F405
 
 # This ensures that Django will be able to detect a secure connection
 # properly on Heroku.
@@ -38,21 +38,21 @@ SECURITY_MIDDLEWARE = (
 )
 
 # Make sure djangosecure.middleware.SecurityMiddleware is listed first
-MIDDLEWARE = SECURITY_MIDDLEWARE + MIDDLEWARE
+MIDDLEWARE = SECURITY_MIDDLEWARE + MIDDLEWARE  # noqa: F405
 
 # set this to 60 seconds and then to 518400 when you can prove it works
 SECURE_HSTS_SECONDS = 60
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(  # noqa: F405
     "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
-SECURE_FRAME_DENY = env.bool("DJANGO_SECURE_FRAME_DENY", default=True)
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
+SECURE_FRAME_DENY = env.bool("DJANGO_SECURE_FRAME_DENY", default=True)  # noqa: F405
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool(  # noqa: F405
     "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
 
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
-SECURE_SSL_HOST = env("DJANGO_SECURE_SSL_HOST", default=None)
+SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)  # noqa: F405
+SECURE_SSL_HOST = env("DJANGO_SECURE_SSL_HOST", default=None)  # noqa: F405
 
 # SITE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -62,25 +62,25 @@ ALLOWED_HOSTS = ["www.pola-app.pl", "pola-app.pl",
                  "pola-staging.herokuapp.com"]
 # END SITE CONFIGURATION
 
-INSTALLED_APPS += ("gunicorn", )
+INSTALLED_APPS += ("gunicorn", )  # noqa: F405
 
 # STORAGE CONFIGURATION
 # ------------------------------------------------------------------------------
 # Uploaded Media Files
 # ------------------------
 # See: http://django-storages.readthedocs.org/en/latest/index.html
-INSTALLED_APPS += ('storages',)
+INSTALLED_APPS += ('storages',)  # noqa: F405
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')
-AWS_STORAGE_BUCKET_AI_NAME = env('DJANGO_AWS_STORAGE_BUCKET_AI_NAME')
+AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')  # noqa: F405
+AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')  # noqa: F405
+AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')  # noqa: F405
+AWS_STORAGE_BUCKET_AI_NAME = env('DJANGO_AWS_STORAGE_BUCKET_AI_NAME')  # noqa: F405
 AWS_AUTO_CREATE_BUCKET = True
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 
-AI_SHARED_SECRET = env('AI_SHARED_SECRET')
+AI_SHARED_SECRET = env('AI_SHARED_SECRET')  # noqa: F405
 
 # AWS cache settings, don't change unless you know what you're doing:
 AWS_EXPIRY = 60 * 60 * 24 * 7
@@ -108,14 +108,14 @@ STATIC_URL = MEDIA_URL
 # 'django.contrib.staticfiles'
 AWS_PRELOAD_METADATA = True
 
-INSTALLED_APPS = ('collectfast', ) + INSTALLED_APPS
+INSTALLED_APPS = ('collectfast', ) + INSTALLED_APPS  # noqa: F405
 
 # EMAIL
 # ------------------------------------------------------------------------------
-DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
+DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')  # noqa: F405
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-MAILGUN_ACCESS_KEY = env('DJANGO_MAILGUN_API_KEY')
-MAILGUN_SERVER_NAME = env('DJANGO_MAILGUN_SERVER_NAME')
+MAILGUN_ACCESS_KEY = env('DJANGO_MAILGUN_API_KEY')  # noqa: F405
+MAILGUN_SERVER_NAME = env('DJANGO_MAILGUN_SERVER_NAME')  # noqa: F405
 EMAIL_SUBJECT_PREFIX = ''
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
@@ -123,7 +123,7 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # ------------------------------------------------------------------------------
 # See:
 # https://docs.djangoproject.com/en/dev/ref/templates/api/#django.template.loaders.cached.Loader
-TEMPLATES[0]['OPTIONS']['loaders'] = [
+TEMPLATES[0]['OPTIONS']['loaders'] = [  # noqa: F405
     ('django.template.loaders.cached.Loader', [
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader', ]),
@@ -132,7 +132,7 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # Raises ImproperlyConfigured exception if DATABASE_URL not in os.environ
-DATABASES['default'] = env.db("DATABASE_URL")
+DATABASES['default'] = env.db("DATABASE_URL")  # noqa: F405
 
 # CACHING
 # ------------------------------------------------------------------------------

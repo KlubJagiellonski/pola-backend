@@ -1,9 +1,9 @@
 # Create your views here.
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.urls import reverse, reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, QueryDict
+from django.urls import reverse, reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django_filters.views import FilterView
@@ -90,7 +90,7 @@ class FieldsDisplayMixin(object):
                 method_display = getattr(
                     obj, 'get_' + field_name + '_display')
                 value = method_display()
-            except:
+            except:  # noqa
                 value = obj.__dict__[field_name]
             fields.append(
                 {"name": self.model._meta

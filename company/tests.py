@@ -192,7 +192,7 @@ class CompanyCreateFromKRSFormTestCase(TestCase):
     def test_existings_compnay_in_db(self, mock_tool):
         CompanyFactory(nip=123)
         mock_tool.return_value = [self._get_mock()]
-        data = {'is_krs' : '1', 'no': 123}
+        data = {'is_krs': '1', 'no': 123}
         form = CompanyCreateFromKRSForm(data=data)
         self.assertFalse(form.is_valid())
 
@@ -202,28 +202,28 @@ class CompanyCreateFromKRSFormTestCase(TestCase):
             self._get_mock(),
             self._get_mock(),
         ]
-        data = {'is_krs' : '1', 'no': 123}
+        data = {'is_krs': '1', 'no': 123}
         form = CompanyCreateFromKRSForm(data=data)
         self.assertFalse(form.is_valid())
 
     @patch('mojepanstwo_api2.krs.Krs.get_companies')
     def test_no_company_in_remote_api(self, mock_tool):
         mock_tool.return_value = []
-        data = {'is_krs' : '1', 'no': 123}
+        data = {'is_krs': '1', 'no': 123}
         form = CompanyCreateFromKRSForm(data=data)
         self.assertFalse(form.is_valid())
 
     @patch('mojepanstwo_api2.krs.Krs.get_companies')
     def test_success(self, mock_tool):
         mock_tool.return_value = [self._get_mock()]
-        data = {'is_krs' : '1', 'no': 123}
+        data = {'is_krs': '1', 'no': 123}
         form = CompanyCreateFromKRSForm(data=data)
         self.assertTrue(form.is_valid())
 
     @patch('mojepanstwo_api2.krs.Krs.get_companies')
     def test_success_by_nip(self, mock_tool):
         mock_tool.return_value = [self._get_mock()]
-        data = {'is_krs' : '0', 'no': 123}
+        data = {'is_krs': '0', 'no': 123}
         form = CompanyCreateFromKRSForm(data=data)
         self.assertTrue(form.is_valid())
 

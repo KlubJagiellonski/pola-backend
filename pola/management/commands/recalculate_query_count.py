@@ -15,4 +15,3 @@ class Command(BaseCommand):
         print('Recalculating company query count')
         Company.recalculate_query_count()
         print('Finished recalculating query count')
-

@@ -16,11 +16,12 @@ preview_texts = [
     u'Rozwijaj z nami Polę!',
 ]
 
+
 def add_ask_for_pics(product, result):
     if product and product.name and product.company \
-        and 'plScore' in result and result['plScore']\
-        and product.company.query_count > QUERY_COUNT_THRESHOLD\
-        and random.randint(0, DESIRED_AI_PICS_COUNT) > product.ai_pics_count:
+            and 'plScore' in result and result['plScore']\
+            and product.company.query_count > QUERY_COUNT_THRESHOLD\
+            and random.randint(0, DESIRED_AI_PICS_COUNT) > product.ai_pics_count:
 
         ai = result['ai'] = {}
         ai['ask_for_pics'] = True

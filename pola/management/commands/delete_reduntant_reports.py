@@ -13,7 +13,7 @@ class Command(BaseCommand):
         parser.add_argument('last_product_id')
 
     def handle(self, *args, **options):
-        print 'Starting...'
+        print('Starting...')
 
         products = Product.objects.filter(pk__gte=options["last_product_id"]) \
             .values('id', 'name') \
@@ -21,8 +21,8 @@ class Command(BaseCommand):
 
         for product in products:
 
-            print "{} (id:{})".format(product['name'].encode('UTF-8')
-                                      if product['name'] else '', product['id'])
+            print("{} (id:{})".format(product['name'].encode('UTF-8')
+                                      if product['name'] else '', product['id']))
 
             reports = Report.objects\
                 .filter(product__id=product['id'], client='krs-bot')\
@@ -32,8 +32,8 @@ class Command(BaseCommand):
             for report in reports:
 
                 if report.description in desc:
-                    print report.description.encode('utf-8') + ' - deleted'
+                    print(report.description.encode('utf-8') + ' - deleted')
                     report.delete()
                 else:
-                    print report.description.encode('utf-8')
+                    print(report.description.encode('utf-8'))
                     desc.add(report.description)
