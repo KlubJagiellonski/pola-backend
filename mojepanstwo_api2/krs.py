@@ -36,9 +36,20 @@ class ApiClient:
         self.url = url
         self.session = requests.Session()
 
-    def send_request(self, method, **kwargs):
+    def send_request(self, method, data={}, **kwargs):
 
-        resp = self.session.get(url=self.API_URL + method, **kwargs)
+        def nested_object(name, mapping):
+            return [(u'{}[{}]'.format(name, key), value) for key, value in mapping.items()]
+
+        post_data = [
+            [(key, value)]
+            if not isinstance(value, dict)
+            else nested_object(key, value)
+            for key, value in data.items()
+        ]
+        post_data = [y for x in post_data for y in x]
+
+        resp = self.session.get(url=self.API_URL + method, params=post_data)
 
         if resp.status_code != 200:
             raise ConnectionError({'status_code': resp.status_code})
@@ -68,7 +79,7 @@ class Krs:
             conditions['krs_podmioty.krs'] = kwargs['krs_no']
 
         if 'krs_nip' in kwargs:
-            conditions['krs_podmioty.nip'] = kwargs['krs_name']
+            conditions['krs_podmioty.nip'] = kwargs['krs_nip']
 
         response = self.client.send_request('dane/krs_podmioty', data={'conditions': conditions})
         return self._parse_companies_response(response)
@@ -142,4 +153,5 @@ class Krs:
         for key, value in Krs.COMMON_COMPANY_NAME_ENDINGS.items():
             if name.endswith(key.upper()):
                 return name[:len(name) - len(key)] + value
+
         return name
