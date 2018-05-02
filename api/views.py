@@ -5,6 +5,9 @@ import os
 import time
 import uuid
 from hashlib import sha1
+
+from api.rates import whitelist
+
 try:
     from urllib.parse import quote_plus  # Python 3+
 except ImportError:
@@ -52,7 +55,7 @@ def get_ai_pics(request):
 
 # API v3
 @csrf_exempt
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def add_ai_pics(request):
     device_id = request.GET['device_id']
 
@@ -114,7 +117,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
     return signed_request
 
 
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def get_by_code_v3(request):
     noai = request.GET.get('noai')
 
@@ -124,7 +127,7 @@ def get_by_code_v3(request):
 
 
 @csrf_exempt
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def create_report_v3(request):
     return create_report_internal(request)
 
@@ -154,7 +157,7 @@ def get_by_code_internal(request, ai_supported=False):
     return result
 
 
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def get_by_code_v2(request):
 
     result = get_by_code_internal(request)
@@ -163,7 +166,7 @@ def get_by_code_v2(request):
 
 
 @csrf_exempt
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def create_report_v2(request):
     return create_report_internal(request, extra_comma=True)
 
@@ -234,7 +237,7 @@ def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False
 
 
 @csrf_exempt
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def attach_file_v2(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
@@ -255,7 +258,7 @@ def attach_file_v2(request):
 # --- API v1 (old)
 
 
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def get_by_code(request, code):
     device_id = request.GET['device_id']
 
@@ -277,7 +280,7 @@ def get_by_code(request, code):
 
 
 @csrf_exempt
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def create_report(request):
     device_id = request.GET['device_id']
 
@@ -296,7 +299,7 @@ def create_report(request):
 
 
 @csrf_exempt
-@ratelimit(key='ip', rate='2/s', block=True)
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
 def update_report(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
@@ -316,7 +319,7 @@ def update_report(request):
 
 
 @csrf_exempt
-@ratelimit(key='ip', rate='5/s', block=True)
+@ratelimit(key='ip', rate=whitelist('5/s'), block=True)
 def attach_file(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
