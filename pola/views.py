@@ -70,6 +70,16 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
             (Product.objects.filter(name__isnull=True)
                 .order_by('-query_count')[:10])
 
+        sq = 'select count(*) from report_report join product_product on report_report.product_id=product_product.id where company_company.id=product_product.company_id and resolved_at is NULL'
+        c['companies_with_most_open_reports'] =\
+            Company.objects.raw('select '
+                                '*, '
+                                '(' + sq + ') as no_of_open_reports '
+                                'from '
+                                'company_company '
+                                'order by no_of_open_reports desc limit 10'
+        )
+
         c['newest_reports'] = (Report.objects.only_open()
                                      .order_by('-created_at')[:10])
         c['no_of_open_reports'] = Report.objects.only_open().count()

@@ -146,8 +146,8 @@
     {% endif %}
 </div>
 
-{% if perms.report.view_report %}
     <div class="row">
+{% if perms.report.view_report %}
         <div class="col-md-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -172,6 +172,25 @@
                 </div>
             </div>
         </div>
-    </div>
 {% endif %}
+{% if perms.product.view_company %}
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Producenci z nierozpatrzonymi zgłoszeniami" %}
+                    </h3>
+                </div>
+                {% for company in companies_with_most_open_reports %}
+                    <li class="list-group-item">
+                        <a href="{{ company.get_absolute_url }}">{{ company }} ({{ company.query_count }}) ({{ company.no_of_open_reports }}) </a>
+                        {% if company.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ company.locked_by }}"></i>{% endif %}
+                    </li>
+                {% endfor %}
+            </div>
+</div>
+{% endif %}
+    </div>
+
+
 {% endblock content %}
