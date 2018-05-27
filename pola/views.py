@@ -78,7 +78,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
                                 'from '
                                 'company_company '
                                 'order by no_of_open_reports desc limit 10'
-        )
+                                )
 
         c['newest_reports'] = (Report.objects.only_open()
                                      .order_by('-created_at')[:10])

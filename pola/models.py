@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import get_default_timezone
@@ -20,6 +21,9 @@ class Query(models.Model):
 
     class Meta:
         get_latest_by = 'timestamp'
+        indexes = [
+            BrinIndex(fields=['timestamp'], pages_per_range=64)
+        ]
 
 
 class Stats(models.Model):
@@ -48,6 +52,9 @@ class Stats(models.Model):
 
     class Meta:
         unique_together = ('year', 'month', 'day')
+        indexes = [
+            BrinIndex(fields=['calculated_at'], pages_per_range=16)
+        ]
 
     def calculate(self, year, month, day):
         today_midnight = datetime(year, month, day,

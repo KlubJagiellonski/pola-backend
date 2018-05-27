@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.contrib.postgres.indexes import BrinIndex
 from django.core.validators import ValidationError
 from django.db import connection, models
 from django.forms.models import model_to_dict
@@ -230,3 +230,6 @@ class Company(models.Model):
             # ("change_company", "Can edit the company"),
             # ("delete_company", "Can delete the company"),
         )
+        indexes = [
+            BrinIndex(fields=['created_at'], pages_per_range=16)
+        ]

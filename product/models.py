@@ -1,3 +1,4 @@
+from django.contrib.postgres.indexes import BrinIndex
 from django.db import connection, models
 from django.urls import reverse
 from django.utils import timezone
@@ -103,3 +104,6 @@ class Product(models.Model):
             # ("change_product", "Can edit the product"),
             # ("delete_product", "Can delete the product"),
         )
+        indexes = [
+            BrinIndex(fields=['created_at'], pages_per_range=16)
+        ]

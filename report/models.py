@@ -5,6 +5,7 @@ from os.path import basename
 
 from babel.dates import format_timedelta
 from django.conf import settings
+from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -88,6 +89,9 @@ class Report(models.Model):
             # ("change_report", "Can edit the report"),
             # ("delete_report", "Can delete the report"),
         )
+        indexes = [
+            BrinIndex(fields=['created_at'], pages_per_range=16)
+        ]
 
 
 @python_2_unicode_compatible

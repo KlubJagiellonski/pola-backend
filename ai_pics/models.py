@@ -3,6 +3,7 @@
 from os.path import basename
 
 from django.conf import settings
+from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
@@ -65,6 +66,9 @@ class AIPics(models.Model):
             # ("change_aipics", "Can edit the AIPics"),
             # ("delete_aipics", "Can delete the AIPics"),
         )
+        indexes = [
+            BrinIndex(fields=['created_at'], pages_per_range=16)
+        ]
 
 
 @python_2_unicode_compatible
