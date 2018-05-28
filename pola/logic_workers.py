@@ -61,7 +61,7 @@ def requery_all_codes():
 
 
 def requery_products(products):
-    client = Client(settings.PRODUKTY_W_SIECI_API_KEY)
+    client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
 
     for prod in products:
         print(prod.code + " -> ",)

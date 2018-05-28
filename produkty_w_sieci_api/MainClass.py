@@ -12,26 +12,23 @@ class ConnectionError(ApiError):
 
 
 class Client:
-    PROD_HOST = 'http://api3.produktywsieci.pl/PublicService.svc/rest/json/'
+    PROD_HOST = 'https://www.produktywsieci.gs1.pl'
 
-    def __init__(self, api_key, host=PROD_HOST):
-        self.api_key = api_key
+    def __init__(self, username, password, host=PROD_HOST):
         self.host = host
         self.session = requests.Session()
+        self.username = username
+        self.password = password
 
     def get_product_by_gtin(self, code):
-        url = self.host + "GetExpandedProductByGTIN"
-        params = {
-            'gs1Key': self.api_key,
-            'gtin': Client._normalize_gtin(code)
-        }
-        resp = self.session.get(url=url, params=params)
-        # import ipdb; ipdb.set_trace()
+        gtin = Client._normalize_gtin(code)
+        url = self.host + "/api/products/{}?aggregation=CREDIBLE".format(gtin)
+        resp = self.session.get(url=url, auth=(self.username, self.password))
         logger.info('GS1 resp:' + str(resp.status_code))
         if resp.status_code != 200:
             raise ConnectionError({'status_code': resp.status_code})
         json = resp.json()
-        if not json.get('IsValid', False):
+        if not json.get('GTIN', None):
             return None
         return json
 
