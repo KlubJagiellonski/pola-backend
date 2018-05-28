@@ -233,3 +233,37 @@ class Company(models.Model):
         indexes = [
             BrinIndex(fields=['created_at'], pages_per_range=16)
         ]
+
+class BrandQuerySet(models.query.QuerySet):
+
+    def get_or_create(self, commit_desc=None, commit_user=None,
+                      *args, **kwargs):
+        if not commit_desc:
+            return super(BrandQuerySet, self).get_or_create(*args, **kwargs)
+
+        with reversion.create_revision(manage_manually=True, atomic=True):
+            obj, created = super(BrandQuerySet, self).get_or_create(*args, **kwargs)
+            if created:
+                reversion.set_comment(commit_desc)
+                reversion.set_user(commit_user)
+                reversion.add_to_revision(obj)
+            return obj, created
+
+
+@reversion.register
+@python_2_unicode_compatible
+class Brand(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128, null=False, blank=False,
+                            db_index=True,
+                            verbose_name=_(u"Nazwa marki"))
+    objects = BrandQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = _(u"Marka")
+        verbose_name_plural = _(u"Marki")
+        ordering = ['-created_at']
+        permissions = (
+            ("view_brand", "Can see all brands"),
+        )

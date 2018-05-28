@@ -6,7 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from reversion import revisions as reversion
 
-from company.models import Company
+from company.models import Company, Brand
 from pola.concurency import concurency
 
 
@@ -37,6 +37,7 @@ class Product(models.Model):
     company = models.ForeignKey(Company, null=True, blank=True,
                                 verbose_name="Producent",
                                 on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, null=True, blank=True, verbose_name="Marka produktu", on_delete=models.CASCADE)
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
 

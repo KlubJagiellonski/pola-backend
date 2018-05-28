@@ -7,7 +7,7 @@ from django.conf import settings
 
 import mojepanstwo_api
 import produkty_w_sieci_api
-from company.models import Company
+from company.models import Company, Brand
 from mojepanstwo_api import KrsClient
 from product.models import Product
 from produkty_w_sieci_api import Client
@@ -151,7 +151,7 @@ def create_from_api(code, obj, product=None):
     if obj:
         obj_owner_name = obj.get('BrandOwner', None)
         obj_product_name = obj.get('ProductName', None)
-
+        obj_brand = obj.get('Brand', None)
 
     if obj_owner_name:
         company, company_created = Company.objects.get_or_create(
@@ -194,6 +194,23 @@ def create_from_api(code, obj, product=None):
                                   )
         else:
             product.company = company
+
+        if product.company and obj_brand:
+            if product.brand:
+                if product.brand.name != obj_brand:
+                    create_bot_report(product,
+                                  u"Wg. najnowszego odpytania w bazie ILiM "
+                                  "marka tego produktu to:\"{}\"".format(
+                                      obj_brand),
+                                  check_if_already_exists=True
+                                  )
+            else:
+                brand, _ = Brand.objects.get_or_create(
+                    name=obj_brand, company=product.company,
+                    commit_desc='Marka utworzona automatycznie na podstawie API'
+                                ' ILiM')
+                product.brand = brand
+
         product.save()
 
     if company and company_created:
