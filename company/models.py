@@ -211,14 +211,14 @@ class Company(models.Model):
     def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
         self.full_clean()
         if not commit_desc:
-            return super(Company, self).save(*args, **kwargs)
+            super(Company, self).save(*args, **kwargs)
+            return
 
         with reversion.create_revision(manage_manually=True, atomic=True):
-            obj = super(Company, self).save(*args, **kwargs)
+            super(Company, self).save(*args, **kwargs)
             reversion.set_comment(commit_desc)
             reversion.set_user(commit_user)
-            reversion.add_to_revision(obj)
-            return obj
+            reversion.add_to_revision(self)
 
     class Meta:
         verbose_name = _(u"Producent")
