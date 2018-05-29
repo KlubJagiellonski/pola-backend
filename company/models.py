@@ -255,9 +255,11 @@ class BrandQuerySet(models.query.QuerySet):
 class Brand(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
-    name = models.CharField(max_length=128, null=False, blank=False,
+    name = models.CharField(max_length=128, null=True, blank=True,
                             db_index=True,
-                            verbose_name=_(u"Nazwa marki"))
+                            verbose_name=_(u"Nazwa marki (na podstawie ILiM)"))
+    common_name = models.CharField(max_length=128, null=True, blank=True,
+                                   verbose_name=_(u"Nazwa dla użytkownika"))
     objects = BrandQuerySet.as_manager()
 
     class Meta:
