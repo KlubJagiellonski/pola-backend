@@ -152,7 +152,6 @@ def create_from_api(code, obj, product=None):
         obj_owner_name = obj.get('BrandOwner', None)
         obj_product_name = obj.get('ProductName', None)
 
-
     if obj_owner_name:
         company, company_created = Company.objects.get_or_create(
             name=obj_owner_name,
@@ -160,6 +159,8 @@ def create_from_api(code, obj, product=None):
                         ' ILiM')
     else:
         company = None
+
+    commit_desc = None
 
     if not product:
         product = Product.objects.create(
@@ -179,6 +180,7 @@ def create_from_api(code, obj, product=None):
                                   )
         else:
             if obj_product_name != code:
+                commit_desc+='Nazwa produktu zmieniona na podstawie bazy GS1. '
                 product.name = obj_product_name
 
         if product.company:
@@ -194,7 +196,8 @@ def create_from_api(code, obj, product=None):
                                   )
         else:
             product.company = company
-        product.save()
+            commit_desc += 'Producent produktu zmieniony na podstawie bazy GS1. '
+        product.save(commit_desc=commit_desc)
 
     if company and company_created:
         update_company_from_krs(product, company)
