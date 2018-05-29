@@ -161,6 +161,8 @@ def create_from_api(code, obj, product=None):
     else:
         company = None
 
+    commit_desc = None
+
     if not product:
         product = Product.objects.create(
             name=obj_product_name,
@@ -179,6 +181,7 @@ def create_from_api(code, obj, product=None):
                                   )
         else:
             if obj_product_name != code:
+                commit_desc+='Nazwa produktu zmieniona na podstawie bazy GS1. '
                 product.name = obj_product_name
 
         if product.company:
@@ -193,6 +196,7 @@ def create_from_api(code, obj, product=None):
                                   check_if_already_exists=not company_created
                                   )
         else:
+            commit_desc += 'Producent produktu zmieniony na podstawie bazy GS1. '
             product.company = company
 
         if product.company and obj_brand:
@@ -210,8 +214,9 @@ def create_from_api(code, obj, product=None):
                     commit_desc='Marka utworzona automatycznie na podstawie API'
                                 ' ILiM')
                 product.brand = brand
+                commit_desc += 'Marka produktu zmieniona na podstawie bazy GS1. '
 
-        product.save()
+        product.save(commit_desc=commit_desc)
 
     if company and company_created:
         update_company_from_krs(product, company)
