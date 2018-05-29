@@ -9,7 +9,7 @@
 <h1>{{ object }}</h1>
 <ul>
     {% for version  in revision_list %}
-    <li>{{ version }} @ {{ version.revision }} @ {{ version.revision.data_created }} @ {{ version.revision.user }} @ {{ version.revision.comment }} </li>
+    <li>{{ version }} @ {{ version.serialized_data }} @ {{ version.revision.date_created }} @ {{ version.revision.user }} @ {{ version.revision.comment }} </li>
     {% empty %}
     <li>{% trans "Nie ma historii dla tego produktu" %}</li>
     {% endfor %}
