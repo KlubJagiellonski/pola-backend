@@ -26,7 +26,7 @@ class Client:
         resp = self.session.get(url=url, auth=(self.username, self.password))
         logger.info('GS1 resp:' + str(resp.status_code))
         if resp.status_code != 200:
-            raise ConnectionError({'status_code': resp.status_code})
+            raise ConnectionError({'status_code': resp.status_code, 'code':code, 'json':resp.json()})
         json = resp.json()
         if not json.get('GTIN', None):
             return None
