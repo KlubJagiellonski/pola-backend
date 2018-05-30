@@ -160,7 +160,7 @@ def create_from_api(code, obj, product=None):
     else:
         company = None
 
-    commit_desc = None
+    commit_desc = ""
 
     if not product:
         product = Product.objects.create(
