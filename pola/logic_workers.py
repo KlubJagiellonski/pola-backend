@@ -73,7 +73,8 @@ def requery_products(products):
                 and (len(prod.code) == 8 or len(prod.code) == 13) \
                 and not prod.code.startswith('977') \
                 and not prod.code.startswith('978') \
-                and not prod.code.startswith('979'):
+                and not prod.code.startswith('979') \
+                and not prod.code.startswith('99'):
             product_info = client.get_product_by_gtin(prod.code)
 
             p = create_from_api(prod.code, product_info, product=prod)
