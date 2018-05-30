@@ -152,6 +152,7 @@ def create_from_api(code, obj, product=None):
         obj_owner_name = obj.get('BrandOwner', None)
         obj_product_name = obj.get('ProductName', None)
 
+    company_created = False
     if obj_owner_name:
         company, company_created = Company.objects.get_or_create(
             name=obj_owner_name,
