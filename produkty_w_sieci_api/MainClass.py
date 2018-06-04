@@ -1,5 +1,6 @@
 import logging
 import requests
+import traceback
 logger = logging.getLogger(__name__)
 
 
@@ -23,7 +24,11 @@ class Client:
     def get_product_by_gtin(self, code):
         gtin = Client._normalize_gtin(code)
         url = self.host + "/api/products/{}?aggregation=CREDIBLE".format(gtin)
-        resp = self.session.get(url=url, auth=(self.username, self.password))
+        try:
+            resp = self.session.get(url=url, auth=(self.username, self.password), timeout=5)
+        except requests.exceptions.Timeout:
+            print('Timeout while querying GS1: ',traceback.format_exc())
+            return None
         logger.info('GS1 resp:' + str(resp.status_code))
         if resp.status_code != 200:
             raise ConnectionError({'status_code': resp.status_code, 'code':code, 'json':resp.json()})
