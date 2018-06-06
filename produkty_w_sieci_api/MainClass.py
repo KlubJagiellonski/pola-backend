@@ -1,6 +1,7 @@
 import logging
 import requests
 import traceback
+import urllib3
 logger = logging.getLogger(__name__)
 
 
@@ -26,7 +27,7 @@ class Client:
         url = self.host + "/api/products/{}?aggregation=CREDIBLE".format(gtin)
         try:
             resp = self.session.get(url=url, auth=(self.username, self.password), timeout=5)
-        except requests.exceptions.Timeout:
+        except(requests.exceptions.Timeout, urllib3.exceptions.ReadTimeoutError):
             print('Timeout while querying GS1: ',traceback.format_exc())
             return None
         logger.info('GS1 resp:' + str(resp.status_code))
