@@ -2,6 +2,7 @@ import logging
 import requests
 import traceback
 import urllib3
+from gtin import GTIN, CheckDigitError
 logger = logging.getLogger(__name__)
 
 
@@ -12,6 +13,20 @@ class ApiError(Exception):
 class ConnectionError(ApiError):
     pass
 
+def is_code_supported_by_gs1_api(code):
+    code = code.lstrip('0')
+
+    try:
+        _ = GTIN(code)
+    except CheckDigitError:
+        return False
+
+    if code.isdigit() \
+        and len(code) in [8,11,12,13,14] \
+        and not code.startswith(('190', '967', '977', '978', '979', '99', '150', '169', '2', '922')):
+        return True
+
+    return False
 
 class Client:
     PROD_HOST = 'https://www.produktywsieci.gs1.pl'
