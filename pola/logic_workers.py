@@ -10,12 +10,12 @@ from django.utils import timezone
 from company.models import Company
 from pola.logic import create_from_api, update_company_from_krs
 from product.models import Product
-from produkty_w_sieci_api import Client
+from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
 
 
-REQUERY_590_FREQUENCY = 7
+REQUERY_590_FREQUENCY = 30
 REQUERY_590_LIMIT = 100
-REQUERY_ALL_FREQUENCY = 30
+REQUERY_ALL_FREQUENCY = 60
 REQUERY_ALL_LIMIT = 100
 
 # usage:
@@ -36,7 +36,7 @@ def requery_590_codes():
             company__isnull=True,
             code__startswith='590',
             ilim_queried_at__lt=timezone.now() - timedelta(days=REQUERY_590_FREQUENCY)
-        ).order_by('ilim_queried_at')[:REQUERY_590_LIMIT]
+        ).order_by('-query_count')[:REQUERY_590_LIMIT]
 
 #    p590 = products = Product.objects.filter(code='5909990022380')
 
@@ -50,8 +50,9 @@ def requery_all_codes():
 
     products = Product.objects\
         .filter(
+#            company__isnull=True,
             ilim_queried_at__lt=timezone.now() - timedelta(days=REQUERY_ALL_FREQUENCY)
-        ).order_by('ilim_queried_at')[:REQUERY_ALL_LIMIT]
+        ).order_by('-query_count')[:REQUERY_ALL_LIMIT]
 
 #    products = Product.objects.filter(code='142222157008')
 
@@ -64,14 +65,12 @@ def requery_products(products):
     client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
 
     for prod in products:
-        print(prod.code + " -> ",)
+        print(prod.code, prod.query_count, " -> ")
 
         prod.ilim_queried_at = timezone.now()
         prod.save()
 
-        if prod.code.isdigit() \
-                and (len(prod.code) == 8 or len(prod.code) == 13) \
-                and not prod.code.startswith(('977','978','979','99','150')):
+        if is_code_supported_by_gs1_api(prod.code):
             product_info = client.get_product_by_gtin(prod.code)
 
             p = create_from_api(prod.code, product_info, product=prod)

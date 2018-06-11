@@ -10,7 +10,7 @@ import produkty_w_sieci_api
 from company.models import Company
 from mojepanstwo_api import KrsClient
 from product.models import Product
-from produkty_w_sieci_api import Client
+from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
 from report.models import Report
 
 
@@ -136,9 +136,10 @@ def get_by_code(code):
     except Product.DoesNotExist:
         pass
     try:
-        client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
-        product_info = client.get_product_by_gtin(code)
-        return create_from_api(code, product_info)
+        if is_code_supported_by_gs1_api(code):
+            client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
+            product_info = client.get_product_by_gtin(code)
+            return create_from_api(code, product_info)
     except produkty_w_sieci_api.ApiError:
         pass
     return Product.objects.create(code=code)
