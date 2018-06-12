@@ -96,8 +96,8 @@ select count(*) from reversion_revision
 where id not in (select revision_id from reversion_version);
 
 
-select name, query_count from company_company where "plCapital">50 and ("plWorkers"=100 or "plRnD"=100)
-order by query_count desc limit 20;
+select name, query_count from company_company where "plCapital"=100 and "plWorkers"=100 and "plRnD"=100 and "plRegistered"=100 and "plNotGlobEnt"=100
+order by query_count desc limit 100;
 
 SELECT relname,n_live_tup
   FROM pg_stat_user_tables where n_Live_tup>250
@@ -154,3 +154,22 @@ where product_product.name is not null and (is_valid=TRUE OR is_valid is NULL)
 group by product_product.code, name
 order by cnt desc
 limit 10;
+
+select date_part('year', created_at) as year, date_part('week', created_at) as week, count(*)
+from ai_pics_aipics
+join ai_pics_aiattachment on ai_pics_aipics.id=ai_pics_aiattachment.ai_pics_id
+group by year, week
+order by 1,2;
+
+select sum(query_count), sum(query_count*enough_ai_pics) from
+(
+select count(distinct pola_query.id) as query_count,
+case when count(distinct ai_pics_aiattachment.id)>20 then 1 else 0 end as enough_ai_pics
+from product_product
+join pola_query on product_product.id=pola_query.product_id
+left outer join ai_pics_aipics on product_product.id = ai_pics_aipics.product_id
+left outer join ai_pics_aiattachment on ai_pics_aipics.id = ai_pics_id
+where pola_query.timestamp > current_timestamp - interval '1 day'
+group by product_product.id, product_product.name
+) as sub;
+
