@@ -262,6 +262,9 @@ class Brand(models.Model):
                                    verbose_name=_(u"Nazwa dla użytkownika"))
     objects = BrandQuerySet.as_manager()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = _(u"Marka")
         verbose_name_plural = _(u"Marki")

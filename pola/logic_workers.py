@@ -76,7 +76,7 @@ def requery_products(products):
             p = create_from_api(prod.code, product_info, product=prod)
 
             if p.company and p.company.name:
-                print(p.company.name.encode('utf-8'))
+                print(p.company.name.encode('utf-8'), p.brand)
             else:
                 print(".")
         else:
