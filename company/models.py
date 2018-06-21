@@ -107,6 +107,11 @@ class Company(models.Model):
                                verbose_name=_(u"Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
+    is_friend = models.BooleanField(default=False,
+                                   verbose_name=_("Przyjaciel Poli"),
+                                   choices=((True, _("Tak")),
+                                            (False, _("Nie"))))
+
     objects = CompanyQuerySet.as_manager()
 
     def increment_query_count(self):
