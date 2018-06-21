@@ -43,6 +43,9 @@ def get_result_from_code(code):
             result['plRegistered_notes'] = company.plRegistered_notes
             result['plNotGlobEnt'] = company.plNotGlobEnt
             result['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
+            result['is_friend'] = company.is_friend
+            if company.is_friend:
+                result['friend_text'] = 'To jest przyjaciel Poli'
 
             if company.description:
                 result['description'] = company.description
