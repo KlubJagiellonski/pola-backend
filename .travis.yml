@@ -17,10 +17,6 @@ matrix:
   - python: 3.6
     env: TOX_ENV=flake8
   - python: 2.7
-    env: TOX_ENV=py27-dj110-coveralls
-  - python: 3.6
-    env: TOX_ENV=py36-dj110-coveralls
-  - python: 2.7
     env: TOX_ENV=py27-dj111-coveralls
   - python: 3.6
     env: TOX_ENV=py36-dj111-coveralls
