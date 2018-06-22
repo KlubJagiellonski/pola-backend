@@ -1,0 +1,38 @@
+{%extends 'company/base.html' %}
+{% load i18n %}
+
+{% block breadcrumbs_rows %}
+    {% if object.company %}
+        <li><a href="{{ object.company.get_absolute_url }}">{{ object.company }}</a></li>
+    {% endif %}
+
+    <li class="active"><a href="{{ obj.get_absolute_url }}">{{ object }}</a></li>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="btn-group">
+        {% if perms.company.delete_company %}
+            <a href="{% url 'company:brand-delete' object.pk %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Usuń" %}</a>
+        {% endif %}
+        {% if perms.company.change_company %}
+            <a href="{% url 'company:brand-edit' object.pk %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+        {% endif %}
+    </div>
+{% endif %}
+<h1>
+    {% if object.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ object.locked_by }}"></i>{% endif %}
+    {{ object }}  <small>#{{ object.pk }}</small>
+</h1>
+<div class="panel panel-primary">
+    <div class="panel-heading">{% trans "Data metric" %}</div>
+    <table class="table">
+        {% for field in fields %}
+        <tr>
+            <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock content %}

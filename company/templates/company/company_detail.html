@@ -20,16 +20,49 @@
     {% if object.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ object.locked_by }}"></i>{% endif %}
     {{ object }}  <small>#{{ object.pk }}</small>
 </h1>
-<div class="panel panel-primary">
-	<div class="panel-heading">{% trans "Data metric" %}</div>
-	<table class="table">
-        {% for field in fields %}
-		<tr>
-            <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
-		</tr>
-        {% endfor %}
-	</table>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">{% trans "Data metric" %}</div>
+            <table class="table">
+                {% for field in fields %}
+                <tr>
+                    <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="btn-group pull-right">
+                    <a class="btn btn-xs btn-info" href="{% url "company:brand-list" %}" title="Pokaż">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    <a class="btn btn-xs btn-info" href="{% url "company:brand-create" %}?company={{ object.pk }}" title="Dodaj">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
+
+                <h3 class="panel-title">Marki</h3>
+            </div>
+
+            {% if brand_list %}
+            <ul class="list-group">
+                {% for brand in brand_list %}
+                <li class="list-group-item"><a href="{{ brand.get_absolute_url }}">{{ brand }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="panel-body">
+                {% trans "Nie ma żadnych marek" %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
+
 <div class="row">
     {% if perms.product.view_product %}
         <div class="col-md-6">

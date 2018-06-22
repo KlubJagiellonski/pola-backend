@@ -13,6 +13,7 @@ class ApiError(Exception):
 class ConnectionError(ApiError):
     pass
 
+
 def is_code_supported_by_gs1_api(code):
     code = code.lstrip('0')
 
@@ -22,11 +23,12 @@ def is_code_supported_by_gs1_api(code):
         return False
 
     if code.isdigit() \
-        and len(code) in [8,11,12,13,14] \
-        and not code.startswith(('190', '967', '977', '978', '979', '99', '150', '169', '2', '922')):
+            and len(code) in [8, 11, 12, 13, 14] \
+            and not code.startswith(('190', '967', '977', '978', '979', '99', '150', '169', '2', '922')):
         return True
 
     return False
+
 
 class Client:
     PROD_HOST = 'https://www.produktywsieci.gs1.pl'
@@ -43,11 +45,11 @@ class Client:
         try:
             resp = self.session.get(url=url, auth=(self.username, self.password), timeout=5)
         except(requests.exceptions.Timeout, urllib3.exceptions.ReadTimeoutError):
-            print('Timeout while querying GS1: ',traceback.format_exc())
+            print('Timeout while querying GS1: ', traceback.format_exc())
             return None
         logger.info('GS1 resp:' + str(resp.status_code))
         if resp.status_code != 200:
-            raise ConnectionError({'status_code': resp.status_code, 'code':code, 'json':resp.json()})
+            raise ConnectionError({'status_code': resp.status_code, 'code': code, 'json': resp.json()})
         json = resp.json()
         if not json.get('GTIN', None):
             return None

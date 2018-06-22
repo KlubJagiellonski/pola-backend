@@ -108,9 +108,9 @@ class Company(models.Model):
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
     is_friend = models.BooleanField(default=False,
-                                   verbose_name=_("Przyjaciel Poli"),
-                                   choices=((True, _("Tak")),
-                                            (False, _("Nie"))))
+                                    verbose_name=_("Przyjaciel Poli"),
+                                    choices=((True, _("Tak")),
+                                             (False, _("Nie"))))
 
     objects = CompanyQuerySet.as_manager()
 
@@ -239,6 +239,7 @@ class Company(models.Model):
             BrinIndex(fields=['created_at'], pages_per_range=16)
         ]
 
+
 class BrandQuerySet(models.query.QuerySet):
 
     def get_or_create(self, commit_desc=None, commit_user=None,
@@ -269,6 +270,9 @@ class Brand(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('company:brand-detail', args=[self.pk])
 
     class Meta:
         verbose_name = _(u"Marka")

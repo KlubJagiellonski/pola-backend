@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from dal import autocomplete
 from django import forms
 
 from mojepanstwo_api2.krs import Krs
@@ -22,6 +22,7 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
             'name',
             'official_name',
             'common_name',
+            'is_friend',
             'plCapital',
             'plWorkers',
             'plRnD',
@@ -69,3 +70,17 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
         if is_krs:
             return client.get_companies(krs_no=no)
         return client.get_companies(krs_nip=no)
+
+
+class BrandForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):
+
+    class Meta:
+        model = models.Brand
+        fields = [
+            'name',
+            'common_name',
+            'company'
+        ]
+        widgets = {
+            'company': autocomplete.ModelSelect2(url='company:company-autocomplete')
+        }

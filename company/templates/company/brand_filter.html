@@ -1,0 +1,39 @@
+{%extends 'company/base.html' %}
+
+{% load i18n crispy_forms_tags %}
+
+{% block content %}
+
+    {% if perms.company.add_company %}
+        <div class="btn-group">
+            <a href="{% url 'company:brand-create' %}" class="btn btn-primary">
+                <i class="fa fa-plus"></i> {% trans "Dodaj" %}
+            </a>
+        </div>
+    {% endif %}
+
+	<h1>Marki</h1>
+
+	<div class="row">
+		<div class="col-md-3">
+			{% crispy filter.form %}
+		</div>
+		<div class="col-md-9">
+			<ul>
+                {% for obj in object_list %}
+                    <li>
+                        <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
+                    </li>
+                {% empty %}
+                    <li>{% trans "Nie znaleziono producentów spełniających zadane kryteria" %}.</li>
+                {% endfor %}
+
+                {% include 'pagination_custom/pager.html' with page=page_obj %}
+			</ul>
+		</div>
+	</div>
+{% endblock content %}
+
+{% block javascript %}
+    {{ filter.form.media }}
+{% endblock javascript %}

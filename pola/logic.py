@@ -186,7 +186,7 @@ def create_from_api(code, obj, product=None):
                                   )
         else:
             if obj_product_name != code:
-                commit_desc+='Nazwa produktu zmieniona na podstawie bazy GS1. '
+                commit_desc += 'Nazwa produktu zmieniona na podstawie bazy GS1. '
                 product.name = obj_product_name
 
         if product.company:
@@ -208,11 +208,11 @@ def create_from_api(code, obj, product=None):
             if product.brand:
                 if product.brand.name != obj_brand:
                     create_bot_report(product,
-                                  u"Wg. najnowszego odpytania w bazie ILiM "
-                                  "marka tego produktu to:\"{}\"".format(
-                                      obj_brand),
-                                  check_if_already_exists=True
-                                  )
+                                      u"Wg. najnowszego odpytania w bazie ILiM "
+                                      "marka tego produktu to:\"{}\"".format(
+                                          obj_brand),
+                                      check_if_already_exists=True
+                                      )
             else:
                 brand, _ = Brand.objects.get_or_create(
                     name=obj_brand, company=product.company,

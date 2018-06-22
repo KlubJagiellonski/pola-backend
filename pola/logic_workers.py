@@ -50,7 +50,7 @@ def requery_all_codes():
 
     products = Product.objects\
         .filter(
-#            company__isnull=True,
+            #            company__isnull=True,
             ilim_queried_at__lt=timezone.now() - timedelta(days=REQUERY_ALL_FREQUENCY)
         ).order_by('-query_count')[:REQUERY_ALL_LIMIT]
 

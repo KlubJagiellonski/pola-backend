@@ -1,0 +1,17 @@
+{%extends 'company/base.html' %}
+{% load i18n %}
+
+{% block breadcrumbs_rows %}
+    {% if object.company %}
+        <li><a href="{{ object.company.get_absolute_url }}">{{ object.company }}</a></li>
+    {% endif %}
+    <li><a href="{{ obj.get_absolute_url }}">{{ object }}</a></li>
+    <li class="active">{% trans 'Potwierdź usunięcie' %}</li>
+{% endblock %}
+
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+    <p>{% blocktrans %}Czy na pewno chcesz usunąć markę: "{{ object }}"?{% endblocktrans %}</p>
+    <input type="submit" value="Confirm" class="btn btn-primary" />
+</form>
+{% endblock %}
