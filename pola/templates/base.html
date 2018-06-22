@@ -50,7 +50,14 @@
                         <li><a href="{% url 'product:list' %}">{% trans "Produkty" %}</a></li>
                     {% endif %}
                     {% if perms.company.view_company %}
-                        <li><a href="{% url 'company:list' %}">{% trans "Producenci" %}</a></li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Producenci <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="{% url 'company:list' %}">{% trans "Producenci" %}</a></li>
+                            <li><a href="{% url 'company:brand-list' %}">{% trans "Marki" %}</a></li>
+                          </ul>
+                        </li>
+
                     {% endif %}
                     {% if perms.report.view_report %}
                         <li><a href="{% url 'report:list' %}">{% trans "Zgłoszenia" %}</a></li>

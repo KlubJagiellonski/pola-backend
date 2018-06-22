@@ -37,7 +37,7 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="btn-group pull-right">
-                    <a class="btn btn-xs btn-info" href="{% url "company:brand-list" %}" title="Pokaż">
+                    <a class="btn btn-xs btn-info" href="{% url "company:brand-list" %}?company={{ object.pk }}" title="Pokaż">
                         <i class="fa fa-eye"></i>
                     </a>
                     <a class="btn btn-xs btn-info" href="{% url "company:brand-create" %}?company={{ object.pk }}" title="Dodaj">
