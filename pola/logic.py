@@ -204,7 +204,7 @@ def create_from_api(code, obj, product=None):
             commit_desc += 'Producent produktu zmieniony na podstawie bazy GS1. '
             product.company = company
 
-        if product.company and obj_brand:
+        if product.company and obj and obj_brand:
             if product.brand:
                 if product.brand.name != obj_brand:
                     create_bot_report(product,
