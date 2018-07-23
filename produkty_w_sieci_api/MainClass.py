@@ -24,7 +24,7 @@ def is_code_supported_by_gs1_api(code):
 
     if code.isdigit() \
             and len(code) in [8, 11, 12, 13, 14] \
-            and not code.startswith(('190', '967', '977', '978', '979', '99', '150', '169', '2', '922', '178')):
+            and not code.startswith(('190', '967', '977', '978', '979', '99', '150', '169', '2', '922', '178', '161')):
         return True
 
     return False
