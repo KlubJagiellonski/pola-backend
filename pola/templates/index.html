@@ -1,113 +1,9 @@
+{% extends "base-main.html" %}
 {% load staticfiles %}
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{%  block header_class_name %}header{% endblock %}
 
-    <title>Pola. Zabierz ją na zakupy</title>
-
-    <link href="{% static "css/landing.min.css"%}" rel="stylesheet">
-
-    <meta property="og:title" content="Pola. Zabierz ją na zakupy" />
-    <meta property="og:description" content="Masz dość masówki globalnych koncernów? Szukasz lokalnych firm tworzących unikatowe produkty? Pola pomoże Ci odnaleźć polskie wyroby. Zabierając Polę na zakupy odnajdujesz produkty „z duszą” i wspierasz polską gospodarkę. Zeskanuj kod kreskowy z dowolnego produktu i dowiedz się więcej o firmie, która go wyprodukowała. Pola powie Ci, czy dany producent opiera się na polskim kapitale, ma u nas swoją produkcję, tworzy wykwalifikowane miejsca pracy, jest częścią zagranicznego koncernu." />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="pl_PL" />
-    <meta property="og:image" content="{% static "images/og_image.png" %}" />
-
-    <meta name="twitter:card" content="app">
-    <meta name="twitter:site" content="@pola_app">
-    <meta name="twitter:title" content="Pola. Zabierz ją na zakupy">
-    <meta name="twitter:description" content="Masz dość masówki globalnych koncernów? Szukasz lokalnych firm tworzących unikatowe produkty? Pola pomoże Ci odnaleźć polskie wyroby. Zabierając Polę na zakupy odnajdujesz produkty „z duszą” i wspierasz polską gospodarkę. Zeskanuj kod kreskowy z dowolnego produktu i dowiedz się więcej o firmie, która go wyprodukowała. Pola powie Ci, czy dany producent opiera się na polskim kapitale, ma u nas swoją produkcję, tworzy wykwalifikowane miejsca pracy, jest częścią zagranicznego koncernu.">
-    <meta name="twitter:image" content="{% static "images/og_image.png" %}">
-    <meta name="twitter:app:country" content="PL">
-    <meta name="twitter:app:name:iphone" content="Pola. Zabierz ją na zakupy">
-    <meta name="twitter:app:id:iphone" content="1038401148">
-    <meta name="twitter:app:name:ipad" content="Pola. Zabierz ją na zakupy">
-    <meta name="twitter:app:id:ipad" content="1038401148">
-    <meta name="twitter:app:name:googleplay" content="Pola. Zabierz ją na zakupy">
-    <meta name="twitter:app:id:googleplay" content="pl.pola_app">
-
-    <meta name="apple-itunes-app" content="app-id=1038401148">
-
-    <!-- Generated at http://realfavicongenerator.net/-->
-    <link rel="apple-touch-icon" sizes="57x57" href="{% static "favicons/apple-touch-icon-57x57.png" %}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{% static "favicons/apple-touch-icon-60x60.png" %}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{% static "favicons/apple-touch-icon-72x72.png" %}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{% static "favicons/apple-touch-icon-76x76.png" %}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{% static "favicons/apple-touch-icon-114x114.png" %}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{% static "favicons/apple-touch-icon-120x120.png" %}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{% static "favicons/apple-touch-icon-144x144.png" %}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{% static "favicons/apple-touch-icon-152x152.png" %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon-180x180.png" %}">
-    <link rel="icon" type="image/png" href="{% static "favicons/favicon-32x32.png" %}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{% static "favicons/android-chrome-192x192.png" %}" sizes="192x192">
-    <link rel="icon" type="image/png" href="{% static "favicons/favicon-96x96.png" %}" sizes="96x96">
-    <link rel="icon" type="image/png" href="{% static "favicons/favicon-16x16.png" %}" sizes="16x16">
-    <link rel="manifest" href="{% static "favicons/manifest.json" %}">
-    <link rel="mask-icon" href="{% static "favicons/safari-pinned-tab.svg" %}" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="{%  static "/mstile-144x144.png" %}">
-    <meta name="theme-color" content="#ffffff">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <script type="text/javascript">
-      WebFontConfig = {
-        google: {
-          families: ['Lato:400,300,100:latin,latin-ext']
-      }
-  };
-</script>
-<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
-</head>
-<body>
-    <div id="svg-container">
-    </div>
-    <div class="header">
-        <div class="top-bar">
-            <div class="container">
-                <div class="top-bar-nav top-bar-main">
-                    <ul>
-                        <li><a href="#about">O Poli</a></li>
-                        <li><a href="#methodology">Algorytm</a></li>
-                        <li><a href="#partners">Partnerzy</a></li>
-                        <li><a href="#team">Zespół</a></li>
-                    </ul>
-                </div>
-                <div class="top-bar-nav top-bar-social">
-                    <ul>
-                        <li>
-                            <a href="mailto:aplikacja.pola@gmail.com">
-                                <svg role="img" class="icon" title="Mail">
-                                    <use xlink:href="#mail"/>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.facebook.com/app.pola">
-                                <svg role="img" class="icon" title="Facebook">
-                                    <use xlink:href="#facebook"/>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://twitter.com/pola_app">
-                                <svg role="img" class="icon" title="Twitter">
-                                    <use xlink:href="#twitter"/>
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+{% block content %}
         <div class="container">
             <div class="header-mobile visible-sm-block visible-xs-block">
                 <svg role="img" class="icon header-logo" title="Pola">
@@ -350,19 +246,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="end-page"></div>
-<script type="text/javascript">
-    var path_config = {
-        symbols: '{% static "symbols.svg" %}',
-    };
-</script>
-{% if debug %}
-<script src="{% static 'js/landing.js' %}"></script>
-{% else %}
-<script src="{% static 'js/landing.min.js' %}"></script>
-{% endif %}
-{% include 'partiales/google_analytics.html' %}
-</body>
-</html>
+        </div></div>
+{% endblock content %}

@@ -15,6 +15,8 @@ from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, Admin
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='index.html'), name="home"),
+    url(r'^friends$',
+        TemplateView.as_view(template_name='friends.html'), name="friends"),
     url(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),
