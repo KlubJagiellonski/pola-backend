@@ -18,6 +18,6 @@ urlpatterns = [
         template_name="partners.html"),
         name="partners"),
     url(r'^friends$', TemplateView.as_view(
-        template_name="friends.html"),
+        template_name="m_friends.html"),
         name="friends"),
 ]
