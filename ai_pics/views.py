@@ -11,7 +11,7 @@ from ai_pics.models import AIPics, AIAttachment
 class AIPicsPageView(LoginRequiredMixin,
                      PermissionRequiredMixin,
                      ListView):
-    permission_required = 'ai_pics.aipics_view'
+    permission_required = 'ai_pics.view_aipics'
     ordering = '-id'
     paginate_by = 10
     model = AIPics
@@ -44,7 +44,7 @@ class AIPicsPageView(LoginRequiredMixin,
         return self.get(request)
 
     def action_set_aipic_state(self, request):
-        if not self.request.user.has_perm('ai_pics.change_aipics'):
+        if not self.request.user.has_perm('ai_pics.aipics_change'):
             return self.handle_no_permission()
         id = request.POST['id']
         state = request.POST['state']
@@ -54,7 +54,7 @@ class AIPicsPageView(LoginRequiredMixin,
         return JsonResponse({'ok': True})
 
     def action_delete_attachment(self, request):
-        if not self.request.user.has_perm('ai_pics.delete_aiattachment'):
+        if not self.request.user.has_perm('ai_pics.aiattachment_delete'):
             return self.handle_no_permission()
         key = Key(self._bucket)
 
