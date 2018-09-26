@@ -5,6 +5,7 @@ from os.path import basename
 from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
+from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -38,6 +39,9 @@ class AIPics(models.Model):
 
     def attachment_count(self):
         return self.attachment_set.count()
+
+    def get_absolute_url(self):
+        return reverse('ai_pics:detail', args=[self.pk])
 
     @property
     def state(self):

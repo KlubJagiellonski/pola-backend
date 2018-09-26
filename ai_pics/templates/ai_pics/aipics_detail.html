@@ -41,80 +41,48 @@
 {% block content %}
     <h1>{% trans "Zdjęcia AI" %}</h1><br/>
 
-    <ul class="nav nav-tabs">
-        <li role="presentation"{% if state == "unknown" %} class="active"{% endif %}>
-            <a href="?state=unknown">
-                <i class="fa fa-circle-o"></i> Niezweryfikowane
+    <div class="aipic" data-state="{{ object.state }}" data-id="{{ object.id }}">
+        <p>
+            <strong>{{ object.product.name }}</strong>
+        </p>
+        <p>
+            <small>Wysłane {{ object.created_at | naturaltime }} z {{ object.device_name }}</small>
+        </p>
+        <div class="btn-group">
+            {% if perms.ai_pics.aipics_change %}
+            <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="valid">
+                <i class="fa fa-check"></i> Set Valid
             </a>
-        </li>
-        <li role="presentation"{% if state == "valid" %} class="active"{% endif %}>
-            <a href="?state=valid">
-                <i class="fa fa-check"></i> OK
+            <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="invalid">
+                <i class="fa fa-times"></i>
+                Set Invalid
             </a>
-        </li>
-        <li role="presentation"{% if state == "invalid" %} class="active"{% endif %}>
-            <a href="?state=invalid">
-                <i class="fa fa-times"></i> Nie OK
+            <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="unknown">
+                <i class="fa fa-circle-o"></i>
+                Set Unknown
             </a>
-        </li>
-    </ul>
+            {% endif %}
+            {% if perms.ai_pics.aipics_delete %}
+            <a href="#" class="btn btn-danger" data-action="delete_aipic">
+                <i class="fa fa-trash"></i>
+                Delete
+            </a>
+            {% endif %}
+        </div>
 
-	<div class="panel panel-primary">
-        <ul class="list-group">
-        {% for aipic in object_list %}
-            <li class="list-group-item aipic" data-state="{{ aipic.state }}" data-id="{{ aipic.id }}">
-                <p>
-                    <strong>{{ aipic.product.name }}</strong>
-                </p>
-                <p>
-                    <small>Wysłane {{ aipic.created_at | naturaltime }} z {{ aipic.device_name }}</small>
-                </p>
-                <div class="btn-group">
-                    {% if perms.ai_pics.aipics_change %}
-                    <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="valid">
-                        <i class="fa fa-check"></i> Set Valid
-                    </a>
-                    <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="invalid">
-                        <i class="fa fa-times"></i>
-                        Set Invalid
-                    </a>
-                    <a href="#" class="btn btn-primary" data-action="set_aipic_state" data-new-state="unknown">
-                        <i class="fa fa-circle-o"></i>
-                        Set Unknown
-                    </a>
-                    {% endif %}
-                    {% if perms.ai_pics.aipics_delete %}
-                    <a href="#" class="btn btn-danger" data-action="delete_aipic">
-                        <i class="fa fa-trash"></i>
-                        Delete
-                    </a>
-                    {% endif %}
-                    <a href="{{ aipic.get_absolute_url }}" class="btn btn-danger">
-                        View
-                    </a>
-
-                </div>
-
-                <div style="overflow: hidden;">
-                {% for attachment in aipic.aiattachment_set.all %}
-                    <div class="img-actions attachment" data-id="{{ attachment.id }}">
-                        <img style="width:300px" src="{{ attachment.get_absolute_url }}">
-                        {% if perms.ai_pics.aiattachment_delete %}
-                        <a href="#" class="img-actions__button" data-action="delete_attachment">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                </div>
-            </li>
-
+        <div style="overflow: hidden;">
+        {% for attachment in object.aiattachment_set.all %}
+            <div class="img-actions attachment" data-id="{{ attachment.id }}">
+                <img style="width:300px" src="{{ attachment.get_absolute_url }}">
+                {% if perms.ai_pics.aiattachment_delete %}
+                <a href="#" class="img-actions__button" data-action="delete_attachment">
+                    <i class="fa fa-trash"></i>
+                </a>
+                {% endif %}
+            </div>
         {% endfor %}
-        </ul>
+        </div>
     </div>
-
-    {% include 'pagination_custom/pager.html' with page=page_obj %}
-
 {% endblock content %}
 
 {% block javascript %}
@@ -162,7 +130,7 @@
                 var id = $aipic.data('id');
                 $.ajax({
                   method: "POST",
-                  url: '/cms/ai_pics/dapi/lete-api-pic',
+                  url: '/cms/ai_pics/api/delete-api-pic',
                   data: { action: 'delete_aipic', id: id },
                   headers: {
                     'X-CSRFToken' : getCsrfToken()

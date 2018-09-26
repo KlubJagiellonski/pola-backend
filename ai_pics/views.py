@@ -1,15 +1,26 @@
 from boto.s3.connection import S3Connection, Bucket, Key
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, AccessMixin
 from django.http import JsonResponse
 from django.utils.functional import cached_property
-from django.views.generic import ListView
+from django.views import View
+from django.views.generic import ListView, DetailView
 
 from ai_pics.models import AIPics, AIAttachment
 
 
+class BucketMixin:
+    @property
+    def _bucket(self):
+        conn = S3Connection(settings.AWS_ACCESS_KEY_ID,
+                            settings.AWS_SECRET_ACCESS_KEY)
+        bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
+        return bucket
+
+
 class AIPicsPageView(LoginRequiredMixin,
                      PermissionRequiredMixin,
+                     BucketMixin,
                      ListView):
     permission_required = 'ai_pics.view_aipics'
     ordering = '-id'
@@ -43,9 +54,11 @@ class AIPicsPageView(LoginRequiredMixin,
 
         return self.get(request)
 
-    def action_set_aipic_state(self, request):
-        if not self.request.user.has_perm('ai_pics.aipics_change'):
-            return self.handle_no_permission()
+
+class ApiSetAiPicStateView(View, PermissionRequiredMixin, BucketMixin):
+    permission_required = 'ai_pics.change_aipics'
+
+    def post(self, request):
         id = request.POST['id']
         state = request.POST['state']
         aipic = AIPics.objects.get(id=id)
@@ -53,23 +66,11 @@ class AIPicsPageView(LoginRequiredMixin,
         aipic.save()
         return JsonResponse({'ok': True})
 
-    def action_delete_attachment(self, request):
-        if not self.request.user.has_perm('ai_pics.aiattachment_delete'):
-            return self.handle_no_permission()
-        key = Key(self._bucket)
 
-        id = request.POST['id']
-        attachment = AIAttachment.objects.get(id=id)
+class ApiDeleteAiPicsView(View, PermissionRequiredMixin, BucketMixin):
+    permission_required = 'ai_pics.delete_aipics'
 
-        key.key = attachment.attachment
-        self._bucket.delete_key(key)
-
-        attachment.delete()
-        return JsonResponse({'ok': True})
-
-    def action_delete_aipic(self, request):
-        if not self.request.user.has_perm('ai_pics.delete_aipics'):
-            return self.handle_no_permission()
+    def post(self, request):
         key = Key(self._bucket)
 
         id = request.POST['id']
@@ -83,9 +84,31 @@ class AIPicsPageView(LoginRequiredMixin,
         aipic.delete()
         return JsonResponse({'ok': True})
 
-    @property
-    def _bucket(self):
-        conn = S3Connection(settings.AWS_ACCESS_KEY_ID,
-                            settings.AWS_SECRET_ACCESS_KEY)
-        bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
-        return bucket
+
+class ApiDeleteAttachmentView(View, PermissionRequiredMixin, BucketMixin):
+    permission_required = 'ai_pics.aiattachment_delete'
+
+    def post(self, request):
+        key = Key(self._bucket)
+
+        id = request.POST['id']
+        attachment = AIAttachment.objects.get(id=id)
+
+        key.key = attachment.attachment
+        self._bucket.delete_key(key)
+
+        attachment.delete()
+        return JsonResponse({'ok': True})
+
+
+class AIPicsDetailView(LoginRequiredMixin,
+                       PermissionRequiredMixin,
+                       DetailView):
+    permission_required = 'ai_pics.view_aipics'
+    model = AIPics
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.prefetch_related('aiattachment_set')
+
+
