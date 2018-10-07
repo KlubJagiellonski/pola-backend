@@ -86,7 +86,7 @@ class ApiDeleteAiPicsView(View, PermissionRequiredMixin, BucketMixin):
 
 
 class ApiDeleteAttachmentView(View, PermissionRequiredMixin, BucketMixin):
-    permission_required = 'ai_pics.aiattachment_delete'
+    permission_required = 'ai_pics.delete_aiattachment'
 
     def post(self, request):
         key = Key(self._bucket)
