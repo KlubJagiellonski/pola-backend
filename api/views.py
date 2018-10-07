@@ -43,7 +43,7 @@ def get_ai_pics(request):
     attachments = AIAttachment.objects \
         .select_related('ai_pics', 'ai_pics__product') \
         .filter(Q(ai_pics__is_valid=True) | Q(ai_pics__is_valid__isnull=True)) \
-        .order_by('id', 'ai_pics__aiattachment__id')
+        .order_by('id')
 
     paginator = Paginator(attachments, MAX_RECORDS)
 
