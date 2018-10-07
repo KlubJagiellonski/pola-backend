@@ -162,7 +162,7 @@
                 var id = $aipic.data('id');
                 $.ajax({
                   method: "POST",
-                  url: '/cms/ai_pics/dapi/lete-api-pic',
+                  url: '/cms/ai_pics/api/delete-api-pic',
                   data: { action: 'delete_aipic', id: id },
                   headers: {
                     'X-CSRFToken' : getCsrfToken()
