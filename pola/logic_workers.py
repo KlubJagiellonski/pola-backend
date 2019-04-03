@@ -14,9 +14,9 @@ from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
 
 
 REQUERY_590_FREQUENCY = 30
-REQUERY_590_LIMIT = 100
+REQUERY_590_LIMIT = 10000
 REQUERY_ALL_FREQUENCY = 60
-REQUERY_ALL_LIMIT = 100
+REQUERY_ALL_LIMIT = 10000
 
 # usage:
 # python manage.py shell
