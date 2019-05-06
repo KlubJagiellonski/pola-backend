@@ -10,7 +10,7 @@ from django.utils import timezone
 from company.models import Company
 from pola.logic import create_from_api, update_company_from_krs
 from product.models import Product
-from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
+from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api, ConnectionError
 
 
 REQUERY_590_FREQUENCY = 30
@@ -70,17 +70,20 @@ def requery_products(products):
         prod.ilim_queried_at = timezone.now()
         prod.save()
 
-        if is_code_supported_by_gs1_api(prod.code):
-            product_info = client.get_product_by_gtin(prod.code)
+        try:
+            if is_code_supported_by_gs1_api(prod.code):
+                product_info = client.get_product_by_gtin(prod.code)
 
-            p = create_from_api(prod.code, product_info, product=prod)
+                p = create_from_api(prod.code, product_info, product=prod)
 
-            if p.company and p.company.name:
-                print(p.company.name.encode('utf-8'), p.brand)
+                if p.company and p.company.name:
+                    print(p.company.name.encode('utf-8'), p.brand)
+                else:
+                    print(".")
             else:
-                print(".")
-        else:
-            print(";")
+                print(";")
+        except ConnectionError as e:
+            print(e)
 
 
 def update_from_kbpoz(db_filename):
