@@ -44,12 +44,12 @@ class CompanyQuerySet(models.query.QuerySet):
 @python_2_unicode_compatible
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=128, null=True, blank=True,
+    name = models.CharField(max_length=255, null=True, blank=True,
                             db_index=True,
                             verbose_name=_(u"Nazwa (pobrana z ILiM)"))
-    official_name = models.CharField(max_length=128, blank=True, null=True,
+    official_name = models.CharField(max_length=255, blank=True, null=True,
                                      verbose_name=_(u"Nazwa rejestrowa"))
-    common_name = models.CharField(max_length=128, blank=True,
+    common_name = models.CharField(max_length=255, blank=True,
                                    verbose_name=_(u"Nazwa dla użytkownika"))
 
     plCapital = IntegerRangeField(
