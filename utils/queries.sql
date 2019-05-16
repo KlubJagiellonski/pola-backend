@@ -215,3 +215,8 @@ limit 100;
                 12 * date_part('year', age(created_at)) + date_part('month', age(created_at))
                 ) ;
 
+# find duplicate company names
+
+select id, name, common_name, official_name, query_count from company_company ou
+where (select count(*) from company_company inr where inr.name = ou.name) > 1
+order by name;

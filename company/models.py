@@ -45,7 +45,7 @@ class CompanyQuerySet(models.query.QuerySet):
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=255, null=True, blank=True,
-                            db_index=True,
+                            db_index=True, unique=True,
                             verbose_name=_(u"Nazwa (pobrana z ILiM)"))
     official_name = models.CharField(max_length=255, blank=True, null=True,
                                      verbose_name=_(u"Nazwa rejestrowa"))
