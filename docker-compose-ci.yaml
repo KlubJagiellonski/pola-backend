@@ -2,15 +2,20 @@ version: '3'
 
 services:
   web:
-    build: .
-    command: bash -c "sleep 5 && python3 manage.py runserver 0.0.0.0:8080"
+    build:
+      context: .
+      args:
+        - DJANGO_VERSION
+        - PYTHON_VERSION
+        - TRAVIS_JOB_ID
+        - TRAVIS_BRANCH
+    command: bash -c "sleep 5 & coverage run manage.py test --verbosity=2 --keepdb"
     volumes:
       - .:/app
     ports:
       - "8080:8080"
     environment:
       DATABASE_URL: 'postgres://pola_app:pola_app@postgres/pola_app'
-    env_file: pola/.env
 
   postgres:
     image: postgres:9.5
