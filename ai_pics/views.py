@@ -1,6 +1,6 @@
 from boto.s3.connection import S3Connection, Bucket, Key
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, AccessMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.utils.functional import cached_property
 from django.views import View
@@ -110,5 +110,3 @@ class AIPicsDetailView(LoginRequiredMixin,
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.prefetch_related('aiattachment_set')
-
-

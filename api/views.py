@@ -29,6 +29,7 @@ from report.models import Report, Attachment
 
 MAX_RECORDS = 5000
 
+
 @csrf_exempt
 def get_ai_pics(request):
     if settings.AI_SHARED_SECRET == '':

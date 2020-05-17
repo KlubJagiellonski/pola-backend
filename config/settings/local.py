@@ -7,20 +7,27 @@ Local settings
 - Add Django Debug Toolbar
 - Add django-extensions as app
 '''
+import os
 
 from .tests import *  # noqa
 
+IS_DOCKER = os.path.exists('/.dockerenv')
 # DEBUG
 # ------------------------------------------------------------------------------
 DEBUG = env.bool('DJANGO_DEBUG', default=True)  # noqa: F405
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG  # noqa: F405
+
+if IS_DOCKER:
+    ALLOWED_HOSTS = ['0.0.0.0']
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)  # noqa: F405
 INSTALLED_APPS += ('debug_toolbar', )  # noqa: F405
 
-INTERNAL_IPS = ('127.0.0.1', '10.0.2.2', '192.168.99.1')
+INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', '192.168.99.1']
+if IS_DOCKER:
+    INTERNAL_IPS.append('0.0.0.0')
 
 DEBUG_TOOLBAR_CONFIG = {
     'DISABLE_PANELS': [

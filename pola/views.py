@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import reduce
+from textwrap import dedent
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
@@ -70,7 +71,15 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
             (Product.objects.filter(name__isnull=True)
                 .order_by('-query_count')[:10])
 
-        sq = 'select count(*) from report_report join product_product on report_report.product_id=product_product.id where company_company.id=product_product.company_id and resolved_at is NULL'
+        sq = dedent("""\
+            select
+                count(*)
+            from
+                report_report
+                join
+                    product_product on report_report.product_id = product_product.id
+            where company_company.id=product_product.company_id and resolved_at is NULL
+        """)
         c['companies_with_most_open_reports'] =\
             Company.objects.raw('select '
                                 '*, '

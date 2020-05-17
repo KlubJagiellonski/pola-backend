@@ -18,7 +18,7 @@ def is_code_supported_by_gs1_api(code):
     code = code.lstrip('0')
 
     try:
-        _ = GTIN(code)
+        GTIN(code)
     except CheckDigitError:
         return False
 

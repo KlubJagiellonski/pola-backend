@@ -1,5 +1,6 @@
 [run]
+branch = True
 include = ./*
-omit = *migrations*
+omit = */site-packages/*,**/migrations/*
 plugins =
     django_coverage_plugin

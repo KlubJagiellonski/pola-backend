@@ -1,9 +1,0 @@
-# Test dependencies go here.
--r base.txt
-flake8==3.5.0
-django-test-plus==1.0.22
-factory_boy==2.10.0
-mock==2.0.0
-webtest==2.0.29
-django-coverage-plugin==1.5.0
-django-webtest==1.9.2

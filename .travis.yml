@@ -1,51 +1,19 @@
 language: python
-
-cache:
-  directories:
-  - "$HOME/.cache/pip"
-
 services:
-- postgresql
+- docker
 
-env:
-  fast_finish: true
-  global:
-  - DATABASE_URL="postgres:///pola_backend"
-
-matrix:
+jobs:
   include:
-  - python: 3.6
-    env: TOX_ENV=flake8
-  - python: 2.7
-    env: TOX_ENV=py27-dj111-coveralls
-  - python: 3.6
-    env: TOX_ENV=py36-dj111-coveralls
-  - python: 3.5
-    env: TOX_ENV=py35-dj20-coveralls
-  - python: 3.6
-    env: TOX_ENV=py36-dj20-coveralls
-  - python: 3.5
-    env: TOX_ENV=py35-djmaster-coveralls
-  - python: 3.6
-    env: TOX_ENV=py36-djmaster-coveralls
-
-  allow_failures:
-  - python: 3.6
-    env: TOX_ENV=flake8
-  - python: 3.5
-    env: TOX_ENV=py35-djmaster-coveralls
-  - python: 3.6
-    env: TOX_ENV=py36-djmaster-coveralls
+  - env: PYTHON_VERSION=3.6 DJANGO_VERSION=2.0.2
+    script: docker-compose -f docker-compose-ci.yaml run web flake8
+  - env: PYTHON_VERSION=3.5 DJANGO_VERSION=2.0.2
+  - env: PYTHON_VERSION=3.6 DJANGO_VERSION=2.0.2
 
 install:
-- pip install -U pip wheel
-- pip install tox
+- docker-compose -f docker-compose-ci.yaml up -d postgres
 
 script:
-- travis_retry tox -e $TOX_ENV
-
-after_script:
-- rm $HOME/.cache/pip/log/*
+- docker-compose -f docker-compose-ci.yaml run web coverage run manage.py test --verbosity=2 --keepdb
 
 notifications:
   slack:
