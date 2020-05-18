@@ -4,11 +4,16 @@ FROM python:${PYTHON_VERSION}-slim-buster
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
-        netcat-openbsd \
+        binutils \
+        binutils-common \
+        binutils-x86-64-linux-gnu \
         gcc \
-        gcc \
+        libcc1-0 \
+        libgcc-8-dev \
         libpq-dev \
+        libpq5 \
         linux-libc-dev \
+        netcat-openbsd \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
