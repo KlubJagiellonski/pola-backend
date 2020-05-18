@@ -14,7 +14,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='company',
             name='created_at',
-            field=models.DateTimeField(default=datetime.datetime(2015, 10, 25, 10, 59, 15, 308311, tzinfo=utc), auto_now_add=True),
+            field=models.DateTimeField(
+                default=datetime.datetime(2015, 10, 25, 10, 59, 15, 308311, tzinfo=utc), auto_now_add=True
+            ),
             preserve_default=False,
         ),
     ]

@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='query',
-            options={'get_latest_by': 'timestamp'},
-        ),
+        migrations.AlterModelOptions(name='query', options={'get_latest_by': 'timestamp'},),
     ]

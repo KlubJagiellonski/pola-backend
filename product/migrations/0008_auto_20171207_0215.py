@@ -12,6 +12,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='product',
-            options={'ordering': ['-created_at'], 'permissions': (('view_product', 'Can see all product'),), 'verbose_name': 'Produkt', 'verbose_name_plural': 'Produkty'},
+            options={
+                'ordering': ['-created_at'],
+                'permissions': (('view_product', 'Can see all product'),),
+                'verbose_name': 'Produkt',
+                'verbose_name_plural': 'Produkty',
+            },
         ),
     ]

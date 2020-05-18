@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddIndex(
             model_name='aipics',
-            index=django.contrib.postgres.indexes.BrinIndex(fields=['created_at'], name='ai_pics_aip_created_9179cd_brin', pages_per_range=16),
+            index=django.contrib.postgres.indexes.BrinIndex(
+                fields=['created_at'], name='ai_pics_aip_created_9179cd_brin', pages_per_range=16
+            ),
         ),
     ]

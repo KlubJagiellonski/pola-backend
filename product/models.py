@@ -29,14 +29,11 @@ class ProductQuerySet(models.query.QuerySet):
 @reversion.register
 @python_2_unicode_compatible
 class Product(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, )
+    created_at = models.DateTimeField(auto_now_add=True,)
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
     name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
-    code = models.CharField(max_length=20, db_index=True, verbose_name="Kod",
-                            unique=True)
-    company = models.ForeignKey(Company, null=True, blank=True,
-                                verbose_name="Producent",
-                                on_delete=models.CASCADE)
+    code = models.CharField(max_length=20, db_index=True, verbose_name="Kod", unique=True)
+    company = models.ForeignKey(Company, null=True, blank=True, verbose_name="Producent", on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, null=True, blank=True, verbose_name="Marka produktu", on_delete=models.CASCADE)
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
@@ -68,15 +65,11 @@ class Product(models.Model):
 
     def increment_query_count(self):
         with connection.cursor() as cursor:
-            cursor.execute(
-                'update product_product set query_count = query_count +1 '
-                'where id=%s', [self.id])
+            cursor.execute('update product_product set query_count = query_count +1 ' 'where id=%s', [self.id])
 
     def increment_ai_pics_count(self):
         with connection.cursor() as cursor:
-            cursor.execute(
-                'update product_product set ai_pics_count = ai_pics_count +1 '
-                'where id=%s', [self.id])
+            cursor.execute('update product_product set ai_pics_count = ai_pics_count +1 ' 'where id=%s', [self.id])
 
     @staticmethod
     def recalculate_query_count():
@@ -84,7 +77,8 @@ class Product(models.Model):
             cursor.execute(
                 'update product_product set query_count = (select count(id) '
                 'from pola_query '
-                'where pola_query.product_id=product_product.id)')
+                'where pola_query.product_id=product_product.id)'
+            )
 
     @staticmethod
     def recalculate_ai_pics_count():
@@ -93,7 +87,8 @@ class Product(models.Model):
                 'update product_product set ai_pics_count = (select count(id) '
                 'from ai_pics_aipics '
                 'where ai_pics_aipics.product_id=product_product.id and '
-                '(ai_pics_aipics.is_valid=TRUE or ai_pics_aipics.is_valid IS NULL))')
+                '(ai_pics_aipics.is_valid=TRUE or ai_pics_aipics.is_valid IS NULL))'
+            )
 
     class Meta:
         verbose_name = _("Produkt")
@@ -105,6 +100,4 @@ class Product(models.Model):
             # ("change_product", "Can edit the product"),
             # ("delete_product", "Can delete the product"),
         )
-        indexes = [
-            BrinIndex(fields=['created_at'], pages_per_range=16)
-        ]
+        indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]

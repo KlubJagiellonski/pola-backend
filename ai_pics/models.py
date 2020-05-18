@@ -17,11 +17,9 @@ class AIPics(models.Model):
         ('unknown', 'Unknown'),
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    client = models.CharField(max_length=40, blank=False, null=False,
-                              verbose_name=_('Zgłaszający'))
+    client = models.CharField(max_length=40, blank=False, null=False, verbose_name=_('Zgłaszający'))
 
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      verbose_name=_('Utworzone'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Utworzone'))
 
     original_width = models.IntegerField(null=False)
     original_height = models.IntegerField(null=False)
@@ -68,17 +66,14 @@ class AIPics(models.Model):
             # ("change_aipics", "Can edit the AIPics"),
             # ("delete_aipics", "Can delete the AIPics"),
         )
-        indexes = [
-            BrinIndex(fields=['created_at'], pages_per_range=16)
-        ]
+        indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]
 
 
 @python_2_unicode_compatible
 class AIAttachment(models.Model):
     ai_pics = models.ForeignKey(AIPics, on_delete=models.CASCADE)
     file_no = models.IntegerField(null=False, default=0)
-    attachment = models.FileField(
-        upload_to="ai/%Y/%m/%d", verbose_name=_("File"))
+    attachment = models.FileField(upload_to="ai/%Y/%m/%d", verbose_name=_("File"))
 
     @property
     def filename(self):
@@ -88,8 +83,7 @@ class AIAttachment(models.Model):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):
-        return 'https://{}.s3.amazonaws.com/{}'.format(
-            settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
+        return 'https://{}.s3.amazonaws.com/{}'.format(settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
 
     class Meta:
         verbose_name = _("AIPics's attachment")

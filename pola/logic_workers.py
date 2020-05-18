@@ -7,7 +7,7 @@ from django.utils import timezone
 from produkty_w_sieci_api import (
     Client,
     ConnectionError,
-    is_code_supported_by_gs1_api
+    is_code_supported_by_gs1_api,
 )
 
 from company.models import Company
@@ -32,14 +32,13 @@ REQUERY_ALL_LIMIT = 10000
 def requery_590_codes():
     print("Starting requering 590 codes...")
 
-    p590 = Product.objects\
-        .filter(
-            company__isnull=True,
-            code__startswith='590',
-            ilim_queried_at__lt=timezone.now() - timedelta(days=REQUERY_590_FREQUENCY)
-        ).order_by('-query_count')[:REQUERY_590_LIMIT]
+    p590 = Product.objects.filter(
+        company__isnull=True,
+        code__startswith='590',
+        ilim_queried_at__lt=timezone.now() - timedelta(days=REQUERY_590_FREQUENCY),
+    ).order_by('-query_count')[:REQUERY_590_LIMIT]
 
-#    p590 = products = Product.objects.filter(code='5909990022380')
+    #    p590 = products = Product.objects.filter(code='5909990022380')
 
     requery_products(p590)
 
@@ -49,13 +48,13 @@ def requery_590_codes():
 def requery_all_codes():
     print("Starting requering all codes...")
 
-    products = Product.objects\
-        .filter(
-            #            company__isnull=True,
-            ilim_queried_at__lt=timezone.now() - timedelta(days=REQUERY_ALL_FREQUENCY)
-        ).order_by('-query_count')[:REQUERY_ALL_LIMIT]
+    products = Product.objects.filter(
+        #            company__isnull=True,
+        ilim_queried_at__lt=timezone.now()
+        - timedelta(days=REQUERY_ALL_FREQUENCY)
+    ).order_by('-query_count')[:REQUERY_ALL_LIMIT]
 
-#    products = Product.objects.filter(code='142222157008')
+    #    products = Product.objects.filter(code='142222157008')
 
     requery_products(products)
 
@@ -116,9 +115,7 @@ def update_from_kbpoz(db_filename):
                             prod.company = company
                             prod.ilim_queried_at = timezone.now()
                             Product.save(
-                                prod,
-                                commit_desc="Produkt przypisany do producenta na podstawie bazy "
-                                            "KBPOZ"
+                                prod, commit_desc="Produkt przypisany do producenta na podstawie bazy " "KBPOZ",
                             )
 
                 except ObjectDoesNotExist:

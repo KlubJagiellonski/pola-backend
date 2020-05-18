@@ -16,8 +16,9 @@ class Command(BaseCommand):
                 "where ai_pics_aipics.created_at > current_timestamp - interval '1 day' "
             )
             row = cursor.fetchone()
-            msg = 'W ciągu ostatniej doby użytkownicy Poli przysłali {} zdjęć w {} sesjach dla {} produktów.' \
-                .format(row[0], row[1], row[2])
+            msg = 'W ciągu ostatniej doby użytkownicy Poli przysłali {} zdjęć w {} sesjach dla {} produktów.'.format(
+                row[0], row[1], row[2]
+            )
             send_ai_pics_stats(msg)
 
             for i in range(0, 40, 10):
@@ -32,12 +33,15 @@ class Command(BaseCommand):
                     "left outer join ai_pics_aiattachment on ai_pics_aipics.id = ai_pics_id "
                     "where pola_query.timestamp > current_timestamp - interval '1 day' "
                     "group by product_product.id, product_product.name "
-                    ") as sub", [i]
+                    ") as sub",
+                    [i],
                 )
                 row = cursor.fetchone()
 
-                msg = "W ciągu ostatniej doby użytkownicy Poli zeskanowali produkty {} razy. " \
-                      "Mamy więcej niż {} zdjęć AI dla {} " \
-                      "zeskanowań, co daje {:.2f}%".format(row[0], i, row[1], 100 * row[1] / row[0])
+                msg = (
+                    "W ciągu ostatniej doby użytkownicy Poli zeskanowali produkty {} razy. "
+                    "Mamy więcej niż {} zdjęć AI dla {} "
+                    "zeskanowań, co daje {:.2f}%".format(row[0], i, row[1], 100 * row[1] / row[0])
+                )
                 # print msg.encode("utf-8")
                 send_ai_pics_stats(msg)

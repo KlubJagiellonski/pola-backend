@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='verified',
-            field=models.BooleanField(default=False, verbose_name='Dane zweryfikowane', choices=[(True, 'Tak'), (False, 'Nie')]),
+            field=models.BooleanField(
+                default=False, verbose_name='Dane zweryfikowane', choices=[(True, 'Tak'), (False, 'Nie')]
+            ),
         ),
     ]

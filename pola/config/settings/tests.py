@@ -20,17 +20,11 @@ SECRET_KEY = env("DJANGO_SECRET_KEY", default='CHANGEME!!!')  # noqa: F405
 # ------------------------------------------------------------------------------
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
-EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND',  # noqa: F405
-                    default='django.core.mail.backends.console.EmailBackend')
+EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')  # noqa: F405
 
 # CACHING
 # ------------------------------------------------------------------------------
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': ''
-    }
-}
+CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 'LOCATION': ''}}
 
 # TESTING
 # ------------------------------------------------------------------------------

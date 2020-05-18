@@ -9,8 +9,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='query_count',
-            field=models.PositiveIntegerField(default=0, db_index=True),
+            model_name='product', name='query_count', field=models.PositiveIntegerField(default=0, db_index=True),
         ),
     ]

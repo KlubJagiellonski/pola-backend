@@ -12,10 +12,18 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='aiattachment',
-            options={'permissions': (('view_aiattachment', 'Can see all AIAttachment'),), 'verbose_name': "AIPics's attachment", 'verbose_name_plural': "AIPics's attachments"},
+            options={
+                'permissions': (('view_aiattachment', 'Can see all AIAttachment'),),
+                'verbose_name': "AIPics's attachment",
+                'verbose_name_plural': "AIPics's attachments",
+            },
         ),
         migrations.AlterModelOptions(
             name='aipics',
-            options={'permissions': (('view_aipics', 'Can see all AIPics'),), 'verbose_name': 'AIPics', 'verbose_name_plural': 'AIPics'},
+            options={
+                'permissions': (('view_aipics', 'Can see all AIPics'),),
+                'verbose_name': 'AIPics',
+                'verbose_name_plural': 'AIPics',
+            },
         ),
     ]

@@ -1,9 +1,5 @@
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect
-# from: https://github.com/django/django/blob/
-# 91f18400cc0fb37659e2dbaab5484ff2081f1f30/django/middleware/http.py#L33
-# this code is unsafe if we move away from Heroku. Heroku ensures the
-# HTTP_X_FORWARDED_FOR is safe
 from django.utils.deprecation import MiddlewareMixin
 
 
@@ -33,19 +29,14 @@ class SetRemoteAddrFromForwardedFor(MiddlewareMixin):
 
 
 def _get_redirect(new_hostname, request):
-    new_location = '{}://{}{}'.format(
-        request.is_secure() and 'https' or 'http',
-        new_hostname,
-        request.get_full_path()
-    )
+    new_location = '{}://{}{}'.format(request.is_secure() and 'https' or 'http', new_hostname, request.get_full_path())
     return HttpResponsePermanentRedirect(new_location)
 
 
 class HostnameRedirectMiddleware(MiddlewareMixin):
     def process_request(self, request):
         server_name = request.META['HTTP_HOST']
-        catchall = getattr(settings,
-                           'SECURE_SSL_HOST', None)
+        catchall = getattr(settings, 'SECURE_SSL_HOST', None)
         # if catchall hostname is set, verify that the current
         # hostname is valid, and redirect if not
         if catchall:

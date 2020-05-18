@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddIndex(
             model_name='query',
-            index=django.contrib.postgres.indexes.BrinIndex(fields=['timestamp'], name='pola_query_timesta_ea44b7_brin', pages_per_range=64),
+            index=django.contrib.postgres.indexes.BrinIndex(
+                fields=['timestamp'], name='pola_query_timesta_ea44b7_brin', pages_per_range=64
+            ),
         ),
     ]

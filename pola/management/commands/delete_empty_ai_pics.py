@@ -24,8 +24,7 @@ class Command(BaseCommand):
             s3_files.add(key.name)
 
         startdate = timezone.now() - timedelta(days=int(options["no_of_days_back"]))
-        attachments = AIAttachment.objects.select_related('ai_pics')\
-            .filter(ai_pics__created_at__gte=startdate)
+        attachments = AIAttachment.objects.select_related('ai_pics').filter(ai_pics__created_at__gte=startdate)
         for attachment in attachments:
             if attachment.attachment not in s3_files:
                 print(attachment.attachment)

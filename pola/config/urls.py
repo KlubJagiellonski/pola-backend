@@ -7,7 +7,7 @@ from django.views.defaults import (
     bad_request,
     page_not_found,
     permission_denied,
-    server_error
+    server_error,
 )
 from django.views.generic import RedirectView, TemplateView
 from django.views.static import serve
@@ -16,45 +16,38 @@ from pola.views import (
     AdminStatsPageView,
     EditorsStatsPageView,
     FrontPageView,
-    StatsPageView
+    StatsPageView,
 )
 
 urlpatterns = [
-    url(r'^$',
-        TemplateView.as_view(template_name='index.html'), name="home"),
-    url(r'^friends$',
-        TemplateView.as_view(template_name='friends.html'), name="friends"),
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
+    url(r'^friends$', TemplateView.as_view(template_name='friends.html'), name="friends"),
     url(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),
     url(r'^cms/admin-stats$', AdminStatsPageView.as_view(), name="home-admin-stats"),
-    url(r'^cms/lang/$', login_required(
-        TemplateView.as_view(template_name='pages/lang-cms.html')),
-        name="select_lang"),
-    url(r'^about/$',
-        TemplateView.as_view(template_name='pages/about.html'), name="about"),
-
+    url(r'^cms/lang/$', login_required(TemplateView.as_view(template_name='pages/lang-cms.html')), name="select_lang",),
+    url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
     url(r'^cms/product/', ('product.urls', 'product', 'product')),
     url(r'^cms/company/', ('company.urls', 'company', 'company')),
     url(r'^cms/report/', ('report.urls', 'report', 'report')),
     url(r'^cms/ai_pics/', ('ai_pics.urls', 'ai_pics', 'ai_pics')),
-
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/', admin.site.urls),
-
     # User management
     url(r'^users/', ('pola.users.urls', 'pola.users', 'users')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-
     # url(r'^api/', include('pola.api.urls', namespace='api')),
     url(r'^a/', ('pola.rpc_api.urls', 'api', 'api')),
     url(r'^m/', ('pola.webviews.urls', 'webviews', 'webviews')),
     url(r'^concurency/', ('pola.concurency.urls', 'pola.concurency', 'concurency')),
-
-    url(r'^robots\.txt$', TemplateView.as_view(
-        template_name="robots.txt" if settings.IS_PRODUCTION
-        else "robots-staging.txt", content_type='text/plain')),
+    url(
+        r'^robots\.txt$',
+        TemplateView.as_view(
+            template_name="robots.txt" if settings.IS_PRODUCTION else "robots-staging.txt", content_type='text/plain',
+        ),
+    ),
 ]
 
 FAVICON_FILES = [
@@ -74,24 +67,26 @@ FAVICON_FILES = [
 ]
 
 for filename in FAVICON_FILES:
-    urlpatterns.append(url(r'^' + filename + '$', RedirectView.as_view(
-        url=settings.STATIC_URL + 'favicons/' + filename, permanent=True)))
+    urlpatterns.append(
+        url(
+            r'^' + filename + '$',
+            RedirectView.as_view(url=settings.STATIC_URL + 'favicons/' + filename, permanent=True),
+        )
+    )
 
 # serving static files
 urlpatterns += [
-    url(r'^static/(?P<path>.*)$',
-        serve, {'document_root': settings.STATIC_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ]
-    urlpatterns += static(settings.STATIC_URL,
-                          document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [

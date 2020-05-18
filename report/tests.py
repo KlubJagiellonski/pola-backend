@@ -53,9 +53,7 @@ class ReportAdvancedListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTest
         reports = ReportFactory.create_batch(10)
 
         self.login()
-        self.client.post(reverse('report:advanced'), {
-            'report_to_resolve': map(lambda d: d.pk, reports)
-        })
+        self.client.post(reverse('report:advanced'), {'report_to_resolve': map(lambda d: d.pk, reports)})
 
         self.assertEqual(len(Report.objects.only_resolved()), 10)
 
@@ -109,7 +107,6 @@ class ReportResolveViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixi
 
 
 class ReportQuerySetTestCase(TestCase):
-
     def test_only_open(self):
         self.assertTrue(Report.objects.only_open().filter(pk=ReportFactory().pk).exists())
         self.assertFalse(Report.objects.only_open().filter(pk=ResolvedReportFactory().pk).exists())

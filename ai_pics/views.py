@@ -2,7 +2,7 @@ from boto.s3.connection import Bucket, Key, S3Connection
 from django.conf import settings
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
-    PermissionRequiredMixin
+    PermissionRequiredMixin,
 )
 from django.http import JsonResponse
 from django.utils.functional import cached_property
@@ -15,16 +15,12 @@ from ai_pics.models import AIAttachment, AIPics
 class BucketMixin:
     @property
     def _bucket(self):
-        conn = S3Connection(settings.AWS_ACCESS_KEY_ID,
-                            settings.AWS_SECRET_ACCESS_KEY)
+        conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
         bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
         return bucket
 
 
-class AIPicsPageView(LoginRequiredMixin,
-                     PermissionRequiredMixin,
-                     BucketMixin,
-                     ListView):
+class AIPicsPageView(LoginRequiredMixin, PermissionRequiredMixin, BucketMixin, ListView):
     permission_required = 'ai_pics.view_aipics'
     ordering = '-id'
     paginate_by = 10
@@ -104,9 +100,7 @@ class ApiDeleteAttachmentView(View, PermissionRequiredMixin, BucketMixin):
         return JsonResponse({'ok': True})
 
 
-class AIPicsDetailView(LoginRequiredMixin,
-                       PermissionRequiredMixin,
-                       DetailView):
+class AIPicsDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     permission_required = 'ai_pics.view_aipics'
     model = AIPics
 

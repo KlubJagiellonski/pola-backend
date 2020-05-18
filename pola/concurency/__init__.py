@@ -8,17 +8,20 @@ class BaseConcurency:
     def is_locked(obj, user):
         raise NotImplementedError(
             'subclasses of BaseConcurency must \
-            provide a is_locked(obj, user) method')
+            provide a is_locked(obj, user) method'
+        )
 
     def lock(obj, user):
         raise NotImplementedError(
             'subclasses of BaseConcurency must \
-            provide a lock(obj, user) method')
+            provide a lock(obj, user) method'
+        )
 
     def unlock(obj):
         raise NotImplementedError(
             'subclasses of BaseConcurency must \
-            provide a unlock(obj, user) method')
+            provide a unlock(obj, user) method'
+        )
 
 
 class CacheConcurency(BaseConcurency):
@@ -61,8 +64,7 @@ class ConcurencyProtectUpdateView:
         if self.concurency_url:
             return force_text(self.concurency_url)
         else:
-            raise ImproperlyConfigured(
-                "No URL to redirect to. Provide a concurency_url.")
+            raise ImproperlyConfigured("No URL to redirect to. Provide a concurency_url.")
 
     def dispatch(self, request, *args, **kwargs):
         concurency = self.get_concurency()

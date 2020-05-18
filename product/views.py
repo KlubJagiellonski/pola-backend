@@ -23,8 +23,7 @@ from .forms import ProductForm
 from .images import Barcode
 
 
-class ProductDetailView(LoginPermissionRequiredMixin,
-                        DetailView):
+class ProductDetailView(LoginPermissionRequiredMixin, DetailView):
     permission_required = 'product.view_product'
     slug_field = 'code'
     model = models.Product
@@ -34,23 +33,19 @@ class ProductDetailView(LoginPermissionRequiredMixin,
 
         obj = context['object']
 
-        context['report_list'] = Report.objects.filter(
-            product=obj, resolved_at=None)
+        context['report_list'] = Report.objects.filter(product=obj, resolved_at=None)
 
         return context
 
 
-class ProductListView(LoginPermissionRequiredMixin,
-                      FilterView):
+class ProductListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'product.view_product'
     model = models.Product
     filterset_class = ProductFilter
     paginate_by = 25
 
 
-class ProductCreate(LoginPermissionRequiredMixin,
-                    FormValidMessageMixin,
-                    CreateView):
+class ProductCreate(LoginPermissionRequiredMixin, FormValidMessageMixin, CreateView):
     permission_required = 'product.add_product'
     slug_field = 'code'
     model = models.Product
@@ -58,10 +53,7 @@ class ProductCreate(LoginPermissionRequiredMixin,
     form_valid_message = _("Product created!")
 
 
-class ProductUpdate(LoginPermissionRequiredMixin,
-                    ConcurencyProtectUpdateView,
-                    FormValidMessageMixin,
-                    UpdateView):
+class ProductUpdate(LoginPermissionRequiredMixin, ConcurencyProtectUpdateView, FormValidMessageMixin, UpdateView):
     permission_required = 'product.change_product'
     slug_field = 'code'
     model = models.Product
@@ -70,9 +62,7 @@ class ProductUpdate(LoginPermissionRequiredMixin,
     form_valid_message = _("Produkt zaktualizowany!")
 
 
-class ProductDelete(LoginPermissionRequiredMixin,
-                    FormValidMessageMixin,
-                    DeleteView):
+class ProductDelete(LoginPermissionRequiredMixin, FormValidMessageMixin, DeleteView):
     permission_required = 'product.delete_product'
     slug_field = 'code'
     model = models.Product
@@ -80,8 +70,7 @@ class ProductDelete(LoginPermissionRequiredMixin,
     form_valid_message = _("Product deleted!")
 
 
-class ProductHistoryView(LoginPermissionRequiredMixin,
-                         DetailView):
+class ProductHistoryView(LoginPermissionRequiredMixin, DetailView):
     permission_required = 'product.view_product'
     slug_field = 'code'
     model = models.Product
@@ -102,9 +91,7 @@ def get_image(request, code):
     return response
 
 
-class ProductAutocomplete(LoginRequiredMixin,
-                          ExprAutocompleteMixin,
-                          autocomplete.Select2QuerySetView):
+class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',
         'company__name__icontains',

@@ -12,6 +12,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='report',
-            options={'get_latest_by': 'created_at', 'ordering': ['-created_at'], 'permissions': (('view_report', 'Can see all report'),), 'verbose_name': 'Report', 'verbose_name_plural': 'Reports'},
+            options={
+                'get_latest_by': 'created_at',
+                'ordering': ['-created_at'],
+                'permissions': (('view_report', 'Can see all report'),),
+                'verbose_name': 'Report',
+                'verbose_name_plural': 'Reports',
+            },
         ),
     ]

@@ -24,9 +24,11 @@ def is_code_supported_by_gs1_api(code):
     except CheckDigitError:
         return False
 
-    if code.isdigit() \
-            and len(code) in [8, 11, 12, 13, 14] \
-            and not code.startswith(('190', '967', '977', '978', '979', '99', '150', '169', '2', '922', '178', '161')):
+    if (
+        code.isdigit()
+        and len(code) in [8, 11, 12, 13, 14]
+        and not code.startswith(('190', '967', '977', '978', '979', '99', '150', '169', '2', '922', '178', '161'))
+    ):
         return True
 
     return False
@@ -46,7 +48,7 @@ class Client:
         url = self.host + "/api/products/{}?aggregation=CREDIBLE".format(gtin)
         try:
             resp = self.session.get(url=url, auth=(self.username, self.password), timeout=10)
-        except(requests.exceptions.Timeout, urllib3.exceptions.ReadTimeoutError):
+        except (requests.exceptions.Timeout, urllib3.exceptions.ReadTimeoutError):
             print('Timeout while querying GS1: ', traceback.format_exc())
             return None
         logger.info('GS1 resp:' + str(resp.status_code))

@@ -12,18 +12,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='report',
             name='client',
-            field=models.CharField(default=None, max_length=40, null=True, verbose_name='Zg\u0142aszaj\u0105cy', blank=True),
+            field=models.CharField(
+                default=None, max_length=40, null=True, verbose_name='Zg\u0142aszaj\u0105cy', blank=True
+            ),
         ),
         migrations.AlterField(
             model_name='report',
             name='created_at',
             field=models.DateTimeField(auto_now_add=True, verbose_name='Utworzone'),
         ),
-        migrations.AlterField(
-            model_name='report',
-            name='description',
-            field=models.TextField(verbose_name='Opis'),
-        ),
+        migrations.AlterField(model_name='report', name='description', field=models.TextField(verbose_name='Opis'),),
         migrations.AlterField(
             model_name='report',
             name='resolved_at',
@@ -32,6 +30,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='report',
             name='resolved_by',
-            field=models.ForeignKey(verbose_name='Rozpatrzone przez', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
+            field=models.ForeignKey(
+                verbose_name='Rozpatrzone przez',
+                blank=True,
+                to=settings.AUTH_USER_MODEL,
+                null=True,
+                on_delete=models.CASCADE,
+            ),
         ),
     ]

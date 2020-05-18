@@ -165,36 +165,19 @@ class ProductAutocompleteTestCase(PermissionMixin, TestCase):
 
         response = self.client.get("{}?q={}".format(self.url, "A1"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.json(),
-            self._get_expected_result([('1', 'A1')])
-        )
+        self.assertEqual(response.json(), self._get_expected_result([('1', 'A1')]))
 
         response = self.client.get("{}?q={}".format(self.url, "B2"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.json(),
-            self._get_expected_result([('2', 'A2')])
-        )
+        self.assertEqual(response.json(), self._get_expected_result([('2', 'A2')]))
 
         response = self.client.get("{}?q={}".format(self.url, "B3"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.json(),
-            self._get_expected_result([('3', 'A3')])
-        )
+        self.assertEqual(response.json(), self._get_expected_result([('3', 'A3')]))
 
         response = self.client.get("{}?q={}".format(self.url, "B4"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.json(),
-            self._get_expected_result([('4', 'A4')])
-        )
+        self.assertEqual(response.json(), self._get_expected_result([('4', 'A4')]))
 
     def _get_expected_result(self, elements):
-        return {
-            'pagination':
-                {'more': False},
-            'results':
-                [{'text': o[1], 'id': o[0]} for o in elements]
-        }
+        return {'pagination': {'more': False}, 'results': [{'text': o[1], 'id': o[0]} for o in elements]}

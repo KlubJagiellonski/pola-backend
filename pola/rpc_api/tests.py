@@ -61,13 +61,10 @@ class get_by_codeTestCase(TestCase):
         get_by_code_mock.return_value = product
         resp = self.client.get(self.url, {'device_id': 123})
 
-        self.assertEqual(resp.json(), {
-            'report': 'ask_for_company',
-            'code': product.code,
-            'verified': False,
-            'plScore': None,
-            'id': product.pk
-        })
+        self.assertEqual(
+            resp.json(),
+            {'report': 'ask_for_company', 'code': product.code, 'verified': False, 'plScore': None, 'id': product.pk},
+        )
 
     # @patch('pola.logic.get_by_code')
     # def test_rate_limit(self, get_by_code_mock):
@@ -144,9 +141,7 @@ class create_reportTestCase(JsonRequestMixin, TestCase):
         self.product = ProductFactory()
 
     def test_success_without_product(self):
-        resp = self._request(
-            self.url + '?device_id=123',
-        )
+        resp = self._request(self.url + '?device_id=123',)
         report = Report.objects.latest()
 
         self.assertEqual(resp.status_code, 200)
@@ -154,10 +149,7 @@ class create_reportTestCase(JsonRequestMixin, TestCase):
         self.assertEqual(report.product, None)
 
     def test_success_with_product(self):
-        resp = self._request(
-            self.url + '?device_id=123',
-            json={'product_id': self.product.id}
-        )
+        resp = self._request(self.url + '?device_id=123', json={'product_id': self.product.id})
         report = Report.objects.latest()
 
         self.assertEqual(resp.status_code, 200)
@@ -190,7 +182,7 @@ class update_reportTestCase(JsonRequestMixin, TestCase):
     def test_success_update(self):
         resp = self.json_request(
             self.url + '?device_id={}&report_id={}'.format(self.report.client, self.report.id),
-            data={'description': "New description"}
+            data={'description': "New description"},
         )
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.json(), {"id": self.report.pk})
@@ -223,8 +215,7 @@ class attach_fileTestCase(TestCase):
     def test_success_attach_file(self):
         file = SimpleUploadedFile("image1.jpeg", b"file_content", content_type="image/jpeg")
         resp = self.client.post(
-            self.url + '?device_id={}&report_id={}'.format(self.report.client, self.report.id),
-            {'file': file}
+            self.url + '?device_id={}&report_id={}'.format(self.report.client, self.report.id), {'file': file}
         )
         attachment = Attachment.objects.last()
         self.assertEqual(resp.status_code, 200)

@@ -18,24 +18,20 @@ class SingleButtonMixin(HelperMixin):
 
     @property
     def action_text(self):
-        return _('Zapisz') if (hasattr(self, 'instance') and
-                               self.instance.pk) else _('Save')
+        return _('Zapisz') if (hasattr(self, 'instance') and self.instance.pk) else _('Save')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper.add_input(
-            Submit('action', self.action_text, css_class="btn-primary"))
+        self.helper.add_input(Submit('action', self.action_text, css_class="btn-primary"))
 
 
 class SaveButtonMixin(SingleButtonMixin):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper.add_input(Reset('reset', _('Przywróć poprzednie')))
 
 
 class FormHorizontalMixin(HelperMixin):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper.form_class = 'form-horizontal'
@@ -44,8 +40,7 @@ class FormHorizontalMixin(HelperMixin):
 
 
 class CommitDescriptionMixin(forms.Form):
-    commit_desc = forms.CharField(label=_('Opis zmiany'),
-                                  widget=forms.Textarea)
+    commit_desc = forms.CharField(label=_('Opis zmiany'), widget=forms.Textarea)
 
     def save(self, *args, **kwargs):
         with reversion.create_revision(atomic=True):
@@ -60,8 +55,7 @@ class ReadOnlyFieldsMixin:
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in (field
-                      for name, field in self.fields.items() if name in self.readonly_fields):
+        for field in (field for name, field in self.fields.items() if name in self.readonly_fields):
             field.widget.attrs['disabled'] = 'true'
             field.required = False
 
