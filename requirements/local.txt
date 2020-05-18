@@ -4,7 +4,7 @@ coverage==5.1
 #Sphinx
 django-extensions==2.2.9
 Werkzeug==1.0.1
-django-test-plus==1.0.22
+django-test-plus==1.4.0
 #factory_boy==2.5.2
 
 # django-debug-toolbar that works with Django 1.5+
@@ -19,7 +19,7 @@ django-debug-toolbar==1.9.1
 # Test dependencies go here.
 coveralls==2.0.0
 flake8==3.8.0
-django-test-plus==1.0.22
+django-test-plus==1.4.0
 factory_boy==2.10.0
 mock==2.0.0
 webtest==2.0.29
