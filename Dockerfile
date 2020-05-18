@@ -8,6 +8,7 @@ RUN apt-get update \
         gcc \
         gcc \
         libpq-dev \
+        linux-libc-dev \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
