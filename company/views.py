@@ -5,16 +5,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, QueryDict
 from django.urls import reverse, reverse_lazy
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
+from django.views.generic.edit import (
+    CreateView,
+    DeleteView,
+    FormView,
+    UpdateView
+)
 from django_filters.views import FilterView
 
-from company.models import Company, Brand
+from company.models import Brand, Company
 from pola.concurency import ConcurencyProtectUpdateView
 from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ExprAutocompleteMixin
 from report.models import Report
-from .filters import CompanyFilter, BrandFilter
-from .forms import CompanyCreateFromKRSForm, CompanyForm, BrandForm
+
+from .filters import BrandFilter, CompanyFilter
+from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm
 
 
 class CompanyListView(LoginPermissionRequiredMixin,

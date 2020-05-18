@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import AIPics, AIAttachment
+from .models import AIAttachment, AIPics
 
 
 class AIAttachmentAdminInline(admin.TabularInline):

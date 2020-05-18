@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.db import connection
-
 from slack import send_ai_pics_stats
 
 

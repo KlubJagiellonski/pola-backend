@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from datetime import timedelta
 
@@ -10,8 +9,11 @@ from django.utils import timezone
 from company.models import Company
 from pola.logic import create_from_api, update_company_from_krs
 from product.models import Product
-from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api, ConnectionError
-
+from produkty_w_sieci_api import (
+    Client,
+    ConnectionError,
+    is_code_supported_by_gs1_api
+)
 
 REQUERY_590_FREQUENCY = 30
 REQUERY_590_LIMIT = 10000

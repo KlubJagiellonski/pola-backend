@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from distutils.util import strtobool
 
@@ -7,7 +6,8 @@ from dal import autocomplete
 from django.utils.translation import ugettext_lazy as _
 
 from pola.filters import CrispyFilterMixin
-from .models import Company, Brand
+
+from .models import Brand, Company
 
 
 class CompanyFilter(CrispyFilterMixin,

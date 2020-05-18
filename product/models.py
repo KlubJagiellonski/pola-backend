@@ -6,7 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from reversion import revisions as reversion
 
-from company.models import Company, Brand
+from company.models import Brand, Company
 from pola.concurency import concurency
 
 

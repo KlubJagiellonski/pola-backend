@@ -9874,7 +9874,7 @@ $(function() {
 });
 
 (function (doc) {
-    var container = document.getElementById('svg-container'); 
+    var container = document.getElementById('svg-container');
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         container.innerHTML = this.responseText;

@@ -16,6 +16,7 @@ from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ExprAutocompleteMixin
 from product.models import Product
 from report.models import Report
+
 from . import models
 from .filters import ProductFilter
 from .forms import ProductForm

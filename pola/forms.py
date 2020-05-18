@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import reversion
 from crispy_forms.helper import FormHelper

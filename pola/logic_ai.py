@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import random
 
 QUERY_COUNT_THRESHOLD = 1000

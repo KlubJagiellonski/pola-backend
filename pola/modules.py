@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect
-
 # from: https://github.com/django/django/blob/
 # 91f18400cc0fb37659e2dbaab5484ff2081f1f30/django/middleware/http.py#L33
 # this code is unsafe if we move away from Heroku. Heroku ensures the

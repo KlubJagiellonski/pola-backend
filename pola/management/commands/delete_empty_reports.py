@@ -1,7 +1,7 @@
 import sys
 from datetime import timedelta
 
-from boto.s3.connection import S3Connection, Bucket
+from boto.s3.connection import Bucket, S3Connection
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection

@@ -1,0 +1,68 @@
+---
+default_stages: [commit, push]
+default_language_version:
+  # force all unspecified python hooks to run python3
+  python: python3
+minimum_pre_commit_version: "1.20.0"
+
+repos:
+#  - repo: https://github.com/Lucas-C/pre-commit-hooks
+#    rev: v1.1.7
+#    hooks:
+#      - id: forbid-tabs
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.5.0
+    hooks:
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: check-executables-have-shebangs
+      - id: check-xml
+      - id: trailing-whitespace
+      - id: fix-encoding-pragma
+        args:
+          - --remove
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.5.1
+    hooks:
+      - id: rst-backticks
+      - id: python-no-log-warn
+#  - repo: https://github.com/pre-commit/mirrors-pylint
+#    rev: 'v2.5.2'
+#    hooks:
+#      - id: pylint
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: '3.8.0'
+    hooks:
+      - id: flake8
+  - repo: local
+    hooks:
+      - id: yamllint
+        name: Check yaml files with yamllint
+        entry: yamllint -c yamllint-config.yml
+        language: python
+        additional_dependencies: ['yamllint']
+        types: [yaml]
+      - id: shellcheck
+        name: Check Shell scripts syntax correctness
+        language: docker_image
+        entry: koalaman/shellcheck:stable -x -a
+        files: \.sh$
+      - id: hadolint
+        name: Hadolint
+        description: Haskell-based Docker image linter
+        language: docker_image
+        types:
+          - dockerfile
+        entry: --entrypoint /bin/hadolint hadolint/hadolint:latest --ignore DL3013 --ignore DL3018 --ignore DL3008 -
+      - id: isort
+        name: Run isort to sort imports
+        language: python
+        entry: isort
+        files: \.py$
+        additional_dependencies: ['isort']

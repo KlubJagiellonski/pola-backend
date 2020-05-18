@@ -1,8 +1,10 @@
 import logging
-import requests
 import traceback
+
+import requests
 import urllib3
 from gtin import GTIN, CheckDigitError
+
 logger = logging.getLogger(__name__)
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 # from company.models import Company
 # from mojepanstwo_api import KrsClient

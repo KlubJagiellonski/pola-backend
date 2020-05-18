@@ -1,5 +1,8 @@
 
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin
+)
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 

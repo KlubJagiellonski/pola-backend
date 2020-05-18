@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-'''
+"""
 Production Configurations
 
 - Use djangosecure
@@ -7,19 +6,22 @@ Production Configurations
 - Use mailgun to send emails
 - Use Redis on Heroku
 
-'''
+"""
+# pylint: disable=unused-wildcard-import
 from __future__ import absolute_import, unicode_literals
+
+import os
 
 from boto.s3.connection import OrdinaryCallingFormat
 from django.utils import six
-import os
+
+from .common import *  # noqa
+
 try:
     from urllib import parse as urlparse
 except ImportError:
     from urlparse import urlparse
 
-
-from .common import *  # noqa
 
 # SECRET CONFIGURATION
 # ------------------------------------------------------------------------------

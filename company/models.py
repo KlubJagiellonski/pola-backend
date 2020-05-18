@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.contrib.postgres.indexes import BrinIndex
 from django.core.validators import ValidationError
 from django.db import connection, models
