@@ -1,4 +1,3 @@
-# coding=utf-8
 import json
 
 from django.core.cache import cache
@@ -10,7 +9,7 @@ from company.factories import CompanyFactory
 from pola.models import Query
 from product.factories import ProductFactory
 from report.factories import ReportFactory
-from report.models import Report, Attachment
+from report.models import Attachment, Report
 
 
 class JsonRequestMixin(object):

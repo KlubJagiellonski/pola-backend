@@ -1,4 +1,3 @@
-# coding=utf-8
 from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_text
 from django_webtest import WebTestMixin

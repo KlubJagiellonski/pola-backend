@@ -1,21 +1,24 @@
+---
 language: python
 services:
-- docker
+  - docker
 
 jobs:
   include:
-  - env: PYTHON_VERSION=3.6 DJANGO_VERSION=2.0.2
-    script: docker-compose -f docker-compose-ci.yaml run web flake8
-  - env: PYTHON_VERSION=3.5 DJANGO_VERSION=2.0.2
-  - env: PYTHON_VERSION=3.6 DJANGO_VERSION=2.0.2
+    - install: pip install pre-commit==2.4.0
+      script: pre-commit run --all-files --show-diff-on-failure --color always
+    - env: PYTHON_VERSION=3.5 DJANGO_VERSION=2.0.2
+    - env: PYTHON_VERSION=3.6 DJANGO_VERSION=2.0.2
 
 install:
-- docker-compose -f docker-compose-ci.yaml up -d postgres
+  - docker-compose -f docker-compose-ci.yaml up -d postgres
 
 script:
-- docker-compose -f docker-compose-ci.yaml run web coverage run manage.py test --verbosity=2 --keepdb
+  - docker-compose -f docker-compose-ci.yaml run web coverage run manage.py test --verbosity=2 --keepdb
 
 notifications:
   slack:
+    # yamllint disable
     secure: eUMw66ZqzCF2dAA57pB1cCBQUGl7tN6F6TqL90eKgwxGlPy1Nf4gALgVOTGFy7VuJJtLt0wA+DRzx2iST4i1iEypCF9m8vl4aiG3f2+As4mPd9aABZFR6JEZ5CHdgoj7f/C6fiJGXvDz/jAYahApP4qBT53V4B3b7Zd5kjannWckRlEWh2EoCPhbqUWQZbN06FVFUZKZOcb751zhwKZDcaebuZm3e9cRlA28KPVFSzuKoL2nWydhokeYNYMP50xzCUWV35aoPa2N0rUGEBmDUt1A6bZE3ecqQ+fLIA+Somp4yshdzvTNoefp+Bepk2oufrQ8D4sMyVoMH/da39oGcsFTRjLceO4eoQVIs9bkVTLXxP6OqCWp0O0OsYK9mFvU4iv2JVcb0QmKtoaic0dCygISH8YzOCHItk3LtUo7fvlAThrx4lXKq01ZxHup1UYMUW1rDzTyIxnfcWNqhzGRovQYvu3dZeg0cdbUASS1S/lFG73BIUWJRjFLpznzgkgPxfRR4uIZBBFJlsPgCLW+xN8lWbr+Q6z4Q//db3UoCir5BT8XDe8rhN5EQ414KtIqiU8CBPoXTuEg2bPjCBM2MMO0qUKxPc25iR1gckYDBZb4PAGCjbHztGrhp3Dokzr3bL/3K2ED6dQG8w+1j7RVPYiXg1ygJF11P10EDWac/54=
+    # yamllint enable
   email: false

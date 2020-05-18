@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -10,6 +9,7 @@ from django_filters.views import FilterView
 from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ActionView
 from report.models import Report
+
 from .filters import ReportFilter
 
 

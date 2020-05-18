@@ -1,6 +1,5 @@
-# coding=utf-8
-from django.urls import reverse, reverse_lazy
 from django.test import override_settings
+from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
 from mock import patch
 from reversion.models import Version

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.conf import settings
@@ -6,11 +5,21 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from django.views.defaults import bad_request, permission_denied, page_not_found, server_error
-from django.views.generic import TemplateView, RedirectView
+from django.views.defaults import (
+    bad_request,
+    page_not_found,
+    permission_denied,
+    server_error
+)
+from django.views.generic import RedirectView, TemplateView
 from django.views.static import serve
 
-from pola.views import FrontPageView, StatsPageView, EditorsStatsPageView, AdminStatsPageView
+from pola.views import (
+    AdminStatsPageView,
+    EditorsStatsPageView,
+    FrontPageView,
+    StatsPageView
+)
 
 urlpatterns = [
     url(r'^$',

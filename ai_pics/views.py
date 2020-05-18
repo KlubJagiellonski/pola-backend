@@ -1,12 +1,15 @@
-from boto.s3.connection import S3Connection, Bucket, Key
+from boto.s3.connection import Bucket, Key, S3Connection
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin
+)
 from django.http import JsonResponse
 from django.utils.functional import cached_property
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
-from ai_pics.models import AIPics, AIAttachment
+from ai_pics.models import AIAttachment, AIPics
 
 
 class BucketMixin:

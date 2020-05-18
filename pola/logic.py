@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import locale
 import re
@@ -7,7 +6,7 @@ from django.conf import settings
 
 import mojepanstwo_api
 import produkty_w_sieci_api
-from company.models import Company, Brand
+from company.models import Brand, Company
 from mojepanstwo_api import KrsClient
 from product.models import Product
 from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api

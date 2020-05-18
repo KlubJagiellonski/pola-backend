@@ -3,8 +3,7 @@ from functools import reduce
 from textwrap import dedent
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ImproperlyConfigured
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import connection
 from django.db.models import Q
 from django.db.models.functions import Length
@@ -14,7 +13,9 @@ from django.utils.encoding import force_text
 from django.utils.timezone import get_default_timezone
 from django.views.generic import TemplateView
 from django.views.generic.detail import (
-    BaseDetailView, SingleObjectTemplateResponseMixin)
+    BaseDetailView,
+    SingleObjectTemplateResponseMixin
+)
 
 from company.models import Company
 from pola.models import Stats

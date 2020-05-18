@@ -1,11 +1,15 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
 
 from mojepanstwo_api2.krs import Krs
-from pola.forms import CommitDescriptionMixin, FormHorizontalMixin, ReadOnlyFieldsMixin, \
-    SaveButtonMixin, SingleButtonMixin
+from pola.forms import (
+    CommitDescriptionMixin,
+    FormHorizontalMixin,
+    ReadOnlyFieldsMixin,
+    SaveButtonMixin,
+    SingleButtonMixin
+)
 
 from . import models
 

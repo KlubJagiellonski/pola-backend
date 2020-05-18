@@ -7,9 +7,9 @@ WORKDIR /app
 ARG DJANGO_VERSION="2.0.2"
 ENV DJANGO_VERSION=${DJANGO_VERSION}
 RUN pip install "django==${DJANGO_VERSION}"
-ADD requirements/base.txt requirements/local.txt /app/requirements/
+COPY requirements/base.txt requirements/local.txt /app/requirements/
 
 RUN pip install -r requirements/local.txt
 
 
-ADD . /app/
+COPY . /app/

@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from . import views
 
+from . import views
 
 urlpatterns = [
     url(regex=r'v3/get_ai_pics$', view=views.get_ai_pics,

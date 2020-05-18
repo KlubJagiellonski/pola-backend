@@ -1,10 +1,13 @@
 from dal import autocomplete
 from django import forms
 
-from pola.forms import (CommitDescriptionMixin,
-                        FormHorizontalMixin,
-                        ReadOnlyFieldsMixin,
-                        SaveButtonMixin)
+from pola.forms import (
+    CommitDescriptionMixin,
+    FormHorizontalMixin,
+    ReadOnlyFieldsMixin,
+    SaveButtonMixin
+)
+
 from . import models
 
 
