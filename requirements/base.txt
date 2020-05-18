@@ -29,7 +29,7 @@ django-redis==4.11.0
 redis>=2.10.0
 
 
-jsonfield==2.0.2
+jsonfield==3.1.0
 django-reversion==2.0.13
 reportlab==3.4.0
 django-filter==1.1.0
