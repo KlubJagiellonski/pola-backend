@@ -22,7 +22,7 @@ unicode-slugify==0.1.3
 django-autoslug==1.9.7
 
 # Time zones support
-pytz==2017.3
+pytz==2020.1
 
 # Redis support
 django-redis==4.8.0
