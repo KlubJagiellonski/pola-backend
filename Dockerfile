@@ -2,7 +2,6 @@ ARG PYTHON_VERSION="3.6"
 FROM python:${PYTHON_VERSION}-slim-buster
 
 RUN apt-get update \
-    && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
         binutils \
         binutils-common \
