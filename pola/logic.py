@@ -3,12 +3,11 @@ import re
 
 from django.conf import settings
 
-import mojepanstwo_api
-import produkty_w_sieci_api
 from company.models import Brand, Company
-from mojepanstwo_api import KrsClient
+from pola import mojepanstwo_api, produkty_w_sieci_api
+from pola.mojepanstwo_api import KrsClient
+from pola.produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
 from product.models import Product
-from produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
 from report.models import Report
 
 

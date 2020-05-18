@@ -9,7 +9,7 @@ from test_plus.test import TestCase
 from company.factories import CompanyFactory
 from company.forms import CompanyCreateFromKRSForm
 from company.models import Company
-from mojepanstwo_api2.krs import CompanyInfo
+from pola.mojepanstwo_api2.krs import CompanyInfo
 from pola.tests import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
 
@@ -41,7 +41,7 @@ class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, WebTe
     url = reverse_lazy('company:create_from_krs')
     template_name = 'company/company_from_krs.html'
 
-    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_success_by_nip(self, mock_tool):
         mock_tool.return_value = [self._get_mock()]
 
@@ -188,7 +188,7 @@ class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, 
 
 class CompanyCreateFromKRSFormTestCase(TestCase):
 
-    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_existings_compnay_in_db(self, mock_tool):
         CompanyFactory(nip=123)
         mock_tool.return_value = [self._get_mock()]
@@ -196,7 +196,7 @@ class CompanyCreateFromKRSFormTestCase(TestCase):
         form = CompanyCreateFromKRSForm(data=data)
         self.assertFalse(form.is_valid())
 
-    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_multiple_company(self, mock_tool):
         mock_tool.return_value = [
             self._get_mock(),
@@ -206,21 +206,21 @@ class CompanyCreateFromKRSFormTestCase(TestCase):
         form = CompanyCreateFromKRSForm(data=data)
         self.assertFalse(form.is_valid())
 
-    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_no_company_in_remote_api(self, mock_tool):
         mock_tool.return_value = []
         data = {'is_krs': '1', 'no': 123}
         form = CompanyCreateFromKRSForm(data=data)
         self.assertFalse(form.is_valid())
 
-    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_success(self, mock_tool):
         mock_tool.return_value = [self._get_mock()]
         data = {'is_krs': '1', 'no': 123}
         form = CompanyCreateFromKRSForm(data=data)
         self.assertTrue(form.is_valid())
 
-    @patch('mojepanstwo_api2.krs.Krs.get_companies')
+    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_success_by_nip(self, mock_tool):
         mock_tool.return_value = [self._get_mock()]
         data = {'is_krs': '0', 'no': 123}
