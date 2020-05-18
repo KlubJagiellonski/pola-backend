@@ -35,8 +35,8 @@ class Command(BaseCommand):
                 )
                 row = cursor.fetchone()
 
-                msg = u"W ciągu ostatniej doby użytkownicy Poli zeskanowali produkty {} razy. " \
-                      u"Mamy więcej niż {} zdjęć AI dla {} " \
-                      u"zeskanowań, co daje {:.2f}%".format(row[0], i, row[1], 100 * row[1] / row[0])
+                msg = "W ciągu ostatniej doby użytkownicy Poli zeskanowali produkty {} razy. " \
+                      "Mamy więcej niż {} zdjęć AI dla {} " \
+                      "zeskanowań, co daje {:.2f}%".format(row[0], i, row[1], 100 * row[1] / row[0])
                 # print msg.encode("utf-8")
                 send_ai_pics_stats(msg)

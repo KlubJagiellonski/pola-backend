@@ -1,4 +1,3 @@
-
 from distutils.util import strtobool
 
 import django_filters
@@ -16,7 +15,7 @@ class CompanyFilter(CrispyFilterMixin,
     verified = django_filters.TypedChoiceFilter(
         choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
         coerce=strtobool,
-        label=_(u"Dane zweryfikowane"))
+        label=_("Dane zweryfikowane"))
 
     class Meta:
         model = Company
@@ -30,8 +29,8 @@ class CompanyFilter(CrispyFilterMixin,
         order_by = (
             ('name', _('Nazwa (A-Z)')),
             ('-name', _('Nazwa (Z-A)')),
-            ('query_count', _(u'Liczba zapytań (rosnąco)')),
-            ('-query_count', _(u'Liczba zapytań (malejąco)')),
+            ('query_count', _('Liczba zapytań (rosnąco)')),
+            ('-query_count', _('Liczba zapytań (malejąco)')),
         )
 
 

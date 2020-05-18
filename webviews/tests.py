@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from test_plus.test import TestCase
 
 
-class TemplateUsedMixin(object):
+class TemplateUsedMixin:
     def test_template_used(self):
         resp = self.client.get(self.url)
         self.assertTemplateUsed(resp, self.template_name)

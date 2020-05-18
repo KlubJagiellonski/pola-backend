@@ -1,7 +1,8 @@
+from unittest.mock import patch
+
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
-from mock import patch
 from reversion.models import Version
 from test_plus.test import TestCase
 
@@ -13,16 +14,16 @@ from pola.tests import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
 
 
-class TemplateUsedMixin(object):
+class TemplateUsedMixin:
     def test_template_used(self):
         self.login()
         resp = self.client.get(self.url)
         self.assertTemplateUsed(resp, self.template_name)
 
 
-class InstanceMixin(object):
+class InstanceMixin:
     def setUp(self):
-        super(InstanceMixin, self).setUp()
+        super().setUp()
         self.instance = CompanyFactory()
 
     def test_contains_official_name(self):
@@ -74,13 +75,13 @@ class CompanyUpdateTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, T
     template_name = 'company/company_form.html'
 
     def setUp(self):
-        super(CompanyUpdateTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('company:edit', kwargs={'pk': self.instance.pk})
 
 
 class CompanyUpdateWebTestCase(WebTestMixin, TestCase):
     def setUp(self):
-        super(CompanyUpdateWebTestCase, self).setUp()
+        super().setUp()
         self.instance = CompanyFactory(name="company_name")
         self.url = reverse('company:edit', kwargs={'pk': self.instance.pk})
         self.user = StaffFactory()
@@ -129,7 +130,7 @@ class ConcurencyComapnyUpdateTestCase(TestCase):
     user_factory = UserFactory
 
     def setUp(self):
-        super(ConcurencyComapnyUpdateTestCase, self).setUp()
+        super().setUp()
         self.instance = CompanyFactory()
 
     def test_restrictions(self):
@@ -150,7 +151,7 @@ class CompanyDeleteViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixi
     template_name = 'company/company_confirm_delete.html'
 
     def setUp(self):
-        super(CompanyDeleteViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('company:delete', kwargs={'pk': self.instance.pk})
 
     def test_object_delete(self):
@@ -163,7 +164,7 @@ class CompanyDetailViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixi
     template_name = 'company/company_detail.html'
 
     def setUp(self):
-        super(CompanyDetailViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('company:detail', kwargs={'pk': self.instance.pk})
 
 

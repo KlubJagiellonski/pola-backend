@@ -1,4 +1,3 @@
-
 import django_filters
 from dal import autocomplete
 from django import forms
@@ -38,6 +37,6 @@ class ProductFilter(CrispyFilterMixin,
             ('-name', _('Nazawa (Z-A)')),
             ('company__name', _('Nazwa producenta (A-Z)')),
             ('-company__name', _('Nazwa producenta (Z-A)')),
-            ('query_count', _(u'Liczba zeskanowań (rosnąco)')),
-            ('-query_count', _(u'Liczba zeskanowań (malejąco)')),
+            ('query_count', _('Liczba zeskanowań (rosnąco)')),
+            ('-query_count', _('Liczba zeskanowań (malejąco)')),
         )

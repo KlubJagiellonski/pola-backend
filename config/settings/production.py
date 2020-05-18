@@ -8,20 +8,14 @@ Production Configurations
 
 """
 # pylint: disable=unused-wildcard-import
-from __future__ import absolute_import, unicode_literals
 
 import os
+from urllib import parse as urlparse
 
 from boto.s3.connection import OrdinaryCallingFormat
 from django.utils import six
 
 from .common import *  # noqa
-
-try:
-    from urllib import parse as urlparse
-except ImportError:
-    from urlparse import urlparse
-
 
 # SECRET CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -144,7 +138,7 @@ redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL',
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '%s:%s' % (redis_url.hostname, redis_url.port),
+        'LOCATION': '{}:{}'.format(redis_url.hostname, redis_url.port),
         'OPTIONS': {
             'DB': 0,
             'PASSWORD': redis_url.password,

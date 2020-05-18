@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta
+from urllib import urlencode
 
 import requests
 from django.conf import settings
@@ -7,11 +8,6 @@ from rq import Queue
 
 from pola.rq_tasks import get_url_at_time
 from pola.rq_worker import conn
-
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
 
 q = Queue(connection=conn)
 

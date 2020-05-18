@@ -31,7 +31,7 @@ class AIPicsPageView(LoginRequiredMixin,
     model = AIPics
 
     def get_queryset(self):
-        qs = super(AIPicsPageView, self).get_queryset()
+        qs = super().get_queryset()
         if self.state == 'valid':
             qs = qs.filter(is_valid=True)
         elif self.state == 'invalid':
@@ -47,7 +47,7 @@ class AIPicsPageView(LoginRequiredMixin,
 
     def get_context_data(self, *args, **kwargs):
         kwargs['state'] = self.state
-        return super(AIPicsPageView, self).get_context_data(**kwargs)
+        return super().get_context_data(**kwargs)
 
     def post(self, request):
         action_name = self.request.POST['action']

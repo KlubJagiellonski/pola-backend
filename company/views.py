@@ -31,9 +31,9 @@ class CompanyListView(LoginPermissionRequiredMixin,
     paginate_by = 25
 
 
-class GetInitalFormMixin(object):
+class GetInitalFormMixin:
     def get_initial(self):
-        initials = super(GetInitalFormMixin, self).get_initial()
+        initials = super().get_initial()
         initials.update(self.request.GET.dict())
         return initials
 
@@ -45,7 +45,7 @@ class CompanyCreate(GetInitalFormMixin,
     permission_required = 'company.add_company'
     model = Company
     form_class = CompanyForm
-    form_valid_message = u"Firma utworzona!"
+    form_valid_message = "Firma utworzona!"
 
 
 class CompanyCreateFromKRSView(LoginPermissionRequiredMixin,
@@ -59,7 +59,7 @@ class CompanyCreateFromKRSView(LoginPermissionRequiredMixin,
         q = QueryDict('', mutable=True)
         q['official_name'] = company['nazwa']
         q['common_name'] = company['nazwa_skrocona']
-        q['sources'] = u"Dane z KRS|%s" % company['url']
+        q['sources'] = "Dane z KRS|%s" % company['url']
         q['nip'] = company['nip']
         q['address'] = company['adres']
 
@@ -74,7 +74,7 @@ class CompanyUpdate(LoginPermissionRequiredMixin,
     model = Company
     form_class = CompanyForm
     concurency_url = reverse_lazy('concurency:lock')
-    form_valid_message = u"Firma zaktualizowana!"
+    form_valid_message = "Firma zaktualizowana!"
 
 
 class CompanyDelete(LoginPermissionRequiredMixin,
@@ -83,12 +83,12 @@ class CompanyDelete(LoginPermissionRequiredMixin,
     permission_required = 'company.delete_company'
     model = Company
     success_url = reverse_lazy('company:list')
-    form_valid_message = u"Firma skasowana!"
+    form_valid_message = "Firma skasowana!"
 
 
-class FieldsDisplayMixin(object):
+class FieldsDisplayMixin:
     def get_context_data(self, **kwargs):
-        context = super(FieldsDisplayMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         fields = []
         for field_name in self.fields_to_display:
             obj = self.get_object()
@@ -153,7 +153,7 @@ class CompanyDetailView(FieldsDisplayMixin,
     )
 
     def get_context_data(self, **kwargs):
-        context = super(CompanyDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         context['report_list'] = Report.objects.filter(
             product__company=self.get_object(), resolved_at=None)
@@ -189,7 +189,7 @@ class BrandCreate(GetInitalFormMixin,
     permission_required = 'company.add_company'
     model = Brand
     form_class = BrandForm
-    form_valid_message = u"Marka utworzona!"
+    form_valid_message = "Marka utworzona!"
 
     def get_success_url(self):
         if self.object.company:
@@ -205,7 +205,7 @@ class BrandUpdate(LoginPermissionRequiredMixin,
     model = Brand
     form_class = BrandForm
     concurency_url = reverse_lazy('concurency:lock')
-    form_valid_message = u"Marka zaktualizowana!"
+    form_valid_message = "Marka zaktualizowana!"
 
     def get_success_url(self):
         if self.object.company:
@@ -219,7 +219,7 @@ class BrandDelete(LoginPermissionRequiredMixin,
     permission_required = 'company.delete_company'
     model = Brand
     success_url = reverse_lazy('company:list')
-    form_valid_message = u"Marka skasowana!"
+    form_valid_message = "Marka skasowana!"
 
     def get_success_url(self):
         if self.object.company:

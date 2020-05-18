@@ -20,7 +20,7 @@ class IntegerRangeField(models.IntegerField):
         defaults = {'min_value': self.min_value,
                     'max_value': self.max_value}
         defaults.update(kwargs)
-        return super(IntegerRangeField, self).formfield(**defaults)
+        return super().formfield(**defaults)
 
 
 class CompanyQuerySet(models.query.QuerySet):
@@ -28,10 +28,10 @@ class CompanyQuerySet(models.query.QuerySet):
     def get_or_create(self, commit_desc=None, commit_user=None,
                       *args, **kwargs):
         if not commit_desc:
-            return super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
+            return super().get_or_create(*args, **kwargs)
 
         with reversion.create_revision(manage_manually=True, atomic=True):
-            obj, created = super(CompanyQuerySet, self).get_or_create(*args, **kwargs)
+            obj, created = super().get_or_create(*args, **kwargs)
             if created:
                 reversion.set_comment(commit_desc)
                 reversion.set_user(commit_user)
@@ -45,40 +45,40 @@ class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=255, null=True, blank=True,
                             db_index=True, unique=True,
-                            verbose_name=_(u"Nazwa (pobrana z ILiM)"))
+                            verbose_name=_("Nazwa (pobrana z ILiM)"))
     official_name = models.CharField(max_length=255, blank=True, null=True,
-                                     verbose_name=_(u"Nazwa rejestrowa"))
+                                     verbose_name=_("Nazwa rejestrowa"))
     common_name = models.CharField(max_length=255, blank=True,
-                                   verbose_name=_(u"Nazwa dla użytkownika"))
+                                   verbose_name=_("Nazwa dla użytkownika"))
 
     plCapital = IntegerRangeField(
-        verbose_name=_(u"Udział polskiego kapitału"),
+        verbose_name=_("Udział polskiego kapitału"),
         min_value=0, max_value=100, null=True, blank=True)
     plWorkers = IntegerRangeField(
-        verbose_name=_(u"Miejsce produkcji"), min_value=0,
+        verbose_name=_("Miejsce produkcji"), min_value=0,
         max_value=100, null=True, blank=True,
-        choices=((0, _(u"0 - Nie produkuje w Polsce")),
-                 (100, _(u"100 - Produkuje w Polsce"))))
+        choices=((0, _("0 - Nie produkuje w Polsce")),
+                 (100, _("100 - Produkuje w Polsce"))))
     plRnD = IntegerRangeField(
-        verbose_name=_(u"Miejsca pracy w BiR w Polsce"), min_value=0,
+        verbose_name=_("Miejsca pracy w BiR w Polsce"), min_value=0,
         max_value=100, null=True, blank=True,
-        choices=((0, _(u"0 - Nie tworzy miejsc pracy w BiR Polsce")),
-                 (100, _(u"100 - Tworzy miejsca pracy w BiR w Polsce"))))
+        choices=((0, _("0 - Nie tworzy miejsc pracy w BiR Polsce")),
+                 (100, _("100 - Tworzy miejsca pracy w BiR w Polsce"))))
     plRegistered = IntegerRangeField(
-        verbose_name=_(u"Miejsce rejestracji"), min_value=0, max_value=100,
+        verbose_name=_("Miejsce rejestracji"), min_value=0, max_value=100,
         null=True, blank=True,
-        choices=((0, _(u"0 - Firma zarejestrowana za granicą")),
-                 (100, _(u"100 - Firma zarejestrowana w Polsce"))))
+        choices=((0, _("0 - Firma zarejestrowana za granicą")),
+                 (100, _("100 - Firma zarejestrowana w Polsce"))))
     plNotGlobEnt = IntegerRangeField(
-        verbose_name=_(u"Struktura kapitałowa"), min_value=0,
+        verbose_name=_("Struktura kapitałowa"), min_value=0,
         max_value=100, null=True, blank=True,
-        choices=((0, _(u"0 - Firma jest częścią zagranicznego koncernu")),
+        choices=((0, _("0 - Firma jest częścią zagranicznego koncernu")),
                  (100,
-                  _(u"100 - Firma nie jest częścią zagranicznego koncernu"))))
+                  _("100 - Firma nie jest częścią zagranicznego koncernu"))))
 
     description = models.TextField(
-        _(u"Opis producenta"), null=True, blank=True)
-    sources = models.TextField(_(u"Źródła"), null=True, blank=True)
+        _("Opis producenta"), null=True, blank=True)
+    sources = models.TextField(_("Źródła"), null=True, blank=True)
 
     verified = models.BooleanField(default=False,
                                    verbose_name=_("Dane zweryfikowane"),
@@ -86,24 +86,24 @@ class Company(models.Model):
                                             (False, _("Nie"))))
 
     Editor_notes = models.TextField(
-        _(u"Notatki redakcji (nie pokazujemy użytkownikom)"), null=True,
+        _("Notatki redakcji (nie pokazujemy użytkownikom)"), null=True,
         blank=True)
 
     plCapital_notes = models.TextField(
-        _(u"Więcej nt. udziału polskiego kapitału"), null=True, blank=True)
+        _("Więcej nt. udziału polskiego kapitału"), null=True, blank=True)
     plWorkers_notes = models.TextField(
-        _(u"Więcej nt. miejsca produkcji"), null=True, blank=True)
+        _("Więcej nt. miejsca produkcji"), null=True, blank=True)
     plRnD_notes = models.TextField(
-        _(u"Więcej nt. miejsc pracy w BiR"), null=True, blank=True)
+        _("Więcej nt. miejsc pracy w BiR"), null=True, blank=True)
     plRegistered_notes = models.TextField(
-        _(u"Więcej nt. miejsca rejestracji"), null=True, blank=True)
+        _("Więcej nt. miejsca rejestracji"), null=True, blank=True)
     plNotGlobEnt_notes = models.TextField(
-        _(u"Więcej nt. struktury kapitałowej"), null=True, blank=True)
+        _("Więcej nt. struktury kapitałowej"), null=True, blank=True)
 
     nip = models.CharField(max_length=10, db_index=True, null=True,
-                           blank=True, verbose_name=_(u"NIP/Tax ID"))
+                           blank=True, verbose_name=_("NIP/Tax ID"))
     address = models.TextField(null=True, blank=True,
-                               verbose_name=_(u"Adres"))
+                               verbose_name=_("Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
     is_friend = models.BooleanField(default=False,
@@ -169,20 +169,20 @@ class Company(models.Model):
         lines = self.sources.splitlines()
         for line in lines:
             line = line.strip()
-            if line == u'':
+            if line == '':
                 continue
-            s = line.split(u'|')
+            s = line.split('|')
             if s.__len__() != 2:
                 if raise_exp:
-                    raise ValidationError(u'Pole >Źródła< powinno składać się '
-                                          u'linii zawierających tytuł odnośnika'
-                                          u' i odnośnik odzielone znakiem | (pipe)')
+                    raise ValidationError('Pole >Źródła< powinno składać się '
+                                          'linii zawierających tytuł odnośnika'
+                                          ' i odnośnik odzielone znakiem | (pipe)')
                 else:
                     continue
             if s[0] in ret:
                 if raise_exp:
-                    raise ValidationError(u'Tytuł odnośnika >{}< występuje'
-                                          u' więcej niż raz'.format(s[0]))
+                    raise ValidationError('Tytuł odnośnika >{}< występuje'
+                                          ' więcej niż raz'.format(s[0]))
                 else:
                     continue
             ret[s[0]] = s[1]
@@ -191,42 +191,42 @@ class Company(models.Model):
 
     def clean(self, *args, **kwargs):
         if self.verified:
-            YOU_CANT_SET_VERIFIED = u'Nie możesz oznaczyć producenta jako ' \
-                u'zweryfikowany jeśli pole >{}< jest nieustalone'
+            YOU_CANT_SET_VERIFIED = 'Nie możesz oznaczyć producenta jako ' \
+                'zweryfikowany jeśli pole >{}< jest nieustalone'
             if self.plCapital is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format(u'udział kapitału polskiego'))
+                                      format('udział kapitału polskiego'))
             if self.plWorkers is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format(u'miejsce produkcji'))
+                                      format('miejsce produkcji'))
             if self.plRnD is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
                                       format('wysokopłatne miejsca pracy'))
             if self.plRegistered is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format(u'miejsce rejestracji'))
+                                      format('miejsce rejestracji'))
             if self.plNotGlobEnt is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.
-                                      format(u'struktura kapitałowa'))
+                                      format('struktura kapitałowa'))
             self.get_sources()
 
-        super(Company, self).clean(*args, **kwargs)
+        super().clean(*args, **kwargs)
 
     def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
         self.full_clean()
         if not commit_desc:
-            super(Company, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             return
 
         with reversion.create_revision(manage_manually=True, atomic=True):
-            super(Company, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             reversion.set_comment(commit_desc)
             reversion.set_user(commit_user)
             reversion.add_to_revision(self)
 
     class Meta:
-        verbose_name = _(u"Producent")
-        verbose_name_plural = _(u"Producenci")
+        verbose_name = _("Producent")
+        verbose_name_plural = _("Producenci")
         ordering = ['-created_at']
         permissions = (
             ("view_company", "Can see all company"),
@@ -244,10 +244,10 @@ class BrandQuerySet(models.query.QuerySet):
     def get_or_create(self, commit_desc=None, commit_user=None,
                       *args, **kwargs):
         if not commit_desc:
-            return super(BrandQuerySet, self).get_or_create(*args, **kwargs)
+            return super().get_or_create(*args, **kwargs)
 
         with reversion.create_revision(manage_manually=True, atomic=True):
-            obj, created = super(BrandQuerySet, self).get_or_create(*args, **kwargs)
+            obj, created = super().get_or_create(*args, **kwargs)
             if created:
                 reversion.set_comment(commit_desc)
                 reversion.set_user(commit_user)
@@ -262,9 +262,9 @@ class Brand(models.Model):
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=128, null=True, blank=True,
                             db_index=True,
-                            verbose_name=_(u"Nazwa marki (na podstawie ILiM)"))
+                            verbose_name=_("Nazwa marki (na podstawie ILiM)"))
     common_name = models.CharField(max_length=128, null=True, blank=True,
-                                   verbose_name=_(u"Nazwa dla użytkownika"))
+                                   verbose_name=_("Nazwa dla użytkownika"))
     objects = BrandQuerySet.as_manager()
 
     def __str__(self):
@@ -274,8 +274,8 @@ class Brand(models.Model):
         return reverse('company:brand-detail', args=[self.pk])
 
     class Meta:
-        verbose_name = _(u"Marka")
-        verbose_name_plural = _(u"Marki")
+        verbose_name = _("Marka")
+        verbose_name_plural = _("Marki")
         ordering = ['-created_at']
         permissions = (
             ("view_brand", "Can see all brands"),

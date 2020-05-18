@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import django.contrib.auth.models
 import django.core.validators
 import django.utils.timezone

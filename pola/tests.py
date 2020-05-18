@@ -4,9 +4,9 @@ from test_plus.test import TestCase
 from pola.users.factories import StaffFactory
 
 
-class PermissionMixin(object):
+class PermissionMixin:
     def setUp(self):
-        super(PermissionMixin, self).setUp()
+        super().setUp()
         self.user = StaffFactory()
 
     def login(self, username=None):
@@ -17,7 +17,7 @@ class PermissionMixin(object):
         self.assertEqual(resp.status_code, 302)
 
 
-class TemplateUsedMixin(object):
+class TemplateUsedMixin:
     def test_template_used(self):
         resp = self.client.get(self.url)
         self.assertTemplateUsed(resp, self.template_name)
@@ -34,7 +34,7 @@ class SelectLangTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
 
     def test_template_used(self):
         self.login()
-        super(SelectLangTestCase, self).test_template_used()
+        super().test_template_used()
 
 
 class AboutTestCase(TemplateUsedMixin, TestCase):

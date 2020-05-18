@@ -8,7 +8,7 @@ from . import models
 
 class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(UserForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'

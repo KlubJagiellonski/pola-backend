@@ -5,6 +5,7 @@ import os
 import time
 import uuid
 from hashlib import sha1
+from urllib.parse import quote_plus  # Python 3+
 
 from django.conf import settings
 from django.core.paginator import Paginator
@@ -19,12 +20,6 @@ from pola import logic, logic_ai
 from pola.models import Query
 from product.models import Product
 from report.models import Attachment, Report
-
-try:
-    from urllib.parse import quote_plus  # Python 3+
-except ImportError:
-    from urllib import quote_plus  # Python 2.X
-
 
 MAX_RECORDS = 5000
 
@@ -115,8 +110,9 @@ def add_ai_pics(request):
 
 
 def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
-    object_name = '%s/%s_%s_%s.%s' % (str(ai_pics.product.code),
-                                      str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext)
+    object_name = '{}/{}_{}_{}.{}'.format(
+        str(ai_pics.product.code), str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext
+    )
 
     signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
 
@@ -213,7 +209,7 @@ def create_report_internal(request, extra_comma=False):
 
 
 def attach_file_internal(report, file_ext, mime_type, extra_comma=False):
-    object_name = '%s/%s.%s' % (str(report.id), str(uuid.uuid1()), file_ext)
+    object_name = '{}/{}.{}'.format(str(report.id), str(uuid.uuid1()), file_ext)
 
     signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME, extra_comma)
 
@@ -236,10 +232,10 @@ def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False
         hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(),
                  string_to_sign.encode('utf8'), sha1).digest())
     signature = quote_plus(signature.strip())
-    url = 'https://%s.s3.amazonaws.com/%s' % (bucket_name,
-                                              object_name)
-    signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % \
-                     (url, settings.AWS_ACCESS_KEY_ID, expires, signature)
+    url = 'https://{}.s3.amazonaws.com/{}'.format(bucket_name, object_name)
+    signed_request = '{}?AWSAccessKeyId={}&Expires={}&Signature={}'.format(
+        url, settings.AWS_ACCESS_KEY_ID, expires, signature
+    )
 
     if extra_comma:
         signed_request = signed_request,

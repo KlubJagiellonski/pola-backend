@@ -1,4 +1,3 @@
-
 import locale
 import re
 
@@ -51,17 +50,17 @@ def get_result_from_code(code):
             else:
                 desc = ''
                 if company.plCapital_notes:
-                    desc += strip_urls_newlines(company.plCapital_notes) + u'\n'
+                    desc += strip_urls_newlines(company.plCapital_notes) + '\n'
                 if company.plWorkers_notes:
-                    desc += strip_urls_newlines(company.plWorkers_notes) + u'\n'
+                    desc += strip_urls_newlines(company.plWorkers_notes) + '\n'
                 if company.plRnD_notes:
-                    desc += strip_urls_newlines(company.plRnD_notes) + u'\n'
+                    desc += strip_urls_newlines(company.plRnD_notes) + '\n'
                 if company.plRegistered_notes:
                     desc +=\
-                        strip_urls_newlines(company.plRegistered_notes) + u'\n'
+                        strip_urls_newlines(company.plRegistered_notes) + '\n'
                 if company.plNotGlobEnt_notes:
                     desc +=\
-                        strip_urls_newlines(company.plNotGlobEnt_notes) + u'\n'
+                        strip_urls_newlines(company.plNotGlobEnt_notes) + '\n'
 
                 result['description'] = desc
 
@@ -178,7 +177,7 @@ def create_from_api(code, obj, product=None):
         if product.name:
             if obj_product_name and product.name != obj_product_name:
                 create_bot_report(product,
-                                  u"Wg. najnowszego odpytania w bazie ILiM "
+                                  "Wg. najnowszego odpytania w bazie ILiM "
                                   "nazwa tego produktu to:\"{}\"".format(
                                       obj_product_name),
                                   check_if_already_exists=not company_created
@@ -194,7 +193,7 @@ def create_from_api(code, obj, product=None):
                 and not ilim_compare_str(
                     product.company.name, obj_owner_name):
                 create_bot_report(product,
-                                  u"Wg. najnowszego odpytania w bazie ILiM "
+                                  "Wg. najnowszego odpytania w bazie ILiM "
                                   "producent tego produktu to:\"{}\"".format(
                                       obj_owner_name),
                                   check_if_already_exists=not company_created
@@ -207,7 +206,7 @@ def create_from_api(code, obj, product=None):
             if product.brand:
                 if product.brand.name != obj_brand:
                     create_bot_report(product,
-                                      u"Wg. najnowszego odpytania w bazie ILiM "
+                                      "Wg. najnowszego odpytania w bazie ILiM "
                                       "marka tego produktu to:\"{}\"".format(
                                           obj_brand),
                                       check_if_already_exists=True
@@ -243,7 +242,7 @@ def update_company_from_krs(product, company):
             company.address = companies[0]['adres']
             company.nip = companies[0]['nip']
             company.plRegistered = 100
-            company.sources = u"Dane z KRS|%s" % companies[0]['url']
+            company.sources = "Dane z KRS|%s" % companies[0]['url']
 
             Company.save(company, commit_desc="Dane firmy pobrane "
                                               "automatycznie poprzez API "
@@ -252,28 +251,28 @@ def update_company_from_krs(product, company):
 
             shareholders = shareholders_to_str(krs, companies[0]['id'], '')
             if shareholders:
-                create_bot_report(product, u'Wspólnicy spółki {}:\n{}'.
+                create_bot_report(product, 'Wspólnicy spółki {}:\n{}'.
                                   format(company.name, shareholders))
             return True
 
         elif companies.__len__() > 0:
-            description = u'{} - ta firma może być jedną z następujących:\n\n' \
+            description = '{} - ta firma może być jedną z następujących:\n\n' \
                 .format(company.name)
 
             for i in range(0, min(companies.__len__(), 10)):
                 description += \
-                    (u'Nazwa: {}\n' +
-                     u'Skrót: {}\n' +
-                     u'NIP:   {}\n' +
-                     u'Adres: \n{}\n' +
-                     u'Url:   {}\n').format(companies[i]['nazwa'],
-                                            companies[i]['nazwa_skrocona'],
-                                            companies[i]['nip'],
-                                            companies[i]['adres'],
-                                            companies[i]['url'])
+                    ('Nazwa: {}\n' +
+                     'Skrót: {}\n' +
+                     'NIP:   {}\n' +
+                     'Adres: \n{}\n' +
+                     'Url:   {}\n').format(companies[i]['nazwa'],
+                                           companies[i]['nazwa_skrocona'],
+                                           companies[i]['nip'],
+                                           companies[i]['adres'],
+                                           companies[i]['url'])
                 shareholders = shareholders_to_str(krs, companies[i]['id'], '')
                 if shareholders:
-                    description += u'Wspólnicy:\n{}'.format(shareholders)
+                    description += 'Wspólnicy:\n{}'.format(shareholders)
                 description += '\n'
 
             create_bot_report(product, description)
@@ -363,9 +362,9 @@ def shareholders_to_str(krs, id, indent):
     for wspolnik in wspolnicy:
         udzialy_wartosc = wspolnik.get('udzialy_wartosc', None)
         if udzialy_wartosc is None:
-            str += u'{0}* {1} -------\n'.format(indent, wspolnik['nazwa'])
+            str += '{}* {} -------\n'.format(indent, wspolnik['nazwa'])
         else:
-            str += u'{0}* {1} {2}/{3} {4:.0f}%\n'. \
+            str += '{0}* {1} {2}/{3} {4:.0f}%\n'. \
                 format(indent,
                        wspolnik['nazwa'],
                        udzialy_wartosc,
@@ -377,7 +376,7 @@ def shareholders_to_str(krs, id, indent):
 
 
 def rem_dbl_newlines(str):
-    return str.replace(u'\r\n\r\n', u'\r\n').replace(u'\n\n', u'\n')
+    return str.replace('\r\n\r\n', '\r\n').replace('\n\n', '\n')
 
 
 def strip_dbl_spaces(str):

@@ -9,16 +9,16 @@ from report.factories import ReportFactory, ResolvedReportFactory
 from report.models import Report
 
 
-class TemplateUsedMixin(object):
+class TemplateUsedMixin:
     def test_template_used(self):
         self.login()
         resp = self.client.get(self.url)
         self.assertTemplateUsed(resp, self.template_name)
 
 
-class InstanceMixin(object):
+class InstanceMixin:
     def setUp(self):
-        super(InstanceMixin, self).setUp()
+        super().setUp()
         self.instance = ReportFactory()
 
     def test_contains_official_name(self):
@@ -77,7 +77,7 @@ class ReportDeleteViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin
     template_name = 'report/report_confirm_delete.html'
 
     def setUp(self):
-        super(ReportDeleteViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('report:delete', kwargs={'pk': self.instance.pk})
 
     def test_resolve_action(self):
@@ -90,7 +90,7 @@ class ReportDetailViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin
     template_name = 'report/report_detail.html'
 
     def setUp(self):
-        super(ReportDetailViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('report:detail', kwargs={'pk': self.instance.pk})
 
 
@@ -98,7 +98,7 @@ class ReportResolveViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixi
     template_name = 'report/report_resolve.html'
 
     def setUp(self):
-        super(ReportResolveViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('report:resolve', kwargs={'pk': self.instance.pk})
 
     def test_resolve_action(self):

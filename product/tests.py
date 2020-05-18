@@ -11,16 +11,16 @@ from product.factories import ProductFactory
 from product.models import Product
 
 
-class TemplateUsedMixin(object):
+class TemplateUsedMixin:
     def test_template_used(self):
         self.login()
         resp = self.client.get(self.url)
         self.assertTemplateUsed(resp, self.template_name)
 
 
-class InstanceMixin(object):
+class InstanceMixin:
     def setUp(self):
-        super(InstanceMixin, self).setUp()
+        super().setUp()
         self.instance = ProductFactory()
 
     def test_contains_name(self):
@@ -38,7 +38,7 @@ class ProductGetImageTestCase(PermissionMixin, TestCase):
     url = reverse_lazy('product:image')
 
     def setUp(self):
-        super(ProductGetImageTestCase, self).setUp()
+        super().setUp()
         self.instance = ProductFactory()
         self.url = reverse("product:image", args=[self.instance.code])
 
@@ -53,13 +53,13 @@ class ProductUpdateTestCase(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_update_form.html'
 
     def setUp(self):
-        super(ProductUpdateTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('product:edit', args=[self.instance.code])
 
 
 class ProductUpdateWebTestCase(WebTestMixin, TestCase):
     def setUp(self):
-        super(ProductUpdateWebTestCase, self).setUp()
+        super().setUp()
         self.instance = ProductFactory(code="123")
         self.url = reverse('product:edit', args=[self.instance.code])
         self.user = StaffFactory()
@@ -108,7 +108,7 @@ class ProductHistoryViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_history.html'
 
     def setUp(self):
-        super(ProductHistoryViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('product:view-history', args=[self.instance.code])
 
 
@@ -116,7 +116,7 @@ class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
 
     def setUp(self):
-        super(ProductDetailViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('product:detail', args=[self.instance.code])
 
 
@@ -124,7 +124,7 @@ class ProductDeleteViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
 
     def setUp(self):
-        super(ProductDeleteViewTestCase, self).setUp()
+        super().setUp()
         self.url = reverse('product:delete', args=[self.instance.code])
 
     def test_success_delete(self):
@@ -163,28 +163,28 @@ class ProductAutocompleteTestCase(PermissionMixin, TestCase):
         ProductFactory(id=3, name="A3", company=CompanyFactory(official_name="B3Suffix"))
         ProductFactory(id=4, name="A4", company=CompanyFactory(common_name="PefixB4Suffix"))
 
-        response = self.client.get("%s?q=%s" % (self.url, "A1"))
+        response = self.client.get("{}?q={}".format(self.url, "A1"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
             self._get_expected_result([('1', 'A1')])
         )
 
-        response = self.client.get("%s?q=%s" % (self.url, "B2"))
+        response = self.client.get("{}?q={}".format(self.url, "B2"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
             self._get_expected_result([('2', 'A2')])
         )
 
-        response = self.client.get("%s?q=%s" % (self.url, "B3"))
+        response = self.client.get("{}?q={}".format(self.url, "B3"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
             self._get_expected_result([('3', 'A3')])
         )
 
-        response = self.client.get("%s?q=%s" % (self.url, "B4"))
+        response = self.client.get("{}?q={}".format(self.url, "B4"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
