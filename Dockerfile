@@ -3,7 +3,11 @@ FROM python:${PYTHON_VERSION}-slim-buster
 
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y netcat-openbsd gcc \
+    && apt-get install -y \
+        netcat-openbsd \
+        gcc \
+        gcc \
+        postgresql-devel \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
