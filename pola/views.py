@@ -27,7 +27,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-cms.html'
 
     def get_context_data(self, *args, **kwargs):
-        c = super(FrontPageView, self).get_context_data(**kwargs)
+        c = super().get_context_data(**kwargs)
 
         c['most_popular_companies'] = (Company.objects
                                        .filter(verified=False)
@@ -99,7 +99,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         return c
 
 
-class ExprAutocompleteMixin(object):
+class ExprAutocompleteMixin:
     def get_search_expr(self):
         if not hasattr(self, 'search_expr'):
             raise ImproperlyConfigured('{0} is missing a {0}.search_expr. Define '
@@ -120,7 +120,7 @@ class ExprAutocompleteMixin(object):
         return qs
 
 
-class ActionMixin(object):
+class ActionMixin:
     success_url = None
 
     def action(self):
@@ -156,7 +156,7 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home-stats.html'
 
     def get_context_data(self, *args, **kwargs):
-        c = super(StatsPageView, self).get_context_data(**kwargs)
+        c = super().get_context_data(**kwargs)
 
         stats = []
 

@@ -6,7 +6,7 @@ from .models import Brand, Company
 
 class CompanyAdmin(VersionAdmin):
     list_display = (
-        u'id',
+        'id',
         'nip',
         'name',
         'address',

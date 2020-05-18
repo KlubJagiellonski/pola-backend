@@ -48,7 +48,7 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
     no = forms.CharField(label="Numer", max_length=20, required=False)
 
     def clean(self):
-        cleaned_data = super(CompanyCreateFromKRSForm, self).clean()
+        cleaned_data = super().clean()
 
         is_krs = cleaned_data['is_krs'] == '1'
         no = cleaned_data['no']
@@ -65,7 +65,7 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
 
         if models.Company.objects.filter(nip=int(first_company.nip)).exists():
             raise forms.ValidationError(
-                u"Ta firma istnieje już w naszej bazie", 'error')
+                "Ta firma istnieje już w naszej bazie", 'error')
 
         return cleaned_data
 

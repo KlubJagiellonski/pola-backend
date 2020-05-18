@@ -1,7 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
 
 
-class SortMixin(object):
+class SortMixin:
     """
     View mixin which provides sorting for ListView.
     """
@@ -25,11 +25,11 @@ class SortMixin(object):
 
     def get_queryset(self):
         return self.sort_queryset(
-            super(SortMixin, self).get_queryset(),
+            super().get_queryset(),
             *self.get_sort_params())
 
     def get_context_data(self, *args, **kwargs):
-        context = super(SortMixin, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         sort_by, order = self.get_sort_params()
         context.update({
             'sort_by': sort_by,
@@ -38,7 +38,7 @@ class SortMixin(object):
         return context
 
 
-class FilterMixin(object):
+class FilterMixin:
     """
     View mixin which provides filtering for ListView.
     """
@@ -65,11 +65,11 @@ class FilterMixin(object):
 
     def get_queryset(self):
         return self.filter_queryset(
-            super(FilterMixin, self).get_queryset(),
+            super().get_queryset(),
             self.get_filter_param())
 
     def get_context_data(self, *args, **kwargs):
-        context = super(FilterMixin, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context.update({
             'filter': self.get_filter_param(),
         })

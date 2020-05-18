@@ -50,9 +50,9 @@ class KrsClient:
         company['nazwa_skrocona'] = \
             KrsClient.unescape(data['krs_podmioty.nazwa_skrocona'])
         company['nip'] = data['krs_podmioty.nip']
-        lokal = u" lok. {}".format(data['krs_podmioty.adres_lokal']) if \
-            data['krs_podmioty.adres_lokal'] else u""
-        company['adres'] = KrsClient.unescape(u"ul. {} {} {}\n{} {}\n{}".format(
+        lokal = " lok. {}".format(data['krs_podmioty.adres_lokal']) if \
+            data['krs_podmioty.adres_lokal'] else ""
+        company['adres'] = KrsClient.unescape("ul. {} {} {}\n{} {}\n{}".format(
             data['krs_podmioty.adres_ulica'],
             data['krs_podmioty.adres_numer'],
             lokal,
@@ -101,22 +101,22 @@ class KrsClient:
 
     COMMON_COMPANY_NAME_ENDINGS = \
         {
-            u' S.A.':
-                u' SPÓŁKA AKCYJNA',
-            u' Sp. z o.o.':
-                u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-            u' Spółka z o.o.':
-                u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-            u'Sp. Jawna':
-                u'SPÓŁKA JAWNA',
-            u'spółka z ograniczoną odpowiedzialnością sp.k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            u'sp. z o. o. sp.k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            u'Sp. z o.o. sp.k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            u'sp. z o.o. sp. k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
+            ' S.A.':
+                ' SPÓŁKA AKCYJNA',
+            ' Sp. z o.o.':
+                ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+            ' Spółka z o.o.':
+                ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+            'Sp. Jawna':
+                'SPÓŁKA JAWNA',
+            'spółka z ograniczoną odpowiedzialnością sp.k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            'sp. z o. o. sp.k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            'Sp. z o.o. sp.k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            'sp. z o.o. sp. k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
         }
 
     @staticmethod

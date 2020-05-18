@@ -8,7 +8,7 @@ class AttachmentIline(admin.TabularInline):
 
 
 class AttachmentAdmin(admin.ModelAdmin):
-    list_display = (u'id', 'report', 'attachment')
+    list_display = ('id', 'report', 'attachment')
     list_filter = ('report',)
 
 

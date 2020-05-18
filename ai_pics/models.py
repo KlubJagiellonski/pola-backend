@@ -1,4 +1,3 @@
-
 from os.path import basename
 
 from django.conf import settings
@@ -19,7 +18,7 @@ class AIPics(models.Model):
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=False, null=False,
-                              verbose_name=_(u'Zgłaszający'))
+                              verbose_name=_('Zgłaszający'))
 
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('Utworzone'))

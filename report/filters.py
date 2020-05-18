@@ -1,4 +1,3 @@
-
 import django_filters
 from dal import autocomplete
 from django.utils.translation import ugettext_lazy as _
@@ -14,7 +13,7 @@ class StatusFilter(django_filters.ChoiceFilter):
     def __init__(self, *args, **kwargs):
         if 'label' not in kwargs:
             kwargs['label'] = _('Status')
-        super(StatusFilter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.extra['choices'] = (
             ('', '---------'),
             ('open', _('Otwarte')),
@@ -54,6 +53,6 @@ class ReportFilter(CrispyFilterMixin,
             ('-created_at', _('Data utworzenia (reversed)')),
             ('resolved_at', _('Data rozpatrzenia')),
             ('-resolved_at', _('Data rozpatrzenia (reversed)')),
-            ('resolved_by', _(u'Rozpatrujący')),
-            ('-resolved_by', _(u'Rozpatrujący (reversed)')),
+            ('resolved_by', _('Rozpatrujący')),
+            ('-resolved_by', _('Rozpatrujący (reversed)')),
         ]

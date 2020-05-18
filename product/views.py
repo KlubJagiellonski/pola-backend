@@ -30,7 +30,7 @@ class ProductDetailView(LoginPermissionRequiredMixin,
     model = models.Product
 
     def get_context_data(self, **kwargs):
-        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         obj = context['object']
 
@@ -55,7 +55,7 @@ class ProductCreate(LoginPermissionRequiredMixin,
     slug_field = 'code'
     model = models.Product
     form_class = ProductForm
-    form_valid_message = _(u"Product created!")
+    form_valid_message = _("Product created!")
 
 
 class ProductUpdate(LoginPermissionRequiredMixin,
@@ -67,7 +67,7 @@ class ProductUpdate(LoginPermissionRequiredMixin,
     model = models.Product
     form_class = ProductForm
     concurency_url = reverse_lazy('concurency:lock')
-    form_valid_message = _(u"Produkt zaktualizowany!")
+    form_valid_message = _("Produkt zaktualizowany!")
 
 
 class ProductDelete(LoginPermissionRequiredMixin,
@@ -77,7 +77,7 @@ class ProductDelete(LoginPermissionRequiredMixin,
     slug_field = 'code'
     model = models.Product
     success_url = reverse_lazy('product:list')
-    form_valid_message = _(u"Product deleted!")
+    form_valid_message = _("Product deleted!")
 
 
 class ProductHistoryView(LoginPermissionRequiredMixin,
@@ -88,7 +88,7 @@ class ProductHistoryView(LoginPermissionRequiredMixin,
     template_name = 'product/product_history.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ProductHistoryView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['revision_list'] = Version.objects.get_for_object(self.get_object())
         return context
 

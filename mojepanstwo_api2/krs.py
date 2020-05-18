@@ -38,7 +38,7 @@ class ApiClient:
     def send_request(self, method, data={}, **kwargs):
 
         def nested_object(name, mapping):
-            return [(u'{}[{}]'.format(name, key), value) for key, value in mapping.items()]
+            return [('{}[{}]'.format(name, key), value) for key, value in mapping.items()]
 
         post_data = [
             [(key, value)]
@@ -110,7 +110,7 @@ class Krs:
 
     def _simplify_address(self, data):
 
-        adres = Krs._unescape(u"ul. {} {} {}\n{} {}\n{}".format(
+        adres = Krs._unescape("ul. {} {} {}\n{} {}\n{}".format(
             data['data']['krs_podmioty.adres_ulica'],
             data['data']['krs_podmioty.adres_numer'],
             data['data'].get('krs_podmioty.adres_lokal', ""),
@@ -128,22 +128,22 @@ class Krs:
 
     COMMON_COMPANY_NAME_ENDINGS = \
         {
-            u' S.A.':
-                u' SPÓŁKA AKCYJNA',
-            u' Sp. z o.o.':
-                u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-            u' Spółka z o.o.':
-                u' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-            u'Sp. Jawna':
-                u'SPÓŁKA JAWNA',
-            u'spółka z ograniczoną odpowiedzialnością sp.k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            u'sp. z o. o. sp.k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            u'Sp. z o.o. sp.k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            u'sp. z o.o. sp. k.':
-                u'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
+            ' S.A.':
+                ' SPÓŁKA AKCYJNA',
+            ' Sp. z o.o.':
+                ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+            ' Spółka z o.o.':
+                ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+            'Sp. Jawna':
+                'SPÓŁKA JAWNA',
+            'spółka z ograniczoną odpowiedzialnością sp.k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            'sp. z o. o. sp.k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            'Sp. z o.o. sp.k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+            'sp. z o.o. sp. k.':
+                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
         }
 
     @staticmethod

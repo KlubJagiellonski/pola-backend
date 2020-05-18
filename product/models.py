@@ -12,14 +12,14 @@ from pola.concurency import concurency
 
 class ProductQuerySet(models.query.QuerySet):
     def __init__(self, *args, **kwargs):
-        super(ProductQuerySet, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def create(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
-            return super(ProductQuerySet, self).create(*args, **kwargs)
+            return super().create(*args, **kwargs)
 
         with reversion.create_revision(manage_manually=True, atomic=True):
-            obj = super(ProductQuerySet, self).create(*args, **kwargs)
+            obj = super().create(*args, **kwargs)
             reversion.set_comment(commit_desc)
             reversion.set_user(commit_user)
             reversion.add_to_revision(obj)
@@ -57,11 +57,11 @@ class Product(models.Model):
 
     def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
-            super(Product, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             return
 
         with reversion.create_revision(manage_manually=True, atomic=True):
-            super(Product, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             reversion.set_comment(commit_desc)
             reversion.set_user(commit_user)
             reversion.add_to_revision(self)

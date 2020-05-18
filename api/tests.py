@@ -1,8 +1,8 @@
 import json
+from unittest.mock import patch
 
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
-from mock import patch
 from test_plus.test import TestCase
 
 from company.factories import CompanyFactory
@@ -12,7 +12,7 @@ from report.factories import ReportFactory
 from report.models import Attachment, Report
 
 
-class JsonRequestMixin(object):
+class JsonRequestMixin:
     def json_request(self, url, data=None, **kwargs):
         body = json.dumps(data)
         return self.client.post(url, body, content_type="application/json", **kwargs)
@@ -52,7 +52,7 @@ class get_by_codeTestCase(TestCase):
     url = url_pattern % code
 
     def setUp(self):
-        super(get_by_codeTestCase, self).setUp()
+        super().setUp()
         cache.clear()
 
     @patch('pola.logic.get_by_code')
@@ -139,7 +139,7 @@ class create_reportTestCase(JsonRequestMixin, TestCase):
     url = '/a/create_report'
 
     def setUp(self):
-        super(create_reportTestCase, self).setUp()
+        super().setUp()
         cache.clear()
         self.product = ProductFactory()
 
@@ -183,13 +183,13 @@ class update_reportTestCase(JsonRequestMixin, TestCase):
     url = '/a/update_report'
 
     def setUp(self):
-        super(update_reportTestCase, self).setUp()
+        super().setUp()
         cache.clear()
         self.report = ReportFactory()
 
     def test_success_update(self):
         resp = self.json_request(
-            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+            self.url + '?device_id={}&report_id={}'.format(self.report.client, self.report.id),
             data={'description': "New description"}
         )
         self.assertEqual(resp.status_code, 200)
@@ -216,14 +216,14 @@ class attach_fileTestCase(TestCase):
     url = '/a/attach_file'
 
     def setUp(self):
-        super(attach_fileTestCase, self).setUp()
+        super().setUp()
         cache.clear()
         self.report = ReportFactory()
 
     def test_success_attach_file(self):
         file = SimpleUploadedFile("image1.jpeg", b"file_content", content_type="image/jpeg")
         resp = self.client.post(
-            self.url + '?device_id=%s&report_id=%s' % (self.report.client, self.report.id),
+            self.url + '?device_id={}&report_id={}'.format(self.report.client, self.report.id),
             {'file': file}
         )
         attachment = Attachment.objects.last()
