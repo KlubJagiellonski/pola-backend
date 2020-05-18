@@ -3,7 +3,7 @@ FROM python:${PYTHON_VERSION}-slim-buster
 
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y \
+    && apt-get install -y --no-install-recommends \
         netcat-openbsd \
         gcc \
         gcc \
