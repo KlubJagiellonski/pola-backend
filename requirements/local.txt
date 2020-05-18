@@ -8,7 +8,7 @@ django-test-plus==1.0.22
 #factory_boy==2.5.2
 
 # django-debug-toolbar that works with Django 1.5+
-django-debug-toolbar==1.9.1
+django-debug-toolbar==2.2
 
 # improved REPL
 #ipdb==0.8.1
