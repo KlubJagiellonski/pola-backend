@@ -24,4 +24,4 @@ factory_boy==2.12.0
 mock==4.0.2
 webtest==2.0.35
 django-coverage-plugin==1.8.0
-django-webtest==1.9.2
+django-webtest==1.9.7
