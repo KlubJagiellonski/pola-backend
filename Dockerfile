@@ -7,7 +7,7 @@ RUN apt-get update \
         netcat-openbsd \
         gcc \
         gcc \
-        postgresql-devel \
+        libpq-dev \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
