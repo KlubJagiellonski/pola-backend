@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddIndex(
             model_name='report',
-            index=django.contrib.postgres.indexes.BrinIndex(fields=['created_at'], name='report_repo_created_edcdde_brin', pages_per_range=16),
+            index=django.contrib.postgres.indexes.BrinIndex(
+                fields=['created_at'], name='report_repo_created_edcdde_brin', pages_per_range=16
+            ),
         ),
     ]

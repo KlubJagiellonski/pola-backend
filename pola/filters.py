@@ -8,6 +8,7 @@ class CrispyFilterMixin:
     def form(self):
         from crispy_forms.helper import FormHelper
         from crispy_forms.layout import Submit
+
         self._form = super().form
         self._form.helper = FormHelper(self._form)
         if self.form_class:

@@ -9,7 +9,7 @@ from django.views.generic.edit import (
     CreateView,
     DeleteView,
     FormView,
-    UpdateView
+    UpdateView,
 )
 from django_filters.views import FilterView
 
@@ -23,8 +23,7 @@ from .filters import BrandFilter, CompanyFilter
 from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm
 
 
-class CompanyListView(LoginPermissionRequiredMixin,
-                      FilterView):
+class CompanyListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'company.view_company'
     model = Company
     filterset_class = CompanyFilter
@@ -38,18 +37,14 @@ class GetInitalFormMixin:
         return initials
 
 
-class CompanyCreate(GetInitalFormMixin,
-                    LoginPermissionRequiredMixin,
-                    FormValidMessageMixin,
-                    CreateView):
+class CompanyCreate(GetInitalFormMixin, LoginPermissionRequiredMixin, FormValidMessageMixin, CreateView):
     permission_required = 'company.add_company'
     model = Company
     form_class = CompanyForm
     form_valid_message = "Firma utworzona!"
 
 
-class CompanyCreateFromKRSView(LoginPermissionRequiredMixin,
-                               FormView):
+class CompanyCreateFromKRSView(LoginPermissionRequiredMixin, FormView):
     permission_required = 'company.add_company'
     form_class = CompanyCreateFromKRSForm
     template_name = 'company/company_from_krs.html'
@@ -66,10 +61,7 @@ class CompanyCreateFromKRSView(LoginPermissionRequiredMixin,
         return HttpResponseRedirect(reverse('company:create') + '?' + q.urlencode())
 
 
-class CompanyUpdate(LoginPermissionRequiredMixin,
-                    FormValidMessageMixin,
-                    ConcurencyProtectUpdateView,
-                    UpdateView):
+class CompanyUpdate(LoginPermissionRequiredMixin, FormValidMessageMixin, ConcurencyProtectUpdateView, UpdateView):
     permission_required = 'company.change_company'
     model = Company
     form_class = CompanyForm
@@ -77,9 +69,7 @@ class CompanyUpdate(LoginPermissionRequiredMixin,
     form_valid_message = "Firma zaktualizowana!"
 
 
-class CompanyDelete(LoginPermissionRequiredMixin,
-                    FormValidMessageMixin,
-                    DeleteView):
+class CompanyDelete(LoginPermissionRequiredMixin, FormValidMessageMixin, DeleteView):
     permission_required = 'company.delete_company'
     model = Company
     success_url = reverse_lazy('company:list')
@@ -95,19 +85,14 @@ class FieldsDisplayMixin:
             name = self._lookup_field_info(
                 obj,
                 'get_' + field_name + '_display_name',
-                default=lambda: self.model._meta.get_field(field_name).verbose_name
+                default=lambda: self.model._meta.get_field(field_name).verbose_name,
             )
 
             value = self._lookup_field_info(
-                obj,
-                'get_' + field_name + '_display',
-                default=lambda: obj.__dict__[field_name]
+                obj, 'get_' + field_name + '_display', default=lambda: obj.__dict__[field_name]
             )
 
-            fields.append({
-                "name": name,
-                "value": value
-            })
+            fields.append({"name": name, "value": value})
 
         context['fields'] = fields
         return context
@@ -128,9 +113,7 @@ class FieldsDisplayMixin:
         return None
 
 
-class CompanyDetailView(FieldsDisplayMixin,
-                        LoginPermissionRequiredMixin,
-                        DetailView):
+class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, DetailView):
     model = Company
     permission_required = 'company.view_company'
 
@@ -155,17 +138,14 @@ class CompanyDetailView(FieldsDisplayMixin,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['report_list'] = Report.objects.filter(
-            product__company=self.get_object(), resolved_at=None)
+        context['report_list'] = Report.objects.filter(product__company=self.get_object(), resolved_at=None)
 
         context['brand_list'] = Brand.objects.filter(company=self.get_object())
 
         return context
 
 
-class CompanyAutocomplete(LoginRequiredMixin,
-                          ExprAutocompleteMixin,
-                          autocomplete.Select2QuerySetView):
+class CompanyAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',
         'official_name__icontains',
@@ -174,18 +154,14 @@ class CompanyAutocomplete(LoginRequiredMixin,
     model = Company
 
 
-class BrandListView(LoginPermissionRequiredMixin,
-                    FilterView):
+class BrandListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'company.view_company'
     model = Brand
     filterset_class = BrandFilter
     paginate_by = 25
 
 
-class BrandCreate(GetInitalFormMixin,
-                  LoginPermissionRequiredMixin,
-                  FormValidMessageMixin,
-                  CreateView):
+class BrandCreate(GetInitalFormMixin, LoginPermissionRequiredMixin, FormValidMessageMixin, CreateView):
     permission_required = 'company.add_company'
     model = Brand
     form_class = BrandForm
@@ -197,10 +173,7 @@ class BrandCreate(GetInitalFormMixin,
         return reverse("company:brand-detail", args=[self.object.pk])
 
 
-class BrandUpdate(LoginPermissionRequiredMixin,
-                  FormValidMessageMixin,
-                  ConcurencyProtectUpdateView,
-                  UpdateView):
+class BrandUpdate(LoginPermissionRequiredMixin, FormValidMessageMixin, ConcurencyProtectUpdateView, UpdateView):
     permission_required = 'company.change_company'
     model = Brand
     form_class = BrandForm
@@ -213,9 +186,7 @@ class BrandUpdate(LoginPermissionRequiredMixin,
         return reverse("company:brand-list")
 
 
-class BrandDelete(LoginPermissionRequiredMixin,
-                  FormValidMessageMixin,
-                  DeleteView):
+class BrandDelete(LoginPermissionRequiredMixin, FormValidMessageMixin, DeleteView):
     permission_required = 'company.delete_company'
     model = Brand
     success_url = reverse_lazy('company:list')
@@ -227,9 +198,7 @@ class BrandDelete(LoginPermissionRequiredMixin,
         return reverse("company:brand-list")
 
 
-class BrandDetailView(FieldsDisplayMixin,
-                      LoginPermissionRequiredMixin,
-                      DetailView):
+class BrandDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, DetailView):
     model = Brand
     permission_required = 'company.view_company'
 
@@ -239,9 +208,7 @@ class BrandDetailView(FieldsDisplayMixin,
     )
 
 
-class BrandAutocomplete(LoginRequiredMixin,
-                        ExprAutocompleteMixin,
-                        autocomplete.Select2QuerySetView):
+class BrandAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',
         'common_name__icontains',

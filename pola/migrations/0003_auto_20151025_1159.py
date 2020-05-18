@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Stats',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True),),
                 ('year', models.IntegerField()),
                 ('month', models.IntegerField()),
                 ('day', models.IntegerField()),
@@ -26,8 +26,5 @@ class Migration(migrations.Migration):
                 ('no_of_new_reports', models.IntegerField()),
             ],
         ),
-        migrations.AlterUniqueTogether(
-            name='stats',
-            unique_together={('year', 'month', 'day')},
-        ),
+        migrations.AlterUniqueTogether(name='stats', unique_together={('year', 'month', 'day')},),
     ]

@@ -13,8 +13,7 @@ from report.models import Report
 from .filters import ReportFilter
 
 
-class ReportListView(LoginPermissionRequiredMixin,
-                     FilterView):
+class ReportListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'report.view_report'
     model = Report
     filterset_class = ReportFilter
@@ -22,8 +21,7 @@ class ReportListView(LoginPermissionRequiredMixin,
     queryset = Report.objects.prefetch_related('attachment_set').all()
 
 
-class ReportAdvancedListView(LoginPermissionRequiredMixin,
-                             FilterView):
+class ReportAdvancedListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'report.view_report'
     model = Report
     filterset_class = ReportFilter
@@ -38,21 +36,18 @@ class ReportAdvancedListView(LoginPermissionRequiredMixin,
         return HttpResponseRedirect(request.get_full_path())
 
 
-class ReportDeleteView(LoginPermissionRequiredMixin,
-                       DeleteView):
+class ReportDeleteView(LoginPermissionRequiredMixin, DeleteView):
     permission_required = 'report.delete_report'
     model = Report
     success_url = reverse_lazy('report:list')
 
 
-class ReportDetailView(LoginPermissionRequiredMixin,
-                       DetailView):
+class ReportDetailView(LoginPermissionRequiredMixin, DetailView):
     permission_required = 'report.view_report'
     model = Report
 
 
-class ReportResolveView(LoginPermissionRequiredMixin,
-                        ActionView):
+class ReportResolveView(LoginPermissionRequiredMixin, ActionView):
     permission_required = 'report.change_report'
     model = Report
     template_name_suffix = '_resolve'

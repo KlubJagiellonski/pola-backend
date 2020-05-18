@@ -14,11 +14,7 @@ class StatusFilter(django_filters.ChoiceFilter):
         if 'label' not in kwargs:
             kwargs['label'] = _('Status')
         super().__init__(*args, **kwargs)
-        self.extra['choices'] = (
-            ('', '---------'),
-            ('open', _('Otwarte')),
-            ('resolved', _('Rozpatrzone'))
-        )
+        self.extra['choices'] = (('', '---------'), ('open', _('Otwarte')), ('resolved', _('Rozpatrzone')))
 
     def filter(self, qs, value):
         if value == 'open':
@@ -28,15 +24,14 @@ class StatusFilter(django_filters.ChoiceFilter):
         return qs
 
 
-class ReportFilter(CrispyFilterMixin,
-                   django_filters.FilterSet):
+class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
     status = StatusFilter()
     product = django_filters.ModelChoiceFilter(
-        queryset=Product.objects.all(),
-        widget=autocomplete.ModelSelect2(url='product:product-autocomplete'))
+        queryset=Product.objects.all(), widget=autocomplete.ModelSelect2(url='product:product-autocomplete')
+    )
     product__company = django_filters.ModelChoiceFilter(
-        queryset=Company.objects.all(),
-        widget=autocomplete.ModelSelect2(url='company:company-autocomplete'))
+        queryset=Company.objects.all(), widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
+    )
 
     class Meta:
         model = Report
@@ -47,7 +42,8 @@ class ReportFilter(CrispyFilterMixin,
             'client',
             'created_at',
             'resolved_at',
-            'resolved_by']
+            'resolved_by',
+        ]
         order_by = [
             ('created_at', _('Data utowrzenia')),
             ('-created_at', _('Data utworzenia (reversed)')),

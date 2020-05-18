@@ -26,7 +26,7 @@ class ReportAdmin(admin.ModelAdmin):
     )
     list_filter = ('product', 'created_at', 'resolved_at', 'resolved_by')
     date_hierarchy = 'created_at'
-    inlines = (AttachmentIline, )
+    inlines = (AttachmentIline,)
 
 
 admin.site.register(Report, ReportAdmin)

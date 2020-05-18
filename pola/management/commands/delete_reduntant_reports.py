@@ -15,18 +15,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('Starting...')
 
-        products = Product.objects.filter(pk__gte=options["last_product_id"]) \
-            .values('id', 'name') \
-            .order_by('id').iterator()
+        products = (
+            Product.objects.filter(pk__gte=options["last_product_id"]).values('id', 'name').order_by('id').iterator()
+        )
 
         for product in products:
 
-            print("{} (id:{})".format(product['name'].encode('UTF-8')
-                                      if product['name'] else '', product['id']))
+            print("{} (id:{})".format(product['name'].encode('UTF-8') if product['name'] else '', product['id']))
 
-            reports = Report.objects\
-                .filter(product__id=product['id'], client='krs-bot')\
-                .order_by('created_at')
+            reports = Report.objects.filter(product__id=product['id'], client='krs-bot').order_by('created_at')
 
             desc = Set()
             for report in reports:

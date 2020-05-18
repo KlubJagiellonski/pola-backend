@@ -35,24 +35,25 @@ def get_ai_pics(request):
 
     page_no = int(request.GET.get('page', 0))
 
-    attachments = AIAttachment.objects \
-        .select_related('ai_pics', 'ai_pics__product') \
-        .filter(Q(ai_pics__is_valid=True) | Q(ai_pics__is_valid__isnull=True)) \
+    attachments = (
+        AIAttachment.objects.select_related('ai_pics', 'ai_pics__product')
+        .filter(Q(ai_pics__is_valid=True) | Q(ai_pics__is_valid__isnull=True))
         .order_by('id')
+    )
 
     paginator = Paginator(attachments, MAX_RECORDS)
 
     aipics = []
 
     if page_no < paginator.num_pages:
-        for attachment in paginator.page(page_no+1):
+        for attachment in paginator.page(page_no + 1):
             aipics.append(
                 {
                     'ai_pics_id': attachment.ai_pics.id,
                     'code': attachment.ai_pics.product.code,
                     'product_name': attachment.ai_pics.product.name,
                     'company_id': attachment.ai_pics.product.company_id,
-                    'url': attachment.get_absolute_url()
+                    'url': attachment.get_absolute_url(),
                 }
             )
 
@@ -92,7 +93,7 @@ def add_ai_pics(request):
         height=height,
         device_name=device_name,
         flash_used=flash_used,
-        was_portrait=was_portrait
+        was_portrait=was_portrait,
     )
 
     signed_requests = []
@@ -141,6 +142,7 @@ def create_report_v3(request):
 
 # API v2
 
+
 def get_by_code_internal(request, ai_supported=False):
     code = request.GET['code']
     device_id = request.GET['device_id']
@@ -148,10 +150,13 @@ def get_by_code_internal(request, ai_supported=False):
     result, stats, product = logic.get_result_from_code(code)
 
     if product is not None:
-        Query.objects.create(client=device_id, product=product,
-                             was_verified=stats['was_verified'],
-                             was_590=stats['was_590'],
-                             was_plScore=stats['was_plScore'])
+        Query.objects.create(
+            client=device_id,
+            product=product,
+            was_verified=stats['was_verified'],
+            was_590=stats['was_590'],
+            was_plScore=stats['was_plScore'],
+        )
 
     if product:
         product.increment_query_count()
@@ -192,8 +197,7 @@ def create_report_internal(request, extra_comma=False):
     if product_id:
         product = Product.objects.get(pk=product_id)
 
-    report = Report.objects.create(product=product, description=description,
-                                   client=device_id)
+    report = Report.objects.create(product=product, description=description, client=device_id)
 
     signed_requests = []
     if files_count and file_ext and mime_type:
@@ -204,8 +208,7 @@ def create_report_internal(request, extra_comma=False):
             signed_request = attach_file_internal(report, file_ext, mime_type, extra_comma)
             signed_requests.append(signed_request)
 
-    return JsonResponse({'id': report.id,
-                         'signed_requests': signed_requests})
+    return JsonResponse({'id': report.id, 'signed_requests': signed_requests})
 
 
 def attach_file_internal(report, file_ext, mime_type, extra_comma=False):
@@ -224,13 +227,11 @@ def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False
     expires = int(time.time() + 60 * 60 * 24)
     amz_headers = "x-amz-acl:public-read"
 
-    string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % \
-                     (mime_type, expires, amz_headers,
-                      bucket_name, object_name)
+    string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, bucket_name, object_name)
 
     signature = base64.encodestring(
-        hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(),
-                 string_to_sign.encode('utf8'), sha1).digest())
+        hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(), string_to_sign.encode('utf8'), sha1).digest()
+    )
     signature = quote_plus(signature.strip())
     url = 'https://{}.s3.amazonaws.com/{}'.format(bucket_name, object_name)
     signed_request = '{}?AWSAccessKeyId={}&Expires={}&Signature={}'.format(
@@ -238,7 +239,7 @@ def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False
     )
 
     if extra_comma:
-        signed_request = signed_request,
+        signed_request = (signed_request,)
 
     return signed_request
 
@@ -262,6 +263,7 @@ def attach_file_v2(request):
 
     return JsonResponse({'signed_request': signed_request})
 
+
 # --- API v1 (old)
 
 
@@ -273,10 +275,13 @@ def get_by_code(request, code):
 
     result = logic.serialize_product(product)
 
-    Query.objects.create(client=device_id, product=product,
-                         was_verified=result['verified'],
-                         was_590=code.startswith('590'),
-                         was_plScore=result['plScore'] is not None)
+    Query.objects.create(
+        client=device_id,
+        product=product,
+        was_verified=result['verified'],
+        was_590=code.startswith('590'),
+        was_plScore=result['plScore'] is not None,
+    )
 
     if product:
         product.increment_query_count()
@@ -299,8 +304,7 @@ def create_report(request):
     if product_id:
         product = Product.objects.get(pk=product_id)
 
-    report = Report.objects.create(product=product, description=description,
-                                   client=device_id)
+    report = Report.objects.create(product=product, description=description, client=device_id)
 
     return JsonResponse({'id': report.id})
 

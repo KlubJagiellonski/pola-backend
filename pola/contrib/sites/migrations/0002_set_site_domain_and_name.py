@@ -5,25 +5,13 @@ from django.db import migrations
 def update_site_forward(apps, schema_editor):
     """Set site domain and name."""
     Site = apps.get_model("sites", "Site")
-    Site.objects.update_or_create(
-        id=settings.SITE_ID,
-        defaults={
-            "domain": "pola.pl",
-            "name": "pola"
-        }
-    )
+    Site.objects.update_or_create(id=settings.SITE_ID, defaults={"domain": "pola.pl", "name": "pola"})
 
 
 def update_site_backward(apps, schema_editor):
     """Revert site domain and name to default."""
     Site = apps.get_model("sites", "Site")
-    Site.objects.update_or_create(
-        id=settings.SITE_ID,
-        defaults={
-            "domain": "example.com",
-            "name": "example.com"
-        }
-    )
+    Site.objects.update_or_create(id=settings.SITE_ID, defaults={"domain": "example.com", "name": "example.com"})
 
 
 class Migration(migrations.Migration):

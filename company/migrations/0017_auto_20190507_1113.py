@@ -18,7 +18,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='name',
-            field=models.CharField(blank=True, db_index=True, max_length=255, null=True, verbose_name='Nazwa (pobrana z ILiM)'),
+            field=models.CharField(
+                blank=True, db_index=True, max_length=255, null=True, verbose_name='Nazwa (pobrana z ILiM)'
+            ),
         ),
         migrations.AlterField(
             model_name='company',

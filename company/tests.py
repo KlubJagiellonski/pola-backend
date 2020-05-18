@@ -66,7 +66,7 @@ class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, WebTe
             "adres": "TEST3",
             "liczba_wspolnikow": 3,
             "score": "333",
-            "url": "URL"
+            "url": "URL",
         }
         return CompanyInfo(**data)
 
@@ -187,7 +187,6 @@ class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, 
 
 
 class CompanyCreateFromKRSFormTestCase(TestCase):
-
     @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_existings_compnay_in_db(self, mock_tool):
         CompanyFactory(nip=123)
@@ -236,7 +235,7 @@ class CompanyCreateFromKRSFormTestCase(TestCase):
             "adres": "AAAA",
             "liczba_wspolnikow": 3,
             "score": "333",
-            "url": ""
+            "url": "",
         }
         return CompanyInfo(**data)
 

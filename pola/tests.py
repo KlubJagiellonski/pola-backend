@@ -45,6 +45,7 @@ class AboutTestCase(TemplateUsedMixin, TestCase):
 class FaviconsTestCase(TestCase):
     def test_redirect_happens(self):
         from pola.config.urls import FAVICON_FILES
+
         for filename in FAVICON_FILES:
             resp = self.client.get('/' + filename, follow=False)
             self.assertEqual(resp.status_code, 301, "Invalid redirect status code")

@@ -27,9 +27,7 @@ class KrsClient:
         self.session = requests.Session()
 
     def query_podmiot(self, param, value):
-        params = {
-            param: value
-        }
+        params = {param: value}
         resp = self.session.get(url=self.url, params=params)
 
         if resp.status_code != 200:
@@ -47,22 +45,21 @@ class KrsClient:
 
         company = dict()
         company['nazwa'] = KrsClient.unescape(data['krs_podmioty.nazwa'])
-        company['nazwa_skrocona'] = \
-            KrsClient.unescape(data['krs_podmioty.nazwa_skrocona'])
+        company['nazwa_skrocona'] = KrsClient.unescape(data['krs_podmioty.nazwa_skrocona'])
         company['nip'] = data['krs_podmioty.nip']
-        lokal = " lok. {}".format(data['krs_podmioty.adres_lokal']) if \
-            data['krs_podmioty.adres_lokal'] else ""
-        company['adres'] = KrsClient.unescape("ul. {} {} {}\n{} {}\n{}".format(
-            data['krs_podmioty.adres_ulica'],
-            data['krs_podmioty.adres_numer'],
-            lokal,
-            data['krs_podmioty.adres_kod_pocztowy'],
-            data['krs_podmioty.adres_miejscowosc'],
-            data['krs_podmioty.adres_kraj'])
+        lokal = " lok. {}".format(data['krs_podmioty.adres_lokal']) if data['krs_podmioty.adres_lokal'] else ""
+        company['adres'] = KrsClient.unescape(
+            "ul. {} {} {}\n{} {}\n{}".format(
+                data['krs_podmioty.adres_ulica'],
+                data['krs_podmioty.adres_numer'],
+                lokal,
+                data['krs_podmioty.adres_kod_pocztowy'],
+                data['krs_podmioty.adres_miejscowosc'],
+                data['krs_podmioty.adres_kraj'],
+            )
         )
         company['id'] = data['krs_podmioty.id']
-        company['liczba_wspolnikow'] = \
-            data['krs_podmioty.liczba_wspolnikow']
+        company['liczba_wspolnikow'] = data['krs_podmioty.liczba_wspolnikow']
 
         company['score'] = json['Dataobject'][i]['score']
         company['url'] = json['Dataobject'][i]['mp_url']
@@ -99,32 +96,23 @@ class KrsClient:
     def unescape(s):
         return s.replace('&amp;', '&')
 
-    COMMON_COMPANY_NAME_ENDINGS = \
-        {
-            ' S.A.':
-                ' SPÓŁKA AKCYJNA',
-            ' Sp. z o.o.':
-                ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-            ' Spółka z o.o.':
-                ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
-            'Sp. Jawna':
-                'SPÓŁKA JAWNA',
-            'spółka z ograniczoną odpowiedzialnością sp.k.':
-                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            'sp. z o. o. sp.k.':
-                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            'Sp. z o.o. sp.k.':
-                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
-            'sp. z o.o. sp. k.':
-                'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA'
-        }
+    COMMON_COMPANY_NAME_ENDINGS = {
+        ' S.A.': ' SPÓŁKA AKCYJNA',
+        ' Sp. z o.o.': ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+        ' Spółka z o.o.': ' SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
+        'Sp. Jawna': 'SPÓŁKA JAWNA',
+        'spółka z ograniczoną odpowiedzialnością sp.k.': 'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+        'sp. z o. o. sp.k.': 'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+        'Sp. z o.o. sp.k.': 'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+        'sp. z o.o. sp. k.': 'SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ SPÓŁKA KOMANDYTOWA',
+    }
 
     @staticmethod
     def _normalize_name(name):
         name = name.upper()
         for key, value in KrsClient.COMMON_COMPANY_NAME_ENDINGS.items():
             if name.endswith(key.upper()):
-                return name[:len(name) - len(key)] + value
+                return name[: len(name) - len(key)] + value
         return name
 
     def query_shareholders(self, id):

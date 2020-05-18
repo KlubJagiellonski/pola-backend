@@ -7,18 +7,15 @@ from pola.forms import (
     FormHorizontalMixin,
     ReadOnlyFieldsMixin,
     SaveButtonMixin,
-    SingleButtonMixin
+    SingleButtonMixin,
 )
 from pola.mojepanstwo_api2.krs import Krs
 
 from . import models
 
 
-class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
-                  CommitDescriptionMixin, forms.ModelForm):
-    readonly_fields = [
-        'name'
-    ]
+class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
+    readonly_fields = ['name']
 
     class Meta:
         model = models.Company
@@ -42,9 +39,7 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin,
 
 
 class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.Form):
-    is_krs = forms.ChoiceField(widget=forms.RadioSelect, label="Typ",
-                               choices=((1, 'KRS'), (0, 'NIP')),
-                               initial=1)
+    is_krs = forms.ChoiceField(widget=forms.RadioSelect, label="Typ", choices=((1, 'KRS'), (0, 'NIP')), initial=1)
     no = forms.CharField(label="Numer", max_length=20, required=False)
 
     def clean(self):
@@ -54,18 +49,15 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
         no = cleaned_data['no']
         companies = self.get_companies_from_api(is_krs, no)
         if len(companies) == 0:
-            raise forms.ValidationError(
-                "Nie znaleziono firmy o danym numerze KRS/NIP", 'error')
+            raise forms.ValidationError("Nie znaleziono firmy o danym numerze KRS/NIP", 'error')
         if len(companies) >= 2:
-            raise forms.ValidationError(
-                "Jest wiele firm o tym numerze KRS/NIP (!)", 'error')
+            raise forms.ValidationError("Jest wiele firm o tym numerze KRS/NIP (!)", 'error')
         first_company = companies[0]
 
         cleaned_data['company'] = first_company._asdict()
 
         if models.Company.objects.filter(nip=int(first_company.nip)).exists():
-            raise forms.ValidationError(
-                "Ta firma istnieje już w naszej bazie", 'error')
+            raise forms.ValidationError("Ta firma istnieje już w naszej bazie", 'error')
 
         return cleaned_data
 
@@ -77,14 +69,7 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
 
 
 class BrandForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):
-
     class Meta:
         model = models.Brand
-        fields = [
-            'name',
-            'common_name',
-            'company'
-        ]
-        widgets = {
-            'company': autocomplete.ModelSelect2(url='company:company-autocomplete')
-        }
+        fields = ['name', 'common_name', 'company']
+        widgets = {'company': autocomplete.ModelSelect2(url='company:company-autocomplete')}

@@ -18,13 +18,12 @@ class NullProductFilter(django_filters.Filter):
         return qs
 
 
-class ProductFilter(CrispyFilterMixin,
-                    django_filters.FilterSet):
+class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
     company_empty = NullProductFilter(label="Tylko produkty bez producenta")
 
     company = django_filters.ModelChoiceFilter(
-        queryset=Company.objects.all(),
-        widget=autocomplete.ModelSelect2(url='company:company-autocomplete'))
+        queryset=Company.objects.all(), widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
+    )
 
     class Meta:
         model = Product

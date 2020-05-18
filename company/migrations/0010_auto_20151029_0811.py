@@ -13,7 +13,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plRnD',
-            field=company.models.IntegerRangeField(blank=True, null=True, verbose_name='Miejsca pracy w BiR w Polsce', choices=[(0, '0 - Nie tworzy miejsc pracy w BiR Polsce'), (100, '100 - Tworzy miejsca pracy w BiR w Polsce')]),
+            field=company.models.IntegerRangeField(
+                blank=True,
+                null=True,
+                verbose_name='Miejsca pracy w BiR w Polsce',
+                choices=[
+                    (0, '0 - Nie tworzy miejsc pracy w BiR Polsce'),
+                    (100, '100 - Tworzy miejsca pracy w BiR w Polsce'),
+                ],
+            ),
         ),
         migrations.AlterField(
             model_name='company',

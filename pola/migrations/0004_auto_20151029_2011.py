@@ -8,14 +8,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AddField(model_name='stats', name='no_of_not_verified_590', field=models.IntegerField(default=0),),
         migrations.AddField(
-            model_name='stats',
-            name='no_of_not_verified_590',
-            field=models.IntegerField(default=0),
-        ),
-        migrations.AddField(
-            model_name='stats',
-            name='no_of_not_verified_not_590',
-            field=models.IntegerField(default=0),
+            model_name='stats', name='no_of_not_verified_not_590', field=models.IntegerField(default=0),
         ),
     ]

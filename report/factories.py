@@ -9,6 +9,7 @@ from product.factories import ProductFactory
 class ReportFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'report.Report'
+
     product = factory.SubFactory(ProductFactory)
     client = factory.sequence(lambda n: "client%s" % n)
     description = factory.fuzzy.FuzzyText()

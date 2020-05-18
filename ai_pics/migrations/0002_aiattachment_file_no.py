@@ -8,9 +8,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='aiattachment',
-            name='file_no',
-            field=models.IntegerField(default=0),
-        ),
+        migrations.AddField(model_name='aiattachment', name='file_no', field=models.IntegerField(default=0),),
     ]

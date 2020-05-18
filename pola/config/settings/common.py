@@ -26,14 +26,11 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # Useful template tags:
     'django.contrib.humanize',
-
     # Must be before django.contrib.admin
     'dal',
     'dal_select2',
-
     # Admin
     'grappelli',
     'django.contrib.admin',
@@ -44,7 +41,7 @@ THIRD_PARTY_APPS = (
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
     'reversion',
-    'django_filters'
+    'django_filters',
 )
 
 # Apps specific for this project go here.
@@ -105,9 +102,7 @@ EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.s
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = (
-    ("""Pola Team""", 'pola@pola.pl'),
-)
+ADMINS = [("""Pola Team""", 'pola@pola.pl')]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
@@ -158,18 +153,13 @@ TEMPLATES = [
         # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        'DIRS': [
-            str(APPS_DIR.path('templates')),
-        ],
+        'DIRS': [str(APPS_DIR.path('templates'))],
         'OPTIONS': {
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
             'debug': DEBUG,
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
-            'loaders': [
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-            ],
+            'loaders': ['django.template.loaders.filesystem.Loader', 'django.template.loaders.app_directories.Loader'],
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -198,9 +188,7 @@ STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 STATIC_URL = '/static/'
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = (
-    str(APPS_DIR.path('static')),
-)
+STATICFILES_DIRS = [str(APPS_DIR.path('static'))]
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
@@ -259,25 +247,15 @@ FILTERS_DISABLE_HELP_TEXT = True
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
+    'filters': {'require_debug_false': {'()': 'django.utils.log.RequireDebugFalse'}},
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+            'class': 'django.utils.log.AdminEmailHandler',
         }
     },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
+    'loggers': {'django.request': {'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': True}},
 }
 
 IS_PRODUCTION = env("IS_PRODUCTION", default=False)

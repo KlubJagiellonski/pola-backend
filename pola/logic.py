@@ -28,8 +28,7 @@ def get_result_from_code(code):
 
         if company:
             # we know the manufacturer of the product
-            result['name'] = company.common_name or \
-                company.official_name or company.name
+            result['name'] = company.common_name or company.official_name or company.name
             result['plCapital'] = company.plCapital
             result['plCapital_notes'] = company.plCapital_notes
             result['plWorkers'] = company.plWorkers
@@ -55,11 +54,9 @@ def get_result_from_code(code):
                 if company.plRnD_notes:
                     desc += strip_urls_newlines(company.plRnD_notes) + '\n'
                 if company.plRegistered_notes:
-                    desc +=\
-                        strip_urls_newlines(company.plRegistered_notes) + '\n'
+                    desc += strip_urls_newlines(company.plRegistered_notes) + '\n'
                 if company.plNotGlobEnt_notes:
-                    desc +=\
-                        strip_urls_newlines(company.plNotGlobEnt_notes) + '\n'
+                    desc += strip_urls_newlines(company.plNotGlobEnt_notes) + '\n'
 
                 result['description'] = desc
 
@@ -78,54 +75,59 @@ def get_result_from_code(code):
             if code.startswith('590'):
                 # the code is registered in Poland, we want more data!
                 result['name'] = "Zgłoś nam ten kod!"
-                result['altText'] = "Zeskanowałeś kod, którego nie mamy " \
-                                    "jeszcze w bazie. Bardzo prosimy o " \
-                                    "zgłoszenie tego kodu "\
-                                    "i wysłania zdjęć zarówno " \
-                                    "kodu kreskowego jak i etykiety z " \
-                                    "produktu. Z góry dziękujemy!"
-                result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego " \
-                                        "produktu"
+                result['altText'] = (
+                    "Zeskanowałeś kod, którego nie mamy "
+                    "jeszcze w bazie. Bardzo prosimy o "
+                    "zgłoszenie tego kodu "
+                    "i wysłania zdjęć zarówno "
+                    "kodu kreskowego jak i etykiety z "
+                    "produktu. Z góry dziękujemy!"
+                )
+                result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego " "produktu"
                 result['card_type'] = TYPE_GREY
                 result['report_button_type'] = TYPE_RED
-            elif code.startswith('977') or code.startswith('978') \
-                    or code.startswith('979'):
+            elif code.startswith('977') or code.startswith('978') or code.startswith('979'):
                 # this is an ISBN/ISSN/ISMN number
                 # (book, music album or magazine)
                 result['name'] = 'Kod ISBN/ISSN/ISMN'
-                result['altText'] = 'Zeskanowany kod jest kodem ' \
-                                    'ISBN/ISSN/ISMN dotyczącym książki,  ' \
-                                    'czasopisma lub albumu muzycznego. ' \
-                                    'Wydawnictwa tego typu nie są aktualnie ' \
-                                    'w obszarze zainteresowań Poli.'
-                result['report_text'] = "To nie jest książka, czasopismo lub "\
-                                        "album muzyczny? Prosimy o zgłoszenie"
+                result['altText'] = (
+                    'Zeskanowany kod jest kodem '
+                    'ISBN/ISSN/ISMN dotyczącym książki,  '
+                    'czasopisma lub albumu muzycznego. '
+                    'Wydawnictwa tego typu nie są aktualnie '
+                    'w obszarze zainteresowań Poli.'
+                )
+                result['report_text'] = "To nie jest książka, czasopismo lub " "album muzyczny? Prosimy o zgłoszenie"
             else:
                 # let's try to associate the code with a country
                 for prefix in CODE_PREFIX_TO_COUNTRY.keys():
                     if code.startswith(prefix):
                         result['plScore'] = 0
                         result['card_type'] = TYPE_GREY
-                        result['name'] = 'Miejsce rejestracji: {}' \
-                            .format(CODE_PREFIX_TO_COUNTRY[prefix])
-                        result['altText'] = 'Ten produkt został wyprodukowany ' \
-                                            'przez zagraniczną firmę, której ' \
-                                            'miejscem rejestracji jest: {}.'\
-                                            .format(CODE_PREFIX_TO_COUNTRY[prefix])
+                        result['name'] = 'Miejsce rejestracji: {}'.format(CODE_PREFIX_TO_COUNTRY[prefix])
+                        result['altText'] = (
+                            'Ten produkt został wyprodukowany '
+                            'przez zagraniczną firmę, której '
+                            'miejscem rejestracji jest: {}.'.format(CODE_PREFIX_TO_COUNTRY[prefix])
+                        )
                         break
                 else:
                     # Ups. It seems to be an internal code
                     result['name'] = 'Kod wewnętrzny'
-                    result['altText'] = 'Zeskanowany kod jest wewnętrznym ' \
-                                        'kodem sieci handlowej. Pola nie ' \
-                                        'potrafi powiedzieć o nim nic więcej'
+                    result['altText'] = (
+                        'Zeskanowany kod jest wewnętrznym '
+                        'kodem sieci handlowej. Pola nie '
+                        'potrafi powiedzieć o nim nic więcej'
+                    )
 
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
         result['name'] = 'Nieprawidłowy kod'
-        result['altText'] = 'Pola rozpoznaje tylko kody kreskowe typu EAN8 i '\
-                            'EAN13. Zeskanowany przez Ciebie kod jest innego '\
-                            'typu. Spróbuj zeskanować kod z czegoś innego'
+        result['altText'] = (
+            'Pola rozpoznaje tylko kody kreskowe typu EAN8 i '
+            'EAN13. Zeskanowany przez Ciebie kod jest innego '
+            'typu. Spróbuj zeskanować kod z czegoś innego'
+        )
 
     return result, stats, product
 
@@ -157,9 +159,8 @@ def create_from_api(code, obj, product=None):
     company_created = False
     if obj_owner_name:
         company, company_created = Company.objects.get_or_create(
-            name=obj_owner_name,
-            commit_desc='Firma utworzona automatycznie na podstawie API'
-                        ' ILiM')
+            name=obj_owner_name, commit_desc='Firma utworzona automatycznie na podstawie API' ' ILiM'
+        )
     else:
         company = None
 
@@ -170,33 +171,34 @@ def create_from_api(code, obj, product=None):
             name=obj_product_name,
             code=code,
             company=company,
-            commit_desc="Produkt utworzony automatycznie na podstawie skanu "
-                        "użytkownika")
+            commit_desc="Produkt utworzony automatycznie na podstawie skanu " "użytkownika",
+        )
     else:
         if product.name:
             if obj_product_name and product.name != obj_product_name:
-                create_bot_report(product,
-                                  "Wg. najnowszego odpytania w bazie ILiM "
-                                  "nazwa tego produktu to:\"{}\"".format(
-                                      obj_product_name),
-                                  check_if_already_exists=not company_created
-                                  )
+                create_bot_report(
+                    product,
+                    "Wg. najnowszego odpytania w bazie ILiM " "nazwa tego produktu to:\"{}\"".format(obj_product_name),
+                    check_if_already_exists=not company_created,
+                )
         else:
             if obj_product_name != code:
                 commit_desc += 'Nazwa produktu zmieniona na podstawie bazy GS1. '
                 product.name = obj_product_name
 
         if product.company:
-            if company and product.company.name \
-                and obj_owner_name \
-                and not ilim_compare_str(
-                    product.company.name, obj_owner_name):
-                create_bot_report(product,
-                                  "Wg. najnowszego odpytania w bazie ILiM "
-                                  "producent tego produktu to:\"{}\"".format(
-                                      obj_owner_name),
-                                  check_if_already_exists=not company_created
-                                  )
+            if (
+                company
+                and product.company.name
+                and obj_owner_name
+                and not ilim_compare_str(product.company.name, obj_owner_name)
+            ):
+                create_bot_report(
+                    product,
+                    "Wg. najnowszego odpytania w bazie ILiM "
+                    "producent tego produktu to:\"{}\"".format(obj_owner_name),
+                    check_if_already_exists=not company_created,
+                )
         else:
             commit_desc += 'Producent produktu zmieniony na podstawie bazy GS1. '
             product.company = company
@@ -204,17 +206,17 @@ def create_from_api(code, obj, product=None):
         if product.company and obj and obj_brand:
             if product.brand:
                 if product.brand.name != obj_brand:
-                    create_bot_report(product,
-                                      "Wg. najnowszego odpytania w bazie ILiM "
-                                      "marka tego produktu to:\"{}\"".format(
-                                          obj_brand),
-                                      check_if_already_exists=True
-                                      )
+                    create_bot_report(
+                        product,
+                        "Wg. najnowszego odpytania w bazie ILiM " "marka tego produktu to:\"{}\"".format(obj_brand),
+                        check_if_already_exists=True,
+                    )
             else:
                 brand, _ = Brand.objects.get_or_create(
-                    name=obj_brand, company=product.company,
-                    commit_desc='Marka utworzona automatycznie na podstawie API'
-                                ' ILiM')
+                    name=obj_brand,
+                    company=product.company,
+                    commit_desc='Marka utworzona automatycznie na podstawie API' ' ILiM',
+                )
                 product.brand = brand
                 commit_desc += 'Marka produktu zmieniona na podstawie bazy GS1. '
 
@@ -243,32 +245,29 @@ def update_company_from_krs(product, company):
             company.plRegistered = 100
             company.sources = "Dane z KRS|%s" % companies[0]['url']
 
-            Company.save(company, commit_desc="Dane firmy pobrane "
-                                              "automatycznie poprzez API "
-                                              "mojepanstwo.pl ({})"
-                         .format(companies[0]['url']))
+            Company.save(
+                company,
+                commit_desc="Dane firmy pobrane "
+                "automatycznie poprzez API "
+                "mojepanstwo.pl ({})".format(companies[0]['url']),
+            )
 
             shareholders = shareholders_to_str(krs, companies[0]['id'], '')
             if shareholders:
-                create_bot_report(product, 'Wspólnicy spółki {}:\n{}'.
-                                  format(company.name, shareholders))
+                create_bot_report(product, 'Wspólnicy spółki {}:\n{}'.format(company.name, shareholders))
             return True
 
         elif companies.__len__() > 0:
-            description = '{} - ta firma może być jedną z następujących:\n\n' \
-                .format(company.name)
+            description = '{} - ta firma może być jedną z następujących:\n\n'.format(company.name)
 
             for i in range(0, min(companies.__len__(), 10)):
-                description += \
-                    ('Nazwa: {}\n' +
-                     'Skrót: {}\n' +
-                     'NIP:   {}\n' +
-                     'Adres: \n{}\n' +
-                     'Url:   {}\n').format(companies[i]['nazwa'],
-                                           companies[i]['nazwa_skrocona'],
-                                           companies[i]['nip'],
-                                           companies[i]['adres'],
-                                           companies[i]['url'])
+                description += ('Nazwa: {}\n' + 'Skrót: {}\n' + 'NIP:   {}\n' + 'Adres: \n{}\n' + 'Url:   {}\n').format(
+                    companies[i]['nazwa'],
+                    companies[i]['nazwa_skrocona'],
+                    companies[i]['nip'],
+                    companies[i]['adres'],
+                    companies[i]['url'],
+                )
                 shareholders = shareholders_to_str(krs, companies[i]['id'], '')
                 if shareholders:
                     description += 'Wspólnicy:\n{}'.format(shareholders)
@@ -276,16 +275,17 @@ def update_company_from_krs(product, company):
 
             create_bot_report(product, description)
 
-    except (mojepanstwo_api.CompanyNotFound, mojepanstwo_api.ConnectionError,
-            mojepanstwo_api.ApiError):
+    except (mojepanstwo_api.CompanyNotFound, mojepanstwo_api.ConnectionError, mojepanstwo_api.ApiError):
         pass
 
     return False
 
 
 def create_bot_report(product, description, check_if_already_exists=False):
-    if check_if_already_exists \
-            and Report.objects.filter(product=product, client='krs-bot', description=description).exists():
+    if (
+        check_if_already_exists
+        and Report.objects.filter(product=product, client='krs-bot', description=description).exists()
+    ):
         return
 
     report = Report(description=description)
@@ -295,19 +295,20 @@ def create_bot_report(product, description, check_if_already_exists=False):
 
 
 def serialize_product(product):
-    json = {'plScore': None,
-            'verified': False,
-            'report': 'ask_for_company',
-            'id': product.id,
-            'code': product.code}
+    json = {
+        'plScore': None,
+        'verified': False,
+        'report': 'ask_for_company',
+        'id': product.id,
+        'code': product.code,
+    }
 
     company = product.company
 
     if company:
         json['report'] = False
         json['company'] = {}
-        json['company']['name'] = company.common_name or \
-            company.official_name or company.name
+        json['company']['name'] = company.common_name or company.official_name or company.name
         json['company']['plCapital'] = company.plCapital
         json['company']['plCapital_notes'] = company.plCapital_notes
         json['company']['plWorkers'] = company.plWorkers
@@ -329,24 +330,25 @@ def serialize_product(product):
                 json['plScore'] = 0
                 json['verified'] = False
                 json['company'] = {}
-                json['company']['name'] = 'Miejsce rejestracji: {}' \
-                    .format(CODE_PREFIX_TO_COUNTRY[prefix])
+                json['company']['name'] = 'Miejsce rejestracji: {}'.format(CODE_PREFIX_TO_COUNTRY[prefix])
 
     return json
 
 
 def get_plScore(company):
-    if company.plCapital is not None and \
-       company.plWorkers is not None and \
-       company.plRnD is not None and \
-       company.plRegistered is not None and \
-       company.plNotGlobEnt is not None:
+    if (
+        company.plCapital is not None
+        and company.plWorkers is not None
+        and company.plRnD is not None
+        and company.plRegistered is not None
+        and company.plNotGlobEnt is not None
+    ):
         return int(
-            .35 * company.plCapital +
-            .30 * company.plWorkers +
-            .15 * company.plRnD +
-            .10 * company.plRegistered +
-            .10 * company.plNotGlobEnt
+            0.35 * company.plCapital
+            + 0.30 * company.plWorkers
+            + 0.15 * company.plRnD
+            + 0.10 * company.plRegistered
+            + 0.10 * company.plNotGlobEnt
         )
     else:
         return None
@@ -363,12 +365,13 @@ def shareholders_to_str(krs, id, indent):
         if udzialy_wartosc is None:
             str += '{}* {} -------\n'.format(indent, wspolnik['nazwa'])
         else:
-            str += '{0}* {1} {2}/{3} {4:.0f}%\n'. \
-                format(indent,
-                       wspolnik['nazwa'],
-                       udzialy_wartosc,
-                       kapital_zakladowy,
-                       100 * locale.atof(udzialy_wartosc) / kapital_zakladowy)
+            str += '{}* {} {}/{} {:.0f}%\n'.format(
+                indent,
+                wspolnik['nazwa'],
+                udzialy_wartosc,
+                kapital_zakladowy,
+                100 * locale.atof(udzialy_wartosc) / kapital_zakladowy,
+            )
         if wspolnik['krs_id'] is not None:
             str += shareholders_to_str(krs, wspolnik['krs_id'], indent + '  ')
     return str
@@ -394,7 +397,7 @@ def strip_urls_newlines(str):
         r'(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’'
         r']))',
         '',
-        str
+        str,
     )
     s = rem_dbl_newlines(s)
     s = s.strip(' \t\n\r')
@@ -411,9 +414,7 @@ DEFAULT_RESULT = {
     'name': None,
     'card_type': TYPE_WHITE,
     'plScore': None,
-
     'altText': None,
-
     'plCapital': None,
     'plCapital_notes': None,
     'plWorkers': None,
@@ -424,18 +425,12 @@ DEFAULT_RESULT = {
     'plRegistered_notes': None,
     'plNotGlobEnt': None,
     'plNotGlobEnt_notes': None,
-
-    'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat '
-                   'tego produktu',
+    'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat ' 'tego produktu',
     'report_button_text': 'Zgłoś',
     'report_button_type': TYPE_WHITE,
 }
 
-DEFAULT_STATS = {
-    'was_verified': False,
-    'was_590': False,
-    'was_plScore': False
-}
+DEFAULT_STATS = {'was_verified': False, 'was_590': False, 'was_plScore': False}
 
 CODE_PREFIX_TO_COUNTRY = {
     "30": "Francja",

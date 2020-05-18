@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='company',
             name='is_friend',
-            field=models.BooleanField(choices=[(True, 'Tak'), (False, 'Nie')], default=False, verbose_name='Przyjaciel Poli'),
+            field=models.BooleanField(
+                choices=[(True, 'Tak'), (False, 'Nie')], default=False, verbose_name='Przyjaciel Poli'
+            ),
         ),
     ]

@@ -38,11 +38,9 @@ MIDDLEWARE = SECURITY_MIDDLEWARE + MIDDLEWARE  # noqa: F405
 
 # set this to 60 seconds and then to 518400 when you can prove it works
 SECURE_HSTS_SECONDS = 60
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(  # noqa: F405
-    "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)  # noqa: F405
 SECURE_FRAME_DENY = env.bool("DJANGO_SECURE_FRAME_DENY", default=True)  # noqa: F405
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool(  # noqa: F405
-    "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)  # noqa: F405
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
@@ -54,11 +52,10 @@ SECURE_SSL_HOST = env("DJANGO_SECURE_SSL_HOST", default=None)  # noqa: F405
 # ------------------------------------------------------------------------------
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["www.pola-app.pl", "pola-app.pl",
-                 "pola-staging.herokuapp.com"]
+ALLOWED_HOSTS = ["www.pola-app.pl", "pola-app.pl", "pola-staging.herokuapp.com"]
 # END SITE CONFIGURATION
 
-INSTALLED_APPS += ("gunicorn", )  # noqa: F405
+INSTALLED_APPS += ("gunicorn",)  # noqa: F405
 
 # STORAGE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -84,10 +81,7 @@ AWS_EXPIRY = 60 * 60 * 24 * 7
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto
-AWS_HEADERS = {
-    'Cache-Control': six.b('max-age=%d, s-maxage=%d, must-revalidate' % (
-        AWS_EXPIRY, AWS_EXPIRY))
-}
+AWS_HEADERS = {'Cache-Control': six.b('max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY))}
 
 # URL that handles the media served from MEDIA_ROOT, used for managing
 # stored files.
@@ -104,7 +98,7 @@ STATIC_URL = MEDIA_URL
 # 'django.contrib.staticfiles'
 AWS_PRELOAD_METADATA = True
 
-INSTALLED_APPS = ('collectfast', ) + INSTALLED_APPS  # noqa: F405
+INSTALLED_APPS = ('collectfast',) + INSTALLED_APPS  # noqa: F405
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -120,9 +114,10 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # See:
 # https://docs.djangoproject.com/en/dev/ref/templates/api/#django.template.loaders.cached.Loader
 TEMPLATES[0]['OPTIONS']['loaders'] = [  # noqa: F405
-    ('django.template.loaders.cached.Loader', [
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader', ]),
+    (
+        'django.template.loaders.cached.Loader',
+        ['django.template.loaders.filesystem.Loader', 'django.template.loaders.app_directories.Loader'],
+    ),
 ]
 
 # DATABASE CONFIGURATION
@@ -132,17 +127,13 @@ DATABASES['default'] = env.db("DATABASE_URL")  # noqa: F405
 
 # CACHING
 # ------------------------------------------------------------------------------
-redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL',
-                                             'redis://localhost:6959'))
+redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost:6959'))
 
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': '{}:{}'.format(redis_url.hostname, redis_url.port),
-        'OPTIONS': {
-            'DB': 0,
-            'PASSWORD': redis_url.password,
-        }
+        'OPTIONS': {'DB': 0, 'PASSWORD': redis_url.password},
     }
 }
 
