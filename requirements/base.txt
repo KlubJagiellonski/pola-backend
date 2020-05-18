@@ -50,7 +50,7 @@ Babel==2.5.3
 rq==0.10.0
 
 #Boto
-boto==2.48.0
+boto==2.49.0
 
 #GTIN
 gtin==0.1.3
