@@ -1,5 +1,5 @@
 ARG PYTHON_VERSION="3.6"
-FROM python:${PYTHON_VERSION}-buster
+FROM python:${PYTHON_VERSION}-slim-buster
 
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /app
