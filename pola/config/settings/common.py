@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import environ
 from django.utils.translation import ugettext_lazy as _
 
-ROOT_DIR = environ.Path(__file__) - 3  # (/a/b/myfile.py - 3 = /)
+ROOT_DIR = environ.Path(__file__) - 4  # (/a/b/myfile.py - 3 = /)
 APPS_DIR = ROOT_DIR.path('pola')
 
 env = environ.Env()
@@ -54,11 +54,11 @@ LOCAL_APPS = (
     'company',
     'report',
     'ai_pics',
-    'pagination_custom',
+    'pola.pagination_custom',
     'pola.users',
     'pola.concurency',
-    'api',
-    'webviews',
+    'pola.rpc_api',
+    'pola.webviews',
     # custom users app
     # Your stuff: custom apps go here
 )
@@ -218,10 +218,10 @@ MEDIA_URL = '/media/'
 
 # URL Configuration
 # ------------------------------------------------------------------------------
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'pola.config.urls'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'pola.config.wsgi.application'
 
 # AUTHENTICATION CONFIGURATION
 # ------------------------------------------------------------------------------

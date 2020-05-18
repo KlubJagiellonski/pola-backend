@@ -2,7 +2,6 @@
 from dal import autocomplete
 from django import forms
 
-from mojepanstwo_api2.krs import Krs
 from pola.forms import (
     CommitDescriptionMixin,
     FormHorizontalMixin,
@@ -10,6 +9,7 @@ from pola.forms import (
     SaveButtonMixin,
     SingleButtonMixin
 )
+from pola.mojepanstwo_api2.krs import Krs
 
 from . import models
 

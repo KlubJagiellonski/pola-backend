@@ -15,9 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 from ratelimit.decorators import ratelimit
 
 from ai_pics.models import AIAttachment, AIPics
-from api.rates import whitelist
 from pola import logic, logic_ai
 from pola.models import Query
+from pola.rpc_api.rates import whitelist
 from product.models import Product
 from report.models import Attachment, Report
 

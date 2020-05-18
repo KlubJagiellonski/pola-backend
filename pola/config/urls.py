@@ -48,8 +48,8 @@ urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
 
     # url(r'^api/', include('pola.api.urls', namespace='api')),
-    url(r'^a/', ('api.urls', 'api', 'api')),
-    url(r'^m/', ('webviews.urls', 'webviews', 'webviews')),
+    url(r'^a/', ('pola.rpc_api.urls', 'api', 'api')),
+    url(r'^m/', ('pola.webviews.urls', 'webviews', 'webviews')),
     url(r'^concurency/', ('pola.concurency.urls', 'pola.concurency', 'concurency')),
 
     url(r'^robots\.txt$', TemplateView.as_view(

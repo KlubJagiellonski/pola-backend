@@ -143,7 +143,7 @@ Run these commands to deploy the project to Heroku:
     heroku addons:create mailgun
 
     heroku config:set DJANGO_SECRET_KEY=`openssl rand -base64 32`
-    heroku config:set DJANGO_SETTINGS_MODULE='config.settings.production'
+    heroku config:set DJANGO_SETTINGS_MODULE='pola.config.settings.production'
 
     heroku config:set DJANGO_AWS_ACCESS_KEY_ID=YOUR_AWS_ID_HERE
     heroku config:set DJANGO_AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY_HERE
@@ -191,7 +191,7 @@ You can then deploy by running the following commands.
     ssh -t dokku@yourservername.com dokku postgres:create pola-postgres
     ssh -t dokku@yourservername.com dokku postgres:link pola-postgres pola
     ssh -t dokku@yourservername.com dokku config:set pola DJANGO_SECRET_KEY=RANDOM_SECRET_KEY_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_SETTINGS_MODULE='config.settings.production'
+    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_SETTINGS_MODULE='pola.config.settings.production'
     ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_ACCESS_KEY_ID=YOUR_AWS_ID_HERE
     ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY_HERE
     ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_STORAGE_BUCKET_NAME=YOUR_AWS_S3_BUCKET_NAME_HERE
