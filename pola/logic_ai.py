@@ -42,6 +42,6 @@ def add_ask_for_pics(product, result):
         ai["donate"] = {
             "show_button": True,
             "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-            "title": "Wspieraj aplikację Pola"
+            "title": "Wspieraj aplikację Pola",
         }
     return result
