@@ -39,5 +39,9 @@ def add_ask_for_pics(product, result):
         ai['ask_for_pics_product'] = 'Uczysz Polę produktu: {}'.format(product.name)
         ai['ask_for_pics_button_start'] = 'Nakręć film'
         ai['max_pic_size'] = 800
-
+        ai["donate"] = {
+            "show_button": True,
+            "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+            "title": "Wspieraj aplikację Pola"
+        }
     return result
