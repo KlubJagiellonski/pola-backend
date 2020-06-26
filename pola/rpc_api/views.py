@@ -166,6 +166,11 @@ def get_by_code_internal(request, ai_supported=False):
     if ai_supported:
         result = logic_ai.add_ask_for_pics(product, result)
 
+    result["donate"] = {
+        "show_button": True,
+        "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+        "title": "Wspieraj aplikację Pola",
+    }
     return result
 
 
