@@ -12,8 +12,10 @@ Production Configurations
 import os
 from urllib import parse as urlparse
 
+import sentry_sdk
 from boto.s3.connection import OrdinaryCallingFormat
 from django.utils import six
+from sentry_sdk.integrations.django import DjangoIntegration
 
 from .common import *  # noqa
 
@@ -138,3 +140,11 @@ CACHES = {
 }
 
 # Your production stuff: Below this line define 3rd party library settings
+
+
+sentry_sdk.init(
+    integrations=[DjangoIntegration()],
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True,
+)
