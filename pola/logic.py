@@ -132,13 +132,16 @@ def get_result_from_code(code):
     return result, stats, product
 
 
+ENABLE_GS1_API = False
+
+
 def get_by_code(code):
     try:
         return Product.objects.get(code=code)
     except Product.DoesNotExist:
         pass
     try:
-        if is_code_supported_by_gs1_api(code):
+        if is_code_supported_by_gs1_api(code) and ENABLE_GS1_API:
             client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
             product_info = client.get_product_by_gtin(code)
             return create_from_api(code, product_info)
