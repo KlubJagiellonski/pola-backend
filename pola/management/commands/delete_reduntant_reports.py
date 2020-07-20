@@ -1,6 +1,5 @@
-from sets import Set
-
 from django.core.management.base import BaseCommand
+from sets import Set
 
 from product.models import Product
 from report.models import Report
