@@ -9,9 +9,8 @@ on:
     branches: ['master']
 
 jobs:
-  run-tests:
-    timeout-minutes: 5
-    name: "Trigger tests"
+  django-tests:
+    name: "Django tests"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,7 +22,9 @@ jobs:
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
-      - name: "Run progress"
+      - name: "Build images"
+        run: docker-compose -f docker-compose-ci.yaml build
+      - name: "Start PostgresSQL"
         run: docker-compose -f docker-compose-ci.yaml up -d postgres
-      - name: "Check if tests should be run"
+      - name: "Run tests"
         run: docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
