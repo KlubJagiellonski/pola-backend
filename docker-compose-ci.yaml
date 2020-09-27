@@ -8,9 +8,7 @@ services:
       args:
         - DJANGO_VERSION
         - PYTHON_VERSION
-        - TRAVIS_JOB_ID
-        - TRAVIS_BRANCH
-    command: bash -c "sleep 5 & coverage run manage.py test --verbosity=2 --keepdb"
+    command: test --verbosity=2 --keepdb
     volumes:
       - .:/app
     ports:
