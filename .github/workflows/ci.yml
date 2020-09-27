@@ -28,4 +28,25 @@ jobs:
       - name: "Run tests"
         run: |
           docker-compose -f docker-compose-ci.yaml up -d postgres
+          docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
+
+  django-tests2:
+    name: "Django tests"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version: ["3.5", "3.6", "3.7", "3.8"]
+        django_version: ["2.0.2"]
+    env:
+      PYTHON_VERSION: ${{ matrix.python_version }}
+      DJANGO_VERSION: ${{ matrix.django_version }}
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+      - name: "Build images"
+        run: docker-compose -f docker-compose-ci.yaml build
+      - name: "Run tests"
+        run: |
+          docker-compose -f docker-compose-ci.yaml up -d postgres
           docker-compose -f docker-compose-ci.yaml run web test --verbosity=2 --keepdb

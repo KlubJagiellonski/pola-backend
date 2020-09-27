@@ -53,7 +53,9 @@ if [[ ${EXIT_CODE} != 0 ]]; then
 fi
 
 if command -v "${COMMAND}"; then
+  echo "Running: ${*}"
   exec "${@}"
 fi
 
+echo "Running: /app/manage.py ${*}"
 exec "/app/manage.py" "${@}"
