@@ -28,5 +28,4 @@ jobs:
       - name: "Run tests"
         run: |
           docker-compose -f docker-compose-ci.yaml up -d postgres
-          sleep 5;
-          docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
+          docker-compose -f docker-compose-ci.yaml run web test --verbosity=2 --keepdb

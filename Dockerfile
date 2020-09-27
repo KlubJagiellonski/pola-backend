@@ -22,6 +22,9 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /app
 WORKDIR /app
 
+COPY ./scripts/ci-docker-image/entrypoint.sh /entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
 ARG DJANGO_VERSION="2.0.2"
 ENV DJANGO_VERSION=${DJANGO_VERSION}
 RUN pip install "django==${DJANGO_VERSION}"
