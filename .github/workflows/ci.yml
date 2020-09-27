@@ -13,6 +13,7 @@ jobs:
     name: "Django tests"
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python_version: ["3.5", "3.6", "3.7", "3.8"]
         django_version: ["2.0.2"]
@@ -27,4 +28,5 @@ jobs:
       - name: "Run tests"
         run: |
           docker-compose -f docker-compose-ci.yaml up -d postgres
+          sleep 5;
           docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
