@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v2
       - name: "Build images"
         run: docker-compose -f docker-compose-ci.yaml build
-      - name: "Start PostgresSQL"
-        run: docker-compose -f docker-compose-ci.yaml up -d postgres
       - name: "Run tests"
-        run: docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
+        run: |
+          docker-compose -f docker-compose-ci.yaml up -d postgres
+          docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
