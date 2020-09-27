@@ -29,3 +29,18 @@ jobs:
         run: |
           docker-compose -f docker-compose-ci.yaml up -d postgres
           docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
+
+  static-checks:
+    name: "Static checks"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+      - name: "Setup Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: "Run static checks"
+        uses: pre-commit/action@v2.0.0
