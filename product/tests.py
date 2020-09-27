@@ -29,24 +29,35 @@ class InstanceMixin:
         self.assertContains(resp, self.instance.name)
 
 
-class ProductCreateTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
-    url = reverse_lazy('product:create')
-    template_name = 'product/product_form.html'
-
-
-class ProductGetImageTestCase(PermissionMixin, TestCase):
-    url = reverse_lazy('product:image')
+class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
+    template_name = 'product/product_detail.html'
 
     def setUp(self):
         super().setUp()
-        self.instance = ProductFactory()
-        self.url = reverse("product:image", args=[self.instance.code])
+        self.url = reverse('product:detail', args=[self.instance.code])
 
-    def test_valid_content_type(self):
+
+class ProductListViewTestCase(PermissionMixin, WebTestMixin, TestCase):
+    url = reverse_lazy('product:list')
+    template_name = 'product/product_filter.html'
+
+    def test_empty(self):
         self.login()
         resp = self.client.get(self.url)
-        content_type = resp['Content-Type']
-        self.assertEqual(content_type, "image/png")
+        self.assertContains(resp, "Nic nie znaleziono")
+
+    def test_filled(self):
+        products = ProductFactory.create_batch(100)
+        page = self.app.get(self.url, user=self.user)
+        # self.assertTrue("1 z 4" in page)
+        self.assertTrue(str(products[-1]) in page)
+        page2 = page.click("Następne")
+        page2.click("Poprzednie")
+
+
+class ProductCreateTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+    url = reverse_lazy('product:create')
+    template_name = 'product/product_form.html'
 
 
 class ProductUpdateTestCase(PermissionMixin, InstanceMixin, TestCase):
@@ -104,22 +115,6 @@ class ProductUpdateWebTestCase(WebTestMixin, TestCase):
         self.assertEqual(self.instance.code, "123")
 
 
-class ProductHistoryViewTestCase(PermissionMixin, InstanceMixin, TestCase):
-    template_name = 'product/product_history.html'
-
-    def setUp(self):
-        super().setUp()
-        self.url = reverse('product:view-history', args=[self.instance.code])
-
-
-class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
-    template_name = 'product/product_detail.html'
-
-    def setUp(self):
-        super().setUp()
-        self.url = reverse('product:detail', args=[self.instance.code])
-
-
 class ProductDeleteViewTestCase(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
 
@@ -135,22 +130,27 @@ class ProductDeleteViewTestCase(PermissionMixin, InstanceMixin, TestCase):
         self.assertFalse(Product.objects.filter(pk=self.instance.pk).exists())
 
 
-class ProductListViewTestCase(PermissionMixin, WebTestMixin, TestCase):
-    url = reverse_lazy('product:list')
-    template_name = 'product/product_filter.html'
+class ProductHistoryViewTestCase(PermissionMixin, InstanceMixin, TestCase):
+    template_name = 'product/product_history.html'
 
-    def test_empty(self):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('product:view-history', args=[self.instance.code])
+
+
+class ProductGetImageTestCase(PermissionMixin, TestCase):
+    url = reverse_lazy('product:image')
+
+    def setUp(self):
+        super().setUp()
+        self.instance = ProductFactory()
+        self.url = reverse("product:image", args=[self.instance.code])
+
+    def test_valid_content_type(self):
         self.login()
         resp = self.client.get(self.url)
-        self.assertContains(resp, "Nic nie znaleziono")
-
-    def test_filled(self):
-        products = ProductFactory.create_batch(100)
-        page = self.app.get(self.url, user=self.user)
-        # self.assertTrue("1 z 4" in page)
-        self.assertTrue(str(products[-1]) in page)
-        page2 = page.click("Następne")
-        page2.click("Poprzednie")
+        content_type = resp['Content-Type']
+        self.assertEqual(content_type, "image/png")
 
 
 class ProductAutocompleteTestCase(PermissionMixin, TestCase):
@@ -181,3 +181,15 @@ class ProductAutocompleteTestCase(PermissionMixin, TestCase):
 
     def _get_expected_result(self, elements):
         return {'pagination': {'more': False}, 'results': [{'text': o[1], 'id': o[0]} for o in elements]}
+
+
+class UrlsTestCase(TestCase):
+    def test_should_render_url(self):
+        self.assertEqual("/cms/product/create", reverse('product:create'))
+        self.assertEqual("/cms/product/product-autocomplete/", reverse('product:product-autocomplete'))
+        self.assertEqual("/cms/product/123/image", reverse('product:image', args=[123]))
+        self.assertEqual("/cms/product/123/edit", reverse('product:edit', args=[123]))
+        self.assertEqual("/cms/product/123/delete", reverse('product:delete', args=[123]))
+        self.assertEqual("/cms/product/123/history", reverse('product:view-history', args=[123]))
+        self.assertEqual("/cms/product/123/", reverse('product:detail', args=[123]))
+        self.assertEqual("/cms/product/", reverse('product:list'))
