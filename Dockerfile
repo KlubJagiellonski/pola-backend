@@ -23,7 +23,7 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY ./scripts/ci-docker-image/entrypoint.sh /entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint"]
 
 ARG DJANGO_VERSION="2.0.2"
 ENV DJANGO_VERSION=${DJANGO_VERSION}
