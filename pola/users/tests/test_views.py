@@ -46,3 +46,7 @@ class TestUserUpdateView(BaseUserTestCase):
     def test_get_object(self):
         # Expect: self.user, as that is the request's user object
         self.assertEqual(self.view.get_object(), self.user)
+
+
+class TestUserListView(BaseUserTestCase):
+    pass

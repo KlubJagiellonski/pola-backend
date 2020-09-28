@@ -28,6 +28,42 @@ class HomeTestCase(TemplateUsedMixin, TestCase):
     template_name = 'index.html'
 
 
+class FrontPageViewTestCase(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-cms')
+    template_name = 'pages/home-cms.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class StatsPageViewTestCase(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-stats')
+    template_name = 'pages/home-stats.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class EditorsStatsPageViewTestCase(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-editors-stats')
+    template_name = 'pages/home-editors-stats.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class AdminStatsPageViewTestCase(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-admin-stats')
+    template_name = 'pages/home-admin-stats.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
 class SelectLangTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('select_lang')
     template_name = 'pages/lang-cms.html'
