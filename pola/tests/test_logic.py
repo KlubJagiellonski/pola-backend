@@ -136,11 +136,11 @@ class GetResultFromCodeTestCase(TestCase):
             {
                 "altText": (
                     'Ten produkt został wyprodukowany przez zagraniczną firmę, której '
-                    f'miejscem rejestracji jest: {country}.'
+                    'miejscem rejestracji jest: {}.'.format(country)
                 ),
                 "card_type": "type_grey",
                 "code": current_ean,
-                "name": 'Miejsce rejestracji: ' + country,
+                "name": 'Miejsce rejestracji: {}'.format(country),
                 "plCapital": None,
                 "plCapital_notes": None,
                 "plNotGlobEnt": None,
