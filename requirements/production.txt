@@ -22,4 +22,4 @@ django-redis-cache==2.1.1
 
 sentry-sdk==0.15.1
 
-django==3.0.6
+django==3.0.7
