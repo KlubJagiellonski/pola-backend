@@ -23,12 +23,48 @@ class TemplateUsedMixin:
         self.assertTemplateUsed(resp, self.template_name)
 
 
-class HomeTestCase(TemplateUsedMixin, TestCase):
+class TestHome(TemplateUsedMixin, TestCase):
     url = reverse_lazy('home')
     template_name = 'index.html'
 
 
-class SelectLangTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+class TestFrontPageView(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-cms')
+    template_name = 'pages/home-cms.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class TestStatsPageView(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-stats')
+    template_name = 'pages/home-stats.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class TestEditorsStatsPageView(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-editors-stats')
+    template_name = 'pages/home-editors-stats.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class TestAdminStatsPageView(TemplateUsedMixin, PermissionMixin, TestCase):
+    url = reverse_lazy('home-admin-stats')
+    template_name = 'pages/home-admin-stats.html'
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class TestSelectLang(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('select_lang')
     template_name = 'pages/lang-cms.html'
 
@@ -37,12 +73,12 @@ class SelectLangTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
         super().test_template_used()
 
 
-class AboutTestCase(TemplateUsedMixin, TestCase):
+class TestAbout(TemplateUsedMixin, TestCase):
     url = reverse_lazy('about')
     template_name = 'pages/about.html'
 
 
-class FaviconsTestCase(TestCase):
+class TestFavicons(TestCase):
     def test_redirect_happens(self):
         from pola.config.urls import FAVICON_FILES
 

@@ -11,7 +11,7 @@ django-test-plus==1.0.22
 django-debug-toolbar==1.9.1
 
 # improved REPL
-#ipdb==0.8.1
+ipdb==0.8.1
 
 #getting rid of InsecurePlatformWarning
 #ndg-httpsclient==0.4.0
@@ -25,3 +25,4 @@ mock==2.0.0
 webtest==2.0.29
 django-coverage-plugin==1.5.0
 django-webtest==1.9.7
+parameterized==0.7.4

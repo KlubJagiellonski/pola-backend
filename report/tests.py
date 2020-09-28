@@ -3,7 +3,7 @@ from django.utils.encoding import force_text
 from django_webtest import WebTestMixin
 from test_plus.test import TestCase
 
-from pola.tests import PermissionMixin
+from pola.tests.test_views import PermissionMixin
 from pola.users.factories import UserFactory
 from report.factories import ReportFactory, ResolvedReportFactory
 from report.models import Report
@@ -27,7 +27,7 @@ class InstanceMixin:
         self.assertContains(resp, force_text(self.instance))
 
 
-class ReportListViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, WebTestMixin, TestCase):
+class TestReportListView(PermissionMixin, TemplateUsedMixin, InstanceMixin, WebTestMixin, TestCase):
     url = reverse_lazy('report:list')
     template_name = 'report/report_filter.html'
 
@@ -45,7 +45,7 @@ class ReportListViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, 
         page2.click("Poprzednie")
 
 
-class ReportAdvancedListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
+class TestReportAdvancedListView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('report:advanced')
     template_name = 'report/report_filter_adv.html'
 
@@ -71,7 +71,7 @@ class ReportAdvancedListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTest
         page2.click("Poprzednie")
 
 
-class ReportDeleteViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
+class TestReportDeleteView(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
     template_name = 'report/report_confirm_delete.html'
 
     def setUp(self):
@@ -84,7 +84,7 @@ class ReportDeleteViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin
         self.assertFalse(Report.objects.filter(pk=self.instance.pk).exists())
 
 
-class ReportDetailViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
+class TestReportDetailView(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
     template_name = 'report/report_detail.html'
 
     def setUp(self):
@@ -92,7 +92,7 @@ class ReportDetailViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin
         self.url = reverse('report:detail', kwargs={'pk': self.instance.pk})
 
 
-class ReportResolveViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
+class TestReportResolveView(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
     template_name = 'report/report_resolve.html'
 
     def setUp(self):
@@ -106,7 +106,7 @@ class ReportResolveViewTestCase(PermissionMixin, TemplateUsedMixin, InstanceMixi
         self.assertEqual(Report.objects.get(pk=self.instance.pk).status(), Report.RESOLVED)
 
 
-class ReportQuerySetTestCase(TestCase):
+class TestReportQuerySet(TestCase):
     def test_only_open(self):
         self.assertTrue(Report.objects.only_open().filter(pk=ReportFactory().pk).exists())
         self.assertFalse(Report.objects.only_open().filter(pk=ResolvedReportFactory().pk).exists())
