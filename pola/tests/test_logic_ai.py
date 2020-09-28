@@ -1,5 +1,5 @@
 from unittest import TestCase
 
 
-class AddAskForPicsTestCase(TestCase):
+class TestAddAskForPics(TestCase):
     pass

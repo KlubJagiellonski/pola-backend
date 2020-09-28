@@ -1,17 +1,17 @@
 from test_plus import TestCase
 
 
-class Requery590CodesTestCase(TestCase):
+class TestRequery590Codes(TestCase):
     pass
 
 
-class RequeryAlCodesTestCase(TestCase):
+class TestRequeryAlCodes(TestCase):
     pass
 
 
-class RequeryProductsTestCase(TestCase):
+class TestRequeryProducts(TestCase):
     pass
 
 
-class UpdateFromKbpozTestCase(TestCase):
+class TestUpdateFromKbpoz(TestCase):
     pass

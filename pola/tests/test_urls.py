@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 
-class HomeTestCase(TestCase):
+class TestHome(TestCase):
     def test_should_render_urls(self):
         self.assertEqual("/", reverse("home"))
         self.assertEqual("/friends", reverse("friends"))

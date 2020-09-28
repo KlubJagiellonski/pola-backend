@@ -9,7 +9,7 @@ from product.models import Product
 TEST_EAN13 = "5900084231145"
 
 
-class GetResultFromCodeTestCase(TestCase):
+class TestGetResultFromCode(TestCase):
     def test_should_return_empty_message_on_invalid_code(self):
         self.maxDiff = None
         response = get_result_from_code("ABC")
@@ -205,7 +205,7 @@ class GetResultFromCodeTestCase(TestCase):
         self.assertEqual(expected_response, response)
 
 
-class GetByCodeTestCase(TestCase):
+class TestGetByCode(TestCase):
     def test_should_read_existing_object(self):
         Product(code=TEST_EAN13, name="NAME").save()
         response = get_by_code(TEST_EAN13)
@@ -218,41 +218,41 @@ class GetByCodeTestCase(TestCase):
         self.assertEqual(1, Product.objects.count())
 
 
-class CreateFromApiTestCase(TestCase):
+class TestCreateFromApi(TestCase):
     pass
 
 
-class UpdateCompanyFromKrsTestCase(TestCase):
+class TestUpdateCompanyFromKrs(TestCase):
     pass
 
 
-class CreateBotReportTestCase(TestCase):
+class TestCreateBotReport(TestCase):
     pass
 
 
-class SerializeProductTestCase(TestCase):
+class TestSerializeProduct(TestCase):
     pass
 
 
-class GetPlScoreTestCase(TestCase):
+class TestGetPlScore(TestCase):
     pass
 
 
-class ShareholdersToStrTestCase(TestCase):
+class TestShareholdersToStr(TestCase):
     pass
 
 
-class RemDblNewlinesTestCase(TestCase):
+class TestRemDblNewlines(TestCase):
     pass
 
 
-class StripDblSpacesTestCase(TestCase):
+class TestStripDblSpaces(TestCase):
     pass
 
 
-class IlimCompareStrTestCase(TestCase):
+class TestIlimCompareStr(TestCase):
     pass
 
 
-class StripUrlsNewlinesTestCase(TestCase):
+class TestStripUrlsNewlines(TestCase):
     pass

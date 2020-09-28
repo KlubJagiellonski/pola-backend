@@ -18,39 +18,39 @@ class JsonRequestMixin:
         return self.client.post(url, body, content_type="application/json", **kwargs)
 
 
-class GetAiPicsTestCase(TestCase):
+class TestGetAiPics(TestCase):
     url = '/a/v3/get_ai_pics'
 
 
-class AddAiPicsTestCase(TestCase):
+class TestAddAiPics(TestCase):
     url = '/a/v3/add_ai_pics'
 
 
-class GetByCodeV3TestCase(TestCase):
+class TestGetByCodeV3(TestCase):
     url = '/a/v3/get_by_code'
 
 
-class CreateReportV3TestCase(TestCase):
+class TestCreateReportV3(TestCase):
     url = '/a/v3/create_report'
 
 
-class GetByCodeV2TestCase(TestCase):
+class TestGetByCodeV2(TestCase):
     url = '/a/v2/get_by_code'
 
 
-class CreateReportV2TestCase(TestCase):
+class TestCreateReportV2(TestCase):
     url = '/a/v2/create_report'
 
 
-class UpdateReportV2TestCase(TestCase):
+class TestUpdateReportV2(TestCase):
     url = '/a/v2/update_report'
 
 
-class AttachFileV2TestCase(TestCase):
+class TestAttachFileV2(TestCase):
     url = '/a/v2/attach_file'
 
 
-class GetByCodeTestCase(TestCase):
+class TestGetByCode(TestCase):
     code = "5901887005100"
     url_pattern = '/a/get_by_code/%s'
     url = url_pattern % code
@@ -136,7 +136,7 @@ class GetByCodeTestCase(TestCase):
         self.assertEqual(query.was_590, False)
 
 
-class CreateReportTestCase(JsonRequestMixin, TestCase):
+class TestCreateReport(JsonRequestMixin, TestCase):
     url = '/a/create_report'
 
     def setUp(self):
@@ -175,7 +175,7 @@ class CreateReportTestCase(JsonRequestMixin, TestCase):
         return self.json_request(url, data=r_json)
 
 
-class UpdateReportTestCase(JsonRequestMixin, TestCase):
+class TestUpdateReport(JsonRequestMixin, TestCase):
     url = '/a/update_report'
 
     def setUp(self):
@@ -208,7 +208,7 @@ class UpdateReportTestCase(JsonRequestMixin, TestCase):
     #     self.assertEqual(resp.status_code, 403)
 
 
-class AttachFileTestCase(TestCase):
+class TestAttachFile(TestCase):
     url = '/a/attach_file'
 
     def setUp(self):

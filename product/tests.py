@@ -29,7 +29,7 @@ class InstanceMixin:
         self.assertContains(resp, self.instance.name)
 
 
-class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
+class TestProductDetailView(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
 
     def setUp(self):
@@ -37,7 +37,7 @@ class ProductDetailViewTestCase(PermissionMixin, InstanceMixin, TestCase):
         self.url = reverse('product:detail', args=[self.instance.code])
 
 
-class ProductListViewTestCase(PermissionMixin, WebTestMixin, TestCase):
+class TestProductListView(PermissionMixin, WebTestMixin, TestCase):
     url = reverse_lazy('product:list')
     template_name = 'product/product_filter.html'
 
@@ -55,12 +55,12 @@ class ProductListViewTestCase(PermissionMixin, WebTestMixin, TestCase):
         page2.click("Poprzednie")
 
 
-class ProductCreateTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+class TestProductCreate(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('product:create')
     template_name = 'product/product_form.html'
 
 
-class ProductUpdateTestCase(PermissionMixin, InstanceMixin, TestCase):
+class TestProductUpdate(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_update_form.html'
 
     def setUp(self):
@@ -68,7 +68,7 @@ class ProductUpdateTestCase(PermissionMixin, InstanceMixin, TestCase):
         self.url = reverse('product:edit', args=[self.instance.code])
 
 
-class ProductUpdateWebTestCase(WebTestMixin, TestCase):
+class TestProductUpdateWeb(WebTestMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.instance = ProductFactory(code="123")
@@ -115,7 +115,7 @@ class ProductUpdateWebTestCase(WebTestMixin, TestCase):
         self.assertEqual(self.instance.code, "123")
 
 
-class ProductDeleteViewTestCase(PermissionMixin, InstanceMixin, TestCase):
+class TestProductDeleteView(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
 
     def setUp(self):
@@ -130,7 +130,7 @@ class ProductDeleteViewTestCase(PermissionMixin, InstanceMixin, TestCase):
         self.assertFalse(Product.objects.filter(pk=self.instance.pk).exists())
 
 
-class ProductHistoryViewTestCase(PermissionMixin, InstanceMixin, TestCase):
+class TestProductHistoryView(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_history.html'
 
     def setUp(self):
@@ -138,7 +138,7 @@ class ProductHistoryViewTestCase(PermissionMixin, InstanceMixin, TestCase):
         self.url = reverse('product:view-history', args=[self.instance.code])
 
 
-class ProductGetImageTestCase(PermissionMixin, TestCase):
+class TestProductGetImage(PermissionMixin, TestCase):
     url = reverse_lazy('product:image')
 
     def setUp(self):
@@ -153,7 +153,7 @@ class ProductGetImageTestCase(PermissionMixin, TestCase):
         self.assertEqual(content_type, "image/png")
 
 
-class ProductAutocompleteTestCase(PermissionMixin, TestCase):
+class TestProductAutocomplete(PermissionMixin, TestCase):
     url = reverse_lazy('product:product-autocomplete')
 
     def test_filters(self):
@@ -183,7 +183,7 @@ class ProductAutocompleteTestCase(PermissionMixin, TestCase):
         return {'pagination': {'more': False}, 'results': [{'text': o[1], 'id': o[0]} for o in elements]}
 
 
-class UrlsTestCase(TestCase):
+class TestUrls(TestCase):
     def test_should_render_url(self):
         self.assertEqual("/cms/product/create", reverse('product:create'))
         self.assertEqual("/cms/product/product-autocomplete/", reverse('product:product-autocomplete'))

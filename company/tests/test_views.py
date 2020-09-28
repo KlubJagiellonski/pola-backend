@@ -32,12 +32,12 @@ class InstanceMixin:
         self.assertContains(resp, self.instance.official_name)
 
 
-class CompanyCreateViewTestCase(PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyCreateView(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('company:create')
     template_name = 'company/company_form.html'
 
 
-class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
+class TestCompanyCreateFromKRSView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('company:create_from_krs')
     template_name = 'company/company_from_krs.html'
 
@@ -71,7 +71,7 @@ class CompanyCreateFromKRSViewTestCase(PermissionMixin, TemplateUsedMixin, WebTe
         return CompanyInfo(**data)
 
 
-class CompanyUpdateTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyUpdate(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_form.html'
 
     def setUp(self):
@@ -79,7 +79,7 @@ class CompanyUpdateTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, T
         self.url = reverse('company:edit', kwargs={'pk': self.instance.pk})
 
 
-class CompanyUpdateWebTestCase(WebTestMixin, TestCase):
+class TestCompanyUpdateWeb(WebTestMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.instance = CompanyFactory(name="company_name")
@@ -126,7 +126,7 @@ class CompanyUpdateWebTestCase(WebTestMixin, TestCase):
         self.assertEqual(self.instance.name, "company_name")
 
 
-class ConcurencyComapnyUpdateTestCase(TestCase):
+class TestConcurencyComapnyUpdate(TestCase):
     user_factory = UserFactory
 
     def setUp(self):
@@ -147,7 +147,7 @@ class ConcurencyComapnyUpdateTestCase(TestCase):
             self.response_302(response)
 
 
-class CompanyDeleteViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyDeleteView(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_confirm_delete.html'
 
     def setUp(self):
@@ -160,7 +160,7 @@ class CompanyDeleteViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixi
         self.assertFalse(Company.objects.filter(pk=self.instance.pk).exists())
 
 
-class CompanyDetailViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyDetailView(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_detail.html'
 
     def setUp(self):
@@ -168,7 +168,7 @@ class CompanyDetailViewTestCase(InstanceMixin, PermissionMixin, TemplateUsedMixi
         self.url = reverse('company:detail', kwargs={'pk': self.instance.pk})
 
 
-class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
+class TestCompanyListView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('company:list')
     template_name = 'company/company_filter.html'
 
@@ -186,7 +186,7 @@ class CompanyListViewTestCase(PermissionMixin, TemplateUsedMixin, WebTestMixin, 
         page2.click("Poprzednie")
 
 
-class CompanyCreateFromKRSFormTestCase(TestCase):
+class TestCompanyCreateFromKRSForm(TestCase):
     @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
     def test_existings_compnay_in_db(self, mock_tool):
         CompanyFactory(nip=123)

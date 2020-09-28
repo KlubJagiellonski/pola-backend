@@ -8,31 +8,31 @@ class TemplateUsedMixin:
         self.assertTemplateUsed(resp, self.template_name)
 
 
-class WebViewsAboutTestCase(TemplateUsedMixin, TestCase):
+class TestWebViewsAbout(TemplateUsedMixin, TestCase):
     template_name = 'about.html'
     url = reverse_lazy('webviews:about')
 
 
-class WebViewsMethodTestCase(TemplateUsedMixin, TestCase):
+class TestWebViewsMethod(TemplateUsedMixin, TestCase):
     template_name = 'method.html'
     url = reverse_lazy('webviews:method')
 
 
-class WebViewsKjTestCase(TemplateUsedMixin, TestCase):
+class TestWebViewsKj(TemplateUsedMixin, TestCase):
     template_name = 'kj.html'
     url = reverse_lazy('webviews:kj')
 
 
-class WebViewsTeamTestCase(TemplateUsedMixin, TestCase):
+class TestWebViewsTeam(TemplateUsedMixin, TestCase):
     template_name = 'team.html'
     url = reverse_lazy('webviews:team')
 
 
-class WebViewsPartnersTestCase(TemplateUsedMixin, TestCase):
+class TestWebViewsPartners(TemplateUsedMixin, TestCase):
     template_name = 'partners.html'
     url = reverse_lazy('webviews:partners')
 
 
-class WebViewsFriendsTestCase(TemplateUsedMixin, TestCase):
+class TestWebViewsFriends(TemplateUsedMixin, TestCase):
     template_name = 'm_friends.html'
     url = reverse_lazy('webviews:friends')

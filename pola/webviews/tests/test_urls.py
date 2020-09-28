@@ -3,7 +3,7 @@ from unittest import TestCase
 from django.urls import reverse
 
 
-class WebViewsUrlsTestCase(TestCase):
+class TestWebViewsUrls(TestCase):
     def test_should_render_url(self):
         self.assertEqual("/m/about", reverse('webviews:about'))
         self.assertEqual("/m/method", reverse('webviews:method'))

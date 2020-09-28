@@ -1,5 +1,5 @@
 from test_plus import TestCase
 
 
-class StatsTestCase(TestCase):
+class TestStats(TestCase):
     pass
