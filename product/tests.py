@@ -5,7 +5,7 @@ from reversion.models import Version
 from test_plus.test import TestCase
 
 from company.factories import CompanyFactory
-from pola.tests import PermissionMixin
+from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
 from product.models import Product

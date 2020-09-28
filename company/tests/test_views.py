@@ -10,7 +10,7 @@ from company.factories import CompanyFactory
 from company.forms import CompanyCreateFromKRSForm
 from company.models import Company
 from pola.mojepanstwo_api2.krs import CompanyInfo
-from pola.tests import PermissionMixin
+from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
 
 
