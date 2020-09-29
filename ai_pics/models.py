@@ -34,7 +34,7 @@ class AIPics(models.Model):
     is_valid = models.NullBooleanField()
 
     def attachment_count(self):
-        return self.attachment_set.count()
+        return self.aiattachment_set.count()
 
     def get_absolute_url(self):
         return reverse('ai_pics:detail', args=[self.pk])

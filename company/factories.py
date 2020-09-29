@@ -6,7 +6,7 @@ class CompanyFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'company.Company'
 
-    name = factory.Sequence(lambda n: 'company%d' % n)
-    official_name = factory.Sequence(lambda n: 'company_official_%d' % n)
-    common_name = factory.Sequence(lambda n: 'company_official_%d' % n)
+    name = factory.fuzzy.FuzzyText(prefix='company_')
+    official_name = factory.fuzzy.FuzzyText(prefix='company_official_')
+    common_name = factory.fuzzy.FuzzyText(prefix='company_official_')
     description = factory.fuzzy.FuzzyText()
