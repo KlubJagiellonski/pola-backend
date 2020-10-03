@@ -3,7 +3,9 @@ version: '3'
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: scripts/ci-docker-image/Dockerfile
     command: runserver 0.0.0.0:8080
     volumes:
       - .:/app

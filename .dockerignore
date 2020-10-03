@@ -1,0 +1,13 @@
+# Ignore everything...
+**
+# ...except stated below:
+!ai_pics
+!company
+!pola
+!product
+!report
+!requirements
+!utils
+!scripts
+!manage.py
+!Procfile

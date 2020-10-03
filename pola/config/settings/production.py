@@ -65,16 +65,16 @@ INSTALLED_APPS += ("gunicorn",)  # noqa: F405
 # ------------------------
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += ('storages',)  # noqa: F405
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')  # noqa: F405
 AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')  # noqa: F405
 AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')  # noqa: F405
 AWS_STORAGE_BUCKET_AI_NAME = env('DJANGO_AWS_STORAGE_BUCKET_AI_NAME')  # noqa: F405
 AWS_AUTO_CREATE_BUCKET = True
-AWS_QUERYSTRING_AUTH = False
+AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)  # noqa: F405
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
-
+AWS_S3_SIGNATURE_VERSION = "s3v4"
 AI_SHARED_SECRET = env('AI_SHARED_SECRET')  # noqa: F405
 
 # AWS cache settings, don't change unless you know what you're doing:
@@ -83,7 +83,9 @@ AWS_EXPIRY = 60 * 60 * 24 * 7
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto
-AWS_HEADERS = {'Cache-Control': six.b('max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY))}
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': six.b('max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY))
+}
 
 # URL that handles the media served from MEDIA_ROOT, used for managing
 # stored files.
@@ -99,6 +101,8 @@ STATIC_URL = MEDIA_URL
 # For Django 1.7+, 'collectfast' should come before
 # 'django.contrib.staticfiles'
 AWS_PRELOAD_METADATA = True
+COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
+COLLECTFAST_THREADS = 20
 
 INSTALLED_APPS = ('collectfast',) + INSTALLED_APPS  # noqa: F405
 
