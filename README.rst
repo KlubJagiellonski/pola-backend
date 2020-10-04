@@ -5,10 +5,6 @@ Pola
     :target: https://travis-ci.org/KlubJagiellonski/pola-backend
     :alt: Build Status
 
-.. image:: https://coveralls.io/repos/github/KlubJagiellonski/pola-backend/badge.svg?branch=master
-    :target: https://coveralls.io/github/KlubJagiellonski/pola-backend?branch=master
-    :alt: Coverage Status
-
 .. image:: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/shield.svg
      :target: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/
      :alt: Updates
@@ -20,21 +16,96 @@ Pola
 .. image:: https://img.shields.io/github/license/KlubJagiellonski/pola-backend.svg
      :alt: License
 
-asystent w zakupach
+Pola pomoże Ci odnaleźć polskie wyroby. Zabierając Polę na zakupy odnajdujesz produkty “z duszą” i wspierasz polską gospodarkę.
 
-Staging API: https://pola-staging.herokuapp.com/
+Staging server: https://pola-staging.herokuapp.com/
 
 LICENSE: BSD
 
-Settings
-------------
+Uruchamianie aplikacji
+----------------------
 
-pola relies extensively on environment settings which **will not work with Apache/mod_wsgi setups**. It has been deployed successfully with both Gunicorn/Nginx and even uWSGI/Nginx.
+Aplikacja została przygotowana do pracy w środowisku Docker. Przed pierwszym uruchomieniem musisz spełnić następujące wymagania wstępne:
 
-For configuration purposes, the following table maps the 'pola' environment variables to their Django setting:
+1. Ty musisz mieć zainstalowane `Docker <https://docs.docker.com/get-docker/>`__:
+
+   - Dla Linux, uruchom: ``curl https://get.docker.com | bash``
+   - Dla Max OS/Windows, skorzystaj z poradnika: [Get docker](https://docs.docker.com/get-docker/)
+
+2. Ty musisz mieć zainstalowane `docker-compose <https://docs.docker.com/compose/install/>`__:
+
+   - Dla Linux, uruchom::
+
+       sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+   - Dla Mac OS: Docker Desktop i Docker Toolbox zawierają już Docker Compose wraz z innymi aplikacjami Docker, więc użytkownicy nie muszą instalować Docker Compose oddzielnie.
+
+Po wykonaniu tych kroków możesz uruchomić poniższe polecenie, aby uruchomić sorodowisko:
+
+.. code-block:: bash
+
+    docker-compose up
+
+Poczatkowo baza jest pusta, wiec konieczne jest przeprowadzenie migracji:
+
+.. code-block:: bash
+
+    docker-compose run web migrate
+
+Warto również utworzyć konto administratora w systemie:
+
+.. code-block:: bash
+
+    docker-compose run web createsuperuser --username admin --email admin@example.org
+
+Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Możę to wyglądać następująco.
+
+
+.. code-block:: console
+
+    $ docker-compose run web createsuperuser --username admin --email admin@example.org
+    Creating pola-backend_web_run ... done
+    Checking environment:
+    postgres:  OK.
+    Running: /app/manage.py createsuperuser --username admin --email admin@example.org
+    Password:
+    Password (again):
+    Superuser created successfully.
+
+Po utworzeniu konta, ty możęsz się zalogować pod adresem: http://localhost:8080/cms
+
+Jeśli pojawi się prośba o potwierdzenia założenia konta to niezbędny link będzie dostępny w dzienniku aplikacji
+
+.. code-block:: text
+
+    web_1       | Content-Type: text/plain; charset="utf-8"
+    web_1       | MIME-Version: 1.0
+    web_1       | Content-Transfer-Encoding: 7bit
+    web_1       | Subject: [example.com] Please Confirm Your E-mail Address
+    web_1       | From: webmaster@localhost
+    web_1       | To: admin@example.org
+    web_1       | Date: Sun, 04 Oct 2020 13:51:42 -0000
+    web_1       | Message-ID: <160181950227.18.15611522909315616515@17ac4ef38019>
+    web_1       |
+    web_1       | Hello from example.com!
+    web_1       |
+    web_1       | You're receiving this e-mail because user admin has given yours as an e-mail address to connect their account.
+    web_1       |
+    web_1       | To confirm this is correct, go to http://localhost:8080/accounts/confirm-email/MQ:1kP4QQ:okaOy8Z-KcMpSD0xSGgxPLFA2b0/
+    web_1       |
+    web_1       | Thank you from example.com!
+    web_1       | example.com
+    web_1       | -------------------------------------------------------------------------------
+
+Ustawienia
+----------
+
+Aplikacja w dużym stopniu polegają na zmiennych środowiskowych. Został pomyślnie wdrożony zarówno z Gunicorn.
+
+Na potrzeby konfiguracji poniższa tabela odwzorowuje zmienne środowiskowe na ich ustawienia w Django:
 
 ======================================= =========================== ============================================== ======================================================================
-Environment Variable                    Django Setting              Development Default                            Production Default
+Zmienna środowiskowa                    Ustawienia Django           Domyślna wartośc - dewlopment                  Domyślna wartość - produkcja
 ======================================= =========================== ============================================== ======================================================================
 DJANGO_CACHES                           CACHES (default)            locmem                                         redis
 DJANGO_DATABASES                        DATABASES (default)         See code                                       See code
@@ -52,88 +123,41 @@ DJANGO_SERVER_EMAIL                     SERVER_EMAIL                n/a         
 DJANGO_EMAIL_SUBJECT_PREFIX             EMAIL_SUBJECT_PREFIX        n/a                                            "[pola] "
 ======================================= =========================== ============================================== ======================================================================
 
-The following table lists settings and their defaults for third-party applications:
+W poniższej tabeli wymieniono ustawienia i ich wartości domyślne dla aplikacji innych firm:
 
 ======================================= =========================== ============================================== ======================================================================
-Environment Variable                    Django Setting              Development Default                            Production Default
+Zmienna środowiskowa                    Ustawienia Django           Domyślna wartośc - dewlopment                  Domyślna wartość - produkcja
 ======================================= =========================== ============================================== ======================================================================
-DJANGO_AWS_ACCESS_KEY_ID                AWS_ACCESS_KEY_ID           n/a                                            raises error
-DJANGO_AWS_SECRET_ACCESS_KEY            AWS_SECRET_ACCESS_KEY       n/a                                            raises error
-DJANGO_AWS_STORAGE_BUCKET_NAME          AWS_STORAGE_BUCKET_NAME     n/a                                            raises error
+DJANGO_AWS_ACCESS_KEY_ID                AWS_ACCESS_KEY_ID           n/a                                            <zgłasza wyjątek>
+DJANGO_AWS_SECRET_ACCESS_KEY            AWS_SECRET_ACCESS_KEY       n/a                                            <zgłasza wyjątek>
+DJANGO_AWS_STORAGE_BUCKET_NAME          AWS_STORAGE_BUCKET_NAME     n/a                                            <zgłasza wyjątek>
 
-DJANGO_MAILGUN_API_KEY                  MAILGUN_ACCESS_KEY          n/a                                            raises error
-DJANGO_MAILGUN_SERVER_NAME              MAILGUN_SERVER_NAME         n/a                                            raises error
+DJANGO_MAILGUN_API_KEY                  MAILGUN_ACCESS_KEY          n/a                                            <zgłasza wyjątek>
+DJANGO_MAILGUN_SERVER_NAME              MAILGUN_SERVER_NAME         n/a                                            <zgłasza wyjątek>
 ======================================= =========================== ============================================== ======================================================================
 
-Getting up and running
-----------------------
+Wdrażanie
+---------
 
-Basics
+Możliwe jest wdrożenie aplikacji na platformę Heroku lub inną platformę wspierające `obrazy OCI <https://github.com/opencontainers/image-spec>`__/Docker.
+
+Docker
 ^^^^^^
 
-The steps below will get you up and running with a local development environment. We assume you have the following installed:
+W celu zbudowania obrazu produkcyjny, ty możesz uruchomić komendę:
 
-* pip
-* virtualenv
-* PostgreSQL
+.. code-block:: bash
 
-First make sure to create and activate a virtualenv_, then open a terminal at the project root and install the requirements for local development::
+    ./scripts/prod-docker-image.sh
 
-    $ pip install -r requirements/local.txt
-
-.. _virtualenv: http://docs.python-guide.org/en/latest/dev/virtualenvs/
-
-Create a local PostgreSQL database::
-
-    $ createdb pola
-
-Run ``migrate`` on your new database::
-
-    $ python manage.py migrate
-
-You can now run the ``runserver_plus`` command::
-
-    $ python manage.py runserver_plus
-
-Open up your browser to http://127.0.0.1:8000/ to see the site running locally.
-
-Setting Up Your Users
-^^^^^^^^^^^^^^^^^^^^^
-
-To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
-
-To create an **superuser account**, use this command::
-
-    $ python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-Test coverage
-^^^^^^^^^^^^^
-
-To run the tests, check your test coverage, and generate an HTML coverage report::
-
-    $ coverage run manage.py test
-    $ coverage html
-    $ open htmlcov/index.html
-
-
-It's time to write the code!!!
-
-
-Deployment
-------------
-
-It is possible to deploy to Heroku or to your own server by using Dokku, an open source Heroku clone.
+To powinno zbudować obraz ``docker.pkg.github.com/klubjagiellonski/pola-backend/pola-backend:latest``, który możnaa wykorzystać do wdorżenia na inną platfomre.
 
 Heroku
 ^^^^^^
 
-Run these commands to deploy the project to Heroku:
+Uruchom następujące polecenia, aby wdrożyć projekt w Heroku z wykorzystaniem obrazu Docker:
 
 .. code-block:: bash
-
-    heroku create --buildpack https://github.com/heroku/heroku-buildpack-python
 
     heroku addons:create heroku-postgresql:hobby-dev
     heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL
@@ -142,7 +166,7 @@ Run these commands to deploy the project to Heroku:
     heroku addons:create heroku-redis:hobby-dev
     heroku addons:create mailgun
 
-    heroku config:set DJANGO_SECRET_KEY=`openssl rand -base64 32`
+    heroku config:set DJANGO_SECRET_KEY=$(openssl rand -base64 32)
     heroku config:set DJANGO_SETTINGS_MODULE='pola.config.settings.production'
 
     heroku config:set DJANGO_AWS_ACCESS_KEY_ID=YOUR_AWS_ID_HERE
@@ -154,50 +178,10 @@ Run these commands to deploy the project to Heroku:
 
     heroku config:set PYTHONHASHSEED=random
 
-    git push heroku master
+    ./scripts/prod-docker-image.sh
+    ./scripts/deploy.sh
+
     heroku run python manage.py migrate
     heroku run python manage.py check --deploy
     heroku run python manage.py createsuperuser
     heroku open
-
-Dokku
-^^^^^
-
-You need to make sure you have a server running Dokku with at least 1GB of RAM. Backing services are
-added just like in Heroku however you must ensure you have the relevant Dokku plugins installed.
-
-.. code-block:: bash
-
-    cd /var/lib/dokku/plugins
-    git clone https://github.com/rlaneve/dokku-link.git link
-    git clone https://github.com/luxifer/dokku-redis-plugin redis
-    git clone https://github.com/jezdez/dokku-postgres-plugin postgres
-    dokku plugins-install
-
-You can specify the buildpack you wish to use by creating a file name .env containing the following.
-
-.. code-block:: bash
-
-    export BUILDPACK_URL=<repository>
-
-You can then deploy by running the following commands.
-
-..  code-block:: bash
-
-    git remote add dokku dokku@yourservername.com:pola
-    git push dokku master
-    ssh -t dokku@yourservername.com dokku redis:create pola-redis
-    ssh -t dokku@yourservername.com dokku redis:link pola-redis pola
-    ssh -t dokku@yourservername.com dokku postgres:create pola-postgres
-    ssh -t dokku@yourservername.com dokku postgres:link pola-postgres pola
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_SECRET_KEY=RANDOM_SECRET_KEY_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_SETTINGS_MODULE='pola.config.settings.production'
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_ACCESS_KEY_ID=YOUR_AWS_ID_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_AWS_STORAGE_BUCKET_NAME=YOUR_AWS_S3_BUCKET_NAME_HERE
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_MAILGUN_API_KEY=YOUR_MAILGUN_API_KEY
-    ssh -t dokku@yourservername.com dokku config:set pola DJANGO_MAILGUN_SERVER_NAME=YOUR_MAILGUN_SERVER
-    ssh -t dokku@yourservername.com dokku run pola python manage.py migrate
-    ssh -t dokku@yourservername.com dokku run pola python manage.py createsuperuser
-
-When deploying via Dokku make sure you backup your database in some fashion as it is NOT done automatically.

@@ -19,7 +19,7 @@ DEBUG = env.bool('DJANGO_DEBUG', default=True)  # noqa: F405
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG  # noqa: F405
 
 if IS_DOCKER:
-    ALLOWED_HOSTS = ['0.0.0.0']
+    ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
