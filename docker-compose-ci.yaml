@@ -5,6 +5,7 @@ services:
   web:
     build:
       context: .
+      dockerfile: scripts/ci-docker-image/Dockerfile
       args:
         - DJANGO_VERSION
         - PYTHON_VERSION

@@ -8,6 +8,11 @@ on:
   pull_request:
     branches: ['master']
 
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   django-tests:
     name: "Django tests"
@@ -23,12 +28,21 @@ jobs:
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
-      - name: "Build images"
-        run: docker-compose -f docker-compose-ci.yaml build
+      - name: "Login to Github Docker Registry"
+        run: ./scripts/docker_login_github.sh
+      - name: "Build image"
+        run: |
+          # Build Django CI image
+          ./scripts/ci-docker-image/build_image.sh
+          # Build Postgres image
+          docker-compose -f docker-compose-ci.yaml build postgres
       - name: "Run tests"
         run: |
           docker-compose -f docker-compose-ci.yaml up -d postgres
           docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
+      - name: "Push image (push)"
+        if: github.event_name == 'push'
+        run: ./scripts/ci-docker-image/push_image.sh
 
   static-checks:
     name: "Static checks"
@@ -44,3 +58,41 @@ jobs:
           python-version: '3.7'
       - name: "Run static checks"
         uses: pre-commit/action@v2.0.0
+
+  prod-image:
+    name: "Build Prod Image"
+    runs-on: ubuntu-latest
+    needs: [django-tests, static-checks]
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+      - name: "Login to Github Docker Registry"
+        run: ./scripts/docker_login_github.sh
+      - name: "Build image"
+        run: ./scripts/prod-docker-image/build_image.sh
+      - name: "Verify image"
+        run: ./scripts/prod-docker-image/verify_image.sh
+      - name: "Push image (push)"
+        if: github.event_name == 'push'
+        run: ./scripts/prod-docker-image/push_image.sh
+
+  deploy:
+    name: "Deploy (push)"
+    runs-on: ubuntu-latest
+    needs: [prod-image]
+    if: github.event_name == 'push'
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+      - name: "Login to Github Docker Registry"
+        run: ./scripts/docker_login_github.sh
+      - name: "Login to Heroku Docker Registry"
+        run: "./scripts/docker_login_heroku.sh"
+      - name: "Install Heroku CLI"
+        run: "curl https://cli-assets.heroku.com/install.sh | sh"
+      - name: "Pull image"
+        run: ./scripts/prod-docker-image/pull_image.sh
+      - name: "Deploy"
+        run: ./scripts/deploy.sh pola-staging
