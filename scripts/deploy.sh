@@ -41,12 +41,12 @@ fi
 
 HEROKU_REGISTRY_URL="registry.heroku.com/${APP_NAME}"
 
-docker tag "${IMAGE_NAME}" "${HEROKU_REGISTRY_URL}/web"
+docker tag "${IMAGE_NAME}:latest" "${HEROKU_REGISTRY_URL}/web"
 docker build prod-docker-image \
   --build-arg "BASE_IMAGE=${IMAGE_NAME}" \
   --file=prod-docker-image/Dockerfile.release \
   --tag "${HEROKU_REGISTRY_URL}/release"
-docker tag "${IMAGE_NAME}:latest"
+docker tag "${IMAGE_NAME}:latest" "${IMAGE_NAME}:${APP_NAME}"
 
 docker push "${HEROKU_REGISTRY_URL}/release"
 docker push "${HEROKU_REGISTRY_URL}/web"
