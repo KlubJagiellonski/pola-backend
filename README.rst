@@ -40,7 +40,15 @@ Aplikacja została przygotowana do pracy w środowisku Docker. Przed pierwszym u
 
    - Dla Mac OS: Docker Desktop i Docker Toolbox zawierają już Docker Compose wraz z innymi aplikacjami Docker, więc użytkownicy nie muszą instalować Docker Compose oddzielnie.
 
-Po wykonaniu tych kroków możesz uruchomić poniższe polecenie, aby uruchomić sorodowisko:
+Po wykonaniu tych kroków powiniens przygotować plik z zmiennymi środowiskowymi. Niestety niektóre komponenty wykorzystują
+prywatne lub komercyjne APi, więc możesz mieć problem z dostępem, ale nie powinno to stanowić w problemu w rozwoju aplikacji.
+Zmienne sa przechowywaane w pliku ``.env``. Swój zestaw zmiennych możesz stworzyć bazujac na pliku ``.env.example``.
+
+.. code-block:: bash
+
+    cp .env.example .env
+
+Teraz możesz uruchomić sorodowisko:
 
 .. code-block:: bash
 
