@@ -7,6 +7,9 @@ ARG PYTHON_VERSION="3.6"
 
 FROM python:${PYTHON_VERSION}-slim-buster as build
 
+ARG APP_HOME
+ENV APP_HOME=${APP_HOME}
+
 SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
 
 # Make sure noninteractive debian install is used and language variables set
@@ -58,6 +61,10 @@ ARG APP_UID
 ARG APP_GID
 ENV APP_UID=${APP_UID}
 ENV APP_GID=${APP_GID}
+ARG APP_USER_HOME_DIR=/home/pola-backend
+ENV APP_USER_HOME_DIR=${APP_USER_HOME_DIR}
+ARG APP_HOME
+ENV APP_HOME=${APP_HOME}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
 
@@ -86,16 +93,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG APP_USER_HOME_DIR=/home/pola-backend
-ENV APP_USER_HOME_DIR=${APP_USER_HOME_DIR}
-
 RUN addgroup --gid "${APP_GID}" "pola-backend" && \
     adduser --quiet "pola-backend" --uid "${APP_UID}" \
         --gid "${APP_GID}" \
         --home "${APP_USER_HOME_DIR}"
-
-ARG APP_HOME
-ENV APP_HOME=${APP_HOME}
 
 # Make app files belong to the root group and are accessible. This is to accomodate the guidelines from
 # OpenShift https://docs.openshift.com/enterprise/3.0/creating_images/guidelines.html
