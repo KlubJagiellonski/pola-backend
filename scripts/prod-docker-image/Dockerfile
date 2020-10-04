@@ -34,7 +34,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin
 
-COPY requirements/ /app/requirements/
+COPY ./requirements/ ${APP_HOME}/requirements/
 
 RUN pip install --user -r /app/requirements/production.txt \
     && find /root/.local/ -name '*.pyc' -print0 | xargs -0 rm -r \
@@ -56,6 +56,8 @@ FROM python:${PYTHON_VERSION}-slim-buster as main
 
 ARG APP_UID
 ARG APP_GID
+ENV APP_UID=${APP_UID}
+ENV APP_GID=${APP_GID}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
 
@@ -85,6 +87,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ARG APP_USER_HOME_DIR=/home/pola-backend
+ENV APP_USER_HOME_DIR=${APP_USER_HOME_DIR}
 
 RUN addgroup --gid "${APP_GID}" "pola-backend" && \
     adduser --quiet "pola-backend" --uid "${APP_UID}" \
@@ -92,6 +95,7 @@ RUN addgroup --gid "${APP_GID}" "pola-backend" && \
         --home "${APP_USER_HOME_DIR}"
 
 ARG APP_HOME
+ENV APP_HOME=${APP_HOME}
 
 # Make app files belong to the root group and are accessible. This is to accomodate the guidelines from
 # OpenShift https://docs.openshift.com/enterprise/3.0/creating_images/guidelines.html
@@ -124,6 +128,7 @@ EXPOSE 8080
 USER ${APP_UID}
 
 ARG RELEASE_SHA
+ENV RELEASE_SHA=${RELEASE_SHA}
 
 LABEL io.github.klubjagiellonski.distro="debian"
 LABEL io.github.klubjagiellonski.distro.version="buster"

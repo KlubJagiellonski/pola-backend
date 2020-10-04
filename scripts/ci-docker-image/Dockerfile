@@ -26,6 +26,8 @@ COPY ./scripts/ci-docker-image/entrypoint.sh /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
 ARG DJANGO_VERSION="2.0.2"
+ENV DJANGO_VERSION=${DJANGO_VERSION}
+
 RUN pip install --no-cache "django==${DJANGO_VERSION}"
 
 COPY requirements/base.txt requirements/local.txt /app/requirements/
