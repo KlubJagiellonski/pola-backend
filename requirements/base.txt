@@ -35,7 +35,7 @@ reportlab==3.4.0
 django-filter==1.1.0
 
 # API
-requests==2.20.0
+requests==2.24.0
 django-ratelimit==1.1.0
 
 django-grappelli==2.14.2
