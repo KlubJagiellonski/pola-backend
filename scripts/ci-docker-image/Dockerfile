@@ -3,6 +3,9 @@ FROM python:${PYTHON_VERSION}-slim-buster
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        apt-transport-https \
+        apt-utils \
+        ca-certificates \
         binutils \
         binutils-common \
         binutils-x86-64-linux-gnu \
