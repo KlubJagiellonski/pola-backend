@@ -180,7 +180,10 @@ class TestProductAutocomplete(PermissionMixin, TestCase):
         self.assertEqual(response.json(), self._get_expected_result([('4', 'A4')]))
 
     def _get_expected_result(self, elements):
-        return {'pagination': {'more': False}, 'results': [{'text': o[1], 'id': o[0]} for o in elements]}
+        return {
+            'pagination': {'more': False},
+            'results': [{'text': o[1], 'selected_text': o[1], 'id': o[0]} for o in elements],
+        }
 
 
 class TestUrls(TestCase):

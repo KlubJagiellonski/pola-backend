@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from product.models import Product
@@ -69,7 +68,6 @@ class AIPics(models.Model):
         indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]
 
 
-@python_2_unicode_compatible
 class AIAttachment(models.Model):
     ai_pics = models.ForeignKey(AIPics, on_delete=models.CASCADE)
     file_no = models.IntegerField(null=False, default=0)

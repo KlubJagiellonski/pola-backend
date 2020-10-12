@@ -2,7 +2,6 @@ from django.contrib.postgres.indexes import BrinIndex
 from django.db import connection, models
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from reversion import revisions as reversion
 
@@ -27,7 +26,6 @@ class ProductQuerySet(models.query.QuerySet):
 
 
 @reversion.register
-@python_2_unicode_compatible
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,)
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)

@@ -9,7 +9,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from reversion.models import Revision
 
@@ -27,7 +26,6 @@ class ReportQuerySet(models.QuerySet):
         return self.update(resolved_at=timezone.now(), resolved_by=user)
 
 
-@python_2_unicode_compatible
 class Report(models.Model):
     product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=True, null=True, default=None, verbose_name=_('Zgłaszający'))
@@ -83,7 +81,6 @@ class Report(models.Model):
         indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]
 
 
-@python_2_unicode_compatible
 class Attachment(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
     attachment = models.FileField(upload_to="reports/%Y/%m/%d", verbose_name=_("File"))

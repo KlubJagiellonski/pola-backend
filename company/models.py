@@ -3,7 +3,6 @@ from django.core.validators import ValidationError
 from django.db import connection, models
 from django.forms.models import model_to_dict
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from reversion import revisions as reversion
 
@@ -36,7 +35,6 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 @reversion.register
-@python_2_unicode_compatible
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(
@@ -242,7 +240,6 @@ class BrandQuerySet(models.query.QuerySet):
 
 
 @reversion.register
-@python_2_unicode_compatible
 class Brand(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
