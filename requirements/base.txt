@@ -47,7 +47,7 @@ django-autocomplete-light==3.5.1
 Babel==2.5.3
 
 #RQ
-rq==0.10.0
+rq==1.5.2
 
 #Boto
 boto==2.49.0
