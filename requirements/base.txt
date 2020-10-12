@@ -41,7 +41,7 @@ django-ratelimit==3.0.1
 django-grappelli==2.14.2
 
 # Autocomplete
-django-autocomplete-light==3.5.1
+django-autocomplete-light==3.8.0
 
 #Babel
 Babel==2.8.0
