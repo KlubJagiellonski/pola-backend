@@ -12,7 +12,6 @@ jobs:
     - env: PYTHON_VERSION=3.6 DJANGO_VERSION=2.0.2
     - env: PYTHON_VERSION=3.7 DJANGO_VERSION=2.0.2
     - env: PYTHON_VERSION=3.8 DJANGO_VERSION=2.0.2
-    - env: PYTHON_VERSION=3.9 DJANGO_VERSION=2.0.2
 
 install:
   - docker-compose -f docker-compose-ci.yaml up -d postgres
