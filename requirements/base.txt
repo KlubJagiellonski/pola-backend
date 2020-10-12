@@ -19,7 +19,7 @@ psycopg2-binary==2.8.6
 
 # Unicode slugification
 unicode-slugify==0.1.3
-django-autoslug==1.9.7
+django-autoslug==1.9.8
 
 # Time zones support
 pytz==2020.1
