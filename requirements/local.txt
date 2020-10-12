@@ -3,7 +3,7 @@
 coverage==5.3
 #Sphinx
 django-extensions==3.0.9
-Werkzeug==0.15.3
+Werkzeug==1.0.1
 django-test-plus==1.4.0
 #factory_boy==2.5.2
 
