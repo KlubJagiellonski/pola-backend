@@ -17,7 +17,7 @@ ipdb==0.13.4
 #ndg-httpsclient==0.4.0
 
 # Test dependencies go here.
-coveralls==2.0.0
+coveralls==2.1.2
 flake8==3.8.4
 django-test-plus==1.4.0
 factory_boy==3.1.0
