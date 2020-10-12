@@ -14,7 +14,6 @@ from urllib import parse as urlparse
 
 import sentry_sdk
 from boto.s3.connection import OrdinaryCallingFormat
-from django.utils import six
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from .common import *  # noqa
@@ -83,9 +82,7 @@ AWS_EXPIRY = 60 * 60 * 24 * 7
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': six.b('max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY))
-}
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)}
 
 # URL that handles the media served from MEDIA_ROOT, used for managing
 # stored files.
