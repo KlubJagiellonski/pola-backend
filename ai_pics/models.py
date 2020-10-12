@@ -61,7 +61,7 @@ class AIPics(models.Model):
         verbose_name = _("AIPics")
         verbose_name_plural = _("AIPics")
         permissions = (
-            ("view_aipics", "Can see all AIPics"),
+            # ("view_aipics", "Can see all AIPics"),
             # ("add_aipics", "Can add a new AIPics"),
             # ("change_aipics", "Can edit the AIPics"),
             # ("delete_aipics", "Can delete the AIPics"),
@@ -89,7 +89,7 @@ class AIAttachment(models.Model):
         verbose_name = _("AIPics's attachment")
         verbose_name_plural = _("AIPics's attachments")
         permissions = (
-            ("view_aiattachment", "Can see all AIAttachment"),
+            # ("view_aiattachment", "Can see all AIAttachment"),
             # ("add_aiattachment", "Can add a new AIAttachment"),
             # ("change_aiattachment", "Can edit the AIAttachment"),
             # ("delete_aiattachment", "Can delete the AIAttachment"),

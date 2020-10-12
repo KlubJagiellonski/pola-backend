@@ -219,7 +219,7 @@ class Company(models.Model):
         verbose_name_plural = _("Producenci")
         ordering = ['-created_at']
         permissions = (
-            ("view_company", "Can see all company"),
+            # ("view_company", "Can see all company"),
             # ("add_company", "Can add a new company"),
             # ("change_company", "Can edit the company"),
             # ("delete_company", "Can delete the company"),
@@ -262,4 +262,6 @@ class Brand(models.Model):
         verbose_name = _("Marka")
         verbose_name_plural = _("Marki")
         ordering = ['-created_at']
-        permissions = (("view_brand", "Can see all brands"),)
+        permissions = (
+            # ("view_brand", "Can see all brands"),
+        )

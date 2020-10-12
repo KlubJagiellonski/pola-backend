@@ -75,7 +75,7 @@ class Report(models.Model):
         ordering = ['-created_at']
         get_latest_by = 'created_at'
         permissions = (
-            ("view_report", "Can see all report"),
+            # ("view_report", "Can see all report"),
             # ("add_report", "Can add a new report"),
             # ("change_report", "Can edit the report"),
             # ("delete_report", "Can delete the report"),
