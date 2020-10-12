@@ -1,6 +1,6 @@
 # Local development dependencies go here
 -r base.txt
-coverage==4.5
+coverage==5.3
 #Sphinx
 django-extensions==3.0.9
 Werkzeug==0.15.3
