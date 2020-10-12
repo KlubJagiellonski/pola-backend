@@ -9,7 +9,6 @@ jobs:
   include:
     - install: pip install pre-commit==2.4.0
       script: pre-commit run --all-files --show-diff-on-failure --color always
-    - env: PYTHON_VERSION=3.5 DJANGO_VERSION=2.0.2
     - env: PYTHON_VERSION=3.6 DJANGO_VERSION=2.0.2
     - env: PYTHON_VERSION=3.7 DJANGO_VERSION=2.0.2
     - env: PYTHON_VERSION=3.8 DJANGO_VERSION=2.0.2
