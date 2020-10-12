@@ -34,7 +34,7 @@ function build_image() {
     --target "build" \
     --tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
 
-  if [[ "$(docker images -q "${PROD_IMAGE_NAME:latest}:latest" 2> /dev/null)" == "" ]]; then
+  if [[ "$(docker images -q "${PROD_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
     docker pull "${PROD_IMAGE_NAME}:latest" || true
   fi
 
