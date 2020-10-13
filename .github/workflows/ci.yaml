@@ -1,0 +1,43 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: npm ci
+    - name: Run the tests
+      run: npm test -- --coverage
+    - name: Build app
+      run: npm run build
+    - uses: actions/upload-artifact@v2
+      name: Upload app as artifact
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: app-${{ matrix.node-version }}
+        path: ./build
+    - name: Deploy app on gh-pages branch
+      uses: s0/git-publish-subdir-action@develop
+      if: ${{ github.event_name == 'push' }}
+      env:
+        REPO: self
+        BRANCH: gh-pages
+        FOLDER: ./build
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
