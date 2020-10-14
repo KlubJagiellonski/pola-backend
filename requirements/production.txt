@@ -19,6 +19,6 @@ django-mailgun==0.9.1
 # Redis
 django-redis-cache==2.1.1
 
-sentry-sdk==0.18.0
+sentry-sdk==0.19.0
 
 django==3.1.2
