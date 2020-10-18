@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-
+set -x
 # shellcheck source=scripts/_base_variables.sh
 source "$( dirname "${BASH_SOURCE[0]}" )/_base_variables.sh"
 
