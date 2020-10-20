@@ -14,10 +14,12 @@ function build_image() {
   RELEASE_SHA=$(git rev-parse HEAD)
   readonly RELEASE_SHA
   echo "RELEASE_SHA=${RELEASE_SHA}}"
+  docker pull "python:${PYTHON_VERSION}-slim-buster"
 
   build_args=(\
     "."
     "--file=scripts/prod-docker-image/Dockerfile"
+    "--cache-from=python:${PYTHON_VERSION}-slim-buster"
   )
 
   echo "Building image: ${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
