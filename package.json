@@ -2,11 +2,15 @@
   "name": "pola-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://www.pola-app.pl/a/v3",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.20.0",
+    "jquery": "^3.5.1",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.3.0",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3"
   },
@@ -30,5 +34,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "msw": "^0.21.3"
   }
 }
