@@ -72,8 +72,8 @@ jobs:
         if: >-
           github.event_name == 'push' &&
           (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
-        run: >-
-          set -x
+        run: |-
+          set -x;
 
           if [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "prod" ]]; then
             echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
@@ -125,8 +125,8 @@ jobs:
       - name: "Install Heroku CLI"
         run: "curl https://cli-assets.heroku.com/install.sh | sh"
       - name: "Set image tag"
-        run: >-
-          set -x
+        run: |-
+          set -x;
           if [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "prod" ]]; then
             echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
             echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
