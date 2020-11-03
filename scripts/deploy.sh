@@ -40,13 +40,15 @@ if [[ "$(docker images -q "${IMAGE_NAME}" 2> /dev/null)" == "" ]]; then
 fi
 
 HEROKU_REGISTRY_URL="registry.heroku.com/${APP_NAME}"
+IMAGE_TO_DEPLOY="${IMAGE_NAME}:${IMAGE_TAG}"
 
-docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${HEROKU_REGISTRY_URL}/web"
+echo "Deploying '${IMAGE_TO_DEPLOY}' to '${APP_NAME}' app"
+docker tag "${IMAGE_TO_DEPLOY}" "${HEROKU_REGISTRY_URL}/web"
 docker build prod-docker-image \
   --build-arg "BASE_IMAGE=${IMAGE_NAME}" \
   --file=prod-docker-image/Dockerfile.release \
   --tag "${HEROKU_REGISTRY_URL}/release"
-docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${IMAGE_NAME}:${APP_NAME}"
+docker tag "${IMAGE_TO_DEPLOY}" "${IMAGE_NAME}:${APP_NAME}"
 
 docker push "${HEROKU_REGISTRY_URL}/release"
 docker push "${HEROKU_REGISTRY_URL}/web"
