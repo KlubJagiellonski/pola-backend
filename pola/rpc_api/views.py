@@ -131,10 +131,11 @@ def get_by_code_v3(request):
 
     result = get_by_code_internal(request, ai_supported=noai is None)
 
-    respons = JsonResponse(result)
+    response = JsonResponse(result)
     response["Access-Control-Allow-Origin"] = "*"
 
     return response
+
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
