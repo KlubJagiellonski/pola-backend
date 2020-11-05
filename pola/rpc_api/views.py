@@ -131,7 +131,10 @@ def get_by_code_v3(request):
 
     result = get_by_code_internal(request, ai_supported=noai is None)
 
-    return JsonResponse(result)
+    response = JsonResponse(result)
+    response["Access-Control-Allow-Origin"] = "*"
+
+    return response
 
 
 @csrf_exempt
