@@ -1,18 +1,6 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+import styled from "styled-components"
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* Base for label styling */
+export const Wrapper = styled.input`
 [type="checkbox"]:not(:checked),
 [type="checkbox"]:checked {
   position: absolute;
@@ -32,11 +20,10 @@ code {
   position: absolute;
   left: 0; 
   top: 0;
-  width: 1.5em; 
-  height: 1.5em;
+  width: 1.25em; 
+  height: 1.25em;
   border: 2px solid #ccc;
   background: #fff;
-  border-radius: 10%;
 }
 /* checked mark aspect */
 [type="checkbox"]:not(:checked) + label:after,
@@ -65,11 +52,12 @@ code {
 [type="checkbox"]:disabled:checked + label:before {
   box-shadow: none;
   border-color: #6c757d;
-  background-color: #6c757d;
+  background-color: white;
 }
 [type="checkbox"]:disabled:checked + label:after {
-  color: white;
+  color: #999;
 }
 [type="checkbox"]:disabled + label {
   color: black;
 }
+`
