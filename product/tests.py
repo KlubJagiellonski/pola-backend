@@ -101,19 +101,6 @@ class TestProductUpdateWeb(WebTestMixin, TestCase):
 
         self.assertRedirects(page, self.instance.get_absolute_url())
 
-    @override_settings(LANGUAGE_CODE='en-EN')
-    def test_form_readonly_fields(self):
-        page = self.app.get(self.url, user=self.user)
-        self.assertEqual(page.form['code'].attrs['disabled'], 'true')
-
-        page.form['code'] = "789789789"
-        page.form['commit_desc'] = "Commit desc"
-        page = page.form.submit()
-
-        self.assertRedirects(page, self.instance.get_absolute_url())
-        self.instance.refresh_from_db()
-        self.assertEqual(self.instance.code, "123")
-
 
 class TestProductDeleteView(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
@@ -189,6 +176,7 @@ class TestProductAutocomplete(PermissionMixin, TestCase):
 class TestUrls(TestCase):
     def test_should_render_url(self):
         self.assertEqual("/cms/product/create", reverse('product:create'))
+        self.assertEqual("/cms/product/create-bulk", reverse('product:create-bulk'))
         self.assertEqual("/cms/product/product-autocomplete/", reverse('product:product-autocomplete'))
         self.assertEqual("/cms/product/123/image", reverse('product:image', args=[123]))
         self.assertEqual("/cms/product/123/edit", reverse('product:edit', args=[123]))
