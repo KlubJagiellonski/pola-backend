@@ -42,16 +42,20 @@ fi
 HEROKU_REGISTRY_URL="registry.heroku.com/${APP_NAME}"
 IMAGE_TO_DEPLOY="${IMAGE_NAME}:${IMAGE_TAG}"
 
-echo "Deploying '${IMAGE_TO_DEPLOY}' to '${APP_NAME}' app"
+echo "Start deploying '${IMAGE_TO_DEPLOY}' to '${APP_NAME}' app"
+echo "Preparing images:"
 docker tag "${IMAGE_TO_DEPLOY}" "${HEROKU_REGISTRY_URL}/web"
 docker build prod-docker-image \
   --build-arg "BASE_IMAGE=${IMAGE_TO_DEPLOY}" \
   --file=prod-docker-image/Dockerfile.release \
   --tag "${HEROKU_REGISTRY_URL}/release"
 docker tag "${IMAGE_TO_DEPLOY}" "${IMAGE_NAME}:${APP_NAME}"
+docekr images -a
 
+echo "Publishing images to Heroku registry"
 docker push "${HEROKU_REGISTRY_URL}/release"
 docker push "${HEROKU_REGISTRY_URL}/web"
+echo "Start a new release in Heroku"
 heroku container:release --verbose --app "${APP_NAME}" web release
 
 DOMAIN_LIST=$(\
@@ -60,5 +64,6 @@ DOMAIN_LIST=$(\
     | sed "s@^@https://@g"
   )
 
+echo "Tag image in Github Registry"
 docker push "${IMAGE_NAME}:${APP_NAME}"
 echo "App deployed: ${DOMAIN_LIST}"
