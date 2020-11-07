@@ -18,7 +18,7 @@ const Search = () => {
     e.preventDefault();
     if (ean.length > 0) {
         try {
-           const resp = await axios.get('/get_by_code',
+           const resp = await axios.get('https://www.pola-app.pl/a/v3/get_by_code',
             {
               params: {
                 code: ean,
