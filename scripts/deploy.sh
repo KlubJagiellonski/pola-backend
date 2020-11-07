@@ -50,7 +50,7 @@ docker build prod-docker-image \
   --file=prod-docker-image/Dockerfile.release \
   --tag "${HEROKU_REGISTRY_URL}/release"
 docker tag "${IMAGE_TO_DEPLOY}" "${IMAGE_NAME}:${APP_NAME}"
-docekr images -a
+docker images -a
 
 echo "Publishing images to Heroku registry"
 docker push "${HEROKU_REGISTRY_URL}/release"
