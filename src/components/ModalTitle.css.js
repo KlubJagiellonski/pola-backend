@@ -8,6 +8,7 @@ export const WrapperTitle = styled.div`
 `
 
 export const Title = styled.p`
+  width: 100%;
   fontSize: 20px;
   padding: 0 10px; 
   margin: 0;

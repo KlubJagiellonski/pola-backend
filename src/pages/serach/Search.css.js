@@ -1,38 +1,34 @@
 import styled from "styled-components"
-import { FormControl, Button } from "react-bootstrap"
+import { Link } from "react-router-dom";
 
-export const SearchButton = styled(Button)`
-    background-color: transparent;
-    border: solid 4px #d8002f;
-    border-left: none;
+export const SearchButton = styled(Link)`
     color: #d8002f;
-    font-size: 28px;
-    padding: 0 20px;
-    :hover{
-        background-color: transparent;
-        border: solid 4px #d8002f;
-        border-left: none;
-        color: #d8002f;
-        box-shadow: none;
-        font-size: 35px;
-    }
-   :focus,:active {
-        outline: none !important;
-        box-shadow: none !important;
-        background-color: transparent !important;
-        border: solid 4px #d8002f !important;
-        border-left: none !important;
-        color: #d8002f !important;
-     }
+    float: left;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
 `
-export const SearchFormControl = styled(FormControl)`
-    border: solid 4px #d8002f;
-    border-right: none;
-    font-size: 32px;
+export const SearchInput = styled.input`
+    width: 100%;
     padding-left: 15px;
-    :focus{
-        box-shadow: none;
-        border: solid 4px #d8002f;
-        border-right: none;
-    }
+    border: none;
+    color: #495057;
+    padding-right: 70px;
+`
+
+export const SearchFormControl = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2.5px 0;
+    width: 50%;
+    border: solid 4px #d8002f;
+    font-size: 32px;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    position: relative;
 `
