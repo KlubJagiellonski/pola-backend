@@ -8,6 +8,8 @@ Zeskanuj kod kreskowy z dowolnego produktu i dowiedz się więcej o firmie, któ
 
 Ten projekt został rozpoczęty wykorzystując [Create React App](https://github.com/facebook/create-react-app).
 
+Podgląd wersji deweloperskiej: [https://klubjagiellonski.github.io/pola-web/](https://klubjagiellonski.github.io/pola-web/)
+
 ## Dostępne skrypty
 
 W katalogu projektu możesz uruchomić:
