@@ -5,7 +5,7 @@ asgiref==3.3.1
 boto3==1.16.13
 boto==2.49.0
 botocore==1.19.13
-certifi==2020.6.20
+certifi==2020.11.8
 chardet==3.0.4
 click==7.1.2
 defusedxml==0.6.0
