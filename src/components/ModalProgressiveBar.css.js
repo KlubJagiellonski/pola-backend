@@ -32,4 +32,9 @@ export const ProgressBarStyledLabel = styled.label`
   top: 0;
   bottom: 0;
   color: white;
+  display: table-cell;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
