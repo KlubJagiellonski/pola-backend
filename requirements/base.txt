@@ -2,6 +2,7 @@ Babel==2.8.0
 Pillow==7.2.0
 Unidecode==1.1.1
 asgiref==3.3.0
+attrs==20.3.0
 boto3==1.16.4
 boto==2.49.0
 botocore==1.19.4
@@ -26,8 +27,10 @@ gtin==0.1.13
 idna==2.10
 jmespath==0.10.0
 jsonfield==3.1.0
+jsonschema==3.2.0
 oauthlib==3.1.0
 psycopg2-binary==2.8.6
+pyrsistent==0.17.3
 python-dateutil==2.8.1
 python3-openid==3.2.0
 pytz==2020.1
