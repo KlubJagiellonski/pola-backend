@@ -62,12 +62,18 @@ function push_image() {
     echo "Pushing image: ${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
     # For pull-request
-    docker push "${BUILD_IMAGE_NAME}:latest"
+    if [[ "${IMAGE_TAG}" != "latest" ]]; then
+        docker tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_IMAGE_NAME}:latest"
+        docker push "${BUILD_IMAGE_NAME}:latest"
+    fi
 
     echo "Pushing image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     # For pull-request
-    docker push "${PROD_IMAGE_NAME}:latest"
+    if [[ "${IMAGE_TAG}" != "latest" ]]; then
+        docker tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_IMAGE_NAME}:latest"
+        docker push "${PROD_IMAGE_NAME}:latest"
+    fi
 }
 
 function pull_image() {
