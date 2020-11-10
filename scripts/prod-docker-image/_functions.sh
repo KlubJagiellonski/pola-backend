@@ -61,8 +61,13 @@ function verify_image() {
 function push_image() {
     echo "Pushing image: ${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
+    # For pull-request
+    docker push "${BUILD_IMAGE_NAME}:latest"
+
     echo "Pushing image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+    # For pull-request
+    docker push "${PROD_IMAGE_NAME}:latest"
 }
 
 function pull_image() {
