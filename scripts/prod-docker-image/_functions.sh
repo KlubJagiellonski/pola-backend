@@ -24,24 +24,24 @@ function build_image() {
 
   echo "Building image: ${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
 
-  if [[ "$(docker images -q "${BUILD_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
-    docker pull "${BUILD_IMAGE_NAME}:latest" || true
+  if [[ "$(docker images -q "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
+    docker pull "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" || true
   fi
 
   if [[ ! "$(docker images -q "${BUILD_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
-      build_args+=("--cache-from=${BUILD_IMAGE_NAME}:latest")
+      build_args+=("--cache-from=${BUILD_IMAGE_NAME}:${IMAGE_TAG}")
   fi
   docker build \
     "${build_args[@]}" \
     --target "build" \
     --tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
 
-  if [[ "$(docker images -q "${PROD_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
-    docker pull "${PROD_IMAGE_NAME}:latest" || true
+  if [[ "$(docker images -q "${PROD_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
+    docker pull "${PROD_IMAGE_NAME}:${IMAGE_TAG}" || true
   fi
 
   if [[ ! "$(docker images -q "${PROD_IMAGE_NAME}" 2> /dev/null)" == "" ]]; then
-      build_args+=("--cache-from=${PROD_IMAGE_NAME}:latest")
+      build_args+=("--cache-from=${PROD_IMAGE_NAME}:${IMAGE_TAG}")
   fi
 
   echo "Building image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
