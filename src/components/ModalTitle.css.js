@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, {keyframes} from "styled-components"
 
 export const WrapperTitle = styled.div`
   display: flex;
@@ -12,4 +12,29 @@ export const Title = styled.p`
   fontSize: 20px;
   padding: 0 10px; 
   margin: 0;
+`
+
+const toolTip = keyframes`
+  0%{
+    opacity: 0;
+  }
+  50%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+`
+
+export const ToolTip = styled.div`
+    position: absolute;
+    background-color: #253037;
+    color: white;
+    transform: translate(50%, 100%);
+    padding: 5px 20px;
+    right: 15px;
+    z-index: 1;
+    white-space: nowrap;
+    border-radius: 10px;
+    animation: ${toolTip} 1s linear;
 `

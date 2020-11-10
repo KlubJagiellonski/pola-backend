@@ -6,18 +6,19 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import { AppStyled } from './App.css'
 
 
 function App() {
   return (
-    <div>
+    <AppStyled>
       <HashRouter>
         <Search />
         <Switch>
           <Route exact path="/:ean" component={ModalPage} />
         </Switch>
       </HashRouter>
-    </div>
+    </AppStyled>
   );
 }
 

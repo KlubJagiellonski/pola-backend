@@ -1,22 +1,34 @@
 import React, { useState } from 'react'
-import { SearchButton, SearchInput, SearchFormControl } from './Search.css'
+import { SearchButton, SearchInput, SearchFormControl, Wrapper, Text } from './Search.css'
 import { ImSearch } from 'react-icons/im'
+import { useHistory } from "react-router-dom";
 
 const Search = () => {
   const [ean, setEan] = useState("");
+  let history = useHistory();
+
+  const handleSubmit = () => {
+    history.push(`/${ean.replace(/\s/g, '')}`);
+  }
 
   return (
-    <SearchFormControl>
-      <SearchInput
-        type='text'
-        value={ean}
-        onChange={e => setEan(e.target.value)}
-        placeholder="Wpisz tutaj kod ean"
-      />
-      <SearchButton to={`/${ean}`}>
-        <ImSearch />
-      </SearchButton>
-    </SearchFormControl>
+    <Wrapper>
+      <Text>
+        Sprawdź informacje o produkcie.<br />
+        Nie wiesz, jaki kod ma Twój produkt? <a href='https://pl.openfoodfacts.org/'>Sprawdź w bazie kodów</a>
+      </Text>
+      <SearchFormControl onSubmit={handleSubmit}>
+        <SearchInput
+          type='text'
+          value={ean}
+          onChange={e => setEan(e.target.value)}
+          placeholder="Wpisz tutaj kod kreskowy (EAN)"
+        />
+        <SearchButton type='submit'>
+          <ImSearch />
+        </SearchButton>
+      </SearchFormControl>
+    </Wrapper>
   )
 }
 
