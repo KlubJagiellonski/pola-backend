@@ -7,7 +7,7 @@ django==3.1.2
 gevent==20.9.0
 greenlet==0.4.17
 gunicorn==20.0.4
-sentry-sdk==0.19.1
+sentry-sdk==0.19.2
 typing-extensions==3.7.4.3
 zope.event==4.5.0
 zope.interface==5.1.2
