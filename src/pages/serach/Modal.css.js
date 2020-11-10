@@ -45,4 +45,8 @@ export const Content = styled.div`
   border-radius: 5px;
   box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.2);
   animation: ${translate} 0.3s linear;
+
+  @media only screen and (max-width: 992px) {
+    width: 85%;
+  }
 `
