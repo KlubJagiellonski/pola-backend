@@ -1,13 +1,14 @@
+---
 version: 2
 updates:
-- package-ecosystem: pip
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "04:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: botocore
-    versions:
-    - "> 1.19.4"
-    - "< 2"
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "04:00"
+    open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: botocore
+        versions:
+          - "> 1.19.4"
+          - "< 2"
