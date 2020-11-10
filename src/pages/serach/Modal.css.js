@@ -11,8 +11,9 @@ export const filling = keyframes`
 `
 
 export const Background = styled.div`
-  top: 0;
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   animation: ${filling} 0.3s linear;
