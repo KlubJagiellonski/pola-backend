@@ -2,7 +2,7 @@ import React from 'react';
 import Search from './pages/serach/Search'
 import ModalPage from './pages/serach/Modal'
 import {
-  BrowserRouter,
+  HashRouter,
   Switch,
   Route,
 } from "react-router-dom";
@@ -11,12 +11,12 @@ import {
 function App() {
   return (
     <div>
-      <BrowserRouter>
+      <HashRouter>
         <Search />
         <Switch>
           <Route exact path="/:ean" component={ModalPage} />
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }

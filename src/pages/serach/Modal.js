@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
 import SearchModal from './SearchModal';
 import axios from 'axios'
 import { getCurrentDeviceId } from "../../deviceId";
 import { Background, Content, Wrapper } from "./Modal.css";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 
-const ModalPage = ({ match, open }) => {
+const ModalPage = () => {
   const [data, setData] = useState('');
   const { ean } = useParams();
 
@@ -16,7 +15,7 @@ const ModalPage = ({ match, open }) => {
     setRedirect(true)
   }
 
-  useEffect((ean) => {
+  useEffect(() => {
     async function api() {
       if (ean && ean.length > 0) {
         try {
@@ -43,7 +42,7 @@ const ModalPage = ({ match, open }) => {
         <>
           <Background>
             <Wrapper onClick={closeModal} />
-            <Content open={open}>
+            <Content>
               <SearchModal
                 data={data}
                 close={closeModal}
