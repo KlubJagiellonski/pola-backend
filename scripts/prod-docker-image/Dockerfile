@@ -41,7 +41,8 @@ COPY ./requirements/ ${APP_HOME}/requirements/
 
 RUN pip install --user -r "${APP_HOME}/requirements/production.txt" \
     && find /root/.local/ -name '*.pyc' -print0 | xargs -0 rm -r \
-    && find /root/.local/ -type d -name '__pycache__' -print0 | xargs -0 rm -r
+    && find /root/.local/ -type d -name '__pycache__' -print0 | xargs -0 rm -r \
+    && pip check
 
 # make sure that all directories and files in .local are also group accessible
 RUN find /root/.local -executable -print0 | xargs --null chmod g+x && \
