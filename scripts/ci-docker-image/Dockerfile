@@ -35,4 +35,4 @@ RUN pip install --no-cache "django==${DJANGO_VERSION}"
 
 COPY requirements/base.txt requirements/local.txt /app/requirements/
 
-RUN pip install --no-cache -r requirements/local.txt
+RUN pip install --no-cache -r requirements/local.txt && pip check
