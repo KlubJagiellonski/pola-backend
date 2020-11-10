@@ -1,6 +1,9 @@
 import styled from "styled-components"
 
 export const Wrapper = styled.p`
+  margin: 0;
+  padding: 0.2em 0;
+
   [type="checkbox"]:not(:checked),
   [type="checkbox"]:checked {
     position: absolute;
@@ -9,7 +12,7 @@ export const Wrapper = styled.p`
   [type="checkbox"]:not(:checked) + label,
   [type="checkbox"]:checked + label {
     position: relative;
-    padding-left: 1.95em;
+    padding-left: 2.2em;
     cursor: pointer;
   }
 
@@ -30,7 +33,7 @@ export const Wrapper = styled.p`
   [type="checkbox"]:checked + label:after {
     content: "✓";
     position: absolute;
-    top: .15em; 
+    top: .25em;
     left: .22em;
     font-size: 1.3em;
     line-height: 0.8;
@@ -57,7 +60,11 @@ export const Wrapper = styled.p`
   [type="checkbox"]:disabled:checked + label:after {
     color: white;
   }
+  [type="checkbox"] + label {
+    display: block;
+  }
   [type="checkbox"]:disabled + label {
     color: black;
   }
+
 `
