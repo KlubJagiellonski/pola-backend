@@ -15,7 +15,7 @@ function App() {
       <HashRouter>
         <Search />
         <Switch>
-          <Route exact path="/:ean" component={ModalPage} />
+          <Route exact path="/ean/:ean" component={ModalPage} />
         </Switch>
       </HashRouter>
     </AppStyled>

@@ -7,8 +7,12 @@ const Search = () => {
   const [ean, setEan] = useState("");
   let history = useHistory();
 
-  const handleSubmit = () => {
-    history.push(`/${ean.replace(/\s/g, '')}`);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(ean.length)
+    if(ean.length > 0){
+      history.push(`/ean/${ean.replace(/\s/g, '')}`);
+    }
   }
 
   return (

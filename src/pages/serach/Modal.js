@@ -17,19 +17,17 @@ const ModalPage = () => {
 
   useEffect(() => {
     async function api() {
-      if (ean && ean.length > 0) {
-        try {
-          const resp = await axios.get('https://www.pola-app.pl/a/v3/get_by_code',
-            {
-              params: {
-                code: ean,
-                device_id: getCurrentDeviceId()
-              }
-            })
-          setData(resp.data)
-        } catch (err) {
-          console.log(err)
-        }
+      try {
+        const resp = await axios.get('https://www.pola-app.pl/a/v3/get_by_code',
+          {
+            params: {
+              code: ean,
+              device_id: getCurrentDeviceId()
+            }
+          })
+        setData(resp.data)
+      } catch (err) {
+        console.log(err)
       }
     }
     api()
