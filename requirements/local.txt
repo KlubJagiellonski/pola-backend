@@ -1,5 +1,5 @@
 -r base.txt
-Faker==4.14.0
+Faker==4.17.0
 Pygments==2.7.2
 WebOb==1.8.6
 WebTest==2.0.35
