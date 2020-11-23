@@ -20,7 +20,7 @@ flake8==3.8.4
 importlib-metadata==3.0.0
 ipdb==0.13.4
 ipython-genutils==0.2.0
-ipython==7.16.1
+ipython==7.19.0
 jedi==0.17.2
 mccabe==0.6.1
 parameterized==0.7.4
