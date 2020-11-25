@@ -1,12 +1,17 @@
-from braces.views import FormValidMessageMixin
+from braces.views import FormValidMessageMixin, MessageMixin
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import (
+    CreateView,
+    DeleteView,
+    FormView,
+    UpdateView,
+)
 from django_filters.views import FilterView
 from reportlab.graphics import renderPM
 from reversion.models import Version
@@ -19,7 +24,7 @@ from report.models import Report
 
 from . import models
 from .filters import ProductFilter
-from .forms import ProductForm
+from .forms import AddBulkProductForm, ProductForm
 from .images import Barcode
 
 
@@ -99,3 +104,24 @@ class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplet
         'company__common_name__icontains',
     ]
     model = Product
+
+
+class ProductBulkCreate(LoginPermissionRequiredMixin, MessageMixin, FormView):
+    permission_required = 'product.add_product'
+    form_class = AddBulkProductForm
+    form_valid_message = _("Products created!")
+    template_name = 'product/product_form.html'
+
+    def form_valid(self, form):
+        success, failed = form.save()
+        msg = ""
+        if success:
+            msg += f"Zapisano {len(success)} produktów,\n"
+            self.messages.success(msg, fail_silently=True)
+
+        if failed:
+            msg += f"Nie udało się zapisać {len(failed)} produktów.\n"
+            msg += "Niepowodzenia: " + ",".join("{} ({})".format(p, p.code) for p in failed)
+            self.messages.error(msg, fail_silently=True)
+
+        return HttpResponseRedirect(form.cleaned_data['company'].get_absolute_url())

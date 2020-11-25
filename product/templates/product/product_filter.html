@@ -6,6 +6,9 @@
         <div class="btn-group">
             <a href="{% url 'product:create' %}" class="btn btn-primary"><i class="fa fa-plus"></i> {% trans "Dodaj" %}</a>
         </div>
+        <div class="btn-group">
+            <a href="{% url 'product:create-bulk' %}" class="btn btn-primary"><i class="fa fa-plus"></i> {% trans "Dodaj zbiorczo" %}</a>
+        </div>
     {% endif %}
 
     <h1>{% trans "Produkt" %}</h1>

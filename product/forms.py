@@ -1,20 +1,87 @@
+import csv
+from tempfile import NamedTemporaryFile
+from typing import Dict
+
 from dal import autocomplete
 from django import forms
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
+from company.models import Company
 from pola.forms import (
     CommitDescriptionMixin,
     FormHorizontalMixin,
-    ReadOnlyFieldsMixin,
     SaveButtonMixin,
 )
 
 from . import models
+from .models import Product
 
 
-class ProductForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
-    readonly_fields = ['code']
-
+class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
     class Meta:
         model = models.Product
-        fields = ['name', 'code', 'company']
+        fields = ['code', 'name', 'code', 'company']
         widgets = {'company': autocomplete.ModelSelect2(url='company:company-autocomplete')}
+
+
+class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
+    company = forms.ModelChoiceField(
+        queryset=Company.objects, widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
+    )
+    rows = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'name\\tcode\\nMleko\\t590...\\nMasło\\t590...'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean_rows(self):
+        try:
+            with NamedTemporaryFile(mode='w+', newline='') as csvfile:
+                csvfile.write(self.data['rows'])
+                csvfile.seek(0)
+                dialect = csv.Sniffer().sniff(csvfile.read(1024))
+                csvfile.seek(0)
+                reader = csv.DictReader(csvfile, dialect=dialect)
+                if set(reader.fieldnames) != {'code', 'name'}:
+                    raise ValidationError(
+                        f'Następujące kolumny są wymagane: code, name. Aktualne kolumny: {reader.fieldnames}',
+                        code='invalid',
+                    )
+                errors = []
+                result = []
+                for row in reader:
+                    if 'code' not in row or 'name' not in row:
+                        errors.append(
+                            ValidationError(
+                                f"Nieprawidlowe wiersz - Linia {reader.line_num} - " f"Brakujace kolumny: {dict(row)}"
+                            )
+                        )
+                    elif not row['code'] or not row['name']:
+                        errors.append(
+                            ValidationError(
+                                f"Nieprawidlowe wiersz -Linia {reader.line_num} - " f"Puste kolumny: {dict(row)}"
+                            )
+                        )
+                    else:
+                        result.append(row)
+                if errors:
+                    raise ValidationError(errors)
+                return result
+        except csv.Error as ex:
+            raise ValidationError(f"Blad odczytu pliku CSV: {ex}")
+
+    def save(self):
+        company = self.cleaned_data['company']
+        success = []
+        failed = []
+        row: Dict[str, str]
+        for row in self.cleaned_data['rows']:
+            p = Product(code=row['code'], name=row['name'], company=company)
+            try:
+                p.save(commit_desc="Bulk import")
+                success.append(p)
+            except IntegrityError:
+                failed.append(p)
+        return success, failed

@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     url(regex=r'create$', view=views.ProductCreate.as_view(), name="create"),
+    url(regex=r'create-bulk$', view=views.ProductBulkCreate.as_view(), name="create-bulk"),
     url(r'^product-autocomplete/$', views.ProductAutocomplete.as_view(), name='product-autocomplete'),
     url(regex=r'(?P<code>[-\w]+)/image$', view=login_required(views.get_image), name="image"),
     url(regex=r'(?P<slug>[-\w]+)/edit$', view=views.ProductUpdate.as_view(), name="edit"),
