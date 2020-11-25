@@ -39,7 +39,7 @@ RUN mkdir -p /root/.local/bin
 
 COPY ./requirements/ ${APP_HOME}/requirements/
 
-RUN pip install --user -r "${APP_HOME}/requirements/production.txt" \
+RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.txt" \
     && find /root/.local/ -name '*.pyc' -print0 | xargs -0 rm -r \
     && find /root/.local/ -type d -name '__pycache__' -print0 | xargs -0 rm -r \
     && pip check
