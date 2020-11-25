@@ -1,6 +1,7 @@
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
+from parameterized import parameterized
 from reversion.models import Version
 from test_plus.test import TestCase
 
@@ -8,6 +9,7 @@ from company.factories import CompanyFactory
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
+from product.forms import AddBulkProductForm
 from product.models import Product
 
 
@@ -171,6 +173,77 @@ class TestProductAutocomplete(PermissionMixin, TestCase):
             'pagination': {'more': False},
             'results': [{'text': o[1], 'selected_text': o[1], 'id': o[0]} for o in elements],
         }
+
+
+class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
+    url = reverse_lazy('product:create-bulk')
+
+    def setUp(self):
+        super().setUp()
+        self.company = CompanyFactory()
+
+    def test_display_form_on_get(self):
+        self.login()
+        page = self.client.get(self.url, user=self.user)
+        self.assertIsInstance(page.context['form'], AddBulkProductForm)
+        self.assertIn('<form  class="form-horizontal"', page.rendered_content)
+
+    def test_display_should_save_new_product(self):
+        self.login()
+        page = self.client.post(
+            self.url,
+            user=self.user,
+            data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123\nP2\t456"},
+            follow=True,
+        )
+        messages = list(page.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertTrue(Product.objects.filter(company_id=self.company.pk, name="P1", code=123).exists())
+        self.assertTrue(Product.objects.filter(company_id=self.company.pk, name="P2", code=456).exists())
+        self.assertEqual(messages[0].message, 'Zapisano 2 produktów,\n')
+
+    def test_display_should_dont_update_duplicates(self):
+        self.login()
+        Product(company=self.company, name="P1", code=123).save()
+        self.client.post(self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nXXXXX\t123"})
+        self.assertTrue(Product.objects.filter(company_id=self.company.pk, name="P1", code=123).exists())
+
+    @parameterized.expand(
+        [
+            ("\nXXXXX\t123", ['Następujące kolumny są wymagane: code, name. Aktualne kolumny: []']),
+            (
+                "coOOde\tname\n123\tAA",
+                ["Następujące kolumny są wymagane: code, name. Aktualne kolumny: ['coOOde', 'name']"],
+            ),
+            (
+                "name\tcode\n\t123\nP2\t456",
+                ["Nieprawidlowe wiersz -Linia 2 - Puste kolumny: {'name': '', 'code': '123'}"],
+            ),
+            (
+                "name\tcode\n\t123\nP2\t",
+                [
+                    "Nieprawidlowe wiersz -Linia 2 - Puste kolumny: {'name': '', 'code': '123'}",
+                    "Nieprawidlowe wiersz -Linia 3 - Puste kolumny: {'name': 'P2', 'code': ''}",
+                ],
+            ),
+        ]
+    )
+    def test_malformed_csv_file(self, current_input, expected_rows_errors):
+        self.login()
+        Product(company=self.company, name="P1", code=123).save()
+        page = self.client.post(self.url, user=self.user, data={'company': self.company.pk, 'rows': current_input})
+        print(repr(page.context['form'].errors['rows']))
+        self.assertEqual(page.context['form'].errors['rows'], expected_rows_errors)
+
+    def test_duplicate_code(self):
+        self.login()
+        Product(company=self.company, name="P1", code=123).save()
+        response = self.client.post(
+            self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
+        )
+        messages = list(response.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertEqual(messages[0].message, 'Nie udało się zapisać 1 produktów.\nNiepowodzenia: P1 (123)')
 
 
 class TestUrls(TestCase):

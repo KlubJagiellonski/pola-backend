@@ -223,7 +223,7 @@ def create_from_api(code, obj, product=None):
                 product.brand = brand
                 commit_desc += 'Marka produktu zmieniona na podstawie bazy GS1. '
 
-        product.save()
+        product.save(commit_desc=commit_desc)
 
     if company and company_created:
         update_company_from_krs(product, company)
