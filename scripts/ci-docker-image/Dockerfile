@@ -31,8 +31,8 @@ ENTRYPOINT ["/entrypoint"]
 ARG DJANGO_VERSION="3.1.2"
 ENV DJANGO_VERSION=${DJANGO_VERSION}
 
-RUN pip install --no-cache "django==${DJANGO_VERSION}"
+RUN pip install --no-cache-dir "django==${DJANGO_VERSION}"
 
 COPY requirements/base.txt requirements/local.txt /app/requirements/
 
-RUN pip install --no-cache -r requirements/local.txt && pip check
+RUN pip install --no-cache-dir -r requirements/local.txt && pip check
