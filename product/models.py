@@ -1,4 +1,5 @@
 from django.contrib.postgres.indexes import BrinIndex
+from django.core import validators
 from django.db import connection, models
 from django.urls import reverse
 from django.utils import timezone
@@ -30,7 +31,9 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,)
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
     name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
-    code = models.CharField(max_length=20, db_index=True, verbose_name="Kod", unique=True)
+    code = models.CharField(
+        max_length=20, db_index=True, verbose_name="Kod", unique=True, validators=[validators.validate_integer]
+    )
     company = models.ForeignKey(Company, null=True, blank=True, verbose_name="Producent", on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, null=True, blank=True, verbose_name="Marka produktu", on_delete=models.CASCADE)
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)

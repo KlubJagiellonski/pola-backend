@@ -55,17 +55,27 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
                     if 'code' not in row or 'name' not in row:
                         errors.append(
                             ValidationError(
-                                f"Nieprawidlowe wiersz - Linia {reader.line_num} - " f"Brakujace kolumny: {dict(row)}"
+                                f"Nieprawidlowe wiersz - Linia {reader.line_num} - Brakujace kolumny: {dict(row)}"
                             )
                         )
-                    elif not row['code'] or not row['name']:
+                    elif not row['code'].strip() or not row['name'].strip():
                         errors.append(
                             ValidationError(
-                                f"Nieprawidlowe wiersz -Linia {reader.line_num} - " f"Puste kolumny: {dict(row)}"
+                                f"Nieprawidlowe wiersz - Linia {reader.line_num} - Puste kolumny: {dict(row)}"
                             )
                         )
+                    elif not row['code'].strip().isdigit():
+                        errors.append(
+                            ValidationError(
+                                f"Nieprawidlowe wiersz - Linia {reader.line_num} - "
+                                f"Kod musi zawierać tylko cyfry: {dict(row)}"
+                            )
+                        )
+
                     else:
-                        result.append(row)
+                        code = row['code'].strip()
+                        name = row['name'].strip()
+                        result.append({'code': code, 'name': name})
                 if errors:
                     raise ValidationError(errors)
                 return result

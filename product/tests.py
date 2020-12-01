@@ -1,3 +1,5 @@
+import textwrap
+
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
@@ -217,13 +219,25 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
             ),
             (
                 "name\tcode\n\t123\nP2\t456",
-                ["Nieprawidlowe wiersz -Linia 2 - Puste kolumny: {'name': '', 'code': '123'}"],
+                ["Nieprawidlowe wiersz - Linia 2 - Puste kolumny: {'name': '', 'code': '123'}"],
             ),
             (
                 "name\tcode\n\t123\nP2\t",
                 [
-                    "Nieprawidlowe wiersz -Linia 2 - Puste kolumny: {'name': '', 'code': '123'}",
-                    "Nieprawidlowe wiersz -Linia 3 - Puste kolumny: {'name': 'P2', 'code': ''}",
+                    "Nieprawidlowe wiersz - Linia 2 - Puste kolumny: {'name': '', 'code': '123'}",
+                    "Nieprawidlowe wiersz - Linia 3 - Puste kolumny: {'name': 'P2', 'code': ''}",
+                ],
+            ),
+            (
+                textwrap.dedent(
+                    """\
+                    code,name
+                    5903548005092DDD,Amarantus ekspandowany BIO
+                    """,
+                ),
+                [
+                    "Nieprawidlowe wiersz - Linia 2 - Kod musi zawierać tylko cyfry: {'code': '5903548005092DDD', "
+                    "'name': 'Amarantus ekspandowany BIO'}"
                 ],
             ),
         ]
@@ -232,7 +246,6 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
         self.login()
         Product(company=self.company, name="P1", code=123).save()
         page = self.client.post(self.url, user=self.user, data={'company': self.company.pk, 'rows': current_input})
-        print(repr(page.context['form'].errors['rows']))
         self.assertEqual(page.context['form'].errors['rows'], expected_rows_errors)
 
     def test_duplicate_code(self):
