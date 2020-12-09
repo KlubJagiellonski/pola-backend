@@ -19,28 +19,30 @@ jobs:
         node-version: [10.x, 12.x, 14.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: 🗂 Checkout
+      uses: actions/checkout@v2
+    - name: 🟢 Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install dependencies
+    - name: 🟢 Install dependencies
       run: npm ci
-    # - name: Run the tests
+    # - name: 🔎 Run the tests
       # run: npm test -- --coverage
-    - name: Build app
+    - name: 🔧 Build app
       run: npm run build
-    - uses: actions/upload-artifact@v2
-      name: Upload app as artifact
+    - name: 🚀 Upload app as artifact
+      uses: actions/upload-artifact@v2
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: app-${{ matrix.node-version }}
         path: ./build
-    - name: Deploy app on gh-pages branch
-      uses: s0/git-publish-subdir-action@develop
+        if-no-files-found: error
+    - name: 🚀 Deploy app on gh-pages branch
+      uses: JamesIves/github-pages-deploy-action@3.7.1
       if: ${{ github.event_name == 'push' && matrix.node-version == '14.x' }}
       env:
-        REPO: self
-        BRANCH: gh-pages
-        FOLDER: ./build
+        BRANCH: gh-pages  # The branch the action should deploy to.
+        FOLDER: ./build  # The folder the action should deploy.
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CLEAN: true  # Automatically remove deleted files from the deploy branch.
