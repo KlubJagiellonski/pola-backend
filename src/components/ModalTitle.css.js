@@ -18,7 +18,10 @@ const toolTip = keyframes`
   0%{
     opacity: 0;
   }
-  50%{
+  30%{
+    opacity: 1;
+  }
+  70%{
     opacity: 1;
   }
   100%{
@@ -27,13 +30,14 @@ const toolTip = keyframes`
 `
 
 export const ToolTip = styled.div`
+    opacity: 1;
     position: absolute;
     background-color: #253037;
     color: white;
     transform: translate(50%, 100%);
     padding: 5px 20px;
     right: 15px;
-    z-index: 1;
+    z-index: 999;
     white-space: nowrap;
     border-radius: 10px;
     animation: ${toolTip} 1s linear;

@@ -64,7 +64,7 @@ export const prepareGetCodeMock = ({code, name, description, pl_score, pl_capita
 
 
 export const handlers = [
-    rest.get('/get_by_code',
+    rest.get('/a/v3/get_by_code',
         (req, res, ctx) => {
             const code = req.url.searchParams.get('code')
 

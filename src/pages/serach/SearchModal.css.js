@@ -4,8 +4,12 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 16px;
-  overflow: auto;
+  overflow-y: auto;
   max-height: 80vh;
+`
+
+export const Content = styled.div`
+  overflow-x: hidden;
 `
 
 export const BigSection = styled.div`

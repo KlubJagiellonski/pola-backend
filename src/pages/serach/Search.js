@@ -9,8 +9,7 @@ const Search = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(ean.length)
-    if(ean.length > 0){
+    if (ean.length > 0) {
       history.push(`/ean/${ean.replace(/\s/g, '')}`);
     }
   }
@@ -19,16 +18,19 @@ const Search = () => {
     <Wrapper>
       <Text>
         Sprawdź informacje o produkcie.<br />
-        Nie wiesz, jaki kod ma Twój produkt? <a href='https://pl.openfoodfacts.org/'>Sprawdź w bazie kodów</a>
+        Nie wiesz, jaki kod ma Twój produkt? <a target="_blank" href='https://pl.openfoodfacts.org/' rel="noopener noreferrer" >
+          Sprawdź w bazie kodów
+        </a>
       </Text>
-      <SearchFormControl onSubmit={handleSubmit}>
+      <SearchFormControl data-testid="form" onSubmit={handleSubmit}>
         <SearchInput
+          aria-label="Kod EAN"
           type='text'
           value={ean}
           onChange={e => setEan(e.target.value)}
           placeholder="Wpisz tutaj kod kreskowy (EAN)"
         />
-        <SearchButton type='submit'>
+        <SearchButton type='submit' aria-label="wyszukaj">
           <ImSearch />
         </SearchButton>
       </SearchFormControl>

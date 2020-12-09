@@ -5,6 +5,9 @@ import { getCurrentDeviceId } from "../../deviceId";
 import { Background, Content, Wrapper } from "./Modal.css";
 import { Redirect, useParams } from "react-router-dom";
 
+const BASE_URL = process.env.NODE_ENV !== 'production' ? "" : "https://www.pola-app.pl"
+const GET_BY_CODE_ENDPOINT = `${BASE_URL}/a/v3/get_by_code`
+
 const ModalPage = () => {
   const [data, setData] = useState('');
   const { ean } = useParams();
@@ -16,26 +19,32 @@ const ModalPage = () => {
   }
 
   useEffect(() => {
+    let isCancelled = false;
     async function api() {
       try {
-        const resp = await axios.get('https://www.pola-app.pl/a/v3/get_by_code',
+        const resp = await axios.get(GET_BY_CODE_ENDPOINT,
           {
             params: {
               code: ean,
               device_id: getCurrentDeviceId()
             }
           })
-        setData(resp.data)
+        if (!isCancelled) {
+          setData(resp.data)
+        }
       } catch (err) {
         console.log(err)
       }
     }
     api()
+    return () => {
+      isCancelled = true;
+    };
   }, [ean]);
 
   return (
     <>
-      { isRedirect ?
+      {isRedirect ?
         <Redirect to='/' /> :
         <>
           <Background>
