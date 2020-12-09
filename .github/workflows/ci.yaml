@@ -41,7 +41,7 @@ jobs:
     - name: 🚀 Deploy app on gh-pages branch
       uses: JamesIves/github-pages-deploy-action@3.7.1
       if: ${{ github.event_name == 'push' && matrix.node-version == '14.x' }}
-      env:
+      with:
         BRANCH: gh-pages  # The branch the action should deploy to.
         FOLDER: ./build  # The folder the action should deploy.
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
