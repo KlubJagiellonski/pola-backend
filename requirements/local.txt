@@ -10,7 +10,7 @@ coverage==5.3
 coveralls==2.2.0
 decorator==4.4.2
 django-coverage-plugin==1.8.0
-django-debug-toolbar==3.1.1
+django-debug-toolbar==3.2
 django-extensions==3.1.0
 django-test-plus==1.4.0
 django-webtest==1.9.7
