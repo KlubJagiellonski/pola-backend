@@ -258,6 +258,36 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
         self.assertEqual(1, len(messages))
         self.assertEqual(messages[0].message, 'Nie udało się zapisać 1 produktów.\nNiepowodzenia: P1 (123)')
 
+    def test_unknown_company(self):
+        self.login()
+        Product(company=None, name="P1", code=123).save()
+        response = self.client.post(
+            self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
+        )
+        messages = list(response.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertEqual(messages[0].message, 'Zapisano 1 produktów,\n')
+
+    def test_unknown_name(self):
+        self.login()
+        Product(company=self.company, name=None, code=123).save()
+        response = self.client.post(
+            self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
+        )
+        messages = list(response.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertEqual(messages[0].message, 'Zapisano 1 produktów,\n')
+
+    def test_unknown_company_and_name(self):
+        self.login()
+        Product(company=None, name=None, code=123).save()
+        response = self.client.post(
+            self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
+        )
+        messages = list(response.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertEqual(messages[0].message, 'Zapisano 1 produktów,\n')
+
 
 class TestUrls(TestCase):
     def test_should_render_url(self):

@@ -87,8 +87,27 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
         success = []
         failed = []
         row: Dict[str, str]
+        product_by_code = {
+            p.code: p for p in Product.objects.filter(code__in=[row['code'] for row in self.cleaned_data['rows']])
+        }
         for row in self.cleaned_data['rows']:
-            p = Product(code=row['code'], name=row['name'], company=company)
+            code = row['code']
+            name = row['name']
+            p = product_by_code.get(code)
+            changed = False
+            if p is None:
+                p = Product(code=code, name=name, company=company)
+                changed = True
+            else:
+                if p.company_id is None:
+                    p.company = company
+                    changed = True
+                if not p.name:
+                    p.name = row['name']
+                    changed = True
+            if not changed:
+                failed.append(p)
+                continue
             try:
                 p.save(commit_desc="Bulk import")
                 success.append(p)
