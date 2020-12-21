@@ -1,6 +1,6 @@
 -r base.txt
 Faker==5.0.2
-Pygments==2.7.2
+Pygments==2.7.3
 WebOb==1.8.6
 WebTest==2.0.35
 Werkzeug==1.0.1
