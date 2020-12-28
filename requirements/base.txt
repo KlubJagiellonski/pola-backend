@@ -1,6 +1,6 @@
 Babel==2.9.0
 Pillow==8.0.1
-Unidecode==1.1.1
+Unidecode==1.1.2
 asgiref==3.2.10
 attrs==20.3.0
 boto3==1.16.4
