@@ -3,6 +3,9 @@ version: '3'
 
 services:
   web:
+    extends:
+      file: docker-compose.yaml
+      service: web
     build:
       context: .
       dockerfile: scripts/ci-docker-image/Dockerfile
@@ -10,17 +13,24 @@ services:
         - DJANGO_VERSION
         - PYTHON_VERSION
     command: test --verbosity=2 --keepdb
-    volumes:
-      - .:/app
-    ports:
-      - "8080:8080"
-    environment:
-      DATABASE_URL: 'postgres://pola_app:pola_app@postgres/pola_app'
+
+  web-init:
+    extends:
+      file: docker-compose.yaml
+      service: web-init
+
+  minio:
+    extends:
+      file: docker-compose.yaml
+      service: minio
+
+
+  minio-init:
+    extends:
+      file: docker-compose.yaml
+      service: minio-init
 
   postgres:
-    image: postgres:9.5
-    restart: always
-    environment:
-      POSTGRES_USER: pola_app
-      POSTGRES_PASSWORD: pola_app
-      POSTGRES_DB: pola_app
+    extends:
+      file: docker-compose.yaml
+      service: postgres

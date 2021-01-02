@@ -13,7 +13,6 @@ import os
 from urllib import parse as urlparse
 
 import sentry_sdk
-from boto.s3.connection import OrdinaryCallingFormat
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from .common import *  # noqa
@@ -57,39 +56,6 @@ ALLOWED_HOSTS = ["www.pola-app.pl", "pola-app.pl", "pola-staging.herokuapp.com"]
 # END SITE CONFIGURATION
 
 INSTALLED_APPS += ("gunicorn",)  # noqa: F405
-
-# STORAGE CONFIGURATION
-# ------------------------------------------------------------------------------
-# Uploaded Media Files
-# ------------------------
-# See: https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
-INSTALLED_APPS += ('storages',)  # noqa: F405
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')  # noqa: F405
-AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')  # noqa: F405
-AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')  # noqa: F405
-AWS_STORAGE_BUCKET_AI_NAME = env('DJANGO_AWS_STORAGE_BUCKET_AI_NAME')  # noqa: F405
-# TODO See: https://github.com/jschneier/django-storages/issues/47
-# Revert the following and use str after the above-mentioned bug is fixed in
-# either django-storage-redux or boto
-AWS_EXPIRY = 60 * 60 * 24 * 7
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)}
-AWS_DEFAULT_ACL = 'public-read'
-AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)  # noqa: F405
-AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
-AWS_S3_SIGNATURE_VERSION = "s3v4"
-AI_SHARED_SECRET = env('AI_SHARED_SECRET')  # noqa: F405
-
-# URL that handles the media served from MEDIA_ROOT, used for managing
-# stored files.
-MEDIA_URL = 'https://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
-
-# Static Assets
-# ------------------------
-
-STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
-STATIC_URL = MEDIA_URL
 
 # See: https://github.com/antonagestam/collectfast
 # For Django 1.7+, 'collectfast' should come before

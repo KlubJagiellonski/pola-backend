@@ -22,6 +22,7 @@ django-model-utils==4.0.0
 django-ratelimit==3.0.1
 django-redis==4.12.1
 django-reversion==3.0.8
+django-storages==1.10.1
 future==0.18.2
 gtin==0.1.13
 idna==2.10

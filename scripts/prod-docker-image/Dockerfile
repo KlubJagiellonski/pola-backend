@@ -22,6 +22,7 @@ RUN apt-get update \
         binutils-common \
         binutils-x86-64-linux-gnu \
         gcc \
+        git \
         libc6-dev \
         libcc1-0 \
         libgcc-8-dev \

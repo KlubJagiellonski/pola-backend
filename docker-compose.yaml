@@ -1,19 +1,83 @@
 ---
 version: '3'
 
+x-pola-backend-common:
+  &pola-backend-common
+  build:
+    context: .
+    dockerfile: scripts/ci-docker-image/Dockerfile
+  environment:
+    DATABASE_URL: 'postgres://pola_app:pola_app@postgres/pola_app'
+    AI_SHARED_SECRET: '123123'
+    DJANGO_DEBUG: 'True'
+    IS_PRODUCTION: 'False'
+    SLACK_CHANNEL_AI_STATS: 'ai-stats'
+    WEB_CONCURRENCY: '6'
+    WHITELIST_API_IP_ADDRESSES: '10.0.0.1'
+    DJANGO_AWS_ACCESS_KEY_ID: 'minio'
+    DJANGO_AWS_SECRET_ACCESS_KEY: 'minio123'
+    DJANGO_AWS_STORAGE_BUCKET_NAME: 'pola-app-local'
+    DJANGO_AWS_STORAGE_BUCKET_AI_NAME: 'pola-app-ai-local'
+    DJANGO_AWS_S3_ENDPOINT_URL: 'http://minio:9000'
+
+  env_file: .env
+  volumes:
+    - .:/app
+
 services:
   web:
-    build:
-      context: .
-      dockerfile: scripts/ci-docker-image/Dockerfile
+    <<: *pola-backend-common
+    depends_on:
+      - postgres
+      - minio
     command: runserver 0.0.0.0:8080
-    volumes:
-      - .:/app
     ports:
       - "8080:8080"
+    restart: always
+    healthcheck:
+      test: "curl --fail http://localhost:8000/"
+      interval: 30s
+      retries: 5
+
+  web-init:
+    <<: *pola-backend-common
+    depends_on:
+      - minio
+      - minio-init
+      - web
+    command: ./manage.py collectstatic --no-input
+
+  minio:
+    image: minio/minio:RELEASE.2020-12-26T01-35-54Z
+    restart: always
+    ports:
+      - 9000:9000
+    expose:
+      - 9000
+    command: server /data
+    volumes:
+      - minio-data:/data
     environment:
-      DATABASE_URL: 'postgres://pola_app:pola_app@postgres/pola_app'
-    env_file: .env
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  minio-init:
+    image: minio/mc
+    environment:
+      MC_HOST_local: 'http://minio:minio123@minio:9000/'
+    depends_on:
+      - minio
+    entrypoint: bash
+    command:
+      - -x
+      - -c
+      - mc --debug mb local/pola-app-local || true;
+        mc --debug policy set public local/pola-app-local
 
   postgres:
     image: postgres:9.5
@@ -22,3 +86,13 @@ services:
       POSTGRES_USER: pola_app
       POSTGRES_PASSWORD: pola_app
       POSTGRES_DB: pola_app
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: "psql -h localhost -U pola_app -c 'select 1' pola_app"
+      interval: 30s
+      retries: 5
+
+volumes:
+  postgres-data:
+  minio-data:
