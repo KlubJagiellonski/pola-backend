@@ -33,7 +33,7 @@ function verify_image() {
     docker run --rm "${CI_IMAGE_NAME}" pip freeze
     echo "=== Compare requirements ==="
     diff \
-      <(docker run --entrypoint /bin/bash --rm "${CI_IMAGE_NAME}" pip freeze | grep -v -i "Django==" | sort) \
+      <(docker run --entrypoint /bin/bash --rm "${CI_IMAGE_NAME}" -c "pip freeze" | grep -v -i "Django==" | sort) \
       <(sort < ./requirements/ci.txt | grep -v -i "Django==")
     echo "======"
 }

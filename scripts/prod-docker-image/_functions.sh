@@ -57,7 +57,7 @@ function verify_image() {
     docker run --rm "${PROD_IMAGE_NAME}" pip freeze
     echo "=== Compare requirements ==="
     diff \
-      <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}" pip freeze | sort) \
+      <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}" -c "pip freeze" | sort) \
       <(sort < ./requirements/production.txt)
     echo "======"
 }
