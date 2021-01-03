@@ -30,4 +30,6 @@ class AIAttachmentFactory(factory.django.DjangoModelFactory):
         model = 'ai_pics.AIAttachment'
 
     ai_pics = factory.SubFactory(AIPicsFactory)
-    attachment = factory.django.ImageField(width=200, height=200)
+    attachment = factory.django.ImageField(
+        width=200, height=200, filename=factory.sequence(lambda n: "client%s.png" % n)
+    )

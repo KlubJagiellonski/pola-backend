@@ -83,7 +83,9 @@ services:
       - -x
       - -c
       - mc --debug mb local/pola-app-local || true;
-        mc --debug policy set public local/pola-app-local
+        mc --debug mb local/pola-app-ai-local || true;
+        mc --debug policy set public local/pola-app-local || true;
+        mc --debug policy set public local/pola-app-ai-local || true;
 
   postgres:
     image: postgres:9.5

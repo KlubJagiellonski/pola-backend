@@ -1,17 +1,23 @@
-import base64
-import hmac
+import functools
 import json
+import logging
 import os
-import time
 import uuid
-from hashlib import sha1
-from urllib.parse import quote_plus  # Python 3+
+from datetime import timedelta
 
+import boto3
+from botocore.config import Config
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import (
+    HttpResponse,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+    JsonResponse,
+)
 from django.views.decorators.csrf import csrf_exempt
+from jsonschema.validators import validator_for
 from ratelimit.decorators import ratelimit
 
 from ai_pics.models import AIAttachment, AIPics
@@ -23,8 +29,57 @@ from report.models import Attachment, Report
 
 MAX_RECORDS = 5000
 
+log = logging.getLogger(__file__)
+
+
+def validate_json_response(schema, *args, **kwargs):
+    cls = validator_for(schema)
+
+    cls.check_schema(schema)
+    validator = cls(schema, *args, **kwargs)
+
+    def wrapper(func):
+        @functools.wraps(func)
+        def validate_json_schema(*args, **kwargs):
+            response: HttpResponse = func(*args, **kwargs)
+            if response['Content-Type'] == 'application/json':
+                errors = list(validator.iter_errors(json.loads(response.content)))
+                if errors:
+                    log.error("Invalid response. %d errors encountered", len(errors))
+                    for error in errors:
+                        log.error("%s", error)
+                    return HttpResponseServerError("The server generated an invalid response.")
+            return response
+
+        return validate_json_schema
+
+    return wrapper
+
 
 @csrf_exempt
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "aipics": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "ai_pics_id": {"type": "integer"},
+                        "code": {"type": "string"},
+                        "product_name": {"type": "string"},
+                        "company_id": {"type": "integer"},
+                        "url": {"type": "string"},
+                    },
+                    "required": ["ai_pics_id", "code", "product_name", "company_id", "url"],
+                },
+            }
+        },
+        "required": ["aipics"],
+    }
+)
 def get_ai_pics(request):
     if settings.AI_SHARED_SECRET == '':
         return HttpResponseForbidden()
@@ -41,7 +96,7 @@ def get_ai_pics(request):
         .order_by('id')
     )
 
-    paginator = Paginator(attachments, MAX_RECORDS)
+    paginator = Paginator(attachments, settings.AI_PICS_PAGE_SIZE)
 
     aipics = []
 
@@ -63,6 +118,14 @@ def get_ai_pics(request):
 # API v3
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"signed_requests": {"type": "array", "items": {"type": "string"}}},
+        "required": ["signed_requests"],
+    }
+)
 def add_ai_pics(request):
     device_id = request.GET['device_id']
 
@@ -115,7 +178,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
         str(ai_pics.product.code), str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext
     )
 
-    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
+    signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
 
     attachment = AIAttachment(ai_pics=ai_pics)
     attachment.attachment.name = object_name
@@ -126,9 +189,66 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
 
 
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "altText": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "card_type": {"type": "string"},
+            "code": {"type": "string"},
+            "donate": {
+                "type": "object",
+                "properties": {
+                    "show_button": {"type": "boolean"},
+                    "title": {"type": "string"},
+                    "url": {"type": "string"},
+                },
+                "required": ["show_button", "title", "url"],
+            },
+            "name": {"type": "string"},
+            "plCapital": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plCapital_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plNotGlobEnt": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plNotGlobEnt_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plRegistered": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plRegistered_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plRnD": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plRnD_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plScore": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plWorkers": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plWorkers_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "product_id": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "report_button_text": {"type": "string"},
+            "report_button_type": {"type": "string"},
+            "report_text": {"type": "string"},
+        },
+        "required": [
+            "altText",
+            "card_type",
+            "code",
+            "donate",
+            "name",
+            "plCapital",
+            "plCapital_notes",
+            "plNotGlobEnt",
+            "plNotGlobEnt_notes",
+            "plRegistered",
+            "plRegistered_notes",
+            "plRnD",
+            "plRnD_notes",
+            "plScore",
+            "plWorkers",
+            "plWorkers_notes",
+            "product_id",
+            "report_button_text",
+            "report_button_type",
+            "report_text",
+        ],
+    }
+)
 def get_by_code_v3(request):
     noai = request.GET.get('noai')
-
     result = get_by_code_internal(request, ai_supported=noai is None)
 
     response = JsonResponse(result)
@@ -139,6 +259,14 @@ def get_by_code_v3(request):
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"signed_requests": {"type": "array", "items": {"type": "string"}}},
+        "required": ["signed_requests"],
+    }
+)
 def create_report_v3(request):
     return create_report_internal(request)
 
@@ -178,8 +306,65 @@ def get_by_code_internal(request, ai_supported=False):
 
 
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "altText": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "card_type": {"type": "string"},
+            "code": {"type": "string"},
+            "donate": {
+                "type": "object",
+                "properties": {
+                    "show_button": {"type": "boolean"},
+                    "title": {"type": "string"},
+                    "url": {"type": "string"},
+                },
+                "required": ["show_button", "title", "url"],
+            },
+            "name": {"type": "string"},
+            "plCapital": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plCapital_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plNotGlobEnt": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plNotGlobEnt_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plRegistered": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plRegistered_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plRnD": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plRnD_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "plScore": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plWorkers": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "plWorkers_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "product_id": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "report_button_text": {"type": "string"},
+            "report_button_type": {"type": "string"},
+            "report_text": {"type": "string"},
+        },
+        "required": [
+            "altText",
+            "card_type",
+            "code",
+            "donate",
+            "name",
+            "plCapital",
+            "plCapital_notes",
+            "plNotGlobEnt",
+            "plNotGlobEnt_notes",
+            "plRegistered",
+            "plRegistered_notes",
+            "plRnD",
+            "plRnD_notes",
+            "plScore",
+            "plWorkers",
+            "plWorkers_notes",
+            "product_id",
+            "report_button_text",
+            "report_button_type",
+            "report_text",
+        ],
+    }
+)
 def get_by_code_v2(request):
-
     result = get_by_code_internal(request)
 
     return JsonResponse(result)
@@ -187,6 +372,14 @@ def get_by_code_v2(request):
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"id": {"type": "integer"}, "signed_requests": {"type": "array", "items": {"type": "string"}}},
+        "required": ["id", "signed_requests"],
+    }
+)
 def create_report_v2(request):
     return create_report_internal(request, extra_comma=True)
 
@@ -213,16 +406,16 @@ def create_report_internal(request, extra_comma=False):
             return HttpResponseForbidden("files_count can be between 0 and 10")
 
         for _ in range(0, files_count):
-            signed_request = attach_file_internal(report, file_ext, mime_type, extra_comma)
+            signed_request = attach_file_internal(report, file_ext, mime_type)
             signed_requests.append(signed_request)
 
     return JsonResponse({'id': report.id, 'signed_requests': signed_requests})
 
 
-def attach_file_internal(report, file_ext, mime_type, extra_comma=False):
+def attach_file_internal(report, file_ext, mime_type):
     object_name = '{}/{}.{}'.format(str(report.id), str(uuid.uuid1()), file_ext)
 
-    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME, extra_comma)
+    signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME)
 
     attachment = Attachment(report=report)
     attachment.attachment.name = object_name
@@ -231,29 +424,34 @@ def attach_file_internal(report, file_ext, mime_type, extra_comma=False):
     return signed_request
 
 
-def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False):
-    expires = int(time.time() + 60 * 60 * 24)
-    amz_headers = "x-amz-acl:public-read"
-
-    string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, bucket_name, object_name)
-
-    signature = base64.encodestring(
-        hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(), string_to_sign.encode('utf8'), sha1).digest()
+def create_signed_request_boto3(mime_type, object_name, bucket_name):
+    expires = int(timedelta(days=1).total_seconds())
+    client = boto3.client(
+        's3',
+        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        config=Config(signature_version='s3v4'),
+        region_name='us-east-2',
     )
-    signature = quote_plus(signature.strip())
-    url = 'https://{}.s3.amazonaws.com/{}'.format(bucket_name, object_name)
-    signed_request = '{}?AWSAccessKeyId={}&Expires={}&Signature={}'.format(
-        url, settings.AWS_ACCESS_KEY_ID, expires, signature
+    response = client.generate_presigned_url(
+        'put_object',
+        Params=dict(Bucket=bucket_name, Key=object_name, ACL='public-read', ContentType=mime_type),
+        ExpiresIn=expires,
     )
-
-    if extra_comma:
-        signed_request = (signed_request,)
-
-    return signed_request
+    return response
 
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"signed_request": {"type": "array", "items": {"type": "string"}}},
+        "required": ["signed_request"],
+    }
+)
 def attach_file_v2(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
@@ -267,18 +465,60 @@ def attach_file_v2(request):
     file_ext = data['file_ext']
     mime_type = data['mime_type']
 
-    signed_request = attach_file_internal(report, file_ext, mime_type, extra_comma=True)
+    signed_request = attach_file_internal(report, file_ext, mime_type)
 
-    return JsonResponse({'signed_request': signed_request})
+    return JsonResponse({'signed_request': [signed_request]})
 
 
 # --- API v1 (old)
 
 
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "code": {"type": "string"},
+            "company": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"},
+                    "plCapital": {"type": "null"},
+                    "plCapital_notes": {"type": "null"},
+                    "plNotGlobEnt": {"type": "null"},
+                    "plNotGlobEnt_notes": {"type": "null"},
+                    "plRegistered": {"type": "null"},
+                    "plRegistered_notes": {"type": "null"},
+                    "plRnD": {"type": "null"},
+                    "plRnD_notes": {"type": "null"},
+                    "plWorkers": {"type": "null"},
+                    "plWorkers_notes": {"type": "null"},
+                },
+                "required": [
+                    "name",
+                    "plCapital",
+                    "plCapital_notes",
+                    "plNotGlobEnt",
+                    "plNotGlobEnt_notes",
+                    "plRegistered",
+                    "plRegistered_notes",
+                    "plRnD",
+                    "plRnD_notes",
+                    "plWorkers",
+                    "plWorkers_notes",
+                ],
+            },
+            "id": {"type": "integer"},
+            "plScore": {"type": "null"},
+            "report": {"oneOf": [{"type": "boolean"}, {"type": "string", "enum": ['ask_for_company']}]},
+            "verified": {"type": "boolean"},
+        },
+        "required": ["code", "id", "plScore", "report", "verified"],
+    }
+)
 def get_by_code(request, code):
     device_id = request.GET['device_id']
-
     product = logic.get_by_code(code=code)
 
     result = logic.serialize_product(product)
@@ -301,6 +541,14 @@ def get_by_code(request, code):
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"id": {"type": "integer"}},
+        "required": ["id"],
+    }
+)
 def create_report(request):
     device_id = request.GET['device_id']
 
@@ -319,6 +567,14 @@ def create_report(request):
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"id": {"type": "integer"}},
+        "required": ["id"],
+    }
+)
 def update_report(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
@@ -339,6 +595,14 @@ def update_report(request):
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('5/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"id": {"type": "number"}},
+        "required": ["id"],
+    }
+)
 def attach_file(request):
     device_id = request.GET['device_id']
     report_id = request.GET['report_id']
