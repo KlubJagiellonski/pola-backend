@@ -28,6 +28,19 @@ function build_image() {
   docker tag "${CI_IMAGE_NAME}:${IMAGE_TAG}" "pola-backend_web:latest"
 }
 
+function verify_image() {
+    echo "Verifying image: ${CI_IMAGE_NAME}:${IMAGE_TAG}"
+    docker run --rm "${CI_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
+    echo "=== Compare requirements ==="
+    diff \
+      <(
+        docker run --entrypoint /bin/bash --rm "${CI_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | \
+          grep -v -i "Django==" | sort \
+      ) \
+      <(sort < ./requirements/ci.txt | grep -v -i "Django==")
+    echo "======"
+}
+
 function push_image() {
     echo "Pushing image: ${CI_IMAGE_NAME}:${IMAGE_TAG}"
     docker tag "pola-backend_web" "${CI_IMAGE_NAME}:${IMAGE_TAG}"

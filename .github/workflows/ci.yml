@@ -21,26 +21,34 @@ jobs:
       fail-fast: false
       matrix:
         python_version: ["3.6", "3.7", "3.8"]
-        django_version: ["3.1.2"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
-      DJANGO_VERSION: ${{ matrix.django_version }}
+      COMPOSE_FILE: docker-compose-ci.yaml
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
+      - run: docker system prune -a -f
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
+      - run: docker images
       - name: "Build image"
         run: |
           # Build Django CI image
           ./scripts/ci-docker-image/build_image.sh
-          # Build Postgres image
-          docker-compose -f docker-compose-ci.yaml pull postgres
+          # Verify CI image
+          ./scripts/ci-docker-image/verify_image.sh
+      - name: Pull images
+        run: >
+          docker-compose ps --services | xargs -n 1 bash -c '
+          echo "::group::${0}";
+          docker-compose pull -- ${0};
+          echo "::endgroup::"
+          '
+      - run: docker images
+      - run: docker-compose config
       - name: "Run tests"
         run: |
           docker-compose up web
-        env:
-          COMPOSE_FILE: docker-compose-ci.yaml
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh

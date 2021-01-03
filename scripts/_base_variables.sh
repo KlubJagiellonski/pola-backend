@@ -12,7 +12,7 @@ CONTAINER_REGISTRY="$(echo "${CONTAINER_REGISTRY}" | tr '[:upper:]' '[:lower:]')
 readonly CONTAINER_REGISTRY
 
 # Django/Python
-DJANGO_VERSION_PROD=$(grep "^django==" "${SCRIPT_DIR}/../requirements/production.txt" | cut -d "=" -f 3)
+DJANGO_VERSION_PROD=$(grep -i "^django==" "${SCRIPT_DIR}/../requirements/production.txt" | cut -d "=" -f 3)
 readonly DJANGO_VERSION_PROD
 DJANGO_VERSION="${DJANGO_VERSION:="${DJANGO_VERSION_PROD}"}"
 readonly DJANGO_VERSION
