@@ -272,6 +272,8 @@ SLACK_CHANNEL_AI_STATS = env("SLACK_CHANNEL_AI_STATS", default=None)
 
 WHITELIST_API_IP_ADDRESS = env.list("WHITELIST_API_IP_ADDRESSES", default=[])
 
+AI_PICS_PAGE_SIZE = 5000
+
 # STORAGE CONFIGURATION
 # ------------------------------------------------------------------------------
 # Uploaded Media Files

@@ -1,12 +1,10 @@
-import base64
-import hmac
 import json
 import os
-import time
 import uuid
-from hashlib import sha1
-from urllib.parse import quote_plus  # Python 3+
+from datetime import timedelta
 
+import boto3
+from botocore.config import Config
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -20,8 +18,6 @@ from pola.models import Query
 from pola.rpc_api.rates import whitelist
 from product.models import Product
 from report.models import Attachment, Report
-
-MAX_RECORDS = 5000
 
 
 @csrf_exempt
@@ -41,7 +37,7 @@ def get_ai_pics(request):
         .order_by('id')
     )
 
-    paginator = Paginator(attachments, MAX_RECORDS)
+    paginator = Paginator(attachments, settings.AI_PICS_PAGE_SIZE)
 
     aipics = []
 
@@ -115,7 +111,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
         str(ai_pics.product.code), str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext
     )
 
-    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
+    signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_BUCKET_AI_NAME)
 
     attachment = AIAttachment(ai_pics=ai_pics)
     attachment.attachment.name = object_name
@@ -213,16 +209,16 @@ def create_report_internal(request, extra_comma=False):
             return HttpResponseForbidden("files_count can be between 0 and 10")
 
         for _ in range(0, files_count):
-            signed_request = attach_file_internal(report, file_ext, mime_type, extra_comma)
+            signed_request = attach_file_internal(report, file_ext, mime_type)
             signed_requests.append(signed_request)
 
     return JsonResponse({'id': report.id, 'signed_requests': signed_requests})
 
 
-def attach_file_internal(report, file_ext, mime_type, extra_comma=False):
+def attach_file_internal(report, file_ext, mime_type):
     object_name = '{}/{}.{}'.format(str(report.id), str(uuid.uuid1()), file_ext)
 
-    signed_request = create_signed_request(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME, extra_comma)
+    signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME)
 
     attachment = Attachment(report=report)
     attachment.attachment.name = object_name
@@ -231,25 +227,22 @@ def attach_file_internal(report, file_ext, mime_type, extra_comma=False):
     return signed_request
 
 
-def create_signed_request(mime_type, object_name, bucket_name, extra_comma=False):
-    expires = int(time.time() + 60 * 60 * 24)
-    amz_headers = "x-amz-acl:public-read"
-
-    string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, bucket_name, object_name)
-
-    signature = base64.encodestring(
-        hmac.new(settings.AWS_SECRET_ACCESS_KEY.encode(), string_to_sign.encode('utf8'), sha1).digest()
+def create_signed_request_boto3(mime_type, object_name, bucket_name):
+    expires = int(timedelta(days=1).total_seconds())
+    client = boto3.client(
+        's3',
+        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        config=Config(signature_version='s3v4'),
+        region_name='us-east-2',
     )
-    signature = quote_plus(signature.strip())
-    url = 'https://{}.s3.amazonaws.com/{}'.format(bucket_name, object_name)
-    signed_request = '{}?AWSAccessKeyId={}&Expires={}&Signature={}'.format(
-        url, settings.AWS_ACCESS_KEY_ID, expires, signature
+    response = client.generate_presigned_url(
+        'put_object',
+        Params=dict(Bucket=bucket_name, Key=object_name, ACL='public-read', ContentType=mime_type),
+        ExpiresIn=expires,
     )
-
-    if extra_comma:
-        signed_request = (signed_request,)
-
-    return signed_request
+    return response
 
 
 @csrf_exempt
@@ -267,7 +260,7 @@ def attach_file_v2(request):
     file_ext = data['file_ext']
     mime_type = data['mime_type']
 
-    signed_request = attach_file_internal(report, file_ext, mime_type, extra_comma=True)
+    signed_request = attach_file_internal(report, file_ext, mime_type)
 
     return JsonResponse({'signed_request': signed_request})
 
