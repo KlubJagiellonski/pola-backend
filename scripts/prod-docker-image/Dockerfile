@@ -49,11 +49,11 @@ RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.tx
 RUN find /root/.local -executable -print0 | xargs --null chmod g+x && \
     find /root/.local -print0 | xargs --null chmod g+rw
 
-LABEL io.github.klubjagiellonski.distro="debian"
-LABEL io.github.klubjagiellonski.distro.version="buster"
-LABEL io.github.klubjagiellonski.module="pola"
-LABEL io.github.klubjagiellonski.component="pola-backend"
-LABEL io.github.klubjagiellonski.image="pola-backend"
+LABEL io.github.klubjagiellonski.distro="debian" \
+    io.github.klubjagiellonski.distro.version="buster" \
+    io.github.klubjagiellonski.module="pola" \
+    io.github.klubjagiellonski.component="pola-backend" \
+    io.github.klubjagiellonski.image="pola-backend"
 
 ######################### MAIN IMAGE #########################
 
@@ -133,11 +133,11 @@ USER ${APP_UID}
 ARG RELEASE_SHA
 ENV RELEASE_SHA=${RELEASE_SHA}
 
-LABEL io.github.klubjagiellonski.distro="debian"
-LABEL io.github.klubjagiellonski.distro.version="buster"
-LABEL io.github.klubjagiellonski.module="pola"
-LABEL io.github.klubjagiellonski.component="pola-backend"
-LABEL io.github.klubjagiellonski.image="pola-backend"
+LABEL io.github.klubjagiellonski.distro="debian" \
+    io.github.klubjagiellonski.distro.version="buster" \
+    io.github.klubjagiellonski.module="pola" \
+    io.github.klubjagiellonski.component="pola-backend" \
+    io.github.klubjagiellonski.image="pola-backend"
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint"]
 CMD ["gunicorn", "pola.config.wsgi:application"]
