@@ -40,7 +40,7 @@ jobs:
         run: |
           docker-compose up web
         env:
-          COMPOSE_FILE=docker-compose-ci.yaml
+          COMPOSE_FILE: docker-compose-ci.yaml
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
