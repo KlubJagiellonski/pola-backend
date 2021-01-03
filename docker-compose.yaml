@@ -32,6 +32,8 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+      web-init:
+        condition: service_started
     command: runserver 0.0.0.0:8080
     ports:
       - "8080:8080"
@@ -48,8 +50,6 @@ services:
         condition: service_healthy
       minio-init:
         condition: service_started
-      web:
-        condition: service_healthy
     command: ./manage.py collectstatic --no-input
 
   minio:

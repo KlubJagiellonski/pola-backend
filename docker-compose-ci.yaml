@@ -22,8 +22,6 @@ x-pola-backend-common:
     DJANGO_AWS_STORAGE_BUCKET_NAME: 'pola-app-local'
     DJANGO_AWS_STORAGE_BUCKET_AI_NAME: 'pola-app-ai-local'
     DJANGO_AWS_S3_ENDPOINT_URL: 'http://minio:9000'
-
-  env_file: .env
   volumes:
     - .:/app
 
@@ -35,13 +33,15 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+      web-init:
+        condition: service_started
     build:
       context: .
       dockerfile: scripts/ci-docker-image/Dockerfile
       args:
         - DJANGO_VERSION
         - PYTHON_VERSION
-    command: test --verbosity=2 --keepdb
+    command: /app/manage.py test --verbosity=2 --keepdb
 
 
   web-init:
@@ -51,8 +51,6 @@ services:
         condition: service_healthy
       minio-init:
         condition: service_started
-      web:
-        condition: service_healthy
     command: ./manage.py collectstatic --no-input
 
   minio:
