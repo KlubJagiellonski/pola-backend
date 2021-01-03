@@ -54,10 +54,10 @@ function build_image() {
 
 function verify_image() {
     echo "Verifying image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
-    docker run --rm "${PROD_IMAGE_NAME}" pip freeze
+    docker run --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
     echo "=== Compare requirements ==="
     diff \
-      <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}" -c "pip freeze" | sort) \
+      <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | sort) \
       <(sort < ./requirements/production.txt)
     echo "======"
 }
