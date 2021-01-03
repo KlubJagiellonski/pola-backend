@@ -9,7 +9,7 @@ x-pola-backend-common:
     args:
       - DJANGO_VERSION
       - PYTHON_VERSION
-  image: pola-backend
+  image: pola-backend_web:latest
   environment:
     DATABASE_URL: 'postgres://pola_app:pola_app@postgres/pola_app'
     AI_SHARED_SECRET: '123123'
