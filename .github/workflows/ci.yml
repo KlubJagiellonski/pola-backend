@@ -38,8 +38,9 @@ jobs:
           docker-compose -f docker-compose-ci.yaml pull postgres
       - name: "Run tests"
         run: |
-          docker-compose -f docker-compose-ci.yaml up -d postgres
-          docker-compose -f docker-compose-ci.yaml run web /app/manage.py test --verbosity=2 --keepdb
+          docker-compose up web
+        env:
+          COMPOSE_FILE: docker-compose-ci.yaml
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
