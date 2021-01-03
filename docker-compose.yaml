@@ -28,8 +28,10 @@ services:
   web:
     <<: *pola-backend-common
     depends_on:
-      - postgres
-      - minio
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
     command: runserver 0.0.0.0:8080
     ports:
       - "8080:8080"
@@ -42,9 +44,12 @@ services:
   web-init:
     <<: *pola-backend-common
     depends_on:
-      - minio
-      - minio-init
-      - web
+      minio:
+        condition: service_healthy
+      minio-init:
+        condition: service_started
+      web:
+        condition: service_healthy
     command: ./manage.py collectstatic --no-input
 
   minio:
@@ -71,7 +76,8 @@ services:
     environment:
       MC_HOST_local: 'http://minio:minio123@minio:9000/'
     depends_on:
-      - minio
+      minio:
+        condition: service_healthy
     entrypoint: bash
     command:
       - -x
@@ -89,7 +95,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: "psql -h localhost -U pola_app -c 'select 1' pola_app"
+      test: ["CMD", "psql", "-h", "localhost", "-U", "pola_app", "-c", "select 1", "pola_app"]
       interval: 30s
       retries: 5
 
