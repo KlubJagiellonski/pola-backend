@@ -30,6 +30,7 @@ jobs:
       - run: docker system prune -a -f
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
+      - run: docker images
       - name: "Build image"
         run: |
           # Build Django CI image
@@ -41,13 +42,6 @@ jobs:
           docker-compose ps --services | xargs -n 1 bash -c '
           echo "::group::${0}";
           docker-compose pull -- ${0};
-          echo "::endgroup::"
-          '
-      - name: Build images
-        run: >
-          docker-compose ps --services | xargs -n 1 bash -c '
-          echo "::group::${0}";
-          docker-compose build -- ${0};
           echo "::endgroup::"
           '
       - run: docker images
