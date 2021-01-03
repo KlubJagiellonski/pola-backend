@@ -5,6 +5,7 @@ from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from product.models import Product
 
@@ -71,7 +72,11 @@ class AIPics(models.Model):
 class AIAttachment(models.Model):
     ai_pics = models.ForeignKey(AIPics, on_delete=models.CASCADE)
     file_no = models.IntegerField(null=False, default=0)
-    attachment = models.FileField(upload_to="ai/%Y/%m/%d", verbose_name=_("File"))
+    attachment = models.FileField(
+        upload_to="ai/%Y/%m/%d",
+        verbose_name=_("File"),
+        storage=S3Boto3Storage(bucket_name=settings.AWS_STORAGE_BUCKET_AI_NAME),
+    )
 
     @property
     def filename(self):
@@ -81,7 +86,7 @@ class AIAttachment(models.Model):
         return "%s" % (self.filename)
 
     def get_absolute_url(self):
-        return 'https://{}.s3.amazonaws.com/{}'.format(settings.AWS_STORAGE_BUCKET_AI_NAME, self.attachment)
+        return self.attachment.url
 
     class Meta:
         verbose_name = _("AIPics's attachment")

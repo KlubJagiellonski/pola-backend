@@ -270,7 +270,9 @@ SLACK_TOKEN = env("SLACK_TOKEN", default=None)
 SLACK_CHANNEL_AI_STATS = env("SLACK_CHANNEL_AI_STATS", default=None)
 
 
-WHITELIST_API_IP_ADDRESS = env.list("WHITELIST_API_IP_ADDRESSES", default=[])
+WHITELIST_API_IP_ADDRESS = env.list("WHITELIST_API_IP_ADDRESSES", default=['127.0.0.1'])
+
+AI_PICS_PAGE_SIZE = 5000
 
 # STORAGE CONFIGURATION
 # ------------------------------------------------------------------------------
