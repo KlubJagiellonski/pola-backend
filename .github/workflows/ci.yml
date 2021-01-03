@@ -21,15 +21,13 @@ jobs:
       fail-fast: false
       matrix:
         python_version: ["3.6", "3.7", "3.8"]
-        django_version: ["3.1.3"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
-      DJANGO_VERSION: ${{ matrix.django_version }}
       COMPOSE_FILE: docker-compose-ci.yaml
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
-      - run: docker system prune -a
+      - run: docker system prune -a -f
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Build image"
