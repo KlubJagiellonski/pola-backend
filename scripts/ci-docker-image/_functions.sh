@@ -28,6 +28,12 @@ function build_image() {
   docker tag "${CI_IMAGE_NAME}:${IMAGE_TAG}" "pola-backend_web:latest"
 }
 
+function verify_image() {
+    echo "Verifying image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+    docker run --rm "${PROD_IMAGE_NAME}" pip freeze
+    diff <(docker run --rm "${PROD_IMAGE_NAME}" pip freeze | sort) <(cat ../../requirements/ci.txt)
+}
+
 function push_image() {
     echo "Pushing image: ${CI_IMAGE_NAME}:${IMAGE_TAG}"
     docker tag "pola-backend_web" "${CI_IMAGE_NAME}:${IMAGE_TAG}"

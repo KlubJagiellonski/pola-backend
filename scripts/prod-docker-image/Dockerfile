@@ -38,7 +38,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin
 
-COPY ./requirements/ ${APP_HOME}/requirements/
+COPY ./requirements/production.txt ${APP_HOME}/requirements/
 
 RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.txt" \
     && find /root/.local/ -name '*.pyc' -print0 | xargs -0 rm -r \

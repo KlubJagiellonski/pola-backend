@@ -55,7 +55,7 @@ function build_image() {
 function verify_image() {
     echo "Verifying image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker run --rm "${PROD_IMAGE_NAME}" pip freeze
-    # TODO: Add more checks
+    diff <(docker run --rm "${PROD_IMAGE_NAME}" pip freeze | sort) <(cat ../..//requirements/production.txt)
 }
 
 function push_image() {
