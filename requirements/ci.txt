@@ -1,4 +1,4 @@
-Babel==2.8.0
+Babel==2.9.0
 Faker==4.17.1
 Pillow==8.1.0
 PyJWT==2.0.0
