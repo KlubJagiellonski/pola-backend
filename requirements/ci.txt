@@ -7,7 +7,7 @@ Unidecode==1.1.1
 WebOb==1.8.6
 WebTest==2.0.35
 Werkzeug==1.0.1
-asgiref==3.2.10
+asgiref==3.3.1
 attrs==20.3.0
 backcall==0.2.0
 beautifulsoup4==4.9.3
