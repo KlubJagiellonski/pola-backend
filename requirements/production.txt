@@ -26,7 +26,7 @@ django-grappelli==2.14.3
 django-mailgun @ git+git://github.com/BradWhittington/django-mailgun.git@8fadee13983054aa1642899ba3803b3009fa1b0b
 django-model-utils==4.1.1
 django-ratelimit==3.0.1
-django-redis-cache==2.1.1
+django-redis-cache==3.0.0
 django-redis==4.12.1
 django-reversion==3.0.8
 django-storages==1.10.1
