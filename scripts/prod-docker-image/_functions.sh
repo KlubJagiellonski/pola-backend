@@ -13,7 +13,7 @@ function build_image() {
 
   RELEASE_SHA=$(git rev-parse HEAD)
   readonly RELEASE_SHA
-  echo "RELEASE_SHA=${RELEASE_SHA}}"
+  echo "RELEASE_SHA=${RELEASE_SHA}"
   docker pull "python:${PYTHON_VERSION}-slim-buster"
 
   build_args=(\
@@ -64,20 +64,13 @@ function verify_image() {
 
 function push_image() {
     echo "Pushing image: ${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
-    docker push "${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
-    # For pull-request
-    if [[ "${IMAGE_TAG}" != "latest" ]]; then
-        docker tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_IMAGE_NAME}:latest"
-        docker push "${BUILD_IMAGE_NAME}:latest"
-    fi
+    docker tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_IMAGE_NAME}:latest"
+    docker push "${BUILD_IMAGE_NAME}:latest"
 
     echo "Pushing image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
-    # For pull-request
-    if [[ "${IMAGE_TAG}" != "latest" ]]; then
-        docker tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_IMAGE_NAME}:latest"
-        docker push "${PROD_IMAGE_NAME}:latest"
-    fi
+    docker tag "${PROD_IMAGE_NAME}:${IMAGE_TAG}" "${PROD_IMAGE_NAME}:latest"
+    docker push "${PROD_IMAGE_NAME}:latest"
 }
 
 function pull_image() {
