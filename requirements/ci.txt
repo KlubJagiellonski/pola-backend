@@ -1,6 +1,6 @@
-Babel==2.8.0
+Babel==2.9.0
 Faker==4.17.1
-Pillow==7.2.0
+Pillow==8.1.0
 PyJWT==2.0.0
 Pygments==2.7.2
 Unidecode==1.1.1
@@ -70,7 +70,7 @@ pyflakes==2.2.0
 pyrsistent==0.17.3
 python-dateutil==2.8.1
 python3-openid==3.2.0
-pytz==2020.1
+pytz==2020.5
 redis==3.5.3
 reportlab==3.5.56
 requests-oauthlib==1.3.0
@@ -78,7 +78,7 @@ requests==2.24.0
 rq==1.5.2
 s3transfer==0.3.3
 six==1.15.0
-soupsieve==2.0.1
+soupsieve==2.1
 sqlparse==0.4.1
 text-unidecode==1.3
 traitlets==4.3.3
