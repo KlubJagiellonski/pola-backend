@@ -27,7 +27,6 @@ jobs:
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
-      - run: docker system prune -a -f
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
       - run: docker images
