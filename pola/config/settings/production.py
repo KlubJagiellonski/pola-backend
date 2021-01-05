@@ -111,4 +111,7 @@ sentry_sdk.init(
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True,
+    dsn=env.str('SENTRY_DSN'),  # noqa: F405
+    release=env.str('RELEASE_SHA'),  # noqa: F405
+    traces_sample_rate=env.float('SENTRY_TRACES_SAMPLE_RATE', default=0),  # noqa: F405
 )
