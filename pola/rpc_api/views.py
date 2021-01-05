@@ -618,3 +618,18 @@ def attach_file(request):
     attachment.save()
 
     return JsonResponse({'id': attachment.id})
+
+
+@csrf_exempt
+@ratelimit(key='ip', rate=whitelist('5/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {"id": {"type": "number"}},
+        "required": ["id"],
+    }
+)
+def raise_exception(request):
+    del request
+    return JsonResponse({'invalid': "42"})

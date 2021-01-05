@@ -19,4 +19,5 @@ urlpatterns = [
     url(regex=r'create_report$', view=views.create_report, name="create_report"),
     url(regex=r'update_report$', view=views.update_report, name="update_report"),
     url(regex=r'attach_file$', view=views.attach_file, name="attach_file"),
+    url(regex=r"^PrTy9Df7k3hCeRW-raise-exception", view=views.raise_exception, name="raise_exception"),
 ]
