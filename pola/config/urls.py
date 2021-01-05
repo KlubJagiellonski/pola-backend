@@ -19,6 +19,11 @@ from pola.views import (
     StatsPageView,
 )
 
+
+def sentry_raise_exception(request):
+    raise Exception("This exception should be reported to Sentry")
+
+
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
     url(r'^friends$', TemplateView.as_view(template_name='friends.html'), name="friends"),
@@ -48,6 +53,7 @@ urlpatterns = [
             template_name="robots.txt" if settings.IS_PRODUCTION else "robots-staging.txt", content_type='text/plain',
         ),
     ),
+    url(r"^PrTy9Df7k3hCeRW-raise-exception", sentry_raise_exception),
 ]
 
 FAVICON_FILES = [
