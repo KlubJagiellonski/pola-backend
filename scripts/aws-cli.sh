@@ -9,7 +9,7 @@ if [[ -z "${DJANGO_AWS_ACCESS_KEY_ID=}" ]]; then
 fi
 
 if [[ -z "${DJANGO_AWS_SECRET_ACCESS_KEY=}" ]]; then
-  echo "Missing environment variable: DJANGO_AWS_ACCESS_KEY_ID"
+  echo "Missing environment variable: DJANGO_AWS_SECRET_ACCESS_KEY"
   exit 1
 fi
 
