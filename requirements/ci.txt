@@ -33,7 +33,7 @@ django-debug-toolbar==3.2
 django-environ==0.4.5
 django-extensions==3.1.0
 django-filter==2.4.0
-django-grappelli==2.14.2
+django-grappelli==2.14.3
 django-model-utils==4.1.1
 django-ratelimit==3.0.1
 django-redis==4.12.1
@@ -42,7 +42,7 @@ django-storages==1.11.1
 django-test-plus==1.4.0
 django-webtest==1.9.7
 docopt==0.6.2
-factory-boy==3.1.0
+factory-boy==3.2.0
 flake8==3.8.4
 future==0.18.2
 gtin==0.1.13
@@ -63,7 +63,7 @@ pexpect==4.8.0
 pickleshare==0.7.5
 prompt-toolkit==3.0.9
 psycopg2-binary==2.8.6
-ptyprocess==0.6.0
+ptyprocess==0.7.0
 pycodestyle==2.6.0
 pycparser==2.20
 pyflakes==2.2.0
