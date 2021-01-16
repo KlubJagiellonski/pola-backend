@@ -1,4 +1,5 @@
 import sys
+import textwrap
 
 from django.core.management.base import BaseCommand
 from django.db import connection
@@ -15,18 +16,38 @@ class Command(BaseCommand):
         with connection.cursor() as c:
             i = 0
             c.execute(
-                "SELECT id "
-                "FROM product_product "
-                "WHERE company_id IS NULL AND name IS NULL "
-                "AND (select count(*) from report_report where product_id=product_product.id) = 0 "
-                "AND (select count(*) from ai_pics_aipics where product_id=product_product.id)=0 "
-                "AND ("
-                "select count(*) from pola_query where product_id=product_product.id"
-                ") < "
-                "("
-                "12 * date_part('year', age(created_at)) + date_part('month', age(created_at))"
-                ") "
-                "limit %s",
+                textwrap.dedent(
+                    """
+                    SELECT id
+                    FROM product_product
+                    WHERE name IS NULL
+                      AND
+                        (SELECT count(*)
+                         FROM product_product_companies
+                         WHERE product_id=product_product_companies.id) = 0
+                      AND
+                        (SELECT count(*)
+                         FROM report_report
+                         WHERE product_id=product_product.id) = 0
+                      AND
+                        (SELECT count(*)
+                         FROM ai_pics_aipics
+                         WHERE product_id=product_product.id)=0
+                      AND
+                        (SELECT count(*)
+                         FROM pola_query
+                         WHERE
+                            product_id=product_product.id
+                        )
+                        <
+                        (
+                            12
+                            * date_part('year', age(created_at))
+                            + date_part('month', age(created_at))
+                        )
+                    LIMIT %s
+                    """
+                ),
                 [options["limit"]],
             )
             while True:

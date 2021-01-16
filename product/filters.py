@@ -21,8 +21,10 @@ class NullProductFilter(django_filters.Filter):
 class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
     company_empty = NullProductFilter(label="Tylko produkty bez producenta")
 
-    company = django_filters.ModelChoiceFilter(
-        queryset=Company.objects.all(), widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
+    companies = django_filters.ModelChoiceFilter(
+        label="Producent",
+        queryset=Company.objects.all(),
+        widget=autocomplete.ModelSelect2(url='company:company-autocomplete'),
     )
 
     class Meta:
@@ -34,8 +36,6 @@ class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
         order_by = (
             ('name', _('Nazwa (A-Z)')),
             ('-name', _('Nazawa (Z-A)')),
-            ('company__name', _('Nazwa producenta (A-Z)')),
-            ('-company__name', _('Nazwa producenta (Z-A)')),
             ('query_count', _('Liczba zeskanowań (rosnąco)')),
             ('-query_count', _('Liczba zeskanowań (malejąco)')),
         )

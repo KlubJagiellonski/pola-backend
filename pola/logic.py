@@ -20,12 +20,13 @@ def get_result_from_code(code):
     if code.isdigit() and (len(code) == 8 or len(code) == 13):
         # code is EAN8 or EAN13
         product = get_by_code(code)
-        company = product.company
+        companies = list(product.companies.all())
 
         result['product_id'] = product.id
         stats['was_590'] = code.startswith('590')
 
-        if company:
+        if len(companies) == 1:
+            company = companies[0]
             # we know the manufacturer of the product
             result['name'] = company.common_name or company.official_name or company.name
             result['plCapital'] = company.plCapital
@@ -68,8 +69,7 @@ def get_result_from_code(code):
 
             stats['was_verified'] = company.verified
             result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
-
-        else:
+        elif len(companies) == 0:
             # we don't know the manufacturer
             if code.startswith('590'):
                 # the code is registered in Poland, we want more data!
@@ -82,7 +82,7 @@ def get_result_from_code(code):
                     "kodu kreskowego jak i etykiety z "
                     "produktu. Z góry dziękujemy!"
                 )
-                result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego " "produktu"
+                result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego produktu"
                 result['card_type'] = TYPE_GREY
                 result['report_button_type'] = TYPE_RED
             elif code.startswith('977') or code.startswith('978') or code.startswith('979'):
@@ -96,7 +96,7 @@ def get_result_from_code(code):
                     'Wydawnictwa tego typu nie są aktualnie '
                     'w obszarze zainteresowań Poli.'
                 )
-                result['report_text'] = "To nie jest książka, czasopismo lub " "album muzyczny? Prosimy o zgłoszenie"
+                result['report_text'] = "To nie jest książka, czasopismo lub album muzyczny? Prosimy o zgłoszenie"
             else:
                 # let's try to associate the code with a country
                 for prefix in CODE_PREFIX_TO_COUNTRY.keys():
@@ -118,7 +118,13 @@ def get_result_from_code(code):
                         'kodem sieci handlowej. Pola nie '
                         'potrafi powiedzieć o nim nic więcej'
                     )
-
+        elif len(companies) > 1:
+            # Ups. It seems to be an internal code
+            result['name'] = 'Nieobsługiwana aplikacja'
+            result['altText'] = (
+                'Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, aby wyświetlić '
+                'informację.'
+            )
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
         result['name'] = 'Nieprawidłowy kod'
@@ -249,9 +255,11 @@ def serialize_product(product):
         'code': product.code,
     }
 
-    company = product.company
+    companies = list(product.companies.all())
 
-    if company:
+    if len(companies) == 1:
+        company = companies[0]
+
         json['report'] = False
         json['company'] = {}
         json['company']['name'] = company.common_name or company.official_name or company.name
@@ -270,6 +278,8 @@ def serialize_product(product):
         if plScore:
             json['plScore'] = plScore
             json['verified'] = company.verified
+    elif len(companies) > 1:
+        raise Exception("Add support for multiple companies in this response")
     else:
         for prefix in CODE_PREFIX_TO_COUNTRY.keys():
             if product.code.startswith(prefix):

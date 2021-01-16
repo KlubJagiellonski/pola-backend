@@ -5,6 +5,7 @@ import requests
 from test_plus.test import TestCase
 
 from ai_pics.models import AIAttachment, AIPics
+from company.factories import CompanyFactory
 from product.factories import ProductFactory
 from product.models import Product
 from report.factories import ReportFactory
@@ -135,23 +136,23 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         self.assertEqual(200, response.status_code, response.content)
 
     def test_should_return_200_when_polish_and_known_product(self):
-        p = ProductFactory.create(
-            code=5900049011829,
-            company__plCapital=100,
-            company__plWorkers=0,
-            company__plRnD=100,
-            company__plRegistered=100,
-            company__plNotGlobEnt=100,
-            company__description="TEST",
-            company__sources="TEST|BBBB",
-            company__verified=True,
-            company__is_friend=True,
-            company__plCapital_notes="AAA",
-            company__plWorkers_notes="BBB",
-            company__plRnD_notes="CCC",
-            company__plRegistered_notes="DDD",
-            company__plNotGlobEnt_notes="EEE",
+        c = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
         )
+        p = ProductFactory.create(code=5900049011829, companies=[c])
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
 
@@ -224,23 +225,23 @@ class TestGetByCodeV2(TestCase, JsonRequestMixin):
         self.assertEqual(200, response.status_code)
 
     def test_should_return_200_when_polish_and_known_product(self):
-        p = ProductFactory.create(
-            code=5900049011829,
-            company__plCapital=100,
-            company__plWorkers=0,
-            company__plRnD=100,
-            company__plRegistered=100,
-            company__plNotGlobEnt=100,
-            company__description="KOTEK",
-            company__sources="KOTEK|BBBB",
-            company__verified=True,
-            company__is_friend=True,
-            company__plCapital_notes="AA",
-            company__plWorkers_notes="BBB",
-            company__plRnD_notes="CCC",
-            company__plRegistered_notes="DDD",
-            company__plNotGlobEnt_notes="EEEE",
+        c = CompanyFactory.create(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="KOTEK",
+            sources="KOTEK|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEEE",
         )
+        p = ProductFactory.create(code=5900049011829, companies=[c])
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code)
 

@@ -229,8 +229,10 @@ def get_by_code_internal(request, ai_supported=False):
 
     if product:
         product.increment_query_count()
-        if product.company:
-            product.company.increment_query_count()
+        companies = list(product.companies.all())
+        if companies:
+            for company in companies:
+                company.increment_query_count()
 
     if ai_supported:
         result = logic_ai.add_ask_for_pics(product, result)
@@ -437,8 +439,6 @@ def attach_file_v2(request):
 
 
 # Debug stuff
-
-
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('5/s'), block=True)
 @validate_json_response(
