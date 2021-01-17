@@ -31,7 +31,7 @@ django-redis==4.12.1
 django-reversion==3.0.8
 django-storages==1.11.1
 future==0.18.2
-gevent==20.9.0
+gevent==21.1.0
 greenlet==1.0.0
 gtin==0.1.13
 gunicorn==20.0.4
