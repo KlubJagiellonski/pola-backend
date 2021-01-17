@@ -1,7 +1,6 @@
 import functools
 import json
 import logging
-import os
 import uuid
 from datetime import timedelta
 
@@ -182,7 +181,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
 
     attachment = AIAttachment(ai_pics=ai_pics)
     attachment.attachment.name = object_name
-    attach_file.file_no = file_no
+    attachment.file_no = file_no
     attachment.save()
 
     return signed_request
@@ -448,6 +447,34 @@ def create_signed_request_boto3(mime_type, object_name, bucket_name):
     {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "properties": {"id": {"type": "integer"}},
+        "required": ["id"],
+    }
+)
+def update_report_v2(request):
+    device_id = request.GET['device_id']
+    report_id = request.GET['report_id']
+
+    data = json.loads(request.body.decode("utf-8"))
+    description = data['description']
+
+    report = Report.objects.get(pk=report_id)
+
+    if report.client != device_id:
+        return HttpResponseForbidden("Device_id mismatch")
+
+    report.description = description
+    report.save()
+
+    return JsonResponse({'id': report.id})
+
+
+@csrf_exempt
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "properties": {"signed_request": {"type": "array", "items": {"type": "string"}}},
         "required": ["signed_request"],
     }
@@ -470,154 +497,7 @@ def attach_file_v2(request):
     return JsonResponse({'signed_request': [signed_request]})
 
 
-# --- API v1 (old)
-
-
-@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-            "code": {"type": "string"},
-            "company": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "plCapital": {"type": "null"},
-                    "plCapital_notes": {"type": "null"},
-                    "plNotGlobEnt": {"type": "null"},
-                    "plNotGlobEnt_notes": {"type": "null"},
-                    "plRegistered": {"type": "null"},
-                    "plRegistered_notes": {"type": "null"},
-                    "plRnD": {"type": "null"},
-                    "plRnD_notes": {"type": "null"},
-                    "plWorkers": {"type": "null"},
-                    "plWorkers_notes": {"type": "null"},
-                },
-                "required": [
-                    "name",
-                    "plCapital",
-                    "plCapital_notes",
-                    "plNotGlobEnt",
-                    "plNotGlobEnt_notes",
-                    "plRegistered",
-                    "plRegistered_notes",
-                    "plRnD",
-                    "plRnD_notes",
-                    "plWorkers",
-                    "plWorkers_notes",
-                ],
-            },
-            "id": {"type": "integer"},
-            "plScore": {"type": "null"},
-            "report": {"oneOf": [{"type": "boolean"}, {"type": "string", "enum": ['ask_for_company']}]},
-            "verified": {"type": "boolean"},
-        },
-        "required": ["code", "id", "plScore", "report", "verified"],
-    }
-)
-def get_by_code(request, code):
-    device_id = request.GET['device_id']
-    product = logic.get_by_code(code=code)
-
-    result = logic.serialize_product(product)
-
-    Query.objects.create(
-        client=device_id,
-        product=product,
-        was_verified=result['verified'],
-        was_590=code.startswith('590'),
-        was_plScore=result['plScore'] is not None,
-    )
-
-    if product:
-        product.increment_query_count()
-        if product.company:
-            product.company.increment_query_count()
-
-    return JsonResponse(result)
-
-
-@csrf_exempt
-@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {"id": {"type": "integer"}},
-        "required": ["id"],
-    }
-)
-def create_report(request):
-    device_id = request.GET['device_id']
-
-    data = json.loads(request.body.decode("utf-8"))
-    description = data['description']
-    product_id = data.get('product_id', None)
-
-    product = None
-    if product_id:
-        product = Product.objects.get(pk=product_id)
-
-    report = Report.objects.create(product=product, description=description, client=device_id)
-
-    return JsonResponse({'id': report.id})
-
-
-@csrf_exempt
-@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {"id": {"type": "integer"}},
-        "required": ["id"],
-    }
-)
-def update_report(request):
-    device_id = request.GET['device_id']
-    report_id = request.GET['report_id']
-
-    data = json.loads(request.body.decode("utf-8"))
-    description = data['description']
-
-    report = Report.objects.get(pk=report_id)
-
-    if report.client != device_id:
-        return HttpResponseForbidden("Device_id mismatch")
-
-    report.description = description
-    report.save()
-
-    return JsonResponse({'id': report.id})
-
-
-@csrf_exempt
-@ratelimit(key='ip', rate=whitelist('5/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {"id": {"type": "number"}},
-        "required": ["id"],
-    }
-)
-def attach_file(request):
-    device_id = request.GET['device_id']
-    report_id = request.GET['report_id']
-
-    report = Report.objects.get(pk=report_id)
-
-    if report.client != device_id:
-        return HttpResponseForbidden("Device_id mismatch")
-
-    attachment = Attachment(attachment=request.FILES['file'], report=report)
-    file_name, file_extension = os.path.splitext(attachment.attachment.name)
-    attachment.attachment.name = str(uuid.uuid1()) + file_extension
-    attachment.save()
-
-    return JsonResponse({'id': attachment.id})
+# Debug stuff
 
 
 @csrf_exempt
