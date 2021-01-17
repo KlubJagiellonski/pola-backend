@@ -6,7 +6,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from company.models import Company
-from pola.logic import create_from_api, update_company_from_krs
+from pola.logic import create_from_api
 from pola.produkty_w_sieci_api import (
     Client,
     ConnectionError,
@@ -84,6 +84,9 @@ def requery_products(products):
                 print(";")
         except ConnectionError as e:
             print(e)
+
+ 
+update_company_from_krs = lambda prod, company: False
 
 
 def update_from_kbpoz(db_filename):
