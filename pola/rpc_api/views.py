@@ -7,8 +7,6 @@ from datetime import timedelta
 import boto3
 from botocore.config import Config
 from django.conf import settings
-from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import (
     HttpResponse,
     HttpResponseForbidden,
@@ -53,65 +51,6 @@ def validate_json_response(schema, *args, **kwargs):
         return validate_json_schema
 
     return wrapper
-
-
-@csrf_exempt
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-            "aipics": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "ai_pics_id": {"type": "integer"},
-                        "code": {"type": "string"},
-                        "product_name": {"type": "string"},
-                        "company_id": {"type": "integer"},
-                        "url": {"type": "string"},
-                    },
-                    "required": ["ai_pics_id", "code", "product_name", "company_id", "url"],
-                },
-            }
-        },
-        "required": ["aipics"],
-    }
-)
-def get_ai_pics(request):
-    if settings.AI_SHARED_SECRET == '':
-        return HttpResponseForbidden()
-
-    shared_secret = request.POST.get('shared_secret')
-    if shared_secret != settings.AI_SHARED_SECRET:
-        return HttpResponseForbidden()
-
-    page_no = int(request.GET.get('page', 0))
-
-    attachments = (
-        AIAttachment.objects.select_related('ai_pics', 'ai_pics__product')
-        .filter(Q(ai_pics__is_valid=True) | Q(ai_pics__is_valid__isnull=True))
-        .order_by('id')
-    )
-
-    paginator = Paginator(attachments, settings.AI_PICS_PAGE_SIZE)
-
-    aipics = []
-
-    if page_no < paginator.num_pages:
-        for attachment in paginator.page(page_no + 1):
-            aipics.append(
-                {
-                    'ai_pics_id': attachment.ai_pics.id,
-                    'code': attachment.ai_pics.product.code,
-                    'product_name': attachment.ai_pics.product.name,
-                    'company_id': attachment.ai_pics.product.company_id,
-                    'url': attachment.get_absolute_url(),
-                }
-            )
-
-    return JsonResponse({'aipics': aipics})
 
 
 # API v3

@@ -2,10 +2,8 @@ import io
 import json
 
 import requests
-from django.test import override_settings
 from test_plus.test import TestCase
 
-from ai_pics.factories import AIAttachmentFactory
 from ai_pics.models import AIAttachment, AIPics
 from product.factories import ProductFactory
 from product.models import Product
@@ -30,68 +28,6 @@ def _create_image(width=100, height=None, color='blue', image_format='JPEG', ima
     with Image.new(image_palette, (width, height), color) as thumb:
         thumb.save(thumb_io, format=image_format)
     return thumb_io.getvalue()
-
-
-class TestGetAiPics(TestCase):
-    url = '/a/v3/get_ai_pics'
-
-    @override_settings(AI_SHARED_SECRET='good-secret')
-    def test_should_block_on_missing_secret(self):
-        response = self.client.post(self.url)
-        self.assertEqual(403, response.status_code)
-
-    @override_settings(AI_SHARED_SECRET='good-secret')
-    def test_should_block_on_invalid_secret(self):
-        response = self.client.post(self.url, {'shared_secret': 'invalid-secret'})
-        self.assertEqual(403, response.status_code)
-
-    @override_settings(AI_SHARED_SECRET='good-secret')
-    def test_should_return_empty_set(self):
-        response = self.client.post(self.url, {'shared_secret': 'good-secret'})
-        self.assertEqual(200, response.status_code)
-        self.assertEqual({'aipics': []}, response.json())
-
-    @override_settings(AI_SHARED_SECRET='good-secret')
-    def test_should_return_one_item(self):
-        ai_attachment = AIAttachmentFactory(ai_pics__is_valid=True)
-        response = self.client.post(self.url, {'shared_secret': 'good-secret'})
-        self.assertEqual(200, response.status_code)
-        expected_response = {
-            'aipics': [
-                {
-                    'ai_pics_id': ai_attachment.ai_pics.pk,
-                    'code': ai_attachment.ai_pics.product.code,
-                    'company_id': ai_attachment.ai_pics.product.company_id,
-                    'product_name': ai_attachment.ai_pics.product.name,
-                    'url': ai_attachment.get_absolute_url(),
-                }
-            ]
-        }
-        self.assertEqual(expected_response, response.json())
-
-    @override_settings(AI_SHARED_SECRET='good-secret')
-    def test_should_ignore_invalid(self):
-        AIAttachmentFactory(ai_pics__is_valid=False)
-
-        response = self.client.post(self.url, {'shared_secret': 'good-secret'})
-
-        self.assertEqual(200, response.status_code)
-        self.assertEqual(len(response.json()['aipics']), 0)
-
-    @override_settings(AI_SHARED_SECRET='good-secret', AI_PICS_PAGE_SIZE=10)
-    def test_should_support_pagination(self):
-        AIAttachmentFactory.create_batch(15, ai_pics__is_valid=True)
-        self.assertEqual(AIAttachment.objects.count(), 15)
-
-        response = self.client.post(self.url, {'shared_secret': 'good-secret'})
-
-        self.assertEqual(200, response.status_code)
-        self.assertEqual(len(response.json()['aipics']), 10)
-
-        response = self.client.post(self.url + "?page=1", {'shared_secret': 'good-secret'})
-
-        self.assertEqual(200, response.status_code)
-        self.assertEqual(len(response.json()['aipics']), 5)
 
 
 class TestAddAiPics(TestCase, JsonRequestMixin):

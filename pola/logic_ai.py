@@ -15,8 +15,13 @@ preview_texts = [
     'Rozwijaj z nami Polę!',
 ]
 
+ENABLE_AI_PICS_REQUEST = False
+
 
 def add_ask_for_pics(product, result):
+    if not ENABLE_AI_PICS_REQUEST:
+        return result
+
     if (
         product
         and product.name
