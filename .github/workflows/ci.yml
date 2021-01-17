@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Copy .env.example to .env"
@@ -48,11 +50,23 @@ jobs:
       - run: docker-compose config
       - name: "Run tests"
         run: |
-          docker-compose run web /app/manage.py test --verbosity=2 --keepdb
+          docker-compose run web bash -x -c "
+            coverage run \
+              --source='.' \
+              /app/manage.py test \
+                --verbosity=2 \
+                --keepdb;
+            coverage xml
+          "
       - name: "Check missing migrations"
         run: docker-compose run web makemigrations --check -v 3
       - name: "Checks the entire Django project for potential problems"
         run: docker-compose run web check --fail-level DEBUG -v 3
+      - name: "Upload coverage"
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          verbose: false
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
