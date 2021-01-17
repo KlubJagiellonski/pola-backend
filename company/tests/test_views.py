@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
@@ -7,9 +5,7 @@ from reversion.models import Version
 from test_plus.test import TestCase
 
 from company.factories import CompanyFactory
-from company.forms import CompanyCreateFromKRSForm
 from company.models import Company
-from pola.mojepanstwo_api2.krs import CompanyInfo
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
 
@@ -40,35 +36,6 @@ class TestCompanyCreateView(PermissionMixin, TemplateUsedMixin, TestCase):
 class TestCompanyCreateFromKRSView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('company:create_from_krs')
     template_name = 'company/company_from_krs.html'
-
-    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
-    def test_success_by_nip(self, mock_tool):
-        mock_tool.return_value = [self._get_mock()]
-
-        page = self.app.get(self.url, user=self.user)
-        page.form['is_krs'] = 0
-        page.form['no'] = "123"
-        page = page.form.submit()
-
-        self.assertTrue(page.url.count("TEST1") == 1)
-        self.assertTrue(page.url.count("TEST2") == 1)
-        self.assertTrue(page.url.count("TEST3") == 1)
-        self.assertTrue(page.url.count("123") == 1)
-        self.assertTrue(page.url.count("URL") == 1)
-        self.assertTrue(page.url.count(reverse('company:create')) == 1)
-
-    def _get_mock(self):
-        data = {
-            "id": 1,
-            "nazwa": "TEST1",
-            "nazwa_skrocona": "TEST2",
-            "nip": "123",
-            "adres": "TEST3",
-            "liczba_wspolnikow": 3,
-            "score": "333",
-            "url": "URL",
-        }
-        return CompanyInfo(**data)
 
 
 class TestCompanyUpdate(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
@@ -184,60 +151,6 @@ class TestCompanyListView(PermissionMixin, TemplateUsedMixin, WebTestMixin, Test
         self.assertTrue(str(products[-1]) in page)
         page2 = page.click("Następne")
         page2.click("Poprzednie")
-
-
-class TestCompanyCreateFromKRSForm(TestCase):
-    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
-    def test_existings_compnay_in_db(self, mock_tool):
-        CompanyFactory(nip=123)
-        mock_tool.return_value = [self._get_mock()]
-        data = {'is_krs': '1', 'no': 123}
-        form = CompanyCreateFromKRSForm(data=data)
-        self.assertFalse(form.is_valid())
-
-    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
-    def test_multiple_company(self, mock_tool):
-        mock_tool.return_value = [
-            self._get_mock(),
-            self._get_mock(),
-        ]
-        data = {'is_krs': '1', 'no': 123}
-        form = CompanyCreateFromKRSForm(data=data)
-        self.assertFalse(form.is_valid())
-
-    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
-    def test_no_company_in_remote_api(self, mock_tool):
-        mock_tool.return_value = []
-        data = {'is_krs': '1', 'no': 123}
-        form = CompanyCreateFromKRSForm(data=data)
-        self.assertFalse(form.is_valid())
-
-    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
-    def test_success(self, mock_tool):
-        mock_tool.return_value = [self._get_mock()]
-        data = {'is_krs': '1', 'no': 123}
-        form = CompanyCreateFromKRSForm(data=data)
-        self.assertTrue(form.is_valid())
-
-    @patch('pola.mojepanstwo_api2.krs.Krs.get_companies')
-    def test_success_by_nip(self, mock_tool):
-        mock_tool.return_value = [self._get_mock()]
-        data = {'is_krs': '0', 'no': 123}
-        form = CompanyCreateFromKRSForm(data=data)
-        self.assertTrue(form.is_valid())
-
-    def _get_mock(self):
-        data = {
-            "id": 1,
-            "nazwa": "AA",
-            "nazwa_skrocona": "BB",
-            "nip": "123",
-            "adres": "AAAA",
-            "liczba_wspolnikow": 3,
-            "score": "333",
-            "url": "",
-        }
-        return CompanyInfo(**data)
 
 
 class CompanyAutocomplete(PermissionMixin, TestCase):
