@@ -6,6 +6,9 @@ x-pola-backend-common:
   build:
     context: .
     dockerfile: scripts/ci-docker-image/Dockerfile
+    args:
+      - DJANGO_VERSION=${DJANGO_VERSION-3.1.5}
+      - PYTHON_VERSION=${PYTHON_VERSION-3.6}
   environment:
     DATABASE_URL: 'postgres://pola_app:pola_app@postgres/pola_app'
     AI_SHARED_SECRET: '123123'
@@ -32,16 +35,14 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+      minio-init:
+        condition: service_healthy
       web-init:
         condition: service_started
     command: runserver 0.0.0.0:8080
     ports:
       - "8080:8080"
     restart: always
-    healthcheck:
-      test: "curl --fail http://localhost:8000/"
-      interval: 30s
-      retries: 5
 
   web-init:
     <<: *pola-backend-common

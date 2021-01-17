@@ -23,7 +23,6 @@ jobs:
         python_version: ["3.6", "3.7", "3.8"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
-      COMPOSE_FILE: docker-compose-ci.yaml
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
@@ -47,7 +46,7 @@ jobs:
       - run: docker-compose config
       - name: "Run tests"
         run: |
-          docker-compose run web
+          docker-compose run web /app/manage.py test --verbosity=2 --keepdb
       - name: "Check missing migrations"
         run: docker-compose run web makemigrations --check -v 3
       - name: "Push image (push)"
