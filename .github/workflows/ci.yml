@@ -51,7 +51,7 @@ jobs:
       - name: "Check missing migrations"
         run: docker-compose run web makemigrations --check -v 3
       - name: "Checks the entire Django project for potential problems"
-        run: docker-compose run web check --fail-level DEBUG
+        run: docker-compose run web check --fail-level DEBUG -v 3
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
