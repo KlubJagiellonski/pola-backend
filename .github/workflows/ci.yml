@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
+        with:
+          fetch-dept: 2
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Copy .env.example to .env"
@@ -61,10 +63,8 @@ jobs:
       - name: "Upload coverage"
         uses: codecov/codecov-action@v1
         with:
-          files: ./coverage1.xml,./coverage2.xml # optional
           fail_ci_if_error: true
-          verbose: true
-
+          verbose: false
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
