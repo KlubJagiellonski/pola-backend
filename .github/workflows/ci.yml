@@ -48,11 +48,11 @@ jobs:
       - run: docker-compose config
       - name: "Run tests"
         run: |
-          docker-compose run web
-            coverage run
-              --source='.'
-              /app/manage.py test
-                --verbosity=2
+          docker-compose run web \
+            coverage run \
+              --source='.' \
+              /app/manage.py test \
+                --verbosity=2 \
                 --keepdb
       - name: "Check missing migrations"
         run: docker-compose run web makemigrations --check -v 3
