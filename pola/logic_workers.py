@@ -85,8 +85,9 @@ def requery_products(products):
         except ConnectionError as e:
             print(e)
 
- 
-update_company_from_krs = lambda prod, company: False
+
+def update_company_from_krs(prod, company):
+    return False
 
 
 def update_from_kbpoz(db_filename):
