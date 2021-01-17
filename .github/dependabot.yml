@@ -15,7 +15,7 @@ updates:
       - dependency-name: boto3
         versions:
           - "> 1.16.4"
-          - "< 1.17"        
+          - "< 1.17"
 
   - package-ecosystem: "github-actions"
     # Workflow files stored in the
