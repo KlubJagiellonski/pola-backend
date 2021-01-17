@@ -50,16 +50,16 @@ jobs:
       - run: docker-compose config
       - name: "Run tests"
         run: |
-          docker-compose run web bash -x -c "
+          docker-compose run web bash -x -c '
             coverage run \
-              --source='.' \
+              --source="." \
               /app/manage.py test \
                 --verbosity=2 \
                 --keepdb;
             EXIT_CODE=$?;
             coverage xml;
             exit ${EXIT_CODE};
-          "
+          '
       - name: "Check missing migrations"
         run: docker-compose run web makemigrations --check -v 3
       - name: "Checks the entire Django project for potential problems"
