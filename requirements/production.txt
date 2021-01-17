@@ -2,7 +2,7 @@ Babel==2.9.0
 Collectfast==2.2.0
 Django==3.1.5
 Pillow==8.1.0
-PyJWT==2.0.0
+PyJWT==2.0.1
 Unidecode==1.1.2
 asgiref==3.3.1
 attrs==20.3.0
