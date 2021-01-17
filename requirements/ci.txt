@@ -58,7 +58,7 @@ jsonschema==3.2.0
 mccabe==0.6.1
 oauthlib==3.1.0
 parameterized==0.8.1
-parso==0.7.1
+parso==0.8.1
 pexpect==4.8.0
 pickleshare==0.7.5
 prompt-toolkit==3.0.10
