@@ -9,7 +9,6 @@ from pola.forms import (
     SaveButtonMixin,
     SingleButtonMixin,
 )
-from pola.mojepanstwo_api2.krs import Krs
 
 from . import models
 
@@ -62,10 +61,9 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
         return cleaned_data
 
     def get_companies_from_api(self, is_krs, no):
-        client = Krs()
-        if is_krs:
-            return client.get_companies(krs_no=no)
-        return client.get_companies(krs_nip=no)
+        del is_krs
+        del no
+        return []
 
 
 class BrandForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):

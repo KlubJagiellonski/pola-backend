@@ -4,8 +4,7 @@ import re
 from django.conf import settings
 
 from company.models import Brand, Company
-from pola import mojepanstwo_api, produkty_w_sieci_api
-from pola.mojepanstwo_api import KrsClient
+from pola import produkty_w_sieci_api
 from pola.produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
 from product.models import Product
 from report.models import Report
@@ -225,63 +224,7 @@ def create_from_api(code, obj, product=None):
 
         product.save(commit_desc=commit_desc)
 
-    if company and company_created:
-        update_company_from_krs(product, company)
-
     return product
-
-
-def update_company_from_krs(product, company):
-    try:
-        krs = KrsClient()
-        if company.name:
-            companies = krs.get_companies_by_name(company.name)
-        elif company.nip:
-            companies = krs.get_companies_by_nip(company.nip)
-        else:
-            return False
-        if companies.__len__() == 1:
-            company.official_name = companies[0]['nazwa']
-            company.common_name = companies[0]['nazwa_skrocona']
-            company.address = companies[0]['adres']
-            company.nip = companies[0]['nip']
-            company.plRegistered = 100
-            company.sources = "Dane z KRS|%s" % companies[0]['url']
-
-            Company.save(
-                company,
-                commit_desc="Dane firmy pobrane "
-                "automatycznie poprzez API "
-                "mojepanstwo.pl ({})".format(companies[0]['url']),
-            )
-
-            shareholders = shareholders_to_str(krs, companies[0]['id'], '')
-            if shareholders:
-                create_bot_report(product, 'Wspólnicy spółki {}:\n{}'.format(company.name, shareholders))
-            return True
-
-        elif companies.__len__() > 0:
-            description = '{} - ta firma może być jedną z następujących:\n\n'.format(company.name)
-
-            for i in range(0, min(companies.__len__(), 10)):
-                description += ('Nazwa: {}\n' + 'Skrót: {}\n' + 'NIP:   {}\n' + 'Adres: \n{}\n' + 'Url:   {}\n').format(
-                    companies[i]['nazwa'],
-                    companies[i]['nazwa_skrocona'],
-                    companies[i]['nip'],
-                    companies[i]['adres'],
-                    companies[i]['url'],
-                )
-                shareholders = shareholders_to_str(krs, companies[i]['id'], '')
-                if shareholders:
-                    description += 'Wspólnicy:\n{}'.format(shareholders)
-                description += '\n'
-
-            create_bot_report(product, description)
-
-    except (mojepanstwo_api.CompanyNotFound, mojepanstwo_api.ConnectionError, mojepanstwo_api.ApiError):
-        pass
-
-    return False
 
 
 def create_bot_report(product, description, check_if_already_exists=False):
