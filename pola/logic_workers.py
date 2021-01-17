@@ -4,14 +4,14 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.utils import timezone
-from produkty_w_sieci_api import (
+
+from company.models import Company
+from pola.logic import create_from_api
+from pola.produkty_w_sieci_api import (
     Client,
     ConnectionError,
     is_code_supported_by_gs1_api,
 )
-
-from company.models import Company
-from pola.logic import create_from_api, update_company_from_krs
 from product.models import Product
 
 REQUERY_590_FREQUENCY = 30
@@ -84,6 +84,10 @@ def requery_products(products):
                 print(";")
         except ConnectionError as e:
             print(e)
+
+
+def update_company_from_krs(prod, company):
+    return False
 
 
 def update_from_kbpoz(db_filename):

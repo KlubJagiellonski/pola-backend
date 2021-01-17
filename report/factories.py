@@ -1,4 +1,3 @@
-import factory
 import factory.fuzzy
 from django.utils import timezone
 
@@ -18,3 +17,13 @@ class ReportFactory(factory.django.DjangoModelFactory):
 class ResolvedReportFactory(ReportFactory):
     resolved_at = factory.lazy_attribute(lambda o: timezone.now())
     resolved_by = factory.SubFactory(UserFactory)
+
+
+class AttachmentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = 'report.Attachment'
+
+    report = factory.SubFactory(ReportFactory)
+    attachment = factory.django.ImageField(
+        width=200, height=200, filename=factory.sequence(lambda n: "report-%s.png" % n)
+    )
