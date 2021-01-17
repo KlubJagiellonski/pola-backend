@@ -47,11 +47,11 @@ jobs:
           echo "::endgroup::"
           '
       - run: docker images
-      - run: bash <(curl -s https://codecov.io/env)
       - run: docker-compose config
       - name: "Run tests"
         run: |
-          docker-compose run web bash -x -c "
+          ci_env=`bash <(curl -s https://codecov.io/env)`
+          docker-compose run ${ci_env} web bash -x -c "
             coverage run \
               --source='.' \
               /app/manage.py test \
