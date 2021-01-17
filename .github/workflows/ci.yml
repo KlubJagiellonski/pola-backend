@@ -47,6 +47,7 @@ jobs:
           echo "::endgroup::"
           '
       - run: docker images
+      - run: bash <(curl -s https://codecov.io/env)
       - run: docker-compose config
       - name: "Run tests"
         run: |
