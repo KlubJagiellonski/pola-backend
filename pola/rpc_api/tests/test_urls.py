@@ -15,8 +15,3 @@ class TestApiUrls(TestCase):
         self.assertEqual("/a/v2/create_report", reverse("api:create_report_v2"))
         self.assertEqual("/a/v2/update_report", reverse("api:update_report_v2"))
         self.assertEqual("/a/v2/attach_file", reverse("api:attach_file_v2"))
-        # API v1
-        self.assertEqual("/a/get_by_code/12345678", reverse("api:get_by_code", args=["12345678"]))
-        self.assertEqual("/a/create_report", reverse("api:create_report"))
-        self.assertEqual("/a/update_report", reverse("api:update_report"))
-        self.assertEqual("/a/attach_file", reverse("api:attach_file"))
