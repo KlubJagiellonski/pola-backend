@@ -28,10 +28,10 @@ class AIPics(models.Model):
     height = models.IntegerField(null=False)
 
     device_name = models.CharField(max_length=100)
-    flash_used = models.NullBooleanField()
-    was_portrait = models.NullBooleanField()
+    flash_used = models.BooleanField(null=True)
+    was_portrait = models.BooleanField(null=True)
 
-    is_valid = models.NullBooleanField()
+    is_valid = models.BooleanField(null=True)
 
     def attachment_count(self):
         return self.attachment_set.count()
