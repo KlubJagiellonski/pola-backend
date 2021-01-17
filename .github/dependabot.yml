@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 20
     ignore:
       - dependency-name: botocore
         versions:
@@ -15,4 +15,16 @@ updates:
       - dependency-name: boto3
         versions:
           - "> 1.16.4"
-          - "< 1.17"
+          - "< 1.17"        
+
+  - package-ecosystem: "github-actions"
+    # Workflow files stored in the
+    # default location of `.github/workflows`
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
