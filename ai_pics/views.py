@@ -1,4 +1,4 @@
-from boto.s3.connection import Bucket, Key, S3Connection
+from boto.s3.connection import Bucket, Key
 from django.conf import settings
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -10,12 +10,13 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 
 from ai_pics.models import AIAttachment, AIPics
+from pola.s3 import create_s3_connection
 
 
 class BucketMixin:
     @property
     def _bucket(self):
-        conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+        conn = create_s3_connection()
         bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
         return bucket
 

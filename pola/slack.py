@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timedelta
-from urllib import urlencode
+from urllib.parse import urlencode
 
 import requests
 from django.conf import settings

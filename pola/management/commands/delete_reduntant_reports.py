@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand
-from sets import Set
 
 from product.models import Product
 from report.models import Report
@@ -24,7 +23,7 @@ class Command(BaseCommand):
 
             reports = Report.objects.filter(product__id=product['id'], client='krs-bot').order_by('created_at')
 
-            desc = Set()
+            desc = set()
             for report in reports:
 
                 if report.description in desc:
