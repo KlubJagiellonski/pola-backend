@@ -48,6 +48,8 @@ jobs:
       - name: "Run tests"
         run: |
           docker-compose run web
+      - name: "Check missing migrations"
+        run: docker-compose run web makemigrations --check -v 3
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
