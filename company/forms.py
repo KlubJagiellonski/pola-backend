@@ -63,7 +63,7 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
     def get_companies_from_api(self, is_krs, no):
         del is_krs
         del no
-        return {}
+        return []
 
 
 class BrandForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):
