@@ -1,13 +1,13 @@
 Pola
 ==============================
 
-.. image:: https://travis-ci.org/KlubJagiellonski/pola-backend.svg?branch=master
-    :target: https://travis-ci.org/KlubJagiellonski/pola-backend
-    :alt: Build Status
+.. image:: https://github.com/KlubJagiellonski/pola-backend/workflows/CI%20Build/badge.svg
+     :target: https://github.com/KlubJagiellonski/pola-backend/actions
+     :alt: CI Build
 
-.. image:: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/shield.svg
-     :target: https://pyup.io/repos/github/KlubJagiellonski/pola-backend/
-     :alt: Updates
+.. image:: https://codecov.io/gh/KlubJagiellonski/pola-backend/branch/master/graph/badge.svg?token=qh0CZKfnGR
+     :target: https://codecov.io/gh/KlubJagiellonski/pola-backend
+     :alt: Codedov - Coverage
 
 .. image:: https://img.shields.io/github/issues/KlubJagiellonski/pola-backend.svg
      :target: https://github.com/KlubJagiellonski/pola-backend/issues
