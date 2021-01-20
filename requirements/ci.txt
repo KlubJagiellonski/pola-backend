@@ -1,5 +1,5 @@
 Babel==2.9.0
-Faker==5.6.1
+Faker==5.6.3
 Pillow==8.1.0
 PyJWT==2.0.1
 Pygments==2.7.4
