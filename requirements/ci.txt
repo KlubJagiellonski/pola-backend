@@ -20,7 +20,7 @@ chardet==4.0.0
 click==7.1.2
 coverage==5.3.1
 coveralls==3.0.0
-cryptography==3.3.1
+cryptography==3.4.1
 decorator==4.4.2
 defusedxml==0.6.0
 django-allauth==0.44.0
