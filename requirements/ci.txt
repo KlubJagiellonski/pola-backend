@@ -3,7 +3,7 @@ Faker==6.1.1
 Pillow==8.1.0
 PyJWT==2.0.1
 Pygments==2.7.4
-Unidecode==1.1.2
+Unidecode==1.2.0
 WebOb==1.8.6
 WebTest==2.0.35
 Werkzeug==1.0.1
