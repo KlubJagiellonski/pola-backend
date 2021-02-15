@@ -10,6 +10,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from model_utils.models import TimeStampedModel
 from reversion.models import Revision
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -27,10 +28,9 @@ class ReportQuerySet(models.QuerySet):
         return self.update(resolved_at=timezone.now(), resolved_by=user)
 
 
-class Report(models.Model):
+class Report(TimeStampedModel):
     product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=True, null=True, default=None, verbose_name=_('Zgłaszający'))
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Utworzone'))
     resolved_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Rozpatrzone'))
     resolved_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -64,7 +64,7 @@ class Report(models.Model):
         return self.description[:40] or "None"
 
     def get_timedelta(self):
-        return format_timedelta(timezone.now() - self.created_at, locale='pl_PL')
+        return format_timedelta(timezone.now() - self.created, locale='pl_PL')
 
     def attachment_count(self):
         return self.attachment_set.count()
@@ -75,15 +75,15 @@ class Report(models.Model):
     class Meta:
         verbose_name = _("Report")
         verbose_name_plural = _("Reports")
-        ordering = ['-created_at']
-        get_latest_by = 'created_at'
+        ordering = ['-created']
+        get_latest_by = 'created'
         permissions = (
             # ("view_report", "Can see all report"),
             # ("add_report", "Can add a new report"),
             # ("change_report", "Can edit the report"),
             # ("delete_report", "Can delete the report"),
         )
-        indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]
+        indexes = [BrinIndex(fields=['created'], pages_per_range=16)]
 
 
 class Attachment(models.Model):

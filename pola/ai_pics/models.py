@@ -19,7 +19,7 @@ class AIPics(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=False, null=False, verbose_name=_('Zgłaszający'))
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Utworzone'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Utworzone'))
 
     original_width = models.IntegerField(null=False)
     original_height = models.IntegerField(null=False)
@@ -66,7 +66,7 @@ class AIPics(models.Model):
             # ("change_aipics", "Can edit the AIPics"),
             # ("delete_aipics", "Can delete the AIPics"),
         )
-        indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]
+        indexes = [BrinIndex(fields=['created'], pages_per_range=16)]
 
 
 class AIAttachment(models.Model):

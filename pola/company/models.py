@@ -6,6 +6,7 @@ from django.db import connection, models
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
 
 from pola.concurency import concurency
@@ -37,8 +38,7 @@ class CompanyQuerySet(models.query.QuerySet):
 
 
 @reversion.register
-class Company(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+class Company(TimeStampedModel):
     name = models.CharField(
         max_length=255,
         null=True,
@@ -230,14 +230,14 @@ class Company(models.Model):
     class Meta:
         verbose_name = _("Producent")
         verbose_name_plural = _("Producenci")
-        ordering = ['-created_at']
+        ordering = ['-created']
         permissions = (
             # ("view_company", "Can see all company"),
             # ("add_company", "Can add a new company"),
             # ("change_company", "Can edit the company"),
             # ("delete_company", "Can delete the company"),
         )
-        indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]
+        indexes = [BrinIndex(fields=['created'], pages_per_range=16)]
 
 
 class BrandQuerySet(models.query.QuerySet):
@@ -255,8 +255,7 @@ class BrandQuerySet(models.query.QuerySet):
 
 
 @reversion.register
-class Brand(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+class Brand(TimeStampedModel):
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=128,
@@ -277,7 +276,7 @@ class Brand(models.Model):
     class Meta:
         verbose_name = _("Marka")
         verbose_name_plural = _("Marki")
-        ordering = ['-created_at']
+        ordering = ['-created']
         permissions = (
             # ("view_brand", "Can see all brands"),
         )

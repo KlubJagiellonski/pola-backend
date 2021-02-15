@@ -30,9 +30,9 @@ class DeleteEmptyAiPicsTestCase(TestCase):
         self.assertEqual(AIPics.objects.count(), 0)
 
     def test_keep_untouched_old_files(self):
-        created_at = timezone.now() - timedelta(days=30)
+        created = timezone.now() - timedelta(days=30)
         ai_pics: AIPics = AIPicsFactory()
-        ai_pics.created_at = created_at
+        ai_pics.created = created
         ai_pics.save()
 
         ai_attachment: AIAttachment = AIAttachmentFactory(ai_pics=ai_pics)
