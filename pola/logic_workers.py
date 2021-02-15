@@ -119,7 +119,8 @@ def update_from_kbpoz(db_filename):
                             prod.company = company
                             prod.ilim_queried_at = timezone.now()
                             Product.save(
-                                prod, commit_desc="Produkt przypisany do producenta na podstawie bazy " "KBPOZ",
+                                prod,
+                                commit_desc="Produkt przypisany do producenta na podstawie bazy " "KBPOZ",
                             )
 
                 except ObjectDoesNotExist:

@@ -13,15 +13,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Attachment',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True),),
+                (
+                    'id',
+                    models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True),
+                ),
                 ('attachment', models.FileField(upload_to='reports/%Y/%m/%d', verbose_name='File')),
             ],
-            options={'verbose_name': "Report's attachment", 'verbose_name_plural': "Report's attachments",},
+            options={
+                'verbose_name': "Report's attachment",
+                'verbose_name_plural': "Report's attachments",
+            },
         ),
         migrations.CreateModel(
             name='Report',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True),),
+                (
+                    'id',
+                    models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True),
+                ),
                 ('client', models.CharField(default=None, max_length=40, null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('resolved_at', models.DateTimeField(null=True, blank=True)),
@@ -32,7 +41,10 @@ class Migration(migrations.Migration):
                     models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
                 ),
             ],
-            options={'verbose_name': 'Report', 'verbose_name_plural': 'Reports',},
+            options={
+                'verbose_name': 'Report',
+                'verbose_name_plural': 'Reports',
+            },
         ),
         migrations.AddField(
             model_name='attachment',

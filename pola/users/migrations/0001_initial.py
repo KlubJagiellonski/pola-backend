@@ -14,7 +14,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='User',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True),),
+                (
+                    'id',
+                    models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True),
+                ),
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
                 (
@@ -61,7 +64,10 @@ class Migration(migrations.Migration):
                         default=True,
                     ),
                 ),
-                ('date_joined', models.DateTimeField(verbose_name='date joined', default=django.utils.timezone.now),),
+                (
+                    'date_joined',
+                    models.DateTimeField(verbose_name='date joined', default=django.utils.timezone.now),
+                ),
                 (
                     'groups',
                     models.ManyToManyField(
@@ -86,7 +92,13 @@ class Migration(migrations.Migration):
                 ),
                 ('name', models.CharField(max_length=255, verbose_name='Name of User', blank=True)),
             ],
-            options={'verbose_name': 'user', 'abstract': False, 'verbose_name_plural': 'users',},
-            managers=[('objects', django.contrib.auth.models.UserManager()),],
+            options={
+                'verbose_name': 'user',
+                'abstract': False,
+                'verbose_name_plural': 'users',
+            },
+            managers=[
+                ('objects', django.contrib.auth.models.UserManager()),
+            ],
         ),
     ]

@@ -10,6 +10,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='product', name='ilim_queried_at', field=models.DateTimeField(default=django.utils.timezone.now),
+            model_name='product',
+            name='ilim_queried_at',
+            field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]

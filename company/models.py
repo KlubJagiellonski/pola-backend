@@ -40,7 +40,12 @@ class CompanyQuerySet(models.query.QuerySet):
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(
-        max_length=255, null=True, blank=True, db_index=True, unique=False, verbose_name=_("Nazwa (pobrana z ILiM)"),
+        max_length=255,
+        null=True,
+        blank=True,
+        db_index=True,
+        unique=False,
+        verbose_name=_("Nazwa (pobrana z ILiM)"),
     )
     official_name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_("Nazwa rejestrowa"))
     common_name = models.CharField(max_length=255, blank=True, verbose_name=_("Nazwa dla użytkownika"))
@@ -73,7 +78,10 @@ class Company(models.Model):
         max_value=100,
         null=True,
         blank=True,
-        choices=((0, _("0 - Firma zarejestrowana za granicą")), (100, _("100 - Firma zarejestrowana w Polsce")),),
+        choices=(
+            (0, _("0 - Firma zarejestrowana za granicą")),
+            (100, _("100 - Firma zarejestrowana w Polsce")),
+        ),
     )
     plNotGlobEnt = IntegerRangeField(
         verbose_name=_("Struktura kapitałowa"),
@@ -253,7 +261,11 @@ class Brand(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
     name = models.CharField(
-        max_length=128, null=True, blank=True, db_index=True, verbose_name=_("Nazwa marki (na podstawie ILiM)"),
+        max_length=128,
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name=_("Nazwa marki (na podstawie ILiM)"),
     )
     common_name = models.CharField(max_length=128, null=True, blank=True, verbose_name=_("Nazwa dla użytkownika"))
     objects = BrandQuerySet.as_manager()

@@ -20,23 +20,23 @@
         {% if object.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ object.locked_by }}"></i>{% endif %}
         {{ object }} <small>#{{ object.pk }}</small>
     </h1>
-	<div class="panel panel-primary">
+    <div class="panel panel-primary">
         <div class="panel-heading">{% trans "Dane" %}</div>
-		<div class="panel-body"><img src="{{ object.get_image_url }}" alt=""></div>
-		<table class="table">
-			<tr>
+        <div class="panel-body"><img src="{{ object.get_image_url }}" alt=""></div>
+        <table class="table">
+            <tr>
                 <td>{% trans "ID: " %}</td><td>{{ object.pk }}</td>
-			</tr>
-			<tr>
+            </tr>
+            <tr>
                 <td>{% trans "Nazwa: " %}</td><td>{{ object.name }}</td>
-			</tr>
-			<tr>
+            </tr>
+            <tr>
                 <td>{% trans "Liczba zeskanowań: " %}</td><td>{{ object.query_count }}</td>
-			</tr>
-			<tr>
+            </tr>
+            <tr>
                 <td>{% trans "Kod: " %}</td><td>{{ object.code }}</td>
-			</tr>
-			{% if object.companies %}
+            </tr>
+            {% if object.companies %}
             <tr>
                 <td>{% trans "Producenci" %}</td>
                 <td>
@@ -75,8 +75,8 @@
                 </td>
             </tr>
         {% endif %}
-		</table>
-	</div>
+        </table>
+    </div>
 
     {% if perms.report.view_report %}
         <div class="row">

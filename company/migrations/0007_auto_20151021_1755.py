@@ -9,6 +9,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='company', name='address', field=models.TextField(null=True, verbose_name='Adres', blank=True),
+            model_name='company',
+            name='address',
+            field=models.TextField(null=True, verbose_name='Adres', blank=True),
         ),
     ]

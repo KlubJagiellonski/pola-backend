@@ -28,7 +28,9 @@ class ProductQuerySet(models.query.QuerySet):
 
 @reversion.register
 class Product(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True,)
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
     name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
     code = models.CharField(

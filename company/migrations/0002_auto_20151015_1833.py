@@ -10,10 +10,22 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name='company', name='plBrand',),
-        migrations.RemoveField(model_name='company', name='plBrand_notes',),
-        migrations.RemoveField(model_name='company', name='plTaxes',),
-        migrations.RemoveField(model_name='company', name='plTaxes_notes',),
+        migrations.RemoveField(
+            model_name='company',
+            name='plBrand',
+        ),
+        migrations.RemoveField(
+            model_name='company',
+            name='plBrand_notes',
+        ),
+        migrations.RemoveField(
+            model_name='company',
+            name='plTaxes',
+        ),
+        migrations.RemoveField(
+            model_name='company',
+            name='plTaxes_notes',
+        ),
         migrations.AddField(
             model_name='company',
             name='plNotGlobEnt',

@@ -10,7 +10,7 @@ Local settings
 
 import os
 
-from .tests import *  # noqa
+from .tests import *  # noqa: F403
 
 IS_DOCKER = os.path.exists('/.dockerenv')
 # DEBUG

@@ -21,7 +21,11 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(auto_now_add=True, verbose_name='Utworzone'),
         ),
-        migrations.AlterField(model_name='report', name='description', field=models.TextField(verbose_name='Opis'),),
+        migrations.AlterField(
+            model_name='report',
+            name='description',
+            field=models.TextField(verbose_name='Opis'),
+        ),
         migrations.AlterField(
             model_name='report',
             name='resolved_at',

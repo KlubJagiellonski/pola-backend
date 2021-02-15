@@ -10,7 +10,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Site',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True),),
+                (
+                    'id',
+                    models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True),
+                ),
                 (
                     'domain',
                     models.CharField(
@@ -27,6 +30,8 @@ class Migration(migrations.Migration):
                 'db_table': 'django_site',
                 'ordering': ('domain',),
             },
-            managers=[('objects', django.contrib.sites.models.SiteManager()),],
+            managers=[
+                ('objects', django.contrib.sites.models.SiteManager()),
+            ],
         ),
     ]

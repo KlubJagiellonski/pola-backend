@@ -12,14 +12,14 @@
         </div>
     {% endif %}
 
-	<h1>Marki</h1>
+    <h1>Marki</h1>
 
-	<div class="row">
-		<div class="col-md-3">
-			{% crispy filter.form %}
-		</div>
-		<div class="col-md-9">
-			<ul>
+    <div class="row">
+        <div class="col-md-3">
+            {% crispy filter.form %}
+        </div>
+        <div class="col-md-9">
+            <ul>
                 {% for obj in object_list %}
                     <li>
                         <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
@@ -29,9 +29,9 @@
                 {% endfor %}
 
                 {% include 'pagination_custom/pager.html' with page=page_obj %}
-			</ul>
-		</div>
-	</div>
+            </ul>
+        </div>
+    </div>
 {% endblock content %}
 
 {% block javascript %}

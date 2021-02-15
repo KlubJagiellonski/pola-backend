@@ -8,7 +8,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(model_name='query', name='was_590', field=models.BooleanField(default=False),),
-        migrations.AddField(model_name='query', name='was_plScore', field=models.BooleanField(default=False),),
-        migrations.AddField(model_name='query', name='was_verified', field=models.BooleanField(default=False),),
+        migrations.AddField(
+            model_name='query',
+            name='was_590',
+            field=models.BooleanField(default=False),
+        ),
+        migrations.AddField(
+            model_name='query',
+            name='was_plScore',
+            field=models.BooleanField(default=False),
+        ),
+        migrations.AddField(
+            model_name='query',
+            name='was_verified',
+            field=models.BooleanField(default=False),
+        ),
     ]

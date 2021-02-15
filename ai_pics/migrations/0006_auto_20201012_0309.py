@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AlterModelOptions(
-            name='aipics', options={'permissions': (), 'verbose_name': 'AIPics', 'verbose_name_plural': 'AIPics'},
+            name='aipics',
+            options={'permissions': (), 'verbose_name': 'AIPics', 'verbose_name_plural': 'AIPics'},
         ),
     ]
