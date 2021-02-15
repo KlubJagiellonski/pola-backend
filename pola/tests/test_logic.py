@@ -163,7 +163,6 @@ class TestGetResultFromCode(TestCase):
             {"was_590": False, "was_plScore": False, "was_verified": False},
             product,
         )
-        self.maxDiff = None
         self.assertEqual(expected_response[0], response[0])
         self.assertEqual(expected_response, response)
 
@@ -277,7 +276,7 @@ class TestGetResultFromCode(TestCase):
                 'plScore': None,
                 'plWorkers': None,
                 'plWorkers_notes': None,
-                'product_id': 20,
+                'product_id': product.id,
                 'report_button_text': 'Zgłoś',
                 'report_button_type': 'type_white',
                 'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',

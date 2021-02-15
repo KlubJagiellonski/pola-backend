@@ -10,7 +10,7 @@ from product.models import Product
 from report.models import Report
 
 
-def get_result_from_code(code):
+def get_result_from_code(code, multiple_company_supported=False):
     result = DEFAULT_RESULT.copy()
     stats = DEFAULT_STATS.copy()
     product = None
@@ -25,50 +25,31 @@ def get_result_from_code(code):
         result['product_id'] = product.id
         stats['was_590'] = code.startswith('590')
 
-        if len(companies) == 1:
+        if len(companies) == 1 and not multiple_company_supported:
             company = companies[0]
-            # we know the manufacturer of the product
-            result['name'] = company.common_name or company.official_name or company.name
-            result['plCapital'] = company.plCapital
-            result['plCapital_notes'] = company.plCapital_notes
-            result['plWorkers'] = company.plWorkers
-            result['plWorkers_notes'] = company.plWorkers_notes
-            result['plRnD'] = company.plRnD
-            result['plRnD_notes'] = company.plRnD_notes
-            result['plRegistered'] = company.plRegistered
-            result['plRegistered_notes'] = company.plRegistered_notes
-            result['plNotGlobEnt'] = company.plNotGlobEnt
-            result['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
-            result['is_friend'] = company.is_friend
-            if company.is_friend:
-                result['friend_text'] = 'To jest przyjaciel Poli'
 
-            if company.description:
-                result['description'] = company.description
-            else:
-                desc = ''
-                if company.plCapital_notes:
-                    desc += strip_urls_newlines(company.plCapital_notes) + '\n'
-                if company.plWorkers_notes:
-                    desc += strip_urls_newlines(company.plWorkers_notes) + '\n'
-                if company.plRnD_notes:
-                    desc += strip_urls_newlines(company.plRnD_notes) + '\n'
-                if company.plRegistered_notes:
-                    desc += strip_urls_newlines(company.plRegistered_notes) + '\n'
-                if company.plNotGlobEnt_notes:
-                    desc += strip_urls_newlines(company.plNotGlobEnt_notes) + '\n'
+            company_data = serialize_company(company)
+            stats['was_plScore'] = bool(get_plScore(company))
 
-                result['description'] = desc
-
-            result['sources'] = company.get_sources(raise_exp=False)
-
-            plScore = get_plScore(company)
-            if plScore:
-                result['plScore'] = plScore
-                stats['was_plScore'] = True
-
+            result.update(company_data)
             stats['was_verified'] = company.verified
             result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
+        elif len(companies) >= 1 and multiple_company_supported:
+            companies_data = []
+            for company in companies:
+                company_data = serialize_company(company)
+
+                stats['was_plScore'] = all(get_plScore(c) for c in companies)
+                companies_data.append(company_data)
+
+            result['companies'] = companies_data
+        elif len(companies) > 1 and not multiple_company_supported:
+            # Ups. It seems to be an internal code
+            result['name'] = 'Nieobsługiwana aplikacja'
+            result['altText'] = (
+                'Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, aby wyświetlić '
+                'informację.'
+            )
         elif len(companies) == 0:
             # we don't know the manufacturer
             if code.startswith('590'):
@@ -118,13 +99,6 @@ def get_result_from_code(code):
                         'kodem sieci handlowej. Pola nie '
                         'potrafi powiedzieć o nim nic więcej'
                     )
-        elif len(companies) > 1:
-            # Ups. It seems to be an internal code
-            result['name'] = 'Nieobsługiwana aplikacja'
-            result['altText'] = (
-                'Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, aby wyświetlić '
-                'informację.'
-            )
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
         result['name'] = 'Nieprawidłowy kod'
@@ -135,6 +109,46 @@ def get_result_from_code(code):
         )
 
     return result, stats, product
+
+
+def serialize_company(company):
+    plScore = get_plScore(company)
+    company_data = DEFAULT_COMPANY_DATA.copy()
+    # we know the manufacturer of the product
+    company_data['name'] = company.common_name or company.official_name or company.name
+    company_data['plCapital'] = company.plCapital
+    company_data['plCapital_notes'] = company.plCapital_notes
+    company_data['plWorkers'] = company.plWorkers
+    company_data['plWorkers_notes'] = company.plWorkers_notes
+    company_data['plRnD'] = company.plRnD
+    company_data['plRnD_notes'] = company.plRnD_notes
+    company_data['plRegistered'] = company.plRegistered
+    company_data['plRegistered_notes'] = company.plRegistered_notes
+    company_data['plNotGlobEnt'] = company.plNotGlobEnt
+    company_data['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
+    company_data['is_friend'] = company.is_friend
+    if company.is_friend:
+        company_data['friend_text'] = 'To jest przyjaciel Poli'
+    if company.description:
+        company_data['description'] = company.description
+    else:
+        desc = ''
+        if company.plCapital_notes:
+            desc += strip_urls_newlines(company.plCapital_notes) + '\n'
+        if company.plWorkers_notes:
+            desc += strip_urls_newlines(company.plWorkers_notes) + '\n'
+        if company.plRnD_notes:
+            desc += strip_urls_newlines(company.plRnD_notes) + '\n'
+        if company.plRegistered_notes:
+            desc += strip_urls_newlines(company.plRegistered_notes) + '\n'
+        if company.plNotGlobEnt_notes:
+            desc += strip_urls_newlines(company.plNotGlobEnt_notes) + '\n'
+
+        company_data['description'] = desc
+    company_data['sources'] = company.get_sources(raise_exp=False)
+    if plScore:
+        company_data['plScore'] = plScore
+    return company_data
 
 
 ENABLE_GS1_API = False
@@ -246,51 +260,6 @@ def create_bot_report(product, description, check_if_already_exists=False):
     report.save()
 
 
-def serialize_product(product):
-    json = {
-        'plScore': None,
-        'verified': False,
-        'report': 'ask_for_company',
-        'id': product.id,
-        'code': product.code,
-    }
-
-    companies = list(product.companies.all())
-
-    if len(companies) == 1:
-        company = companies[0]
-
-        json['report'] = False
-        json['company'] = {}
-        json['company']['name'] = company.common_name or company.official_name or company.name
-        json['company']['plCapital'] = company.plCapital
-        json['company']['plCapital_notes'] = company.plCapital_notes
-        json['company']['plWorkers'] = company.plWorkers
-        json['company']['plWorkers_notes'] = company.plWorkers_notes
-        json['company']['plRnD'] = company.plRnD
-        json['company']['plRnD_notes'] = company.plRnD_notes
-        json['company']['plRegistered'] = company.plRegistered
-        json['company']['plRegistered_notes'] = company.plRegistered_notes
-        json['company']['plNotGlobEnt'] = company.plNotGlobEnt
-        json['company']['plNotGlobEnt_notes'] = company.plNotGlobEnt_notes
-
-        plScore = get_plScore(company)
-        if plScore:
-            json['plScore'] = plScore
-            json['verified'] = company.verified
-    elif len(companies) > 1:
-        raise Exception("Add support for multiple companies in this response")
-    else:
-        for prefix in CODE_PREFIX_TO_COUNTRY.keys():
-            if product.code.startswith(prefix):
-                json['plScore'] = 0
-                json['verified'] = False
-                json['company'] = {}
-                json['company']['name'] = 'Miejsce rejestracji: {}'.format(CODE_PREFIX_TO_COUNTRY[prefix])
-
-    return json
-
-
 def get_plScore(company):
     if (
         company.plCapital is not None
@@ -364,13 +333,8 @@ TYPE_RED = 'type_red'
 TYPE_WHITE = 'type_white'
 TYPE_GREY = 'type_grey'
 
-DEFAULT_RESULT = {
-    'product_id': None,
-    'code': None,
+DEFAULT_COMPANY_DATA = {
     'name': None,
-    'card_type': TYPE_WHITE,
-    'plScore': None,
-    'altText': None,
     'plCapital': None,
     'plCapital_notes': None,
     'plWorkers': None,
@@ -381,6 +345,15 @@ DEFAULT_RESULT = {
     'plRegistered_notes': None,
     'plNotGlobEnt': None,
     'plNotGlobEnt_notes': None,
+    'plScore': None,
+}
+
+DEFAULT_RESULT = {
+    'product_id': None,
+    'code': None,
+    'name': None,
+    'card_type': TYPE_WHITE,
+    'altText': None,
     'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat ' 'tego produktu',
     'report_button_text': 'Zgłoś',
     'report_button_type': TYPE_WHITE,

@@ -14,7 +14,12 @@ class Migration(migrations.Migration):
             model_name='company',
             name='name',
             field=models.CharField(
-                blank=True, db_index=True, max_length=255, null=True, unique=False, verbose_name='Nazwa (pobrana z ILiM)'
+                blank=True,
+                db_index=True,
+                max_length=255,
+                null=True,
+                unique=False,
+                verbose_name='Nazwa (pobrana z ILiM)',
             ),
         ),
     ]

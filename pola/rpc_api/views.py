@@ -45,12 +45,94 @@ def validate_json_response(schema, *args, **kwargs):
                     log.error("Invalid response. %d errors encountered", len(errors))
                     for error in errors:
                         log.error("%s", error)
+                        print(error)
                     return HttpResponseServerError("The server generated an invalid response.")
             return response
 
         return validate_json_schema
 
     return wrapper
+
+
+# API v4
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_json_response(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "altText": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "card_type": {"type": "string"},
+            "code": {"type": "string"},
+            "donate": {
+                "type": "object",
+                "properties": {
+                    "show_button": {"type": "boolean"},
+                    "title": {"type": "string"},
+                    "url": {"type": "string"},
+                },
+                "required": ["show_button", "title", "url"],
+            },
+            "name": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "companies": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {"type": "string"},
+                        "plCapital": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+                        "plCapital_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+                        "plNotGlobEnt": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+                        "plNotGlobEnt_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+                        "plRegistered": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+                        "plRegistered_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+                        "plRnD": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+                        "plRnD_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+                        "plScore": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+                        "plWorkers": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+                        "plWorkers_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+                    },
+                    "required": [
+                        "name",
+                        "plCapital",
+                        "plCapital_notes",
+                        "plNotGlobEnt",
+                        "plNotGlobEnt_notes",
+                        "plRegistered",
+                        "plRegistered_notes",
+                        "plRnD",
+                        "plRnD_notes",
+                        "plScore",
+                        "plWorkers",
+                        "plWorkers_notes",
+                    ],
+                },
+            },
+            "product_id": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
+            "report_button_text": {"type": "string"},
+            "report_button_type": {"type": "string"},
+            "report_text": {"type": "string"},
+        },
+        "required": [
+            "altText",
+            "card_type",
+            "code",
+            "donate",
+            "product_id",
+            "report_button_text",
+            "report_button_type",
+            "report_text",
+        ],
+    }
+)
+def get_by_code_v4(request):
+    noai = request.GET.get('noai')
+    result = get_by_code_internal(request, ai_supported=noai is None, multiple_company_supported=True)
+
+    response = JsonResponse(result)
+    response["Access-Control-Allow-Origin"] = "*"
+
+    return response
 
 
 # API v3
@@ -212,11 +294,11 @@ def create_report_v3(request):
 # API v2
 
 
-def get_by_code_internal(request, ai_supported=False):
+def get_by_code_internal(request, ai_supported=False, multiple_company_supported=False):
     code = request.GET['code']
     device_id = request.GET['device_id']
 
-    result, stats, product = logic.get_result_from_code(code)
+    result, stats, product = logic.get_result_from_code(code, multiple_company_supported=multiple_company_supported)
 
     if product is not None:
         Query.objects.create(

@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='brand',
             name='name',
-            field=models.CharField(blank=True, db_index=True, max_length=128, null=True, verbose_name='Nazwa marki (na podstawie ILiM)'),
+            field=models.CharField(
+                blank=True, db_index=True, max_length=128, null=True, verbose_name='Nazwa marki (na podstawie ILiM)'
+            ),
         ),
     ]
