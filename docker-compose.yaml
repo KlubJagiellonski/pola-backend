@@ -90,7 +90,7 @@ services:
         mc --debug policy set public local/pola-app-ai-local || true;
 
   postgres:
-    image: postgres:9.5
+    image: postgres:13.1
     restart: always
     environment:
       POSTGRES_USER: pola_app
