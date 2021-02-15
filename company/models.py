@@ -1,3 +1,5 @@
+import textwrap
+
 from django.contrib.postgres.indexes import BrinIndex
 from django.core.validators import ValidationError
 from django.db import connection, models
@@ -38,7 +40,7 @@ class CompanyQuerySet(models.query.QuerySet):
 class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(
-        max_length=255, null=True, blank=True, db_index=True, unique=True, verbose_name=_("Nazwa (pobrana z ILiM)"),
+        max_length=255, null=True, blank=True, db_index=True, unique=False, verbose_name=_("Nazwa (pobrana z ILiM)"),
     )
     official_name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_("Nazwa rejestrowa"))
     common_name = models.CharField(max_length=255, blank=True, verbose_name=_("Nazwa dla użytkownika"))
@@ -118,10 +120,17 @@ class Company(models.Model):
     def recalculate_query_count():
         with connection.cursor() as cursor:
             cursor.execute(
-                'update company_company set query_count = '
-                '(select coalesce(sum(query_count),0) '
-                'from product_product '
-                'where product_product.company_id=company_company.id)'
+                textwrap.dedent(
+                    """
+                UPDATE company_company
+                SET query_count =
+                  (SELECT coalesce(sum(query_count), 0)
+                   FROM product_product
+                   INNER JOIN product_product_companies ON product_product_companies.product_id = product_product.id
+                   WHERE company_company.id = product_product_companies.company_id)
+
+                """
+                )
             )
 
     def to_dict(self):
@@ -250,7 +259,7 @@ class Brand(models.Model):
     objects = BrandQuerySet.as_manager()
 
     def __str__(self):
-        return self.name
+        return self.common_name or self.name
 
     def get_absolute_url(self):
         return reverse('company:brand-detail', args=[self.pk])

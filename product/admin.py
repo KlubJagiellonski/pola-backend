@@ -9,9 +9,8 @@ class ProductAdmin(VersionAdmin):
         'id',
         'name',
         'code',
-        'company',
     )
-    list_filter = ('company',)
+    list_filter = ()
     search_fields = ('name',)
 
 

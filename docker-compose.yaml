@@ -47,6 +47,7 @@ services:
 
   web-init:
     <<: *pola-backend-common
+    restart: "no"
     depends_on:
       minio:
         condition: service_healthy
@@ -77,6 +78,7 @@ services:
     image: minio/mc
     environment:
       MC_HOST_local: 'http://minio:minio123@minio:9000/'
+    restart: "no"
     depends_on:
       minio:
         condition: service_healthy
@@ -96,6 +98,10 @@ services:
       POSTGRES_USER: pola_app
       POSTGRES_PASSWORD: pola_app
       POSTGRES_DB: pola_app
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:

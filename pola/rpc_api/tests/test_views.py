@@ -5,6 +5,7 @@ import requests
 from test_plus.test import TestCase
 
 from ai_pics.models import AIAttachment, AIPics
+from company.factories import CompanyFactory
 from product.factories import ProductFactory
 from product.models import Product
 from report.factories import ReportFactory
@@ -28,6 +29,187 @@ def _create_image(width=100, height=None, color='blue', image_format='JPEG', ima
     with Image.new(image_palette, (width, height), color) as thumb:
         thumb.save(thumb_io, format=image_format)
     return thumb_io.getvalue()
+
+
+class TestGetByCodeV4(TestCase, JsonRequestMixin):
+    url = '/a/v4/get_by_code'
+
+    def test_should_return_200_for_non_ean_13(self):
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=123",)
+        self.assertEqual(200, response.status_code)
+
+    def test_should_return_200_when_ai_not_supported(self):
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=123&noai=false",)
+        self.assertEqual(200, response.status_code)
+
+    def test_should_return_200_when_polish_product(self):
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=5900049011829")
+        self.assertEqual(200, response.status_code, response.content)
+
+    def test_should_return_200_when_product_without_company(self):
+        p = Product(code=5900049011829)
+        p.name = "test-product"
+        p.save()
+
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+
+    def test_should_return_200_when_polish_and_known_product(self):
+        c = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+        p = ProductFactory.create(code=5900049011829, companies=[c])
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+        self.assertEqual(
+            {
+                "product_id": p.pk,
+                "code": "5900049011829",
+                "name": None,
+                "card_type": "type_white",
+                "altText": None,
+                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                "report_button_text": "Zg\u0142o\u015b",
+                "report_button_type": "type_white",
+                "companies": [
+                    {
+                        "name": c.official_name,
+                        "plCapital": 100,
+                        "plCapital_notes": "AAA",
+                        "plWorkers": 0,
+                        "plWorkers_notes": "BBB",
+                        "plRnD": 100,
+                        "plRnD_notes": "CCC",
+                        "plRegistered": 100,
+                        "plRegistered_notes": "DDD",
+                        "plNotGlobEnt": 100,
+                        "plNotGlobEnt_notes": "EEE",
+                        "plScore": 70,
+                        "is_friend": True,
+                        "friend_text": "To jest przyjaciel Poli",
+                        "description": "TEST",
+                        "sources": {"TEST": "BBBB"},
+                    }
+                ],
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Wspieraj aplikacj\u0119 Pola",
+                },
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_multiple_product(self):
+        c1 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+        c2 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+
+        p = ProductFactory.create(code=5900049011829, companies=[c1, c2])
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": None,
+                "card_type": "type_white",
+                "altText": None,
+                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                "report_button_text": "Zg\u0142o\u015b",
+                "report_button_type": "type_white",
+                "companies": [
+                    {
+                        "name": c1.official_name,
+                        "plCapital": 100,
+                        "plCapital_notes": "AAA",
+                        "plWorkers": 0,
+                        "plWorkers_notes": "BBB",
+                        "plRnD": 100,
+                        "plRnD_notes": "CCC",
+                        "plRegistered": 100,
+                        "plRegistered_notes": "DDD",
+                        "plNotGlobEnt": 100,
+                        "plNotGlobEnt_notes": "EEE",
+                        "plScore": 70,
+                        "is_friend": True,
+                        "friend_text": "To jest przyjaciel Poli",
+                        "description": "TEST",
+                        "sources": {"TEST": "BBBB"},
+                    },
+                    {
+                        "name": c2.official_name,
+                        "plCapital": 100,
+                        "plCapital_notes": "AAA",
+                        "plWorkers": 0,
+                        "plWorkers_notes": "BBB",
+                        "plRnD": 100,
+                        "plRnD_notes": "CCC",
+                        "plRegistered": 100,
+                        "plRegistered_notes": "DDD",
+                        "plNotGlobEnt": 100,
+                        "plNotGlobEnt_notes": "EEE",
+                        "plScore": 70,
+                        "is_friend": True,
+                        "friend_text": "To jest przyjaciel Poli",
+                        "description": "TEST",
+                        "sources": {"TEST": "BBBB"},
+                    },
+                ],
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Wspieraj aplikacj\u0119 Pola",
+                },
+            },
+            json.loads(response.content),
+        )
 
 
 class TestAddAiPics(TestCase, JsonRequestMixin):
@@ -135,25 +317,129 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         self.assertEqual(200, response.status_code, response.content)
 
     def test_should_return_200_when_polish_and_known_product(self):
-        p = ProductFactory.create(
-            code=5900049011829,
-            company__plCapital=100,
-            company__plWorkers=0,
-            company__plRnD=100,
-            company__plRegistered=100,
-            company__plNotGlobEnt=100,
-            company__description="TEST",
-            company__sources="TEST|BBBB",
-            company__verified=True,
-            company__is_friend=True,
-            company__plCapital_notes="AAA",
-            company__plWorkers_notes="BBB",
-            company__plRnD_notes="CCC",
-            company__plRegistered_notes="DDD",
-            company__plNotGlobEnt_notes="EEE",
+        c = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
         )
+        p = ProductFactory.create(code=5900049011829, companies=[c])
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": c.official_name,
+                "card_type": "type_white",
+                "plScore": 70,
+                "altText": None,
+                "plCapital": 100,
+                "plCapital_notes": "AAA",
+                "plWorkers": 0,
+                "plWorkers_notes": "BBB",
+                "plRnD": 100,
+                "plRnD_notes": "CCC",
+                "plRegistered": 100,
+                "plRegistered_notes": "DDD",
+                "plNotGlobEnt": 100,
+                "plNotGlobEnt_notes": "EEE",
+                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                "report_button_text": "Zg\u0142o\u015b",
+                "report_button_type": "type_white",
+                "is_friend": True,
+                "friend_text": "To jest przyjaciel Poli",
+                "description": "TEST",
+                "sources": {"TEST": "BBBB"},
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Wspieraj aplikacj\u0119 Pola",
+                },
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_multiple_product(self):
+        c1 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+        c2 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+
+        p = ProductFactory.create(code=5900049011829, companies=[c1, c2])
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": "Nieobs\u0142ugiwana aplikacja",
+                "card_type": "type_white",
+                "plScore": None,
+                "altText": (
+                    "Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, "
+                    "aby wy\u015bwietli\u0107 informacj\u0119."
+                ),
+                "plCapital": None,
+                "plCapital_notes": None,
+                "plWorkers": None,
+                "plWorkers_notes": None,
+                "plRnD": None,
+                "plRnD_notes": None,
+                "plRegistered": None,
+                "plRegistered_notes": None,
+                "plNotGlobEnt": None,
+                "plNotGlobEnt_notes": None,
+                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                "report_button_text": "Zg\u0142o\u015b",
+                "report_button_type": "type_white",
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Wspieraj aplikacj\u0119 Pola",
+                },
+            },
+            json.loads(response.content),
+        )
 
 
 class TestCreateReportV3(TestCase, JsonRequestMixin):
@@ -224,23 +510,23 @@ class TestGetByCodeV2(TestCase, JsonRequestMixin):
         self.assertEqual(200, response.status_code)
 
     def test_should_return_200_when_polish_and_known_product(self):
-        p = ProductFactory.create(
-            code=5900049011829,
-            company__plCapital=100,
-            company__plWorkers=0,
-            company__plRnD=100,
-            company__plRegistered=100,
-            company__plNotGlobEnt=100,
-            company__description="KOTEK",
-            company__sources="KOTEK|BBBB",
-            company__verified=True,
-            company__is_friend=True,
-            company__plCapital_notes="AA",
-            company__plWorkers_notes="BBB",
-            company__plRnD_notes="CCC",
-            company__plRegistered_notes="DDD",
-            company__plNotGlobEnt_notes="EEEE",
+        c = CompanyFactory.create(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="KOTEK",
+            sources="KOTEK|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEEE",
         )
+        p = ProductFactory.create(code=5900049011829, companies=[c])
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code)
 

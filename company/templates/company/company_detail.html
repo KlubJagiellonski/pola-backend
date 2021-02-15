@@ -71,7 +71,7 @@
                     <h3 class="panel-title">Produkty</h3>
                 </div>
                 <ul class="list-group">
-                    {% for product in object.product_set.all %}
+                    {% for product in product_list %}
                         <li class="list-group-item">
                             <a href="{{ product.get_absolute_url }}">{{ product }}</a>
                         </li>

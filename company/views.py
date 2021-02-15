@@ -17,6 +17,7 @@ from company.models import Brand, Company
 from pola.concurency import ConcurencyProtectUpdateView
 from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ExprAutocompleteMixin
+from product.models import Product
 from report.models import Report
 
 from .filters import BrandFilter, CompanyFilter
@@ -138,9 +139,10 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['report_list'] = Report.objects.filter(product__company=self.get_object(), resolved_at=None)
+        context['report_list'] = Report.objects.only_open().filter(product__companies__in=[self.get_object()])
 
         context['brand_list'] = Brand.objects.filter(company=self.get_object())
+        context['product_list'] = Product.objects.filter(companies__in=[self.get_object()])
 
         return context
 

@@ -36,31 +36,45 @@
 			<tr>
                 <td>{% trans "Kod: " %}</td><td>{{ object.code }}</td>
 			</tr>
-			{% if object.company %}
-				<tr>
-                    <td>{% trans "NIP producenta: " %}</td><td>{{ object.company.nip }} </td>
-				</tr>
-				<tr>
-                    <td>{% trans "Nazwa producenta: " %}</td>
-                    <td>
-                        {% if perms.company.view_company %}<a href="{{ object.company.get_absolute_url }}"> {% endif %}
-                            {{ object.company }}
-                        {% if perms.company.view_company %}</a>{% endif %}
-                    </td>
-				</tr>
-				<tr>
-                    <td>{% trans "Adres producenta: " %}</td><td>{{ object.company.address }} </td>
-				</tr>
-            {% else %}
+			{% if object.companies %}
             <tr>
-                <td>{% trans "Producent" %}</td>
+                <td>{% trans "Producenci" %}</td>
+                <td>
+                {% for company in object.companies.all %}
+                    <div class="panel panel-default">
+                        <table class="table" style="margin-bottom: 10px">
+                            <tbody>
+                            <tr>
+                                <td>{% trans "NIP producenta: " %}</td><td>{{ company.nip }} </td>
+                            </tr>
+                            <tr>
+                                <td>{% trans "Nazwa producenta: " %}</td>
+                                <td>
+                                    {% if perms.company.view_company %}<a href="{{ company.get_absolute_url }}"> {% endif %}
+                                    {{ company }}
+                                    {% if perms.company.view_company %}</a>{% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{% trans "Adres producenta: " %}</td><td>{{ company.address }} </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+            {% endfor %}
+            </td>
+        </tr>
+        {% else %}
+            <tr>
+                <td>{% trans "Producenci" %}</td>
                 <td>
                     {% if perms.product.change_product %}
                         <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
                     {% endif %}
                 </td>
             </tr>
-			{% endif %}
+        {% endif %}
 		</table>
 	</div>
 

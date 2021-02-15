@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta
 from functools import reduce
-from textwrap import dedent
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import connection
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.db.models.functions import Length
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -44,16 +43,18 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
             'order by no_of_open_reports desc limit 10'
         )
 
-        c['most_popular_590_products'] = Product.objects.filter(company__isnull=True, code__startswith='590').order_by(
-            '-query_count'
-        )[:10]
-        c['no_of_590_products'] = Product.objects.filter(company__isnull=True, code__startswith='590').count()
+        c['most_popular_590_products'] = Product.objects.filter(
+            companies__isnull=True, code__startswith='590'
+        ).order_by('-query_count')[:10]
+
+        c['no_of_590_products'] = Product.objects.filter(companies__isnull=True, code__startswith='590').count()
 
         c['most_popular_not_590_products'] = (
-            Product.objects.filter(company__isnull=True).exclude(code__startswith='590').order_by('-query_count')[:10]
+            Product.objects.filter(companies__isnull=True).exclude(code__startswith='590').order_by('-query_count')[:10]
         )
+
         c['no_of_not_590_products'] = (
-            Product.objects.filter(company__isnull=True).exclude(code__startswith='590').count()
+            Product.objects.filter(companies__isnull=True).exclude(code__startswith='590').count()
         )
 
         c['companies_by_name_length'] = (
@@ -64,26 +65,11 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
             :10
         ]
 
-        sq = dedent(
-            """\
-            select
-                count(*)
-            from
-                report_report
-                join
-                    product_product on report_report.product_id = product_product.id
-            where company_company.id=product_product.company_id and resolved_at is NULL
-        """
-        )
-        c['companies_with_most_open_reports'] = Company.objects.raw(
-            'select '
-            '*, '
-            '(' + sq + ') as no_of_open_reports '
-            'from '
-            'company_company '
-            'order by no_of_open_reports desc limit 10'
-        )
+        c['companies_with_most_open_reports'] = Company.objects.annotate(
+            no_of_open_reports=Count('companies__report')
+        ).order_by('no_of_open_reports')
 
+        # Reports
         c['newest_reports'] = Report.objects.only_open().order_by('-created_at')[:10]
         c['no_of_open_reports'] = Report.objects.only_open().count()
         c['no_of_resolved_reports'] = Report.objects.only_resolved().count()

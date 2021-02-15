@@ -9,7 +9,6 @@ from test_plus.test import TestCase
 
 from company.factories import CompanyFactory
 from pola.tests.test_views import PermissionMixin
-from pola.users.factories import StaffFactory
 from product.factories import ProductFactory
 from product.forms import AddBulkProductForm
 from product.models import Product
@@ -72,21 +71,37 @@ class TestProductUpdate(PermissionMixin, InstanceMixin, TestCase):
         self.url = reverse('product:edit', args=[self.instance.code])
 
 
-class TestProductUpdateWeb(WebTestMixin, TestCase):
+class TestProductUpdateWeb(PermissionMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.instance = ProductFactory(code="123")
+        self.company = CompanyFactory()
         self.url = reverse('product:edit', args=[self.instance.code])
-        self.user = StaffFactory()
 
-    def test_form_success(self):
-        page = self.app.get(self.url, user=self.user)
-        page.form['name'] = "New name"
-        page.form['commit_desc'] = "Commit description"
-        page = page.form.submit()
+    @override_settings(LANGUAGE_CODE='en-EN')
+    def test_form_view(self):
+        self.login()
+        page = self.client.get(self.url)
+        self.assertContains(page, 'commit_desc')
+        self.assertContains(page, 'name')
+
+    @override_settings(LANGUAGE_CODE='en-EN')
+    def test_form_success_submit(self):
+        self.login()
+        page = self.client.post(
+            self.url,
+            data={
+                'code': self.instance.code,
+                'name': "New name",
+                'companies': self.company.pk,
+                'commit_desc': "Commit description",
+                'action': 'Save',
+            },
+        )
 
         self.assertRedirects(page, self.instance.get_absolute_url())
         self.instance.refresh_from_db()
+
         versions = Version.objects.get_for_object(self.instance)
         self.assertEqual(versions[0].revision.comment, "Commit description")
         self.assertEqual(versions[0].revision.user, self.user)
@@ -94,16 +109,19 @@ class TestProductUpdateWeb(WebTestMixin, TestCase):
 
     @override_settings(LANGUAGE_CODE='en-EN')
     def test_form_commit_desc_required(self):
-        page = self.app.get(self.url, user=self.user)
-        page.form['name'] = "New name"
-        page = page.form.submit()
+        self.login()
+        page = self.client.post(
+            self.url,
+            data={
+                'code': self.instance.code,
+                'name': "New name",
+                'companies': self.company.pk,
+                'commit_desc': "",
+                'action': 'Save',
+            },
+        )
 
         self.assertContains(page, "This field is required.")
-
-        page.form['commit_desc'] = "AAA"
-        page = page.form.submit()
-
-        self.assertRedirects(page, self.instance.get_absolute_url())
 
 
 class TestProductDeleteView(PermissionMixin, InstanceMixin, TestCase):
@@ -150,9 +168,9 @@ class TestProductAutocomplete(PermissionMixin, TestCase):
     def test_filters(self):
         self.login()
         ProductFactory(id=1, name="A1")
-        ProductFactory(id=2, name="A2", company=CompanyFactory(name="PrefixB2"))
-        ProductFactory(id=3, name="A3", company=CompanyFactory(official_name="B3Suffix"))
-        ProductFactory(id=4, name="A4", company=CompanyFactory(common_name="PefixB4Suffix"))
+        ProductFactory(id=2, name="A2", companies=[CompanyFactory(name="PrefixB2")])
+        ProductFactory(id=3, name="A3", companies=[CompanyFactory(official_name="B3Suffix")])
+        ProductFactory(id=4, name="A4", companies=[CompanyFactory(common_name="PefixB4Suffix")])
 
         response = self.client.get("{}?q={}".format(self.url, "A1"))
         self.assertEqual(response.status_code, 200)
@@ -200,15 +218,17 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
         )
         messages = list(page.context['messages'])
         self.assertEqual(1, len(messages))
-        self.assertTrue(Product.objects.filter(company_id=self.company.pk, name="P1", code=123).exists())
-        self.assertTrue(Product.objects.filter(company_id=self.company.pk, name="P2", code=456).exists())
+        self.assertTrue(Product.objects.filter(companies__id=self.company.pk, name="P1", code=123).exists())
+        self.assertTrue(Product.objects.filter(companies__id=self.company.pk, name="P2", code=456).exists())
         self.assertEqual(messages[0].message, 'Zapisano 2 produktów,\n')
 
     def test_display_should_dont_update_duplicates(self):
         self.login()
-        Product(company=self.company, name="P1", code=123).save()
+        p = Product(name="P1", code=123)
+        p.save()
+        p.companies.add(self.company)
         self.client.post(self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nXXXXX\t123"})
-        self.assertTrue(Product.objects.filter(company_id=self.company.pk, name="P1", code=123).exists())
+        self.assertTrue(Product.objects.filter(companies__id=self.company.pk, name="P1", code=123).exists())
 
     @parameterized.expand(
         [
@@ -244,13 +264,16 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
     )
     def test_malformed_csv_file(self, current_input, expected_rows_errors):
         self.login()
-        Product(company=self.company, name="P1", code=123).save()
+        Product(name="P1", code=123).save()
         page = self.client.post(self.url, user=self.user, data={'company': self.company.pk, 'rows': current_input})
         self.assertEqual(page.context['form'].errors['rows'], expected_rows_errors)
 
     def test_duplicate_code(self):
         self.login()
-        Product(company=self.company, name="P1", code=123).save()
+        p = Product(name="P1", code=123)
+        p.save()
+        p.companies.add(self.company)
+
         response = self.client.post(
             self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
         )
@@ -260,7 +283,7 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
 
     def test_unknown_company(self):
         self.login()
-        Product(company=None, name="P1", code=123).save()
+        Product(name="P1", code=123).save()
         response = self.client.post(
             self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
         )
@@ -270,7 +293,7 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
 
     def test_unknown_name(self):
         self.login()
-        Product(company=self.company, name=None, code=123).save()
+        Product(name=None, code=123).save()
         response = self.client.post(
             self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
         )
@@ -280,7 +303,7 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
 
     def test_unknown_company_and_name(self):
         self.login()
-        Product(company=None, name=None, code=123).save()
+        Product(name=None, code=123).save()
         response = self.client.post(
             self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True
         )
