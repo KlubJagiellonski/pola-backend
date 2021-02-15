@@ -29,7 +29,7 @@ jobs:
       - name: Clear volumes
         run: docker-compose down --volumes
       - name: Starts PostgresSQL
-        run: docker-compose up postgres -d
+        run: docker-compose up -d postgres
       - name: Load production dump
         run: |
           docker cp /tmp/latest.dump pola-backend_postgres_1:/tmp/latest.dump;
