@@ -32,9 +32,10 @@ jobs:
         run: docker-compose up -d postgres
       - name: Load production dump
         run: |
+          set -x;
           docker cp /tmp/latest.dump pola-backend_postgres_1:/tmp/latest.dump;
           docker exec \
-            -ti \
+            -i \
             pola-backend_postgres_1 \
             pg_restore \
               --verbose \
@@ -48,5 +49,6 @@ jobs:
         run: docker-compose run web /app/manage.py migrate
       - name: Remove all data
         run: |
+          set -x;
           rm /tmp/latest.dump;
           docker-compose down --volumes
