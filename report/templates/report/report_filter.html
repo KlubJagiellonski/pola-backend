@@ -3,27 +3,27 @@
 {% load i18n crispy_forms_tags %}
 
 {% block content %}
-	<h1>{% trans "Zgłoszenie" %}</h1>
-	<div class="row">
-		<div class="col-md-3">
-			{% crispy filter.form %}
-		</div>
-		<div class="col-md-9">
-			<ul>
-			{% for obj in object_list %}
-				<li>
+    <h1>{% trans "Zgłoszenie" %}</h1>
+    <div class="row">
+        <div class="col-md-3">
+            {% crispy filter.form %}
+        </div>
+        <div class="col-md-9">
+            <ul>
+            {% for obj in object_list %}
+                <li>
                     <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
                     {% if obj.attachment_count %}
                         <div class="badge badge-info">{{ obj.attachment_count }}</div>
                     {% endif %}
                 </li>
-			{% empty %}
-			    <li>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</li>
-			{% endfor %}
-			</ul>
+            {% empty %}
+                <li>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</li>
+            {% endfor %}
+            </ul>
             {% include 'pagination_custom/pager.html' with page=page_obj %}
-		</div>
-	</div>
+        </div>
+    </div>
 {% endblock content %}
 
 {% block javascript %}

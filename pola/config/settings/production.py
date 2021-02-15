@@ -15,7 +15,7 @@ from urllib import parse as urlparse
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
-from .common import *  # noqa
+from .common import *  # noqa: F403
 
 # SECRET CONFIGURATION
 # ------------------------------------------------------------------------------

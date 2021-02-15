@@ -31,7 +31,11 @@ urlpatterns = [
     url(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     url(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),
     url(r'^cms/admin-stats$', AdminStatsPageView.as_view(), name="home-admin-stats"),
-    url(r'^cms/lang/$', login_required(TemplateView.as_view(template_name='pages/lang-cms.html')), name="select_lang",),
+    url(
+        r'^cms/lang/$',
+        login_required(TemplateView.as_view(template_name='pages/lang-cms.html')),
+        name="select_lang",
+    ),
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
     url(r'^cms/product/', ('product.urls', 'product', 'product')),
     url(r'^cms/company/', ('company.urls', 'company', 'company')),
@@ -50,7 +54,8 @@ urlpatterns = [
     url(
         r'^robots\.txt$',
         TemplateView.as_view(
-            template_name="robots.txt" if settings.IS_PRODUCTION else "robots-staging.txt", content_type='text/plain',
+            template_name="robots.txt" if settings.IS_PRODUCTION else "robots-staging.txt",
+            content_type='text/plain',
         ),
     ),
     url(r"^PrTy9Df7k3hCeRW-raise-exception", sentry_raise_exception),

@@ -8,5 +8,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(model_name='aipics', name='is_valid', field=models.NullBooleanField(),),
+        migrations.AddField(
+            model_name='aipics',
+            name='is_valid',
+            field=models.NullBooleanField(),
+        ),
     ]

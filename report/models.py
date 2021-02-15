@@ -32,7 +32,11 @@ class Report(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Utworzone'))
     resolved_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Rozpatrzone'))
     resolved_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, verbose_name=_('Rozpatrzone przez'), on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        verbose_name=_('Rozpatrzone przez'),
+        on_delete=models.CASCADE,
     )
     description = models.TextField(verbose_name=_('Opis'))
     objects = ReportQuerySet.as_manager()

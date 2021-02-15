@@ -6,7 +6,7 @@ Local settings
 - Add Django Debug Toolbar
 - Add django-extensions as app
 """
-from .common import *  # noqa
+from .common import *  # noqa: F403
 
 TEMPLATES[0]['OPTIONS']['debug'] = True  # noqa: F405
 

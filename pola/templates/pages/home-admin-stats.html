@@ -4,14 +4,14 @@
 {% block content %}
 <h1>{% trans "Statystyki admina" %}</h1><br/>
 
-	<div class="panel panel-primary">
+    <div class="panel panel-primary">
         <div class="panel-heading">{% trans "Liczba odpytań bazy ILiM" %}</div>
-		<table class="table">
+        <table class="table">
             {% for log in  ilim_log %}
-			<tr>
+            <tr>
                 <td>{{ log.to_char }}</td>
                 <td>{{ log.count }}</td>
-			</tr>
+            </tr>
             {% endfor %}
         </table>
     </div>

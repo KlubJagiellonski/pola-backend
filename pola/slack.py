@@ -13,7 +13,16 @@ q = Queue(connection=conn)
 
 
 def send_ai_pics(
-    product, device_name, original_width, original_height, width, height, files_count, file_ext, mime_type, filenames,
+    product,
+    device_name,
+    original_width,
+    original_height,
+    width,
+    height,
+    files_count,
+    file_ext,
+    mime_type,
+    filenames,
 ):
 
     files = []
@@ -31,7 +40,15 @@ def send_ai_pics(
             'Device: *{}*\n'
             'Dimensions: *{}x{}* (Original: {}x{})\n'
             '*{} {}* files ({})'.format(
-                product, device_name, width, height, original_width, original_height, files_count, file_ext, mime_type,
+                product,
+                device_name,
+                width,
+                height,
+                original_width,
+                original_height,
+                files_count,
+                file_ext,
+                mime_type,
             ),
             'attachments': json.dumps(files),
         }

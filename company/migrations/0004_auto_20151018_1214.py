@@ -11,7 +11,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='company', options={'verbose_name': 'Producent', 'verbose_name_plural': 'Producenci'},
+            name='company',
+            options={'verbose_name': 'Producent', 'verbose_name_plural': 'Producenci'},
         ),
         migrations.AlterField(
             model_name='company',

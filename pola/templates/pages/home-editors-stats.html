@@ -4,41 +4,41 @@
 {% block content %}
 <h1>{% trans "Statystyki redakcji" %}</h1><br/>
 
-	<div class="panel panel-primary">
+    <div class="panel panel-primary">
         <div class="panel-heading">{% trans "Liczba zmian w producentach" %}</div>
-		<table class="table">
+        <table class="table">
             {% for log in  company_log %}
-			<tr>
+            <tr>
                 <td>{{ log.to_char }}</td>
                 <td>{{ log.username }}</td>
             <td>{{ log.count }}</td>
-			</tr>
+            </tr>
             {% endfor %}
         </table>
     </div>
 
-	<div class="panel panel-primary">
+    <div class="panel panel-primary">
         <div class="panel-heading">{% trans "Liczba zmian w produktach" %}</div>
-		<table class="table">
+        <table class="table">
             {% for log in  product_log %}
-			<tr>
+            <tr>
                 <td>{{ log.to_char }}</td>
                 <td>{{ log.username }}</td>
             <td>{{ log.count }}</td>
-			</tr>
+            </tr>
             {% endfor %}
         </table>
     </div>
 
-	<div class="panel panel-primary">
+    <div class="panel panel-primary">
         <div class="panel-heading">{% trans "Liczba rozpatrzonych raportów" %}</div>
-		<table class="table">
+        <table class="table">
             {% for log in  report_log %}
-			<tr>
+            <tr>
                 <td>{{ log.to_char }}</td>
                 <td>{{ log.username }}</td>
             <td>{{ log.count }}</td>
-			</tr>
+            </tr>
             {% endfor %}
         </table>
     </div>

@@ -10,7 +10,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(model_name='aipics', name='flash_used', field=models.BooleanField(null=True),),
-        migrations.AlterField(model_name='aipics', name='is_valid', field=models.BooleanField(null=True),),
-        migrations.AlterField(model_name='aipics', name='was_portrait', field=models.BooleanField(null=True),),
+        migrations.AlterField(
+            model_name='aipics',
+            name='flash_used',
+            field=models.BooleanField(null=True),
+        ),
+        migrations.AlterField(
+            model_name='aipics',
+            name='is_valid',
+            field=models.BooleanField(null=True),
+        ),
+        migrations.AlterField(
+            model_name='aipics',
+            name='was_portrait',
+            field=models.BooleanField(null=True),
+        ),
     ]

@@ -35,11 +35,15 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
     url = '/a/v4/get_by_code'
 
     def test_should_return_200_for_non_ean_13(self):
-        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=123",)
+        response = self.json_request(
+            self.url + "?device_id=TEST-DEVICE-ID&code=123",
+        )
         self.assertEqual(200, response.status_code)
 
     def test_should_return_200_when_ai_not_supported(self):
-        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=123&noai=false",)
+        response = self.json_request(
+            self.url + "?device_id=TEST-DEVICE-ID&code=123&noai=false",
+        )
         self.assertEqual(200, response.status_code)
 
     def test_should_return_200_when_polish_product(self):
@@ -297,11 +301,15 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
     url = '/a/v3/get_by_code'
 
     def test_should_return_200_for_non_ean_13(self):
-        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=123",)
+        response = self.json_request(
+            self.url + "?device_id=TEST-DEVICE-ID&code=123",
+        )
         self.assertEqual(200, response.status_code)
 
     def test_should_return_200_when_ai_not_supported(self):
-        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=123&noai=false",)
+        response = self.json_request(
+            self.url + "?device_id=TEST-DEVICE-ID&code=123&noai=false",
+        )
         self.assertEqual(200, response.status_code)
 
     def test_should_return_200_when_polish_product(self):
@@ -506,7 +514,9 @@ class TestGetByCodeV2(TestCase, JsonRequestMixin):
     url = '/a/v2/get_by_code'
 
     def test_should_return_200_for_non_ean_13(self):
-        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=123",)
+        response = self.json_request(
+            self.url + "?device_id=TEST-DEVICE-ID&code=123",
+        )
         self.assertEqual(200, response.status_code)
 
     def test_should_return_200_when_polish_and_known_product(self):

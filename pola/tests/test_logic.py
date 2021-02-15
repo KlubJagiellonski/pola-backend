@@ -127,7 +127,19 @@ class TestGetResultFromCode(TestCase):
         self.maxDiff = None
         self.assertEqual(expected_response, response)
 
-    @parameterized.expand([("775", "Peru",), ("777", "Boliwia",), ("779", "Argentyna")])
+    @parameterized.expand(
+        [
+            (
+                "775",
+                "Peru",
+            ),
+            (
+                "777",
+                "Boliwia",
+            ),
+            ("779", "Argentyna"),
+        ]
+    )
     def test_missing_company_and_wrong_country(self, prefix, country):
         current_ean = prefix + TEST_EAN13[3:]
         product = ProductFactory.create(code=current_ean)
