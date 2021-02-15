@@ -242,7 +242,7 @@ Jeśli wprowadzane są większe zmiany w bazie danych warto wykonać próbe wyko
 
    .. code-block:: bash
 
-    docker exec -ti pola-backend_web_1 /app/manage.py migrate
+    docker-compose run web /app/manage.py migrate
 
 7. Skasuj kopie bazy danych:
 
