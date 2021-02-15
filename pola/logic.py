@@ -16,11 +16,12 @@ def get_result_from_code(code, multiple_company_supported=False):
     product = None
 
     result['code'] = code
-
+    if not multiple_company_supported:
+        result.update(DEFAULT_COMPANY_DATA)
     if code.isdigit() and (len(code) == 8 or len(code) == 13):
         # code is EAN8 or EAN13
         product = get_by_code(code)
-        companies = list(product.companies.all())
+        companies = sorted(list(product.companies.all()), key=lambda d: d.pk)
 
         result['product_id'] = product.id
         stats['was_590'] = code.startswith('590')

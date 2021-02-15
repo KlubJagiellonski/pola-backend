@@ -314,9 +314,6 @@ class TestCreateBotReport(TestCase):
     pass
 
 
-class TestSerializeProduct(TestCase):
-    pass
-
 
 class TestGetPlScore(TestCase):
     pass

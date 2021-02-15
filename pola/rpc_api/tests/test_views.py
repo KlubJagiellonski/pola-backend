@@ -75,9 +75,10 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
 
         self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
         self.assertEqual(
             {
-                "product_id": 2,
+                "product_id": p.pk,
                 "code": "5900049011829",
                 "name": None,
                 "card_type": "type_white",
@@ -87,7 +88,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "report_button_type": "type_white",
                 "companies": [
                     {
-                        "name": "company_official_2",
+                        "name": c.official_name,
                         "plCapital": 100,
                         "plCapital_notes": "AAA",
                         "plWorkers": 0,
@@ -151,6 +152,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         p = ProductFactory.create(code=5900049011829, companies=[c1, c2])
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+
         self.assertEqual(
             {
                 "product_id": p.id,
@@ -163,7 +166,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "report_button_type": "type_white",
                 "companies": [
                     {
-                        "name": "company_official_1",
+                        "name": c1.official_name,
                         "plCapital": 100,
                         "plCapital_notes": "AAA",
                         "plWorkers": 0,
@@ -181,7 +184,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         "sources": {"TEST": "BBBB"},
                     },
                     {
-                        "name": "company_official_0",
+                        "name": c2.official_name,
                         "plCapital": 100,
                         "plCapital_notes": "AAA",
                         "plWorkers": 0,
@@ -332,13 +335,13 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         )
         p = ProductFactory.create(code=5900049011829, companies=[c])
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
-        print(json.dumps(json.loads(response.content.decode()), indent=2))
         self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
         self.assertEqual(
             {
                 "product_id": p.id,
                 "code": "5900049011829",
-                "name": "company_official_3",
+                "name": c.official_name,
                 "card_type": "type_white",
                 "plScore": 70,
                 "altText": None,
@@ -405,7 +408,6 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         p = ProductFactory.create(code=5900049011829, companies=[c1, c2])
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
-        print(json.dumps(json.loads(response.content.decode()), indent=2))
         self.assertEqual(
             {
                 "product_id": p.id,
