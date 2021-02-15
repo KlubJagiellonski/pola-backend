@@ -29,7 +29,7 @@ jobs:
       - name: Clear volumes
         run: docker-compose down --volumes
       - name: Starts PostgresSQL
-        run: docker-compose up -d postgres
+        run: docker-compose up --detach --no-deps postgres
       - name: Load production dump
         run: |
           set -x;
@@ -44,9 +44,20 @@ jobs:
               --no-owner \
               -h localhost \
               -U pola_app \
+              -d pola_app /tmp/latest.dump || \
+          docker exec \
+            -i \
+            pola-backend_postgres_1 \
+            pg_restore \
+              --verbose \
+              --clean \
+              --no-acl \
+              --no-owner \
+              -h localhost \
+              -U pola_app \
               -d pola_app /tmp/latest.dump
       - name: Migrate database
-        run: docker-compose run web /app/manage.py migrate
+        run: docker-compose run --no-deps --rm web /app/manage.py migrate
       - name: Remove all data
         run: |
           set -x;
