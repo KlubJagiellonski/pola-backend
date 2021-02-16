@@ -11,6 +11,11 @@ on:
         required: false
         default: 'The Octoverse'
 
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   say_hello:
     runs-on: ubuntu-latest
@@ -24,8 +29,17 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
+      - name: Login to Github Docker Registry
+        run: ./scripts/docker_login_github.sh
       - name: Copy .env.example to .env
         run: cp .env.example .env
+      - run: docker images
+      - name: Build image
+        run: |
+          # Build Django CI image
+          ./scripts/ci-docker-image/build_image.sh
+          # Verify CI image
+          ./scripts/ci-docker-image/verify_image.sh
       - name: Clear volumes
         run: docker-compose down --volumes
       - name: Starts PostgresSQL
