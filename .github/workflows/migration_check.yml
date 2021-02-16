@@ -2,27 +2,24 @@ name: Manually triggered workflow
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'Person to greet'
+      heroku_app:
+        description: 'Heroku app name[pola-app/pola-staging]'
         required: true
-        default: 'Mona the Octocat'
-      home:
-        description: 'location'
-        required: false
-        default: 'The Octoverse'
+        default: 'pola-app'
 
 env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  HEROKU_APP: ${{ github.event.inputs.heroku_app }}
 
 jobs:
   say_hello:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          heroku pg:backups:capture --app pola-app
-          heroku pg:backups:download --app pola-app --output /tmp/latest.dump
+          heroku pg:backups:capture --app "${HEROKU_APP}"
+          heroku pg:backups:download --app "${HEROKU_APP}" --output /tmp/latest.dump
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       - name: Checkout ${{ github.ref }} ( ${{ github.sha }} )
