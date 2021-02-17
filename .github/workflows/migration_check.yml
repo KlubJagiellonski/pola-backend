@@ -17,11 +17,6 @@ jobs:
   say_hello:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          heroku pg:backups:capture --app "${HEROKU_APP}"
-          heroku pg:backups:download --app "${HEROKU_APP}" --output /tmp/latest.dump
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       - name: Checkout ${{ github.ref }} ( ${{ github.sha }} )
         uses: actions/checkout@v2
         with:
@@ -32,15 +27,16 @@ jobs:
         run: cp .env.example .env
       - run: docker images
       - name: Build image
-        run: |
-          # Build Django CI image
-          ./scripts/ci-docker-image/build_image.sh
-          # Verify CI image
-          ./scripts/ci-docker-image/verify_image.sh
+        run: ./scripts/ci-docker-image/build_image.sh
       - name: Clear volumes
         run: docker-compose down --volumes
       - name: Starts PostgresSQL
         run: docker-compose up --detach --no-deps postgres
+      - name: Download database backup
+        run: |
+          heroku pg:backups:download --app "${HEROKU_APP}" --output /tmp/latest.dump
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       - name: Load production dump
         run: |
           set -x;
