@@ -1,0 +1,71 @@
+name: Migration validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      heroku_app:
+        description: 'Heroku app name[pola-app/pola-staging]'
+        required: true
+        default: 'pola-app'
+
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  HEROKU_APP: ${{ github.event.inputs.heroku_app }}
+
+jobs:
+  say_hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.ref }} ( ${{ github.sha }} )
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Login to Github Docker Registry
+        run: ./scripts/docker_login_github.sh
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+      - name: Build image
+        run: ./scripts/ci-docker-image/build_image.sh
+      - name: Clear volumes
+        run: docker-compose down --volumes
+      - name: Start PostgresSQL
+        run: docker-compose up --detach --no-deps postgres
+      - name: Download database backup
+        run: heroku pg:backups:download --app "${HEROKU_APP}" --output /tmp/latest.dump
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Load production dump
+        run: |
+          set -x;
+          docker cp /tmp/latest.dump pola-backend_postgres_1:/tmp/latest.dump;
+          docker exec \
+            -i \
+            pola-backend_postgres_1 \
+            pg_restore \
+              --verbose \
+              --clean \
+              --no-acl \
+              --no-owner \
+              -h localhost \
+              -U pola_app \
+              -d pola_app /tmp/latest.dump || \
+          docker exec \
+            -i \
+            pola-backend_postgres_1 \
+            pg_restore \
+              --verbose \
+              --clean \
+              --no-acl \
+              --no-owner \
+              -h localhost \
+              -U pola_app \
+              -d pola_app /tmp/latest.dump
+      - name: Migrate database
+        run: docker-compose run --no-deps --rm web /app/manage.py migrate
+      - name: Remove all data
+        run: |
+          set -x;
+          rm /tmp/latest.dump;
+          docker-compose down --volumes
