@@ -1,0 +1,6 @@
+{
+    "files.associations":{
+       "*.sql":"jinja-sql",
+       "**/target/**":""
+    }
+ }
