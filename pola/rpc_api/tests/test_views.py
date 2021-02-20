@@ -162,7 +162,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             {
                 "product_id": p.id,
                 "code": "5900049011829",
-                "name": None,
+                "name": 'Marka własna - Sieć Lidl',
                 "card_type": "type_white",
                 "altText": None,
                 "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",

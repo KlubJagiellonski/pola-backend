@@ -42,7 +42,8 @@ def get_result_from_code(code, multiple_company_supported=False):
 
                 stats['was_plScore'] = all(get_plScore(c) for c in companies)
                 companies_data.append(company_data)
-
+            if len(companies) > 1:
+                result['name'] = "Marka własna - Sieć Lidl"
             result['companies'] = companies_data
         elif len(companies) > 1 and not multiple_company_supported:
             # Ups. It seems to be an internal code
