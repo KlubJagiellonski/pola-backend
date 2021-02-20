@@ -2,11 +2,13 @@
 version: 2
 updates:
   - package-ecosystem: pip
+    labels:
+      - "dependencies"
+      - "automerge"
     directory: "/"
     schedule:
       interval: daily
       time: "04:00"
-    open-pull-requests-limit: 20
     ignore:
       - dependency-name: botocore
         versions:
@@ -18,6 +20,9 @@ updates:
           - "< 1.17"
 
   - package-ecosystem: "github-actions"
+    labels:
+      - "dependencies"
+      - "automerge"
     # Workflow files stored in the
     # default location of `.github/workflows`
     directory: "/"
@@ -25,6 +30,9 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "docker"
+    labels:
+      - "dependencies"
+      - "automerge"
     directory: "/"
     schedule:
       interval: "daily"
