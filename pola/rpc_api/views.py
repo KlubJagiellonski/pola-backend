@@ -109,25 +109,32 @@ def validate_json_response(schema, *args, **kwargs):
                 },
             },
             "product_id": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "report_button_text": {"type": "string"},
-            "report_button_type": {"type": "string"},
-            "report_text": {"type": "string"},
+            "report": {
+                "type": "object",
+                "properties": {
+                    "button_text": {"type": "string"},
+                    "button_type": {"type": "string"},
+                    "text": {"type": "string"},
+                }
+            }
         },
         "required": [
             "altText",
             "card_type",
             "code",
+            "name",
             "donate",
             "product_id",
-            "report_button_text",
-            "report_button_type",
-            "report_text",
         ],
     }
 )
 def get_by_code_v4(request):
     noai = request.GET.get('noai')
-    result = get_by_code_internal(request, ai_supported=noai is None, multiple_company_supported=True)
+    result = get_by_code_internal(
+        request, ai_supported=noai is None,
+        multiple_company_supported=True,
+        report_as_object=True
+    )
 
     response = JsonResponse(result)
     response["Access-Control-Allow-Origin"] = "*"
@@ -294,11 +301,15 @@ def create_report_v3(request):
 # API v2
 
 
-def get_by_code_internal(request, ai_supported=False, multiple_company_supported=False):
+def get_by_code_internal(request, ai_supported=False, multiple_company_supported=False, report_as_object=False):
     code = request.GET['code']
     device_id = request.GET['device_id']
 
-    result, stats, product = logic.get_result_from_code(code, multiple_company_supported=multiple_company_supported)
+    result, stats, product = logic.get_result_from_code(
+        code,
+        multiple_company_supported=multiple_company_supported,
+        report_as_object=report_as_object
+    )
 
     if product is not None:
         Query.objects.create(

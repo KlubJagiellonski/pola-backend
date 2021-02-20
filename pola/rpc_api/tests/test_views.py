@@ -87,9 +87,11 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "name": None,
                 "card_type": "type_white",
                 "altText": None,
-                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
-                "report_button_text": "Zg\u0142o\u015b",
-                "report_button_type": "type_white",
+                "report": {
+                    "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                    "button_text": "Zg\u0142o\u015b",
+                    "button_type": "type_white",
+                },
                 "companies": [
                     {
                         "name": c.official_name,
@@ -165,9 +167,11 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "name": None,
                 "card_type": "type_white",
                 "altText": None,
-                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
-                "report_button_text": "Zg\u0142o\u015b",
-                "report_button_type": "type_white",
+                "report": {
+                    "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                    "button_text": "Zg\u0142o\u015b",
+                    "button_type": "type_white",
+                },
                 "companies": [
                     {
                         "name": c1.official_name,

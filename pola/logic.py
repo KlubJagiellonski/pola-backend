@@ -10,9 +10,10 @@ from product.models import Product
 from report.models import Report
 
 
-def get_result_from_code(code, multiple_company_supported=False):
+def get_result_from_code(code, multiple_company_supported=False, report_as_object=False):
     result = DEFAULT_RESULT.copy()
     stats = DEFAULT_STATS.copy()
+    report = DEFAULT_REPORT_DATA.copy()
     product = None
 
     result['code'] = code
@@ -64,9 +65,9 @@ def get_result_from_code(code, multiple_company_supported=False):
                     "kodu kreskowego jak i etykiety z "
                     "produktu. Z góry dziękujemy!"
                 )
-                result['report_text'] = "Bardzo prosimy o zgłoszenie nam tego produktu"
                 result['card_type'] = TYPE_GREY
-                result['report_button_type'] = TYPE_RED
+                report['text'] = "Bardzo prosimy o zgłoszenie nam tego produktu"
+                report['button_type'] = TYPE_RED
             elif code.startswith('977') or code.startswith('978') or code.startswith('979'):
                 # this is an ISBN/ISSN/ISMN number
                 # (book, music album or magazine)
@@ -78,7 +79,7 @@ def get_result_from_code(code, multiple_company_supported=False):
                     'Wydawnictwa tego typu nie są aktualnie '
                     'w obszarze zainteresowań Poli.'
                 )
-                result['report_text'] = "To nie jest książka, czasopismo lub album muzyczny? Prosimy o zgłoszenie"
+                report['text'] = "To nie jest książka, czasopismo lub album muzyczny? Prosimy o zgłoszenie"
             else:
                 # let's try to associate the code with a country
                 for prefix in CODE_PREFIX_TO_COUNTRY.keys():
@@ -108,7 +109,10 @@ def get_result_from_code(code, multiple_company_supported=False):
             'EAN13. Zeskanowany przez Ciebie kod jest innego '
             'typu. Spróbuj zeskanować kod z czegoś innego'
         )
-
+    if report_as_object:
+        result['report'] = report
+    else:
+        result.update({("report_" + k, v) for k, v in report.items()})
     return result, stats, product
 
 
@@ -349,15 +353,18 @@ DEFAULT_COMPANY_DATA = {
     'plScore': None,
 }
 
+DEFAULT_REPORT_DATA = {
+    'text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+    'button_text': 'Zgłoś',
+    'button_type': TYPE_WHITE,
+}
+
 DEFAULT_RESULT = {
     'product_id': None,
     'code': None,
     'name': None,
     'card_type': TYPE_WHITE,
     'altText': None,
-    'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat ' 'tego produktu',
-    'report_button_text': 'Zgłoś',
-    'report_button_type': TYPE_WHITE,
 }
 
 DEFAULT_STATS = {'was_verified': False, 'was_590': False, 'was_plScore': False}
