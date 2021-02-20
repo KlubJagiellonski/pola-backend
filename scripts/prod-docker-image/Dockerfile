@@ -38,6 +38,8 @@ ENV PYTHONUNBUFFERED 1
 ENV PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin
 
+RUN pip install --no-cache-dir --upgrade "pip" && pip --version
+
 COPY ./requirements/production.txt ${APP_HOME}/requirements/
 
 RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.txt" \
