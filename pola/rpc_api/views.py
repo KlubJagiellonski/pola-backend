@@ -115,8 +115,8 @@ def validate_json_response(schema, *args, **kwargs):
                     "button_text": {"type": "string"},
                     "button_type": {"type": "string"},
                     "text": {"type": "string"},
-                }
-            }
+                },
+            },
         },
         "required": [
             "altText",
@@ -131,9 +131,7 @@ def validate_json_response(schema, *args, **kwargs):
 def get_by_code_v4(request):
     noai = request.GET.get('noai')
     result = get_by_code_internal(
-        request, ai_supported=noai is None,
-        multiple_company_supported=True,
-        report_as_object=True
+        request, ai_supported=noai is None, multiple_company_supported=True, report_as_object=True
     )
 
     response = JsonResponse(result)
@@ -306,9 +304,7 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
     device_id = request.GET['device_id']
 
     result, stats, product = logic.get_result_from_code(
-        code,
-        multiple_company_supported=multiple_company_supported,
-        report_as_object=report_as_object
+        code, multiple_company_supported=multiple_company_supported, report_as_object=report_as_object
     )
 
     if product is not None:
