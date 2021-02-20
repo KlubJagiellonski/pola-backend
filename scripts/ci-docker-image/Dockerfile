@@ -28,10 +28,12 @@ WORKDIR /app
 COPY ./scripts/ci-docker-image/entrypoint.sh /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
+RUN pip install --no-cache-dir  --upgrade "pip" && pip --version
+
 ARG DJANGO_VERSION
 ENV DJANGO_VERSION=${DJANGO_VERSION}
 
-RUN pip install --no-cache-dir "django==${DJANGO_VERSION}"
+RUN pip install --no-cache-dir --no-deps "django==${DJANGO_VERSION}"
 
 COPY requirements/ci.txt /app/requirements/
 
