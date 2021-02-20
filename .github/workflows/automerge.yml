@@ -10,13 +10,20 @@ on:
       - ready_for_review
       - reopened
       - unlocked
+
   pull_request_review:
     types:
       - submitted
 
+  workflow_run:
+    workflows: ["CI Build"]
+    types:
+      - completed
+
   check_suite:
     types:
       - completed
+
   status: {}
 
 jobs:
@@ -26,8 +33,6 @@ jobs:
     steps:
       - name: automerge
         uses: "pascalgn/automerge-action@v0.13.1"
-        with:
-          args: "--trace"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_METHOD: 'squash'
