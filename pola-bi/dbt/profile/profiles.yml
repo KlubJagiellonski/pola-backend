@@ -1,0 +1,29 @@
+---
+config:
+  send_anonymous_usage_stats: false
+  use_colors: true
+
+pola_app_postgres:
+  outputs:
+
+    dev:
+      type: postgres
+      threads: 4
+      host: "{{ env_var('POLA_APP_HOST') }}"
+      port: "{{ env_var('POLA_APP_PORT') | as_number }}"
+      user: "{{ env_var('POLA_APP_USER') }}"
+      pass: "{{ env_var('POLA_APP_PASS') }}"
+      schema: "{{ env_var('POLA_APP_SCHEMA') }}"
+      dbname: "{{ env_var('POLA_APP_DB_NAME') }}"
+
+    prod:
+      type: postgres
+      threads: 4
+      host: "{{ env_var('POLA_APP_HOST') }}"
+      port: "{{ env_var('POLA_APP_PORT') | as_number }}"
+      user: "{{ env_var('POLA_APP_USER') }}"
+      pass: "{{ env_var('POLA_APP_PASS') }}"
+      schema: "{{ env_var('POLA_APP_SCHEMA') }}"
+      dbname: "{{ env_var('POLA_APP_DB_NAME') }}"
+
+  target: dev

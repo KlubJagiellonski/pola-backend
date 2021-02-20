@@ -1,0 +1,54 @@
+---
+name: BI Refresh
+on:
+  schedule:
+    - cron: '28 0 * * 1'
+  workflow_dispatch:
+
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+jobs:
+  deploy-bi:
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [prod, staging]
+    name: "Refresh BI (${{ matrix.environment }})"
+    runs-on: ubuntu-latest
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      COMPOSE_FILE: "docker-compose.dbt.yaml"
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: "Setup Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: "Login to Github Docker Registry"
+        run: ./scripts/docker_login_github.sh
+      - name: "Build BI image"
+        run: |
+          # Build BI image
+          ./scripts/bi-docker-image/build_image.sh
+          # Verify BI image
+          ./scripts/bi-docker-image/verify_image.sh
+      - name: "Set environment env variable"
+        run: |-
+          pip install django-environ
+          source <(python ./pola-bi/dbt/dev.py --environment "${TARGET_ENV}")
+          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
+          printenv | grep POLA_APP >> $GITHUB_ENV;
+        env:
+          TARGET_ENV: ${{ matrix.environment }}
+      - run: ./run_dbt.sh dbt deps
+      - run: ./run_dbt.sh dbt snapshot
+      - run: ./run_dbt.sh dbt seed
+      - run: ./run_dbt.sh dbt run
+      - run: ./run_dbt.sh dbt test

@@ -1,10 +1,8 @@
 ---
 name: CI Build
 on:
-  schedule:
-    - cron: '28 0 * * 1'
   push:
-    branches: ['master', 'prod']
+#    branches: ['master', 'prod']
   pull_request:
     branches: ['master']
 
@@ -32,34 +30,14 @@ jobs:
         run: ./scripts/docker_login_github.sh
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
-      - run: docker images
-      - name: "Build image"
+      - name: "Build CI image"
         run: |
-          # Build Django CI image
           ./scripts/ci-docker-image/build_image.sh
-          # Verify CI image
           ./scripts/ci-docker-image/verify_image.sh
       - name: Pull images
-        run: >
-          docker-compose ps --services | xargs -n 1 bash -c '
-          echo "::group::${0}";
-          docker-compose pull -- ${0};
-          echo "::endgroup::"
-          '
-      - run: docker images
-      - run: docker-compose config
+        run: ./scripts/pull_images.sh
       - name: "Run tests"
-        run: |
-          docker-compose run web bash -x -c '
-            coverage run \
-              --source="." \
-              /app/manage.py test \
-                --verbosity=2 \
-                --keepdb;
-            EXIT_CODE=$?;
-            coverage xml;
-            exit ${EXIT_CODE};
-          '
+        run: ./run_test.sh
       - name: "Check missing migrations"
         run: docker-compose run web makemigrations --check -v 3
       - name: "Checks the entire Django project for potential problems"
@@ -76,17 +54,58 @@ jobs:
   static-checks:
     name: "Static checks"
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
       - name: "Setup Python"
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.8'
       - name: "Run static checks"
         uses: pre-commit/action@v2.0.3
+
+  bi-validate:
+    name: "BI Validate"
+    runs-on: ubuntu-latest
+    needs: [django-tests, static-checks]
+    env:
+      COMPOSE_FILE: "docker-compose.yaml:docker-compose.dbt.yaml:docker-compose.dbt-local.yaml"
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: "Setup Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: "Login to Github Docker Registry"
+        run: ./scripts/docker_login_github.sh
+      - name: "Copy .env.example to .env"
+        run: cp .env.example .env
+      - name: "Build CI image"
+        run: |
+          ./scripts/ci-docker-image/build_image.sh
+          ./scripts/ci-docker-image/verify_image.sh
+      - name: "Build BI image"
+        run: |
+          # Build BI image
+          ./scripts/bi-docker-image/build_image.sh
+          # Verify BI image
+          ./scripts/bi-docker-image/verify_image.sh
+      - name: Pull images
+        run: ./scripts/pull_images.sh
+      - run: docker-compose config
+      - run: ./run_manage.sh migrate
+      - run: ./run_manage.sh populate_db
+      - run: ./run_dbt.sh dbt deps
+      - run: ./run_dbt.sh dbt snapshot
+      - run: ./run_dbt.sh dbt seed
+      - run: ./run_dbt.sh dbt run
+      - run: ./run_dbt.sh dbt test
+      - name: "Push image (push)"
+        if: github.event_name == 'push'
+        run: ./scripts/bi-docker-image/push_image.sh
 
   prod-image:
     name: "Build Prod Image"
@@ -100,14 +119,14 @@ jobs:
       - name: "Set image tag"
         if: >-
           github.event_name == 'push' &&
-          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+          (github.ref == 'refs/heads/bi-views' || github.ref == 'refs/heads/prod')
         run: |-
           set -x;
 
           if [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "prod" ]]; then
             echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
             echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
-          elif [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "master" ]]; then
+          elif [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "bi-views" ]]; then
             echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
             echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
           else
@@ -135,13 +154,13 @@ jobs:
         if: github.event_name == 'push'
         run: ./scripts/prod-docker-image/push_image.sh
 
-  deploy:
-    name: "Deploy (push) - ${{ github.ref }}"
+  deploy-app:
+    name: "Deploy app (push) - ${{ github.ref }}"
     runs-on: ubuntu-latest
-    needs: [prod-image]
+    needs: [prod-image, bi-validate]
     if: >-
       github.event_name == 'push' &&
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+      (github.ref == 'refs/heads/bi-views' || github.ref == 'refs/heads/prod')
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
@@ -153,21 +172,66 @@ jobs:
         run: "./scripts/docker_login_heroku.sh"
       - name: "Install Heroku CLI"
         run: "curl https://cli-assets.heroku.com/install.sh | sh"
-      - name: "Set image tag"
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/prod'
         run: |-
-          set -x;
-          if [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "prod" ]]; then
-            echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
-            echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
-          elif [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "master" ]]; then
-            echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
-            echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
-          else
-            exit 1;
-          fi
-        env:
-          GITHUB_BRANCH: ${{ github.ref }}
+          echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
+          echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/bi-views'
+        run: |-
+          echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
+          echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
       - name: "Pull image"
         run: ./scripts/prod-docker-image/pull_image.sh
       - name: "Deploy"
         run: './scripts/deploy.sh "${HEROKU_APP}"'
+
+  deploy-bi:
+    name: "Deploy (push) - ${{ github.ref }}"
+    runs-on: ubuntu-latest
+    needs: [prod-image, bi-validate]
+    if: >-
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/bi-views' || github.ref == 'refs/heads/prod')
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      COMPOSE_FILE: "docker-compose.yaml:docker-compose.dbt.yaml:docker-compose.dbt-local.yaml"
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: "Setup Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: "Login to Github Docker Registry"
+        run: ./scripts/docker_login_github.sh
+      - name: "Build BI image"
+        run: |
+          # Build BI image
+          ./scripts/bi-docker-image/build_image.sh
+          # Verify BI image
+          ./scripts/bi-docker-image/verify_image.sh
+      - run: pip install django-environ
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/prod'
+        run: |-
+          source <(python ./pola-bi/dbt/dev.py --environment prod)
+          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
+          printenv | grep POLA_APP >> $GITHUB_ENV;
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/bi-views'
+        run: |-
+          source <(python ./pola-bi/dbt/dev.py --environment staging)
+          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
+          printenv | grep POLA_APP >> $GITHUB_ENV;
+      - run: ./run_dbt.sh dbt deps
+      - run: ./run_dbt.sh dbt snapshot
+      - run: ./run_dbt.sh dbt seed
+      - run: ./run_dbt.sh dbt run
+      - run: ./run_dbt.sh dbt test
+      - name: "Push image (push)"
+        if: github.event_name == 'push'
+        run: ./scripts/bi-docker-image/push_image.sh
