@@ -14,10 +14,6 @@ on:
     types:
       - submitted
 
-  workflow_run:
-    types:
-      - completed
-
   check_suite:
     types:
       - completed
