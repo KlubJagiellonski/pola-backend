@@ -8,7 +8,7 @@ x-pola-backend-common:
     dockerfile: scripts/ci-docker-image/Dockerfile
     args:
       - DJANGO_VERSION=${DJANGO_VERSION-3.1.6}
-      - PYTHON_VERSION=${PYTHON_VERSION-3.6}
+      - PYTHON_VERSION=${PYTHON_VERSION-3.9}
   image: pola-backend_web:latest
   environment:
     DATABASE_URL: 'postgres://pola_app:pola_app@postgres/pola_app'

@@ -3,7 +3,7 @@ ARG APP_GID="50000"
 
 ARG APP_HOME=/opt/pola-backend
 
-ARG PYTHON_VERSION="3.6"
+ARG PYTHON_VERSION="3.9"
 
 FROM python:${PYTHON_VERSION}-slim-buster as build
 
