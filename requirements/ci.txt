@@ -16,7 +16,7 @@ cryptography==3.4.6
 decorator==4.4.2
 defusedxml==0.6.0
 django-allauth==0.44.0
-django-autocomplete-light==3.5.1
+django-autocomplete-light==3.8.1
 django-autoslug==1.9.8
 django-braces==1.14.0
 django-coverage-plugin==1.8.0
