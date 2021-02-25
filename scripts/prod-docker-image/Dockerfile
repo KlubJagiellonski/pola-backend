@@ -35,6 +35,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONUNBUFFERED 1
+# hadolint ignore=DL3044
 ENV PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin
 
