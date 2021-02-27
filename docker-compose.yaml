@@ -7,7 +7,7 @@ x-pola-backend-common:
     context: .
     dockerfile: scripts/ci-docker-image/Dockerfile
     args:
-      - DJANGO_VERSION=${DJANGO_VERSION-3.1.6}
+      - DJANGO_VERSION=${DJANGO_VERSION-3.1.7}
       - PYTHON_VERSION=${PYTHON_VERSION-3.9}
   image: pola-backend_web:latest
   environment:
