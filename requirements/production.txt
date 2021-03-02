@@ -38,7 +38,7 @@ jmespath==0.10.0
 jsonfield==3.1.0
 jsonschema==3.2.0
 oauthlib==3.1.0
-Pillow==8.1.0
+Pillow==8.1.1
 psycopg2-binary==2.8.6
 pycparser==2.20
 PyJWT==2.0.1
