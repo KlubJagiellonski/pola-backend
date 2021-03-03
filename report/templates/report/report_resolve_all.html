@@ -1,0 +1,15 @@
+{%extends 'report/base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block breadcrumbs_rows %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
+    <li class="active">{% trans 'Potwierdź rozpatrzenie <b>wszystkich</b> zgłoszeń' %}</li>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">{% trans "Rozpatrz <b>wszystkie</b> zgloszenia" %}</button>
+        <a href="{{ object.get_absolute_url }}" class="btn btn-default">{% trans "Back" %}</a>
+    </form>
+{% endblock %}
