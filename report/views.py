@@ -70,6 +70,5 @@ class ReportResolveAllView(LoginPermissionRequiredMixin, ActionView):
         for i in Report.objects.filter(product=self.object.product):
             i.resolve(self.request.user)
 
-
     def get_success_url(self):
         return self.object.get_absolute_url()
