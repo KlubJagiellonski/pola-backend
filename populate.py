@@ -1,17 +1,21 @@
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE',
-                      'pola.config.settings.local')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pola.config.settings.local')
 
 import django
+
 django.setup()
 
-from company.models import Company
-from product.models import Product
-from report.models import Report
 from company.factories import CompanyFactory
-from report.factories import ReportFactory, ResolvedReportFactory, AttachmentFactory
+from company.models import Company
 from product.factories import ProductFactory
+from product.models import Product
+from report.factories import (
+    AttachmentFactory,
+    ReportFactory,
+    ResolvedReportFactory,
+)
+from report.models import Report
 
 
 def populate():
