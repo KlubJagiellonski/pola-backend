@@ -63,7 +63,7 @@ class ReportResolveView(LoginPermissionRequiredMixin, ActionView):
 class ReportResolveAllView(LoginPermissionRequiredMixin, ActionView):
     permission_required = 'report.change_report'
     model = Report
-    template_name_suffix = '_resolve'
+    template_name_suffix = '_resolve_all'
     queryset = Report.objects.only_open().all()
 
     def action(self):
