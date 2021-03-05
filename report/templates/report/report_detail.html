@@ -73,10 +73,9 @@
     {% endfor %}
 </div>
 {% if perms.report.change_report %}
-    <div class="btn-group">
         {% if object.status == object.OPEN %}
             <a href="{% url 'report:resolve' object.pk %}" class="btn btn-primary"><i class="fa fa-thumbs-o-up"></i> {% trans "Rozpatrz" %}</a>
+            <a href="{% url 'report:resolve-all' object.pk %}" class="btn btn-primary"><i class="fa fa-thumbs-o-up"></i> {% trans "Rozpatrz wszystkie" %}</a>
         {% endif %}
-    </div>
 {% endif %}
 {% endblock content %}

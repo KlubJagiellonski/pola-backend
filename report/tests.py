@@ -106,6 +106,22 @@ class TestReportResolveView(PermissionMixin, TemplateUsedMixin, InstanceMixin, T
         self.assertEqual(Report.objects.get(pk=self.instance.pk).status(), Report.RESOLVED)
 
 
+class TestReportResolveAllView(PermissionMixin, TemplateUsedMixin, InstanceMixin, TestCase):
+    template_name = 'report/report_resolve_all.html'
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('report:resolve-all', kwargs={'pk': self.instance.pk})
+
+    def test_resolve_action(self):
+        self.login()
+        report = Report.objects.get(pk=self.instance.pk)
+        ReportFactory.create_batch(3, product=report.product)
+        response = self.client.post(self.url)
+        self.assertRedirects(response, reverse('report:detail', kwargs={'pk': self.instance.pk}))
+        self.assertEqual(len(Report.objects.only_resolved().filter(product=report.product)), 4)
+
+
 class TestReportQuerySet(TestCase):
     def test_only_open(self):
         self.assertTrue(Report.objects.only_open().filter(pk=ReportFactory().pk).exists())

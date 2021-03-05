@@ -58,3 +58,17 @@ class ReportResolveView(LoginPermissionRequiredMixin, ActionView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+class ReportResolveAllView(LoginPermissionRequiredMixin, ActionView):
+    permission_required = 'report.change_report'
+    model = Report
+    template_name_suffix = '_resolve_all'
+    queryset = Report.objects.only_open().all()
+
+    def action(self):
+        for i in Report.objects.filter(product=self.object.product):
+            i.resolve(self.request.user)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
