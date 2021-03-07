@@ -199,53 +199,6 @@ Próba przed wykonywania migracji
 
 Jeśli wprowadzane są większe zmiany w bazie danych warto wykonać próbe wykorzystujać kopie bazy danych.
 
-1. Stwórz kopie zapasową bazy danych i ją pobierz. Po szczegóły, patrz: `Importing and Exporting Heroku Postgres Databases <https://devcenter.heroku.com/articles/heroku-postgres-import-export>`__
+W tym celu uruchom przepływ pracy `"Migration validation"<https://github.com/KlubJagiellonski/pola-backend/actions/workflows/migration_check.yml>`__ korzystając z twojej gałęzi.
 
-   .. code-block:: bash
-
-    heroku pg:backups:capture --app pola-app
-    heroku pg:backups:download --app pola-app --output /tmp/latest.dump
-
-3. Skasuj wszystkie woluminy podłączone do aktualnej aplikacji:
-
-   .. code-block:: bash
-
-    docker-compose down --volumes
-
-4. Uruchom aplikacje z pustą bazą danych:
-
-   .. code-block:: bash
-
-    docker-compose up postgres
-
-5. Skopiuj kopie bazę danych do kontenera ``postgres`` i wczytaj kopie bazy danych
-
-   .. code-block:: bash
-
-    docker cp /tmp/latest.dump pola-backend_postgres_1:/tmp/latest.dump
-    docker exec -ti pola-backend_postgres_1 \
-        pg_restore \
-            --verbose \
-            --clean \
-            --no-acl \
-            --no-owner \
-            -h localhost \
-            -U pola_app \
-            -d pola_app /tmp/latest.dump
-    docker exec -ti pola-backend_postgres_1 \
-        psql \
-            -U pola_app \
-            -d pola_app \
-            -c "DROP AGGREGATE public.array_agg(anyelement);"
-
-6. Uruchom migracje:
-
-   .. code-block:: bash
-
-    docker-compose run web /app/manage.py migrate
-
-7. Skasuj kopie bazy danych:
-
- .. code-block:: bash
-
-    rm /tmp/latest.dump
+Nie jest wspieranie testowania migracji dla pull-requestów z forków. Kod musi być w naszym repozytorium.
