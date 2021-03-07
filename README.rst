@@ -64,7 +64,7 @@ Zapełnij baze danych przykładowymi danymi:
 
 .. code-block:: bash
 
-    docker-compose run web python populate.py
+    docker-compose run web manage.py populate_db
 
 Warto również utworzyć konto administratora w systemie:
 
