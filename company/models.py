@@ -191,7 +191,7 @@ class Company(models.Model):
                     continue
             if s[0] in ret:
                 if raise_exp:
-                    raise ValidationError('Tytuł odnośnika >{}< występuje' ' więcej niż raz'.format(s[0]))
+                    raise ValidationError(f'Tytuł odnośnika >{s[0]}< występuje więcej niż raz')
                 else:
                     continue
             ret[s[0]] = s[1]

@@ -155,7 +155,7 @@ class TestGetResultFromCode(TestCase):
                 ),
                 "card_type": "type_grey",
                 "code": current_ean,
-                "name": 'Miejsce rejestracji: {}'.format(country),
+                "name": f'Miejsce rejestracji: {country}',
                 "plCapital": None,
                 "plCapital_notes": None,
                 "plNotGlobEnt": None,

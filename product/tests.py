@@ -172,19 +172,19 @@ class TestProductAutocomplete(PermissionMixin, TestCase):
         ProductFactory(id=3, name="A3", companies=[CompanyFactory(official_name="B3Suffix")])
         ProductFactory(id=4, name="A4", companies=[CompanyFactory(common_name="PefixB4Suffix")])
 
-        response = self.client.get("{}?q={}".format(self.url, "A1"))
+        response = self.client.get(f"{self.url}?q=A1")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), self._get_expected_result([('1', 'A1')]))
 
-        response = self.client.get("{}?q={}".format(self.url, "B2"))
+        response = self.client.get(f"{self.url}?q=B2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), self._get_expected_result([('2', 'A2')]))
 
-        response = self.client.get("{}?q={}".format(self.url, "B3"))
+        response = self.client.get(f"{self.url}?q=B3")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), self._get_expected_result([('3', 'A3')]))
 
-        response = self.client.get("{}?q={}".format(self.url, "B4"))
+        response = self.client.get(f"{self.url}?q=B4")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), self._get_expected_result([('4', 'A4')]))
 

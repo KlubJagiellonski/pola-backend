@@ -29,7 +29,7 @@ class SetRemoteAddrFromForwardedFor(MiddlewareMixin):
 
 
 def _get_redirect(new_hostname, request):
-    new_location = '{}://{}{}'.format(request.is_secure() and 'https' or 'http', new_hostname, request.get_full_path())
+    new_location = f"{request.is_secure() and 'https' or 'http'}://{new_hostname}{request.get_full_path()}"
     return HttpResponsePermanentRedirect(new_location)
 
 

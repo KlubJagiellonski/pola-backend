@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         for product in products:
 
-            print("{} (id:{})".format(product['name'].encode('UTF-8') if product['name'] else '', product['id']))
+            print(f"{product['name'].encode('UTF-8') if product['name'] else ''} (id:{product['id']})")
 
             reports = Report.objects.filter(product__id=product['id'], client='krs-bot').order_by('created_at')
 

@@ -48,7 +48,7 @@ class AIPicsPageView(LoginRequiredMixin, PermissionRequiredMixin, BucketMixin, L
 
     def post(self, request):
         action_name = self.request.POST['action']
-        fn = getattr(self, 'action_%s' % action_name, None)
+        fn = getattr(self, f'action_{action_name}', None)
         if fn:
             return fn(request)
 

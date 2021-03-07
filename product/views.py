@@ -121,7 +121,7 @@ class ProductBulkCreate(LoginPermissionRequiredMixin, MessageMixin, FormView):
 
         if failed:
             msg += f"Nie udało się zapisać {len(failed)} produktów.\n"
-            msg += "Niepowodzenia: " + ",".join("{} ({})".format(p, p.code) for p in failed)
+            msg += "Niepowodzenia: " + ",".join(f"{p} ({p.code})" for p in failed)
             self.messages.error(msg, fail_silently=True)
 
         return HttpResponseRedirect(form.cleaned_data['company'].get_absolute_url())

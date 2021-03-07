@@ -45,7 +45,7 @@ class Client:
 
     def get_product_by_gtin(self, code):
         gtin = Client._normalize_gtin(code)
-        url = self.host + "/api/products/{}?aggregation=CREDIBLE".format(gtin)
+        url = self.host + f"/api/products/{gtin}?aggregation=CREDIBLE"
         try:
             resp = self.session.get(url=url, auth=(self.username, self.password), timeout=10)
         except (requests.exceptions.Timeout, urllib3.exceptions.ReadTimeoutError):
