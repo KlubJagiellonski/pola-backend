@@ -67,7 +67,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
 
         c['companies_with_most_open_reports'] = Company.objects.annotate(
             no_of_open_reports=Count('companies__report')
-        ).order_by('no_of_open_reports')
+        ).order_by('no_of_open_reports')[:10]
 
         # Reports
         c['newest_reports'] = Report.objects.only_open().order_by('-created_at')[:10]
