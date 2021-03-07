@@ -26,82 +26,14 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
 
         result['product_id'] = product.id
         stats['was_590'] = code.startswith('590')
-
-        if len(companies) == 1 and not multiple_company_supported:
-            company = companies[0]
-
-            company_data = serialize_company(company)
-            stats['was_plScore'] = bool(get_plScore(company))
-
-            result.update(company_data)
-            stats['was_verified'] = company.verified
-            result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
-        elif len(companies) >= 1 and multiple_company_supported:
-            companies_data = []
-            for company in companies:
-                company_data = serialize_company(company)
-
-                stats['was_plScore'] = all(get_plScore(c) for c in companies)
-                companies_data.append(company_data)
-            if len(companies) > 1:
-                result['name'] = "Marka własna - Sieć Lidl"
-            result['companies'] = companies_data
-        elif len(companies) > 1 and not multiple_company_supported:
-            # Ups. It seems to be an internal code
-            result['name'] = 'Nieobsługiwana aplikacja'
-            result['altText'] = (
-                'Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, aby wyświetlić '
-                'informację.'
+        if len(companies) == 0:
+            handle_unknown_company(code, report, result)
+        elif multiple_company_supported:
+            handle_multiple_companies(companies, result, stats)
+        else:
+            handle_companies_when_multiple_companies_are_not_supported(
+                companies, multiple_company_supported, result, stats
             )
-        elif len(companies) == 0:
-            # we don't know the manufacturer
-            if code.startswith('590'):
-                # the code is registered in Poland, we want more data!
-                result['name'] = "Zgłoś nam ten kod!"
-                result['altText'] = (
-                    "Zeskanowałeś kod, którego nie mamy "
-                    "jeszcze w bazie. Bardzo prosimy o "
-                    "zgłoszenie tego kodu "
-                    "i wysłania zdjęć zarówno "
-                    "kodu kreskowego jak i etykiety z "
-                    "produktu. Z góry dziękujemy!"
-                )
-                result['card_type'] = TYPE_GREY
-                report['text'] = "Bardzo prosimy o zgłoszenie nam tego produktu"
-                report['button_type'] = TYPE_RED
-            elif code.startswith('977') or code.startswith('978') or code.startswith('979'):
-                # this is an ISBN/ISSN/ISMN number
-                # (book, music album or magazine)
-                result['name'] = 'Kod ISBN/ISSN/ISMN'
-                result['altText'] = (
-                    'Zeskanowany kod jest kodem '
-                    'ISBN/ISSN/ISMN dotyczącym książki,  '
-                    'czasopisma lub albumu muzycznego. '
-                    'Wydawnictwa tego typu nie są aktualnie '
-                    'w obszarze zainteresowań Poli.'
-                )
-                report['text'] = "To nie jest książka, czasopismo lub album muzyczny? Prosimy o zgłoszenie"
-            else:
-                # let's try to associate the code with a country
-                for prefix in CODE_PREFIX_TO_COUNTRY.keys():
-                    if code.startswith(prefix):
-                        result['plScore'] = 0
-                        result['card_type'] = TYPE_GREY
-                        result['name'] = 'Miejsce rejestracji: {}'.format(CODE_PREFIX_TO_COUNTRY[prefix])
-                        result['altText'] = (
-                            'Ten produkt został wyprodukowany '
-                            'przez zagraniczną firmę, której '
-                            'miejscem rejestracji jest: {}.'.format(CODE_PREFIX_TO_COUNTRY[prefix])
-                        )
-                        break
-                else:
-                    # Ups. It seems to be an internal code
-                    result['name'] = 'Kod wewnętrzny'
-                    result['altText'] = (
-                        'Zeskanowany kod jest wewnętrznym '
-                        'kodem sieci handlowej. Pola nie '
-                        'potrafi powiedzieć o nim nic więcej'
-                    )
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
         result['name'] = 'Nieprawidłowy kod'
@@ -115,6 +47,87 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
     else:
         result.update({("report_" + k, v) for k, v in report.items()})
     return result, stats, product
+
+
+def handle_companies_when_multiple_companies_are_not_supported(companies, multiple_company_supported, result, stats):
+    if len(companies) == 1:
+        company = companies[0]
+
+        company_data = serialize_company(company)
+        stats['was_plScore'] = bool(get_plScore(company))
+
+        result.update(company_data)
+        stats['was_verified'] = company.verified
+        result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
+    elif len(companies) > 1 and not multiple_company_supported:
+        # Ups. It seems to be an internal code
+        result['name'] = 'Nieobsługiwana aplikacja'
+        result[
+            'altText'
+        ] = 'Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, aby wyświetlić informację.'
+
+
+def handle_multiple_companies(companies, result, stats):
+    companies_data = []
+    for company in companies:
+        company_data = serialize_company(company)
+
+        stats['was_plScore'] = all(get_plScore(c) for c in companies)
+        companies_data.append(company_data)
+    if len(companies) > 1:
+        result['name'] = "Marka własna - Sieć Lidl"
+    result['companies'] = companies_data
+
+
+def handle_unknown_company(code, report, result):
+    # we don't know the manufacturer
+    if code.startswith('590'):
+        # the code is registered in Poland, we want more data!
+        result['name'] = "Zgłoś nam ten kod!"
+        result['altText'] = (
+            "Zeskanowałeś kod, którego nie mamy "
+            "jeszcze w bazie. Bardzo prosimy o "
+            "zgłoszenie tego kodu "
+            "i wysłania zdjęć zarówno "
+            "kodu kreskowego jak i etykiety z "
+            "produktu. Z góry dziękujemy!"
+        )
+        result['card_type'] = TYPE_GREY
+        report['text'] = "Bardzo prosimy o zgłoszenie nam tego produktu"
+        report['button_type'] = TYPE_RED
+    elif code.startswith('977') or code.startswith('978') or code.startswith('979'):
+        # this is an ISBN/ISSN/ISMN number
+        # (book, music album or magazine)
+        result['name'] = 'Kod ISBN/ISSN/ISMN'
+        result['altText'] = (
+            'Zeskanowany kod jest kodem '
+            'ISBN/ISSN/ISMN dotyczącym książki,  '
+            'czasopisma lub albumu muzycznego. '
+            'Wydawnictwa tego typu nie są aktualnie '
+            'w obszarze zainteresowań Poli.'
+        )
+        report['text'] = "To nie jest książka, czasopismo lub album muzyczny? Prosimy o zgłoszenie"
+    else:
+        # let's try to associate the code with a country
+        for prefix in CODE_PREFIX_TO_COUNTRY.keys():
+            if code.startswith(prefix):
+                result['plScore'] = 0
+                result['card_type'] = TYPE_GREY
+                result['name'] = 'Miejsce rejestracji: {}'.format(CODE_PREFIX_TO_COUNTRY[prefix])
+                result['altText'] = (
+                    'Ten produkt został wyprodukowany '
+                    'przez zagraniczną firmę, której '
+                    'miejscem rejestracji jest: {}.'.format(CODE_PREFIX_TO_COUNTRY[prefix])
+                )
+                break
+        else:
+            # Ups. It seems to be an internal code
+            result['name'] = 'Kod wewnętrzny'
+            result['altText'] = (
+                'Zeskanowany kod jest wewnętrznym '
+                'kodem sieci handlowej. Pola nie '
+                'potrafi powiedzieć o nim nic więcej'
+            )
 
 
 def serialize_company(company):
