@@ -26,7 +26,7 @@ class Command(BaseCommand):
         for key in bucket.list():
             s3_files.add(key.name)
 
-        print('Loaded {} S3 files'.format(len(s3_files)))
+        print(f'Loaded {len(s3_files)} S3 files')
 
         startdate = timezone.now() - timedelta(days=int(options["no_of_days_back"]))
         attachments = Attachment.objects.select_related('report').filter(report__created_at__gte=startdate)

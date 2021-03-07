@@ -28,7 +28,7 @@ def send_ai_pics(
     files = []
     i = 1
     for filename in filenames:
-        files.append({'title': '{}'.format(i), 'image_url': filename.split('?')[0].encode('utf-8')})
+        files.append({'title': f'{i}', 'image_url': filename.split('?')[0].encode('utf-8')})
         i += 1
 
     url = 'https://slack.com/api/chat.postMessage?' + urlencode(
@@ -65,7 +65,7 @@ def send_ai_pics_request(product, preview_text):
             'token': settings.SLACK_TOKEN,
             'channel': settings.SLACK_CHANNEL_AI_PICS,
             'username': 'AI pics Requested',
-            'text': 'Product: *{}*\nPreview text: *{}*'.format(product.encode('utf-8'), preview_text.encode('utf-8')),
+            'text': f"Product: *{product.encode('utf-8')}*\nPreview text: *{preview_text.encode('utf-8')}*",
         }
     )
 

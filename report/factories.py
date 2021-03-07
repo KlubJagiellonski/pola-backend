@@ -10,7 +10,7 @@ class ReportFactory(factory.django.DjangoModelFactory):
         model = 'report.Report'
 
     product = factory.SubFactory(ProductFactory)
-    client = factory.sequence(lambda n: "client%s" % n)
+    client = factory.sequence(lambda n: f"client{n}")
     description = factory.fuzzy.FuzzyText()
 
 
@@ -25,5 +25,5 @@ class AttachmentFactory(factory.django.DjangoModelFactory):
 
     report = factory.SubFactory(ReportFactory)
     attachment = factory.django.ImageField(
-        width=200, height=200, filename=factory.sequence(lambda n: "report-%s.png" % n)
+        width=200, height=200, filename=factory.sequence(lambda n: f"report-{n}.png")
     )

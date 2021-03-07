@@ -113,7 +113,7 @@ def handle_unknown_company(code, report, result):
             if code.startswith(prefix):
                 result['plScore'] = 0
                 result['card_type'] = TYPE_GREY
-                result['name'] = 'Miejsce rejestracji: {}'.format(CODE_PREFIX_TO_COUNTRY[prefix])
+                result['name'] = f'Miejsce rejestracji: {CODE_PREFIX_TO_COUNTRY[prefix]}'
                 result['altText'] = (
                     'Ten produkt został wyprodukowany '
                     'przez zagraniczną firmę, której '
@@ -219,7 +219,7 @@ def create_from_api(code, obj, product=None):
             if obj_product_name and product.name != obj_product_name:
                 create_bot_report(
                     product,
-                    "Wg. najnowszego odpytania w bazie ILiM " "nazwa tego produktu to:\"{}\"".format(obj_product_name),
+                    f"Wg. najnowszego odpytania w bazie ILiM nazwa tego produktu to:\"{obj_product_name}\"",
                     check_if_already_exists=not company_created,
                 )
         else:
@@ -249,7 +249,7 @@ def create_from_api(code, obj, product=None):
                 if product.brand.name != obj_brand:
                     create_bot_report(
                         product,
-                        "Wg. najnowszego odpytania w bazie ILiM " "marka tego produktu to:\"{}\"".format(obj_brand),
+                        f"Wg. najnowszego odpytania w bazie ILiM marka tego produktu to:\"{obj_brand}\"",
                         check_if_already_exists=True,
                     )
             else:
@@ -307,7 +307,7 @@ def shareholders_to_str(krs, id, indent):
     for wspolnik in wspolnicy:
         udzialy_wartosc = wspolnik.get('udzialy_wartosc', None)
         if udzialy_wartosc is None:
-            str += '{}* {} -------\n'.format(indent, wspolnik['nazwa'])
+            str += f"{indent}* {wspolnik['nazwa']} -------\n"
         else:
             str += '{}* {} {}/{} {:.0f}%\n'.format(
                 indent,

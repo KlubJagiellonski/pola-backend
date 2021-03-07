@@ -442,7 +442,7 @@ def create_report_internal(request, extra_comma=False):
 
 
 def attach_file_internal(report, file_ext, mime_type):
-    object_name = '{}/{}.{}'.format(str(report.id), str(uuid.uuid1()), file_ext)
+    object_name = f'{str(report.id)}/{str(uuid.uuid1())}.{file_ext}'
 
     signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_BUCKET_NAME)
 

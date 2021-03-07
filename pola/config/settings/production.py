@@ -98,7 +98,7 @@ redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '{}:{}'.format(redis_url.hostname, redis_url.port),
+        'LOCATION': f'{redis_url.hostname}:{redis_url.port}',
         'OPTIONS': {'DB': 0, 'PASSWORD': redis_url.password},
     }
 }

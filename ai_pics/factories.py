@@ -9,7 +9,7 @@ class AIPicsFactory(factory.django.DjangoModelFactory):
         model = 'ai_pics.AIPics'
 
     product = factory.SubFactory(ProductFactory)
-    client = factory.sequence(lambda n: "client%s" % n)
+    client = factory.sequence(lambda n: f"client{n}")
     created_at = factory.lazy_attribute(lambda o: timezone.now())
 
     original_width = 800
@@ -18,7 +18,7 @@ class AIPicsFactory(factory.django.DjangoModelFactory):
     width = 800
     height = 800
 
-    device_name = factory.sequence(lambda n: "client%s" % n)
+    device_name = factory.sequence(lambda n: f"client{n}")
     flash_used = factory.sequence(lambda n: n % 2 == 0)
     was_portrait = factory.sequence(lambda n: n % 3 == 0)
 
@@ -30,6 +30,4 @@ class AIAttachmentFactory(factory.django.DjangoModelFactory):
         model = 'ai_pics.AIAttachment'
 
     ai_pics = factory.SubFactory(AIPicsFactory)
-    attachment = factory.django.ImageField(
-        width=200, height=200, filename=factory.sequence(lambda n: "client%s.png" % n)
-    )
+    attachment = factory.django.ImageField(width=200, height=200, filename=factory.sequence(lambda n: f"client{n}.png"))

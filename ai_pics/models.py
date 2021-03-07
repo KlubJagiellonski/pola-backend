@@ -83,7 +83,7 @@ class AIAttachment(models.Model):
         return basename(self.attachment.name)
 
     def __str__(self):
-        return "%s" % (self.filename)
+        return f"{self.filename}"
 
     def get_absolute_url(self):
         return self.attachment.url

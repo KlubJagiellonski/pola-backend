@@ -46,13 +46,12 @@ repos:
     rev: v2.10.0
     hooks:
       - id: pyupgrade
-        args: [--py3-plus]
-        language_version: "python3.7"
+        args: ['--py38-plus']
   - repo: https://github.com/psf/black
     rev: '20.8b1'
     hooks:
       - id: black
-        args: ["--line-length", "120", "--skip-string-normalization", "--target-version", "py37"]
+        args: ["--line-length", "120", "--skip-string-normalization", "--target-version", "py38"]
         language_version: python3.7
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.7.1
@@ -76,6 +75,13 @@ repos:
       - id: flake8
   - repo: local
     hooks:
+      - id: flynt
+        name: Convert to f-strings with flynt
+        entry: flynt
+        language: python
+        language_version: python3
+        additional_dependencies: ['flynt']
+        files: \.py$
       - id: yamllint
         name: Check yaml files with yamllint
         entry: yamllint -c yamllint-config.yml

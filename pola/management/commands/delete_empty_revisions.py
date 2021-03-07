@@ -15,7 +15,7 @@ class Command(BaseCommand):
         companies = Company.objects.filter(pk__gte=options["last_company_id"]).order_by('id')
         for company in companies:
             if company.name:
-                print("{} (id:{})".format(company.name.encode('UTF-8'), company.id))
+                print(f"{company.name.encode('UTF-8')} (id:{company.id})")
             versions = (
                 Version.objects.filter(
                     object_id=company.pk,

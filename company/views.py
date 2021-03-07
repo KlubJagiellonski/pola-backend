@@ -55,7 +55,7 @@ class CompanyCreateFromKRSView(LoginPermissionRequiredMixin, FormView):
         q = QueryDict('', mutable=True)
         q['official_name'] = company['nazwa']
         q['common_name'] = company['nazwa_skrocona']
-        q['sources'] = "Dane z KRS|%s" % company['url']
+        q['sources'] = f"Dane z KRS|{company['url']}"
         q['nip'] = company['nip']
         q['address'] = company['adres']
 

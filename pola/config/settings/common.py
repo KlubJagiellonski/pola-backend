@@ -301,11 +301,11 @@ AI_SHARED_SECRET = env('AI_SHARED_SECRET')  # noqa: F405
 # URL that handles the media served from MEDIA_ROOT, used for managing
 # stored files.
 if AWS_S3_ENDPOINT_URL:
-    MEDIA_URL = 'https://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
+    MEDIA_URL = f'https://s3.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/'
 else:
-    MEDIA_URL = 'http://localhost:9000/%s/' % AWS_STORAGE_BUCKET_NAME
+    MEDIA_URL = f'http://localhost:9000/{AWS_STORAGE_BUCKET_NAME}/'
 
 # Static Assets
 # ------------------------
 STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
-STATIC_URL = 'http://localhost:9000/static/%s/' % AWS_STORAGE_BUCKET_NAME
+STATIC_URL = f'http://localhost:9000/static/{AWS_STORAGE_BUCKET_NAME}/'
