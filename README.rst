@@ -60,6 +60,12 @@ Poczatkowo baza jest pusta, wiec konieczne jest przeprowadzenie migracji:
 
     docker-compose run web migrate
 
+Zapełnij baze danych przykładowymi danymi:
+
+.. code-block:: bash
+
+    docker-compose run web manage.py populate_db
+
 Warto również utworzyć konto administratora w systemie:
 
 .. code-block:: bash
