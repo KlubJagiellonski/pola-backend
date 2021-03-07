@@ -36,6 +36,7 @@ class Product(models.Model):
     code = models.CharField(
         max_length=20, db_index=True, verbose_name="Kod", unique=True, validators=[validators.validate_integer]
     )
+    company = models.ForeignKey(Company, null=True, blank=True, verbose_name="Producent", on_delete=models.CASCADE)
     companies = models.ManyToManyField(Company, verbose_name="Producenci", related_name='companies')
     brand = models.ForeignKey(Brand, null=True, blank=True, verbose_name="Marka produktu", on_delete=models.CASCADE)
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)

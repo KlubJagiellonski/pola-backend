@@ -99,9 +99,9 @@ def get_image(request, code):
 class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',
-        'companies__name__icontains',
-        'companies__official_name__icontains',
-        'companies__common_name__icontains',
+        'company__name__icontains',
+        'company__official_name__icontains',
+        'company__common_name__icontains',
     ]
     model = Product
 
