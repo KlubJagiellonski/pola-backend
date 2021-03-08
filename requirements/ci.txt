@@ -41,7 +41,7 @@ future==0.18.2
 gtin==0.1.13
 idna==2.10
 importlib-metadata==3.7.2
-ipdb==0.13.4
+ipdb==0.13.5
 ipython==7.16.1
 ipython-genutils==0.2.0
 jedi==0.18.0
