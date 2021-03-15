@@ -22,11 +22,16 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
     if code.isdigit() and (len(code) == 8 or len(code) == 13):
         # code is EAN8 or EAN13
         product = get_by_code(code)
-        companies = sorted(list(product.companies.all()), key=lambda d: d.pk)
-
+        product_company = product.company
+        brand_company = product.brand.company if product.brand else None
+        companies = []
+        if product_company:
+            companies.append(product_company)
+        if brand_company:
+            companies.append(brand_company)
         result['product_id'] = product.id
         stats['was_590'] = code.startswith('590')
-        if len(companies) == 0:
+        if not product_company:
             handle_unknown_company(code, report, result)
         elif multiple_company_supported:
             handle_multiple_companies(companies, result, stats)

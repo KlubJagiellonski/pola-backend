@@ -75,7 +75,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEE",
         )
-        p = ProductFactory.create(code=5900049011829, companies=[c])
+        p = ProductFactory.create(code=5900049011829, company=c, brand=None)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
 
         self.assertEqual(200, response.status_code, response.content)
@@ -155,7 +155,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             plNotGlobEnt_notes="EEE",
         )
 
-        p = ProductFactory.create(code=5900049011829, companies=[c1, c2])
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
         self.maxDiff = None
@@ -345,7 +345,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEE",
         )
-        p = ProductFactory.create(code=5900049011829, companies=[c])
+        p = ProductFactory.create(code=5900049011829, company=c, brand=None)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
         self.maxDiff = None
@@ -417,7 +417,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
             plNotGlobEnt_notes="EEE",
         )
 
-        p = ProductFactory.create(code=5900049011829, companies=[c1, c2])
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
         self.assertEqual(
@@ -540,7 +540,7 @@ class TestGetByCodeV2(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEEE",
         )
-        p = ProductFactory.create(code=5900049011829, companies=[c])
+        p = ProductFactory.create(code=5900049011829, company=c, brand=None)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code)
 

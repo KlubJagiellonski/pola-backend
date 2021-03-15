@@ -139,10 +139,10 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['report_list'] = Report.objects.only_open().filter(product__companies__in=[self.get_object()])
+        context['report_list'] = Report.objects.only_open().filter(product__company=self.get_object())
 
         context['brand_list'] = Brand.objects.filter(company=self.get_object())
-        context['product_list'] = Product.objects.filter(companies__in=[self.get_object()])
+        context['product_list'] = Product.objects.filter(company=self.get_object())
 
         return context
 

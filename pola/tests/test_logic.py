@@ -12,6 +12,8 @@ TEST_EAN13 = "5900084231145"
 
 
 class TestGetResultFromCode(TestCase):
+    maxDiff = None
+
     def test_should_return_empty_message_on_invalid_code(self):
         self.maxDiff = None
         response = get_result_from_code("ABC")
@@ -52,7 +54,7 @@ class TestGetResultFromCode(TestCase):
 
     @mock.patch("pola.logic.get_by_code")
     def test_missing_company_and_590(self, mock_get_by_code):
-        product = ProductFactory.create(code=TEST_EAN13)
+        product = ProductFactory.create(code=TEST_EAN13, company=None, brand=None)
         mock_get_by_code.return_value = product
         response = get_result_from_code(TEST_EAN13)
 
@@ -90,7 +92,7 @@ class TestGetResultFromCode(TestCase):
     @parameterized.expand([("977",), ('978',), ('979',)])
     def test_missing_company_and_book(self, prefix):
         current_ean = prefix + TEST_EAN13[3:]
-        product = ProductFactory.create(code=current_ean)
+        product = ProductFactory.create(code=current_ean, company=None, brand=None)
 
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
@@ -142,7 +144,7 @@ class TestGetResultFromCode(TestCase):
     )
     def test_missing_company_and_wrong_country(self, prefix, country):
         current_ean = prefix + TEST_EAN13[3:]
-        product = ProductFactory.create(code=current_ean)
+        product = ProductFactory.create(code=current_ean, company=None, brand=None)
 
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
@@ -181,7 +183,7 @@ class TestGetResultFromCode(TestCase):
     def test_internal_code(self):
         prefix = "000"
         current_ean = prefix + TEST_EAN13[3:]
-        product = ProductFactory.create(code=current_ean)
+        product = ProductFactory.create(code=current_ean, company=None, brand=None)
 
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
@@ -221,7 +223,7 @@ class TestGetResultFromCode(TestCase):
     def test_code_with_one_company(self):
         current_ean = TEST_EAN13
         company = CompanyFactory.create(description='test-description')
-        product = ProductFactory.create(code=current_ean, companies=[company])
+        product = ProductFactory.create(code=current_ean, company=company, brand=None)
 
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
@@ -263,7 +265,7 @@ class TestGetResultFromCode(TestCase):
         company1 = CompanyFactory.create(name='test-company1', description='test-description')
         company2 = CompanyFactory.create(name='test-company2', description='test-description')
 
-        product = ProductFactory.create(code=current_ean, companies=[company1, company2])
+        product = ProductFactory.create(code=current_ean, company=company1, brand__company=company2)
 
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)

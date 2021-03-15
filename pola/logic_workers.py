@@ -33,7 +33,7 @@ def requery_590_codes():
     print("Starting requering 590 codes...")
 
     p590 = Product.objects.filter(
-        companies__isnull=True,
+        company__isnull=True,
         code__startswith='590',
         ilim_queried_at__lt=timezone.now() - timedelta(days=REQUERY_590_FREQUENCY),
     ).order_by('-query_count')[:REQUERY_590_LIMIT]

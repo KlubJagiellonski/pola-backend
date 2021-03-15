@@ -43,18 +43,18 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
             'order by no_of_open_reports desc limit 10'
         )
 
-        c['most_popular_590_products'] = Product.objects.filter(
-            companies__isnull=True, code__startswith='590'
-        ).order_by('-query_count')[:10]
+        c['most_popular_590_products'] = Product.objects.filter(company__isnull=True, code__startswith='590').order_by(
+            '-query_count'
+        )[:10]
 
-        c['no_of_590_products'] = Product.objects.filter(companies__isnull=True, code__startswith='590').count()
+        c['no_of_590_products'] = Product.objects.filter(company__isnull=True, code__startswith='590').count()
 
         c['most_popular_not_590_products'] = (
-            Product.objects.filter(companies__isnull=True).exclude(code__startswith='590').order_by('-query_count')[:10]
+            Product.objects.filter(company__isnull=True).exclude(code__startswith='590').order_by('-query_count')[:10]
         )
 
         c['no_of_not_590_products'] = (
-            Product.objects.filter(companies__isnull=True).exclude(code__startswith='590').count()
+            Product.objects.filter(company__isnull=True).exclude(code__startswith='590').count()
         )
 
         c['companies_by_name_length'] = (

@@ -134,9 +134,7 @@ class Company(models.Model):
                 SET query_count =
                   (SELECT coalesce(sum(query_count), 0)
                    FROM product_product
-                   INNER JOIN product_product_companies ON product_product_companies.product_id = product_product.id
-                   WHERE company_company.id = product_product_companies.company_id)
-
+                   WHERE company_company.id = product_product.company_id)
                 """
                 )
             )
