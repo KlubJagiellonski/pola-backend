@@ -40,7 +40,7 @@ flake8==3.8.4
 future==0.18.2
 gtin==0.1.13
 idna==2.10
-importlib-metadata==3.7.2
+importlib-metadata==3.7.3
 ipdb==0.13.4
 ipython==7.16.1
 ipython-genutils==0.2.0
