@@ -121,7 +121,105 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             json.loads(response.content),
         )
 
-    def test_should_return_200_when_multiple_product(self):
+    def test_should_return_200_when_multiple_companies(self):
+        c1 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+        c2 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": 'Marka własna - Sieć Lidl',
+                "card_type": "type_white",
+                "altText": None,
+                "report": {
+                    "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                    "button_text": "Zg\u0142o\u015b",
+                    "button_type": "type_white",
+                },
+                "companies": [
+                    {
+                        "name": c1.official_name,
+                        "plCapital": 100,
+                        "plCapital_notes": "AAA",
+                        "plWorkers": 0,
+                        "plWorkers_notes": "BBB",
+                        "plRnD": 100,
+                        "plRnD_notes": "CCC",
+                        "plRegistered": 100,
+                        "plRegistered_notes": "DDD",
+                        "plNotGlobEnt": 100,
+                        "plNotGlobEnt_notes": "EEE",
+                        "plScore": 70,
+                        "is_friend": True,
+                        "friend_text": "To jest przyjaciel Poli",
+                        "description": "TEST",
+                        "sources": {"TEST": "BBBB"},
+                    },
+                    {
+                        "name": c2.official_name,
+                        "plCapital": 100,
+                        "plCapital_notes": "AAA",
+                        "plWorkers": 0,
+                        "plWorkers_notes": "BBB",
+                        "plRnD": 100,
+                        "plRnD_notes": "CCC",
+                        "plRegistered": 100,
+                        "plRegistered_notes": "DDD",
+                        "plNotGlobEnt": 100,
+                        "plNotGlobEnt_notes": "EEE",
+                        "plScore": 70,
+                        "is_friend": True,
+                        "friend_text": "To jest przyjaciel Poli",
+                        "description": "TEST",
+                        "sources": {"TEST": "BBBB"},
+                    },
+                ],
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Wspieraj aplikacj\u0119 Pola",
+                },
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_multiple_(self):
         c1 = CompanyFactory(
             plCapital=100,
             plWorkers=0,
@@ -383,7 +481,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
             json.loads(response.content),
         )
 
-    def test_should_return_200_when_multiple_product(self):
+    def test_should_return_200_when_one_comand_in_brand_and_product(self):
         c1 = CompanyFactory(
             plCapital=100,
             plWorkers=0,
@@ -400,55 +498,41 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEE",
         )
-        c2 = CompanyFactory(
-            plCapital=100,
-            plWorkers=0,
-            plRnD=100,
-            plRegistered=100,
-            plNotGlobEnt=100,
-            description="TEST",
-            sources="TEST|BBBB",
-            verified=True,
-            is_friend=True,
-            plCapital_notes="AAA",
-            plWorkers_notes="BBB",
-            plRnD_notes="CCC",
-            plRegistered_notes="DDD",
-            plNotGlobEnt_notes="EEE",
-        )
 
-        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c1)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
         self.assertEqual(
             {
-                "product_id": p.id,
-                "code": "5900049011829",
-                "name": "Nieobs\u0142ugiwana aplikacja",
-                "card_type": "type_white",
-                "plScore": None,
-                "altText": (
-                    "Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, "
-                    "aby wy\u015bwietli\u0107 informacj\u0119."
-                ),
-                "plCapital": None,
-                "plCapital_notes": None,
-                "plWorkers": None,
-                "plWorkers_notes": None,
-                "plRnD": None,
-                "plRnD_notes": None,
-                "plRegistered": None,
-                "plRegistered_notes": None,
-                "plNotGlobEnt": None,
-                "plNotGlobEnt_notes": None,
-                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
-                "report_button_text": "Zg\u0142o\u015b",
-                "report_button_type": "type_white",
-                "donate": {
-                    "show_button": True,
-                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-                    "title": "Wspieraj aplikacj\u0119 Pola",
+                'altText': None,
+                'card_type': 'type_white',
+                'code': '5900049011829',
+                'description': 'TEST',
+                'donate': {
+                    'show_button': True,
+                    'title': 'Wspieraj aplikację Pola',
+                    'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
                 },
+                'friend_text': 'To jest przyjaciel Poli',
+                'is_friend': True,
+                'name': 'company_official_125',
+                'plCapital': 100,
+                'plCapital_notes': 'AAA',
+                'plNotGlobEnt': 100,
+                'plNotGlobEnt_notes': 'EEE',
+                'plRegistered': 100,
+                'plRegistered_notes': 'DDD',
+                'plRnD': 100,
+                'plRnD_notes': 'CCC',
+                'plScore': 70,
+                'plWorkers': 0,
+                'plWorkers_notes': 'BBB',
+                'product_id': p.pk,
+                'report_button_text': 'Zgłoś',
+                'report_button_type': 'type_white',
+                'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+                'sources': {'TEST': 'BBBB'},
             },
             json.loads(response.content),
         )
