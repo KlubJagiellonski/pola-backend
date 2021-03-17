@@ -273,8 +273,8 @@ class TestGetResultFromCode(TestCase):
         expected_response = (
             {
                 'altText': (
-                    'Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, aby wyświetlić '
-                    'informację.'
+                    "Testujemy now\u0105 wersj\u0119 aplikacji. Przepraszamy za niedogodno\u015bci, "
+                    "prosimy o cierpliwo\u015b\u0107."
                 ),
                 'card_type': 'type_white',
                 'code': '5900084231145',

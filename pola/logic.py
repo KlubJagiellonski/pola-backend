@@ -29,6 +29,7 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
             companies.append(product_company)
         if brand_company:
             companies.append(brand_company)
+        companies = list(({c.pk: c for c in companies}).values())
         result['product_id'] = product.id
         stats['was_590'] = code.startswith('590')
         if not product_company:
@@ -67,9 +68,7 @@ def handle_companies_when_multiple_companies_are_not_supported(companies, multip
     elif len(companies) > 1 and not multiple_company_supported:
         # Ups. It seems to be an internal code
         result['name'] = 'Nieobsługiwana aplikacja'
-        result[
-            'altText'
-        ] = 'Niestety korzystasz z nieaktualnej wersji aplikacji. Zaktualizuj aplikacje, aby wyświetlić informację.'
+        result['altText'] = "Testujemy nową wersję aplikacji. Przepraszamy za niedogodności, prosimy o cierpliwość."
 
 
 def handle_multiple_companies(companies, result, stats):
