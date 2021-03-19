@@ -1,5 +1,6 @@
 import django_filters
 from dal import autocomplete
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from company.models import Company
@@ -24,6 +25,13 @@ class StatusFilter(django_filters.ChoiceFilter):
         return qs
 
 
+def is_bot_client(queryset, name, value):
+    if value:
+        return queryset.filter(client='krs-bot')
+    else:
+        return queryset.filter(~Q(client='krs-bot'))
+
+
 class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
     status = StatusFilter()
     product = django_filters.ModelChoiceFilter(
@@ -31,6 +39,9 @@ class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
     )
     product__company = django_filters.ModelChoiceFilter(
         queryset=Company.objects.all(), widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
+    )
+    is_bot_client = django_filters.BooleanFilter(
+        field_name='client', method=is_bot_client, label='Pokaż zgłoszenia od bota'
     )
 
     class Meta:

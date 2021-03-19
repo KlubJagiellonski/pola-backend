@@ -12,11 +12,12 @@
             <ul>
             {% for obj in object_list %}
                 <li>
-                    <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
-                    {% if obj.attachment_count %}
-                        <div class="badge badge-info">{{ obj.attachment_count }}</div>
-                    {% endif %}
-                </li>
+                        {% if obj.client == 'krs-bot' %}
+                            <a class="text-warning" href="{{ obj.get_absolute_url }}">{{ obj }}</a>
+                        {% else %}
+                            <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
+                        {% endif %}
+</li>
             {% empty %}
                 <li>{% trans "Nie znaleziono zgłoszeń spełniających te kryteria" %}.</li>
             {% endfor %}
