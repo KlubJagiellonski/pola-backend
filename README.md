@@ -39,6 +39,6 @@ Więcej informacji można znaleźć w sekcji dotyczącej [wdrożenia (ang. deplo
 
 ## Wiecej informacji
 
-Możesz dowiedzieć się więcej w [dokuemntacji "Create React App"](https://facebook.github.io/create-react-app/docs/getting-started).
+Możesz dowiedzieć się więcej w [dokumentacji "Create React App"](https://facebook.github.io/create-react-app/docs/getting-started).
 
 Aby nauczyć się Reacta, czytaj [dokumentacja React](https://reactjs.org/).
