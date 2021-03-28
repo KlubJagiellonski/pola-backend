@@ -8,6 +8,8 @@ from company.factories import CompanyFactory
 from company.models import Company
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
+from product.factories import ProductFactory
+from product.models import Product
 
 
 class TemplateUsedMixin:
@@ -155,3 +157,43 @@ class TestCompanyListView(PermissionMixin, TemplateUsedMixin, WebTestMixin, Test
 
 class CompanyAutocomplete(PermissionMixin, TestCase):
     url = reverse_lazy('company:company-autocomplete')
+
+
+class TestCompanyMoveProducts(InstanceMixin, PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
+    url = reverse_lazy('company:move-products')
+    template_name = 'company/company_move_products.html'
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('company:move-products', kwargs={'pk': self.instance.pk})
+        self.company = CompanyFactory()
+
+    def test_same_company(self):
+        self.login()
+        self.url = reverse('company:move-products', kwargs={'pk': self.instance.pk})
+        page = self.client.post(self.url, data={"new_company": self.instance.pk}, follow=True)
+        messages = list(page.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertEqual(messages[0].message, 'Nie można przenieść produktów do tej samej firmy!')
+
+    def test_no_products(self):
+        self.login()
+        self.url = reverse('company:move-products', kwargs={'pk': self.instance.pk})
+        Product.objects.filter(company=self.instance.pk).delete()
+        page = self.client.post(self.url, data={"new_company": self.company.pk}, follow=True)
+        messages = list(page.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertEqual(messages[0].message, 'Ta firma nie ma żadnych produktów!')
+
+    def test_success(self):
+        for i in range(2):
+            ProductFactory(company=self.company)
+        count = Product.objects.filter(company=self.company).count()
+        self.login()
+        self.url = reverse('company:move-products', kwargs={'pk': self.company.pk})
+        page = self.client.post(self.url, data={"new_company": self.instance.pk}, follow=True)
+        messages = list(page.context['messages'])
+        self.assertEqual(1, len(messages))
+        self.assertEqual(count, Product.objects.filter(company=self.instance.pk).count())
+        self.assertEqual(0, Product.objects.filter(company=self.company).count())
+        self.assertEqual(messages[0].message, f"Przeniesiono {count} produktów!")

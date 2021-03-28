@@ -1,0 +1,15 @@
+{%extends 'company/base.html' %}
+
+{% load crispy_forms_tags i18n %}
+
+{% block breadcrumbs_rows %}
+    {% if object %}
+        <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
+    {% endif %}
+    <li class="active">{% trans 'Przenieś produkty' %}</li>
+{% endblock %}
+
+
+{% block content %}
+    {% crispy form %}
+{% endblock content %}
