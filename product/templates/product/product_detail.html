@@ -36,45 +36,53 @@
             <tr>
                 <td>{% trans "Kod: " %}</td><td>{{ object.code }}</td>
             </tr>
-            {% if object.companies %}
             <tr>
-                <td>{% trans "Producenci" %}</td>
+                <td>{% trans "Producent" %}</td>
                 <td>
-                {% for company in object.companies.all %}
-                    <div class="panel panel-default">
-                        <table class="table" style="margin-bottom: 10px">
-                            <tbody>
-                            <tr>
-                                <td>{% trans "NIP producenta: " %}</td><td>{{ company.nip }} </td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Nazwa producenta: " %}</td>
-                                <td>
-                                    {% if perms.company.view_company %}<a href="{{ company.get_absolute_url }}"> {% endif %}
-                                    {{ company }}
-                                    {% if perms.company.view_company %}</a>{% endif %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{% trans "Adres producenta: " %}</td><td>{{ company.address }} </td>
-                            </tr>
-                            </tbody>
+                    {% if object.company %}
+                        <div class="panel panel-default">
+                            <table class="table" style="margin-bottom: 10px">
+                                <tbody>
+                                <tr>
+                                    <td>{% trans "NIP producenta: " %}</td><td>{{ object.company.nip }} </td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "Nazwa producenta: " %}</td>
+                                    <td>
+                                        {% if perms.company.view_company %}<a href="{{ object.company.get_absolute_url }}"> {% endif %}
+                                        {{ object.company }}
+                                        {% if perms.company.view_company %}</a>{% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "Adres producenta: " %}</td><td>{{ object.company.address }} </td>
+                                </tr>
+                                </tbody>
 
-                        </table>
-                    </div>
-            {% endfor %}
-            </td>
-        </tr>
-        {% else %}
-            <tr>
-                <td>{% trans "Producenci" %}</td>
-                <td>
-                    {% if perms.product.change_product %}
-                        <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+                            </table>
+                        </div>
+                    {% else %}
+                        {% if perms.product.change_product %}
+                            <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
-        {% endif %}
+            <tr>
+                <td>{% trans "Marka" %}</td>
+                <td>
+                    {% if object.brand %}
+                        {% if perms.company.view_brand %}<a href="{{ object.brand.get_absolute_url }}"> {% endif %}
+                        {{ object.brand }}
+                        {% if perms.company.view_brand %}</a>{% endif %}
+
+                    {% else %}
+                    {% if perms.product.change_product %}
+                    <a href="{% url 'product:edit' product.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+                    {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
         </table>
     </div>
 
@@ -87,7 +95,7 @@
                         <h3 class="panel-title">Zgłoszenia:</h3>
                     </div>
                     {% if report_list %}
-                    <ul class="list-group">
+                       <ul class="list-group">
                         {% for report in report_list %}
                                 {% if report.client == 'krs-bot' %}
                                     <li class="list-group-item"><a class="text-warning"
@@ -100,9 +108,9 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <div class="panel-body">
-                        {% trans "Nie ma żadnych zgłoszeń" %}
-                    </div>
+                        <div class="panel-body">
+                            {% trans "Nie ma żadnych zgłoszeń" %}
+                        </div>
                     {% endif %}
                 </div>
             </div>

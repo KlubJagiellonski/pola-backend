@@ -21,8 +21,11 @@ from .models import Product
 class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
     class Meta:
         model = models.Product
-        fields = ['code', 'name', 'code', 'companies']
-        widgets = {'companies': autocomplete.ModelSelect2Multiple(url='company:company-autocomplete')}
+        fields = ['code', 'name', 'code', 'company', 'brand']
+        widgets = {
+            'company': autocomplete.ModelSelect2(url='company:company-autocomplete'),
+            'brand': autocomplete.ModelSelect2(url='company:brand-autocomplete'),
+        }
 
 
 class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
@@ -96,10 +99,11 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
             p = product_by_code.get(code)
             changed = False
             if p is None:
-                p = Product(code=code, name=name)
+                p = Product(code=code, name=name, company=company)
                 changed = True
             else:
-                if p.companies.count() == 0:
+                if p.company is None:
+                    p.company = company
                     changed = True
                 if not p.name:
                     p.name = row['name']
@@ -109,7 +113,6 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
                 continue
             try:
                 p.save(commit_desc="Bulk import")
-                p.companies.add(company)
                 success.append(p)
             except IntegrityError:
                 failed.append(p)

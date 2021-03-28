@@ -93,7 +93,7 @@ class TestProductUpdateWeb(PermissionMixin, TestCase):
             data={
                 'code': self.instance.code,
                 'name': "New name",
-                'companies': self.company.pk,
+                'company': self.company.pk,
                 'commit_desc': "Commit description",
                 'action': 'Save',
             },
@@ -115,7 +115,7 @@ class TestProductUpdateWeb(PermissionMixin, TestCase):
             data={
                 'code': self.instance.code,
                 'name': "New name",
-                'companies': self.company.pk,
+                'company': self.company.pk,
                 'commit_desc': "",
                 'action': 'Save',
             },
@@ -168,9 +168,9 @@ class TestProductAutocomplete(PermissionMixin, TestCase):
     def test_filters(self):
         self.login()
         ProductFactory(id=1, name="A1")
-        ProductFactory(id=2, name="A2", companies=[CompanyFactory(name="PrefixB2")])
-        ProductFactory(id=3, name="A3", companies=[CompanyFactory(official_name="B3Suffix")])
-        ProductFactory(id=4, name="A4", companies=[CompanyFactory(common_name="PefixB4Suffix")])
+        ProductFactory(id=2, name="A2", company=CompanyFactory(name="PrefixB2"))
+        ProductFactory(id=3, name="A3", company=CompanyFactory(official_name="B3Suffix"))
+        ProductFactory(id=4, name="A4", company=CompanyFactory(common_name="PefixB4Suffix"))
 
         response = self.client.get(f"{self.url}?q=A1")
         self.assertEqual(response.status_code, 200)
@@ -218,17 +218,16 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
         )
         messages = list(page.context['messages'])
         self.assertEqual(1, len(messages))
-        self.assertTrue(Product.objects.filter(companies__id=self.company.pk, name="P1", code=123).exists())
-        self.assertTrue(Product.objects.filter(companies__id=self.company.pk, name="P2", code=456).exists())
+        self.assertTrue(Product.objects.filter(company__id=self.company.pk, name="P1", code=123).exists())
+        self.assertTrue(Product.objects.filter(company__id=self.company.pk, name="P2", code=456).exists())
         self.assertEqual(messages[0].message, 'Zapisano 2 produktów,\n')
 
     def test_display_should_dont_update_duplicates(self):
         self.login()
-        p = Product(name="P1", code=123)
+        p = Product(name="P1", code=123, company=self.company)
         p.save()
-        p.companies.add(self.company)
         self.client.post(self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nXXXXX\t123"})
-        self.assertTrue(Product.objects.filter(companies__id=self.company.pk, name="P1", code=123).exists())
+        self.assertTrue(Product.objects.filter(company__id=self.company.pk, name="P1", code=123).exists())
 
     @parameterized.expand(
         [
@@ -270,9 +269,8 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
 
     def test_duplicate_code(self):
         self.login()
-        p = Product(name="P1", code=123)
+        p = Product(name="P1", code=123, company=self.company)
         p.save()
-        p.companies.add(self.company)
 
         response = self.client.post(
             self.url, user=self.user, data={'company': self.company.pk, 'rows': "name\tcode\nP1\t123"}, follow=True

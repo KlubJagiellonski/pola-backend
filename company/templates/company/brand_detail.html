@@ -28,11 +28,30 @@
     <div class="panel-heading">{% trans "Data metric" %}</div>
     <table class="table">
         {% for field in fields %}
-        <tr>
-            <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
-        </tr>
+            <tr>
+                <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
+            </tr>
         {% endfor %}
     </table>
 </div>
 
+<div class="row">
+    {% if perms.product.view_product %}
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Produkowane produkty</h3>
+            </div>
+            <ul class="list-group">
+                {% for product in object.product_set.all %}
+                    <li class="list-group-item">
+                        <a href="{{ product.get_absolute_url }}">{{ product }}</a>
+                    </li>
+                {% empty%}
+                    <li class="list-group-item">{% trans "Nie ma żadnych produktów" %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
 {% endblock content %}
