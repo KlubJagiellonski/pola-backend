@@ -4,3 +4,5 @@ export const theme = {
   border: '#A0A0A0',
   text: '#6C6C6C',
 };
+
+export const pageWidth = '1152px';

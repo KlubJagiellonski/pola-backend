@@ -1,21 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import Logo from './../assets/logo.png';
-import SocialFooter from './../assets/SocialFooter.png';
-
+import SocialFooter from '../assets/SocialFooter.png';
 import { theme } from '../styles/theme';
+import { PolaLogo } from './Pola-Logo';
 
-export const Footer = styled.footer`
+export const FooterContainer = styled.footer`
   display: flex;
   flex-flow: row nowrap;
-  width: 100%;
+
   background-color: ${theme.dark};
   padding: 20px 0px;
   justify-content: center;
-`;
-
-export const LogoImage = styled.img`
-  margin-right: 100px;
 `;
 
 export const Section = styled.div`
@@ -50,9 +45,9 @@ export const Section = styled.div`
 
 export const PageFooter = () => {
   return (
-    <Footer>
+    <FooterContainer>
       <div>
-        <LogoImage src={Logo} />
+        <PolaLogo />
       </div>
       <Section>
         <p className="title">Informacje</p>
@@ -81,6 +76,6 @@ export const PageFooter = () => {
           <img className="social-image" src={SocialFooter}></img>
         </div>
       </Section>
-    </Footer>
+    </FooterContainer>
   );
 };
