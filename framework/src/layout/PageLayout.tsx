@@ -13,7 +13,7 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { PageHeader } from './PageHeader';
 import { PageFooter } from './PageFooter';
 import { todosRequested } from '../state/actions/todos';
-import { Device, mobileHeaderHeight } from '../styles/theme';
+import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme';
 import './PageLayout.css';
 
 const LayoutContainer = styled.div``;
@@ -24,7 +24,10 @@ const PageContent = styled.main`
   padding: 0;
 
   @media ${Device.mobile} {
-    margin-top: ${mobileHeaderHeight};
+    padding-top: ${mobileHeaderHeight};
+  }
+  @media ${Device.desktop} {
+    padding-top: ${desktopHeaderHeight};
   }
 `;
 

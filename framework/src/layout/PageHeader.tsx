@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { HamburgerMenu } from './HamburgerMenu';
 import { NavbarMenu } from './NavbarMenu';
-import { Device, pageWidth, theme } from '../styles/theme';
+import { desktopHeaderHeight, Device, pageWidth, theme } from '../styles/theme';
 
 interface IPageHeader {
   siteTitle?: string;
@@ -32,7 +32,7 @@ const HeaderContainer = styled.header`
     }
   }
   @media ${Device.desktop} {
-    height: 96px;
+    height: ${desktopHeaderHeight};
     .hamburger-menu {
       display: none;
     }

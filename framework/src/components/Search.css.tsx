@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import { theme } from '../styles/theme';
 
 export const Wrapper = styled.div`
-width: 100%;
-  background: ${theme.dark};
-  padding: 260px 0 70px 300px;
+  width: 100%;
 
   @media only screen and (max-width: 900px) {
     padding: 260px 0 70px 0;

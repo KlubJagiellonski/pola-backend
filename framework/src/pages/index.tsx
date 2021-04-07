@@ -10,10 +10,18 @@ import './index.css';
 import Search from '../components/Search';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
+import { Device, pageWidth, padding, theme } from '../styles/theme';
 
-
-const PageContainer = styled(PageSection)`
-
+const Content = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  @media ${Device.mobile} {
+    padding: ${padding.normal};
+  }
+  @media ${Device.desktop} {
+    padding: ${padding.normal} 0;
+    max-width: ${pageWidth};
+  }
 `;
 
 const MainPage = ({ todos = [], userId = 0 }: { todos: ITodo[] | undefined; userId: number | undefined }) => {
@@ -33,16 +41,17 @@ const MainPage = ({ todos = [], userId = 0 }: { todos: ITodo[] | undefined; user
     load();
   }, []);
 
-  console.log('render', users);
   return (
     <PageLayout>
       <SEO title="Pola Web" />
-      <PageSection size="full">
+      <PageSection size="full" backgroundColor={theme.dark}>
+        <Content>
           <Search />
+        </Content>
       </PageSection>
-      <PageContainer size="narrow">
+      <PageSection>
         <Contents />
-      </PageContainer>
+      </PageSection>
     </PageLayout>
   );
 };

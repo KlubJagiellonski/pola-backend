@@ -14,11 +14,11 @@ const NavbarLayout = styled.nav`
 
   display: flex;
   flex-flow: row nowrap;
+  justify-content: space-between;
   padding: ${padding.normal};
-  gap: ${padding.normal};
+
   flex: 1 1 100%;
   align-items: center;
-  justify-content: center;
   height: 100%;
 
   .nav-item {

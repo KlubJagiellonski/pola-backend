@@ -6,6 +6,7 @@ export const theme = {
 };
 
 export const mobileHeaderHeight = '40px';
+export const desktopHeaderHeight = '96px';
 
 export const pageWidth = '1272px';
 
