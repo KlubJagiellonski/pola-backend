@@ -12,17 +12,20 @@ import { useStaticQuery, graphql } from 'gatsby';
 
 import { PageHeader } from './PageHeader';
 import { PageFooter } from './PageFooter';
-import './PageLayout.css';
 import { todosRequested } from '../state/actions/todos';
+import { Device, mobileHeaderHeight } from '../styles/theme';
+import './PageLayout.css';
 
-const LayoutContainer = styled.div`
-`;
-
+const LayoutContainer = styled.div``;
 
 const PageContent = styled.main`
   width: 100%;
   margin: 0 auto;
   padding: 0;
+
+  @media ${Device.mobile} {
+    margin-top: ${mobileHeaderHeight};
+  }
 `;
 
 export const PageLayout: React.FC = ({ children }) => {
@@ -51,10 +54,8 @@ export const PageLayout: React.FC = ({ children }) => {
   return (
     <LayoutContainer>
       <PageHeader siteTitle={data.site.siteMetadata.title} />
-      <PageContent>
-        {children}
-      </PageContent>
-        <PageFooter />
+      <PageContent>{children}</PageContent>
+      <PageFooter />
     </LayoutContainer>
   );
 };

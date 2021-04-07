@@ -8,7 +8,7 @@ export const PageSection = styled.section<{ size: 'narrow' | 'full' }>`
 
   @media ${Device.mobile} {
     max-width: 'unset';
-    padding: ${props => (props.size === 'narrow' ? padding : 0)};
+    padding: ${props => (props.size === 'narrow' ? padding.normal : 0)};
   }
   @media ${Device.desktop} {
     max-width: ${props => (props.size === 'narrow' ? pageWidth : undefined)};

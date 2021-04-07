@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import SocialFooter from '../assets/SocialFooter.png';
-import { theme, Device, padding, paddingBig, pageWidth } from '../styles/theme';
 import { PolaLogo } from './Pola-Logo';
+import { theme, Device, padding, pageWidth } from '../styles/theme';
 
 export const FooterContainer = styled.footer`
   background-color: ${theme.dark};
-  padding: ${paddingBig};
+  padding: ${padding.big};
 
   .footer-content {
     display: flex;
@@ -33,7 +34,7 @@ export const FooterContainer = styled.footer`
       }
       .sections {
         flex-flow: row nowrap;
-        gap: ${padding};
+        gap: ${padding.normal};
       }
     }
   }
@@ -79,7 +80,7 @@ export const Section = styled.div`
   }
 
   @media ${Device.desktop} {
-    padding: ${padding};
+    padding: ${padding.normal};
     .hide-desktop {
       display: none;
     }

@@ -5,9 +5,15 @@ export const theme = {
   text: '#6C6C6C',
 };
 
+export const mobileHeaderHeight = '40px';
+
 export const pageWidth = '1272px';
-export const padding = '20px';
-export const paddingBig = '40px';
+
+export const padding = {
+  small: '8px',
+  normal: '20px',
+  big: '40px',
+};
 
 export const Device: { [key: string]: string } = {
   mobile: `(max-width: 1271px)`,
