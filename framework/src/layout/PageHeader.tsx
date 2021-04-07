@@ -5,18 +5,17 @@ import { NavigationBar } from './Navigationbar';
 import { PolaLogo } from './Pola-Logo';
 
 interface IPageHeader {
-  siteTitle?: string
+  siteTitle?: string;
 }
 
 const HeaderContainer = styled.header`
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
-  background: ${theme.dark};
-  margin-bottom: 1.45rem;
+  background: ${theme.border};
   min-height: 6rem;
 
-  .header-container {
+  .header-content {
     display: flex;
     flex-flow: row nowrap;
     width: 100%;
@@ -26,7 +25,7 @@ const HeaderContainer = styled.header`
 
 export const PageHeader = (props: IPageHeader) => (
   <HeaderContainer>
-    <div className="header-container">
+    <div className="header-content">
       <PolaLogo />
       <NavigationBar />
     </div>

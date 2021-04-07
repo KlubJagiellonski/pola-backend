@@ -9,16 +9,12 @@ import { ITodo } from '../models/todo';
 import './index.css';
 import Search from '../components/Search';
 import Contents from '../components/Contents';
+import { PageSection } from '../layout/PageSection';
 
 
-const PageContainer = styled.div`
-  font-size: calc(5px + 3vw);
-  line-height: calc(12px + 3vw);
-  margin: 2px;
-  color: green;
+const PageContainer = styled(PageSection)`
+
 `;
-
-
 
 const MainPage = ({ todos = [], userId = 0 }: { todos: ITodo[] | undefined; userId: number | undefined }) => {
   const [amount, setAmount] = React.useState<number>(50);
@@ -41,8 +37,10 @@ const MainPage = ({ todos = [], userId = 0 }: { todos: ITodo[] | undefined; user
   return (
     <PageLayout>
       <SEO title="Pola Web" />
-      <Search />
-      <PageContainer>
+      <PageSection size="full">
+          <Search />
+      </PageSection>
+      <PageContainer size="narrow">
         <Contents />
       </PageContainer>
     </PageLayout>
