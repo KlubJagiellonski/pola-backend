@@ -1,45 +1,88 @@
 {
   "name": "pola-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
-  "proxy": "https://www.pola-app.pl/a/v3",
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "axios": "^0.20.0",
-    "jquery": "^3.5.1",
-    "react": "^16.13.1",
-    "react-bootstrap": "^1.3.0",
-    "react-dom": "^16.13.1",
-    "react-icons": "^3.11.0",
-    "react-modal": "^3.11.2",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
-    "styled-components": "^5.2.1"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "gatsby build --prefix-paths",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "tslint": "tslint \"src/**/*.ts[x]\" --fix",
+    "lint": "npm run format && npm run tslint",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "test": "jest --watch",
+    "test-once": "jest  --coverage",
+    "e2e": "node_modules/.bin/cypress open",
+    "e2e-headless": "node_modules/.bin/cypress run",
+    "deploy-ghold": "git push origin :gh-pages && git subtree push --prefix public/ origin gh-pages",
+    "deploy-gh": "gh-pages -d public",
+    "deploy-s3": "gatsby-plugin-s3 deploy --yes"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@types/jest": "^24.0.24",
+    "@types/react-helmet": "^5.0.14",
+    "@types/react-redux": "^7.1.5",
+    "@types/react-test-renderer": "^16.9.1",
+    "@types/redux-mock-store": "^1.0.1",
+    "gatsby": "^2.18.12",
+    "gatsby-image": "^2.2.34",
+    "gatsby-plugin-manifest": "^2.2.31",
+    "gatsby-plugin-offline": "^3.0.27",
+    "gatsby-plugin-react-helmet": "^3.1.16",
+    "gatsby-plugin-react-redux": "^1.1.0-0",
+    "gatsby-plugin-sharp": "^2.3.5",
+    "gatsby-plugin-typescript": "^2.1.23",
+    "gatsby-source-filesystem": "^2.1.40",
+    "gatsby-transformer-sharp": "^2.3.7",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-dom": "^16.12.0",
+    "react-helmet": "^5.2.1",
+    "react-redux": "^7.1.3",
+    "react-slick": "^0.28.1",
+    "react-transition-group": "^4.4.1",
+    "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-localstorage-simple": "^2.1.6",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
-    "msw": "^0.21.3"
+    "@types/react-transition-group": "^4.4.1",
+    "@types/styled-components": "^5.1.9",
+    "babel-jest": "^24.9.0",
+    "babel-preset-gatsby": "^0.2.26",
+    "cypress": "^3.8.0",
+    "cypress-cucumber-preprocessor": "^1.19.0",
+    "gh-pages": "^2.1.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "react-test-renderer": "^16.12.0",
+    "redux-mock-store": "^1.5.4",
+    "serverless-offline": "^5.12.1",
+    "styled-components": "^5.2.1",
+    "ts-jest": "^24.2.0",
+    "tslint": "^5.20.1",
+    "typescript": "^4.2.3",
+    "wait-on": "^3.3.0"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+  },
+  "bugs": {
+    "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "env": {
+    "cypress/globals": true
   }
 }
