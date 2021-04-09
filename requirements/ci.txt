@@ -13,7 +13,7 @@ click==7.1.2
 coverage==5.5
 coveralls==3.0.1
 cryptography==3.4.7
-decorator==5.0.5
+decorator==5.0.6
 defusedxml==0.7.1
 django-allauth==0.44.0
 django-autocomplete-light==3.8.2
