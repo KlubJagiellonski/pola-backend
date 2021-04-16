@@ -61,4 +61,4 @@ Unidecode==1.2.0
 urllib3==1.26.4
 zipp==3.4.1
 zope.event==4.5.0
-zope.interface==5.3.0
+zope.interface==5.4.0
