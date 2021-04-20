@@ -4,29 +4,38 @@ import * as actions from './search-actions';
 import { IAction, IActionReducer } from '../types';
 
 export interface ISearchState {
-  isSearchLoading: boolean;
-  searchPhrase?: string;
+  isLoading: boolean;
+  phrase?: string;
   results?: string[];
+  error?: unknown;
 }
 
 const initialState: ISearchState = {
-  isSearchLoading: false,
+  isLoading: false,
 };
 
 const reducers: IActionReducer<ISearchState> = {
-  [actionTypes.INVOKE_PHRASE]: (state: ISearchState, action: ReturnType<typeof actions.InvokePhrase>) => {
+  [actionTypes.INVOKE_SEARCH]: (state: ISearchState, action: ReturnType<typeof actions.InvokePhrase>) => {
     return {
       ...state,
-      isSearchLoading: true,
-      searchPhrase: action.payload.searchPhrase,
+      isLoading: true,
+      phrase: action.payload.phrase,
     };
   },
 
   [actionTypes.LOAD_RESULTS]: (state: ISearchState, action: ReturnType<typeof actions.LoadResults>) => {
     return {
       ...state,
-      isSearchLoading: false,
+      isLoading: false,
       results: action.payload.results,
+    };
+  },
+
+  [actionTypes.SEARCH_FAILED]: (state: ISearchState, action: ReturnType<typeof actions.SearchFailed>) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload.error,
     };
   },
 };

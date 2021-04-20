@@ -1,12 +1,8 @@
-import { AnyAction } from 'redux';
+import { AnyAction, Reducer } from 'redux';
 import { appReducer, IAppState } from './app/app-reducer';
-import { ILoginState } from './reducers/login';
-import { ITodosState } from './reducers/todos';
 import { searchReducer, ISearchState } from './search/search-reducer';
 
 export interface IPolaState {
-  loginReducer: ILoginState;
-  todosReducer: ITodosState;
   app: IAppState;
   search: ISearchState;
 }

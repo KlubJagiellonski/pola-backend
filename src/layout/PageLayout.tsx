@@ -12,9 +12,9 @@ import { useStaticQuery, graphql } from 'gatsby';
 
 import { PageHeader } from './PageHeader';
 import { PageFooter } from './PageFooter';
-import { todosRequested } from '../state/actions/todos';
 import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme';
 import './PageLayout.css';
+import { Initialize } from '../state/app/app-actions';
 
 const LayoutContainer = styled.div``;
 
@@ -41,7 +41,7 @@ export const PageLayout: React.FC = ({ children }) => {
      * when the webapp boots up.
      */
 
-    dispatch(todosRequested());
+    dispatch(Initialize());
   }, []);
 
   const data = useStaticQuery(graphql`

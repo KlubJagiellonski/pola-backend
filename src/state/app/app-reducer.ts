@@ -15,7 +15,7 @@ const reducers: IActionReducer<IAppState> = {
   [actionTypes.INITIALIZE]: (state: IAppState, action: ReturnType<typeof actions.Initialize>) => {
     return {
       ...state,
-      userData: action.payload.userData,
+      initialized: true,
     };
   },
 };

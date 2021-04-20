@@ -22,17 +22,22 @@ interface IUsersResponse {
   };
 }
 
+export interface ISearchParams {
+  phrase: string;
+}
+
+export interface ISearchSuccess {
+  results: string[];
+}
+
+export interface ISearchError {
+  error: unknown;
+}
+
 export const SearchService = {
   getProducts: async (amount: number) => {
     const response = await fetch(`${apiPath}/?results=${amount}`);
     const productsJson: IUsersResponse = await response.json();
-
-    //   .then(response => response.json())
-    //   .then((response: IUsersResponse) => {
-    //     console.log('users', response.results.length);
-    //     setUsers(response.results);
-    //   });
-
     return productsJson.results;
   },
 };

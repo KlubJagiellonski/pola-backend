@@ -1,7 +1,7 @@
 import React from 'react';
 import { Wrapper, Image, TextSection } from './DevelopmnetSection.css';
 import { theme } from '../styles/theme';
-import Rectangle from './../assets/Rectangle.png';
+import Rectangle from '../assets/Rectangle.png';
 import { TitleSection, Text } from '../styles/GlobalStyle.css';
 
 const DevelopmentSection = () => {

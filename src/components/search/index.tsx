@@ -42,7 +42,7 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, onS
     load();
   }, []);
 
-  const handlePhraseChange = (e: React.ChangeEvent) => setPhrase(e.currentTarget.value);
+  const handlePhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => setPhrase(e.currentTarget.value);
 
   return (
     <Wrapper>

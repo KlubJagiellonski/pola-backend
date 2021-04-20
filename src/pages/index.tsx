@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
 import SEO from '../layout/seo';
-import { ITodo } from '../models/todo';
 import './index.css';
 import { SearchContainer } from '../components/search';
 import Contents from '../components/Contents';
@@ -27,29 +26,16 @@ const Content = styled.div`
 `;
 
 interface IMainPage {
-  todos?: ITodo[];
-  userId?: number;
+  searchResults: string[];
 
   invokeSearch: (phrase: string) => void;
 }
 
 const MainPage = (props: IMainPage) => {
-  const { todos = [], userId = 0 } = props;
-  const [amount, setAmount] = React.useState<number>(50);
-  const [users, setUsers] = React.useState<IUser[]>([]);
+  const { searchResults } = props;
 
   const load = async () => {
-    const products = await SearchService.getProducts(amount);
-
-    console.log('users', products);
-    setUsers(products);
-
-    // fetch(`https://randomuser.me/api/?results=${amount}`)
-    //   .then(response => response.json())
-    //   .then((response: IUsersResponse) => {
-    //     console.log('users', response.results.length);
-    //     setUsers(response.results);
-    //   });
+    const products = await SearchService.getProducts(10);
   };
 
   React.useEffect(() => {
@@ -61,7 +47,7 @@ const MainPage = (props: IMainPage) => {
       <SEO title="Pola Web" />
       <PageSection size="full" backgroundColor={theme.dark}>
         <Content>
-          <SearchContainer searchResults={[]} onSearch={props.invokeSearch} />
+          <SearchContainer searchResults={searchResults} onSearch={props.invokeSearch} />
         </Content>
       </PageSection>
       <PageSection>
@@ -73,10 +59,9 @@ const MainPage = (props: IMainPage) => {
 
 export default connect(
   (state: IPolaState) => ({
-    //todos: state.todosReducer.todos,
-    //userId: state.loginReducer.userId,
+    searchResults: state.search.results,
   }),
   {
-    invokeSearch: searchDispatcher.invokePhrase,
+    invokeSearch: searchDispatcher.invokeSearch,
   }
 )(MainPage);

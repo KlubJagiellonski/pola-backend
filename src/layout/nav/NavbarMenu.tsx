@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { PolaLogo } from './Pola-Logo';
-import { Device, padding, theme } from '../styles/theme';
+import { PolaLogo } from '../Pola-Logo';
+import { Device, padding, theme } from '../../styles/theme';
 
 interface INavbarMenu {}
 

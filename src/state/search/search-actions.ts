@@ -1,14 +1,15 @@
 import { IAction } from '../types';
 
 export const actionTypes = {
-  INVOKE_PHRASE: 'SEARCH:INVOKE_PHRASE',
+  INVOKE_SEARCH: 'SEARCH:INVOKE_SEARCH',
   LOAD_RESULTS: 'SEARCH:LOAD_RESULTS',
+  SEARCH_FAILED: 'SEARCH:SEARCH_FAILED',
 };
 
-export const InvokePhrase = (text: string): IAction => ({
-  type: actionTypes.INVOKE_PHRASE,
+export const InvokePhrase = (phrase: string): IAction => ({
+  type: actionTypes.INVOKE_SEARCH,
   payload: {
-    searchPhrase: text,
+    phrase,
   },
 });
 
@@ -16,5 +17,12 @@ export const LoadResults = (results: string[]): IAction => ({
   type: actionTypes.LOAD_RESULTS,
   payload: {
     results,
+  },
+});
+
+export const SearchFailed = (error: unknown): IAction => ({
+  type: actionTypes.SEARCH_FAILED,
+  payload: {
+    error,
   },
 });

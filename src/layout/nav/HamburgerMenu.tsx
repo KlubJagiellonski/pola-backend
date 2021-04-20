@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { PolaLogo } from './Pola-Logo';
-import { Device, mobileHeaderHeight, padding, theme } from '../styles/theme';
+import { PolaLogo } from '../Pola-Logo';
+import { Device, mobileHeaderHeight, padding, theme } from '../../styles/theme';
 
 interface IHamburgerMenu {}
 
