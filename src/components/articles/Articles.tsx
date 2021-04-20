@@ -4,7 +4,7 @@ import { ArticlesButton, Wrapper } from './Articles.css';
 // import Photo from '../../assets/xmas.png';
 
 const article = {
-  photo: "xmas.png",
+  photo: 'xmas.png',
   title: 'ŚWIĄTECZNE ZAKUPY Z POLA APP DO 15% TANIEJ',
   data: '12 grudnia 2021',
   text: 'Sprawdź szczegóły promocji (wstęp artykułu) Lorem ipsum dolor sit amet enim. Etiam ullamcorper.',
@@ -17,9 +17,9 @@ type ArticlesProps = {
 export const Articles = ({ width }: ArticlesProps) => {
   return (
     <Wrapper>
-      <Article photo={article.photo} title={article.title} date={article.data} text={article.text} width={width} />
-      <Article photo={article.photo} title={article.title} date={article.data} text={article.text} width={width} />
-      <Article photo={article.photo} title={article.title} date={article.data} text={article.text} width={width} />
+      <Article photo={article.photo} title={article.title} date={article.data} text={article.text} width={600} />
+      <Article photo={article.photo} title={article.title} date={article.data} text={article.text} width={600} />
+      <Article photo={article.photo} title={article.title} date={article.data} text={article.text} width={600} />
       <ArticlesButton>CZYTAJ WIĘCEJ</ArticlesButton>
     </Wrapper>
   );

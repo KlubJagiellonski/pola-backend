@@ -10,22 +10,22 @@ import About from './About';
 import { theme } from '../styles/theme';
 
 const Contents = () => {
-  const [width, setWidth] = useState(window.innerWidth);
+  //const [width, setWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener('resize', handleResize);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
 
-  const handleResize = () => {
-    setWidth(window.innerWidth);
-  };
+  // const handleResize = () => {
+  //   setWidth(window.innerWidth);
+  // };
 
   const bigView = (
     <Wrapper>
       <Column>
         <LeftColumn>
-          <Articles width={width} />
+          <Articles width={600} />
         </LeftColumn>
       </Column>
       <Column>
@@ -61,7 +61,7 @@ const Contents = () => {
   const smallView = (
     <Wrapper>
       <DevelopmentSection />
-      <Articles width={width} />
+      <Articles width={600} />
       <About />
       <SocialMedia />
       <Friends />
@@ -81,7 +81,7 @@ const Contents = () => {
     </Wrapper>
   );
 
-  return <>{width <= 768 ? smallView : bigView}</>;
+  return <>{600 <= 768 ? smallView : bigView}</>;
 };
 
 export default Contents;

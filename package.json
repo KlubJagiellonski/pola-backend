@@ -49,10 +49,12 @@
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-localstorage-simple": "^2.1.6",
+    "redux-thunk": "^2.3.0",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@types/react-transition-group": "^4.4.1",
+    "@types/redux-thunk": "^2.1.0",
     "@types/styled-components": "^5.1.9",
     "babel-jest": "^24.9.0",
     "babel-preset-gatsby": "^0.2.26",

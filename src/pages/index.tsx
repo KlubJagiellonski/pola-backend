@@ -4,13 +4,15 @@ import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
 import SEO from '../layout/seo';
-import { IState } from '../state/createStore';
 import { ITodo } from '../models/todo';
 import './index.css';
-import Search from '../components/Search';
+import { SearchContainer } from '../components/search';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
 import { Device, pageWidth, padding, theme } from '../styles/theme';
+import { SearchService } from '../services/search-service';
+import { IPolaState } from '../state/types';
+import { searchDispatcher } from '../state/search/search-dispatcher';
 
 const Content = styled.div`
   width: 100%;
@@ -24,17 +26,30 @@ const Content = styled.div`
   }
 `;
 
-const MainPage = ({ todos = [], userId = 0 }: { todos: ITodo[] | undefined; userId: number | undefined }) => {
+interface IMainPage {
+  todos?: ITodo[];
+  userId?: number;
+
+  invokeSearch: (phrase: string) => void;
+}
+
+const MainPage = (props: IMainPage) => {
+  const { todos = [], userId = 0 } = props;
   const [amount, setAmount] = React.useState<number>(50);
   const [users, setUsers] = React.useState<IUser[]>([]);
 
-  const load = () => {
-    fetch(`https://randomuser.me/api/?results=${amount}`)
-      .then(response => response.json())
-      .then((response: IUsersResponse) => {
-        console.log('users', response.results.length);
-        setUsers(response.results);
-      });
+  const load = async () => {
+    const products = await SearchService.getProducts(amount);
+
+    console.log('users', products);
+    setUsers(products);
+
+    // fetch(`https://randomuser.me/api/?results=${amount}`)
+    //   .then(response => response.json())
+    //   .then((response: IUsersResponse) => {
+    //     console.log('users', response.results.length);
+    //     setUsers(response.results);
+    //   });
   };
 
   React.useEffect(() => {
@@ -46,7 +61,7 @@ const MainPage = ({ todos = [], userId = 0 }: { todos: ITodo[] | undefined; user
       <SEO title="Pola Web" />
       <PageSection size="full" backgroundColor={theme.dark}>
         <Content>
-          <Search />
+          <SearchContainer searchResults={[]} onSearch={props.invokeSearch} />
         </Content>
       </PageSection>
       <PageSection>
@@ -56,11 +71,12 @@ const MainPage = ({ todos = [], userId = 0 }: { todos: ITodo[] | undefined; user
   );
 };
 
-const mapStateToProps = (state: IState) => {
-  return {
-    todos: state.todosReducer.todos,
-    userId: state.loginReducer.userId,
-  };
-};
-
-export default connect(mapStateToProps)(MainPage);
+export default connect(
+  (state: IPolaState) => ({
+    //todos: state.todosReducer.todos,
+    //userId: state.loginReducer.userId,
+  }),
+  {
+    invokeSearch: searchDispatcher.invokePhrase,
+  }
+)(MainPage);
