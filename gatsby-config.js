@@ -1,5 +1,5 @@
 module.exports = {
-  pathPrefix: '/kj/pola',
+  pathPrefix: '/pola-web',
   siteMetadata: {
     title: `Pola Web`,
     description: `Strona aplikacji Pola`,
