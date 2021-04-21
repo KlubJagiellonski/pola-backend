@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Wrapper, LeftColumn, RightColumn, Column } from './Contents.css';
 import DevelopmentSection from './DevelopmentSection';
 import SocialMedia from './SocialMedia';
-import Articles from './articles/Articles';
+import { ArticlesList } from '../articles/components/ArticlesList';
 import Friends from './Friends';
 import Teams from './Teams';
 import Download from './Download';
@@ -25,7 +25,7 @@ const Contents = () => {
     <Wrapper>
       <Column>
         <LeftColumn>
-          <Articles width={600} />
+          <ArticlesList width={600} />
         </LeftColumn>
       </Column>
       <Column>
@@ -61,7 +61,7 @@ const Contents = () => {
   const smallView = (
     <Wrapper>
       <DevelopmentSection />
-      <Articles width={600} />
+      <ArticlesList width={600} />
       <About />
       <SocialMedia />
       <Friends />

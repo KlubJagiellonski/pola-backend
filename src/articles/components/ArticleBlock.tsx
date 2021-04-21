@@ -1,18 +1,18 @@
 import React from 'react';
-import { Wrapper, ArticleImage, ArticleSection, ArticleButton } from './Article.css';
+import { Wrapper, ArticleImage, ArticleSection, ArticleButton } from './ArticleBlock.css';
 import { color } from '../../styles/theme';
 import { TitleSection, Text } from '../../styles/GlobalStyle.css';
-import { ResponsiveImage } from '../responsive-image';
+import { ResponsiveImage } from '../../components/responsive-image';
 
-type ArticleProps = {
+interface IArticleBlock {
   photo: string;
   title: string;
   date: string;
   text: string;
   width: number;
-};
+}
 
-const Article = ({ photo, title, date, text, width }: ArticleProps) => {
+export const ArticleBlock: React.FC<IArticleBlock> = ({ photo, title, date, text, width }) => {
   return (
     <Wrapper color={color.primary}>
       <ArticleImage>
@@ -31,5 +31,3 @@ const Article = ({ photo, title, date, text, width }: ArticleProps) => {
     </Wrapper>
   );
 };
-
-export default Article;

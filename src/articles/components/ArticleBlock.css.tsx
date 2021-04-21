@@ -21,7 +21,7 @@ export const Wrapper = styled(WrapperSection)`
   }
 `;
 
-export const ArticleImage = styled.div<{img?: string;}>`
+export const ArticleImage = styled.div<{ img?: string }>`
   width: 50%;
   height: auto;
   text-align: left;

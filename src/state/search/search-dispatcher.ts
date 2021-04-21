@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { Product } from '../../products';
-import { SearchService } from '../../services/search-service';
+import { SearchService } from '../../products/search-service';
 import { IPolaState } from '../types';
 import * as actions from './search-actions';
 
