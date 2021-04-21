@@ -1,16 +1,13 @@
 import { AnyAction, Reducer } from 'redux';
-import { appReducer, IAppState } from './app/app-reducer';
-import { searchReducer, ISearchState } from './search/search-reducer';
+import { IAppState } from './app/app-reducer';
+import { IArticlesState } from './articles/articles-reducer';
+import { ISearchState } from './search/search-reducer';
 
 export interface IPolaState {
   app: IAppState;
   search: ISearchState;
+  articles: IArticlesState;
 }
-
-export const reducers = {
-  app: appReducer,
-  search: searchReducer,
-};
 
 export interface IAction extends AnyAction {
   type: string;

@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Wrapper, LeftColumn, RightColumn, Column } from './Contents.css';
 import DevelopmentSection from './DevelopmentSection';
 import SocialMedia from './SocialMedia';
-import { ArticlesList } from '../articles/components/ArticlesList';
+import { ArticlesList } from '../components/articles/ArticlesList';
 import Friends from './Friends';
 import Teams from './Teams';
 import Download from './Download';
 import About from './About';
 import { color } from '../styles/theme';
+import { IArticle } from '../domain/articles';
 
-const Contents = () => {
+interface IContent {
+  articles?: IArticle[];
+}
+
+const Contents: React.FC<IContent> = ({ articles }) => {
   //const [width, setWidth] = useState(window.innerWidth);
 
   // useEffect(() => {
@@ -25,7 +30,7 @@ const Contents = () => {
     <Wrapper>
       <Column>
         <LeftColumn>
-          <ArticlesList width={600} />
+          <ArticlesList articles={articles} width={600} />
         </LeftColumn>
       </Column>
       <Column>
@@ -61,7 +66,7 @@ const Contents = () => {
   const smallView = (
     <Wrapper>
       <DevelopmentSection />
-      <ArticlesList width={600} />
+      <ArticlesList articles={articles} width={600} />
       <About />
       <SocialMedia />
       <Friends />

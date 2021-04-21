@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useStaticQuery, graphql } from 'gatsby';
 
@@ -8,9 +8,20 @@ import { PageFooter } from './PageFooter';
 import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme';
 import './PageLayout.css';
 import { Initialize } from '../state/app/app-actions';
+import { IPolaState } from '../state/types';
+import { articlesDispatcher } from '../state/articles/articles-dispatcher';
+import { appDispatcher } from '../state/app/app-dispatcher';
+
+const connector = connect((state: IPolaState) => ({}), {
+  initApp: appDispatcher.initialize,
+  loadArticles: articlesDispatcher.loadArticles,
+});
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type IPageLayout = ReduxProps & {};
 
 const LayoutContainer = styled.div``;
-
 const PageContent = styled.main`
   width: 100%;
   margin: 0 auto;
@@ -24,13 +35,10 @@ const PageContent = styled.main`
   }
 `;
 
-interface IPageLayout {}
-
-export const PageLayout: React.FC<IPageLayout> = ({ children }) => {
-  const dispatch = useDispatch();
-
-  const bootApplication = () => {
-    dispatch(Initialize());
+const Layout: React.FC<IPageLayout> = ({ children, initApp, loadArticles }) => {
+  const bootApplication = async () => {
+    await initApp();
+    await loadArticles();
   };
 
   useEffect(() => {
@@ -55,3 +63,5 @@ export const PageLayout: React.FC<IPageLayout> = ({ children }) => {
     </LayoutContainer>
   );
 };
+
+export const PageLayout = connector(Layout);

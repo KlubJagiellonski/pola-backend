@@ -1,6 +1,3 @@
-import { Context } from 'react';
-import { ReactReduxContextValue } from 'react-redux';
-import { AnyAction } from 'redux';
 import { IAction } from '../types';
 
 export const actionTypes = {

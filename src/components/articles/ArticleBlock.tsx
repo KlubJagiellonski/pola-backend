@@ -5,9 +5,9 @@ import { TitleSection, Text } from '../../styles/GlobalStyle.css';
 import { ResponsiveImage } from '../../components/responsive-image';
 
 interface IArticleBlock {
-  photo: string;
+  photo?: string;
   title: string;
-  date: string;
+  date?: string;
   text: string;
   width: number;
 }
@@ -15,15 +15,13 @@ interface IArticleBlock {
 export const ArticleBlock: React.FC<IArticleBlock> = ({ photo, title, date, text, width }) => {
   return (
     <Wrapper color={color.primary}>
-      <ArticleImage>
-        <ResponsiveImage imageSrc={photo} />
-      </ArticleImage>
+      <ArticleImage>{photo && <ResponsiveImage imageSrc={photo} />}</ArticleImage>
       <ArticleSection>
         <TitleSection>{title}</TitleSection>
         <Text>{text}</Text>
         {width > 768 && (
           <>
-            <Text>{date}</Text>
+            {date && <Text>{date}</Text>}
             <ArticleButton>lorem ipsum</ArticleButton>
           </>
         )}

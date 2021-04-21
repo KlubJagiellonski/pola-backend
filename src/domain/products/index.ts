@@ -1,3 +1,5 @@
+import { getNumber } from '../../utils/data/random-number';
+
 export interface IProduct {
   id: string;
   title: string;
@@ -5,8 +7,6 @@ export interface IProduct {
   category?: string;
   image?: URL;
 }
-
-const getNumber = () => Math.floor(Math.random() * 1000);
 
 export class Product implements IProduct {
   public id: string;

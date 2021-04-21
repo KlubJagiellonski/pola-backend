@@ -1,4 +1,4 @@
-import { IProduct } from '../../products';
+import { IProduct } from '../../domain/products';
 import { IAction } from '../types';
 
 export const actionTypes = {

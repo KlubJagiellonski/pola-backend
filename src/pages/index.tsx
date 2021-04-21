@@ -29,6 +29,7 @@ const Content = styled.div`
 interface IMainPage {
   location: Location;
   searchResults: IProduct[];
+  articles?: IArticle[];
 
   invokeSearch: (phrase: string) => void;
 }
@@ -50,7 +51,7 @@ const MainPage = (props: IMainPage) => {
         </Content>
       </PageSection>
       <PageSection>
-        <Contents />
+        <Contents articles={props.articles} />
       </PageSection>
     </PageLayout>
   );
@@ -59,6 +60,7 @@ const MainPage = (props: IMainPage) => {
 export default connect(
   (state: IPolaState) => ({
     searchResults: state.search.results,
+    articles: state.articles.data,
   }),
   {
     invokeSearch: searchDispatcher.invokeSearch,
