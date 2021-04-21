@@ -12,7 +12,8 @@ import { Device, pageWidth, padding, color } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation } from '../state/app/app-actions';
-import { IProduct } from '../products';
+import { IProduct } from '../domain/products';
+import { IArticle } from '../domain/articles';
 
 const Content = styled.div`
   width: 100%;
@@ -44,7 +45,7 @@ const MainPage = (props: IMainPage) => {
 
   return (
     <PageLayout>
-      <SEO title="Pola Web" />
+      <SEO title="Pola Web | Strona główna" />
       <PageSection size="full" backgroundColor={color.dark}>
         <Content>
           <SearchContainer searchResults={searchResults} onSearch={props.invokeSearch} />

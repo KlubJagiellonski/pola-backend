@@ -24,6 +24,11 @@ const NavbarLayout = styled.nav`
   .nav-item {
     font-weight: bolder;
     cursor: pointer;
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
   }
 `;
 
