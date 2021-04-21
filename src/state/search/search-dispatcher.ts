@@ -8,7 +8,7 @@ export const searchDispatcher = {
     try {
       await dispatch(actions.InvokePhrase(phrase));
       const products = await SearchService.getProducts(10);
-      await dispatch(actions.LoadResults(products.map(x => x.name.last)));
+      await dispatch(actions.LoadResults(products));
     } catch (error) {
       await dispatch(actions.SearchFailed(error));
     }

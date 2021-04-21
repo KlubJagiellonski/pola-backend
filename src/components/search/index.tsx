@@ -8,39 +8,19 @@ import {
   InputIconSection,
   SubmitButton,
   FormSearch,
-} from '../Search.css';
+} from './Search.css';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
-import { IUser, SearchService } from '../../services/search-service';
+import { IUser } from '../../services/search-service';
 
 interface ISearchContainer {
-  searchResults: string[];
+  searchResults: IUser[];
   onSearch: (phrase: string) => void;
 }
 
 export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, onSearch }) => {
-  const amount = 10;
-  const [users, setUsers] = React.useState<IUser[]>([]);
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
-
-  const load = async () => {
-    // fetch(`https://randomuser.me/api/?results=${amount}`)
-    //   .then(response => response.json())
-    //   .then((response: IUsersResponse) => {
-    //     console.log('users', response.results.length);
-    //     setUsers(response.results);
-    //   });
-
-    const products = await SearchService.getProducts(amount);
-
-    console.log('users', products);
-    setUsers(products);
-  };
-
-  React.useEffect(() => {
-    load();
-  }, []);
 
   const handlePhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => setPhrase(e.currentTarget.value);
 
@@ -69,13 +49,15 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, onS
           </SubmitButton>
         </FormSearch>
       </div>
-      <div className="results-list">
-        <ul>
-          {users.map((user: IUser) => (
-            <li key={user.email}>{`${user.name.first} ${user.name.last}`}</li>
-          ))}
-        </ul>
-      </div>
+      {searchResults && (
+        <div className="results-list">
+          <ul>
+            {searchResults.map((user: IUser) => (
+              <li key={user.email}>{`${user.name.first} ${user.name.last}`}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </Wrapper>
   );
 };

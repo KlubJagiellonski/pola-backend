@@ -1,10 +1,3 @@
-/*
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -31,20 +24,20 @@ const PageContent = styled.main`
   }
 `;
 
-export const PageLayout: React.FC = ({ children }) => {
+interface IPageLayout {}
+
+export const PageLayout: React.FC<IPageLayout> = ({ children }) => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    /*
-     * This is an example of doing things when the app first loads.
-     * You can dispatch a Redux action here to do some async thing
-     * when the webapp boots up.
-     */
-
+  const bootApplication = () => {
     dispatch(Initialize());
+  };
+
+  useEffect(() => {
+    bootApplication();
   }, []);
 
-  const data = useStaticQuery(graphql`
+  const data1 = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
         siteMetadata {
@@ -56,7 +49,7 @@ export const PageLayout: React.FC = ({ children }) => {
 
   return (
     <LayoutContainer>
-      <PageHeader siteTitle={data.site.siteMetadata.title} />
+      <PageHeader siteTitle={data1.site.siteMetadata.title} />
       <PageContent>{children}</PageContent>
       <PageFooter />
     </LayoutContainer>

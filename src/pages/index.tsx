@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
@@ -9,9 +9,10 @@ import { SearchContainer } from '../components/search';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
 import { Device, pageWidth, padding, theme } from '../styles/theme';
-import { SearchService } from '../services/search-service';
+import { IUser, SearchService } from '../services/search-service';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
+import { LoadBrowserLocation } from '../state/app/app-actions';
 
 const Content = styled.div`
   width: 100%;
@@ -26,20 +27,18 @@ const Content = styled.div`
 `;
 
 interface IMainPage {
-  searchResults: string[];
+  location: Location;
+  searchResults: IUser[];
 
   invokeSearch: (phrase: string) => void;
 }
 
 const MainPage = (props: IMainPage) => {
-  const { searchResults } = props;
-
-  const load = async () => {
-    const products = await SearchService.getProducts(10);
-  };
+  const { searchResults, location } = props;
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    load();
+    dispatch(LoadBrowserLocation(location));
   }, []);
 
   return (

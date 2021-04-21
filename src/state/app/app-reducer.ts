@@ -1,10 +1,12 @@
 import { AnyAction, Reducer } from 'redux';
+
 import { actionTypes } from './app-actions';
 import * as actions from './app-actions';
 import { IAction, IActionReducer } from '../types';
 
 export interface IAppState {
   initialized: boolean;
+  location?: Location;
 }
 
 const initialState: IAppState = {
@@ -16,6 +18,13 @@ const reducers: IActionReducer<IAppState> = {
     return {
       ...state,
       initialized: true,
+    };
+  },
+
+  [actionTypes.LOAD_BROWSER_LOCATION]: (state: IAppState, action: ReturnType<typeof actions.LoadBrowserLocation>) => {
+    return {
+      ...state,
+      location: action.payload.location,
     };
   },
 };

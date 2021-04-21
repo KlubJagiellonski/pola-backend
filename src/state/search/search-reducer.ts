@@ -2,11 +2,12 @@ import { AnyAction, Reducer } from 'redux';
 import { actionTypes } from './search-actions';
 import * as actions from './search-actions';
 import { IAction, IActionReducer } from '../types';
+import { IUser } from '../../services/search-service';
 
 export interface ISearchState {
   isLoading: boolean;
   phrase?: string;
-  results?: string[];
+  results?: IUser[];
   error?: unknown;
 }
 
