@@ -7,7 +7,7 @@ import Friends from './Friends';
 import Teams from './Teams';
 import Download from './Download';
 import About from './About';
-import { theme } from '../styles/theme';
+import { color } from '../styles/theme';
 
 const Contents = () => {
   //const [width, setWidth] = useState(window.innerWidth);
@@ -65,7 +65,7 @@ const Contents = () => {
       <About />
       <SocialMedia />
       <Friends />
-      <div style={{ background: theme.primary, width: '100%' }}>
+      <div style={{ background: color.primary, width: '100%' }}>
         <Teams
           title="Dołącz do Przyjaciół Poli i odnieś sukces!"
           text="Jedno zdanie, że sekcja jest kierowana do firm"

@@ -11,10 +11,11 @@ import {
 } from './Search.css';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
-import { IUser } from '../../services/search-service';
+import { SearchResultsList } from './SearchResultsList';
+import { IProduct } from '../../products';
 
 interface ISearchContainer {
-  searchResults: IUser[];
+  searchResults: IProduct[];
   onSearch: (phrase: string) => void;
 }
 
@@ -49,15 +50,7 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, onS
           </SubmitButton>
         </FormSearch>
       </div>
-      {searchResults && (
-        <div className="results-list">
-          <ul>
-            {searchResults.map((user: IUser) => (
-              <li key={user.email}>{`${user.name.first} ${user.name.last}`}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {searchResults && <SearchResultsList results={searchResults} />}
     </Wrapper>
   );
 };

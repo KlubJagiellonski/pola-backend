@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { theme } from '../../styles/theme';
+import { color } from '../../styles/theme';
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -56,7 +56,7 @@ export const Text = styled.p`
 
 export const InputSection = styled.div`
   position: relative;
-  border: 1px solid ${theme.border};
+  border: 1px solid ${color.border};
   padding: 5px 100px 5px 5px;
   width: 250px;
   background-color: white;
@@ -94,14 +94,14 @@ export const InputIconSection = styled.div`
 `;
 
 export const SubmitButton = styled.button`
-  background: ${theme.primary};
-  border: 1px solid ${theme.border};
+  background: ${color.primary};
+  border: 1px solid ${color.border};
   height: 100%;
   font-size: 14px;
   text-align: center;
   padding: 6px 15px;
   margin-left: 15px;
-  color: ${theme.border};
+  color: ${color.border};
   display: inline-block;
   font-weight: 700;
   cursor: pointer;

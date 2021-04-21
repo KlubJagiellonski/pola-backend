@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Device, pageWidth, padding, theme } from '../styles/theme';
+import { Device, pageWidth, padding, color } from '../styles/theme';
 
 interface IPageSection {
   size?: 'narrow' | 'full';

@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { PolaLogo } from '../Pola-Logo';
-import { Device, padding, theme } from '../../styles/theme';
+import { Device, padding, color } from '../../styles/theme';
 
 interface INavbarMenu {}
 
 const NavbarLayout = styled.nav`
-  background: ${theme.border};
+  background: ${color.border};
   @media ${Device.mobile} {
     display: none;
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Wrapper, Title, TextSection, ButtonTeams } from './Teams.css';
 import { Text } from '../styles/GlobalStyle.css';
-import { theme } from '../styles/theme';
+import { color } from '../styles/theme';
 
 type TeamsProps = {
   title: string;
@@ -11,7 +11,7 @@ type TeamsProps = {
 
 const Teams = ({ title, text, buttonText }: TeamsProps) => {
   return (
-    <Wrapper color={theme.dark}>
+    <Wrapper color={color.dark}>
       <TextSection>
         <Title>{title}</Title>
         <Text>{text}</Text>

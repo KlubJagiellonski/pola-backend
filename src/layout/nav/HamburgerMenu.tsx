@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import { PolaLogo } from '../Pola-Logo';
-import { Device, mobileHeaderHeight, padding, theme } from '../../styles/theme';
+import { Device, mobileHeaderHeight, padding, color } from '../../styles/theme';
 
 interface IHamburgerMenu {}
 
 const HamburgerLayout = styled.nav`
-  background: ${theme.border};
+  background: ${color.border};
   @media ${Device.desktop} {
     display: none;
   }

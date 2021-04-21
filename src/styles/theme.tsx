@@ -1,4 +1,4 @@
-export const theme = {
+export const color = {
   primary: '#E5E5E5',
   dark: '#C4C4C4',
   border: '#A0A0A0',
@@ -11,6 +11,7 @@ export const desktopHeaderHeight = '96px';
 export const pageWidth = '1272px';
 
 export const padding = {
+  tiny: '4px',
   small: '8px',
   normal: '20px',
   big: '40px',

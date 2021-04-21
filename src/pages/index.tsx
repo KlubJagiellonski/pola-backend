@@ -8,11 +8,11 @@ import './index.css';
 import { SearchContainer } from '../components/search';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
-import { Device, pageWidth, padding, theme } from '../styles/theme';
-import { IUser, SearchService } from '../services/search-service';
+import { Device, pageWidth, padding, color } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation } from '../state/app/app-actions';
+import { IProduct } from '../products';
 
 const Content = styled.div`
   width: 100%;
@@ -28,7 +28,7 @@ const Content = styled.div`
 
 interface IMainPage {
   location: Location;
-  searchResults: IUser[];
+  searchResults: IProduct[];
 
   invokeSearch: (phrase: string) => void;
 }
@@ -44,7 +44,7 @@ const MainPage = (props: IMainPage) => {
   return (
     <PageLayout>
       <SEO title="Pola Web" />
-      <PageSection size="full" backgroundColor={theme.dark}>
+      <PageSection size="full" backgroundColor={color.dark}>
         <Content>
           <SearchContainer searchResults={searchResults} onSearch={props.invokeSearch} />
         </Content>

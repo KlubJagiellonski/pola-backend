@@ -1,6 +1,6 @@
 import React from 'react';
 import { Wrapper, ArticleImage, ArticleSection, ArticleButton } from './Article.css';
-import { theme } from '../../styles/theme';
+import { color } from '../../styles/theme';
 import { TitleSection, Text } from '../../styles/GlobalStyle.css';
 import { ResponsiveImage } from '../responsive-image';
 
@@ -14,9 +14,9 @@ type ArticleProps = {
 
 const Article = ({ photo, title, date, text, width }: ArticleProps) => {
   return (
-    <Wrapper color={theme.primary}>
+    <Wrapper color={color.primary}>
       <ArticleImage>
-      <ResponsiveImage imageSrc={photo} />
+        <ResponsiveImage imageSrc={photo} />
       </ArticleImage>
       <ArticleSection>
         <TitleSection>{title}</TitleSection>

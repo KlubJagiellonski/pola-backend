@@ -1,43 +1,31 @@
-const apiPath = 'https://randomuser.me/api';
-
-export interface IUser {
-  gender: string;
-  name: {
-    title: string;
-    first: string;
-    last: string;
-  };
-  email: string;
-  phone: string;
-  nat: string;
-}
-
-interface IUsersResponse {
-  results: IUser[];
-  info: {
-    seed: string;
-    results: number;
-    page: number;
-    version: number;
-  };
-}
+const apiPath = 'https://fakestoreapi.com/products';
 
 export interface ISearchParams {
   phrase: string;
 }
 
 export interface ISearchSuccess {
-  results: string[];
+  results: IProductData[];
 }
 
 export interface ISearchError {
   error: unknown;
 }
 
+interface IProductData {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+}
+
 export const SearchService = {
-  getProducts: async (amount: number) => {
-    const response = await fetch(`${apiPath}/?results=${amount}`);
-    const productsJson: IUsersResponse = await response.json();
-    return productsJson.results;
+  getProducts: async (amount: number): Promise<ISearchSuccess> => {
+    const response = await fetch(`${apiPath}?limit=${amount}`);
+    const productsJson: IProductData[] = await response.json();
+    return {
+      results: productsJson,
+    };
   },
 };

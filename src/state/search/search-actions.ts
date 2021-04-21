@@ -1,4 +1,4 @@
-import { IUser } from '../../services/search-service';
+import { IProduct } from '../../products';
 import { IAction } from '../types';
 
 export const actionTypes = {
@@ -14,10 +14,10 @@ export const InvokePhrase = (phrase: string): IAction => ({
   },
 });
 
-export const LoadResults = (results: IUser[]): IAction => ({
+export const LoadResults = (products: IProduct[]): IAction => ({
   type: actionTypes.LOAD_RESULTS,
   payload: {
-    results,
+    products,
   },
 });
 

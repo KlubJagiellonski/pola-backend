@@ -4,7 +4,7 @@ import Friend from './../assets/friend.png';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { theme } from '../styles/theme';
+import { color } from '../styles/theme';
 
 const friends = [
   { img: Friend },
@@ -49,7 +49,7 @@ const Friends = () => {
   };
 
   return (
-    <Wrapper color={theme.primary}>
+    <Wrapper color={color.primary}>
       <Title>Przyjaciele Poli</Title>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <ImageWrapper amountElements={friends.length}>

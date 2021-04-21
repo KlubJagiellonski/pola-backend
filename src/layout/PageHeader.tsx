@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { HamburgerMenu } from './nav/HamburgerMenu';
 import { NavbarMenu } from './nav/NavbarMenu';
-import { desktopHeaderHeight, Device, pageWidth, theme } from '../styles/theme';
+import { desktopHeaderHeight, Device, pageWidth, color } from '../styles/theme';
 
 interface IPageHeader {
   siteTitle?: string;
@@ -17,7 +17,7 @@ const HeaderContainer = styled.header`
   top: 0;
   z-index: 10;
   width: 100%;
-  background: ${theme.border};
+  background: ${color.border};
 
   .header-content {
     display: flex;

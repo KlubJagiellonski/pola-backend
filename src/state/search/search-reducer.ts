@@ -2,12 +2,12 @@ import { AnyAction, Reducer } from 'redux';
 import { actionTypes } from './search-actions';
 import * as actions from './search-actions';
 import { IAction, IActionReducer } from '../types';
-import { IUser } from '../../services/search-service';
+import { IProduct } from '../../products';
 
 export interface ISearchState {
   isLoading: boolean;
   phrase?: string;
-  results?: IUser[];
+  results?: IProduct[];
   error?: unknown;
 }
 
@@ -28,7 +28,7 @@ const reducers: IActionReducer<ISearchState> = {
     return {
       ...state,
       isLoading: false,
-      results: action.payload.results,
+      results: action.payload.products,
     };
   },
 

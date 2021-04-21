@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 import SocialFooter from '../assets/SocialFooter.png';
 import { PolaLogo } from './Pola-Logo';
-import { theme, Device, padding, pageWidth } from '../styles/theme';
+import { color, Device, padding, pageWidth } from '../styles/theme';
 
 export const FooterContainer = styled.footer`
-  background-color: ${theme.dark};
+  background-color: ${color.dark};
   padding: ${padding.big};
 
   .footer-content {
@@ -41,7 +41,7 @@ export const FooterContainer = styled.footer`
 `;
 
 export const Section = styled.div`
-  background-color: ${theme.primary};
+  background-color: ${color.primary};
   flex: 1 1 25%;
 
   .text {

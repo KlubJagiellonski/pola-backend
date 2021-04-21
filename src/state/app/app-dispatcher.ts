@@ -1,5 +1,4 @@
-import { ,Dispatch } from 'redux';
-import { BrowserHistoryInstance } from '../../utils/routing/browser-history';
+import { Dispatch } from 'redux';
 import { IPolaState } from '../types';
 import * as actions from './app-actions';
 
@@ -9,7 +8,6 @@ export const appDispatcher = {
   },
 
   loadBrowserLocation: (location: Location) => async (dispatch: any, getState: () => IPolaState) => {
-    BrowserHistoryInstance.setHistory(history);
     await dispatch(actions.LoadBrowserLocation(location));
   },
 };

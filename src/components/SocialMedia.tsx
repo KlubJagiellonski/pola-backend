@@ -1,11 +1,11 @@
 import React from 'react';
 import { Wrapper, Item, Items, Title } from './SocialMedia.css';
 import SocialImg from './../assets/social.png';
-import { theme } from '../styles/theme';
+import { color } from '../styles/theme';
 
 const SocialMedia = () => {
   return (
-    <Wrapper color={theme.primary}>
+    <Wrapper color={color.primary}>
       <Title>Social Media</Title>
       <Items>
         <Item>
