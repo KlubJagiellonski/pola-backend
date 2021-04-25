@@ -86,7 +86,7 @@ jobs:
         with:
           python-version: '3.7'
       - name: "Run static checks"
-        uses: pre-commit/action@v2.0.2
+        uses: pre-commit/action@v2.0.3
 
   prod-image:
     name: "Build Prod Image"
