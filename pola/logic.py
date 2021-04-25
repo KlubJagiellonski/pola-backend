@@ -56,19 +56,13 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
 
 
 def handle_companies_when_multiple_companies_are_not_supported(companies, multiple_company_supported, result, stats):
-    if len(companies) == 1:
-        company = companies[0]
+    company = companies[0]
+    company_data = serialize_company(company)
+    stats['was_plScore'] = bool(get_plScore(company))
 
-        company_data = serialize_company(company)
-        stats['was_plScore'] = bool(get_plScore(company))
-
-        result.update(company_data)
-        stats['was_verified'] = company.verified
-        result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
-    elif len(companies) > 1 and not multiple_company_supported:
-        # Ups. It seems to be an internal code
-        result['name'] = 'Nieobsługiwana aplikacja'
-        result['altText'] = "Testujemy nową wersję aplikacji. Przepraszamy za niedogodności, prosimy o cierpliwość."
+    result.update(company_data)
+    stats['was_verified'] = company.verified
+    result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
 
 
 def handle_multiple_companies(companies, result, stats):
