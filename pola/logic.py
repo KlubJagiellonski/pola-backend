@@ -27,6 +27,7 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
         companies = []
         if product_company:
             companies.append(product_company)
+            result['name'] = product_company.common_name or product_company.official_name or product_company.name
         if brand_company:
             companies.append(brand_company)
         companies = list(({c.pk: c for c in companies}).values())
