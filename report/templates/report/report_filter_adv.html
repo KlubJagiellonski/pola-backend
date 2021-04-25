@@ -17,7 +17,11 @@
             <button class="btn btn-primary js-unselect-all-checkbox">Odznacz wszystkie</button>
         </div>
         {% for obj in object_list %}
-        <div class="panel panel-default">
+         {% if obj.client == 'krs-bot'%}
+                   <div class="panel panel-warning">
+            {% else %}
+                   <div class="panel panel-default">
+            {% endif %}
             <div class="panel-heading">
                 <h3 class="panel-title">
                     <div class="checkbox">

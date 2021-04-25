@@ -95,11 +95,18 @@
                         <h3 class="panel-title">Zgłoszenia:</h3>
                     </div>
                     {% if report_list %}
-                        <ul class="list-group">
-                            {% for report in report_list %}
-                            <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a></li>
-                            {% endfor %}
-                        </ul>
+                       <ul class="list-group">
+                        {% for report in report_list %}
+                                {% if report.client == 'krs-bot' %}
+                                    <li class="list-group-item"><a class="text-warning"
+                                                                   href="{{ report.get_absolute_url }}">{{ report }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="list-group-item"><a href="{{ report.get_absolute_url }}">{{ report }}</a>
+                                    </li>
+                                {% endif %}
+                        {% endfor %}
+                    </ul>
                     {% else %}
                         <div class="panel-body">
                             {% trans "Nie ma żadnych zgłoszeń" %}

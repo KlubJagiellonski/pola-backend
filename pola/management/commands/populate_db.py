@@ -41,6 +41,15 @@ class Command(BaseCommand):
                 product = Product.objects.first()
                 for i in range(3):
                     ReportFactory.create(product=product, description=f"zgłoszenie {i} z tym samym produktem")
+                self.stdout.write(self.style.SUCCESS(f"Product with multiple reports: {product.name}"))
+                product = Product.objects.last()
+                ReportFactory.create(
+                    product=product,
+                    client="krs-bot",
+                    description="Wg. najnowszego odpytania w bazie ILiM nazwa tego produktu to: test",
+                )
+                ReportFactory.create(product=product)
+                self.stdout.write(self.style.SUCCESS(f"Product with user and bot report: {product.name}"))
                 self.stdout.write(self.style.SUCCESS('Successfully populated the database'))
             except IntegrityError:
                 self.stdout.write(
