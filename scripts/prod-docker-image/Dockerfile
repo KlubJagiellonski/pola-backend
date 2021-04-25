@@ -35,7 +35,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # hadolint ignore=DL3044
-ENV PYTHONUNBUFFERED=1\
+ENV PYTHONUNBUFFERED=1 \
     PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin && pip install --no-cache-dir --upgrade "pip" && pip --version
 
@@ -120,7 +120,7 @@ COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
 ENV PATH="${APP_USER_HOME_DIR}/.local/bin:${PATH}" \
     GUNICORN_CMD_ARGS="--worker-tmp-dir /dev/shm"
 
-COPY  --chown=airflow:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
+COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
 COPY ./ ${APP_HOME}
 
 WORKDIR ${APP_HOME}
