@@ -272,13 +272,12 @@ class TestGetResultFromCode(TestCase):
         # TODO: Add support for multiple companies in this response
         expected_response = (
             {
-                'altText': (
-                    "Testujemy now\u0105 wersj\u0119 aplikacji. Przepraszamy za niedogodno\u015bci, "
-                    "prosimy o cierpliwo\u015b\u0107."
-                ),
-                'card_type': 'type_white',
+                'altText': None,
+                'card_type': 'type_grey',
                 'code': '5900084231145',
-                'name': 'Nieobsługiwana aplikacja',
+                'description': 'test-description',
+                'is_friend': False,
+                'name': company1.official_name,
                 'plCapital': None,
                 'plCapital_notes': None,
                 'plNotGlobEnt': None,
@@ -293,7 +292,8 @@ class TestGetResultFromCode(TestCase):
                 'product_id': product.id,
                 'report_button_text': 'Zgłoś',
                 'report_button_type': 'type_white',
-                'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+                'report_text': ('Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu'),
+                'sources': {},
             },
             {"was_590": True, "was_plScore": False, "was_verified": False},
             product,
