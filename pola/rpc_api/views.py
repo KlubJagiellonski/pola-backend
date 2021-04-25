@@ -73,7 +73,7 @@ def validate_json_response(schema, *args, **kwargs):
                 },
                 "required": ["show_button", "title", "url"],
             },
-            "name": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+            "name": {"type": "string"},
             "companies": {
                 "type": "array",
                 "items": {
