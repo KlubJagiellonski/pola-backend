@@ -26,6 +26,18 @@ def nip_number(value):
     raise argparse.ArgumentTypeError(f"Invalid NIP number: '{value}'")
 
 
+def ask_yes_no(question):
+    confirm = input(question)
+    while True:
+        if confirm not in ('Y', 'n', 'yes', 'no'):
+            confirm = input('Please enter either "yes" or "no": ')
+            continue
+        if confirm in ('Y', 'yes'):
+            return True
+        else:
+            return False
+
+
 class Command(BaseCommand):
     help = 'Import lidl companies from .tsv file'
 
@@ -46,18 +58,11 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'Company with nip {options["company_nip"]} does not exist.'))
             return
 
-        if options['interactive']:
-            confirm = input(
-                f'You seleceted company: {brand_owner.official_name} with nip: {brand_owner.nip}. Proceed? (Y/n)'
-            )
-            while True:
-                if confirm not in ('Y', 'n', 'yes', 'no'):
-                    confirm = input('Please enter either "yes" or "no": ')
-                    continue
-                if confirm in ('Y', 'yes'):
-                    break
-                else:
-                    return
+        if options['interactive'] and not ask_yes_no(
+            f'You seleceted company: {brand_owner.official_name} with nip: {brand_owner.nip}. Proceed? (Y/n)'
+        ):
+            self.stdout.write(self.style.ERROR('Operation cancelled.'))
+            return
 
         with options['tsv_filepath'] as csv_file:
             csv_reader = csv.reader(csv_file, delimiter='\t')
