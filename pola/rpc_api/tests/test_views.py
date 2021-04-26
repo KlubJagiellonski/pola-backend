@@ -84,7 +84,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             {
                 "product_id": p.pk,
                 "code": "5900049011829",
-                "name": None,
+                "name": c.common_name,
                 "card_type": "type_white",
                 "altText": None,
                 "report": {
