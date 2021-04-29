@@ -62,7 +62,7 @@ pycodestyle==2.7.0
 pycparser==2.20
 pyflakes==2.3.1
 Pygments==2.8.1
-PyJWT==2.0.1
+PyJWT==2.1.0
 pyrsistent==0.17.3
 python-dateutil==2.8.1
 python3-openid==3.2.0
