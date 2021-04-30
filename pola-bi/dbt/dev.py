@@ -24,7 +24,7 @@ def db_url_to_env_var(database_url: str, prefix: str) -> Dict[str, str]:
         f"{prefix}_PORT": str(db_config['PORT'] or 5432),
         f"{prefix}_USER": str(db_config['USER']),
         f"{prefix}_PASS": str(db_config['PASSWORD']),
-        f"{prefix}_DB_NAME": str(db_config['PASSWORD']),
+        f"{prefix}_DB_NAME": str(db_config['NAME']),
     }
     return db_config_env_var
 
@@ -32,7 +32,7 @@ def db_url_to_env_var(database_url: str, prefix: str) -> Dict[str, str]:
 def load_database_url(environment: str) -> str:
     if environment == 'staging':
         return fetch_database_url_from_heroku(app_name='pola-staging')
-    elif environment == 'staging':
+    elif environment == 'prod':
         return fetch_database_url_from_heroku(app_name='pola-app')
     elif environment == 'local':
         return "postgres://pola_app:pola_app@localhost/pola_app"
@@ -77,8 +77,8 @@ def main() -> None:
 
     print("# To load variable, run:")
     print("# Local: eval $(python dev.py)")
-    print("# Prod: eval $(python dev.py --environmentt prod)")
-    print("# Staging: eval $(python dev.py --environmentt staging)")
+    print("# Prod: eval $(python dev.py --environment prod)")
+    print("# Staging: eval $(python dev.py --environment staging)")
 
 
 if __name__ == '__main__':

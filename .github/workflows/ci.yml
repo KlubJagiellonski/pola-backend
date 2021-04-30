@@ -32,34 +32,14 @@ jobs:
         run: ./scripts/docker_login_github.sh
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
-      - run: docker images
-      - name: "Build image"
+      - name: "Build CI image"
         run: |
-          # Build Django CI image
           ./scripts/ci-docker-image/build_image.sh
-          # Verify CI image
           ./scripts/ci-docker-image/verify_image.sh
       - name: Pull images
-        run: >
-          docker-compose ps --services | xargs -n 1 bash -c '
-          echo "::group::${0}";
-          docker-compose pull -- ${0};
-          echo "::endgroup::"
-          '
-      - run: docker images
-      - run: docker-compose config
+        run: ./scripts/pull_images.sh
       - name: "Run tests"
-        run: |
-          docker-compose run web bash -x -c '
-            coverage run \
-              --source="." \
-              /app/manage.py test \
-                --verbosity=2 \
-                --keepdb;
-            EXIT_CODE=$?;
-            coverage xml;
-            exit ${EXIT_CODE};
-          '
+        run: ./run_test.sh
       - name: "Check missing migrations"
         run: docker-compose run web makemigrations --check -v 3
       - name: "Checks the entire Django project for potential problems"
@@ -70,7 +50,7 @@ jobs:
           fail_ci_if_error: true
           verbose: false
       - name: "Push image (push)"
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'schedule'
         run: ./scripts/ci-docker-image/push_image.sh
 
   static-checks:
@@ -104,14 +84,22 @@ jobs:
         run: ./scripts/docker_login_github.sh
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
-      - name: "Build image"
+      - name: "Build CI image"
+        run: |
+          ./scripts/ci-docker-image/build_image.sh
+          ./scripts/ci-docker-image/verify_image.sh
+      - name: "Build BI image"
         run: |
           # Build BI image
           ./scripts/bi-docker-image/build_image.sh
           # Verify BI image
           ./scripts/bi-docker-image/verify_image.sh
+      - name: Pull images
+        run: ./scripts/pull_images.sh
+      - run: ./run_manage.sh migrate
+      - run: ./run_manage.sh populate_db
       - name: "Push image (push)"
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'schedule'
         run: ./scripts/bi-docker-image/push_image.sh
 
   prod-image:
