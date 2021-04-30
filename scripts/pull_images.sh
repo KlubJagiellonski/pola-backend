@@ -21,6 +21,6 @@ function end_group {
 
 docker-compose ps --services | while read -r service_name; do
   start_group "${service_name}";
-  echo docker-compose pull -- "${service_name}";
+  docker-compose pull -- "${service_name}";
   end_group;
 done

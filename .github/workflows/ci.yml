@@ -71,6 +71,9 @@ jobs:
   bi-validate:
     name: "BI Validate"
     runs-on: ubuntu-latest
+    needs: [django-tests, static-checks]
+    env:
+      COMPOSE_FILE: "docker-compose.yaml:docker-compose.dbt.yaml:docker-compose.dbt-local.yaml"
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
@@ -96,8 +99,10 @@ jobs:
           ./scripts/bi-docker-image/verify_image.sh
       - name: Pull images
         run: ./scripts/pull_images.sh
+      - run: docker-compose config
       - run: ./run_manage.sh migrate
       - run: ./run_manage.sh populate_db
+      - run: ./run_manage.sh dbt
       - name: "Push image (push)"
         if: github.event_name == 'push' || github.event_name == 'schedule'
         run: ./scripts/bi-docker-image/push_image.sh
