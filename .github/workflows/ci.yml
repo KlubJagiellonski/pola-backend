@@ -1,8 +1,6 @@
 ---
 name: CI Build
 on:
-  schedule:
-    - cron: '28 0 * * 1'
   push:
     branches: ['master', 'prod']
   pull_request:
@@ -50,7 +48,7 @@ jobs:
           fail_ci_if_error: true
           verbose: false
       - name: "Push image (push)"
-        if: github.event_name == 'push' || github.event_name == 'schedule'
+        if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
 
   static-checks:
@@ -108,7 +106,7 @@ jobs:
       - run: ./run_dbt.sh dbt run
       - run: ./run_dbt.sh dbt test
       - name: "Push image (push)"
-        if: github.event_name == 'push' || github.event_name == 'schedule'
+        if: github.event_name == 'push'
         run: ./scripts/bi-docker-image/push_image.sh
 
   prod-image:
@@ -159,7 +157,7 @@ jobs:
         run: ./scripts/prod-docker-image/push_image.sh
 
   deploy-app:
-    name: "Deploy (push) - ${{ github.ref }}"
+    name: "Deploy app (push) - ${{ github.ref }}"
     runs-on: ubuntu-latest
     needs: [prod-image, bi-validate]
     if: >-
@@ -176,21 +174,63 @@ jobs:
         run: "./scripts/docker_login_heroku.sh"
       - name: "Install Heroku CLI"
         run: "curl https://cli-assets.heroku.com/install.sh | sh"
-      - name: "Set image tag"
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/prod'
         run: |-
-          set -x;
-          if [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "prod" ]]; then
-            echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
-            echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
-          elif [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "master" ]]; then
-            echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
-            echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
-          else
-            exit 1;
-          fi
-        env:
-          GITHUB_BRANCH: ${{ github.ref }}
+          echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
+          echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/master'
+        run: |-
+          echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
+          echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
       - name: "Pull image"
         run: ./scripts/prod-docker-image/pull_image.sh
       - name: "Deploy"
         run: './scripts/deploy.sh "${HEROKU_APP}"'
+
+  deploy-bi:
+    name: "Deploy (push) - ${{ github.ref }}"
+    runs-on: ubuntu-latest
+    needs: [prod-image, bi-validate]
+    if: >-
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      COMPOSE_FILE: "docker-compose.yaml:docker-compose.dbt.yaml:docker-compose.dbt-local.yaml"
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: "Setup Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: "Login to Github Docker Registry"
+        run: ./scripts/docker_login_github.sh
+      - name: "Build BI image"
+        run: |
+          # Build BI image
+          ./scripts/bi-docker-image/build_image.sh
+          # Verify BI image
+          ./scripts/bi-docker-image/verify_image.sh
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/prod'
+        run: |-
+          $(python dev.py --environment staging)
+          printenv | grep POLA_APP >> $GITHUB_ENV;
+      - name: "Set environment env variable"
+        if: github.ref == 'refs/heads/master'
+        run: |-
+          $(python dev.py --environment staging)
+          printenv | grep POLA_APP >> $GITHUB_ENV;
+      - run: ./run_dbt.sh dbt deps
+      - run: ./run_dbt.sh dbt snapshot
+      - run: ./run_dbt.sh dbt seed
+      - run: ./run_dbt.sh dbt run
+      - run: ./run_dbt.sh dbt test
+      - name: "Push image (push)"
+        if: github.event_name == 'push'
+        run: ./scripts/bi-docker-image/push_image.sh
