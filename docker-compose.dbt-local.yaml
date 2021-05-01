@@ -3,6 +3,13 @@ version: '3'
 
 services:
   dbt:
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_started
+      web-init:
+        condition: service_started
     environment:
       - POLA_APP_HOST=postgres
       - POLA_APP_PORT=5432

@@ -22,8 +22,14 @@ SELECT
     SUM(query_count) sum_query_count,
     SUM(1) sum_total,
     SUM(company_company.verified::int) sum_verified,
-    SUM(company_company.verified::int)::float / SUM(1)::float as percentage_verified,
-    SUM(query_count)::float / (SELECT SUM(company_company.query_count) FROM company_company) percentage_query_count
+    CASE
+        WHEN SUM(1) = 0 THEN 0
+        ELSE SUM(company_company.verified::int)::float / SUM(1)::float
+    END percentage_verified,
+    CASE
+        WHEN (SELECT SUM(company_company.query_count) FROM company_company) = 0 THEN 0
+        ELSE SUM(query_count)::float / (SELECT SUM(company_company.query_count) FROM company_company)
+    END percentage_query_count
 FROM
     {{ source('public', 'company_company') }}
 GROUP BY query_count_group
