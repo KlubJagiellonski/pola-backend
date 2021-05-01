@@ -1,0 +1,20 @@
+---
+version: '3'
+
+services:
+  dbt:
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_started
+      web-init:
+        condition: service_started
+    environment:
+      - POLA_APP_HOST=postgres
+      - POLA_APP_PORT=5432
+      - POLA_APP_USER=pola_app
+      - POLA_APP_PASS=pola_app
+      - POLA_APP_DB_NAME=pola_app
+      - POLA_APP_SCHEMA=public
+      - DBT_PROFILES_DIR=/app/dbt/profile

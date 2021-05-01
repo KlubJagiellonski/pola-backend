@@ -1,0 +1,22 @@
+---
+version: '3'
+
+services:
+  dbt:
+    build:
+      context: .
+      dockerfile: ./scripts/bi-docker-image/Dockerfile
+    image: pola-bi:latest
+    volumes:
+      - ./pola-bi:/app
+    working_dir: /app/dbt
+    command: 'echo "Hello"'
+    environment:
+      - POLA_APP_HOST
+      - POLA_APP_PORT
+      - POLA_APP_USER
+      - POLA_APP_PASS
+      - POLA_APP_DB_NAME
+      - POLA_APP_SCHEMA
+      - DBT_PROFILES_DIR=/app/dbt/profile
+    restart: always

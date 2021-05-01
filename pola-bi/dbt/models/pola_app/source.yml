@@ -1,0 +1,120 @@
+---
+version: 2
+
+sources:
+  - name: public
+    tables:
+      - name: "company_brand"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "created_at"
+          - name: "company_id"
+          - name: "name"
+          - name: "common_name"
+      - name: "company_company"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "verified"
+          - name: "created_at"
+          - name: "query_count"
+          - name: "is_friend"
+          - name: "nip"
+          - name: "name"
+          - name: "official_name"
+          - name: "common_name"
+          - name: "address"
+      - name: "pola_query"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "was_plScore"
+          - name: "client"
+          - name: "was_590"
+          - name: "product_id"
+          - name: "timestamp"
+
+      - name: "product_product"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "ilim_queried_at"
+          - name: "ai_pics_count"
+          - name: "brand_id"
+          - name: "company_id"
+          - name: "code"
+          - name: "name"
+          - name: "created_at"
+          - name: "query_count"
+      - name: "report_report"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "client"
+          - name: "created_at"
+          - name: "resolved_at"
+          - name: "resolved_by_id"
+          - name: "product_id"
+          - name: "description"
+      - name: "reversion_revision"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "comment"
+          - name: "user_id"
+          - name: "date_created"
+      - name: "reversion_version"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "db"
+          - name: "serialized_data"
+          - name: "format"
+          - name: "revision_id"
+          - name: "object_id"
+          - name: "content_type_id"
+          - name: "object_repr"
+      - name: "socialaccount_socialaccount"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "date_joined"
+          - name: "last_login"
+          - name: "extra_data"
+          - name: "uid"
+          - name: "provider"
+          - name: "user_id"
+      - name: "users_user"
+        columns:
+          - name: "id"
+            tests:
+              - unique
+              - not_null
+          - name: "last_name"
+          - name: "password"
+          - name: "date_joined"
+          - name: "is_active"
+          - name: "last_login"
+          - name: "is_superuser"
+          - name: "is_staff"
+          - name: "username"
+          - name: "name"
+          - name: "email"
+          - name: "first_name"
