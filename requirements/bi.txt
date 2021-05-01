@@ -54,7 +54,7 @@ pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20
 pycryptodomex==3.10.1
-PyJWT==1.7.1
+PyJWT==2.1.0
 pyOpenSSL==20.0.1
 pyrsistent==0.17.3
 python-dateutil==2.8.1
