@@ -102,7 +102,11 @@ jobs:
       - run: docker-compose config
       - run: ./run_manage.sh migrate
       - run: ./run_manage.sh populate_db
-      - run: ./run_manage.sh dbt
+      - run: ./run_dbt.sh dbt deps
+      - run: ./run_dbt.sh dbt snapshot
+      - run: ./run_dbt.sh dbt seed
+      - run: ./run_dbt.sh dbt run
+      - run: ./run_dbt.sh dbt test
       - name: "Push image (push)"
         if: github.event_name == 'push' || github.event_name == 'schedule'
         run: ./scripts/bi-docker-image/push_image.sh
