@@ -2,7 +2,7 @@
 name: CI Build
 on:
   push:
-    branches: ['master', 'prod']
+#    branches: ['master', 'prod']
   pull_request:
     branches: ['master']
 
@@ -54,8 +54,6 @@ jobs:
   static-checks:
     name: "Static checks"
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
@@ -121,14 +119,14 @@ jobs:
       - name: "Set image tag"
         if: >-
           github.event_name == 'push' &&
-          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+          (github.ref == 'refs/heads/bi-views' || github.ref == 'refs/heads/prod')
         run: |-
           set -x;
 
           if [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "prod" ]]; then
             echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
             echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
-          elif [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "master" ]]; then
+          elif [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "bi-views" ]]; then
             echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
             echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
           else
@@ -162,7 +160,7 @@ jobs:
     needs: [prod-image, bi-validate]
     if: >-
       github.event_name == 'push' &&
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+      (github.ref == 'refs/heads/bi-views' || github.ref == 'refs/heads/prod')
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
@@ -180,7 +178,7 @@ jobs:
           echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
           echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
       - name: "Set environment env variable"
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/bi-views'
         run: |-
           echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
           echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
@@ -195,7 +193,7 @@ jobs:
     needs: [prod-image, bi-validate]
     if: >-
       github.event_name == 'push' &&
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+      (github.ref == 'refs/heads/bi-views' || github.ref == 'refs/heads/prod')
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       COMPOSE_FILE: "docker-compose.yaml:docker-compose.dbt.yaml:docker-compose.dbt-local.yaml"
@@ -219,10 +217,10 @@ jobs:
       - name: "Set environment env variable"
         if: github.ref == 'refs/heads/prod'
         run: |-
-          $(python dev.py --environment staging)
+          $(python dev.py --environment prod)
           printenv | grep POLA_APP >> $GITHUB_ENV;
       - name: "Set environment env variable"
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/bi-views'
         run: |-
           $(python dev.py --environment staging)
           printenv | grep POLA_APP >> $GITHUB_ENV;

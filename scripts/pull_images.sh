@@ -6,7 +6,7 @@ BOLD=$'\e[36m'
 RESET=$'\e[0m'
 
 function start_group {
-  if [ "${CI:=}" == "true" ]; then
+  if [ "${GITHUB_ACTIONS:=}" == "true" ]; then
     echo "::group::${1}";
   else
     echo ":::${BOLD}${1}${RESET}:::"
@@ -14,7 +14,7 @@ function start_group {
 }
 
 function end_group {
-  if [ "${CI:=}" == "true" ]; then
+  if [ "${GITHUB_ACTIONS:=}" == "true" ]; then
     echo "::endgroup::";
   fi
 }
