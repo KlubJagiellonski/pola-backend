@@ -33,7 +33,7 @@ idna==2.9
 importlib-metadata==3.7.0
 isodate==0.6.0
 jeepney==0.6.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jmespath==0.10.0
 json-rpc==1.13.0
 jsonschema==3.1.1
