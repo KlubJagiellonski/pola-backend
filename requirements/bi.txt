@@ -28,7 +28,7 @@ google-crc32c==1.1.2
 google-resumable-media==1.2.0
 googleapis-common-protos==1.52.0
 grpcio==1.37.1
-hologram==0.0.14
+hologram==0.0.13
 idna==3.1
 importlib-metadata==4.0.1
 isodate==0.6.0
