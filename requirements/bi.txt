@@ -10,7 +10,7 @@ botocore==1.18.18
 cachetools==4.2.2
 certifi==2020.12.5
 cffi==1.14.5
-chardet==4.0.0
+chardet==3.0.4
 colorama==0.4.3
 cryptography==3.4.7
 dbt==0.19.1
