@@ -9,14 +9,14 @@ exposures:
     url: https://bi.tool/dashboards/1
 
     depends_on:
-      - ref('companies_by_query_group')
-      - ref('companies_with_count_group')
-      - ref('new_product_by_hour')
-      - ref('popular_not_verified_products')
-      - ref('product_by_time')
-      - ref('queries_by_time')
-      - ref('queries_stats_intervals')
-      - ref('stats_queries_uq_users_by_week')
+      - ref('bi_companies_by_query_group')
+      - ref('bi_companies_with_count_group')
+      - ref('bi_new_product_by_hour')
+      - ref('bi_popular_not_verified_products')
+      - ref('bi_product_by_time')
+      - ref('bi_queries_by_time')
+      - ref('bi_queries_stats_intervals')
+      - ref('bi_stats_queries_uq_users_by_week')
     owner:
       name: Pola
       email: "-"
