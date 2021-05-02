@@ -22,7 +22,7 @@ dbt-snowflake==0.19.1
 decorator==5.0.7
 google-api-core==1.23.0
 google-auth==1.30.0
-google-cloud-bigquery==2.15.0
+google-cloud-bigquery==2.3.1
 google-cloud-core==1.4.4
 google-crc32c==1.1.2
 google-resumable-media==1.2.0
