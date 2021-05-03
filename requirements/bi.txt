@@ -41,7 +41,9 @@ keyring==21.8.0
 leather==0.3.3
 Logbook==1.5.3
 MarkupSafe==1.1.1
+mashumaro==2.0
 minimal-snowplow-tracker==0.0.2
+msgpack==1.0.2
 msrest==0.6.21
 networkx==2.5.1
 oauthlib==3.1.0
