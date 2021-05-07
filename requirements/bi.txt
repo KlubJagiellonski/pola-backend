@@ -1,6 +1,6 @@
 agate==1.6.1
 asn1crypto==1.4.0
-attrs==20.3.0
+attrs==21.1.0
 azure-common==1.1.27
 azure-core==1.13.0
 azure-storage-blob==12.8.1
