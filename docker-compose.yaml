@@ -18,11 +18,12 @@ x-pola-backend-common:
     SLACK_CHANNEL_AI_STATS: 'ai-stats'
     WEB_CONCURRENCY: '6'
     WHITELIST_API_IP_ADDRESSES: '10.0.0.1'
-    DJANGO_AWS_ACCESS_KEY_ID: 'minio'
-    DJANGO_AWS_SECRET_ACCESS_KEY: 'minio123'
-    DJANGO_AWS_STORAGE_BUCKET_NAME: 'pola-app-local'
-    DJANGO_AWS_STORAGE_BUCKET_AI_NAME: 'pola-app-ai-local'
-    DJANGO_AWS_S3_ENDPOINT_URL: 'http://minio:9000'
+    POLA_APP_AWS_ACCESS_KEY_ID: 'minio'
+    POLA_APP_AWS_SECRET_ACCESS_KEY: 'minio123'
+    POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME: 'pola-app-public'
+    POLA_APP_AWS_S3_BACKEND_BUCKET_NAME: 'pola-app-backend'
+    POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME: 'pola-app-ai-pics'
+    POLA_APP_AWS_S3_ENDPOINT_URL: 'http://minio:9000'
 
   env_file: .env
   volumes:
@@ -86,10 +87,10 @@ services:
     command:
       - -x
       - -c
-      - mc --debug mb local/pola-app-local || true;
-        mc --debug mb local/pola-app-ai-local || true;
-        mc --debug policy set public local/pola-app-local || true;
-        mc --debug policy set public local/pola-app-ai-local || true;
+      - mc mb local/pola-app-public || true;
+        mc mb local/pola-app-backend || true;
+        mc mb local/pola-app-ai-pics || true;
+        mc policy set public local/pola-app-public || true;
 
   postgres:
     image: postgres:13.1

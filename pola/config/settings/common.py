@@ -284,10 +284,11 @@ AI_PICS_PAGE_SIZE = 5000
 INSTALLED_APPS += ('storages',)  # noqa: F405
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')  # noqa: F405
-AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')  # noqa: F405
-AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')  # noqa: F405
-AWS_STORAGE_BUCKET_AI_NAME = env('DJANGO_AWS_STORAGE_BUCKET_AI_NAME')  # noqa: F405
+AWS_ACCESS_KEY_ID = env('POLA_APP_AWS_ACCESS_KEY_ID')  # noqa: F405
+AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')  # noqa: F405
+AWS_STORAGE_BUCKET_NAME = env('POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME')  # noqa: F405
+AWS_STORAGE_BACKEND_BUCKET_NAME = env('POLA_APP_AWS_S3_BACKEND_BUCKET_NAME')  # noqa: F405
+AWS_STORAGE_AI_PICS_BUCKET_NAME = env('POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME')  # noqa: F405
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto
@@ -297,7 +298,7 @@ AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)  # noqa: F405
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 AWS_S3_SIGNATURE_VERSION = "s3v4"
-AWS_S3_ENDPOINT_URL = env.str('DJANGO_AWS_S3_ENDPOINT_URL', default=None)
+AWS_S3_ENDPOINT_URL = env.str('POLA_APP_AWS_S3_ENDPOINT_URL', default=None)
 AI_SHARED_SECRET = env('AI_SHARED_SECRET')  # noqa: F405
 
 # URL that handles the media served from MEDIA_ROOT, used for managing
@@ -309,5 +310,5 @@ else:
 
 # Static Assets
 # ------------------------
-STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 STATIC_URL = f'http://localhost:9000/static/{AWS_STORAGE_BUCKET_NAME}/'
