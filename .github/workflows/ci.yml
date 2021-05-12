@@ -45,8 +45,8 @@ jobs:
       - name: "Upload coverage"
         uses: codecov/codecov-action@v1.5.0
         with:
-          fail_ci_if_error: true
-          verbose: false
+          fail_ci_if_error: false
+          verbose: true
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
