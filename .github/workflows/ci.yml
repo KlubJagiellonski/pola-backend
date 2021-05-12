@@ -58,7 +58,7 @@ jobs:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v2
       - name: "Setup Python"
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.2.2
         with:
           python-version: '3.8'
       - name: "Run static checks"
@@ -76,7 +76,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: "Setup Python"
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.2.2
         with:
           python-version: '3.8'
       - name: "Login to Github Docker Registry"
@@ -203,7 +203,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: "Setup Python"
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.2.2
         with:
           python-version: '3.8'
       - name: "Login to Github Docker Registry"
