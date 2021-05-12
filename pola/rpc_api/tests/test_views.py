@@ -115,7 +115,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "donate": {
                     "show_button": True,
                     "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-                    "title": "Wspieraj aplikacj\u0119 Pola",
+                    "title": "Potrzebujemy 1 zł",
                 },
             },
             json.loads(response.content),
