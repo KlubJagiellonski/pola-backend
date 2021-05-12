@@ -329,7 +329,7 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
     result["donate"] = {
         "show_button": True,
         "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-        "title": "Wspieraj aplikację Pola",
+        "title": "Potrzebujemy 1 zł",
     }
     return result
 
