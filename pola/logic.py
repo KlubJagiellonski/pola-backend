@@ -82,14 +82,17 @@ def handle_unknown_company(code, report, result):
     # we don't know the manufacturer
     if code.startswith('590'):
         # the code is registered in Poland, we want more data!
-        result['name'] = "Zgłoś nam ten kod!"
+        result['name'] = "Dziękujemy za użycie aplikacji Pola!"
         result['altText'] = (
-            "Zeskanowałeś kod, którego nie mamy "
-            "jeszcze w bazie. Bardzo prosimy o "
-            "zgłoszenie tego kodu "
-            "i wysłania zdjęć zarówno "
-            "kodu kreskowego jak i etykiety z "
-            "produktu. Z góry dziękujemy!"
+            "Każde skanowanie jest rejestrowane."
+            " Najczęściej skanowanefirmy i produkty,"
+            "których nie mamy jeszcze w bazie,"
+            " są weryfikowane w pierwszej kolejności."
+            " Nie pobieramy przy tym żadnych"
+            " informacji o użytkowniku."
+            " "
+            "Jeśli chcesz zgłosić błąd lub wyrazić"
+            " opinię, prosimy o kontakt: pola@klubjagiellonski.pl"
         )
         result['card_type'] = TYPE_GREY
         report['text'] = "Bardzo prosimy o zgłoszenie nam tego produktu"
