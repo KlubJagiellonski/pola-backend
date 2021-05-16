@@ -138,18 +138,6 @@ jobs:
         run: ./scripts/prod-docker-image/build_image.sh
       - name: "Verify image"
         run: ./scripts/prod-docker-image/verify_image.sh
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'docker.pkg.github.com/klubjagiellonski/pola-backend/pola-backend:${{ env.IMAGE_TAG }}'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: 'trivy-results.sarif'
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/prod-docker-image/push_image.sh
