@@ -413,7 +413,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'description': 'TEST',
                 'donate': {
                     'show_button': True,
-                    'title': 'Wspieraj aplikację Pola',
+                    'title': 'Potrzebujemy 1 zł',
                     'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
                 },
                 'friend_text': 'To jest przyjaciel Poli',
