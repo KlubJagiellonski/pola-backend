@@ -13,6 +13,7 @@ def update_product(self, brand, ean_code, company, product_name):
     if product:
         product.brand = brand
         product.name = product_name
+        product.company = company
         product.save()
         self.stdout.write(self.style.SUCCESS(f"Successfully updated product {product_name}"))
     else:
