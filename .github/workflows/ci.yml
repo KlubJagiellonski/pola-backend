@@ -43,10 +43,10 @@ jobs:
       - name: "Checks the entire Django project for potential problems"
         run: docker-compose run web check --fail-level DEBUG -v 3
       - name: "Upload coverage"
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.5.0
         with:
-          fail_ci_if_error: true
-          verbose: false
+          fail_ci_if_error: false
+          verbose: true
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/ci-docker-image/push_image.sh
