@@ -61,13 +61,15 @@ class TestGetResultFromCode(TestCase):
         expected_response = (
             {
                 "altText": (
-                    "Zeskanowałeś kod, którego nie mamy jeszcze w bazie. Bardzo "
-                    "prosimy o zgłoszenie tego kodu i wysłania zdjęć zarówno kodu "
-                    "kreskowego jak i etykiety z produktu. Z góry dziękujemy!"
+                    "Każde skanowanie jest rejestrowane. Najczęściej skanowane firmy i produkty, "
+                    "których nie mamy jeszcze w bazie, są weryfikowane w pierwszej kolejności. "
+                    "Nie pobieramy przy tym żadnych informacji o użytkowniku.\n"
+                    "\n"
+                    "Jeśli chcesz zgłosić błąd lub wyrazić opinię, prosimy o kontakt: pola@klubjagiellonski.pl"
                 ),
                 "card_type": "type_grey",
                 "code": "5900084231145",
-                "name": "Zgłoś nam ten kod!",
+                "name": "Dziękujemy za użycie aplikacji Pola!",
                 "plCapital": None,
                 "plCapital_notes": None,
                 "plNotGlobEnt": None,
