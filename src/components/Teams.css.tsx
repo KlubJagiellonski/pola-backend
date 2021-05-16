@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { WrapperSection, TitleSection, Button } from '../styles/GlobalStyle.css';
 
-export const Wrapper = styled(WrapperSection)`
+export const WrapperTeams = styled(WrapperSection)`
   height: 100%;
   min-height: 200px;
   margin-top: 15px;
@@ -12,6 +12,10 @@ export const Wrapper = styled(WrapperSection)`
   @media only screen and (max-width: 768px) {
     background: none;
   }
+`;
+
+export const Wrapper = styled(WrapperTeams)`
+  grid-area: teams;
 `;
 
 export const TextSection = styled.div`

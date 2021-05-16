@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SearchButton, SearchInput, SearchFormControl, Wrapper, Text } from './Search.css'
+import { SearchButton, SearchInput, SearchFormControl, Wrapper, Text, TextInfo } from './Search.css'
 import { ImSearch } from 'react-icons/im'
 import { useHistory } from "react-router-dom";
 
@@ -22,6 +22,9 @@ const Search = () => {
           Sprawdź w bazie kodów
         </a>
       </Text>
+      <TextInfo>
+        Już niedługo wprowadzimy możliwość wyszukiwania nazw firm i produktów.
+        </TextInfo>
       <SearchFormControl data-testid="form" onSubmit={handleSubmit}>
         <SearchInput
           aria-label="Kod EAN"

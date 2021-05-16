@@ -3,19 +3,13 @@ import { Wrapper, Title, TextSection, ButtonTeams } from './Teams.css';
 import { Text } from '../styles/GlobalStyle.css';
 import { color } from '../styles/theme';
 
-type TeamsProps = {
-  title: string;
-  text: string;
-  buttonText: string;
-};
-
-const Teams = ({ title, text, buttonText }: TeamsProps) => {
+const Teams = () => {
   return (
-    <Wrapper color={color.dark}>
+    <Wrapper color={color.secondary}>
       <TextSection>
-        <Title>{title}</Title>
-        <Text>{text}</Text>
-        <ButtonTeams>{buttonText}</ButtonTeams>
+        <Title>Zespół</Title>
+        <Text>1-2 zdania: ogólnie kto tworzy Polę (jaka grupa ludzi np. studenci, członkowie Klubu itp.)</Text>
+        <ButtonTeams>DOŁĄCZ DO ZESPOŁU</ButtonTeams>
       </TextSection>
     </Wrapper>
   );

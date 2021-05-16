@@ -7,6 +7,7 @@ export const Wrapper = styled(WrapperSection)`
   justify-content: center;
   padding: 50px;
   min-height: 410px;
+  grid-area: about;
 
   @media only screen and (min-width: 1900px) {
     min-height: 440px;

@@ -15,6 +15,13 @@ export const Text = styled.p`
     }
 `
 
+export const TextInfo = styled.p`
+    color: red;
+    font-size: 16px;
+    padding: 0px;
+    margin: 10px;
+`
+
 export const SearchButton = styled.button`
     color: #d8002f;
     float: left;

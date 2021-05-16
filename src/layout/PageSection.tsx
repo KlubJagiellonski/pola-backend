@@ -12,7 +12,7 @@ export const PageSection = styled.section<IPageSection>`
   margin: 0 auto;
   background-color: ${props => props.backgroundColor || 'transparent'};
   @media ${Device.mobile} {
-    padding: ${props => (props.size === 'full' ? 0 : padding.normal)};
+    padding: 0;
   }
   @media ${Device.desktop} {
     max-width: ${props => (props.size === 'full' ? undefined : pageWidth)};

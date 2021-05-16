@@ -6,7 +6,7 @@ import { PolaLogo } from './Pola-Logo';
 import { color, Device, padding, pageWidth } from '../styles/theme';
 
 export const FooterContainer = styled.footer`
-  background-color: ${color.dark};
+  background-color: ${color.secondary};
   padding: ${padding.big};
 
   .footer-content {

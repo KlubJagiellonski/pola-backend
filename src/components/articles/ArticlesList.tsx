@@ -5,10 +5,9 @@ import { ArticlesButton, Wrapper } from './ArticlesList.css';
 
 interface IArticlesList {
   articles?: IArticle[];
-  width: number;
 }
 
-export const ArticlesList: React.FC<IArticlesList> = ({ articles, width }) => {
+export const ArticlesList: React.FC<IArticlesList> = ({ articles }) => {
   return (
     <Wrapper>
       {articles &&
@@ -19,7 +18,6 @@ export const ArticlesList: React.FC<IArticlesList> = ({ articles, width }) => {
             title={article.title}
             date={article.date}
             text={article.content}
-            width={600}
           />
         ))}
       <ArticlesButton>CZYTAJ WIĘCEJ</ArticlesButton>

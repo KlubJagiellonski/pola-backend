@@ -1,8 +1,8 @@
 export const color = {
   primary: '#E5E5E5',
-  dark: '#C4C4C4',
+  secondary: '#C4C4C4',
   border: '#A0A0A0',
-  text: '#6C6C6C',
+  dark: '#6C6C6C',
 };
 
 export const mobileHeaderHeight = '40px';
@@ -18,6 +18,6 @@ export const padding = {
 };
 
 export const Device: { [key: string]: string } = {
-  mobile: `(max-width: 1271px)`,
-  desktop: `(min-width: 1272px)`,
+  mobile: `(max-width: 768px)`,
+  desktop: `(min-width: 768px)`,
 };

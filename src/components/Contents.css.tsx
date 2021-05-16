@@ -1,36 +1,34 @@
 import styled from 'styled-components';
+import {Device} from './../styles/theme'
 
 export const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  padding: 15px 0;
+  display: grid;
+  grid-gap: 15px;
+  grid-template-areas:
+     "articles development"
+     "articles social-media"
+     "articles about"
+     "friends friends"
+     "teams-friend teams"
+     "download download";
 
-  @media only screen and (max-width: 1200px) {
-    margin: 0 70px 20px 70px;
-  }
-
-  @media only screen and (max-width: 900px) {
-    margin: 0 20px 20px 20px;
-  }
-
-  @media only screen and (max-width: 800px) {
-    margin: 0 10px 20px 10px;
-  }
-
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     margin: 0;
+    padding: 0;
+    grid-gap: 0px;
+    grid-template-areas:
+     "development"
+     "articles"
+     "about"
+     "social-media"
+     "friends"
+     "teams-friend"
+     "teams"
+     "download";
   }
-`;
-
-export const Column = styled.div`
-  flex: 0 50%;
-`;
-
-export const LeftColumn = styled.div`
-  margin-right: 8px;
-  height: 100%;
-`;
-
-export const RightColumn = styled.div`
-  margin-left: 8px;
-  height: 100%;
 `;

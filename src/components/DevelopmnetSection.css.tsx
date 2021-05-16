@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { WrapperSection } from '../styles/GlobalStyle.css';
+import {Device} from './../styles/theme'
 
 export const Wrapper = styled(WrapperSection)`
   display: flex;
   flex-direction: row;
   min-height: 190px;
+  grid-area: development;
 
   @media only screen and (min-width: 1900px) {
     min-height: 220px;
@@ -14,7 +16,7 @@ export const Wrapper = styled(WrapperSection)`
     min-height: 250px;
   }
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     min-height: 150px;
   }
 `;

@@ -1,17 +1,17 @@
 import styled from 'styled-components';
-import { color } from '../../styles/theme';
+import { color, Device } from '../../styles/theme';
 
 export const Wrapper = styled.div`
   width: 100%;
+  padding: 260px 0 70px 0;
 
   @media only screen and (max-width: 900px) {
-    padding: 260px 0 70px 0;
     display: flex;
     align-items: center;
     flex-direction: column;
   }
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     padding: 100px 0 20px 0;
     display: flex;
     align-items: center;
@@ -32,8 +32,9 @@ export const Title = styled.p`
   font-weight: bold;
   font-size: 24px;
   text-align: left;
+  color: white;
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile}{
     font-size: 18px;
   }
 `;
@@ -44,24 +45,27 @@ export const Text = styled.p`
   font-family: 'Roboto';
   font-size: 16px;
   text-align: left;
+  line-height: 1rem;
+  color: white;
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     font-size: 12px;
   }
 
   a {
-    color: #6c6c6c;
+    color: #1f1f1f;
   }
 `;
 
 export const InputSection = styled.div`
   position: relative;
   border: 1px solid ${color.border};
-  padding: 5px 100px 5px 5px;
-  width: 250px;
+  padding: 5px 100px 5px 10px;
+  width: 320px;
   background-color: white;
+  border-radius: 20px;
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -94,20 +98,21 @@ export const InputIconSection = styled.div`
 `;
 
 export const SubmitButton = styled.button`
-  background: ${color.primary};
+  background: white;
   border: 1px solid ${color.border};
   height: 100%;
   font-size: 14px;
   text-align: center;
-  padding: 6px 15px;
+  padding: 6px 20px;
   margin-left: 15px;
   color: ${color.border};
   display: inline-block;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Roboto';
+  border-radius: 20px;
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     padding: 5px 0;
     margin-left: 0;
     margin-top: 5px;
@@ -120,7 +125,7 @@ export const FormSearch = styled.div`
   align-items: center;
   margin-top: 10px;
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     flex-direction: column;
   }
 `;
