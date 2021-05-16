@@ -84,15 +84,11 @@ def handle_unknown_company(code, report, result):
         # the code is registered in Poland, we want more data!
         result['name'] = "Dziękujemy za użycie aplikacji Pola!"
         result['altText'] = (
-            "Każde skanowanie jest rejestrowane."
-            " Najczęściej skanowanefirmy i produkty,"
-            "których nie mamy jeszcze w bazie,"
-            " są weryfikowane w pierwszej kolejności."
-            " Nie pobieramy przy tym żadnych"
-            " informacji o użytkowniku."
-            " "
-            "Jeśli chcesz zgłosić błąd lub wyrazić"
-            " opinię, prosimy o kontakt: pola@klubjagiellonski.pl"
+            "Każde skanowanie jest rejestrowane. Najczęściej skanowane firmy i produkty, "
+            "których nie mamy jeszcze w bazie, są weryfikowane w pierwszej kolejności. "
+            "Nie pobieramy przy tym żadnych informacji o użytkowniku.\n"
+            "\n"
+            "Jeśli chcesz zgłosić błąd lub wyrazić opinię, prosimy o kontakt: pola@klubjagiellonski.pl"
         )
         result['card_type'] = TYPE_GREY
         report['text'] = "Bardzo prosimy o zgłoszenie nam tego produktu"

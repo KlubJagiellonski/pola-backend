@@ -61,12 +61,11 @@ class TestGetResultFromCode(TestCase):
         expected_response = (
             {
                 "altText": (
-                    "Każde skanowanie jest rejestrowane. Najczęściej skanowane firmy i produkty,"
-                    " których nie mamy jeszcze w bazie, są weryfikowane w pierwszej kolejności. "
-                    "Nie pobieramy przy tym żadnych informacji o użytkowniku."
-                    " "
+                    "Każde skanowanie jest rejestrowane. Najczęściej skanowane firmy i produkty, "
+                    "których nie mamy jeszcze w bazie, są weryfikowane w pierwszej kolejności. "
+                    "Nie pobieramy przy tym żadnych informacji o użytkowniku.\n"
+                    "\n"
                     "Jeśli chcesz zgłosić błąd lub wyrazić opinię, prosimy o kontakt: pola@klubjagiellonski.pl"
-
                 ),
                 "card_type": "type_grey",
                 "code": "5900084231145",
