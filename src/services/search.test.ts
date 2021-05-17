@@ -10,11 +10,11 @@ jest.mock('./search-service', () => ({
   },
 }));
 
-import { SearchService } from './search-service';
+import { SearchService } from './search';
 
 describe('Search Service', () => {
   it('should return a promise containing a data', async () => {
-    const result = await SearchService.getProducts(10);
+    const result = await SearchService.getInstance().getProducts(10);
     expect(result).toEqual(mockFailureResponse);
   });
 });
