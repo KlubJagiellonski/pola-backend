@@ -1,15 +1,15 @@
 export const color = {
   primary: '#E5E5E5',
-  secondary: '#C4C4C4',
+  dark: '#C4C4C4',
   border: '#A0A0A0',
-  dark: '#6C6C6C',
+  text: '#6C6C6C',
 };
 
 export const mobileHeaderHeight = '40px';
 export const desktopHeaderHeight = '96px';
 
-export const pageWidth = '1272px';
-
+const width = 1272;
+export const pageWidth = width + 'px';
 export const padding = {
   tiny: '4px',
   small: '8px',
@@ -18,6 +18,6 @@ export const padding = {
 };
 
 export const Device: { [key: string]: string } = {
-  mobile: `(max-width: 768px)`,
-  desktop: `(min-width: 768px)`,
+  mobile: `(max-width: ${width - 1}px)`,
+  desktop: `(min-width: ${pageWidth})`,
 };

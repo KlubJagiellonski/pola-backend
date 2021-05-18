@@ -1,4 +1,4 @@
-import { IProduct } from '../../domain/products';
+import { IProductData } from '../../domain/products';
 import { IAction } from '../types';
 
 export const actionTypes = {
@@ -14,10 +14,11 @@ export const InvokePhrase = (phrase: string): IAction => ({
   },
 });
 
-export const LoadResults = (products: IProduct[]): IAction => ({
+export const LoadResults = (products: IProductData[], token: string): IAction => ({
   type: actionTypes.LOAD_RESULTS,
   payload: {
     products,
+    token,
   },
 });
 

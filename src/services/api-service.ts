@@ -1,4 +1,4 @@
-export abstract class ApiConnector {
+export abstract class ApiService {
   protected readonly apiUrl: string;
 
   protected constructor(apiUrl: string) {

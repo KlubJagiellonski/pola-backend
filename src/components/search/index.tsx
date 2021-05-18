@@ -12,18 +12,23 @@ import {
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
 import { SearchResultsList } from './SearchResultsList';
-import { IProduct } from '../../products';
+import { IProductData } from '../../domain/products';
 
 interface ISearchContainer {
-  searchResults: IProduct[];
+  searchResults: IProductData[];
+  token?: string;
+
   onSearch: (phrase: string) => void;
+  onLoadMore: () => void;
 }
 
-export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, onSearch }) => {
+export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, token, onSearch, onLoadMore }) => {
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
 
   const handlePhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => setPhrase(e.currentTarget.value);
+  const handleSearch = (e: React.MouseEventHandler<HTMLButtonElement>) => onSearch(phrase);
+  const handleLoad = () => onLoadMore();
 
   return (
     <Wrapper>
@@ -45,12 +50,12 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, onS
               <img src={Microphone} />
             </InputIconSection>
           </InputSection>
-          <SubmitButton disabled={!hasPhrase} onClick={e => onSearch(phrase)}>
+          <SubmitButton disabled={!hasPhrase} onClick={handleSearch}>
             Sprawdź
           </SubmitButton>
         </FormSearch>
       </div>
-      {searchResults && <SearchResultsList results={searchResults} />}
+      {searchResults && <SearchResultsList results={searchResults} token={token} onLoadMore={handleLoad} />}
     </Wrapper>
   );
 };

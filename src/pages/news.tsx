@@ -5,6 +5,7 @@ import SEO from '../layout/seo';
 import { IArticle } from '../domain/articles';
 import { connect } from 'react-redux';
 import ArticlesList from '../components/articles/ArticlesList';
+import { IPolaState } from '../state/types';
 
 interface NewsPage {
   articles?: IArticle[];

@@ -1,6 +1,21 @@
 import { getNumber } from '../../utils/data/random-number';
 
-export interface IProduct {
+export interface ICompany {
+  name: string;
+}
+
+export interface IBrand {
+  name: string;
+}
+
+export interface IProductData {
+  code: string;
+  name: string;
+  company?: ICompany;
+  brand?: IBrand;
+}
+
+export interface IProductEAN {
   id: string;
   title: string;
   description?: string;
@@ -8,7 +23,7 @@ export interface IProduct {
   image?: URL;
 }
 
-export class Product implements IProduct {
+export class Product implements IProductEAN {
   public id: string;
   public image: URL;
 
