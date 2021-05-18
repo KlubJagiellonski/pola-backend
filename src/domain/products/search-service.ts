@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IProductData } from '.';
+import { IProductData, IProductMock } from '.';
 import { ApiService } from '../../services/api-service';
 
 export interface ISearchParams {
@@ -14,14 +14,6 @@ export interface IProductSearchSuccess {
 
 export interface ISearchError {
   error: unknown;
-}
-
-interface IProductMock {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  image: URL;
 }
 
 const PRODUCT_SEARCH_API = 'https://fakestoreapi.com/products';
@@ -44,7 +36,7 @@ export class ProductService extends ApiService {
   public async searchProducts(phrase: string, token?: string): Promise<IProductSearchSuccess> {
     const amount = 5 + this.page;
     const response = await axios.get(`${this.apiUrl}?limit=${amount}`);
-    const producs: IProductMock[] = response.data;
+    const products: IProductMock[] = response.data;
 
     if (token) {
       this.page += 1;
@@ -55,7 +47,7 @@ export class ProductService extends ApiService {
     return {
       nextPageToken: token || 'mock_token',
       totalItems: amount,
-      products: producs.map(mock => ({
+      products: products.map(mock => ({
         code: mock.id,
         name: mock.title,
         company: {

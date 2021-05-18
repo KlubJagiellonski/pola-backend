@@ -23,6 +23,14 @@ export interface IProductEAN {
   image?: URL;
 }
 
+export interface IProductMock {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  image: URL;
+}
+
 export class Product implements IProductEAN {
   public id: string;
   public image: URL;
