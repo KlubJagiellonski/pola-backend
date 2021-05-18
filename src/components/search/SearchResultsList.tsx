@@ -4,7 +4,7 @@ import { IProductData } from '../../domain/products';
 import { ButtonColor, PrimaryButton } from '../buttons/PrimaryButton';
 import { SearchResultElement } from './SearchResultElement';
 import { color } from '../../styles/theme';
-import { Spinner } from '../icons/spinner';
+import { Spinner } from '../icons/Spinner';
 
 const ResultsList = styled.div`
   ul {
