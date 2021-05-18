@@ -31,6 +31,7 @@ interface IMainPage {
   location: Location;
   searchResults: IProductData[];
   token?: string;
+  isLoading?: boolean;
   articles?: IArticle[];
 
   invokeSearch: (phrase: string) => void;
@@ -55,6 +56,7 @@ const MainPage = (props: IMainPage) => {
             searchResults={searchResults}
             onSearch={props.invokeSearch}
             token={props.token}
+            isLoading={props.isLoading}
             onLoadMore={props.invokeLoadMore}
             onSelect={props.selectProduct}
           />
@@ -71,6 +73,7 @@ export default connect(
   (state: IPolaState) => ({
     searchResults: state.search.products,
     token: state.search.token,
+    isLoading: state.search.isLoading,
     articles: state.articles.data,
   }),
   {

@@ -21,7 +21,6 @@ const ModalContainer = styled.div`
   height: 75vh;
   min-height: 500px;
   z-index: 1;
-  box-shadow: 0px 0px 10px ${color.border};
   max-width: 800px;
   box-sizing: border-box;
 
@@ -41,11 +40,11 @@ const ModalContainer = styled.div`
 
   @media ${Device.phone} {
     width: calc(100% - 2 * ${padding.small});
-    padding: ${padding.small};
+    //padding: ${padding.small};
   }
   @media ${Device.desktop} {
     width: calc(100% - 2 * ${padding.big});
-    padding: ${padding.normal};
+    //padding: ${padding.normal};
   }
 `;
 

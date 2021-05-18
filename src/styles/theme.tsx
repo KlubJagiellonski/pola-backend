@@ -5,6 +5,8 @@ export const color = {
   text: '#6C6C6C',
   black: '#000000',
   white: '#ffffff',
+  red: '#D8152F',
+  redLight: '#DF1F3F',
 };
 
 export const mobileHeaderHeight = '40px';

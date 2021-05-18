@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { color, Device } from '../../styles/theme';
+import { IconButton } from '../../components/buttons/IconButton';
+import { color, Device, padding } from '../../styles/theme';
 
 const Header = styled.div`
   display: flex;
   flex-flow: row nowrap;
+  padding: ${padding.small} ${padding.normal};
 
   h3 {
     font-weight: bold;
@@ -25,6 +27,6 @@ interface IModalHeader {
 export const ModalHeader = React.memo((props: IModalHeader) => (
   <Header>
     <h3>{props.title}</h3>
-    <button onClick={e => props.onClose()}>X</button>
+    <IconButton icon={<span>X</span>} onClick={props.onClose} />
   </Header>
 ));

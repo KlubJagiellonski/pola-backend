@@ -17,6 +17,7 @@ import { IProductData } from '../../domain/products';
 interface ISearchContainer {
   searchResults: IProductData[];
   token?: string;
+  isLoading?: boolean;
 
   onSearch: (phrase: string) => void;
   onLoadMore: () => void;
@@ -26,6 +27,7 @@ interface ISearchContainer {
 export const SearchContainer: React.FC<ISearchContainer> = ({
   searchResults,
   token,
+  isLoading,
   onSearch,
   onLoadMore,
   onSelect,
@@ -63,7 +65,13 @@ export const SearchContainer: React.FC<ISearchContainer> = ({
         </FormSearch>
       </div>
       {searchResults && (
-        <SearchResultsList results={searchResults} token={token} onLoadMore={handleLoad} onSelect={onSelect} />
+        <SearchResultsList
+          results={searchResults}
+          token={token}
+          isLoading={isLoading}
+          onLoadMore={handleLoad}
+          onSelect={onSelect}
+        />
       )}
     </Wrapper>
   );
