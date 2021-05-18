@@ -20,9 +20,16 @@ interface ISearchContainer {
 
   onSearch: (phrase: string) => void;
   onLoadMore: () => void;
+  onSelect: (code: string) => void;
 }
 
-export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, token, onSearch, onLoadMore }) => {
+export const SearchContainer: React.FC<ISearchContainer> = ({
+  searchResults,
+  token,
+  onSearch,
+  onLoadMore,
+  onSelect,
+}) => {
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
 
@@ -55,7 +62,9 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ searchResults, tok
           </SubmitButton>
         </FormSearch>
       </div>
-      {searchResults && <SearchResultsList results={searchResults} token={token} onLoadMore={handleLoad} />}
+      {searchResults && (
+        <SearchResultsList results={searchResults} token={token} onLoadMore={handleLoad} onSelect={onSelect} />
+      )}
     </Wrapper>
   );
 };

@@ -1,4 +1,6 @@
 import { Dispatch } from 'redux';
+import { IProductEAN } from '../../domain/products';
+import { ProductEANService } from '../../domain/products/ean-service';
 import { ProductService } from '../../domain/products/search-service';
 import { IPolaState } from '../types';
 import * as actions from './search-actions';
@@ -28,5 +30,19 @@ export const searchDispatcher = {
     } catch (error) {
       await dispatch(actions.SearchFailed(error));
     }
+  },
+
+  selectProduct: (code: string) => async (dispatch: Dispatch, getState: () => IPolaState) => {
+    try {
+      const service = ProductEANService.getInstance();
+      const product = await service.getProduct(code);
+      await dispatch(actions.ShowProductDetails(product));
+    } catch (error) {}
+  },
+
+  unselectProduct: () => async (dispatch: Dispatch, getState: () => IPolaState) => {
+    try {
+      await dispatch(actions.UnselectProduct());
+    } catch (error) {}
   },
 };

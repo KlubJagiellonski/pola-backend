@@ -1,35 +1,6 @@
 import axios from 'axios';
-import { IProductMock } from '.';
+import { IProductEAN, IProductMock } from '.';
 import { ApiService } from '../../services/api-service';
-
-interface IDonate {
-  show_button: boolean;
-  title: string;
-  url: string;
-}
-
-interface IProd {
-  product_id: number;
-  code: string;
-  name: string;
-  card_type?: string;
-  altText?: string;
-  plCapital?: string;
-  plCapital_notes?: string;
-  plWorkers?: string;
-  plWorkers_notes?: string;
-  plRnD?: string;
-  plRnD_notes?: string;
-  plRegistered?: string;
-  plRegistered_notes?: string;
-  plNotGlobEnt?: string;
-  plNotGlobEnt_notes?: string;
-  plScore: number;
-  report_text: string;
-  report_button_type: string;
-  report_button_text: string;
-  donate: IDonate;
-}
 
 export interface IProductEANParams {
   code: string;
@@ -56,7 +27,7 @@ export class ProductEANService extends ApiService {
     super(MOCK_PRODUCT_EAN_API);
   }
 
-  public async getProduct(code: string): Promise<IProd> {
+  public async getProduct(code: string): Promise<IProductEAN> {
     const response = await axios.get(`${this.apiUrl}/${code}`);
     const product: IProductMock = response.data;
 

@@ -2,13 +2,14 @@ import { AnyAction, Reducer } from 'redux';
 import { actionTypes } from './search-actions';
 import * as actions from './search-actions';
 import { IAction, IActionReducer } from '../types';
-import { IProductData } from '../../domain/products';
+import { IProductData, IProductEAN } from '../../domain/products';
 
 export interface ISearchState {
   isLoading: boolean;
   phrase?: string;
   products?: IProductData[];
   token?: string;
+  selectedProduct?: IProductEAN;
   error?: unknown;
 }
 
@@ -41,6 +42,20 @@ const reducers: IActionReducer<ISearchState> = {
       isLoading: false,
       error: action.payload.error,
       token: undefined,
+    };
+  },
+
+  [actionTypes.SHOW_PRODUCT_DETAILS]: (state: ISearchState, action: ReturnType<typeof actions.ShowProductDetails>) => {
+    return {
+      ...state,
+      selectedProduct: action.payload.product,
+    };
+  },
+
+  [actionTypes.UNSELECT_PRODUCT]: (state: ISearchState, action: ReturnType<typeof actions.ShowProductDetails>) => {
+    return {
+      ...state,
+      selectedProduct: undefined,
     };
   },
 };

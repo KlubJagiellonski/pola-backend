@@ -14,9 +14,10 @@ interface ISearchResultsList {
   token?: string;
 
   onLoadMore?: () => void;
+  onSelect: (code: string) => void;
 }
 
-export const SearchResultsList: React.FC<ISearchResultsList> = ({ results, token, onLoadMore }) => {
+export const SearchResultsList: React.FC<ISearchResultsList> = ({ results, token, onLoadMore, onSelect }) => {
   return (
     <ResultsList>
       <header>
@@ -25,7 +26,7 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({ results, token
       </header>
       <ul>
         {results.map((product: IProductData, index: number) => (
-          <SearchResultElement product={product} key={product.code} />
+          <SearchResultElement product={product} key={product.code} onSelect={onSelect} />
         ))}
       </ul>
       {token && <button onClick={onLoadMore}>Doładuj</button>}

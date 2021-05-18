@@ -13,6 +13,7 @@ const ResultElement = styled.div`
   display: flex;
   flex-flow: column;
   line-height: 1.7em;
+  cursor: pointer;
 
   .company {
     text-transform: uppercase;
@@ -21,10 +22,11 @@ const ResultElement = styled.div`
 
 interface ISearchResultElement {
   product: IProductData;
+  onSelect: (code: string) => void;
 }
 
-export const SearchResultElement: React.FC<ISearchResultElement> = ({ product }) => (
-  <ListElement>
+export const SearchResultElement: React.FC<ISearchResultElement> = ({ product, onSelect }) => (
+  <ListElement onClick={e => onSelect(product.code)}>
     <ResultElement>
       <span className="company">{product.company?.name || 'No company'}</span>
       <span className="brand">{product.brand?.name || 'No brand'}</span>

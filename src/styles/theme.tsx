@@ -3,6 +3,8 @@ export const color = {
   dark: '#C4C4C4',
   border: '#A0A0A0',
   text: '#6C6C6C',
+  black: '#000000',
+  white: '#ffffff',
 };
 
 export const mobileHeaderHeight = '40px';

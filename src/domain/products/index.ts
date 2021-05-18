@@ -15,12 +15,33 @@ export interface IProductData {
   brand?: IBrand;
 }
 
-export interface IProductEAN {
-  id: string;
+interface IDonate {
+  show_button: boolean;
   title: string;
-  description?: string;
-  category?: string;
-  image?: URL;
+  url: string;
+}
+
+export interface IProductEAN {
+  product_id: number;
+  code: string;
+  name: string;
+  card_type?: string;
+  altText?: string;
+  plCapital?: string;
+  plCapital_notes?: string;
+  plWorkers?: string;
+  plWorkers_notes?: string;
+  plRnD?: string;
+  plRnD_notes?: string;
+  plRegistered?: string;
+  plRegistered_notes?: string;
+  plNotGlobEnt?: string;
+  plNotGlobEnt_notes?: string;
+  plScore: number;
+  report_text: string;
+  report_button_type: string;
+  report_button_text: string;
+  donate: IDonate;
 }
 
 export interface IProductMock {
@@ -31,7 +52,7 @@ export interface IProductMock {
   image: URL;
 }
 
-export class Product implements IProductEAN {
+export class ProductMock implements IProductMock {
   public id: string;
   public image: URL;
 

@@ -35,6 +35,7 @@ interface IMainPage {
 
   invokeSearch: (phrase: string) => void;
   invokeLoadMore: () => void;
+  selectProduct: (code: string) => void;
 }
 
 const MainPage = (props: IMainPage) => {
@@ -55,6 +56,7 @@ const MainPage = (props: IMainPage) => {
             onSearch={props.invokeSearch}
             token={props.token}
             onLoadMore={props.invokeLoadMore}
+            onSelect={props.selectProduct}
           />
         </Content>
       </PageSection>
@@ -74,5 +76,6 @@ export default connect(
   {
     invokeSearch: searchDispatcher.invokeSearch,
     invokeLoadMore: searchDispatcher.invokeLoadMore,
+    selectProduct: searchDispatcher.selectProduct,
   }
 )(MainPage);
