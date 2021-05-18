@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Loader from 'react-loader-spinner';
 import { IProductData } from '../../domain/products';
 import { ButtonColor, PrimaryButton } from '../buttons/PrimaryButton';
 import { SearchResultElement } from './SearchResultElement';
+import { color } from '../../styles/theme';
+import { Spinner } from '../icons/spinner';
 
 const ResultsList = styled.div`
   ul {
@@ -34,18 +35,7 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
   onSelect,
 }) => {
   const loadButton = isLoading ? (
-    <PrimaryButton
-      icon={
-        <Loader
-          type="Puff"
-          color="#00BFFF"
-          height={100}
-          width={100}
-          timeout={3000} //3 secs
-        />
-      }
-      color={ButtonColor.Red}
-    />
+    <PrimaryButton icon={<Spinner color={color.white} size={100} timeout={0} />} color={ButtonColor.Red} />
   ) : (
     <PrimaryButton label="Doładuj" color={ButtonColor.Red} onClick={onLoadMore} />
   );
