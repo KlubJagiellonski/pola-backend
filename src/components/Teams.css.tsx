@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { WrapperSection, TitleSection, Button } from '../styles/GlobalStyle.css';
+import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
+import {Device, padding} from '../styles/theme'
+import {PrimaryButton } from './buttons/PrimaryButton';
 
 export const WrapperTeams = styled(WrapperSection)`
   height: 100%;
@@ -31,13 +33,15 @@ export const Title = styled(TitleSection)`
   padding: 15px;
 `;
 
-export const ButtonTeams = styled(Button)`
+export const ButtonTeams = styled(PrimaryButton)`
   position: absolute;
   bottom: 0px;
   left: 0px;
   right: 0px;
+  width: 100%;
+  padding: ${padding.normal};
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     position: relative;
     margin-top: 20px;
   }

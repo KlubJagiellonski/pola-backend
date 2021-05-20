@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { WrapperSection, Text } from '../../styles/GlobalStyle.css';
 import {Device} from '../../styles/theme'
+import {SecondaryButton } from '../buttons/SecondaryButton';
 
 export const Wrapper = styled(WrapperSection)`
   display: flex;
@@ -17,7 +18,6 @@ export const Wrapper = styled(WrapperSection)`
   }
 
   @media ${Device.mobile}{
-    background-color: white;
     min-height: 120px;
   }
 `;
@@ -46,17 +46,9 @@ export const ArticleSection = styled.div`
   }
 `;
 
-export const ArticleButton = styled.button`
-  font-family: 'Roboto';
-  font-size: 12px;
+export const ArticleButton = styled(SecondaryButton)`
+  font-size: 14px;
   font-weight: 300;
-  margin-top: 40px;
-  margin-bottom: 15px;
-  background: #c4c4c4;
-  border-radius: 3px;
-  padding: 5px 10px;
-  cursor: pointer;
-  border: none;
   
   @media ${Device.mobile} {
     display: none;

@@ -1,20 +1,6 @@
 import styled from 'styled-components';
 import { color } from './theme';
 
-export const Button = styled.button`
-  font-family: 'Roboto';
-  font-size: 14px;
-  font-weight: 700;
-  border: 1px solid ${color.border};
-  background: ${color.primary};
-  padding: 15px 0;
-  text-align: center;
-  cursor: pointer;
-  color: ${color.border};
-  text-transform: uppercase;
-  width: 100%;
-`;
-
 type Color = {
   color: string;
 };
@@ -35,6 +21,7 @@ export const TitleSection = styled.p`
   font-size: 14px;
   font-weight: 700;
   line-height: 1rem;
+  color: ${color.textLight};
 
   @media only screen and (min-width: 1900px) {
     margin-top: 20px;
@@ -48,7 +35,7 @@ export const Text = styled.p`
   padding: 0;
   font-family: 'Roboto';
   font-size: 12px;
-  color: ${color.dark};
+  color: ${color.textLight};
   line-height: 1rem;
 
   @media only screen and (min-width: 1900px) {

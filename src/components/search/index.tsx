@@ -13,6 +13,7 @@ import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
 import { SearchResultsList } from './SearchResultsList';
 import { IProductData } from '../../domain/products';
+import {ButtonColor} from './../buttons/Button';
 
 interface ISearchContainer {
   searchResults: IProductData[];
@@ -59,9 +60,7 @@ export const SearchContainer: React.FC<ISearchContainer> = ({
               <img src={Microphone} />
             </InputIconSection>
           </InputSection>
-          <SubmitButton disabled={!hasPhrase} onClick={handleSearch}>
-            Sprawdź
-          </SubmitButton>
+          <SubmitButton label='Sprawdź' color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch}/>
         </FormSearch>
       </div>
       {searchResults && (

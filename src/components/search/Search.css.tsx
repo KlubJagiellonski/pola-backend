@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { color, Device } from '../../styles/theme';
+import {SecondaryButton} from './../buttons/SecondaryButton';
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -32,7 +33,7 @@ export const Title = styled.p`
   font-weight: bold;
   font-size: 24px;
   text-align: left;
-  color: white;
+  color: ${color.text};
 
   @media ${Device.mobile}{
     font-size: 18px;
@@ -46,14 +47,14 @@ export const Text = styled.p`
   font-size: 16px;
   text-align: left;
   line-height: 1rem;
-  color: white;
+  color: ${color.textLight};
 
   @media ${Device.mobile} {
     font-size: 12px;
   }
 
   a {
-    color: #1f1f1f;
+    color: ${color.red};
   }
 `;
 
@@ -97,20 +98,8 @@ export const InputIconSection = styled.div`
   }
 `;
 
-export const SubmitButton = styled.button`
-  background: white;
-  border: 1px solid ${color.border};
-  height: 100%;
-  font-size: 14px;
-  text-align: center;
-  padding: 6px 20px;
+export const SubmitButton = styled(SecondaryButton)`
   margin-left: 15px;
-  color: ${color.border};
-  display: inline-block;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Roboto';
-  border-radius: 20px;
 
   @media ${Device.mobile} {
     padding: 5px 0;

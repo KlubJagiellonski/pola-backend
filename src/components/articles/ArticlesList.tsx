@@ -2,6 +2,7 @@ import React from 'react';
 import { IArticle } from '../../domain/articles';
 import { ArticleBlock } from './ArticleBlock';
 import { ArticlesButton, Wrapper } from './ArticlesList.css';
+import { ButtonColor} from '../buttons/Button';
 
 interface IArticlesList {
   articles?: IArticle[];
@@ -20,7 +21,7 @@ export const ArticlesList: React.FC<IArticlesList> = ({ articles }) => {
             text={article.content}
           />
         ))}
-      <ArticlesButton>CZYTAJ WIĘCEJ</ArticlesButton>
+      <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" color={ButtonColor.Red} />
     </Wrapper>
   );
 };

@@ -1,8 +1,10 @@
 export const color = {
-  primary: '#E5E5E5',
+  primary: '#ffffff',
+  secondary: '#333333',
   dark: '#C4C4C4',
   border: '#A0A0A0',
-  text: '#6C6C6C',
+  text: '#333333',
+  textLight: '#5B5B5B',
   black: '#000000',
   white: '#ffffff',
   red: '#D8152F',

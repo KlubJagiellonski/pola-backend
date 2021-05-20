@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import {color} from './../styles/theme'
 
 export const Wrapper = styled.div`
-  background: black;
-  color: white;
+  background: ${color.black};
+  color: ${color.white};
   display: flex;
   align-items: center;
   justify-content: center;

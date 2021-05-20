@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Button } from '../../styles/GlobalStyle.css';
-import {Device} from './../../styles/theme'
+import {Device, padding} from './../../styles/theme'
+import {PrimaryButton } from '../buttons/PrimaryButton';
 
 export const Wrapper = styled.div`
   grid-area: articles;
@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const ArticlesButton = styled(Button)`
-  margin-top: 10px;
+export const ArticlesButton = styled(PrimaryButton)`
+  width: 100%;
+  padding: ${padding.normal}
 `;

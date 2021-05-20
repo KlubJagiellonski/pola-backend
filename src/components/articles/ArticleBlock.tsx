@@ -3,6 +3,7 @@ import { Wrapper, ArticleImage, ArticleSection, ArticleButton, ArticleDate } fro
 import { color } from '../../styles/theme';
 import { TitleSection, Text } from '../../styles/GlobalStyle.css';
 import { ResponsiveImage } from '../../components/responsive-image';
+import {ButtonColor} from './../buttons/Button'
 
 interface IArticleBlock {
   photo?: string;
@@ -19,7 +20,7 @@ export const ArticleBlock: React.FC<IArticleBlock> = ({ photo, title, date, text
         <TitleSection>{title}</TitleSection>
         <Text>{text}</Text>
         {date && <ArticleDate>{date}</ArticleDate>}
-        <ArticleButton>lorem ipsum</ArticleButton>
+        <ArticleButton label='TAG/KATEGORIA' color={ButtonColor.LightGray}/>
       </ArticleSection>
     </Wrapper>
   );

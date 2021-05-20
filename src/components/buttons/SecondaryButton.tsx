@@ -1,7 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
 import {ButtonColor, Button, getButtonColor} from './Button'
 
-export interface IPrimaryButton {
+const SecButton = styled(Button)`
+  border-radius: 20px;
+`
+
+export interface ISecondaryButton {
   label?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
@@ -11,7 +16,7 @@ export interface IPrimaryButton {
   onClick?: () => void;
 }
 
-export const PrimaryButton: React.FC<IPrimaryButton> = ({ label, icon, className, disabled, color, onClick }) => {
+export const SecondaryButton: React.FC<ISecondaryButton> = ({ label, icon, className, disabled, color, onClick }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     !disabled && onClick && onClick();
@@ -20,9 +25,9 @@ export const PrimaryButton: React.FC<IPrimaryButton> = ({ label, icon, className
   const theme = getButtonColor(color);
 
   return (
-    <Button theme={theme} className={className} onClick={handleClick}>
+    <SecButton theme={theme} className={className} onClick={handleClick}>
       {icon}
       {label}
-    </Button>
+    </SecButton>
   );
 };

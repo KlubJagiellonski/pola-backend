@@ -18,7 +18,7 @@ const HeaderContainer = styled.header`
   top: 0;
   z-index: 10;
   width: 100%;
-  background: ${color.border};
+  background: ${color.primary};
 
   .header-content {
     display: flex;
