@@ -22,6 +22,19 @@ export const padding = {
   normal: '20px',
   big: '40px',
 };
+export const margin = {
+  tiny: '4px',
+  small: '8px',
+  normal: '20px',
+  big: '40px',
+};
+
+export const fontSize = {
+  big: '24px',
+  normal: '18px',
+  small: '14px',
+  tiny: '12px',
+}
 
 export const Device: { [key: string]: string } = {
   mobile: `(max-width: ${width - 1}px)`,

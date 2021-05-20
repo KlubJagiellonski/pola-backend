@@ -54,6 +54,5 @@ export const Title = styled(TitleSection)`
   @media ${Device.mobile} {
     width: 100%;
     margin-bottom: 20px;
-    font-size: 18px;
   }
 `;

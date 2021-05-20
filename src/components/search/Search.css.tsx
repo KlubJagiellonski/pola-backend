@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { color, Device } from '../../styles/theme';
+import { color, Device, fontSize } from '../../styles/theme';
 import {SecondaryButton} from './../buttons/SecondaryButton';
 
 export const Wrapper = styled.div`
@@ -29,9 +29,9 @@ export const Wrapper = styled.div`
 export const Title = styled.p`
   margin: 0;
   padding: 0;
-  font-family: 'Roboto';
+  font-family: 'Ubuntu';
   font-weight: bold;
-  font-size: 24px;
+  font-size: ${fontSize.big};
   text-align: left;
   color: ${color.text};
 
@@ -44,7 +44,7 @@ export const Text = styled.p`
   margin: 10px 0;
   padding: 0;
   font-family: 'Roboto';
-  font-size: 16px;
+  font-size: ${fontSize.small};
   text-align: left;
   line-height: 1rem;
   color: ${color.textLight};
@@ -77,7 +77,7 @@ export const InputSection = styled.div`
 
 export const InputText = styled.input`
   border: none;
-  font-size: 14px;
+  font-size: ${fontSize.small};
   width: 100%;
 `;
 
@@ -112,7 +112,7 @@ export const SubmitButton = styled(SecondaryButton)`
 export const FormSearch = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 30px;
 
   @media ${Device.mobile} {
     flex-direction: column;

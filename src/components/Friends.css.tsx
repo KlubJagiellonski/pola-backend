@@ -28,7 +28,6 @@ export const ImageWrapper = styled.div`
 
 export const Title = styled(TitleSection)`
   @media ${Device.mobile} {
-    font-size: 18px;
     margin-bottom: 20px;
   }
 `;

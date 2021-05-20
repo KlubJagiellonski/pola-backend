@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { WrapperSection, Text } from '../../styles/GlobalStyle.css';
-import {Device} from '../../styles/theme'
+import { WrapperSection, Text, TitleSection } from '../../styles/GlobalStyle.css';
+import {Device, fontSize} from '../../styles/theme'
 import {SecondaryButton } from '../buttons/SecondaryButton';
 
 export const Wrapper = styled(WrapperSection)`
@@ -26,9 +26,6 @@ export const ArticleImage = styled.div<{ img?: string }>`
   width: 50%;
   height: auto;
   text-align: left;
-  /* background: url(${({ img }) => img});
-  background-repeat: no-repeat;
-  background-size: cover; */
 
   @media ${Device.mobile} {
     width: 40%;
@@ -47,16 +44,29 @@ export const ArticleSection = styled.div`
 `;
 
 export const ArticleButton = styled(SecondaryButton)`
-  font-size: 14px;
+  font-size: ${fontSize.small};
   font-weight: 300;
   
   @media ${Device.mobile} {
     display: none;
+    font-size: ${fontSize.tiny};
   }
 `;
 
 export const ArticleDate = styled(Text)`
   @media ${Device.mobile} {
     display: none;
+  }
+`
+
+export const ArticleTitle = styled(TitleSection)`
+  @media ${Device.mobile} {
+    font-size: ${fontSize.tiny};
+  }
+`
+
+export const ArticleText = styled(Text)`
+  @media ${Device.mobile} {
+    font-size: ${fontSize.tiny};
   }
 `

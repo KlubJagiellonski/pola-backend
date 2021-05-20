@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { color } from './theme';
+import { color, fontSize } from './theme';
 
 type Color = {
   color: string;
@@ -17,29 +17,18 @@ export const TitleSection = styled.p`
   margin-top: 15px;
   margin-bottom: 10px;
   padding: 0;
-  font-family: 'Roboto';
-  font-size: 14px;
+  font-size: ${fontSize.normal};
+  font-family: 'Ubuntu';
   font-weight: 700;
   line-height: 1rem;
-  color: ${color.textLight};
-
-  @media only screen and (min-width: 1900px) {
-    margin-top: 20px;
-    margin-bottom: 15px;
-    font-size: 16px;
-  }
+  color: ${color.text};
 `;
 
 export const Text = styled.p`
   margin-top: 5px;
   padding: 0;
-  font-family: 'Roboto';
-  font-size: 12px;
+  font-family: 'Merriweather';
+  font-size: ${fontSize.small};
   color: ${color.textLight};
   line-height: 1rem;
-
-  @media only screen and (min-width: 1900px) {
-    font-size: 14px;
-    margin-top: 10px;
-  }
 `;
