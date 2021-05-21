@@ -29,8 +29,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SECURITY_MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
-    'pola.modules.SetRemoteAddrFromForwardedFor',
-    'pola.modules.HostnameRedirectMiddleware',
+    'pola.middlewares.SetRemoteAddrFromForwardedFor',
+    'pola.middlewares.HostnameRedirectMiddleware',
 )
 
 # Make sure djangosecure.middleware.SecurityMiddleware is listed first
