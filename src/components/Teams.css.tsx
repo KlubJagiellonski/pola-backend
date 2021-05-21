@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
-import {Device, padding} from '../styles/theme'
+import {Device, margin, padding} from '../styles/theme'
 import {PrimaryButton } from './buttons/PrimaryButton';
 
 export const WrapperTeams = styled(WrapperSection)`
   height: 100%;
   min-height: 200px;
-  margin-top: 15px;
+  padding: ${margin.normal};
   position: relative;
   padding: 0px;
   margin: 0px;
 
-  @media only screen and (max-width: 768px) {
+  @media ${Device.mobile} {
     background: none;
   }
 `;
@@ -22,15 +22,15 @@ export const Wrapper = styled(WrapperTeams)`
 
 export const TextSection = styled.div`
   text-align: center;
-  padding: 15px 100px 60px 100px;
+  padding: ${padding.normal} ${padding.huge} ${padding.veryBig} ${padding.huge};
 
-  @media only screen and (max-width: 768px) {
-    padding: 15px 50px 30px 50px;
+  @media ${Device.mobile} {
+    padding: ${padding.normal} ${padding.big} ${padding.veryBig} ${padding.big};
   }
 `;
 
 export const Title = styled(TitleSection)`
-  padding: 15px;
+  padding: ${padding.normal};
 `;
 
 export const ButtonTeams = styled(PrimaryButton)`
@@ -43,6 +43,6 @@ export const ButtonTeams = styled(PrimaryButton)`
 
   @media ${Device.mobile} {
     position: relative;
-    margin-top: 20px;
+    margin-top: ${margin.normal}
   }
 `;

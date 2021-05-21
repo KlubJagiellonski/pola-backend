@@ -10,6 +10,7 @@ export const PageSection = styled.section<IPageSection>`
   width: 100%;
   margin: 0 auto;
   background-color: ${props => props.backgroundColor || 'transparent'};
+  position: relative;
 
   @media ${Device.mobile} {
     padding: 0;

@@ -1,16 +1,11 @@
 import styled from 'styled-components';
-import { color, Device, fontSize } from '../../styles/theme';
+import { color, Device, fontSize, margin, padding } from '../../styles/theme';
 import {SecondaryButton} from './../buttons/SecondaryButton';
 
 export const Wrapper = styled.div`
   width: 100%;
   padding: 260px 0 70px 0;
-
-  @media only screen and (max-width: 900px) {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
+  position: relative;
 
   @media ${Device.mobile} {
     padding: 100px 0 20px 0;
@@ -20,7 +15,7 @@ export const Wrapper = styled.div`
   }
 
   > div {
-    @media only screen and (max-width: 400px) {
+    @media ${Device.desktop} {
       width: 90%;
     }
   }
@@ -87,14 +82,25 @@ export const InputIconSection = styled.div`
   bottom: 0px;
   display: flex;
   align-items: center;
-  right: 10px;
-  padding: 3px 0;
+  right: 0px;
+  padding: ${padding.tiny} 0;
 
-  img {
-    height: 100%;
-    max-height: 20px;
-    margin: 3px;
-    cursor: pointer;
+  div{
+    border-radius: 50%;
+    background-color: ${color.red};
+    height: 30px;
+    width: 30px;
+    margin-right: ${margin.tiny};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+      img {
+      height: 100%;
+      max-height: 20px;
+      max-width: 20px;
+      cursor: pointer;
+    }
   }
 `;
 

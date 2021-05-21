@@ -21,6 +21,8 @@ export const padding = {
   small: '8px',
   normal: '20px',
   big: '40px',
+  veryBig: '80px',
+  huge: '150px'
 };
 export const margin = {
   tiny: '4px',

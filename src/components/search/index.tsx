@@ -56,8 +56,12 @@ export const SearchContainer: React.FC<ISearchContainer> = ({
           <InputSection>
             <InputText placeholder="Nazwa produktu/producent/kod EAN" type="text" onChange={handlePhraseChange} />
             <InputIconSection>
-              <img src={Kod} />
-              <img src={Microphone} />
+              <div>
+                <img src={Kod} />
+              </div>
+              <div>
+                <img src={Microphone} />
+              </div>
             </InputIconSection>
           </InputSection>
           <SubmitButton label='Sprawdź' color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch}/>

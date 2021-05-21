@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { IProductEAN } from '../../domain/products';
 import { Modal } from '../../layout/modal/Modal';
 import { color, padding } from '../../styles/theme';
-import { ButtonColor } from '../buttons/PrimaryButton';
+import { ButtonColor } from '../buttons/Button';
 import { ClickOutside } from '../ClickOutside';
 import { ProductModalAction } from './ProductModalAction';
 
