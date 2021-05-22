@@ -1,66 +1,58 @@
 import React from 'react';
-import { Wrapper, ImageWrapper, Title } from './Friends.css';
-import Friend from './../assets/friend.png';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import { Wrapper, ImageWrapper, FriendsSlider, Image } from './Friends.css';
+import { TitleSection } from '../styles/GlobalStyle.css';
 import { color } from '../styles/theme';
+import { IFriend } from '../domain/friends';
+import { ResponsiveImage } from './responsive-image';
 
-const friends = [
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-  { img: Friend },
-];
+interface IFriends {
+  friends?: IFriend[];
+}
 
-const Friends = () => {
+const Friends: React.FC<IFriends> = ({ friends }) => {
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: friends.length > 10 ? 10 : friends.length,
-    slidesToScroll: friends.length > 10 ? 10 : friends.length,
+    slidesToShow: 5,
+    adaptiveHeight: true,
+    slidesToScroll: 5,
     arrows: false,
     responsive: [
       {
-        breakpoint: 1400,
+        breakpoint: 1272,
         settings: {
-          slidesToShow: friends.length > 6 ? 6 : friends.length,
-          slidesToScroll: friends.length > 6 ? 6 : friends.length,
+          slidesToShow: 3,
+          slidesToScroll: 3,
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: friends.length > 3 ? 3 : friends.length,
-          slidesToScroll: friends.length > 3 ? 3 : friends.length,
+          slidesToShow: 2,
+          slidesToScroll: 2,
         },
       },
-    ],
-  };
+    ]
+  }
 
   return (
     <Wrapper color={color.primary}>
-      <Title>Przyjaciele Poli</Title>
+      <TitleSection>Przyjaciele Poli</TitleSection>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <ImageWrapper amountElements={friends.length}>
-          <Slider {...settings}>
-            {friends.map((el, id) => (
-              <div key={`friend_${id}`}>
-                <img src={el.img} />
-              </div>
-            ))}
-          </Slider>
-        </ImageWrapper>
+        {friends &&
+          <ImageWrapper>
+            <FriendsSlider {...settings}>
+              {friends.map((el, id) => (
+                <div key={`friend_${id}`}>
+                  <Image>
+                    {el.image && <ResponsiveImage imageSrc={el.image}/>}
+                  </Image>
+                </div>
+              ))}
+            </FriendsSlider>
+        </ImageWrapper>}
       </div>
     </Wrapper>
   );

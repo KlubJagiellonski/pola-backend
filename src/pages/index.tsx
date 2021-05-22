@@ -15,6 +15,7 @@ import { LoadBrowserLocation } from '../state/app/app-actions';
 import { IProductData } from '../domain/products';
 import { IArticle } from '../domain/articles';
 import { ResponsiveImage } from '../components/responsive-image';
+import { IFriend } from '../domain/friends';
 
 const Content = styled.div`
   width: 100%;
@@ -47,6 +48,7 @@ interface IMainPage {
   token?: string;
   isLoading?: boolean;
   articles?: IArticle[];
+  friends?: IFriend[];
 
   invokeSearch: (phrase: string) => void;
   invokeLoadMore: () => void;
@@ -80,7 +82,7 @@ const MainPage = (props: IMainPage) => {
         </Content>
       </PageSection>
       <PageSection>
-        <Contents articles={props.articles} />
+        <Contents articles={props.articles} friends={props.friends}/>
       </PageSection>
     </PageLayout>
   );
@@ -92,6 +94,7 @@ export default connect(
     token: state.search.token,
     isLoading: state.search.isLoading,
     articles: state.articles.data,
+    friends: state.friends.data
   }),
   {
     invokeSearch: searchDispatcher.invokeSearch,

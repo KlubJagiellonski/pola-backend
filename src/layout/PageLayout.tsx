@@ -9,6 +9,7 @@ import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme
 import './PageLayout.css';
 import { IPolaState } from '../state/types';
 import { articlesDispatcher } from '../state/articles/articles-dispatcher';
+import { friendsDispatcher} from './../state/friends/friends-dispatcher';
 import { appDispatcher } from '../state/app/app-dispatcher';
 import { ProductModal } from '../components/search/ProductModal';
 import { searchDispatcher } from '../state/search/search-dispatcher';
@@ -20,6 +21,7 @@ const connector = connect(
   {
     initApp: appDispatcher.initialize,
     loadArticles: articlesDispatcher.loadArticles,
+    loadFriends: friendsDispatcher.loadFriends,
     unselectProduct: searchDispatcher.unselectProduct,
   }
 );
@@ -42,10 +44,11 @@ const PageContent = styled.main`
   }
 `;
 
-const Layout: React.FC<IPageLayout> = ({ children, initApp, loadArticles, selectedProduct, unselectProduct }) => {
+const Layout: React.FC<IPageLayout> = ({ children, initApp, loadArticles, loadFriends, selectedProduct, unselectProduct }) => {
   const bootApplication = async () => {
     await initApp();
     await loadArticles();
+    await loadFriends();
   };
 
   useEffect(() => {

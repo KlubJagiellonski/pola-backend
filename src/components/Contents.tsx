@@ -9,12 +9,14 @@ import Download from './Download';
 import About from './About';
 import { IArticle } from '../domain/articles';
 import TeamsFriend from './TeamsFriend';
+import { IFriend } from '../domain/friends';
 
 interface IContent {
   articles?: IArticle[];
+  friends?: IFriend[];
 }
 
-const Contents: React.FC<IContent> = ({ articles }) => {
+const Contents: React.FC<IContent> = ({ articles, friends }) => {
 
   return (
     <Wrapper>
@@ -22,7 +24,7 @@ const Contents: React.FC<IContent> = ({ articles }) => {
     <DevelopmentSection />
     <SocialMedia />
     <About />
-    <Friends /> 
+    <Friends friends={friends}/> 
     <Teams/>
     <TeamsFriend/>
     <Download /> 
