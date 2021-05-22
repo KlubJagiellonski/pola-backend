@@ -11,18 +11,24 @@ export interface ISecondaryButton {
   icon?: React.ReactNode;
   disabled?: boolean;
   color?: ButtonColor;
+  fontSize?: string;
   className?: string;
 
   onClick?: () => void;
 }
 
-export const SecondaryButton: React.FC<ISecondaryButton> = ({ label, icon, className, disabled, color, onClick }) => {
+export const SecondaryButton: React.FC<ISecondaryButton> = ({ label, icon, className, disabled, color, fontSize, onClick }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     !disabled && onClick && onClick();
   };
 
-  const theme = getButtonColor(color);
+  const themeColor = getButtonColor(color);
+
+  const theme = {
+    color: themeColor,
+    fontSize
+  }
 
   return (
     <SecButton theme={theme} className={className} onClick={handleClick}>

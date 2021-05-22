@@ -1,53 +1,49 @@
 import styled from 'styled-components';
 import { WrapperSection } from '../styles/GlobalStyle.css';
-import {Device, fontSize, margin} from './../styles/theme'
+import {Device, fontSize, margin, color, padding} from './../styles/theme'
 import { TitleSection, Text } from '../styles/GlobalStyle.css';
 
 export const Wrapper = styled(WrapperSection)`
   display: flex;
   flex-direction: row;
-  min-height: 190px;
   grid-area: development;
-
-  @media only screen and (min-width: 1900px) {
-    min-height: 220px;
-  }
-
-  @media only screen and (min-width: 2500px) {
-    min-height: 250px;
-  }
-
-  @media ${Device.mobile} {
-    min-height: 150px;
-  }
+  min-height: 230px;
 `;
 
-type ImageProps = {
-  img: string;
-};
-
-export const Image = styled.div`
+export const Info = styled.p`
+  font-size: ${fontSize.tiny};
+  color: ${color.white};
+  text-align: center;
   width: 50%;
-  height: auto;
-  text-align: left;
-  background: url(${({ img }: ImageProps) => img});
-  background-repeat: no-repeat;
-  background-size: cover;
-  border: 1px solid grey;
-`;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+`
 
 export const TextSection = styled.div`
-  margin: 0 ${margin.normal};
+  margin-right: ${margin.normal};
+  padding: 0 ${padding.normal};
+  background-color: ${color.white};
   width: 50%;
+
+  @media ${Device.mobile} {
+    padding: 0 ${padding.small};
+  }
 `;
 
 export const DevelopmentTitle = styled(TitleSection)`
+  margin-bottom: ${margin.normal};
+
   @media ${Device.mobile} {
     font-size: ${fontSize.tiny};
   }
 `
 
 export const DevelopmentText = styled(Text)`
+  margin-bottom: ${margin.big};
+
   @media ${Device.mobile} {
     font-size: ${fontSize.tiny};
   }

@@ -11,6 +11,7 @@ export const Button = styled.button<{ theme: IButtonTheme }>`
   white-space: nowrap;
   font-weight: bold;
   transition-duration: 0.5s;
+  font-size: ${props => props.theme.fontSize ? props.theme.fontSize: '18px'};
 
   &:hover {
     background-color: ${props => props.theme.color.hover};
@@ -27,40 +28,37 @@ export const Button = styled.button<{ theme: IButtonTheme }>`
   }
 `;
 
-interface IButtonTheme {
-  color: {
-    background: string;
-    hover: string;
-    text: string;
-  };
+interface IButtonColor {
+  background: string;
+  hover: string;
+  text: string;
 }
 
-export const getButtonColor = (buttonColor?: ButtonColor): IButtonTheme => {
+interface IButtonTheme {
+  fontSize? :string
+  color: IButtonColor
+}
+
+export const getButtonColor = (buttonColor?: ButtonColor): IButtonColor => {
   switch (buttonColor) {
     case ButtonColor.Red:
       return {
-        color: {
-          background: color.red,
-          hover: color.redLight,
-          text: color.white,
-        },
+        background: color.red,
+        hover: color.redLight,
+        text: color.white,
       };
       case ButtonColor.LightGray:
         return {
-          color: {
-            background: '#C4C4C430',
-            hover: color.primary,
-            text: color.text,
-          },
+          background: '#C4C4C430',
+          hover: color.primary,
+          text: color.text,
         };
     case ButtonColor.Gray:
     default:
       return {
-        color: {
-          background: color.dark,
-          hover: color.border,
-          text: color.text,
-        },
+        background: color.dark,
+        hover: color.border,
+        text: color.text,
       };
   }
 };

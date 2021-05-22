@@ -6,18 +6,24 @@ export interface IPrimaryButton {
   icon?: React.ReactNode;
   disabled?: boolean;
   color?: ButtonColor;
+  fontSize?: string;
   className?: string;
 
   onClick?: () => void;
 }
 
-export const PrimaryButton: React.FC<IPrimaryButton> = ({ label, icon, className, disabled, color, onClick }) => {
+export const PrimaryButton: React.FC<IPrimaryButton> = ({ label, icon, className, disabled, color, fontSize, onClick }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     !disabled && onClick && onClick();
   };
 
-  const theme = getButtonColor(color);
+  const themeColor = getButtonColor(color);
+
+  const theme = {
+    color: themeColor,
+    fontSize
+  }
 
   return (
     <Button theme={theme} className={className} onClick={handleClick}>
