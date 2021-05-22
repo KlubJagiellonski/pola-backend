@@ -5,7 +5,7 @@ import { color } from '../styles/theme';
 
 const SocialMedia = () => {
   return (
-    <Wrapper color={color.primary}>
+    <Wrapper color={color.background.white}>
       <Title>Social Media</Title>
       <Items>
         <Item>

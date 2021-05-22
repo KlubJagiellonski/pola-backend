@@ -8,15 +8,11 @@ import Icon from './../assets/ikona-zespół.png'
 
 const Wrapper = styled(WrapperTeams)`
   grid-area: teams-friend;
-
-  @media ${Device.mobile}{
-    background-color: ${color.primary};
-  }
 `
 
 const TeamsFriend = () => {
   return (
-    <Wrapper color={color.primary}>
+    <Wrapper color={color.background.white}>
     <TextSection>
       <img src={Icon}/>
       <Title>Dołącz do Przyjaciół Poli i odnieś sukces!</Title>

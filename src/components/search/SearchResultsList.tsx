@@ -36,7 +36,7 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
   onSelect,
 }) => {
   const loadButton = isLoading ? (
-    <PrimaryButton icon={<Spinner color={color.white} size={100} timeout={0} />} color={ButtonColor.Red} />
+    <PrimaryButton icon={<Spinner color={color.text.light} size={100} timeout={0} />} color={ButtonColor.Red} />
   ) : (
     <PrimaryButton label="Doładuj" color={ButtonColor.Red} onClick={onLoadMore} />
   );

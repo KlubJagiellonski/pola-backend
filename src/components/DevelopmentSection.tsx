@@ -6,7 +6,7 @@ import {ButtonColor} from './buttons/Button'
 
 const DevelopmentSection = () => {
   return (
-    <Wrapper color={color.red}>
+    <Wrapper color={color.background.red}>
       <Info>Grafika Flat: Smutny koszyk zakupowy</Info>
       <TextSection>
         <DevelopmentTitle>Zobacz jak rozwija się Aplikacja Pola i wspomóż ją!</DevelopmentTitle>

@@ -12,7 +12,7 @@ export const Wrapper = styled(WrapperSection)`
 
 export const Info = styled.p`
   font-size: ${fontSize.tiny};
-  color: ${color.white};
+  color: ${color.text.light};
   text-align: center;
   width: 50%;
   display: flex;
@@ -25,7 +25,7 @@ export const Info = styled.p`
 export const TextSection = styled.div`
   margin-right: ${margin.normal};
   padding: 0 ${padding.normal};
-  background-color: ${color.white};
+  background-color: ${color.background.white};
   width: 50%;
 
   @media ${Device.mobile} {

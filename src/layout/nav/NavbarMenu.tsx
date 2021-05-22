@@ -7,7 +7,7 @@ import { Device, padding, color } from '../../styles/theme';
 interface INavbarMenu {}
 
 const NavbarLayout = styled.nav`
-  background: ${color.primary};
+  background: ${color.background.white};
   @media ${Device.mobile} {
     display: none;
   }

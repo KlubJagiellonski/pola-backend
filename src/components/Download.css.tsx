@@ -3,7 +3,7 @@ import {color, fontSize, Device} from './../styles/theme'
 import {TitleSection} from './../styles/GlobalStyle.css'
 
 export const Wrapper = styled.div`
-  background: ${color.black};
+  background: ${color.background.black};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,7 +19,7 @@ export const Wrapper = styled.div`
 `;
 
 export const DownoladTitle = styled(TitleSection)`
-  color: ${color.white};
+  color: ${color.text.light};
   margin: 30px 0 50px 0;
   font-size: ${fontSize.normal};
 

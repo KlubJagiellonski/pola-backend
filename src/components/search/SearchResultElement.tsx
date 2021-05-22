@@ -6,7 +6,7 @@ import { padding, color } from '../../styles/theme';
 const ListElement = styled.li`
   margin-bottom: ${padding.tiny};
   padding: ${padding.small} ${padding.normal};
-  background-color: ${color.border};
+  background-color: ${color.button.disabled};
 `;
 
 const ResultElement = styled.div`

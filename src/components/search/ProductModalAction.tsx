@@ -14,8 +14,8 @@ const Container = styled.div<{ theme?: ITheme }>`
   flex-flow: row nowrap;
   padding: ${padding.normal} ${padding.normal};
   align-items: center;
-  border-top: 1px solid ${color.primary};
-  background-color: ${props => props.theme?.backgroundColor || color.white};
+  border-top: 1px solid ${color.border.white};
+  background-color: ${props => props.theme?.backgroundColor || color.background.white};
 
   .action-btn {
     width: 10rem;

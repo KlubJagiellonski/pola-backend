@@ -66,7 +66,7 @@ const MainPage = (props: IMainPage) => {
   return (
     <PageLayout>
       <SEO title="Pola Web | Strona główna" />
-      <PageSection size='full' backgroundColor={color.dark}>
+      <PageSection size='full' backgroundColor={color.background.primary}>
         <Background>
           <ResponsiveImage imageSrc={'background.png'}/>
         </Background>

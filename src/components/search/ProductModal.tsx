@@ -25,7 +25,7 @@ const AppDownload = styled.div`
     .image {
       width: 3rem;
       height: 3rem;
-      background-color: ${color.border};
+      background-color: ${color.button.disabled};
     }
   }
 `;
@@ -58,7 +58,7 @@ export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
         </ProductModalAction>
         <ProductModalAction
           actionName="Pobierz"
-          theme={{ backgroundColor: color.primary, buttonColor: ButtonColor.Red }}
+          theme={{ backgroundColor: color.background.white, buttonColor: ButtonColor.Red }}
           actionCallback={downloadCallbackMock}>
           <AppDownload>
             <h4>Skanuj kody w aplikacji:</h4>

@@ -7,7 +7,7 @@ import Icon from './../assets/ikona-przyjaciele.png'
 
 const Teams = () => {
   return (
-    <Wrapper color={color.primary}>
+    <Wrapper color={color.background.white}>
       <TextSection>
         <img src={Icon}/>
         <Title>Zespół</Title>

@@ -21,7 +21,7 @@ export const TitleSection = styled.p`
   font-family: 'Ubuntu';
   font-weight: 700;
   line-height: 1rem;
-  color: ${color.text};
+  color: ${color.text.primary};
 `;
 
 export const Text = styled.p`
@@ -29,6 +29,6 @@ export const Text = styled.p`
   padding: 0;
   font-family: 'Merriweather';
   font-size: ${fontSize.small};
-  color: ${color.textLight};
+  color: ${color.text.secondary};
   line-height: 1rem;
 `;

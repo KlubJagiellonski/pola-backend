@@ -5,7 +5,7 @@ import { Text } from '../styles/GlobalStyle.css';
 
 const About = () => {
   return (
-    <Wrapper color={color.secondary}>
+    <Wrapper color={color.background.dark}>
       <Text>O POLI / (EXPLAINER VIDEO w Przyszłości)(tekst dlaczego to ważne = krótkie info + czytaj więcej)</Text>
     </Wrapper>
   );

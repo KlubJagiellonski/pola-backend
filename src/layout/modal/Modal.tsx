@@ -14,7 +14,7 @@ const ModalLayout = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background-color: ${color.white};
+  background-color: ${color.background.white};
   position: absolute;
   display: flex;
   flex-flow: column;
@@ -49,7 +49,7 @@ const ModalContainer = styled.div`
 `;
 
 const ModalOverlay = styled.div`
-  background-color: ${color.black};
+  background-color: ${color.background.black};
   width: 100%;
   height: 100vh;
   opacity: 0.5;

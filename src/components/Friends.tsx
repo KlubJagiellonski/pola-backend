@@ -38,7 +38,7 @@ const Friends: React.FC<IFriends> = ({ friends }) => {
   }
 
   return (
-    <Wrapper color={color.primary}>
+    <Wrapper color={color.background.white}>
       <TitleSection>Przyjaciele Poli</TitleSection>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {friends &&

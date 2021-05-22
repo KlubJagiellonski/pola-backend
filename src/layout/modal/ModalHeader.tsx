@@ -10,7 +10,7 @@ const Header = styled.div`
 
   h3 {
     font-weight: bold;
-    color: ${color.black};
+    color: ${color.text.dark};
     flex: 1 1 100%;
 
     @media ${Device.phone} {

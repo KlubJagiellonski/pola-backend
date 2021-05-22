@@ -6,7 +6,7 @@ import { PolaLogo } from './Pola-Logo';
 import { color, Device, padding, pageWidth } from '../styles/theme';
 
 export const FooterContainer = styled.footer`
-  background-color: ${color.secondary};
+  background-color: ${color.background.dark};
   padding: ${padding.big};
 
   .footer-content {
@@ -41,7 +41,7 @@ export const FooterContainer = styled.footer`
 `;
 
 export const Section = styled.div`
-  background-color: ${color.primary};
+  background-color: ${color.background.white};
   flex: 1 1 25%;
 
   .text {

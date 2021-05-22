@@ -8,8 +8,8 @@ const Button = styled.button`
   justify-content: center;
   box-sizing: border-box;
   cursor: pointer;
-  color: ${color.text};
-  background-color: ${color.primary};
+  color: ${color.text.primary};
+  background-color: ${color.button.white};
   border: none;
   padding: ${padding.normal};
   white-space: nowrap;
@@ -23,7 +23,7 @@ const Button = styled.button`
 
   &.disabled {
     cursor: default;
-    background-color: ${color.border};
+    background-color: ${color.button.disabled};
     font-weight: 400;
   }
 `;

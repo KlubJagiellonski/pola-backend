@@ -1,14 +1,31 @@
 export const color = {
-  primary: '#ffffff',
-  secondary: '#333333',
-  dark: '#C4C4C4',
-  border: '#A0A0A0',
-  text: '#333333',
-  textLight: '#5B5B5B',
-  black: '#000000',
-  white: '#ffffff',
-  red: '#D8152F',
-  redLight: '#DF1F3F',
+  background: {
+    primary: '#C4C4C4',
+    secondary: '#A0A0A0',
+    dark: '#333333',
+    black: '#000000',
+    red: '#D8152F',
+    white: '#ffffff',
+  },
+  text: {
+    primary: '#333333',
+    secondary: '#5B5B5B',
+    light: '#ffffff',
+    dark: '#000000',
+    red: '#D8152F',
+  },
+  button: {
+    white: '#ffffff',
+    red: '#D8152F',
+    redLight: '#DF1F3F',
+    gray: '#C4C4C4',
+    lightGray: '#C4C4C430',
+    disabled: '#A0A0A0',
+  },
+  border: {
+    grey: '#A0A0A0',
+    white: '#ffffff',
+  }
 };
 
 export const mobileHeaderHeight = '40px';

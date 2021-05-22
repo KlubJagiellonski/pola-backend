@@ -28,7 +28,7 @@ export const Title = styled.p`
   font-weight: bold;
   font-size: ${fontSize.big};
   text-align: left;
-  color: ${color.text};
+  color: ${color.text.primary};
 
   @media ${Device.mobile}{
     font-size: 18px;
@@ -42,20 +42,20 @@ export const Text = styled.p`
   font-size: ${fontSize.small};
   text-align: left;
   line-height: 1rem;
-  color: ${color.textLight};
+  color: ${color.text.secondary};
 
   @media ${Device.mobile} {
     font-size: 12px;
   }
 
   a {
-    color: ${color.red};
+    color: ${color.text.red};
   }
 `;
 
 export const InputSection = styled.div`
   position: relative;
-  border: 1px solid ${color.border};
+  border: 1px solid ${color.border.grey};
   padding: 5px 100px 5px 10px;
   width: 320px;
   background-color: white;
@@ -87,7 +87,7 @@ export const InputIconSection = styled.div`
 
   div{
     border-radius: 50%;
-    background-color: ${color.red};
+    background-color: ${color.background.red};
     height: 30px;
     width: 30px;
     margin-right: ${margin.tiny};

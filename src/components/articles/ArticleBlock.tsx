@@ -13,7 +13,7 @@ interface IArticleBlock {
 
 export const ArticleBlock: React.FC<IArticleBlock> = ({ photo, title, date, text}) => {
   return (
-    <Wrapper color={color.primary}>
+    <Wrapper color={color.background.white}>
       <ArticleImage>{photo && <ResponsiveImage imageSrc={photo} />}</ArticleImage>
       <ArticleSection>
         <ArticleTitle>{title}</ArticleTitle>

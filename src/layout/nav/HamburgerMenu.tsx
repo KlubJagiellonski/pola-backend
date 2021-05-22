@@ -9,7 +9,7 @@ import { Device, mobileHeaderHeight, padding, color } from '../../styles/theme';
 interface IHamburgerMenu {}
 
 const HamburgerLayout = styled.nav`
-  background: ${color.border};
+  background: ${color.button.disabled};
   @media ${Device.desktop} {
     display: none;
   }
