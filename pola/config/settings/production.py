@@ -69,9 +69,12 @@ INSTALLED_APPS = ('collectfast',) + INSTALLED_APPS  # noqa: F405
 # EMAIL
 # ------------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')  # noqa: F405
-EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-MAILGUN_ACCESS_KEY = env('DJANGO_MAILGUN_API_KEY')  # noqa: F405
-MAILGUN_SERVER_NAME = env('DJANGO_MAILGUN_SERVER_NAME')  # noqa: F405
+ANYMAIL = {
+    "MAILGUN_API_KEY": env('DJANGO_MAILGUN_API_KEY'),  # noqa: F405
+    "MAILGUN_API_URL": "https://api.eu.mailgun.net/v3",  # noqa: F405
+    "MAILGUN_SENDER_DOMAIN": env('DJANGO_MAILGUN_SERVER_NAME'),  # noqa: F405
+}
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 EMAIL_SUBJECT_PREFIX = ''
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 

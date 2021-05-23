@@ -13,6 +13,7 @@ cryptography==3.4.7
 defusedxml==0.7.1
 Django==3.2.3
 django-allauth==0.44.0
+django-anymail==8.3
 django-autocomplete-light==3.8.2
 django-autoslug==1.9.8
 django-braces==1.14.0
@@ -20,7 +21,6 @@ django-crispy-forms==1.11.2
 django-environ==0.4.5
 django-filter==2.4.0
 django-grappelli==2.15.1
-django-mailgun @ git+git://github.com/BradWhittington/django-mailgun.git@8fadee13983054aa1642899ba3803b3009fa1b0b
 django-model-utils==4.1.1
 django-ratelimit==3.0.1
 django-redis==4.12.1
