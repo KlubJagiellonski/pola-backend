@@ -1,9 +1,15 @@
 import React from 'react';
-import { Wrapper, Title, TextSection, ButtonTeams } from './Teams.css';
+import styled from 'styled-components';
+
+import { WrapperTeams, Title, TextSection, ButtonTeams } from './Teams.css';
 import { Text } from '../styles/GlobalStyle.css';
 import { color } from '../styles/theme';
 import {ButtonColor } from './buttons/Button';
 import Icon from './../assets/ikona-przyjaciele.png'
+
+const Wrapper = styled(WrapperTeams)`
+  grid-area: teams;
+`;
 
 const Teams = () => {
   return (

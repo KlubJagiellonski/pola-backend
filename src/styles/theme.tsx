@@ -46,6 +46,7 @@ export const margin = {
   small: '8px',
   normal: '20px',
   big: '40px',
+  veryBig: '50px',
 };
 
 export const fontSize = {

@@ -16,6 +16,7 @@ import { IProductData } from '../domain/products';
 import { IArticle } from '../domain/articles';
 import { ResponsiveImage } from '../components/responsive-image';
 import { IFriend } from '../domain/friends';
+import Download from '../components/Download';
 
 const Content = styled.div`
   width: 100%;
@@ -83,6 +84,9 @@ const MainPage = (props: IMainPage) => {
       </PageSection>
       <PageSection>
         <Contents articles={props.articles} friends={props.friends}/>
+      </PageSection>
+      <PageSection size='full' backgroundColor={color.background.black}>
+        <Download />
       </PageSection>
     </PageLayout>
   );

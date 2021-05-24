@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
+
 import { WrapperTeams, Title, TextSection, ButtonTeams } from './Teams.css';
 import { Text } from '../styles/GlobalStyle.css';
 import { color, Device } from '../styles/theme';
