@@ -32,7 +32,7 @@ export const searchDispatcher = {
     }
   },
 
-  selectProduct: (code: string, id: number) => async (dispatch: Dispatch, getState: () => IPolaState) => {
+  selectProduct: (code: string, id: string) => async (dispatch: Dispatch, getState: () => IPolaState) => {
     try {
       const service = ProductEANService.getInstance();
       const ean = await service.getProduct(code, id);

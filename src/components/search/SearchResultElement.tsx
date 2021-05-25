@@ -26,7 +26,7 @@ const ResultElement = styled.div`
 
 interface ISearchResultElement {
   product: IProductData;
-  onSelect: (code: string, id: number) => void;
+  onSelect: (code: string, id: string) => void;
 }
 
 export const SearchResultElement: React.FC<ISearchResultElement> = ({ product, onSelect }) => (

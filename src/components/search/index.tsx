@@ -26,7 +26,7 @@ interface ISearchContainer {
 
   onSearch: (phrase: string) => void;
   onLoadMore: () => void;
-  onSelect: (code: string, id: number) => void;
+  onSelect: (code: string, id: string) => void;
 }
 
 export const SearchContainer: React.FC<ISearchContainer> = ({

@@ -28,7 +28,7 @@ export class ProductEANService extends ApiService {
     super(MOCK_PRODUCT_EAN_API);
   }
 
-  public async getProduct(code: string, id: number): Promise<IProductEAN> {
+  public async getProduct(code: string, id: string): Promise<IProductEAN> {
     try {
       //const response = await axios.get(`${this.apiUrl}/get_by_code?code=${code}&device_id=NONE`);
       const response = await axios.get(`${MOCK_PRODUCT_EAN_API}/${id}`);

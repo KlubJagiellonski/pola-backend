@@ -26,7 +26,7 @@ interface ISearchResultsList {
   isLoading?: boolean;
 
   onLoadMore?: () => void;
-  onSelect: (code: string, id: number) => void;
+  onSelect: (code: string, id: string) => void;
 }
 
 export const SearchResultsList: React.FC<ISearchResultsList> = ({

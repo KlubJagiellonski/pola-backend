@@ -53,7 +53,7 @@ interface IMainPage {
 
   invokeSearch: (phrase: string) => void;
   invokeLoadMore: () => void;
-  selectProduct: (code: string, id: number) => void;
+  selectProduct: (code: string, id: string) => void;
 }
 
 const MainPage = (props: IMainPage) => {
@@ -85,7 +85,7 @@ const MainPage = (props: IMainPage) => {
       <PageSection>
         <Contents articles={props.articles} friends={props.friends} />
       </PageSection>
-      <PageSection size='full' backgroundColor={color.background.black}>
+      <PageSection size="full" backgroundColor={color.background.black}>
         <Download />
       </PageSection>
     </PageLayout>

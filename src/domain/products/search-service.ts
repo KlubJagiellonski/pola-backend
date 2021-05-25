@@ -53,18 +53,21 @@ export class ProductService extends ApiService {
       return {
         nextPageToken: token || 'mock_token',
         totalItems: amount,
-        products: products.map(mock => ({
-          id: mock.id.toString(),
-          code: getEAN(),
-          name: mock.title,
-          company: {
-            name: mock.description,
-          },
-          brand: {
-            name: mock.category,
-          },
-          score: getNumber(0, 100),
-        })),
+        products: products.map(
+          mock =>
+            ({
+              id: mock.id.toString(),
+              code: getEAN(),
+              name: mock.title,
+              company: {
+                name: mock.description,
+              },
+              brand: {
+                name: mock.category,
+              },
+              score: getNumber(0, 100),
+            } as IProductData)
+        ),
       };
     } catch (e) {
       throw new FetchError('Search API', e);

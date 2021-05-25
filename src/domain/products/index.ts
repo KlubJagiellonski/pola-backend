@@ -9,7 +9,7 @@ export interface IBrand {
 }
 
 export interface IProductData {
-  id: number;
+  id: string;
   code: string;
   name: string;
   score: number;
