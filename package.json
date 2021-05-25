@@ -51,7 +51,7 @@
     "react-responsive-carousel": "^3.2.18",
     "react-slick": "^0.28.1",
     "react-transition-group": "^4.4.1",
-    "redux": "^4.0.4",
+    "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.8",
     "redux-localstorage-simple": "^2.1.6",
     "redux-thunk": "^2.3.0",
