@@ -70,7 +70,7 @@
     "@types/uuid": "^8.3.0",
     "babel-jest": "^24.9.0",
     "babel-preset-gatsby": "^0.2.26",
-    "cypress": "^3.8.0",
+    "cypress": "^7.4.0",
     "cypress-cucumber-preprocessor": "^1.19.0",
     "gh-pages": "^2.1.1",
     "identity-obj-proxy": "^3.0.0",
