@@ -40,7 +40,6 @@ export class ProductEANService extends ApiService {
 
       return {
         product_id: parseInt(product.id),
-        code,
         name: product.title,
         plScore: 0,
         report_text: 'Zgłoś',
