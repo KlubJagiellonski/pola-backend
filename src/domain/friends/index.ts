@@ -1,4 +1,4 @@
-import { getNumber } from '../../utils/data/random-number';
+import { getGuid } from '../../utils/data/random-number';
 
 export interface IFriend {
   id: string;
@@ -12,7 +12,6 @@ export class Friend implements IFriend {
 
   constructor(public description: string, imageSrc?: string) {
     this.image = imageSrc;
-    this.id = `${getNumber()}-${getNumber()}-${getNumber()}-${getNumber()}`;
-
+    this.id = getGuid();
   }
 }

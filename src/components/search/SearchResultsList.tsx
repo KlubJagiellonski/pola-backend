@@ -9,6 +9,7 @@ import { Spinner } from '../icons/spinner';
 
 const ResultsList = styled.div`
   ul {
+    padding: 0;
     list-style: none;
   }
 
@@ -25,7 +26,7 @@ interface ISearchResultsList {
   isLoading?: boolean;
 
   onLoadMore?: () => void;
-  onSelect: (code: string) => void;
+  onSelect: (code: string, id: number) => void;
 }
 
 export const SearchResultsList: React.FC<ISearchResultsList> = ({
@@ -43,10 +44,7 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
 
   return (
     <ResultsList>
-      <header>
-        <h2>Uzyskano</h2>
-        <span>{`${results.length} wyniki`}</span>
-      </header>
+      <ProductCounter amount={results.length} />
       <ul>
         {results.map((product: IProductData, index: number) => (
           <SearchResultElement product={product} key={product.code} onSelect={onSelect} />
@@ -54,5 +52,34 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
       </ul>
       {token && <div className="actions">{loadButton}</div>}
     </ResultsList>
+  );
+};
+
+interface IProductCounter {
+  amount: number;
+}
+
+const ProductCounter: React.FC<IProductCounter> = ({ amount }) => {
+  let text: string;
+  switch (amount) {
+    case 0:
+      text = `Nie znaleziono produktów`;
+      break;
+    case 1:
+      text = `Znaleziono 1 produkt`;
+      break;
+    case 2:
+    case 3:
+    case 4:
+      text = `Znaleziono ${amount} produty`;
+      break;
+    default:
+      text = `Znaleziono ${amount} produktów`;
+  }
+
+  return (
+    <header>
+      <h4>{text}</h4>
+    </header>
   );
 };

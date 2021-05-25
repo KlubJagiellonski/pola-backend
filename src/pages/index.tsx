@@ -36,12 +36,12 @@ export const Background = styled.div<{ img?: string }>`
   left: 0px;
   bottom: 0px;
   right: 0px;
-  
-  div{
+
+  div {
     width: 100%;
     height: 100%;
   }
-`
+`;
 
 interface IMainPage {
   location: Location;
@@ -53,7 +53,7 @@ interface IMainPage {
 
   invokeSearch: (phrase: string) => void;
   invokeLoadMore: () => void;
-  selectProduct: (code: string) => void;
+  selectProduct: (code: string, id: number) => void;
 }
 
 const MainPage = (props: IMainPage) => {
@@ -67,9 +67,9 @@ const MainPage = (props: IMainPage) => {
   return (
     <PageLayout>
       <SEO title="Pola Web | Strona główna" />
-      <PageSection size='full' backgroundColor={color.background.primary}>
+      <PageSection size="full" backgroundColor={color.background.primary}>
         <Background>
-          <ResponsiveImage imageSrc={'background.png'}/>
+          <ResponsiveImage imageSrc={'background.png'} />
         </Background>
         <Content>
           <SearchContainer
@@ -83,7 +83,7 @@ const MainPage = (props: IMainPage) => {
         </Content>
       </PageSection>
       <PageSection>
-        <Contents articles={props.articles} friends={props.friends}/>
+        <Contents articles={props.articles} friends={props.friends} />
       </PageSection>
       <PageSection size='full' backgroundColor={color.background.black}>
         <Download />
@@ -98,7 +98,7 @@ export default connect(
     token: state.search.token,
     isLoading: state.search.isLoading,
     articles: state.articles.data,
-    friends: state.friends.data
+    friends: state.friends.data,
   }),
   {
     invokeSearch: searchDispatcher.invokeSearch,

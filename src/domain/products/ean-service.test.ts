@@ -14,7 +14,7 @@ jest.mock('./ean-service', () => ({
 
 describe('Product EAN service', () => {
   it('should return a promise containing a data', async () => {
-    const result = await ProductEANService.getInstance().getProduct('4006985902304');
+    const result = await ProductEANService.getInstance().getProduct('4006985902304', 2);
     expect(result).toEqual(mockFailureResponse);
   });
 });

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect, ConnectedProps, useDispatch } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import styled from 'styled-components';
 import { useStaticQuery, graphql } from 'gatsby';
 
@@ -9,10 +9,11 @@ import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme
 import './PageLayout.css';
 import { IPolaState } from '../state/types';
 import { articlesDispatcher } from '../state/articles/articles-dispatcher';
-import { friendsDispatcher} from './../state/friends/friends-dispatcher';
+import { friendsDispatcher } from './../state/friends/friends-dispatcher';
 import { appDispatcher } from '../state/app/app-dispatcher';
 import { ProductModal } from '../components/search/ProductModal';
 import { searchDispatcher } from '../state/search/search-dispatcher';
+import ErrorBoundary from '../utils/error-boundary';
 
 const connector = connect(
   (state: IPolaState) => ({
@@ -44,7 +45,14 @@ const PageContent = styled.main`
   }
 `;
 
-const Layout: React.FC<IPageLayout> = ({ children, initApp, loadArticles, loadFriends, selectedProduct, unselectProduct }) => {
+const Layout: React.FC<IPageLayout> = ({
+  children,
+  initApp,
+  loadArticles,
+  loadFriends,
+  selectedProduct,
+  unselectProduct,
+}) => {
   const bootApplication = async () => {
     await initApp();
     await loadArticles();
@@ -66,12 +74,14 @@ const Layout: React.FC<IPageLayout> = ({ children, initApp, loadArticles, loadFr
   `);
 
   return (
-    <LayoutContainer>
-      {selectedProduct && <ProductModal product={selectedProduct} onClose={unselectProduct} />}
-      <PageHeader siteTitle={data.site.siteMetadata.title} />
-      <PageContent>{children}</PageContent>
-      <PageFooter />
-    </LayoutContainer>
+    <ErrorBoundary scope="page-layout">
+      <LayoutContainer>
+        {selectedProduct && <ProductModal product={selectedProduct} onClose={unselectProduct} />}
+        <PageHeader siteTitle={data.site.siteMetadata.title} />
+        <PageContent>{children}</PageContent>
+        <PageFooter />
+      </LayoutContainer>
+    </ErrorBoundary>
   );
 };
 

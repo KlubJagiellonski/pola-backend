@@ -1,0 +1,4 @@
+{
+  "searchApiURL": "https://fakestoreapi.com/products",
+  "eanApiURL": "https://www.pola-app.pl/a/v3"
+}

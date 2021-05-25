@@ -1,4 +1,4 @@
-import { getNumber } from '../../utils/data/random-number';
+import { getGuid } from '../../utils/data/random-number';
 
 export interface IArticle {
   id: string;
@@ -13,7 +13,7 @@ export class Article implements IArticle {
   public image?: string;
 
   constructor(public title: string, public content: string, public date?: string, imageSrc?: string) {
-    this.id = `${getNumber()}-${getNumber()}-${getNumber()}-${getNumber()}`;
+    this.id = getGuid();
     this.image = imageSrc;
   }
 }

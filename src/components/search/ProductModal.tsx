@@ -6,9 +6,19 @@ import { color, padding } from '../../styles/theme';
 import { ButtonColor } from '../buttons/Button';
 import { ClickOutside } from '../ClickOutside';
 import { ProductModalAction } from './ProductModalAction';
+import { ProductScore } from './ProductScore';
 
 const ProductDetails = styled.div`
   padding: ${padding.small} ${padding.normal};
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: ${padding.small};
+    }
+  }
 `;
 
 const AppDownload = styled.div`
@@ -42,12 +52,16 @@ export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
 
   return (
     <ClickOutside clickOutsideHandler={onClose}>
-      <Modal title={`EAN: ${product.code}`} onClose={onClose}>
+      <Modal title={`EAN: ${product.data?.code}`} onClose={onClose}>
         <ProductDetails>
           <h3>{product.name}</h3>
           <ul>
-            <li>{product.name}</li>
-            <li>{product.code}</li>
+            {product.data?.company && <li>{product.data?.company?.name}</li>}
+            {product.data?.brand && <li>{product.data?.brand?.name}</li>}
+            <li>
+              <span>Punkty w rankingu Poli: {product.data?.score}</span>
+              <ProductScore value={product.data?.score || 0} />
+            </li>
           </ul>
         </ProductDetails>
         <ProductModalAction actionName={product.report_text} actionCallback={reportCallbackMock}>

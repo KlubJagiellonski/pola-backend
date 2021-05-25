@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { color, padding } from '../../styles/theme';
-import { ButtonColor} from '../buttons/Button';
-import {PrimaryButton} from '../buttons/PrimaryButton'
+import { ButtonColor } from '../buttons/Button';
+import { PrimaryButton } from '../buttons/PrimaryButton';
 
 interface ITheme {
   backgroundColor?: string;
@@ -14,7 +14,7 @@ const Container = styled.div<{ theme?: ITheme }>`
   flex-flow: row nowrap;
   padding: ${padding.normal} ${padding.normal};
   align-items: center;
-  border-top: 1px solid ${color.border.white};
+  border-top: 1px solid ${color.background.primary};
   background-color: ${props => props.theme?.backgroundColor || color.background.white};
 
   .action-btn {
