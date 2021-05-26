@@ -52,7 +52,7 @@
     "react-slick": "^0.28.1",
     "react-transition-group": "^4.4.1",
     "redux": "^4.0.4",
-    "redux-devtools-extension": "^2.13.8",
+    "redux-devtools-extension": "^2.13.9",
     "redux-localstorage-simple": "^2.4.0",
     "redux-thunk": "^2.3.0",
     "slick-carousel": "^1.8.1",
