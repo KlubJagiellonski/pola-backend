@@ -8,6 +8,10 @@ on:
 
 env:
   PUBLIC_URL: 'https://klubjagiellonski.github.io/pola-web/'
+  # Enable colors in CLI apps.
+  # 3 - Truecolor support (16 million colors)
+  # https://www.npmjs.com/package/chalk#chalksupportscolor
+  FORCE_COLOR: 3
 
 jobs:
   build:
