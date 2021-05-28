@@ -10,15 +10,6 @@ updates:
       interval: daily
       time: "04:00"
     open-pull-requests-limit: 30
-    ignore:
-      - dependency-name: botocore
-        versions:
-          - "> 1.19.4"
-          - "< 2"
-      - dependency-name: boto3
-        versions:
-          - "> 1.16.4"
-          - "< 1.17"
 
   - package-ecosystem: "github-actions"
     labels:
