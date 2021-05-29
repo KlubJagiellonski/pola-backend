@@ -5,8 +5,8 @@ azure-common==1.1.27
 azure-core==1.14.0
 azure-storage-blob==12.8.1
 Babel==2.9.1
-boto3==1.17.83
-botocore==1.20.83
+boto3==1.15.18
+botocore==1.18.18
 cachetools==4.2.2
 certifi==2020.12.5
 cffi==1.14.5
@@ -67,7 +67,7 @@ PyYAML==5.4.1
 requests==2.23.0
 requests-oauthlib==1.3.0
 rsa==4.7.2
-s3transfer==0.4.2
+s3transfer==0.3.7
 SecretStorage==3.3.1
 six==1.16.0
 snowflake-connector-python==2.3.6
