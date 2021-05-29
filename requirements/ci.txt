@@ -39,7 +39,7 @@ Faker==8.4.0
 flake8==3.9.2
 future==0.18.2
 gtin==0.1.13
-idna==2.10
+idna==3.1
 importlib-metadata==4.3.0
 ipdb==0.13.8
 ipython==7.21.0
