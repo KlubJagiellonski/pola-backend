@@ -22,6 +22,208 @@ class IntegerRangeField(models.IntegerField):
         return super().formfield(**defaults)
 
 
+class CapitalGroupQuerySet(models.query.QuerySet):
+    def get_or_create(self, commit_desc=None, commit_user=None, *args, **kwargs):
+        if not commit_desc:
+            return super().get_or_create(*args, **kwargs)
+
+        with reversion.create_revision(manage_manually=True, atomic=True):
+            obj, created = super().get_or_create(*args, **kwargs)
+            if created:
+                reversion.set_comment(commit_desc)
+                reversion.set_user(commit_user)
+                reversion.add_to_revision(obj)
+            return obj, created
+
+
+@reversion.register
+class CapitalGroup(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        db_index=True,
+        unique=False,
+        verbose_name=_("Nazwa (pobrana z ILiM)"),
+    )
+    official_name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_("Nazwa rejestrowa"))
+    common_name = models.CharField(max_length=255, blank=True, verbose_name=_("Nazwa dla użytkownika"))
+
+    plCapital = IntegerRangeField(
+        verbose_name=_("Udział polskiego kapitału"), min_value=0, max_value=100, null=True, blank=True
+    )
+    plWorkers = IntegerRangeField(
+        verbose_name=_("Miejsce produkcji"),
+        min_value=0,
+        max_value=100,
+        null=True,
+        blank=True,
+        choices=((0, _("0 - Nie produkuje w Polsce")), (100, _("100 - Produkuje w Polsce"))),
+    )
+    plRnD = IntegerRangeField(
+        verbose_name=_("Miejsca pracy w BiR w Polsce"),
+        min_value=0,
+        max_value=100,
+        null=True,
+        blank=True,
+        choices=(
+            (0, _("0 - Nie tworzy miejsc pracy w BiR Polsce")),
+            (100, _("100 - Tworzy miejsca pracy w BiR w Polsce")),
+        ),
+    )
+    plRegistered = IntegerRangeField(
+        verbose_name=_("Miejsce rejestracji"),
+        min_value=0,
+        max_value=100,
+        null=True,
+        blank=True,
+        choices=(
+            (0, _("0 - Firma zarejestrowana za granicą")),
+            (100, _("100 - Firma zarejestrowana w Polsce")),
+        ),
+    )
+    plNotGlobEnt = IntegerRangeField(
+        verbose_name=_("Struktura kapitałowa"),
+        min_value=0,
+        max_value=100,
+        null=True,
+        blank=True,
+        choices=(
+            (0, _("0 - Firma jest częścią zagranicznego koncernu")),
+            (100, _("100 - Firma nie jest częścią zagranicznego koncernu")),
+        ),
+    )
+
+    description = models.TextField(_("Opis grupy kapitałowej"), null=True, blank=True)
+    sources = models.TextField(_("Źródła"), null=True, blank=True)
+
+    verified = models.BooleanField(
+        default=False, verbose_name=_("Dane zweryfikowane"), choices=((True, _("Tak")), (False, _("Nie")))
+    )
+
+    Editor_notes = models.TextField(_("Notatki redakcji (nie pokazujemy użytkownikom)"), null=True, blank=True)
+
+    plCapital_notes = models.TextField(_("Więcej nt. udziału polskiego kapitału"), null=True, blank=True)
+    plWorkers_notes = models.TextField(_("Więcej nt. miejsca produkcji"), null=True, blank=True)
+    plRnD_notes = models.TextField(_("Więcej nt. miejsc pracy w BiR"), null=True, blank=True)
+    plRegistered_notes = models.TextField(_("Więcej nt. miejsca rejestracji"), null=True, blank=True)
+    plNotGlobEnt_notes = models.TextField(_("Więcej nt. struktury kapitałowej"), null=True, blank=True)
+
+    nip = models.CharField(max_length=10, db_index=True, null=True, blank=True, verbose_name=_("NIP/Tax ID"))
+    address = models.TextField(null=True, blank=True, verbose_name=_("Adres"))
+
+    is_friend = models.BooleanField(
+        default=False, verbose_name=_("Przyjaciel Poli"), choices=((True, _("Tak")), (False, _("Nie")))
+    )
+    objects = CapitalGroupQuerySet.as_manager()
+
+    def to_dict(self):
+        dict = model_to_dict(self)
+        return dict
+
+    def get_absolute_url(self):
+        return reverse('company:capital-group-detail', args=[self.pk])
+
+    def locked_by(self):
+        return concurency.locked_by(self)
+
+    def __str__(self):
+        return self.common_name or self.official_name or self.name
+
+    def get_sources(self, raise_exp=True):
+        ret = {}
+        if not self.sources:
+            return ret
+
+        lines = self.sources.splitlines()
+        for line in lines:
+            line = line.strip()
+            if line == '':
+                continue
+            s = line.split('|')
+            if s.__len__() != 2:
+                if raise_exp:
+                    raise ValidationError(
+                        'Pole >Źródła< powinno składać się '
+                        'linii zawierających tytuł odnośnika'
+                        ' i odnośnik odzielone znakiem | (pipe)'
+                    )
+                else:
+                    continue
+            if s[0] in ret:
+                if raise_exp:
+                    raise ValidationError(f'Tytuł odnośnika >{s[0]}< występuje więcej niż raz')
+                else:
+                    continue
+            ret[s[0]] = s[1]
+
+        return ret
+
+    def clean(self, *args, **kwargs):
+        if self.verified:
+            YOU_CANT_SET_VERIFIED = (
+                'Nie możesz oznaczyć grupy kapitałowej jako ' 'zweryfikowana jeśli pole >{}< jest nieustalone'
+            )
+            if self.plCapital is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.format('udział kapitału polskiego'))
+            if self.plWorkers is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.format('miejsce produkcji'))
+            if self.plRnD is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.format('wysokopłatne miejsca pracy'))
+            if self.plRegistered is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.format('miejsce rejestracji'))
+            if self.plNotGlobEnt is None:
+                raise ValidationError(YOU_CANT_SET_VERIFIED.format('struktura kapitałowa'))
+            self.get_sources()
+
+        super().clean(*args, **kwargs)
+
+    def as_company(self, pk):
+        return Company(
+            pk=pk,
+            created_at=self.created_at,
+            name=self.name,
+            official_name=self.official_name,
+            common_name=self.common_name,
+            plCapital=self.plCapital,
+            plWorkers=self.plWorkers,
+            plRnD=self.plRnD,
+            plRegistered=self.plRegistered,
+            plNotGlobEnt=self.plNotGlobEnt,
+            description=self.description,
+            sources=self.sources,
+            verified=self.verified,
+            Editor_notes=self.Editor_notes,
+            plCapital_notes=self.plCapital_notes,
+            plWorkers_notes=self.plWorkers_notes,
+            plRnD_notes=self.plRnD_notes,
+            plRegistered_notes=self.plRegistered_notes,
+            plNotGlobEnt_notes=self.plNotGlobEnt_notes,
+            nip=self.nip,
+            address=self.address,
+            is_friend=self.is_friend,
+        )
+
+    def save(self, commit_desc=None, commit_user=None, *args, **kwargs):
+        self.full_clean()
+        if not commit_desc:
+            super().save(*args, **kwargs)
+            return
+
+        with reversion.create_revision(manage_manually=True, atomic=True):
+            super().save(*args, **kwargs)
+            reversion.set_comment(commit_desc)
+            reversion.set_user(commit_user)
+            reversion.add_to_revision(self)
+
+    class Meta:
+        verbose_name = _("Grupa kapitałowa")
+        verbose_name_plural = _("Grupy kapitałowe")
+        ordering = ['-created_at']
+        permissions = ()
+
+
 class CompanyQuerySet(models.query.QuerySet):
     def get_or_create(self, commit_desc=None, commit_user=None, *args, **kwargs):
         if not commit_desc:
@@ -49,7 +251,9 @@ class Company(models.Model):
     )
     official_name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_("Nazwa rejestrowa"))
     common_name = models.CharField(max_length=255, blank=True, verbose_name=_("Nazwa dla użytkownika"))
-
+    capital_group = models.ForeignKey(
+        CapitalGroup, null=True, on_delete=models.CASCADE, blank=True, verbose_name=_("Grupa kapitałowa")
+    )
     plCapital = IntegerRangeField(
         verbose_name=_("Udział polskiego kapitału"), min_value=0, max_value=100, null=True, blank=True
     )

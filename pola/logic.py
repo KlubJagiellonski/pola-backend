@@ -26,9 +26,15 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
         brand_company = product.brand.company if product.brand else None
         companies = []
         if product_company:
+            if product_company.capital_group is not None:
+                product_company = product_company.capital_group.as_company(product_company.pk)
+
             companies.append(product_company)
             result['name'] = product_company.common_name or product_company.official_name or product_company.name
         if brand_company:
+            if brand_company.capital_group is not None:
+                brand_company = brand_company.capital_group.as_company(brand_company.pk)
+
             companies.append(brand_company)
         companies = list(({c.pk: c for c in companies}).values())
         result['product_id'] = product.id

@@ -23,6 +23,7 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin, Com
             'official_name',
             'common_name',
             'is_friend',
+            'capital_group',
             'plCapital',
             'plWorkers',
             'plRnD',
@@ -71,3 +72,25 @@ class BrandForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):
         model = models.Brand
         fields = ['name', 'common_name', 'company']
         widgets = {'company': autocomplete.ModelSelect2(url='company:company-autocomplete')}
+
+
+class CapitalGroupForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
+    class Meta:
+        model = models.CapitalGroup
+        fields = [
+            'name',
+            'official_name',
+            'common_name',
+            'is_friend',
+            'plCapital',
+            'plWorkers',
+            'plRnD',
+            'plRegistered',
+            'plNotGlobEnt',
+            'description',
+            'sources',
+            'verified',
+            'Editor_notes',
+            'nip',
+            'address',
+        ]

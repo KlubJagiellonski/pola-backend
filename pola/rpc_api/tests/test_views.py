@@ -5,7 +5,7 @@ import requests
 from test_plus.test import TestCase
 
 from ai_pics.models import AIAttachment, AIPics
-from company.factories import CompanyFactory
+from company.factories import CapitalGroupFactory, CompanyFactory
 from product.factories import ProductFactory
 from product.models import Product
 from report.factories import ReportFactory
@@ -219,6 +219,331 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             json.loads(response.content),
         )
 
+    def test_should_return_200_when_polish_and_known_product_capitalgroup(self):
+        capitalgroup = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP",
+            sources="AAAA|CCCC",
+            verified=True,
+            is_friend=False,
+            plCapital_notes="CCC",
+            plWorkers_notes="WWW",
+            plRnD_notes="RRR",
+            plRegistered_notes="EEE",
+            plNotGlobEnt_notes="GGG",
+        )
+        c = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup,
+        )
+        p = ProductFactory.create(code=5900049011829, company=c, brand=None)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+        self.assertEqual(
+            {
+                "product_id": p.pk,
+                "code": "5900049011829",
+                "name": capitalgroup.common_name,
+                "card_type": "type_white",
+                "altText": None,
+                "report": {
+                    "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                    "button_text": "Zg\u0142o\u015b",
+                    "button_type": "type_white",
+                },
+                "companies": [
+                    {
+                        "name": capitalgroup.official_name,
+                        "plCapital": 0,
+                        "plCapital_notes": "CCC",
+                        "plWorkers": 100,
+                        "plWorkers_notes": "WWW",
+                        "plRnD": 0,
+                        "plRnD_notes": "RRR",
+                        "plRegistered": 0,
+                        "plRegistered_notes": "EEE",
+                        "plNotGlobEnt": 0,
+                        "plNotGlobEnt_notes": "GGG",
+                        "plScore": 30,
+                        "is_friend": False,
+                        "description": "TEST_CAPITALGROUP",
+                        "sources": {"AAAA": "CCCC"},
+                    }
+                ],
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Potrzebujemy 1 zł",
+                },
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_multiple_companies_both_capitalgroup(self):
+        capitalgroup1 = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP_1",
+            sources="AAAA_1|CCCC_1",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="CCC_1",
+            plWorkers_notes="WWW_1",
+            plRnD_notes="RRR_1",
+            plRegistered_notes="EEE_1",
+            plNotGlobEnt_notes="GGG_1",
+        )
+        capitalgroup2 = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP_2",
+            sources="AAAA_2|CCCC_2",
+            verified=True,
+            is_friend=False,
+            plCapital_notes="CCC_2",
+            plWorkers_notes="WWW_2",
+            plRnD_notes="RRR_2",
+            plRegistered_notes="EEE_2",
+            plNotGlobEnt_notes="GGG_2",
+        )
+        c1 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup1,
+        )
+        c2 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup2,
+        )
+
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": 'Marka własna - Sieć Lidl',
+                "card_type": "type_white",
+                "altText": None,
+                "report": {
+                    "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                    "button_text": "Zg\u0142o\u015b",
+                    "button_type": "type_white",
+                },
+                "companies": [
+                    {
+                        "name": capitalgroup1.official_name,
+                        "plCapital": 0,
+                        "plCapital_notes": "CCC_1",
+                        "plWorkers": 100,
+                        "plWorkers_notes": "WWW_1",
+                        "plRnD": 0,
+                        "plRnD_notes": "RRR_1",
+                        "plRegistered": 0,
+                        "plRegistered_notes": "EEE_1",
+                        "plNotGlobEnt": 0,
+                        "plNotGlobEnt_notes": "GGG_1",
+                        "plScore": 30,
+                        'friend_text': 'To jest przyjaciel Poli',
+                        "is_friend": True,
+                        "description": "TEST_CAPITALGROUP_1",
+                        "sources": {"AAAA_1": "CCCC_1"},
+                    },
+                    {
+                        "name": capitalgroup2.official_name,
+                        "plCapital": 0,
+                        "plCapital_notes": "CCC_2",
+                        "plWorkers": 100,
+                        "plWorkers_notes": "WWW_2",
+                        "plRnD": 0,
+                        "plRnD_notes": "RRR_2",
+                        "plRegistered": 0,
+                        "plRegistered_notes": "EEE_2",
+                        "plNotGlobEnt": 0,
+                        "plNotGlobEnt_notes": "GGG_2",
+                        "plScore": 30,
+                        "is_friend": False,
+                        "description": "TEST_CAPITALGROUP_2",
+                        "sources": {"AAAA_2": "CCCC_2"},
+                    },
+                ],
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Potrzebujemy 1 zł",
+                },
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_multiple_companies_one_capitalgroup(self):
+        capitalgroup = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP_1",
+            sources="AAAA_1|CCCC_1",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="CCC_1",
+            plWorkers_notes="WWW_1",
+            plRnD_notes="RRR_1",
+            plRegistered_notes="EEE_1",
+            plNotGlobEnt_notes="GGG_1",
+        )
+        c1 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+        c2 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup,
+        )
+
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": 'Marka własna - Sieć Lidl',
+                "card_type": "type_white",
+                "altText": None,
+                "report": {
+                    "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                    "button_text": "Zg\u0142o\u015b",
+                    "button_type": "type_white",
+                },
+                "companies": [
+                    {
+                        "name": c1.official_name,
+                        "plCapital": 100,
+                        "plCapital_notes": "AAA",
+                        "plWorkers": 0,
+                        "plWorkers_notes": "BBB",
+                        "plRnD": 100,
+                        "plRnD_notes": "CCC",
+                        "plRegistered": 100,
+                        "plRegistered_notes": "DDD",
+                        "plNotGlobEnt": 100,
+                        "plNotGlobEnt_notes": "EEE",
+                        "plScore": 70,
+                        "is_friend": True,
+                        "friend_text": "To jest przyjaciel Poli",
+                        "description": "TEST",
+                        "sources": {"TEST": "BBBB"},
+                    },
+                    {
+                        "name": capitalgroup.official_name,
+                        "plCapital": 0,
+                        "plCapital_notes": "CCC_1",
+                        "plWorkers": 100,
+                        "plWorkers_notes": "WWW_1",
+                        "plRnD": 0,
+                        "plRnD_notes": "RRR_1",
+                        "plRegistered": 0,
+                        "plRegistered_notes": "EEE_1",
+                        "plNotGlobEnt": 0,
+                        "plNotGlobEnt_notes": "GGG_1",
+                        "plScore": 30,
+                        "is_friend": True,
+                        "friend_text": "To jest przyjaciel Poli",
+                        "description": "TEST_CAPITALGROUP_1",
+                        "sources": {"AAAA_1": "CCCC_1"},
+                    },
+                ],
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Potrzebujemy 1 zł",
+                },
+            },
+            json.loads(response.content),
+        )
+
 
 class TestAddAiPics(TestCase, JsonRequestMixin):
     url = '/a/v3/add_ai_pics'
@@ -418,7 +743,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 },
                 'friend_text': 'To jest przyjaciel Poli',
                 'is_friend': True,
-                'name': 'company_official_125',
+                'name': c1.official_name,
                 'plCapital': 100,
                 'plCapital_notes': 'AAA',
                 'plNotGlobEnt': 100,
@@ -435,6 +760,274 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'report_button_type': 'type_white',
                 'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
                 'sources': {'TEST': 'BBBB'},
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_polish_and_known_product_capitalgroup(self):
+        capitalgroup = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP",
+            sources="AAAA|CCCC",
+            verified=True,
+            is_friend=False,
+            plCapital_notes="CCC",
+            plWorkers_notes="WWW",
+            plRnD_notes="RRR",
+            plRegistered_notes="EEE",
+            plNotGlobEnt_notes="GGG",
+        )
+        c = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup,
+        )
+        p = ProductFactory.create(code=5900049011829, company=c, brand=None)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": capitalgroup.official_name,
+                "card_type": "type_white",
+                "plScore": 30,
+                "altText": None,
+                "plCapital": 0,
+                "plCapital_notes": "CCC",
+                "plWorkers": 100,
+                "plWorkers_notes": "WWW",
+                "plRnD": 0,
+                "plRnD_notes": "RRR",
+                "plRegistered": 0,
+                "plRegistered_notes": "EEE",
+                "plNotGlobEnt": 0,
+                "plNotGlobEnt_notes": "GGG",
+                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                "report_button_text": "Zg\u0142o\u015b",
+                "report_button_type": "type_white",
+                "is_friend": False,
+                "description": "TEST_CAPITALGROUP",
+                "sources": {"AAAA": "CCCC"},
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Potrzebujemy 1 zł",
+                },
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_multiple_companies_both_capitalgroup(self):
+        capitalgroup1 = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP_1",
+            sources="AAAA_1|CCCC_1",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="CCC_1",
+            plWorkers_notes="WWW_1",
+            plRnD_notes="RRR_1",
+            plRegistered_notes="EEE_1",
+            plNotGlobEnt_notes="GGG_1",
+        )
+        capitalgroup2 = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP_2",
+            sources="AAAA_2|CCCC_2",
+            verified=True,
+            is_friend=False,
+            plCapital_notes="CCC_2",
+            plWorkers_notes="WWW_2",
+            plRnD_notes="RRR_2",
+            plRegistered_notes="EEE_2",
+            plNotGlobEnt_notes="GGG_2",
+        )
+        c1 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup1,
+        )
+        c2 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup2,
+        )
+
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": capitalgroup1.official_name,
+                "card_type": "type_white",
+                "plScore": 30,
+                "altText": None,
+                "plCapital": 0,
+                "plCapital_notes": "CCC_1",
+                "plWorkers": 100,
+                "plWorkers_notes": "WWW_1",
+                "plRnD": 0,
+                "plRnD_notes": "RRR_1",
+                "plRegistered": 0,
+                "plRegistered_notes": "EEE_1",
+                "plNotGlobEnt": 0,
+                "plNotGlobEnt_notes": "GGG_1",
+                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                "report_button_text": "Zg\u0142o\u015b",
+                "report_button_type": "type_white",
+                "is_friend": True,
+                "friend_text": "To jest przyjaciel Poli",
+                "description": "TEST_CAPITALGROUP_1",
+                "sources": {"AAAA_1": "CCCC_1"},
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Potrzebujemy 1 zł",
+                },
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_200_when_multiple_companies_one_capitalgroup(self):
+        capitalgroup = CapitalGroupFactory(
+            plCapital=0,
+            plWorkers=100,
+            plRnD=0,
+            plRegistered=0,
+            plNotGlobEnt=0,
+            description="TEST_CAPITALGROUP_1",
+            sources="AAAA_1|CCCC_1",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="CCC_1",
+            plWorkers_notes="WWW_1",
+            plRnD_notes="RRR_1",
+            plRegistered_notes="EEE_1",
+            plNotGlobEnt_notes="GGG_1",
+        )
+        c1 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            capital_group=capitalgroup,
+        )
+        c2 = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+        )
+
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+
+        self.assertEqual(
+            {
+                "product_id": p.id,
+                "code": "5900049011829",
+                "name": capitalgroup.official_name,
+                "card_type": "type_white",
+                "plScore": 30,
+                "altText": None,
+                "plCapital": 0,
+                "plCapital_notes": "CCC_1",
+                "plWorkers": 100,
+                "plWorkers_notes": "WWW_1",
+                "plRnD": 0,
+                "plRnD_notes": "RRR_1",
+                "plRegistered": 0,
+                "plRegistered_notes": "EEE_1",
+                "plNotGlobEnt": 0,
+                "plNotGlobEnt_notes": "GGG_1",
+                "report_text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
+                "report_button_text": "Zg\u0142o\u015b",
+                "report_button_type": "type_white",
+                "is_friend": True,
+                "friend_text": "To jest przyjaciel Poli",
+                "description": "TEST_CAPITALGROUP_1",
+                "sources": {"AAAA_1": "CCCC_1"},
+                "donate": {
+                    "show_button": True,
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Potrzebujemy 1 zł",
+                },
             },
             json.loads(response.content),
         )

@@ -19,3 +19,13 @@ class BrandFactory(factory.django.DjangoModelFactory):
     company = factory.SubFactory(CompanyFactory)
     name = factory.Sequence(lambda n: 'brand%d' % n)
     common_name = factory.Sequence(lambda n: 'common_brand_name%d' % n)
+
+
+class CapitalGroupFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = 'company.CapitalGroup'
+
+    name = factory.Sequence(lambda n: 'capitalgroup%d' % n)
+    official_name = factory.Sequence(lambda n: 'capitalgroup_official_%d' % n)
+    common_name = factory.Sequence(lambda n: 'capitalgroup_official_%d' % n)
+    description = factory.fuzzy.FuzzyText()
