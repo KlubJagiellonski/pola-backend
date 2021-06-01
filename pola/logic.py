@@ -82,7 +82,7 @@ def handle_unknown_company(code, report, result):
     # we don't know the manufacturer
     if code.startswith('590'):
         # the code is registered in Poland, we want more data!
-        result['name'] = "Dziękujemy za użycie aplikacji Pola!"
+        result['name'] = "Tego produktu nie mamy jeszcze w bazie"
         result['altText'] = (
             "Każde skanowanie jest rejestrowane. Najczęściej skanowane firmy i produkty, "
             "których nie mamy jeszcze w bazie, są weryfikowane w pierwszej kolejności. "
