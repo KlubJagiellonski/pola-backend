@@ -1,5 +1,5 @@
 module.exports = {
-  pathPrefix: '/pola-web',
+  pathPrefix: process.env.PUBLIC_URL && new URL(process.env.PUBLIC_URL).pathname || null,
   siteMetadata: {
     title: `Pola Web`,
     description: `Strona aplikacji Pola`,
