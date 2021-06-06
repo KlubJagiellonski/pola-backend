@@ -1,0 +1,12 @@
+pull_request_rules:
+  - name: Automatic merge PR with automerge label
+    conditions:
+      - label=automerge
+      - check-success=Build Prod Image
+      - check-success=Django tests (3.8)
+      - check-success=Django tests (3.9)
+      - check-success=Static checks
+      - check-success=BI Validate
+    actions:
+      merge:
+        method: squash
