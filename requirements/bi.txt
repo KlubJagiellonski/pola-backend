@@ -20,7 +20,7 @@ dbt-postgres==0.19.1
 dbt-redshift==0.19.1
 dbt-snowflake==0.19.1
 decorator==4.4.2
-google-api-core==1.23.0
+google-api-core==1.29.0
 google-auth==1.30.1
 google-cloud-bigquery==2.3.1
 google-cloud-core==1.4.4
