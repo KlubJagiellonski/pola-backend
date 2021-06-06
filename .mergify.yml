@@ -1,7 +1,7 @@
 pull_request_rules:
-  - name: Automatic merge on approval
+  - name: Automatic merge PR with automerge label
     conditions:
-      - "label=automerge"
+      - label=automerge
       - check-success=Build Prod Image
       - check-success=Django tests (3.8)
       - check-success=Django tests (3.9)
