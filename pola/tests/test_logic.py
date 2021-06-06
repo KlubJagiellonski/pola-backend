@@ -69,7 +69,7 @@ class TestGetResultFromCode(TestCase):
                 ),
                 "card_type": "type_grey",
                 "code": "5900084231145",
-                "name": "Dziękujemy za użycie aplikacji Pola!",
+                "name": "Tego produktu nie mamy jeszcze w bazie",
                 "plCapital": None,
                 "plCapital_notes": None,
                 "plNotGlobEnt": None,
