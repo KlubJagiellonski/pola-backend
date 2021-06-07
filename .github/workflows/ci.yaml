@@ -45,14 +45,14 @@ jobs:
       run: echo "$MATRIX_CONTEXT"
     - name: Set deployment status
       uses: pbrandone/create-status-action@master
-      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == "User"
+      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == 'User'
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         state: pending
         description: Preparing deploy preview
         context: Deploy Preview URL
     - name: "Set public URL"
-      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == "User"
+      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == 'User'
       run: |
         BASE_URL="http://${AWS_BUCKET_NAME}.s3-website.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com"
         PREVIEW_DIR="$(echo "${GITHUB_HEAD_REF}" | tr -c '[:alnum:]._-' '-')"
@@ -99,16 +99,16 @@ jobs:
         clean: true  # Automatically remove deleted files from the deploy branch.
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
-      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == "User"
+      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == 'User'
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
     - name: "Upload preview to AWS S3"
-      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == "User"
+      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == 'User'
       run: aws s3 sync --delete ./public/ "s3://${AWS_BUCKET_NAME}/${PREVIEW_DIR}"
     - name: Set success deployment status
-      if: success() && github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == "User"
+      if: success() && github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == 'User'
       uses: pbrandone/create-status-action@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -117,7 +117,7 @@ jobs:
         url: ${{ env.PUBLIC_URL }}
         context: Deploy Preview URL
     - name: Set failed deployment status
-      if: failure() && github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == "User"
+      if: failure() && github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender == 'User'
       uses: pbrandone/create-status-action@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
