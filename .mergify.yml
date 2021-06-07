@@ -1,3 +1,4 @@
+---
 pull_request_rules:
   - name: Automatic merge PR with automerge label
     conditions:
