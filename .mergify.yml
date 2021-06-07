@@ -23,8 +23,8 @@ pull_request_rules:
         message: Could you please fix the conflicts @{{author}}? 🙏
   - name: Remove label on conflict
     conditions:
-      - -conflict
-      - -closed
+     - -conflict
+     - -closed
     actions:
       label:
         remove:
