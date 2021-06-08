@@ -1,3 +1,4 @@
+---
 pull_request_rules:
   - name: Automatic merge PR with automerge label
     conditions:
@@ -10,3 +11,21 @@ pull_request_rules:
     actions:
       merge:
         method: squash
+  - name: Add label on conflict
+    conditions:
+      - conflict
+      - -closed
+    actions:
+      label:
+        add:
+          - conflict
+      comment:
+        message: Could you please fix the conflicts @{{author}}? 🙏
+  - name: Remove label on conflict
+    conditions:
+      - -conflict
+      - -closed
+    actions:
+      label:
+        remove:
+          - conflict
