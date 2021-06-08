@@ -31,14 +31,14 @@ pull_request_rules:
           - conflict
   - name: Add label on BI Validatiton failutre
     conditions:
-      - check-success=BI Validate
+      - check-failure=BI Validate
     actions:
       label:
         add:
           - "BI Validation Failed"
   - name: Remove label on BI Validatiton success
     conditions:
-      - check-failure=BI Validate
+      - check-success=BI Validate
     actions:
       label:
         remove:
