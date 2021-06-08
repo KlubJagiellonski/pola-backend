@@ -29,3 +29,17 @@ pull_request_rules:
       label:
         remove:
           - conflict
+  - name: Add label on BI Validatiton failutre
+    conditions:
+      - check-success=BI Validate
+    actions:
+      label:
+        add:
+          - "BI Validation Failed"
+  - name: Remove label on BI Validatiton success
+    conditions:
+      - check-failure=BI Validate
+    actions:
+      label:
+        remove:
+          - "BI Validation Failed"
