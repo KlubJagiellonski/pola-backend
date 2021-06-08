@@ -25,17 +25,18 @@ class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
         queryset=Company.objects.all(), widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
     )
 
+    o = django_filters.OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ('name', _('Nazwa (A-Z)')),
+            ('company__name', _('Nazwa producenta (A-Z)')),
+            ('query_count', _('Liczba zeskanowań (rosnąco)')),
+        )
+    )
+
     class Meta:
         model = Product
         fields = {
             'name': ['icontains'],
             'code': ['icontains'],
         }
-        order_by = (
-            ('name', _('Nazwa (A-Z)')),
-            ('-name', _('Nazawa (Z-A)')),
-            ('company__name', _('Nazwa producenta (A-Z)')),
-            ('-company__name', _('Nazwa producenta (Z-A)')),
-            ('query_count', _('Liczba zeskanowań (rosnąco)')),
-            ('-query_count', _('Liczba zeskanowań (malejąco)')),
-        )

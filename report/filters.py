@@ -44,6 +44,15 @@ class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
         field_name='client', method=is_bot_client, label='Pokaż zgłoszenia od bota'
     )
 
+    o = django_filters.OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ('created_at', _('Data utowrzenia')),
+            ('resolved_at', _('Data rozpatrzenia')),
+            ('resolved_by', _('Rozpatrujący')),
+        )
+    )
+
     class Meta:
         model = Report
         fields = [
@@ -54,12 +63,4 @@ class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
             'created_at',
             'resolved_at',
             'resolved_by',
-        ]
-        order_by = [
-            ('created_at', _('Data utowrzenia')),
-            ('-created_at', _('Data utworzenia (reversed)')),
-            ('resolved_at', _('Data rozpatrzenia')),
-            ('-resolved_at', _('Data rozpatrzenia (reversed)')),
-            ('resolved_by', _('Rozpatrujący')),
-            ('-resolved_by', _('Rozpatrujący (reversed)')),
         ]
