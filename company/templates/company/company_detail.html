@@ -20,6 +20,11 @@
     {% if object.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ object.locked_by }}"></i>{% endif %}
     {{ object }}  <small>#{{ object.pk }}</small>
 </h1>
+    {% if capital_group %}
+        <div class="alert alert-warning" role="alert">
+   Ten producent ma przypisaną grupę kapitałową! <a href="{{ capital_group.get_absolute_url }}">{{ capital_group }}</a>
+        </div>
+    {% endif %}
 <div class="row">
     <div class="col-lg-9">
         <div class="panel panel-primary">

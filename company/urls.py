@@ -19,7 +19,14 @@ urlpatterns = [
     path('brand/<int:pk>/delete', views.BrandDelete.as_view(), name="brand-delete"),
     path('brand/<int:pk>/', views.BrandDetailView.as_view(), name="brand-detail"),
     path('brand', views.BrandListView.as_view(), name="brand-list"),
+    # Capital group
+    path('capital-group', views.CapitalGroupListView.as_view(), name="capital-group-list"),
+    path('create-capital-group', views.CapitalGroupCreate.as_view(), name="capital-group-create"),
+    path('capital-group/<int:pk>/edit', views.CapitalGroupUpdate.as_view(), name="capital-group-edit"),
+    path('capital-group/<int:pk>/delete', views.CapitalGroupDelete.as_view(), name="capital-group-delete"),
+    path('capital-group/<int:pk>/', views.CapitalGroupDetailView.as_view(), name="capital-group-detail"),
     # Autocomplete
     path('autocomplete/company', views.CompanyAutocomplete.as_view(), name='company-autocomplete'),
     path(r'autocomplete/brand/', views.BrandAutocomplete.as_view(), name='brand-autocomplete'),
+    path(r'autocomplete/capital-group/', views.CapitalGroupAutocomplete.as_view(), name='capital-group-autocomplete'),
 ]

@@ -1,8 +1,8 @@
 from django.core.management import BaseCommand
 from django.db import IntegrityError
 
-from company.factories import CompanyFactory
-from company.models import Company
+from company.factories import CapitalGroupFactory, CompanyFactory
+from company.models import Brand, CapitalGroup, Company
 from product.factories import ProductFactory
 from product.models import Product
 from report.factories import (
@@ -27,13 +27,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options['delete']:
             Company.objects.all().delete()
+            CapitalGroup.objects.all().delete()
             Product.objects.all().delete()
             Report.objects.all().delete()
+            Brand.objects.all().delete()
             self.stdout.write(self.style.SUCCESS('Successfully emptied the database'))
         else:
             try:
                 for i in range(5):
                     CompanyFactory.create()
+                    CapitalGroupFactory.create()
                     ProductFactory.create()
                     ReportFactory.create()
                     ResolvedReportFactory.create()

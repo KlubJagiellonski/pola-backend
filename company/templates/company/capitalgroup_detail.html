@@ -1,0 +1,50 @@
+{%extends 'company/base.html' %}
+{% load i18n %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="btn-group">
+        {% if perms.company.delete_company %}
+            <a href="{% url 'company:capital-group-delete' object.pk %}" class="btn btn-primary"><i class="fa fa-trash"></i> {% trans "Usuń" %}</a>
+        {% endif %}
+        {% if perms.company.change_company %}
+            <a href="{% url 'company:capital-group-edit' object.pk %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+        {% endif %}
+    </div>
+{% endif %}
+<h1>
+    {% if object.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ object.locked_by }}"></i>{% endif %}
+    {{ object }}  <small>#{{ object.pk }}</small>
+</h1>
+<div class="panel panel-primary">
+    <div class="panel-heading">{% trans "Data metric" %}</div>
+    <table class="table">
+        {% for field in fields %}
+            <tr>
+                <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="row">
+    {% if perms.product.view_product %}
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Producenci należący do grupy kapitałowej</h3>
+            </div>
+
+            <ul class="list-group">
+                {% for company in company_list  %}
+                    <li class="list-group-item">
+                        <a href="{{ company.get_absolute_url }}">{{ company }}</a>
+                    </li>
+                {% empty%}
+                    <li class="list-group-item">{% trans "Nie ma żadnych producentów" %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+{% endblock content %}

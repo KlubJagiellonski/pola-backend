@@ -13,15 +13,20 @@ from django.views.generic.edit import (
 )
 from django_filters.views import FilterView
 
-from company.models import Brand, Company
+from company.models import Brand, CapitalGroup, Company
 from pola.concurency import ConcurencyProtectUpdateView
 from pola.mixins import LoginPermissionRequiredMixin
 from pola.views import ExprAutocompleteMixin
 from product.models import Product
 from report.models import Report
 
-from .filters import BrandFilter, CompanyFilter
-from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm
+from .filters import BrandFilter, CapitalGroupFilter, CompanyFilter
+from .forms import (
+    BrandForm,
+    CapitalGroupForm,
+    CompanyCreateFromKRSForm,
+    CompanyForm,
+)
 
 
 class CompanyListView(LoginPermissionRequiredMixin, FilterView):
@@ -140,7 +145,7 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
         context = super().get_context_data(**kwargs)
 
         context['report_list'] = Report.objects.only_open().filter(product__company=self.get_object())
-
+        context['capital_group'] = self.get_object().capital_group
         context['brand_list'] = Brand.objects.filter(company=self.get_object())
         context['product_list'] = Product.objects.filter(company=self.get_object())
 
@@ -216,3 +221,74 @@ class BrandAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.
         'common_name__icontains',
     ]
     model = Brand
+
+
+class CapitalGroupListView(LoginPermissionRequiredMixin, FilterView):
+    permission_required = 'company.view_company'
+    model = CapitalGroup
+    filterset_class = CapitalGroupFilter
+    paginate_by = 25
+
+
+class CapitalGroupCreate(GetInitalFormMixin, LoginPermissionRequiredMixin, FormValidMessageMixin, CreateView):
+    permission_required = 'company.add_company'
+    model = CapitalGroup
+    form_class = CapitalGroupForm
+    form_valid_message = "Grupa kapitałowa utworzona!"
+
+    def get_success_url(self):
+        return reverse("company:capital-group-detail", args=[self.object.pk])
+
+
+class CapitalGroupUpdate(LoginPermissionRequiredMixin, FormValidMessageMixin, ConcurencyProtectUpdateView, UpdateView):
+    permission_required = 'company.change_company'
+    model = CapitalGroup
+    form_class = CapitalGroupForm
+    concurency_url = reverse_lazy('concurency:lock')
+    form_valid_message = "Grupa kapitałowa zaktualizowana!"
+
+
+class CapitalGroupDelete(LoginPermissionRequiredMixin, FormValidMessageMixin, DeleteView):
+    permission_required = 'company.delete_company'
+    model = CapitalGroup
+    success_url = reverse_lazy('company:list')
+    form_valid_message = "Grupa kapitałowa skasowana!"
+
+    def get_success_url(self):
+        return reverse("company:capital-group-list")
+
+
+class CapitalGroupDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, DetailView):
+    model = CapitalGroup
+    permission_required = 'company.view_company'
+
+    fields_to_display = (
+        'Editor_notes',
+        'name',
+        'official_name',
+        'common_name',
+        'is_friend',
+        'plCapital',
+        'plWorkers',
+        'plRnD',
+        'plRegistered',
+        'plNotGlobEnt',
+        'description',
+        'sources',
+        'verified',
+        'address',
+        'nip',
+    )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company_list'] = Company.objects.filter(capital_group=self.get_object())
+        return context
+
+
+class CapitalGroupAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
+    search_expr = [
+        'name__icontains',
+        'common_name__icontains',
+    ]
+    model = CapitalGroup
