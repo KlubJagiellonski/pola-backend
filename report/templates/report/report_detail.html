@@ -9,11 +9,11 @@
 {% block content %}
 <nav>
   <ul class="pager">
-    {% if object.get_previous_by_created_at %}
-        <li class="previous"><a href="{{ object.get_previous_by_created_at.get_absolute_url }}" title="{{ object.get_previous_by_created_at }}"><span aria-hidden="true" data-key-shortcut="left">&larr;</span> Older</a></li>
+    {% if object.get_previous_by_created %}
+        <li class="previous"><a href="{{ object.get_previous_by_created.get_absolute_url }}" title="{{ object.get_previous_by_created }}"><span aria-hidden="true" data-key-shortcut="left">&larr;</span> Older</a></li>
     {% endif %}
-    {% if object.get_next_by_created_at %}
-        <li class="next"><a href="{{ object.get_next_by_created_at.get_absolute_url }}" title="{{ object.get_next_by_created_at }}" data-key-shortcut="right">Newer <span aria-hidden="true">&rarr;</span></a></li>
+    {% if object.get_next_by_created %}
+        <li class="next"><a href="{{ object.get_next_by_created.get_absolute_url }}" title="{{ object.get_next_by_created }}" data-key-shortcut="right">Newer <span aria-hidden="true">&rarr;</span></a></li>
     {% endif %}
   </ul>
 </nav>
@@ -44,7 +44,7 @@
             </td>
         </tr>
         <tr>
-            <td>Utworzone: </td><td>{{ object.created_at }}</td>
+            <td>Utworzone: </td><td>{{ object.created }}</td>
         </tr>
         {% if object.status == object.RESOLVED %}
         <tr>

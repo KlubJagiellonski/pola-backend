@@ -117,7 +117,7 @@ where pola_query.product_id=product_product.id)
   select count(*) from product_product
   where query_count <4 and company_id is null and (select count(*) from report_report where report_report.product_id=product_product.id)=0;
 
-select date_part('year', created_at) as year, date_part('month', created_at) as month, count(*)
+select date_part('year', created) as year, date_part('month', created) as month, count(*)
 from product_product
 group by year, month
 order by 1,2;
@@ -143,7 +143,7 @@ WHERE company_id IS NULL AND name IS NULL
  AND (select count(*) from report_report where product_id=product_product.id)=0
  AND (select count(*) from ai_pics_aipics where product_id=product_product.id)=0
  AND (select count(*) from pola_query where product_id=product_product.id) <
- (12*date_part('year',age(created_at))+ date_part('month',age(created_at)))
+ (12*date_part('year',age(created))+ date_part('month',age(created)))
 limit 10;
 
 SELECT product_product.code, name, count(*) as cnt
@@ -155,7 +155,7 @@ group by product_product.code, name
 order by cnt desc
 limit 10;
 
-select date_part('year', created_at) as year, date_part('week', created_at) as week, count(*)
+select date_part('year', created) as year, date_part('week', created) as week, count(*)
 from ai_pics_aipics
 join ai_pics_aiattachment on ai_pics_aipics.id=ai_pics_aiattachment.ai_pics_id
 group by year, week
@@ -183,23 +183,23 @@ where timestamp > '05-01-2018'
 group by year, month
 order by 1,2;
 
-select date_part('year', created_at) as year, date_part('month', created_at) as month,
+select date_part('year', created) as year, date_part('month', created) as month,
 --(100.0 * count(CASE WHEN company_id is null THEN 1 END)/count(*))::numeric(5,2) as "null_company",
 count(*)
 from product_product
-where created_at > '05-01-2018'
+where created > '05-01-2018'
 group by year, month
 order by 1,2;
 
 SELECT id, code,
 (select count(*) from pola_query where product_id=product_product.id),
-(12 * date_part('year', age(created_at)) + date_part('month', age(created_at))),
-date_part('year', age(created_at)), date_part('month', age(created_at))
+(12 * date_part('year', age(created)) + date_part('month', age(created))),
+date_part('year', age(created)), date_part('month', age(created))
 FROM product_product
 WHERE company_id IS NULL AND name IS NULL
 AND (select count(*) from report_report where product_id=product_product.id) = 0
 AND (select count(*) from ai_pics_aipics where product_id=product_product.id)=0
-AND created_at > '10-01-2018'
+AND created > '10-01-2018'
 order by 3
 limit 100;
 
@@ -212,7 +212,7 @@ limit 100;
                 select count(*) from pola_query where product_id=product_product.id
                 ) <
                 2* (
-                12 * date_part('year', age(created_at)) + date_part('month', age(created_at))
+                12 * date_part('year', age(created)) + date_part('month', age(created))
                 ) ;
 
 # find duplicate company names

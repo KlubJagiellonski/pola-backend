@@ -13,13 +13,13 @@ class AIAttachmentAdminInline(admin.TabularInline):
 class AIPicsAdmin(admin.ModelAdmin):
     readonly_fields = (
         'id',
-        'created_at',
+        'created',
     )
     fields = [
         'id',
         'product',
         'client',
-        'created_at',
+        'created',
         ('original_width', 'original_height', 'width', 'height'),
         'device_name',
         'flash_used',
@@ -30,12 +30,12 @@ class AIPicsAdmin(admin.ModelAdmin):
         'id',
         'product',
         'client',
-        'created_at',
+        'created',
         'is_valid',
     )
     inlines = [AIAttachmentAdminInline]
-    list_filter = ('product', 'created_at', 'is_valid')
-    date_hierarchy = 'created_at'
+    list_filter = ('product', 'created', 'is_valid')
+    date_hierarchy = 'created'
 
 
 @admin.register(AIAttachment)

@@ -46,7 +46,7 @@
             <strong>{{ object.product.name }}</strong>
         </p>
         <p>
-            <small>Wysłane {{ object.created_at | naturaltime }} z {{ object.device_name }}</small>
+            <small>Wysłane {{ object.created | naturaltime }} z {{ object.device_name }}</small>
         </p>
         <div class="btn-group">
             {% if perms.ai_pics.change_aipics %}

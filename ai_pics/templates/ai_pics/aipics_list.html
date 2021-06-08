@@ -67,7 +67,7 @@
                     <strong>{{ aipic.product.name }}</strong>
                 </p>
                 <p>
-                    <small>Wysłane {{ aipic.created_at | naturaltime }} z {{ aipic.device_name }}</small>
+                    <small>Wysłane {{ aipic.created | naturaltime }} z {{ aipic.device_name }}</small>
                 </p>
                 <div class="btn-group">
                     {% if perms.ai_pics.change_aipics %}

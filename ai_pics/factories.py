@@ -10,7 +10,7 @@ class AIPicsFactory(factory.django.DjangoModelFactory):
 
     product = factory.SubFactory(ProductFactory)
     client = factory.sequence(lambda n: f"client{n}")
-    created_at = factory.lazy_attribute(lambda o: timezone.now())
+    created = factory.lazy_attribute(lambda o: timezone.now())
 
     original_width = 800
     original_height = 800

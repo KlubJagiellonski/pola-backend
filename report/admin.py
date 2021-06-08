@@ -20,12 +20,12 @@ class ReportAdmin(admin.ModelAdmin):
         'id',
         'product',
         'client',
-        'created_at',
+        'created',
         'resolved_at',
         'resolved_by',
     )
-    list_filter = ('product', 'created_at', 'resolved_at', 'resolved_by')
-    date_hierarchy = 'created_at'
+    list_filter = ('product', 'created', 'resolved_at', 'resolved_by')
+    date_hierarchy = 'created'
     inlines = (AttachmentIline,)
 
 

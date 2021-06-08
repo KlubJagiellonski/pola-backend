@@ -51,13 +51,13 @@ class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
             'product',
             'product__company',
             'client',
-            'created_at',
+            'created',
             'resolved_at',
             'resolved_by',
         ]
         order_by = [
-            ('created_at', _('Data utowrzenia')),
-            ('-created_at', _('Data utworzenia (reversed)')),
+            ('created', _('Data utowrzenia')),
+            ('-created', _('Data utworzenia (reversed)')),
             ('resolved_at', _('Data rozpatrzenia')),
             ('-resolved_at', _('Data rozpatrzenia (reversed)')),
             ('resolved_by', _('Rozpatrujący')),
