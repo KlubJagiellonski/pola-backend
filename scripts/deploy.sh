@@ -60,7 +60,7 @@ heroku container:release --verbose --app "${APP_NAME}" web release
 
 DOMAIN_LIST=$(\
   heroku domains --app "${APP_NAME}" --json \
-    | jq 'map(.hostname) | join(", ")' -r \
+    | jq '.[].hostname' -r \
     | sed "s@^@https://@g"
   )
 
