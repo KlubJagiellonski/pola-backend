@@ -4,7 +4,7 @@ set -euo pipefail
 
 export
 if [[ -z "${GITHUB_REF}" ]]; then
-  echo "GITHUB_REF variable is unset"
+  >&2 echo "GITHUB_REF variable is unset"
   exit 1
 fi
 
