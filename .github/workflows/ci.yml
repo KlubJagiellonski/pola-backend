@@ -117,23 +117,13 @@ jobs:
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Set image tag"
-        if: >-
+        if: |
           github.event_name == 'push' &&
           (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
-        run: |-
-          set -x;
-
-          if [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "prod" ]]; then
-            echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
-            echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
-          elif [[ "$(echo "${GITHUB_BRANCH}" | cut -d / -f 3)" == "master" ]]; then
-            echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
-            echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
-          else
-            exit 1;
-          fi
-        env:
-          GITHUB_BRANCH: ${{ github.ref }}
+        run: |
+          APP_NAME="$(./scripts/detect_app_name.sh)";
+          echo "IMAGE_TAG=${APP_NAME}" >> $GITHUB_ENV;
+          echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
       - name: "Build image"
         run: ./scripts/prod-docker-image/build_image.sh
       - name: "Verify image"
@@ -161,19 +151,37 @@ jobs:
       - name: "Install Heroku CLI"
         run: "curl https://cli-assets.heroku.com/install.sh | sh"
       - name: "Set environment env variable"
-        if: github.ref == 'refs/heads/prod'
-        run: |-
-          echo "IMAGE_TAG=pola-app" >> $GITHUB_ENV;
-          echo "HEROKU_APP=pola-app" >> $GITHUB_ENV;
-      - name: "Set environment env variable"
-        if: github.ref == 'refs/heads/master'
-        run: |-
-          echo "IMAGE_TAG=pola-staging" >> $GITHUB_ENV;
-          echo "HEROKU_APP=pola-staging" >> $GITHUB_ENV;
+        run: |
+          APP_NAME="$(./scripts/detect_app_name.sh)";
+          echo "IMAGE_TAG=${APP_NAME}" >> $GITHUB_ENV;
+          echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
+          echo "HEROKU_DOMAIN=$(./scripts/fetch_domain.sh "${APP_NAME}")" >> $GITHUB_ENV;
+      - uses: chrnorm/deployment-action@releases/v1
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: "${{ github.token }}"
+          target_url: "${{ env.HEROKU_DOMAIN }}"
+          state: in_progress
+          environment: "${{ env.HEROKU_APP }}"
       - name: "Pull image"
         run: ./scripts/prod-docker-image/pull_image.sh
       - name: "Deploy"
         run: './scripts/deploy.sh "${HEROKU_APP}"'
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          state: "success"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          state: "failure"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
   deploy-bi:
     name: "Deploy BI (push) - ${{ github.ref }}"
@@ -205,13 +213,13 @@ jobs:
       - run: pip install django-environ
       - name: "Set environment env variable"
         if: github.ref == 'refs/heads/prod'
-        run: |-
+        run: |
           source <(python ./pola-bi/dbt/dev.py --environment prod)
           printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
           printenv | grep POLA_APP >> $GITHUB_ENV;
       - name: "Set environment env variable"
         if: github.ref == 'refs/heads/master'
-        run: |-
+        run: |
           source <(python ./pola-bi/dbt/dev.py --environment staging)
           printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
           printenv | grep POLA_APP >> $GITHUB_ENV;
