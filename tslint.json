@@ -8,12 +8,13 @@
   "nodePath": "./node_modules",
   "rules": {
     "align": [true, "parameters", "statements"],
-    "arrow-parens": [true, "ban-single-arg-parens"],
+    "arrow-parens": [false, "ban-single-arg-parens"],
+    "quotemark": [false],
     "eofline": true,
     "no-console": false,
     "interface-name": false,
     "max-classes-per-file": false,
-    "max-line-length": [true, { "limit": 120, "ignore-pattern": "^import |^export {(.*?)}" }],
+    "max-line-length": [false, { "limit": 120, "ignore-pattern": "^import |^export {(.*?)}" }],
     "no-any": false,
     "no-consecutive-blank-lines": false,
     "no-var-requires": false,
@@ -21,7 +22,6 @@
     "one-variable-per-declaration": false,
     "ordered-imports": false,
     "object-literal-key-quotes": [true, "as-needed"],
-    "quotemark": [true, "single", "avoid-escape", "avoid-template"],
     "trailing-comma": [
       true,
       {
@@ -30,7 +30,7 @@
       }
     ],
     "typedef": [
-      true,
+      false,
       "array-destructuring",
       "call-signature",
       "member-variable-declaration",

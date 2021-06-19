@@ -121,6 +121,11 @@ export const SearchInput: React.FC<ISearchInput> = ({ onSearch }) => {
 
   const handlePhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => setPhrase(e.currentTarget.value);
   const handleSearch = () => onSearch(phrase);
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      handleSearch();
+    }
+  };
 
   return (
     <Container>
@@ -135,7 +140,12 @@ export const SearchInput: React.FC<ISearchInput> = ({ onSearch }) => {
       </Text>
       <FormSearch>
         <InputSection>
-          <InputText placeholder="Nazwa produktu/producent/kod EAN" type="text" onChange={handlePhraseChange} />
+          <InputText
+            placeholder="Nazwa produktu/producent/kod EAN"
+            type="text"
+            onChange={handlePhraseChange}
+            onKeyDown={handleEnter}
+          />
           <InputIconSection>
             <div>
               <img src={Kod} />

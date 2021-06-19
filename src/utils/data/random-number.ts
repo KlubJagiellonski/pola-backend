@@ -21,9 +21,9 @@ export function getGuid(): guid {
 export function getEAN(): string {
   // prettier-ignore
   const ean = new Ean([
-    '0'+ Math.floor(getNumber(1,9)) + Math.floor(getNumber(1,9)), 
-    '0'+ Math.floor(getNumber(1,9)) + Math.floor(getNumber(1,9)),
-    '0'+ Math.floor(getNumber(1,9)) + Math.floor(getNumber(1,9)), 
+    '0' + Math.floor(getNumber(1,9)) + Math.floor(getNumber(1,9)), 
+    '0' + Math.floor(getNumber(1,9)) + Math.floor(getNumber(1,9)),
+    '0' + Math.floor(getNumber(1,9)) + Math.floor(getNumber(1,9)), 
   ]);
   const code = ean.create();
   return code;
