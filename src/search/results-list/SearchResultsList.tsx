@@ -4,8 +4,15 @@ import { IProductData } from '../../domain/products';
 import { ButtonColor } from '../../components/buttons/Button';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { SearchResultElement } from './ProductElement';
-import { color } from '../../styles/theme';
+import { color, fontSize, lineHeight } from '../../styles/theme';
 import { Spinner } from '../../components/icons/spinner';
+import { ProductCounter } from './ProductCounter';
+
+const Header = styled.header`
+  font-size: ${fontSize.normal};
+  font-weight: bold;
+  line-height: ${lineHeight.normal};
+`;
 
 const ResultsList = styled.div`
   ul {
@@ -21,6 +28,7 @@ const ResultsList = styled.div`
 `;
 
 interface ISearchResultsList {
+  phrase: string;
   results: IProductData[];
   token?: string;
   isLoading?: boolean;
@@ -30,6 +38,7 @@ interface ISearchResultsList {
 }
 
 export const SearchResultsList: React.FC<ISearchResultsList> = ({
+  phrase,
   results,
   token,
   isLoading,
@@ -42,44 +51,24 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
     <PrimaryButton label="Doładuj" color={ButtonColor.Red} onClick={onLoadMore} />
   );
 
+  const emptyResults = results.length < 1;
+
   return (
     <ResultsList>
-      <ProductCounter amount={results.length} />
-      <ul>
-        {results.map((product: IProductData, index: number) => (
-          <SearchResultElement product={product} key={product.code} onSelect={onSelect} />
-        ))}
-      </ul>
-      {token && <div className="actions">{loadButton}</div>}
+      {emptyResults ? (
+        <Header>Nie znaleziono produktów</Header>
+      ) : (
+        <>
+          <Header>Uzyskano</Header>
+          <ProductCounter phrase={phrase} amount={results.length} />
+          <ul>
+            {results.map((product: IProductData, index: number) => (
+              <SearchResultElement product={product} key={product.code} onSelect={onSelect} />
+            ))}
+          </ul>
+          {token && <div className="actions">{loadButton}</div>}
+        </>
+      )}
     </ResultsList>
-  );
-};
-
-interface IProductCounter {
-  amount: number;
-}
-
-const ProductCounter: React.FC<IProductCounter> = ({ amount }) => {
-  let text: string;
-  switch (amount) {
-    case 0:
-      text = `Nie znaleziono produktów`;
-      break;
-    case 1:
-      text = `Znaleziono 1 produkt`;
-      break;
-    case 2:
-    case 3:
-    case 4:
-      text = `Znaleziono ${amount} produty`;
-      break;
-    default:
-      text = `Znaleziono ${amount} produktów`;
-  }
-
-  return (
-    <header>
-      <h4>{text}</h4>
-    </header>
   );
 };

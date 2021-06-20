@@ -55,27 +55,21 @@ interface ISearchContainer {
   onSearch: (phrase: string) => void;
 }
 
-export const SearchContainer: React.FC<ISearchContainer> = ({
-  isLoading,
-  onSearch
-}) => {
+export const SearchContainer: React.FC<ISearchContainer> = ({ isLoading, onSearch }) => {
   return (
     <ErrorBoundary scope="search-container">
-      {/* <Wrapper> */}
-        {/* <SearchInput onSearch={onSearch} /> */}
-        <Container>
-      <Title>Sprawdź informacje o produkcie</Title>
-      <Text>
-        Wpisz tekst, podyktuj lub zeskanuj kod
-        <br />
-        Nie znasz kodu?
-        <a target="blank" href="https://pl.openfoodfacts.org/">
-          Znajdź go w bazie
-        </a>
-      </Text>
-      <SearchInput onSearch={onSearch} isLoading={isLoading} />
-    </Container>
-      {/* </Wrapper> */}
+      <Container>
+        <Title>Sprawdź informacje o produkcie</Title>
+        <Text>
+          Wpisz tekst, podyktuj lub zeskanuj kod
+          <br />
+          Nie znasz kodu?
+          <a target="blank" href="https://pl.openfoodfacts.org/">
+            Znajdź go w bazie
+          </a>
+        </Text>
+        <SearchInput onSearch={onSearch} isLoading={isLoading} />
+      </Container>
     </ErrorBoundary>
   );
 };

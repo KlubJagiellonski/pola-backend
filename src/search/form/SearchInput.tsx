@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ButtonColor } from '../../components/buttons/Button';
 
-import { Device, fontSize, color, padding, margin } from '../../styles/theme';
+import { ButtonColor } from '../../components/buttons/Button';
 import { SecondaryButton } from '../../components/buttons/SecondaryButton';
+import { Device, fontSize, color, padding, margin } from '../../styles/theme';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
-
-
 
 const InputSection = styled.div`
   position: relative;
@@ -98,59 +96,26 @@ export const SearchInput: React.FC<ISearchInput> = ({ isLoading, onSearch }) => 
     }
   };
 
-  // return (
-  //   <Container>
-  //     <Title>Sprawdź informacje o produkcie</Title>
-  //     <Text>
-  //       Wpisz tekst, podyktuj lub zeskanuj kod
-  //       <br />
-  //       Nie znasz kodu?{' '}
-  //       <a target="blank" href="https://pl.openfoodfacts.org/">
-  //         Znajdź go w bazie
-  //       </a>
-  //     </Text>
-  //     <FormSearch>
-  //       <InputSection>
-  //         <InputText
-  //           placeholder="Nazwa produktu/producent/kod EAN"
-  //           type="text"
-  //           onChange={handlePhraseChange}
-  //           onKeyDown={handleEnter}
-  //         />
-  //         <InputIconSection>
-  //           <div>
-  //             <img src={Kod} />
-  //           </div>
-  //           <div>
-  //             <img src={Microphone} />
-  //           </div>
-  //         </InputIconSection>
-  //       </InputSection>
-  //       <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
-  //     </FormSearch>
-  //   </Container>
-  // );
-
   return (
     <FormSearch>
-    <InputSection>
-      <InputText
-        placeholder="Nazwa produktu/producent/kod EAN"
-        type="text"
-        onChange={handlePhraseChange}
-        onKeyDown={handleEnter}
-        disabled={isLoading}
-      />
-      <InputIconSection>
-        <div>
-          <img src={Kod} />
-        </div>
-        <div>
-          <img src={Microphone} />
-        </div>
-      </InputIconSection>
-    </InputSection>
-    <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
-  </FormSearch>
-  )
+      <InputSection>
+        <InputText
+          placeholder="Nazwa produktu/producent/kod EAN"
+          type="text"
+          onChange={handlePhraseChange}
+          onKeyDown={handleEnter}
+          disabled={isLoading}
+        />
+        <InputIconSection>
+          <div>
+            <img src={Kod} />
+          </div>
+          <div>
+            <img src={Microphone} />
+          </div>
+        </InputIconSection>
+      </InputSection>
+      <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
+    </FormSearch>
+  );
 };

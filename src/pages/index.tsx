@@ -46,6 +46,7 @@ export const Background = styled.div<{ img?: string }>`
 
 interface IMainPage {
   location: Location;
+  phrase: string;
   searchResults: IProductData[];
   token?: string;
   isLoading?: boolean;
@@ -58,7 +59,7 @@ interface IMainPage {
 }
 
 const MainPage = (props: IMainPage) => {
-  const { searchResults, location } = props;
+  const { phrase, searchResults, location } = props;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -79,6 +80,7 @@ const MainPage = (props: IMainPage) => {
       {searchResults && (
         <PageSection>
           <SearchResultsList
+            phrase={phrase}
             results={searchResults}
             isLoading={props.isLoading}
             token={props.token}
@@ -99,6 +101,7 @@ const MainPage = (props: IMainPage) => {
 
 export default connect(
   (state: IPolaState) => ({
+    phrase: state.search.phrase,
     searchResults: state.search.products,
     token: state.search.token,
     isLoading: state.search.isLoading,

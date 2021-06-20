@@ -2,6 +2,7 @@ export const color = {
   background: {
     primary: '#C4C4C4',
     secondary: '#A0A0A0',
+    gray: '#FAFAFA',
     dark: '#333333',
     black: '#000000',
     red: '#D8152F',
@@ -25,7 +26,7 @@ export const color = {
   border: {
     grey: '#A0A0A0',
     white: '#ffffff',
-  }
+  },
 };
 
 export const mobileHeaderHeight = '40px';
@@ -39,7 +40,7 @@ export const padding = {
   normal: '20px',
   big: '40px',
   veryBig: '80px',
-  huge: '150px'
+  huge: '150px',
 };
 export const margin = {
   tiny: '4px',
@@ -54,7 +55,14 @@ export const fontSize = {
   normal: '18px',
   small: '14px',
   tiny: '12px',
-}
+};
+
+export const lineHeight = {
+  big: '26px',
+  normal: '20px',
+  small: '16px',
+  tiny: '14px',
+};
 
 export const Device: { [key: string]: string } = {
   mobile: `(max-width: ${width - 1}px)`,
