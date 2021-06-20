@@ -8,9 +8,8 @@ import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
 
 const InputSection = styled.div`
-  position: relative;
-  border: 1px solid ${color.border.grey};
   padding: 5px 100px 5px 10px;
+  position: relative;
   width: 320px;
   background-color: white;
   border-radius: 20px;
@@ -28,6 +27,12 @@ const InputText = styled.input`
   border: none;
   font-size: ${fontSize.small};
   width: 100%;
+
+  &:focus,
+  &:active {
+    border: none;
+    outline: none;
+  }
 `;
 
 const InputIconSection = styled.div`
@@ -38,24 +43,25 @@ const InputIconSection = styled.div`
   align-items: center;
   right: 0px;
   padding: ${padding.tiny} 0;
+`;
 
-  div {
-    border-radius: 50%;
-    background-color: ${color.background.red};
-    height: 30px;
-    width: 30px;
-    margin-right: ${margin.tiny};
-    display: flex;
-    align-items: center;
-    justify-content: center;
+interface IInputIcon {
+  imagePath: string;
+}
 
-    img {
-      height: 100%;
-      max-height: 20px;
-      max-width: 20px;
-      cursor: pointer;
-    }
-  }
+const InputIcon = styled.div<IInputIcon>`
+  border-radius: 50%;
+  background-color: ${color.background.red};
+  height: 30px;
+  width: 30px;
+  margin-right: ${margin.tiny};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-image: url(${props => props.imagePath});
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const SubmitButton = styled(SecondaryButton)`
@@ -72,7 +78,6 @@ const SubmitButton = styled(SecondaryButton)`
 const FormSearch = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 30px;
 
   @media ${Device.mobile} {
     flex-direction: column;
@@ -87,6 +92,7 @@ interface ISearchInput {
 export const SearchInput: React.FC<ISearchInput> = ({ isLoading, onSearch }) => {
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
+  const showSubmitButton = false;
 
   const handlePhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => setPhrase(e.currentTarget.value);
   const handleSearch = () => onSearch(phrase);
@@ -100,22 +106,20 @@ export const SearchInput: React.FC<ISearchInput> = ({ isLoading, onSearch }) => 
     <FormSearch>
       <InputSection>
         <InputText
-          placeholder="Nazwa produktu/producent/kod EAN"
+          placeholder="nazwa produktu lub kod EAN"
           type="text"
           onChange={handlePhraseChange}
           onKeyDown={handleEnter}
           disabled={isLoading}
         />
         <InputIconSection>
-          <div>
-            <img src={Kod} />
-          </div>
-          <div>
-            <img src={Microphone} />
-          </div>
+          <InputIcon imagePath={Kod} />
+          <InputIcon imagePath={Microphone} />
         </InputIconSection>
       </InputSection>
-      <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
+      {showSubmitButton && (
+        <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
+      )}
     </FormSearch>
   );
 };

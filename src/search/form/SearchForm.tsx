@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { SearchInput } from './SearchInput';
 import ErrorBoundary from '../../utils/error-boundary';
-import { Device, fontSize, color } from '../../styles/theme';
+import { Device, fontSize, color, margin } from '../../styles/theme';
 import { TitleSection } from '../../styles/GlobalStyle.css';
+import { GooglePlayLink, AppStoreLink } from '../../components/links';
 
 const Container = styled.div`
   display: flex;
@@ -52,6 +53,13 @@ const Text = styled.div`
   }
 `;
 
+const SearchWrapper = styled.div`
+  margin-top: ${margin.normal};
+  display: flex;
+  flex-flow: row nowrap;
+  gap: ${margin.small};
+`;
+
 interface ISearchContainer {
   isLoading?: boolean;
   onSearch: (phrase: string) => void;
@@ -65,13 +73,17 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ isLoading, onSearc
         <Text>
           <span>Wpisz tekst, podyktuj lub zeskanuj kod</span>
           <span>
-            Nie znasz kodu?
+            Nie znasz kodu?&nbsp;
             <a target="blank" href="https://pl.openfoodfacts.org/">
               Znajdź go w bazie
             </a>
           </span>
         </Text>
-        <SearchInput onSearch={onSearch} isLoading={isLoading} />
+        <SearchWrapper>
+          <SearchInput onSearch={onSearch} isLoading={isLoading} />
+          <AppStoreLink height={36} />
+          <GooglePlayLink height={36} />
+        </SearchWrapper>
       </Container>
     </ErrorBoundary>
   );
