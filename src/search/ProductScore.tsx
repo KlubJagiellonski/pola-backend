@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { color, padding } from '../../styles/theme';
+import { color, padding } from '../styles/theme';
 
 const Score = styled.div<{ value: number }>`
   width: 100%;

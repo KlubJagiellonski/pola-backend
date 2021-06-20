@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { PageLayout } from '../layout/PageLayout';
 import SEO from '../layout/seo';
 import './index.css';
-import { SearchContainer } from '../components/search';
+import { SearchContainer } from '../search/form/SearchForm';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
 import { Device, pageWidth, padding, color } from '../styles/theme';
@@ -17,6 +17,7 @@ import { IArticle } from '../domain/articles';
 import { ResponsiveImage } from '../components/responsive-image';
 import { IFriend } from '../domain/friends';
 import Download from '../components/Download';
+import { SearchResultsList } from '../search/results-list/SearchResultsList';
 
 const Content = styled.div`
   width: 100%;
@@ -72,16 +73,20 @@ const MainPage = (props: IMainPage) => {
           <ResponsiveImage imageSrc={'background.png'} />
         </Background>
         <Content>
-          <SearchContainer
-            searchResults={searchResults}
-            onSearch={props.invokeSearch}
-            token={props.token}
+          <SearchContainer onSearch={props.invokeSearch} />
+        </Content>
+      </PageSection>
+      {searchResults && (
+        <PageSection>
+          <SearchResultsList
+            results={searchResults}
             isLoading={props.isLoading}
+            token={props.token}
             onLoadMore={props.invokeLoadMore}
             onSelect={props.selectProduct}
           />
-        </Content>
-      </PageSection>
+        </PageSection>
+      )}
       <PageSection>
         <Contents articles={props.articles} friends={props.friends} />
       </PageSection>

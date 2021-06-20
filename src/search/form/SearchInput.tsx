@@ -1,43 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ButtonColor } from '../buttons/Button';
-import { TitleSection } from '../../styles/GlobalStyle.css';
+import { ButtonColor } from '../../components/buttons/Button';
+
 import { Device, fontSize, color, padding, margin } from '../../styles/theme';
-import { SecondaryButton } from '../buttons/SecondaryButton';
+import { SecondaryButton } from '../../components/buttons/SecondaryButton';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
 
-const Container = styled.div``;
 
-const Title = styled(TitleSection)`
-  width: 20%;
-  float: left;
-  text-align: center;
-  margin: 0;
-
-  @media ${Device.mobile} {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-`;
-
-const Text = styled.p`
-  margin: 10px 0;
-  padding: 0;
-  font-family: 'Roboto';
-  font-size: ${fontSize.small};
-  text-align: left;
-  line-height: 1rem;
-  color: ${color.text.secondary};
-
-  @media ${Device.mobile} {
-    font-size: 12px;
-  }
-
-  a {
-    color: ${color.text.red};
-  }
-`;
 
 const InputSection = styled.div`
   position: relative;
@@ -112,10 +82,11 @@ const FormSearch = styled.div`
 `;
 
 interface ISearchInput {
+  isLoading?: boolean;
   onSearch: (phrase: string) => void;
 }
 
-export const SearchInput: React.FC<ISearchInput> = ({ onSearch }) => {
+export const SearchInput: React.FC<ISearchInput> = ({ isLoading, onSearch }) => {
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
 
@@ -127,36 +98,59 @@ export const SearchInput: React.FC<ISearchInput> = ({ onSearch }) => {
     }
   };
 
+  // return (
+  //   <Container>
+  //     <Title>Sprawdź informacje o produkcie</Title>
+  //     <Text>
+  //       Wpisz tekst, podyktuj lub zeskanuj kod
+  //       <br />
+  //       Nie znasz kodu?{' '}
+  //       <a target="blank" href="https://pl.openfoodfacts.org/">
+  //         Znajdź go w bazie
+  //       </a>
+  //     </Text>
+  //     <FormSearch>
+  //       <InputSection>
+  //         <InputText
+  //           placeholder="Nazwa produktu/producent/kod EAN"
+  //           type="text"
+  //           onChange={handlePhraseChange}
+  //           onKeyDown={handleEnter}
+  //         />
+  //         <InputIconSection>
+  //           <div>
+  //             <img src={Kod} />
+  //           </div>
+  //           <div>
+  //             <img src={Microphone} />
+  //           </div>
+  //         </InputIconSection>
+  //       </InputSection>
+  //       <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
+  //     </FormSearch>
+  //   </Container>
+  // );
+
   return (
-    <Container>
-      <Title>Sprawdź informacje o produkcie</Title>
-      <Text>
-        Wpisz tekst, podyktuj lub zeskanuj kod
-        <br />
-        Nie znasz kodu?{' '}
-        <a target="blank" href="https://pl.openfoodfacts.org/">
-          Znajdź go w bazie
-        </a>
-      </Text>
-      <FormSearch>
-        <InputSection>
-          <InputText
-            placeholder="Nazwa produktu/producent/kod EAN"
-            type="text"
-            onChange={handlePhraseChange}
-            onKeyDown={handleEnter}
-          />
-          <InputIconSection>
-            <div>
-              <img src={Kod} />
-            </div>
-            <div>
-              <img src={Microphone} />
-            </div>
-          </InputIconSection>
-        </InputSection>
-        <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
-      </FormSearch>
-    </Container>
-  );
+    <FormSearch>
+    <InputSection>
+      <InputText
+        placeholder="Nazwa produktu/producent/kod EAN"
+        type="text"
+        onChange={handlePhraseChange}
+        onKeyDown={handleEnter}
+        disabled={isLoading}
+      />
+      <InputIconSection>
+        <div>
+          <img src={Kod} />
+        </div>
+        <div>
+          <img src={Microphone} />
+        </div>
+      </InputIconSection>
+    </InputSection>
+    <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
+  </FormSearch>
+  )
 };

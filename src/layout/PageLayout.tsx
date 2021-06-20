@@ -11,7 +11,7 @@ import { IPolaState } from '../state/types';
 import { articlesDispatcher } from '../state/articles/articles-dispatcher';
 import { friendsDispatcher } from './../state/friends/friends-dispatcher';
 import { appDispatcher } from '../state/app/app-dispatcher';
-import { ProductModal } from '../components/search/ProductModal';
+import { ProductModal } from '../search/product-modal/ProductModal';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import ErrorBoundary from '../utils/error-boundary';
 

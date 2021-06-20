@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { IProductEAN } from '../../domain/products';
 import { Modal } from '../../layout/modal/Modal';
 import { color, padding } from '../../styles/theme';
-import { ButtonColor } from '../buttons/Button';
-import { ClickOutside } from '../ClickOutside';
+import { ButtonColor } from '../../components/buttons/Button';
+import { ClickOutside } from '../../components/ClickOutside';
 import { ProductModalAction } from './ProductModalAction';
-import { ProductScore } from './ProductScore';
+import { ProductScore } from '../ProductScore';
 
 const ProductDetails = styled.div`
   padding: ${padding.small} ${padding.normal};

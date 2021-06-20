@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IProductData } from '../../domain/products';
-import { ButtonColor } from '../buttons/Button';
-import { PrimaryButton } from '../buttons/PrimaryButton';
-import { SearchResultElement } from './SearchResultElement';
+import { ButtonColor } from '../../components/buttons/Button';
+import { PrimaryButton } from '../../components/buttons/PrimaryButton';
+import { SearchResultElement } from './ProductElement';
 import { color } from '../../styles/theme';
-import { Spinner } from '../icons/spinner';
+import { Spinner } from '../../components/icons/spinner';
 
 const ResultsList = styled.div`
   ul {
