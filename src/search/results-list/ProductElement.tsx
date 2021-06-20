@@ -13,7 +13,6 @@ const ResultElement = styled.div`
   display: flex;
   flex-flow: column;
   padding: ${padding.small} ${padding.normal};
-  line-height: 1.7em;
   cursor: pointer;
 
   .manufacturer {
@@ -24,7 +23,7 @@ const ResultElement = styled.div`
   .brand,
   .name {
     font-size: ${fontSize.small};
-    line-height: ${lineHeight.small};
+    line-height: ${lineHeight.normal};
   }
 `;
 

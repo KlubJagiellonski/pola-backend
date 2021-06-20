@@ -5,8 +5,6 @@ import { useStaticQuery, graphql } from 'gatsby';
 
 import { PageHeader } from './PageHeader';
 import { PageFooter } from './PageFooter';
-import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme';
-import './PageLayout.css';
 import { IPolaState } from '../state/types';
 import { articlesDispatcher } from '../state/articles/articles-dispatcher';
 import { friendsDispatcher } from './../state/friends/friends-dispatcher';
@@ -14,6 +12,9 @@ import { appDispatcher } from '../state/app/app-dispatcher';
 import { ProductModal } from '../search/product-modal/ProductModal';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import ErrorBoundary from '../utils/error-boundary';
+
+import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme';
+import '../styles/pola-web.css';
 
 const connector = connect(
   (state: IPolaState) => ({

@@ -7,11 +7,12 @@ import { SearchResultElement } from './ProductElement';
 import { color, fontSize, lineHeight } from '../../styles/theme';
 import { Spinner } from '../../components/icons/spinner';
 import { ProductCounter } from './ProductCounter';
+import { Link } from 'gatsby';
 
 const Header = styled.header`
-  font-size: ${fontSize.normal};
+  font-size: ${fontSize.big};
   font-weight: bold;
-  line-height: ${lineHeight.normal};
+  line-height: ${lineHeight.big};
 `;
 
 const ResultsList = styled.div`
@@ -60,7 +61,9 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
       ) : (
         <>
           <Header>Uzyskano</Header>
-          <ProductCounter phrase={phrase} amount={results.length} />
+          <Link>
+            <ProductCounter phrase={phrase} amount={results.length} />
+          </Link>
           <ul>
             {results.map((product: IProductData, index: number) => (
               <SearchResultElement product={product} key={product.code} onSelect={onSelect} />

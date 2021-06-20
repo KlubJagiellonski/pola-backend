@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { lighten } from 'polished';
 import { color, padding } from '../styles/theme';
 
 const Score = styled.div<{ value: number }>`
@@ -8,7 +9,7 @@ const Score = styled.div<{ value: number }>`
   height: ${padding.small};
 
   .value {
-    background-color: ${color.background.red};
+    background-color: ${lighten(0.2)(color.background.red)};
     height: 100%;
     width: ${props => `${props.value}%`};
   }

@@ -5,7 +5,9 @@ import ErrorBoundary from '../../utils/error-boundary';
 import { Device, fontSize, color } from '../../styles/theme';
 import { TitleSection } from '../../styles/GlobalStyle.css';
 
-export const Wrapper = styled.div`
+const Container = styled.div`
+  display: flex;
+  flex-flow: column;
   width: 100%;
   padding: 260px 0 70px 0;
   position: relative;
@@ -17,8 +19,6 @@ export const Wrapper = styled.div`
     flex-direction: column;
   }
 `;
-
-const Container = styled.div``;
 
 const Title = styled(TitleSection)`
   width: 20%;
@@ -32,7 +32,9 @@ const Title = styled(TitleSection)`
   }
 `;
 
-const Text = styled.p`
+const Text = styled.div`
+  display: flex;
+  flex-flow: column;
   margin: 10px 0;
   padding: 0;
   font-family: 'Roboto';
@@ -61,12 +63,13 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ isLoading, onSearc
       <Container>
         <Title>Sprawdź informacje o produkcie</Title>
         <Text>
-          Wpisz tekst, podyktuj lub zeskanuj kod
-          <br />
-          Nie znasz kodu?
-          <a target="blank" href="https://pl.openfoodfacts.org/">
-            Znajdź go w bazie
-          </a>
+          <span>Wpisz tekst, podyktuj lub zeskanuj kod</span>
+          <span>
+            Nie znasz kodu?
+            <a target="blank" href="https://pl.openfoodfacts.org/">
+              Znajdź go w bazie
+            </a>
+          </span>
         </Text>
         <SearchInput onSearch={onSearch} isLoading={isLoading} />
       </Container>

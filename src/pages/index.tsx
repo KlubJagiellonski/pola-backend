@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
 import SEO from '../layout/seo';
-import './index.css';
 import { SearchContainer } from '../search/form/SearchForm';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
