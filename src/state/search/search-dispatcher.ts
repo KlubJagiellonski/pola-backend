@@ -14,6 +14,7 @@ export const searchDispatcher = {
       const products = response.products;
       await dispatch(actions.LoadResults(products, response.nextPageToken));
     } catch (error) {
+      console.error('cannot search', error);
       await dispatch(actions.SearchFailed(error));
     }
   },
@@ -28,6 +29,16 @@ export const searchDispatcher = {
         await dispatch(actions.LoadResults(products, response.nextPageToken));
       }
     } catch (error) {
+      console.error('cannot load more products', error);
+      await dispatch(actions.SearchFailed(error));
+    }
+  },
+
+  clearResults: () => async (dispatch: Dispatch, getState: () => IPolaState) => {
+    try {
+      dispatch(actions.ClearResults());
+    } catch (error) {
+      console.error('cannot clear results', error);
       await dispatch(actions.SearchFailed(error));
     }
   },
@@ -36,19 +47,25 @@ export const searchDispatcher = {
     try {
       const service = ProductEANService.getInstance();
       const ean = await service.getProduct(code, id);
-      const product = getState().search.products?.find(p => p.id === id);
+      const product = getState().search.products?.find((p) => p.id === id);
       await dispatch(
         actions.ShowProductDetails({
           ...ean,
           data: product,
         })
       );
-    } catch (error) {}
+    } catch (error) {
+      console.error('cannot select product', error);
+      await dispatch(actions.SearchFailed(error));
+    }
   },
 
   unselectProduct: () => async (dispatch: Dispatch, getState: () => IPolaState) => {
     try {
       await dispatch(actions.UnselectProduct());
-    } catch (error) {}
+    } catch (error) {
+      console.error('cannot unselect product', error);
+      await dispatch(actions.SearchFailed(error));
+    }
   },
 };

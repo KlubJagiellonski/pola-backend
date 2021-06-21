@@ -57,6 +57,7 @@ interface IMainPage {
 
   invokeSearch: (phrase: string) => void;
   invokeLoadMore: () => void;
+  clearResults: () => void;
   selectProduct: (code: string, id: string) => void;
 }
 
@@ -70,6 +71,10 @@ const MainPage = (props: IMainPage) => {
 
   const redirectToOpenFoods = () => {
     window.location.href = 'https://pl.openfoodfacts.org/';
+  };
+
+  const handleCancel = () => {
+    props.clearResults();
   };
 
   return (
@@ -95,7 +100,9 @@ const MainPage = (props: IMainPage) => {
               onSelect={props.selectProduct}
             />
             <div className="actions">
-              <PrimaryButton color={ButtonColor.Gray}>Anuluj</PrimaryButton>
+              <PrimaryButton color={ButtonColor.Gray} onClick={handleCancel}>
+                Anuluj
+              </PrimaryButton>
             </div>
           </PageSection>
           <PageSection
@@ -131,6 +138,7 @@ export default connect(
   {
     invokeSearch: searchDispatcher.invokeSearch,
     invokeLoadMore: searchDispatcher.invokeLoadMore,
+    clearResults: searchDispatcher.clearResults,
     selectProduct: searchDispatcher.selectProduct,
   }
 )(MainPage);

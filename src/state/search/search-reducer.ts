@@ -7,8 +7,8 @@ import { IProductData, IProductEAN } from '../../domain/products';
 export interface ISearchState {
   isLoading: boolean;
   phrase?: string;
-  products?: IProductData[];
   token?: string;
+  products?: IProductData[];
   selectedProduct?: IProductEAN;
   error?: unknown;
 }
@@ -33,6 +33,15 @@ const reducers: IActionReducer<ISearchState> = {
       isLoading: false,
       products: action.payload.products,
       token: action.payload.token,
+    };
+  },
+
+  [actionTypes.CLEAR_RESULTS]: (state: ISearchState, action: ReturnType<typeof actions.ClearResults>) => {
+    return {
+      ...state,
+      isLoading: false,
+      products: undefined,
+      token: undefined,
     };
   },
 
