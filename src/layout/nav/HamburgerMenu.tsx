@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { PolaLogo } from '../Pola-Logo';
+import { PolaLogo } from '../PolaLogo';
 import { Device, mobileHeaderHeight, padding, color } from '../../styles/theme';
 
-interface IHamburgerMenu {}
-
 const HamburgerLayout = styled.nav`
-  background: ${color.button.disabled};
+  background: ${color.background.white};
   @media ${Device.desktop} {
     display: none;
   }
@@ -51,6 +49,8 @@ const Items = styled.div`
     height: 400px;
   }
 `;
+
+interface IHamburgerMenu {}
 
 export const HamburgerMenu: React.FC<IHamburgerMenu> = ({ children }) => {
   const itemsRef = createRef<HTMLDivElement>();

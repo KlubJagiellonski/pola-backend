@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import SocialFooter from '../assets/SocialFooter.png';
-import { PolaLogo } from './Pola-Logo';
+import LogoWhite from '../assets/logo/pola-white.svg';
 import { color, Device, padding, pageWidth } from '../styles/theme';
 
 export const FooterContainer = styled.footer`
@@ -22,6 +22,10 @@ export const FooterContainer = styled.footer`
       padding: 0;
       margin: 0;
     }
+
+    .logo {
+      margin-right: ${padding.normal};
+    }
     @media ${Device.mobile} {
       .sections {
         flex-flow: column;
@@ -29,9 +33,6 @@ export const FooterContainer = styled.footer`
     }
 
     @media ${Device.desktop} {
-      .logo {
-        min-width: 100px;
-      }
       .sections {
         flex-flow: row nowrap;
         gap: ${padding.normal};
@@ -103,7 +104,7 @@ export const PageFooter = () => {
     <FooterContainer>
       <div className="footer-content">
         <div className="logo">
-          <PolaLogo />
+          <img width="80" height="80" src={LogoWhite} />
         </div>
         <div className="sections">
           <FooterSection title="Informacje">

@@ -68,3 +68,6 @@ export const Device: { [key: string]: string } = {
   mobile: `(max-width: ${width - 1}px)`,
   desktop: `(min-width: ${pageWidth})`,
 };
+
+export type pixels = number;
+export const px = (value: pixels): string => value + 'px';

@@ -5,7 +5,7 @@ import { ButtonColor } from '../../components/buttons/Button';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { SearchResultElement } from './ProductElement';
 import { color, fontSize, lineHeight } from '../../styles/theme';
-import { Spinner } from '../../components/icons/spinner';
+import { Spinner } from '../../components/spinner';
 import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
 
@@ -70,6 +70,10 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
             ))}
           </ul>
           {token && <div className="actions">{loadButton}</div>}
+          <div>
+            <h2>Nie znalazłeś czego szukasz?</h2>
+            <PrimaryButton>Zgłoś produkt do bazy</PrimaryButton>
+          </div>
         </>
       )}
     </ResultsList>
