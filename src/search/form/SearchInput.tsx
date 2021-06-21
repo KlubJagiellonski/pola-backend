@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ButtonColor } from '../../components/buttons/Button';
+import { ButtonColor } from '../../styles/button-theme';
 import { SecondaryButton } from '../../components/buttons/SecondaryButton';
 import { Device, fontSize, color, padding, margin } from '../../styles/theme';
 import Kod from '../../assets/kod.svg';
@@ -59,7 +59,7 @@ const InputIcon = styled.div<IInputIcon>`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-image: url(${props => props.imagePath});
+  background-image: url(${(props) => props.imagePath});
   background-position: center;
   background-repeat: no-repeat;
 `;

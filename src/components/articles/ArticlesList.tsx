@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { IArticle } from '../../domain/articles';
 import { ArticleBlock } from './ArticleBlock';
-import { ButtonColor} from '../buttons/Button';
-import {Device, padding} from './../../styles/theme'
-import {PrimaryButton } from '../buttons/PrimaryButton';
+import { ButtonColor } from '../../styles/button-theme';
+import { Device, padding } from './../../styles/theme';
+import { PrimaryButton } from '../buttons/PrimaryButton';
 
 const Wrapper = styled.div`
   grid-area: articles;
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 
 const ArticlesButton = styled(PrimaryButton)`
   width: 100%;
-  padding: ${padding.normal}
+  padding: ${padding.normal};
 `;
 
 interface IArticlesList {

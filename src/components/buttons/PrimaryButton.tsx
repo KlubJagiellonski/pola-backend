@@ -1,5 +1,6 @@
 import React from 'react';
-import {ButtonColor, Button, getButtonColor} from './Button'
+import { Button } from './Button';
+import { ButtonColor, getButtonColor } from '../../styles/button-theme';
 
 export interface IPrimaryButton {
   label?: string;
@@ -8,11 +9,21 @@ export interface IPrimaryButton {
   color?: ButtonColor;
   fontSize?: string;
   className?: string;
+  children?: React.ReactNode;
 
   onClick?: () => void;
 }
 
-export const PrimaryButton: React.FC<IPrimaryButton> = ({ label, icon, className, disabled, color, fontSize, onClick }) => {
+export const PrimaryButton: React.FC<IPrimaryButton> = ({
+  label,
+  icon,
+  className,
+  disabled,
+  color = ButtonColor.Red,
+  fontSize,
+  onClick,
+  children,
+}) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     !disabled && onClick && onClick();
@@ -22,13 +33,14 @@ export const PrimaryButton: React.FC<IPrimaryButton> = ({ label, icon, className
 
   const theme = {
     color: themeColor,
-    fontSize
-  }
+    fontSize,
+  };
 
   return (
     <Button theme={theme} className={className} onClick={handleClick}>
       {icon}
       {label}
+      {children}
     </Button>
   );
 };

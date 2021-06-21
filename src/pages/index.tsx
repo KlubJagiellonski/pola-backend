@@ -17,6 +17,9 @@ import { ResponsiveImage } from '../components/responsive-image';
 import { IFriend } from '../domain/friends';
 import Download from '../components/Download';
 import { SearchResultsList } from '../search/results-list/SearchResultsList';
+import { PrimaryButton } from '../components/buttons/PrimaryButton';
+import { SecondaryButton } from '../components/buttons/SecondaryButton';
+import { ButtonColor } from '../styles/button-theme';
 
 const Content = styled.div`
   width: 100%;
@@ -30,7 +33,7 @@ const Content = styled.div`
   }
 `;
 
-export const Background = styled.div<{ img?: string }>`
+const Background = styled.div<{ img?: string }>`
   position: absolute;
   top: 0px;
   left: 0px;
@@ -65,10 +68,14 @@ const MainPage = (props: IMainPage) => {
     dispatch(LoadBrowserLocation(location));
   }, []);
 
+  const redirectToOpenFoods = () => {
+    window.location.href = 'https://pl.openfoodfacts.org/';
+  };
+
   return (
     <PageLayout>
       <SEO title="Pola Web | Strona główna" />
-      <PageSection size="full" backgroundColor={color.background.primary}>
+      <PageSection size="full" styles={{ backgroundColor: color.background.primary }}>
         <Background>
           <ResponsiveImage imageSrc={'background.png'} />
         </Background>
@@ -77,21 +84,35 @@ const MainPage = (props: IMainPage) => {
         </Content>
       </PageSection>
       {searchResults && (
-        <PageSection>
-          <SearchResultsList
-            phrase={phrase}
-            results={searchResults}
-            isLoading={props.isLoading}
-            token={props.token}
-            onLoadMore={props.invokeLoadMore}
-            onSelect={props.selectProduct}
-          />
-        </PageSection>
+        <>
+          <PageSection>
+            <SearchResultsList
+              phrase={phrase}
+              results={searchResults}
+              isLoading={props.isLoading}
+              token={props.token}
+              onLoadMore={props.invokeLoadMore}
+              onSelect={props.selectProduct}
+            />
+            <div className="actions">
+              <PrimaryButton color={ButtonColor.Gray}>Anuluj</PrimaryButton>
+            </div>
+          </PageSection>
+          <PageSection
+            styles={{
+              backgroundColor: color.background.red,
+              textColor: color.text.light,
+              textAlign: 'center',
+            }}>
+            <h2>Nie znalazłeś czego szukasz?</h2>
+            <SecondaryButton onClick={redirectToOpenFoods}>Zgłoś produkt do bazy</SecondaryButton>
+          </PageSection>
+        </>
       )}
       <PageSection>
         <Contents articles={props.articles} friends={props.friends} />
       </PageSection>
-      <PageSection size="full" backgroundColor={color.background.black}>
+      <PageSection size="full" styles={{ backgroundColor: color.background.black }}>
         <Download />
       </PageSection>
     </PageLayout>

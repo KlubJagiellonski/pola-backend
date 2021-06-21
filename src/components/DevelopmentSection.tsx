@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Device, fontSize, margin, color, padding} from './../styles/theme'
-import {SecondaryButton } from './buttons/SecondaryButton';
-import {ButtonColor} from './buttons/Button'
+import { Device, fontSize, margin, color, padding } from './../styles/theme';
+import { SecondaryButton } from './buttons/SecondaryButton';
+import { ButtonColor } from '../styles/button-theme';
 import { WrapperSection } from '../styles/GlobalStyle.css';
 import { TitleSection, Text } from '../styles/GlobalStyle.css';
 
@@ -28,7 +28,7 @@ const Info = styled.p`
   justify-content: center;
   padding: 0;
   margin: 0;
-`
+`;
 
 const TextSection = styled.div`
   margin-right: ${margin.normal};
@@ -47,7 +47,7 @@ const DevelopmentTitle = styled(TitleSection)`
   @media ${Device.mobile} {
     font-size: ${fontSize.tiny};
   }
-`
+`;
 
 const DevelopmentText = styled(Text)`
   margin-bottom: ${margin.big};
@@ -55,7 +55,7 @@ const DevelopmentText = styled(Text)`
   @media ${Device.mobile} {
     font-size: ${fontSize.tiny};
   }
-`
+`;
 
 const DevelopmentSection = () => {
   return (
@@ -64,7 +64,7 @@ const DevelopmentSection = () => {
       <TextSection>
         <DevelopmentTitle>Zobacz jak rozwija się Aplikacja Pola i wspomóż ją!</DevelopmentTitle>
         <DevelopmentText>Dowiedz się co możesz jeszcze zrobić, aby wspierać polskich producentów.</DevelopmentText>
-        <SecondaryButton label='Czytaj dalej...' fontSize={fontSize.small} color={ButtonColor.Red}/>
+        <SecondaryButton label="Czytaj dalej..." fontSize={fontSize.small} color={ButtonColor.Red} />
       </TextSection>
     </Wrapper>
   );

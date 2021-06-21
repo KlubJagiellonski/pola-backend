@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import SocialImg from './../assets/social.png';
+import SocialImg from '../assets/social.png';
 import { color, Device } from '../styles/theme';
 import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
 
@@ -10,13 +10,13 @@ const Wrapper = styled(WrapperSection)`
   height: 100%;
   grid-area: social-media;
 
-  @media ${Device.desktop}{
+  @media ${Device.desktop} {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  @media ${Device.mobile}{
+  @media ${Device.mobile} {
     padding: 30px 0;
   }
 `;

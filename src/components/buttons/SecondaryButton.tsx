@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import {ButtonColor, Button, getButtonColor} from './Button'
+import { Button } from './Button';
+import { ButtonColor, getButtonColor } from '../../styles/button-theme';
 
 const SecButton = styled(Button)`
   border-radius: 20px;
-`
+`;
 
 export interface ISecondaryButton {
   label?: string;
@@ -13,11 +14,21 @@ export interface ISecondaryButton {
   color?: ButtonColor;
   fontSize?: string;
   className?: string;
+  children?: React.ReactNode;
 
   onClick?: () => void;
 }
 
-export const SecondaryButton: React.FC<ISecondaryButton> = ({ label, icon, className, disabled, color, fontSize, onClick }) => {
+export const SecondaryButton: React.FC<ISecondaryButton> = ({
+  label,
+  icon,
+  className,
+  disabled,
+  color,
+  fontSize,
+  children,
+  onClick,
+}) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     !disabled && onClick && onClick();
@@ -27,13 +38,14 @@ export const SecondaryButton: React.FC<ISecondaryButton> = ({ label, icon, class
 
   const theme = {
     color: themeColor,
-    fontSize
-  }
+    fontSize,
+  };
 
   return (
     <SecButton theme={theme} className={className} onClick={handleClick}>
       {icon}
       {label}
+      {children}
     </SecButton>
   );
 };

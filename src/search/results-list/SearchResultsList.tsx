@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IProductData } from '../../domain/products';
-import { ButtonColor } from '../../components/buttons/Button';
+import { ButtonColor } from '../../styles/button-theme';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { SearchResultElement } from './ProductElement';
 import { color, fontSize, lineHeight } from '../../styles/theme';
@@ -69,11 +69,6 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
               <SearchResultElement product={product} key={product.code} onSelect={onSelect} />
             ))}
           </ul>
-          {token && <div className="actions">{loadButton}</div>}
-          <div>
-            <h2>Nie znalazłeś czego szukasz?</h2>
-            <PrimaryButton>Zgłoś produkt do bazy</PrimaryButton>
-          </div>
         </>
       )}
     </ResultsList>

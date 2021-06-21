@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ResponsiveImage } from '../../components/responsive-image';
-import {ButtonColor} from './../buttons/Button'
+import { ButtonColor } from '../../styles/button-theme';
 import { WrapperSection, Text, TitleSection } from '../../styles/GlobalStyle.css';
-import {Device, fontSize, margin, color} from '../../styles/theme'
-import {SecondaryButton } from '../buttons/SecondaryButton';
+import { Device, fontSize, margin, color } from '../../styles/theme';
+import { SecondaryButton } from '../buttons/SecondaryButton';
 
 const Wrapper = styled(WrapperSection)`
   display: flex;
@@ -12,7 +12,7 @@ const Wrapper = styled(WrapperSection)`
   min-height: 16.5em;
   margin-bottom: 15px;
 
-  @media ${Device.mobile}{
+  @media ${Device.mobile} {
     min-height: 0;
   }
 `;
@@ -34,7 +34,7 @@ const ArticleSection = styled.div`
 const ArticleButton = styled(SecondaryButton)`
   margin-top: ${margin.big};
   font-weight: 300;
-  
+
   @media ${Device.mobile} {
     display: none;
     font-size: ${fontSize.tiny};
@@ -47,19 +47,19 @@ const ArticleDate = styled(Text)`
   @media ${Device.mobile} {
     display: none;
   }
-`
+`;
 
 const ArticleTitle = styled(TitleSection)`
   @media ${Device.mobile} {
     font-size: ${fontSize.tiny};
   }
-`
+`;
 
 const ArticleText = styled(Text)`
   @media ${Device.mobile} {
     font-size: ${fontSize.tiny};
   }
-`
+`;
 
 interface IArticleBlock {
   photo?: string;
@@ -68,7 +68,7 @@ interface IArticleBlock {
   text: string;
 }
 
-export const ArticleBlock: React.FC<IArticleBlock> = ({ photo, title, date, text}) => {
+export const ArticleBlock: React.FC<IArticleBlock> = ({ photo, title, date, text }) => {
   return (
     <Wrapper color={color.background.white}>
       <ArticleImage>{photo && <ResponsiveImage imageSrc={photo} />}</ArticleImage>
@@ -76,7 +76,7 @@ export const ArticleBlock: React.FC<IArticleBlock> = ({ photo, title, date, text
         <ArticleTitle>{title}</ArticleTitle>
         <ArticleText>{text}</ArticleText>
         {date && <ArticleDate>{date}</ArticleDate>}
-        <ArticleButton label='TAG/KATEGORIA' color={ButtonColor.LightGray} fontSize={fontSize.small}/>
+        <ArticleButton label="TAG/KATEGORIA" color={ButtonColor.LightGray} fontSize={fontSize.small} />
       </ArticleSection>
     </Wrapper>
   );

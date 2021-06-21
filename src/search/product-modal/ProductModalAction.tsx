@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { color, padding } from '../../styles/theme';
-import { ButtonColor } from '../../components/buttons/Button';
+import { ButtonColor } from '../../styles/button-theme';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 
 interface ITheme {
@@ -15,7 +15,7 @@ const Container = styled.div<{ theme?: ITheme }>`
   padding: ${padding.normal} ${padding.normal};
   align-items: center;
   border-top: 1px solid ${color.background.primary};
-  background-color: ${props => props.theme?.backgroundColor || color.background.white};
+  background-color: ${(props) => props.theme?.backgroundColor || color.background.white};
 
   .action-btn {
     width: 10rem;
