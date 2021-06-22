@@ -1,22 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IProductData } from '../../domain/products';
-import { ButtonColor } from '../../styles/button-theme';
-import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { SearchResultElement } from './ProductElement';
-import { color, fontSize, lineHeight } from '../../styles/theme';
-import { Spinner } from '../../components/spinner';
-import { ProductCounter } from './ProductCounter';
-import { Link } from 'gatsby';
-
-const Header = styled.header`
-  font-size: ${fontSize.big};
-  font-weight: bold;
-  line-height: ${lineHeight.big};
-`;
 
 const ResultsList = styled.div`
-  ul {
+  .products-list {
     padding: 0;
     list-style: none;
   }
@@ -30,11 +18,11 @@ const ResultsList = styled.div`
 
 interface ISearchResultsList {
   phrase: string;
-  results: IProductData[];
+  results?: IProductData[];
   token?: string;
   isLoading?: boolean;
+  actions?: React.ReactNode | React.ReactNode[];
 
-  onLoadMore?: () => void;
   onSelect: (code: string, id: string) => void;
 }
 
@@ -43,34 +31,21 @@ export const SearchResultsList: React.FC<ISearchResultsList> = ({
   results,
   token,
   isLoading,
-  onLoadMore,
+  actions,
   onSelect,
 }) => {
-  const loadButton = isLoading ? (
-    <PrimaryButton icon={<Spinner color={color.text.light} size={100} timeout={0} />} color={ButtonColor.Red} />
-  ) : (
-    <PrimaryButton label="Doładuj" color={ButtonColor.Red} onClick={onLoadMore} />
-  );
-
-  const emptyResults = results.length < 1;
+  if (!results) {
+    return null;
+  }
 
   return (
     <ResultsList>
-      {emptyResults ? (
-        <Header>Nie znaleziono produktów</Header>
-      ) : (
-        <>
-          <Header>Uzyskano</Header>
-          <Link>
-            <ProductCounter phrase={phrase} amount={results.length} />
-          </Link>
-          <ul>
-            {results.map((product: IProductData, index: number) => (
-              <SearchResultElement product={product} key={product.code} onSelect={onSelect} />
-            ))}
-          </ul>
-        </>
-      )}
+      <ul className="products-list">
+        {results.map((product: IProductData, index: number) => (
+          <SearchResultElement product={product} key={product.code} onSelect={onSelect} />
+        ))}
+      </ul>
+      {actions && <div className="actions">{actions}</div>}
     </ResultsList>
   );
 };

@@ -69,5 +69,14 @@ export const Device: { [key: string]: string } = {
   desktop: `(min-width: ${pageWidth})`,
 };
 
+/**
+ * Represents value in pixels
+ */
 export type pixels = number;
+
+/**
+ * Transforms pixels integer into string
+ * @param value number of pixels
+ * @returns string for CSS
+ */
 export const px = (value: pixels): string => value + 'px';

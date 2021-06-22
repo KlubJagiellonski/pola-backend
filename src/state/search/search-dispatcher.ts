@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux';
-import { IProductEAN } from '../../domain/products';
 import { ProductEANService } from '../../domain/products/ean-service';
 import { ProductService } from '../../domain/products/search-service';
 import { IPolaState } from '../types';

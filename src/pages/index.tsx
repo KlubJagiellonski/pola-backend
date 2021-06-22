@@ -7,7 +7,7 @@ import SEO from '../layout/seo';
 import { SearchContainer } from '../search/form/SearchForm';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
-import { Device, pageWidth, padding, color } from '../styles/theme';
+import { Device, pageWidth, padding, margin, color, fontSize, lineHeight } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation } from '../state/app/app-actions';
@@ -20,6 +20,9 @@ import { SearchResultsList } from '../search/results-list/SearchResultsList';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { SecondaryButton } from '../components/buttons/SecondaryButton';
 import { ButtonColor } from '../styles/button-theme';
+import { ProductCounter } from '../search/results-list/ProductCounter';
+import { Link } from 'gatsby';
+import { Spinner } from '../components/spinner';
 
 const Content = styled.div`
   width: 100%;
@@ -46,10 +49,25 @@ const Background = styled.div<{ img?: string }>`
   }
 `;
 
+const MissingProductInfo = styled.div`
+  background-color: ${color.background.red};
+  color: ${color.text.light};
+  text-align: center;
+  font-size: ${fontSize.big};
+  padding: ${padding.normal};
+  margin-top: ${margin.big};
+`;
+
+const Header = styled.header`
+  font-size: ${fontSize.big};
+  font-weight: bold;
+  line-height: ${lineHeight.big};
+`;
+
 interface IMainPage {
   location: Location;
   phrase: string;
-  searchResults: IProductData[];
+  searchResults?: IProductData[];
   token?: string;
   isLoading?: boolean;
   articles?: IArticle[];
@@ -62,7 +80,7 @@ interface IMainPage {
 }
 
 const MainPage = (props: IMainPage) => {
-  const { phrase, searchResults, location } = props;
+  const { phrase, searchResults, location, isLoading } = props;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -77,6 +95,8 @@ const MainPage = (props: IMainPage) => {
     props.clearResults();
   };
 
+  const emptyResults = !searchResults || searchResults.length < 1;
+
   return (
     <PageLayout>
       <SEO title="Pola Web | Strona główna" />
@@ -88,33 +108,26 @@ const MainPage = (props: IMainPage) => {
           <SearchContainer onSearch={props.invokeSearch} />
         </Content>
       </PageSection>
-      {searchResults && (
-        <>
-          <PageSection>
-            <SearchResultsList
-              phrase={phrase}
-              results={searchResults}
-              isLoading={props.isLoading}
-              token={props.token}
-              onLoadMore={props.invokeLoadMore}
-              onSelect={props.selectProduct}
-            />
-            <div className="actions">
+      <SearchResultsHeader phrase={phrase} searchResults={searchResults} isLoading={isLoading} />
+      {!emptyResults && (
+        <PageSection>
+          <SearchResultsList
+            phrase={phrase}
+            results={searchResults}
+            isLoading={props.isLoading}
+            token={props.token}
+            actions={
               <PrimaryButton color={ButtonColor.Gray} onClick={handleCancel}>
-                Anuluj
+                <span>Anuluj</span>
               </PrimaryButton>
-            </div>
-          </PageSection>
-          <PageSection
-            styles={{
-              backgroundColor: color.background.red,
-              textColor: color.text.light,
-              textAlign: 'center',
-            }}>
-            <h2>Nie znalazłeś czego szukasz?</h2>
+            }
+            onSelect={props.selectProduct}
+          />
+          <MissingProductInfo>
+            <p>Nie znalazłeś czego szukasz?</p>
             <SecondaryButton onClick={redirectToOpenFoods}>Zgłoś produkt do bazy</SecondaryButton>
-          </PageSection>
-        </>
+          </MissingProductInfo>
+        </PageSection>
       )}
       <PageSection>
         <Contents articles={props.articles} friends={props.friends} />
@@ -124,6 +137,41 @@ const MainPage = (props: IMainPage) => {
       </PageSection>
     </PageLayout>
   );
+};
+
+interface ISearchResultsHeader {
+  phrase: string;
+  searchResults?: IProductData[];
+  isLoading?: boolean;
+}
+
+const SearchResultsHeader: React.FC<ISearchResultsHeader> = ({ phrase, searchResults, isLoading }) => {
+  const emptyResults = !searchResults || searchResults.length < 1;
+  let header: React.ReactNode;
+  if (!phrase && !searchResults && !isLoading) {
+    return null;
+  }
+
+  if (isLoading) {
+    header = <Spinner text="Wyszukiwanie produktów..." />;
+  }
+
+  if (emptyResults && !isLoading) {
+    header = <Header>Nie znaleziono produktów</Header>;
+  }
+
+  if (!header) {
+    header = (
+      <>
+        <Header>Uzyskano</Header>
+        <Link to="/products">
+          <ProductCounter phrase={phrase} amount={searchResults?.length || 0} />
+        </Link>
+      </>
+    );
+  }
+
+  return <PageSection styles={{ textAlign: isLoading ? 'center' : 'left' }}>{header}</PageSection>;
 };
 
 export default connect(
