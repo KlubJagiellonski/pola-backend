@@ -1,35 +1,34 @@
 import { Link } from 'gatsby';
 import React from 'react';
 import styled from 'styled-components';
-import { PageType } from '../../domain/generic';
+import { PageLinkData, PageType } from '../../domain/generic';
 import { color } from '../../styles/theme';
-
-interface INavItem {
-  label: string;
-  to: string;
-  type: PageType;
-  activePage: PageType;
-}
 
 const Item = styled.div<{ selected: boolean }>`
   font-weight: bolder;
   cursor: pointer;
 
-  &.selected {
-    color: ${color.text.red};
-  }
-
   a {
-    color: black;
+    color: ${(props) => (props.selected ? color.text.red : color.text.primary)};
     text-decoration: none;
   }
 `;
 
-export const NavItem: React.FC<INavItem> = ({ label, to, type, activePage }) => {
-  const selected = type === activePage;
+interface INavItem {
+  data: PageLinkData;
+  activePage: PageType;
+  onClick: (type: PageType) => void;
+}
+
+export const NavItem: React.FC<INavItem> = ({ data, activePage, onClick }) => {
+  const selected = data.type === activePage;
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    onClick(data.type);
+  };
+
   return (
-    <Item className={type} selected={selected}>
-      <Link to={to}>{label}</Link>
+    <Item className={data.type} selected={selected} onClick={handleClick}>
+      <Link to={data.url}>{data.label}</Link>
     </Item>
   );
 };

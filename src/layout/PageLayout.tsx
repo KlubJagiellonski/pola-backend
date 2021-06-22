@@ -18,10 +18,12 @@ import '../styles/pola-web.css';
 
 const connector = connect(
   (state: IPolaState) => ({
+    activePage: state.app.activePage,
     selectedProduct: state.search.selectedProduct,
   }),
   {
     initApp: appDispatcher.initialize,
+    selectPage: appDispatcher.selectActivePage,
     loadArticles: articlesDispatcher.loadArticles,
     loadFriends: friendsDispatcher.loadFriends,
     unselectProduct: searchDispatcher.unselectProduct,
@@ -32,11 +34,17 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 type IPageLayout = ReduxProps & {};
 
-const LayoutContainer = styled.div``;
+const LayoutContainer = styled.div`
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+`;
+
 const PageContent = styled.main`
   width: 100%;
   margin: 0 auto;
   padding: 0;
+  flex: 1 1 auto;
 
   @media ${Device.mobile} {
     padding-top: ${mobileHeaderHeight};
@@ -47,11 +55,13 @@ const PageContent = styled.main`
 `;
 
 const Layout: React.FC<IPageLayout> = ({
+  activePage,
+  selectedProduct,
   children,
   initApp,
+  selectPage,
   loadArticles,
   loadFriends,
-  selectedProduct,
   unselectProduct,
 }) => {
   const bootApplication = async () => {
@@ -78,7 +88,7 @@ const Layout: React.FC<IPageLayout> = ({
     <ErrorBoundary scope="page-layout">
       <LayoutContainer>
         {selectedProduct && <ProductModal product={selectedProduct} onClose={unselectProduct} />}
-        <PageHeader siteTitle={data.site.siteMetadata.title} />
+        <PageHeader siteTitle={data.site.siteMetadata.title} activePage={activePage} onSelect={selectPage} />
         <PageContent>{children}</PageContent>
         <PageFooter />
       </LayoutContainer>

@@ -3,14 +3,17 @@ import { AnyAction, Reducer } from 'redux';
 import { actionTypes } from './app-actions';
 import * as actions from './app-actions';
 import { IAction, IActionReducer } from '../types';
+import { PageType } from '../../domain/generic';
 
 export interface IAppState {
   initialized: boolean;
   location?: Location;
+  activePage: PageType;
 }
 
 const initialState: IAppState = {
   initialized: false,
+  activePage: PageType.HOME,
 };
 
 const reducers: IActionReducer<IAppState> = {
@@ -25,6 +28,13 @@ const reducers: IActionReducer<IAppState> = {
     return {
       ...state,
       location: action.payload.location,
+    };
+  },
+
+  [actionTypes.SELECT_ACTIVE_PAGE]: (state: IAppState, action: ReturnType<typeof actions.SelectActivePage>) => {
+    return {
+      ...state,
+      activePage: action.payload.type,
     };
   },
 };

@@ -18,3 +18,9 @@ export enum PageType {
   FAQ = 'faq',
   CONTACT = 'contact',
 }
+
+export interface PageLinkData {
+  type: PageType;
+  label: string;
+  url: string;
+}

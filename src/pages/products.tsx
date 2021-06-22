@@ -77,6 +77,7 @@ const ProductsPage = (props: IProductsPage) => {
 
 export default connect(
   (state: IPolaState) => ({
+    location: state.app.location,
     phrase: state.search.phrase,
     searchResults: state.search.products,
     token: state.search.token,
