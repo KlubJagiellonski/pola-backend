@@ -2,16 +2,31 @@ import { Link } from 'gatsby';
 import React from 'react';
 import styled from 'styled-components';
 import { PageLinkData, PageType } from '../../domain/generic';
-import { color } from '../../styles/theme';
+import { color, margin } from '../../styles/theme';
 
 const Item = styled.div<{ selected: boolean }>`
+  display: flex;
+  justify-content: center;
+  position: relative;
   font-weight: bolder;
-  cursor: pointer;
 
   a {
+    margin-top: ${margin.big};
+    z-index: 1;
     color: ${(props) => (props.selected ? color.text.red : color.text.primary)};
+    cursor: ${(props) => (props.selected ? 'default' : 'pointer')};
     text-decoration: none;
   }
+`;
+
+const Cricle = styled.div`
+  background-color: ${color.background.white};
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  z-index: 0;
+  position: absolute;
+  top: ${margin.normal};
 `;
 
 interface INavItem {
@@ -29,6 +44,7 @@ export const NavItem: React.FC<INavItem> = ({ data, activePage, onClick }) => {
   return (
     <Item className={data.type} selected={selected} onClick={handleClick}>
       <Link to={data.url}>{data.label}</Link>
+      {selected && <Cricle />}
     </Item>
   );
 };
