@@ -5,6 +5,8 @@ import { HamburgerMenu } from './nav/HamburgerMenu';
 import { NavbarMenu } from './nav/NavbarMenu';
 import { desktopHeaderHeight, Device, pageWidth, color } from '../styles/theme';
 import { Link } from 'gatsby';
+import { NavItem } from './nav/NavItem';
+import { PageType } from '../domain/generic';
 
 interface IPageHeader {
   siteTitle?: string;
@@ -42,30 +44,14 @@ const HeaderContainer = styled.header`
 
 const navItems = (
   <React.Fragment>
-    <span className="nav-item">
-      <Link to="/">Home</Link>
-    </span>
-    <span className="nav-item">
-      <Link to="/news">Aktualności</Link>
-    </span>
-    <span className="nav-item">
-      <Link to="/about">O Poli</Link>
-    </span>
-    <span className="nav-item">
-      <Link to="/support">Wesprzyj aplikację</Link>
-    </span>
-    <span className="nav-item">
-      <Link to="/friends">Klub przyjaciół Poli</Link>
-    </span>
-    <span className="nav-item">
-      <Link to="/join">Dołącz do zespołu</Link>
-    </span>
-    <span className="nav-item">
-      <Link to="/faq">FAQ</Link>
-    </span>
-    <span className="nav-item">
-      <Link to="/contect">Kontakt</Link>
-    </span>
+    <NavItem type={PageType.HOME} label="Home" to="/" activePage={PageType.HOME} />
+    <NavItem type={PageType.NEWS} label="Aktualności" to="/news" activePage={PageType.HOME} />
+    <NavItem type={PageType.ABOUT} label="O Poli" to="/about" activePage={PageType.HOME} />
+    <NavItem type={PageType.SUPPORT} label="Wesprzyj aplikację" to="/support" activePage={PageType.HOME} />
+    <NavItem type={PageType.FRIENDS} label="Klub przyjaciół Poli" to="/friends" activePage={PageType.HOME} />
+    <NavItem type={PageType.TEAM} label="Dołącz do zespołu" to="/join" activePage={PageType.HOME} />
+    <NavItem type={PageType.FAQ} label="FAQ" to="/faq" activePage={PageType.HOME} />
+    <NavItem type={PageType.CONTACT} label="Kontakt" to="/contect" activePage={PageType.HOME} />
   </React.Fragment>
 );
 

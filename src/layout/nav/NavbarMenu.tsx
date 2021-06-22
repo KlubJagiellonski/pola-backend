@@ -20,16 +20,6 @@ const NavbarLayout = styled.nav`
   flex: 1 1 100%;
   align-items: center;
   height: 100%;
-
-  .nav-item {
-    font-weight: bolder;
-    cursor: pointer;
-
-    a {
-      color: black;
-      text-decoration: none;
-    }
-  }
 `;
 
 export const NavbarMenu: React.FC<INavbarMenu> = ({ children }) => (
