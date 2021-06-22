@@ -45,7 +45,9 @@ const ProductsPage = (props: IProductsPage) => {
 
   const emptyResults = !searchResults || searchResults.length < 1;
   if (emptyResults) {
-    navigate('/');
+    if (typeof window !== 'undefined') {
+      navigate('/');
+    }
     return null;
   }
 
