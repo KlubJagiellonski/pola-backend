@@ -17,23 +17,13 @@ const ResultsList = styled.div`
 `;
 
 interface ISearchResultsList {
-  phrase: string;
   results?: IProductData[];
-  token?: string;
-  isLoading?: boolean;
   actions?: React.ReactNode | React.ReactNode[];
 
   onSelect: (code: string, id: string) => void;
 }
 
-export const SearchResultsList: React.FC<ISearchResultsList> = ({
-  phrase,
-  results,
-  token,
-  isLoading,
-  actions,
-  onSelect,
-}) => {
+export const SearchResultsList: React.FC<ISearchResultsList> = ({ results, actions, onSelect }) => {
   if (!results) {
     return null;
   }

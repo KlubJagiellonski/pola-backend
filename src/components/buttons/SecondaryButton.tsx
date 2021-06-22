@@ -2,9 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from './Button';
 import { ButtonColor, getButtonColor } from '../../styles/button-theme';
+import { color } from '../../styles/theme';
 
-const SecButton = styled(Button)`
+const ButtonContainer = styled(Button)`
   border-radius: 20px;
+  border: 2px solid ${color.border.white};
 `;
 
 export interface ISecondaryButton {
@@ -42,10 +44,10 @@ export const SecondaryButton: React.FC<ISecondaryButton> = ({
   };
 
   return (
-    <SecButton theme={theme} className={className} onClick={handleClick}>
+    <ButtonContainer theme={theme} className={className} onClick={handleClick} disabled={disabled}>
       {icon}
       {label}
       {children}
-    </SecButton>
+    </ButtonContainer>
   );
 };

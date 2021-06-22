@@ -23,6 +23,7 @@ import { ButtonColor } from '../styles/button-theme';
 import { ProductCounter } from '../search/results-list/ProductCounter';
 import { Link } from 'gatsby';
 import { Spinner } from '../components/spinner';
+import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
 
 const Content = styled.div`
   width: 100%;
@@ -58,18 +59,12 @@ const MissingProductInfo = styled.div`
   margin-top: ${margin.big};
 `;
 
-const Header = styled.header`
-  font-size: ${fontSize.big};
-  font-weight: bold;
-  line-height: ${lineHeight.big};
-`;
-
 interface IMainPage {
   location: Location;
   phrase: string;
   searchResults?: IProductData[];
   token?: string;
-  isLoading?: boolean;
+  searchState: string;
   articles?: IArticle[];
   friends?: IFriend[];
 
@@ -80,7 +75,7 @@ interface IMainPage {
 }
 
 const MainPage = (props: IMainPage) => {
-  const { phrase, searchResults, location, isLoading } = props;
+  const { phrase, searchResults, location, searchState } = props;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -108,14 +103,11 @@ const MainPage = (props: IMainPage) => {
           <SearchContainer onSearch={props.invokeSearch} />
         </Content>
       </PageSection>
-      <SearchResultsHeader phrase={phrase} searchResults={searchResults} isLoading={isLoading} />
+      <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />
       {!emptyResults && (
         <PageSection>
           <SearchResultsList
-            phrase={phrase}
             results={searchResults}
-            isLoading={props.isLoading}
-            token={props.token}
             actions={
               <PrimaryButton color={ButtonColor.Gray} onClick={handleCancel}>
                 <span>Anuluj</span>
@@ -125,7 +117,9 @@ const MainPage = (props: IMainPage) => {
           />
           <MissingProductInfo>
             <p>Nie znalazłeś czego szukasz?</p>
-            <SecondaryButton onClick={redirectToOpenFoods}>Zgłoś produkt do bazy</SecondaryButton>
+            <SecondaryButton onClick={redirectToOpenFoods} color={ButtonColor.Red} fontSize={fontSize.small}>
+              Zgłoś produkt do bazy
+            </SecondaryButton>
           </MissingProductInfo>
         </PageSection>
       )}
@@ -139,47 +133,12 @@ const MainPage = (props: IMainPage) => {
   );
 };
 
-interface ISearchResultsHeader {
-  phrase: string;
-  searchResults?: IProductData[];
-  isLoading?: boolean;
-}
-
-const SearchResultsHeader: React.FC<ISearchResultsHeader> = ({ phrase, searchResults, isLoading }) => {
-  const emptyResults = !searchResults || searchResults.length < 1;
-  let header: React.ReactNode;
-  if (!phrase && !searchResults && !isLoading) {
-    return null;
-  }
-
-  if (isLoading) {
-    header = <Spinner text="Wyszukiwanie produktów..." />;
-  }
-
-  if (emptyResults && !isLoading) {
-    header = <Header>Nie znaleziono produktów</Header>;
-  }
-
-  if (!header) {
-    header = (
-      <>
-        <Header>Uzyskano</Header>
-        <Link to="/products">
-          <ProductCounter phrase={phrase} amount={searchResults?.length || 0} />
-        </Link>
-      </>
-    );
-  }
-
-  return <PageSection styles={{ textAlign: isLoading ? 'center' : 'left' }}>{header}</PageSection>;
-};
-
 export default connect(
   (state: IPolaState) => ({
     phrase: state.search.phrase,
     searchResults: state.search.products,
     token: state.search.token,
-    isLoading: state.search.isLoading,
+    searchState: state.search.stateName,
     articles: state.articles.data,
     friends: state.friends.data,
   }),

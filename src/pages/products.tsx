@@ -17,13 +17,15 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { ButtonColor } from '../styles/button-theme';
 import { Spinner } from '../components/spinner';
 import { navigate } from 'gatsby';
+import { State } from '../state/search/search-reducer';
+import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
 
 interface IProductsPage {
   location: Location;
   phrase: string;
   searchResults: IProductData[];
   token?: string;
-  isLoading?: boolean;
+  searchState: State;
   articles?: IArticle[];
   friends?: IFriend[];
 
@@ -34,7 +36,7 @@ interface IProductsPage {
 }
 
 const ProductsPage = (props: IProductsPage) => {
-  const { phrase, isLoading, searchResults, location, onLoadMore } = props;
+  const { phrase, searchResults, location, onLoadMore, searchState } = props;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -46,25 +48,24 @@ const ProductsPage = (props: IProductsPage) => {
     return null;
   }
 
-  const loadButton = isLoading ? (
-    <PrimaryButton icon={<Spinner styles={{ size: 30, color: color.button.white }} />} color={ButtonColor.Red} />
-  ) : (
-    <PrimaryButton label="Doładuj" color={ButtonColor.Red} onClick={onLoadMore} />
-  );
+  const loadButton =
+    searchState === State.LOADING ? (
+      <PrimaryButton
+        disabled={true}
+        icon={<Spinner styles={{ size: 20, color: color.button.white }} />}
+        color={ButtonColor.Red}
+      />
+    ) : (
+      <PrimaryButton label="Doładuj" color={ButtonColor.Red} onClick={onLoadMore} />
+    );
 
   return (
     <PageLayout>
       <SEO title="Pola Web | Znalezione produkty" />
+      <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />
       {searchResults && (
         <PageSection>
-          <SearchResultsList
-            phrase={phrase}
-            results={searchResults}
-            isLoading={props.isLoading}
-            token={props.token}
-            actions={loadButton}
-            onSelect={props.selectProduct}
-          />
+          <SearchResultsList results={searchResults} actions={loadButton} onSelect={props.selectProduct} />
         </PageSection>
       )}
     </PageLayout>
@@ -76,7 +77,7 @@ export default connect(
     phrase: state.search.phrase,
     searchResults: state.search.products,
     token: state.search.token,
-    isLoading: state.search.isLoading,
+    searchState: state.search.stateName,
     articles: state.articles.data,
     friends: state.friends.data,
   }),

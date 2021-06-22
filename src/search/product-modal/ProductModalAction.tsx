@@ -18,7 +18,7 @@ const Container = styled.div<{ theme?: ITheme }>`
   background-color: ${(props) => props.theme?.backgroundColor || color.background.white};
 
   .action-btn {
-    width: 10rem;
+    width: 14rem;
   }
 `;
 

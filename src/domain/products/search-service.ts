@@ -36,6 +36,11 @@ export class ProductService extends ApiService {
 
   public async searchProducts(phrase: string, token?: string): Promise<IProductSearchSuccess> {
     try {
+      if (token) {
+        this.page += 1;
+      } else {
+        this.page = 0;
+      }
       const amount = 5 + this.page;
       const response = await axios.get(`${this.apiUrl}?limit=${amount}`);
       const products: IProductMock[] = response.data;
@@ -44,17 +49,11 @@ export class ProductService extends ApiService {
         throw new EmptyResponseDataError('products');
       }
 
-      if (token) {
-        this.page += 1;
-      } else {
-        this.page = 0;
-      }
-
       return {
         nextPageToken: token || 'mock_token',
         totalItems: amount,
         products: products.map(
-          mock =>
+          (mock) =>
             ({
               id: mock.id.toString(),
               code: getEAN(),
