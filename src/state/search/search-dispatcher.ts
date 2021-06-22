@@ -11,7 +11,7 @@ export const searchDispatcher = {
       const service = ProductService.getInstance();
       const response = await service.searchProducts(phrase);
       const products = response.products;
-      await dispatch(actions.LoadResults(products, response.nextPageToken));
+      await dispatch(actions.LoadResults(phrase, response.nextPageToken, products));
     } catch (error) {
       console.error('cannot search', error);
       await dispatch(actions.SearchFailed(error));
@@ -25,7 +25,7 @@ export const searchDispatcher = {
         const service = ProductService.getInstance();
         const response = await service.searchProducts(state.search.phrase, state.search.token);
         const products = response.products;
-        await dispatch(actions.LoadResults(products, response.nextPageToken));
+        await dispatch(actions.LoadResults(state.search.phrase, response.nextPageToken, products));
       }
     } catch (error) {
       console.error('cannot load more products', error);
