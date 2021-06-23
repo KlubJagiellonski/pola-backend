@@ -2,12 +2,14 @@ import { navigate } from 'gatsby';
 
 declare let window: any;
 
+export const isBrowserEnv = () => typeof window !== 'undefined';
+
 /**
  * Redirects to website page
  * @param url Object representing address of the page
  */
 export const navigateTo = (url: string) => {
-  if (!!window && typeof window !== 'undefined') {
+  if (isBrowserEnv()) {
     navigate(url);
   }
 };
@@ -17,7 +19,7 @@ export const navigateTo = (url: string) => {
  * @param url Object representing address of the page
  */
 export const openNewTab = (url: URL) => {
-  if (!!window && typeof window !== 'undefined') {
+  if (isBrowserEnv()) {
     window.open(url.href, '_blank');
   }
 };

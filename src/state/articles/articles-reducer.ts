@@ -15,7 +15,10 @@ const initialState: IArticlesState = {
 };
 
 const reducers: IActionReducer<IArticlesState> = {
-  [actionTypes.LOAD_ARTICLES]: (state: IArticlesState, action: ReturnType<typeof actions.LoadArticles>) => {
+  [actionTypes.LOAD_ARTICLES]: (
+    state: IArticlesState = initialState,
+    action: ReturnType<typeof actions.LoadArticles>
+  ) => {
     return {
       ...state,
       initialized: true,

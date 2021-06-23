@@ -41,7 +41,7 @@ const initialState: SearchState = {
 };
 
 const reducers: IActionReducer<SearchState> = {
-  [actionTypes.INVOKE_SEARCH]: (state: SearchState, action: ReturnType<typeof actions.InvokePhrase>) => {
+  [actionTypes.INVOKE_SEARCH]: (state: SearchState = initialState, action: ReturnType<typeof actions.InvokePhrase>) => {
     return {
       ...state,
       stateName: SearchStateName.LOADING,
@@ -51,7 +51,7 @@ const reducers: IActionReducer<SearchState> = {
     };
   },
 
-  [actionTypes.LOAD_RESULTS]: (state: SearchState, action: ReturnType<typeof actions.LoadResults>) => {
+  [actionTypes.LOAD_RESULTS]: (state: SearchState = initialState, action: ReturnType<typeof actions.LoadResults>) => {
     return {
       ...state,
       stateName: SearchStateName.LOADED,
@@ -61,18 +61,21 @@ const reducers: IActionReducer<SearchState> = {
     };
   },
 
-  [actionTypes.CLEAR_RESULTS]: (state: SearchState, action: ReturnType<typeof actions.ClearResults>) => {
+  [actionTypes.CLEAR_RESULTS]: (state: SearchState = initialState, action: ReturnType<typeof actions.ClearResults>) => {
     return initialState;
   },
 
-  [actionTypes.SEARCH_FAILED]: (state: SearchState, action: ReturnType<typeof actions.SearchFailed>) => {
+  [actionTypes.SEARCH_FAILED]: (state: SearchState = initialState, action: ReturnType<typeof actions.SearchFailed>) => {
     return {
       ...state,
       error: action.payload.error,
     };
   },
 
-  [actionTypes.SHOW_PRODUCT_DETAILS]: (state: SearchState, action: ReturnType<typeof actions.ShowProductDetails>) => {
+  [actionTypes.SHOW_PRODUCT_DETAILS]: (
+    state: SearchState = initialState,
+    action: ReturnType<typeof actions.ShowProductDetails>
+  ) => {
     return {
       ...state,
       stateName: SearchStateName.SELECTED,
@@ -80,7 +83,10 @@ const reducers: IActionReducer<SearchState> = {
     };
   },
 
-  [actionTypes.UNSELECT_PRODUCT]: (state: SearchState, action: ReturnType<typeof actions.ShowProductDetails>) => {
+  [actionTypes.UNSELECT_PRODUCT]: (
+    state: SearchState = initialState,
+    action: ReturnType<typeof actions.ShowProductDetails>
+  ) => {
     return {
       ...state,
       stateName: SearchStateName.LOADED,

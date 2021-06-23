@@ -19,28 +19,34 @@ const initialState: IAppState = {
 };
 
 const reducers: IActionReducer<IAppState> = {
-  [actionTypes.INITIALIZE]: (state: IAppState, action: ReturnType<typeof actions.Initialize>) => {
+  [actionTypes.INITIALIZE]: (state: IAppState = initialState, action: ReturnType<typeof actions.Initialize>) => {
     return {
       ...state,
       initialized: true,
     };
   },
 
-  [actionTypes.LOAD_BROWSER_LOCATION]: (state: IAppState, action: ReturnType<typeof actions.LoadBrowserLocation>) => {
+  [actionTypes.LOAD_BROWSER_LOCATION]: (
+    state: IAppState = initialState,
+    action: ReturnType<typeof actions.LoadBrowserLocation>
+  ) => {
     return {
       ...state,
       location: action.payload.location,
     };
   },
 
-  [actionTypes.SELECT_ACTIVE_PAGE]: (state: IAppState, action: ReturnType<typeof actions.SelectActivePage>) => {
+  [actionTypes.SELECT_ACTIVE_PAGE]: (
+    state: IAppState = initialState,
+    action: ReturnType<typeof actions.SelectActivePage>
+  ) => {
     return {
       ...state,
       activePage: action.payload.type,
     };
   },
 
-  [actionTypes.EXPAND_MENU]: (state: IAppState, action: ReturnType<typeof actions.ExpandMenu>) => {
+  [actionTypes.EXPAND_MENU]: (state: IAppState = initialState, action: ReturnType<typeof actions.ExpandMenu>) => {
     return {
       ...state,
       isMenuExpanded: action.payload.expanded,

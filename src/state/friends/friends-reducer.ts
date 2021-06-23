@@ -15,7 +15,7 @@ const initialState: IFriendsState = {
 };
 
 const reducers: IActionReducer<IFriendsState> = {
-  [actionTypes.LOAD_FRIENDS]: (state: IFriendsState, action: ReturnType<typeof actions.LoadFriends>) => {
+  [actionTypes.LOAD_FRIENDS]: (state: IFriendsState = initialState, action: ReturnType<typeof actions.LoadFriends>) => {
     return {
       ...state,
       initialized: true,
