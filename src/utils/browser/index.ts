@@ -1,11 +1,13 @@
 import { navigate } from 'gatsby';
 
+declare const window: any;
+
 /**
  * Redirects to website page
  * @param url Object representing address of the page
  */
 export const navigateTo = (url: string) => {
-  if (window && typeof window !== 'undefined') {
+  if (!!window && typeof window !== 'undefined') {
     navigate(url);
   }
 };
@@ -15,7 +17,7 @@ export const navigateTo = (url: string) => {
  * @param url Object representing address of the page
  */
 export const openNewTab = (url: URL) => {
-  if (window && typeof window !== 'undefined') {
+  if (!!window && typeof window !== 'undefined') {
     window.open(url.href, '_blank');
   }
 };

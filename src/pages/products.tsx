@@ -3,7 +3,7 @@ import { connect, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
-import SEO from '../layout/seo';
+import SEO from '../layout/SEO';
 import { PageSection } from '../layout/PageSection';
 import { padding, margin, color, fontSize } from '../styles/theme';
 import { IPolaState } from '../state/types';
@@ -15,7 +15,7 @@ import { IFriend } from '../domain/friends';
 import { SearchResultsList } from '../search/results-list/SearchResultsList';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { ButtonColor } from '../styles/button-theme';
-import { Spinner } from '../components/spinner';
+import { Spinner } from '../layout/Spinner';
 import { navigate } from 'gatsby';
 import { SearchStateName } from '../state/search/search-reducer';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';

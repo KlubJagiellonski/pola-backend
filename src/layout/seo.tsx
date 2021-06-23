@@ -1,16 +1,21 @@
-/*
+import React from 'react';
+import Helmet from 'react-helmet';
+import { useStaticQuery, graphql } from 'gatsby';
+
+interface ISEO {
+  title: string;
+  lang?: string;
+  meta?: any[];
+  description?: string;
+}
+
+/**
  * SEO component that queries for data with
  * Gatsby's useStaticQuery React hook
  *
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
-
-import React from 'react';
-import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import { useStaticQuery, graphql } from 'gatsby';
-
-function SEO({ description, lang, meta, title }: any): any {
+const SEO: React.FC<ISEO> = ({ title, description = '', lang = 'en', meta = [] }) => {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -70,19 +75,6 @@ function SEO({ description, lang, meta, title }: any): any {
       ].concat(meta)}
     />
   );
-}
-
-SEO.defaultProps = {
-  lang: 'en',
-  meta: [],
-  description: '',
-};
-
-SEO.propTypes = {
-  description: PropTypes.string,
-  lang: PropTypes.string,
-  meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired,
 };
 
 export default SEO;

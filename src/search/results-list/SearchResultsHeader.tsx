@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageSection } from '../../layout/PageSection';
 import { IProductData } from '../../domain/products';
-import { Spinner } from '../../components/spinner';
+import { Spinner } from '../../layout/Spinner';
 import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
 import { fontSize, lineHeight } from '../../styles/theme';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import { PageLayout } from '../layout/PageLayout';
-import SEO from '../layout/seo';
+import SEO from '../layout/SEO';
 import { IArticle } from '../domain/articles';
 import { connect } from 'react-redux';
 import ArticlesList from '../components/articles/ArticlesList';
