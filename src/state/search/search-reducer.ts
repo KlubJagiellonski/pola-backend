@@ -47,6 +47,7 @@ const reducers: IActionReducer<SearchState> = {
       stateName: SearchStateName.LOADING,
       phrase: action.payload.phrase,
       token: undefined,
+      products: undefined,
     };
   },
 

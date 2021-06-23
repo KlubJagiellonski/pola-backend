@@ -94,20 +94,25 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
   const hasPhrase = !!phrase && phrase.length > 0;
   const showSubmitButton = false;
 
-  const onPhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.persist();
-    setPhrase(e.currentTarget.value);
-    onSearch(e.currentTarget.value);
+  const onPhraseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handlePhraseChange(event.currentTarget.value);
   };
 
-  const handlePhraseChange = debounce(onPhraseChange, 500, {
-    leading: false,
-    trailing: true,
-  });
+  const handlePhraseChange = debounce(
+    (value: string) => {
+      setPhrase(value);
+      onSearch(value);
+    },
+    500,
+    {
+      leading: false,
+      trailing: true,
+    }
+  );
 
   const handleSearch = () => onSearch(phrase);
-  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === 13) {
+  const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === 13) {
       onSearch(phrase);
     }
   };
@@ -118,7 +123,7 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
         <InputText
           placeholder="nazwa produktu / producent / kod EAN"
           type="text"
-          onChange={handlePhraseChange}
+          onChange={onPhraseChange}
           onKeyDown={handleEnter}
           disabled={disabled}
         />
