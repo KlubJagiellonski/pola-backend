@@ -3,7 +3,7 @@ import { connect, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
-import SEO from '../layout/SEO';
+import SEOMetadata from '../layout/SEOMetadata';
 import { SearchForm } from '../search/form/SearchForm';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
@@ -99,7 +99,7 @@ const HomePage = (props: IHomePage) => {
 
   return (
     <PageLayout>
-      <SEO title="Pola Web | Strona główna" />
+      <SEOMetadata title="Pola Web | Strona główna" />
       <PageSection size="full" styles={{ backgroundColor: color.background.search }}>
         <Background>
           <ResponsiveImage imageSrc={'background.png'} />

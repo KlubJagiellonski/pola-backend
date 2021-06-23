@@ -2,7 +2,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 
-interface ISEO {
+interface ISEOMetadata {
   title: string;
   lang?: string;
   meta?: any[];
@@ -15,7 +15,7 @@ interface ISEO {
  *
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
-const SEO: React.FC<ISEO> = ({ title, description = '', lang = 'en', meta = [] }) => {
+const SEOMetadata: React.FC<ISEOMetadata> = ({ title, description = '', lang = 'en', meta = [] }) => {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -77,4 +77,4 @@ const SEO: React.FC<ISEO> = ({ title, description = '', lang = 'en', meta = [] }
   );
 };
 
-export default SEO;
+export default SEOMetadata;

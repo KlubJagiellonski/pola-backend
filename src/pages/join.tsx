@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import { PageLayout } from '../layout/PageLayout';
-import SEO from '../layout/SEO';
+import SEOMetadata from '../layout/SEOMetadata';
 import { IPolaState } from '../state/types';
 import { LoadBrowserLocation } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
@@ -23,7 +23,7 @@ const TeamPage = (props: ITeamPage) => {
 
   return (
     <PageLayout>
-      <SEO title="Pola Web | Dołącz do zespołu" />
+      <SEOMetadata title="Pola Web | Dołącz do zespołu" />
       <DevelopmentPlaceholder />
     </PageLayout>
   );

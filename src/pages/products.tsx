@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
-import SEO from '../layout/SEO';
+import SEOMetadata from '../layout/SEOMetadata';
 import { PageSection } from '../layout/PageSection';
-import { padding, margin, color, fontSize } from '../styles/theme';
+import { color } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation } from '../state/app/app-actions';
@@ -16,7 +15,6 @@ import { SearchResultsList } from '../search/results-list/SearchResultsList';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { ButtonColor } from '../styles/button-theme';
 import { Spinner } from '../layout/Spinner';
-import { navigate } from 'gatsby';
 import { SearchStateName } from '../state/search/search-reducer';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
 import { navigateTo } from '../utils/browser';
@@ -66,7 +64,7 @@ const ProductsPage = (props: IProductsPage) => {
 
   return (
     <PageLayout>
-      <SEO title="Pola Web | Znalezione produkty" />
+      <SEOMetadata title="Pola Web | Znalezione produkty" />
       <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />
       {searchResults && (
         <PageSection>

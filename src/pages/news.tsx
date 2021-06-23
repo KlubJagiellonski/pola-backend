@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import { PageLayout } from '../layout/PageLayout';
-import SEO from '../layout/SEO';
+import SEOMetadata from '../layout/SEOMetadata';
 import { IArticle } from '../domain/articles';
 import { connect, useDispatch } from 'react-redux';
 import ArticlesList from '../components/articles/ArticlesList';
@@ -24,7 +24,7 @@ const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
 
   return (
     <PageLayout>
-      <SEO title="Pola Web | Aktualności" />
+      <SEOMetadata title="Pola Web | Aktualności" />
       <ArticlesList articles={articles} width={600} />
       <Link to="/">Go back to the homepage</Link>
     </PageLayout>
