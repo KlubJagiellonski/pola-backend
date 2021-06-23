@@ -2,13 +2,14 @@ import { Link } from 'gatsby';
 import React from 'react';
 import styled from 'styled-components';
 import { PageLinkData, PageType } from '../../domain/generic';
-import { color, margin } from '../../styles/theme';
+import { color, Device, margin } from '../../styles/theme';
 
 const Item = styled.div<{ selected: boolean }>`
   display: flex;
   justify-content: center;
   position: relative;
   font-weight: bolder;
+  height: 3em;
 
   a {
     margin-top: ${margin.big};
@@ -16,6 +17,13 @@ const Item = styled.div<{ selected: boolean }>`
     color: ${(props) => (props.selected ? color.text.red : color.text.primary)};
     cursor: ${(props) => (props.selected ? 'default' : 'pointer')};
     text-decoration: none;
+
+    @media ${Device.phone} {
+      margin-top: 0;
+    }
+    @media ${Device.desktop} {
+      margin-top: ${margin.big};
+    }
   }
 `;
 
@@ -26,7 +34,14 @@ const Cricle = styled.div`
   border-radius: 50%;
   z-index: 0;
   position: absolute;
-  top: ${margin.normal};
+  top: 0.5rem;
+
+  @media ${Device.phone} {
+    display: none;
+  }
+  @media ${Device.desktop} {
+    display: block;
+  }
 `;
 
 interface INavItem {

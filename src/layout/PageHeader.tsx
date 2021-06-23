@@ -40,7 +40,10 @@ const HeaderContainer = styled.header`
 interface IPageHeader {
   siteTitle?: string;
   activePage: PageType;
+  isMenuExpanded: boolean;
+
   onSelect: (type: PageType) => void;
+  onExpand: (expanded: boolean) => void;
 }
 
 export const PageHeader = (props: IPageHeader) => {
@@ -59,7 +62,9 @@ export const PageHeader = (props: IPageHeader) => {
     <HeaderContainer>
       <div className="header-content">
         <NavbarMenu>{navItems}</NavbarMenu>
-        <HamburgerMenu>{navItems}</HamburgerMenu>
+        <HamburgerMenu expanded={props.isMenuExpanded} onExpand={props.onExpand}>
+          {navItems}
+        </HamburgerMenu>
       </div>
     </HeaderContainer>
   );

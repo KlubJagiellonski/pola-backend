@@ -66,7 +66,7 @@ export const lineHeight = {
 
 export const Device: { [key: string]: string } = {
   mobile: `(max-width: ${width - 1}px)`,
-  desktop: `(min-width: ${pageWidth})`,
+  desktop: `(min-width: ${width}px)`,
 };
 
 /**

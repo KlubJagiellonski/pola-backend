@@ -19,11 +19,13 @@ import '../styles/pola-web.css';
 const connector = connect(
   (state: IPolaState) => ({
     activePage: state.app.activePage,
+    isMenuExpanded: state.app.isMenuExpanded,
     selectedProduct: state.search.selectedProduct,
   }),
   {
     initApp: appDispatcher.initialize,
     selectPage: appDispatcher.selectActivePage,
+    expandMenu: appDispatcher.expandMenu,
     loadArticles: articlesDispatcher.loadArticles,
     loadFriends: friendsDispatcher.loadFriends,
     unselectProduct: searchDispatcher.unselectProduct,
@@ -56,10 +58,13 @@ const PageContent = styled.main`
 
 const Layout: React.FC<IPageLayout> = ({
   activePage,
+  isMenuExpanded,
   selectedProduct,
   children,
+
   initApp,
   selectPage,
+  expandMenu,
   loadArticles,
   loadFriends,
   unselectProduct,
@@ -88,7 +93,13 @@ const Layout: React.FC<IPageLayout> = ({
     <ErrorBoundary scope="page-layout">
       <LayoutContainer>
         {selectedProduct && <ProductModal product={selectedProduct} onClose={unselectProduct} />}
-        <PageHeader siteTitle={data.site.siteMetadata.title} activePage={activePage} onSelect={selectPage} />
+        <PageHeader
+          siteTitle={data.site.siteMetadata.title}
+          activePage={activePage}
+          onSelect={selectPage}
+          isMenuExpanded={isMenuExpanded}
+          onExpand={expandMenu}
+        />
         <PageContent>{children}</PageContent>
         <PageFooter />
       </LayoutContainer>

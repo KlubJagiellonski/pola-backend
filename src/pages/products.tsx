@@ -19,6 +19,8 @@ import { Spinner } from '../components/spinner';
 import { navigate } from 'gatsby';
 import { State } from '../state/search/search-reducer';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
+import { navigateTo } from '../utils/browser';
+import { urls } from '../utils/browser/urls';
 
 interface IProductsPage {
   location: Location;
@@ -45,9 +47,7 @@ const ProductsPage = (props: IProductsPage) => {
 
   const emptyResults = !searchResults || searchResults.length < 1;
   if (emptyResults) {
-    if (typeof window !== 'undefined') {
-      navigate('/');
-    }
+    navigateTo(urls.pola.home);
     return null;
   }
 

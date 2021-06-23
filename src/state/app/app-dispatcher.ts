@@ -15,4 +15,8 @@ export const appDispatcher = {
   selectActivePage: (type: PageType) => async (dispatch: Dispatch, getState: () => IPolaState) => {
     await dispatch(actions.SelectActivePage(type));
   },
+
+  expandMenu: (expanded: boolean) => async (dispatch: Dispatch, getState: () => IPolaState) => {
+    await dispatch(actions.ExpandMenu(expanded));
+  },
 };

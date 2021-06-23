@@ -7,7 +7,7 @@ import SEO from '../layout/seo';
 import { SearchContainer } from '../search/form/SearchForm';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
-import { Device, pageWidth, padding, margin, color, fontSize, lineHeight } from '../styles/theme';
+import { Device, pageWidth, padding, margin, color, fontSize } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation } from '../state/app/app-actions';
@@ -20,10 +20,9 @@ import { SearchResultsList } from '../search/results-list/SearchResultsList';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { SecondaryButton } from '../components/buttons/SecondaryButton';
 import { ButtonColor } from '../styles/button-theme';
-import { ProductCounter } from '../search/results-list/ProductCounter';
-import { Link } from 'gatsby';
-import { Spinner } from '../components/spinner';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
+import { urls } from '../utils/browser/urls';
+import { openNewTab } from '../utils/browser';
 
 const Content = styled.div`
   width: 100%;
@@ -59,7 +58,7 @@ const MissingProductInfo = styled.div`
   margin-top: ${margin.big};
 `;
 
-interface IMainPage {
+interface IHomePage {
   location: Location;
   phrase: string;
   searchResults?: IProductData[];
@@ -74,17 +73,13 @@ interface IMainPage {
   selectProduct: (code: string, id: string) => void;
 }
 
-const MainPage = (props: IMainPage) => {
+const HomePage = (props: IHomePage) => {
   const { phrase, searchResults, location, searchState } = props;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     dispatch(LoadBrowserLocation(location));
   }, []);
-
-  const redirectToOpenFoods = () => {
-    window.location.href = 'https://pl.openfoodfacts.org/';
-  };
 
   const handleCancel = () => {
     props.clearResults();
@@ -117,7 +112,10 @@ const MainPage = (props: IMainPage) => {
           />
           <MissingProductInfo>
             <p>Nie znalazłeś czego szukasz?</p>
-            <SecondaryButton onClick={redirectToOpenFoods} color={ButtonColor.Red} fontSize={fontSize.small}>
+            <SecondaryButton
+              onClick={() => openNewTab(urls.external.openFoods)}
+              color={ButtonColor.Red}
+              fontSize={fontSize.small}>
               Zgłoś produkt do bazy
             </SecondaryButton>
           </MissingProductInfo>
@@ -149,4 +147,4 @@ export default connect(
     clearResults: searchDispatcher.clearResults,
     selectProduct: searchDispatcher.selectProduct,
   }
-)(MainPage);
+)(HomePage);

@@ -5,6 +5,7 @@ import ErrorBoundary from '../../utils/error-boundary';
 import { Device, fontSize, color, margin } from '../../styles/theme';
 import { TitleSection } from '../../styles/GlobalStyle.css';
 import { GooglePlayLink, AppStoreLink } from '../../components/links';
+import { urls } from '../../utils/browser/urls';
 
 const Container = styled.div`
   display: flex;
@@ -74,7 +75,7 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ isLoading, onSearc
           <span>Wpisz tekst, podyktuj lub zeskanuj kod</span>
           <span>
             Nie znasz kodu?&nbsp;
-            <a target="blank" href="https://pl.openfoodfacts.org/">
+            <a target="blank" href={urls.external.openFoods.href}>
               Znajdź go w bazie
             </a>
           </span>

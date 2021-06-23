@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { PolaLogo } from '../PolaLogo';
+import LogoColor from '../../assets/logo/pola-color.svg';
 import { Device, mobileHeaderHeight, padding, color } from '../../styles/theme';
+import { classNames } from '../../utils/class-names';
 
 const HamburgerLayout = styled.nav`
   background: ${color.background.white};
@@ -19,7 +20,6 @@ const HamburgerLayout = styled.nav`
   .nav-items {
     display: flex;
     flex-flow: column;
-    gap: ${padding.normal};
     align-items: center;
     justify-content: center;
     .nav-item {
@@ -46,16 +46,20 @@ const Items = styled.div`
   height: 0;
   transition: height 0.5s;
   &.open {
-    height: 400px;
+    height: 21rem;
   }
 `;
 
-interface IHamburgerMenu {}
+interface IHamburgerMenu {
+  expanded: boolean;
+  onExpand: (expanded: boolean) => void;
+}
 
-export const HamburgerMenu: React.FC<IHamburgerMenu> = ({ children }) => {
+export const HamburgerMenu: React.FC<IHamburgerMenu> = ({ expanded, children, onExpand }) => {
   const itemsRef = createRef<HTMLDivElement>();
 
   const handleOpen = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    onExpand(!expanded);
     const items = itemsRef.current;
     items?.classList.toggle('open');
   };
@@ -63,10 +67,10 @@ export const HamburgerMenu: React.FC<IHamburgerMenu> = ({ children }) => {
   return (
     <HamburgerLayout className="hamburger-menu">
       <Navbar>
-        <PolaLogo />
+        <img width="auto" height="100%" src={LogoColor} />
         <FontAwesomeIcon icon={faBars} onClick={handleOpen} className="menu-icon" />
       </Navbar>
-      <Items ref={itemsRef} className="nav-items">
+      <Items ref={itemsRef} className={classNames('nav-items', ['open', expanded])}>
         {children}
       </Items>
     </HamburgerLayout>
