@@ -6,7 +6,7 @@ import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
 import { fontSize, lineHeight } from '../../styles/theme';
 import styled from 'styled-components';
-import { State } from '../../state/search/search-reducer';
+import { SearchStateName } from '../../state/search/search-reducer';
 
 const Header = styled.header`
   font-size: ${fontSize.big};
@@ -15,13 +15,13 @@ const Header = styled.header`
 `;
 
 interface ISearchResultsHeader {
-  searchState: State;
+  searchState: SearchStateName;
   phrase: string;
   searchResults?: IProductData[];
 }
 
 export const SearchResultsHeader: React.FC<ISearchResultsHeader> = ({ searchState, phrase, searchResults }) => {
-  const isLoading = searchState === State.LOADING;
+  const isLoading = searchState === SearchStateName.LOADING;
   const emptyResults = !searchResults || searchResults.length < 1;
 
   let header: React.ReactNode;

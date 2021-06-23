@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
 import SEO from '../layout/seo';
-import { SearchContainer } from '../search/form/SearchForm';
+import { SearchForm } from '../search/form/SearchForm';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
 import { Device, pageWidth, padding, margin, color, fontSize } from '../styles/theme';
@@ -23,6 +23,7 @@ import { ButtonColor } from '../styles/button-theme';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
 import { urls } from '../utils/browser/urls';
 import { openNewTab } from '../utils/browser';
+import { SearchStateName } from '../state/search/search-reducer';
 
 const Content = styled.div`
   width: 100%;
@@ -86,6 +87,7 @@ const HomePage = (props: IHomePage) => {
   };
 
   const emptyResults = !searchResults || searchResults.length < 1;
+  const isLoading = searchState === SearchStateName.LOADING;
 
   return (
     <PageLayout>
@@ -95,7 +97,7 @@ const HomePage = (props: IHomePage) => {
           <ResponsiveImage imageSrc={'background.png'} />
         </Background>
         <Content>
-          <SearchContainer onSearch={props.invokeSearch} />
+          <SearchForm onSearch={props.invokeSearch} />
         </Content>
       </PageSection>
       <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />

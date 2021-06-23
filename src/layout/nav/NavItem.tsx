@@ -18,11 +18,8 @@ const Item = styled.div<{ selected: boolean }>`
     cursor: ${(props) => (props.selected ? 'default' : 'pointer')};
     text-decoration: none;
 
-    @media ${Device.phone} {
+    @media ${Device.mobile} {
       margin-top: 0;
-    }
-    @media ${Device.desktop} {
-      margin-top: ${margin.big};
     }
   }
 `;
@@ -36,11 +33,8 @@ const Cricle = styled.div`
   position: absolute;
   top: 0.5rem;
 
-  @media ${Device.phone} {
+  @media ${Device.mobile} {
     display: none;
-  }
-  @media ${Device.desktop} {
-    display: block;
   }
 `;
 

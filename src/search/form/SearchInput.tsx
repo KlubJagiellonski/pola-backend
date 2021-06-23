@@ -7,12 +7,22 @@ import { Device, fontSize, color, padding, margin } from '../../styles/theme';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
 
+const FormSearch = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media ${Device.mobile} {
+    flex-direction: column;
+  }
+`;
+
 const InputSection = styled.div`
-  padding: 5px 100px 5px 10px;
+  padding: 0 1em 0 1em;
   position: relative;
-  width: 320px;
+  width: 24em;
+  height: 2.5em;
   background-color: white;
-  border-radius: 20px;
+  border-radius: 3em;
 
   @media ${Device.mobile} {
     width: 100%;
@@ -25,8 +35,9 @@ const InputSection = styled.div`
 
 const InputText = styled.input`
   border: none;
-  font-size: ${fontSize.small};
+  font-size: ${fontSize.normal};
   width: 100%;
+  height: 100%;
 
   &:focus,
   &:active {
@@ -45,11 +56,7 @@ const InputIconSection = styled.div`
   padding: ${padding.tiny} 0;
 `;
 
-interface IInputIcon {
-  imagePath: string;
-}
-
-const InputIcon = styled.div<IInputIcon>`
+const InputIcon = styled.div<{ imagePath: string }>`
   border-radius: 50%;
   background-color: ${color.background.red};
   height: 30px;
@@ -72,15 +79,6 @@ const SubmitButton = styled(SecondaryButton)`
     margin-left: 0;
     margin-top: 5px;
     width: 100%;
-  }
-`;
-
-const FormSearch = styled.div`
-  display: flex;
-  align-items: center;
-
-  @media ${Device.mobile} {
-    flex-direction: column;
   }
 `;
 

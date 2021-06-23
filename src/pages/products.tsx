@@ -17,7 +17,7 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { ButtonColor } from '../styles/button-theme';
 import { Spinner } from '../components/spinner';
 import { navigate } from 'gatsby';
-import { State } from '../state/search/search-reducer';
+import { SearchStateName } from '../state/search/search-reducer';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
 import { navigateTo } from '../utils/browser';
 import { urls } from '../utils/browser/urls';
@@ -27,7 +27,7 @@ interface IProductsPage {
   phrase: string;
   searchResults: IProductData[];
   token?: string;
-  searchState: State;
+  searchState: SearchStateName;
   articles?: IArticle[];
   friends?: IFriend[];
 
@@ -52,14 +52,14 @@ const ProductsPage = (props: IProductsPage) => {
   }
 
   const loadButton =
-    searchState === State.LOADING ? (
+    searchState === SearchStateName.LOADING ? (
       <PrimaryButton
         disabled={true}
         icon={<Spinner styles={{ size: 20, color: color.button.white }} />}
         color={ButtonColor.Red}
       />
     ) : (
-      <PrimaryButton label="Doładuj" color={ButtonColor.Red} onClick={onLoadMore} />
+      <PrimaryButton label="Wczytaj więcej" color={ButtonColor.Red} onClick={onLoadMore} />
     );
 
   return (

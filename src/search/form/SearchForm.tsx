@@ -57,16 +57,26 @@ const Text = styled.div`
 const SearchWrapper = styled.div`
   margin-top: ${margin.normal};
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column;
   gap: ${margin.small};
+
+  @media ${Device.desktop} {
+    flex-flow: row nowrap;
+  }
+
+  .mobile-apps {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: ${margin.small};
+    justify-content: space-between;
+  }
 `;
 
-interface ISearchContainer {
-  isLoading?: boolean;
+interface ISearchForm {
   onSearch: (phrase: string) => void;
 }
 
-export const SearchContainer: React.FC<ISearchContainer> = ({ isLoading, onSearch }) => {
+export const SearchForm: React.FC<ISearchForm> = ({ onSearch }) => {
   return (
     <ErrorBoundary scope="search-container">
       <Container>
@@ -81,9 +91,11 @@ export const SearchContainer: React.FC<ISearchContainer> = ({ isLoading, onSearc
           </span>
         </Text>
         <SearchWrapper>
-          <SearchInput onSearch={onSearch} isLoading={isLoading} />
-          <AppStoreLink height={36} />
-          <GooglePlayLink height={36} />
+          <SearchInput onSearch={onSearch} />
+          <div className="mobile-apps">
+            <AppStoreLink height={44} />
+            <GooglePlayLink height={44} />
+          </div>
         </SearchWrapper>
       </Container>
     </ErrorBoundary>

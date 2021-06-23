@@ -4,7 +4,7 @@ import * as actions from './search-actions';
 import { IAction, IActionReducer } from '../types';
 import { IProductData, IProductEAN } from '../../domain/products';
 
-export enum State {
+export enum SearchStateName {
   INITIAL = 'initial',
   LOADING = 'loading',
   LOADED = 'loaded',
@@ -13,22 +13,22 @@ export enum State {
 
 export type SearchState =
   | {
-      stateName: State.INITIAL;
+      stateName: SearchStateName.INITIAL;
     }
   | {
-      stateName: State.LOADING;
+      stateName: SearchStateName.LOADING;
       phrase: string;
       error?: unknown;
     }
   | {
-      stateName: State.LOADED;
+      stateName: SearchStateName.LOADED;
       phrase: string;
       token: string;
       products: IProductData[];
       error?: unknown;
     }
   | {
-      stateName: State.SELECTED;
+      stateName: SearchStateName.SELECTED;
       phrase: string;
       token: string;
       products: IProductData[];
@@ -37,14 +37,14 @@ export type SearchState =
     };
 
 const initialState: SearchState = {
-  stateName: State.INITIAL,
+  stateName: SearchStateName.INITIAL,
 };
 
 const reducers: IActionReducer<SearchState> = {
   [actionTypes.INVOKE_SEARCH]: (state: SearchState, action: ReturnType<typeof actions.InvokePhrase>) => {
     return {
       ...state,
-      stateName: State.LOADING,
+      stateName: SearchStateName.LOADING,
       phrase: action.payload.phrase,
       token: undefined,
     };
@@ -53,7 +53,7 @@ const reducers: IActionReducer<SearchState> = {
   [actionTypes.LOAD_RESULTS]: (state: SearchState, action: ReturnType<typeof actions.LoadResults>) => {
     return {
       ...state,
-      stateName: State.LOADED,
+      stateName: SearchStateName.LOADED,
       phrase: action.payload.phrase,
       token: action.payload.token,
       products: action.payload.products,
@@ -74,7 +74,7 @@ const reducers: IActionReducer<SearchState> = {
   [actionTypes.SHOW_PRODUCT_DETAILS]: (state: SearchState, action: ReturnType<typeof actions.ShowProductDetails>) => {
     return {
       ...state,
-      stateName: State.SELECTED,
+      stateName: SearchStateName.SELECTED,
       selectedProduct: action.payload.product,
     };
   },
@@ -82,7 +82,7 @@ const reducers: IActionReducer<SearchState> = {
   [actionTypes.UNSELECT_PRODUCT]: (state: SearchState, action: ReturnType<typeof actions.ShowProductDetails>) => {
     return {
       ...state,
-      stateName: State.LOADED,
+      stateName: SearchStateName.LOADED,
       selectedProduct: undefined,
     };
   },

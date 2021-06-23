@@ -1,11 +1,12 @@
 import React from 'react';
+import { urls } from '../../utils/browser/urls';
 
 interface IIconLink {
   height?: number;
 }
 
 export const GooglePlayLink: React.FC<IIconLink> = ({ height = 'auto' }) => (
-  <a href="https://play.google.com/store/apps/details?id=pl.pola_app">
+  <a href={urls.external.polaGooglePlay.href}>
     <img
       height={height}
       src="https://pola-app.s3.amazonaws.com/images/badge-googleplay.png"
@@ -15,7 +16,7 @@ export const GooglePlayLink: React.FC<IIconLink> = ({ height = 'auto' }) => (
 );
 
 export const AppStoreLink: React.FC<IIconLink> = ({ height = 'auto' }) => (
-  <a href="https://itunes.apple.com/us/app/pola.-zabierz-ja-na-zakupy/id1038401148?ls=1&amp;mt=8">
+  <a href={urls.external.polaAppStore.href}>
     <img
       height={height}
       src="https://pola-app.s3.amazonaws.com/images/badge-appstore.png"
