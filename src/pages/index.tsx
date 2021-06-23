@@ -51,7 +51,7 @@ const Background = styled.div<{ img?: string }>`
   }
 
   @media ${Device.mobile} {
-    left: 20rem;
+    opacity: 0.2;
   }
 `;
 
@@ -65,11 +65,12 @@ const MissingProductInfo = styled.div`
 `;
 
 interface IHomePage {
-  location: Location;
+  searchState: SearchStateName;
+
+  location?: Location;
   phrase?: string;
   searchResults?: IProductData[];
   token?: string;
-  searchState: SearchStateName;
   articles?: IArticle[];
   friends?: IFriend[];
 
@@ -84,7 +85,9 @@ const HomePage = (props: IHomePage) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(LoadBrowserLocation(location));
+    if (location) {
+      dispatch(LoadBrowserLocation(location));
+    }
   }, []);
 
   const handleCancel = () => {
@@ -140,11 +143,12 @@ const HomePage = (props: IHomePage) => {
 
 export default connect(
   (state: IPolaState) => ({
+    searchState: state.search.stateName,
+
     location: state.app.location,
     phrase: state.search.phrase,
     searchResults: state.search.products,
     token: state.search.token,
-    searchState: state.search.stateName,
     articles: state.articles.data,
     friends: state.friends.data,
   }),

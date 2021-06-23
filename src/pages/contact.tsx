@@ -8,7 +8,7 @@ import { LoadBrowserLocation } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
 
 interface IContactPage {
-  location: Location;
+  location?: Location;
 }
 
 const ContactPage = (props: IContactPage) => {
@@ -16,7 +16,9 @@ const ContactPage = (props: IContactPage) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(LoadBrowserLocation(location));
+    if (location) {
+      dispatch(LoadBrowserLocation(location));
+    }
   }, []);
 
   return (

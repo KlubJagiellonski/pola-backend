@@ -1,6 +1,6 @@
 import { navigate } from 'gatsby';
 
-declare const window: any;
+declare let window: any;
 
 /**
  * Redirects to website page

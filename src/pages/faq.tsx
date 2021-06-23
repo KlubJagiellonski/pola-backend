@@ -8,7 +8,7 @@ import { LoadBrowserLocation } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
 
 interface IFAQPage {
-  location: Location;
+  location?: Location;
 }
 
 const FAQPage = (props: IFAQPage) => {
@@ -16,7 +16,9 @@ const FAQPage = (props: IFAQPage) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(LoadBrowserLocation(location));
+    if (location) {
+      dispatch(LoadBrowserLocation(location));
+    }
   }, []);
 
   return (

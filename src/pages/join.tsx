@@ -8,7 +8,7 @@ import { LoadBrowserLocation } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
 
 interface ITeamPage {
-  location: Location;
+  location?: Location;
 }
 
 const TeamPage = (props: ITeamPage) => {
@@ -16,7 +16,9 @@ const TeamPage = (props: ITeamPage) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(LoadBrowserLocation(location));
+    if (location) {
+      dispatch(LoadBrowserLocation(location));
+    }
   }, []);
 
   return (

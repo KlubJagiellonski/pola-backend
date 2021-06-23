@@ -26,11 +26,12 @@ const Container = styled.div`
 
 const Title = styled(TitleSection)`
   font-size: ${fontSize.big};
-  text-align: center;
+  text-align: left;
   margin: 0;
 
   @media ${Device.mobile} {
     width: 100%;
+    text-align: center;
     margin-bottom: ${margin.normal};
   }
 `;
@@ -60,26 +61,27 @@ const SearchWrapper = styled.div`
   margin-top: ${margin.normal};
   display: flex;
   flex-flow: column;
-  gap: ${margin.small};
+  gap: ${margin.normal};
   width: 100%;
-  max-width: 30rem;
 
   @media ${Device.desktop} {
     flex-flow: row nowrap;
     justify-content: center;
+    width: 42rem;
+  }
+  @media ${Device.mobile} {
+    max-width: 30rem;
   }
 
   .mobile-apps {
     width: 100%;
-    max-width: 20rem;
-    background-color: red;
     display: flex;
     flex-flow: row nowrap;
-    gap: ${margin.small};
+    gap: ${margin.normal};
 
     @media ${Device.mobile} {
       margin-top: ${margin.normal};
-      justify-content: space-around;
+      justify-content: space-evenly;
       gap: 0;
     }
   }

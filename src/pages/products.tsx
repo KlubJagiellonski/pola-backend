@@ -23,7 +23,7 @@ import { navigateTo } from '../utils/browser';
 import { urls } from '../utils/browser/urls';
 
 interface IProductsPage {
-  location: Location;
+  location?: Location;
   phrase: string;
   searchResults: IProductData[];
   token?: string;
@@ -42,7 +42,9 @@ const ProductsPage = (props: IProductsPage) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(LoadBrowserLocation(location));
+    if (location) {
+      dispatch(LoadBrowserLocation(location));
+    }
   }, []);
 
   const emptyResults = !searchResults || searchResults.length < 1;

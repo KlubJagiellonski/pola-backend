@@ -8,7 +8,7 @@ import { LoadBrowserLocation } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
 
 interface IFriendsPage {
-  location: Location;
+  location?: Location;
 }
 
 const FriendsPage = (props: IFriendsPage) => {
@@ -16,7 +16,9 @@ const FriendsPage = (props: IFriendsPage) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(LoadBrowserLocation(location));
+    if (location) {
+      dispatch(LoadBrowserLocation(location));
+    }
   }, []);
 
   return (

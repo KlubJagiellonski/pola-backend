@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import debounce from 'lodash.debounce';
 
 import { ButtonColor } from '../../styles/button-theme';
 import { SecondaryButton } from '../../components/buttons/SecondaryButton';
 import { Device, fontSize, color, padding, margin, px } from '../../styles/theme';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
-import debounce from 'lodash.debounce';
 
 const FormSearch = styled.div`
   display: flex;
@@ -115,7 +115,7 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
     <FormSearch>
       <InputSection>
         <InputText
-          placeholder="nazwa produktu lub kod EAN"
+          placeholder="nazwa produktu / producent / kod EAN"
           type="text"
           onChange={handlePhraseChange}
           onKeyDown={handleEnter}
