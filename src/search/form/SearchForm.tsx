@@ -26,6 +26,7 @@ const Container = styled.div`
 
 const Title = styled(TitleSection)`
   font-size: ${fontSize.big};
+  line-height: ${lineHeight.big};
   text-align: left;
   margin: 0;
 
@@ -43,7 +44,7 @@ const Text = styled.div`
   padding: 0;
   font-size: ${fontSize.normal};
   text-align: left;
-  line-height: ${lineHeight.normal};
+  line-height: ${lineHeight.big};
   color: ${color.text.secondary};
 
   @media ${Device.mobile} {
@@ -67,7 +68,7 @@ const SearchWrapper = styled.div`
   @media ${Device.desktop} {
     flex-flow: row nowrap;
     justify-content: center;
-    width: 42rem;
+    width: 47rem;
   }
   @media ${Device.mobile} {
     max-width: 30rem;

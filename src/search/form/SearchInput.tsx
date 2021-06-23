@@ -21,7 +21,7 @@ const InputSection = styled.div`
   padding: 0 1em 0 1em;
   position: relative;
   width: 100%;
-  min-width: 24em;
+  min-width: 28em;
   height: 2.5em;
   background-color: white;
   border-radius: 3em;
@@ -30,7 +30,8 @@ const InputSection = styled.div`
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding-right: ${padding.huge};
+    padding-right: ${padding.normal};
+    min-width: 24em;
   }
 `;
 
