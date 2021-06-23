@@ -18,7 +18,6 @@ export const TitleSection = styled.p`
   margin-bottom: 10px;
   padding: 0;
   font-size: ${fontSize.normal};
-  font-family: 'Ubuntu';
   font-weight: 700;
   line-height: 1rem;
   color: ${color.text.primary};

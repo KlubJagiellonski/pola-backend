@@ -7,6 +7,7 @@ export const color = {
     black: '#000000',
     red: '#D8152F',
     white: '#ffffff',
+    search: '#E5E5E5',
   },
   text: {
     primary: '#333333',

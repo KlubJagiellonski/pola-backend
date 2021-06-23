@@ -57,7 +57,9 @@ export const PageHeader = (props: IPageHeader) => {
     { type: PageType.TEAM, label: 'Dołącz do zespołu', url: urls.pola.team },
     { type: PageType.CONTACT, label: 'Kontakt', url: urls.pola.contact },
   ];
-  const navItems = items.map((item) => <NavItem data={item} activePage={props.activePage} onClick={props.onSelect} />);
+  const navItems = items.map((item) => (
+    <NavItem key={item.type} data={item} activePage={props.activePage} onClick={props.onSelect} />
+  ));
 
   return (
     <HeaderContainer>

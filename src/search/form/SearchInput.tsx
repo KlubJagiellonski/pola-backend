@@ -3,9 +3,10 @@ import styled from 'styled-components';
 
 import { ButtonColor } from '../../styles/button-theme';
 import { SecondaryButton } from '../../components/buttons/SecondaryButton';
-import { Device, fontSize, color, padding, margin } from '../../styles/theme';
+import { Device, fontSize, color, padding, margin, px } from '../../styles/theme';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
+import debounce from 'lodash.debounce';
 
 const FormSearch = styled.div`
   display: flex;
@@ -19,17 +20,17 @@ const FormSearch = styled.div`
 const InputSection = styled.div`
   padding: 0 1em 0 1em;
   position: relative;
-  width: 24em;
+  width: 100%;
+  min-width: 24em;
   height: 2.5em;
   background-color: white;
   border-radius: 3em;
 
   @media ${Device.mobile} {
-    width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 5px 70px 5px 5px;
+    padding-right: ${padding.huge};
   }
 `;
 
@@ -56,11 +57,11 @@ const InputIconSection = styled.div`
   padding: ${padding.tiny} 0;
 `;
 
-const InputIcon = styled.div<{ imagePath: string }>`
+const InputIcon = styled.div<{ size: number; imagePath: string }>`
   border-radius: 50%;
   background-color: ${color.background.red};
-  height: 30px;
-  width: 30px;
+  height: ${(props) => px(props.size)};
+  width: ${(props) => px(props.size)};
   margin-right: ${margin.tiny};
   display: flex;
   align-items: center;
@@ -83,20 +84,30 @@ const SubmitButton = styled(SecondaryButton)`
 `;
 
 interface ISearchInput {
-  isLoading?: boolean;
+  disabled: boolean;
   onSearch: (phrase: string) => void;
 }
 
-export const SearchInput: React.FC<ISearchInput> = ({ isLoading, onSearch }) => {
+export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
   const showSubmitButton = false;
 
-  const handlePhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => setPhrase(e.currentTarget.value);
+  const onPhraseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.persist();
+    setPhrase(e.currentTarget.value);
+    onSearch(e.currentTarget.value);
+  };
+
+  const handlePhraseChange = debounce(onPhraseChange, 500, {
+    leading: false,
+    trailing: true,
+  });
+
   const handleSearch = () => onSearch(phrase);
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
-      handleSearch();
+      onSearch(phrase);
     }
   };
 
@@ -108,11 +119,11 @@ export const SearchInput: React.FC<ISearchInput> = ({ isLoading, onSearch }) => 
           type="text"
           onChange={handlePhraseChange}
           onKeyDown={handleEnter}
-          disabled={isLoading}
+          disabled={disabled}
         />
         <InputIconSection>
-          <InputIcon imagePath={Kod} />
-          <InputIcon imagePath={Microphone} />
+          <InputIcon imagePath={Kod} size={36} />
+          <InputIcon imagePath={Microphone} size={36} />
         </InputIconSection>
       </InputSection>
       {showSubmitButton && (

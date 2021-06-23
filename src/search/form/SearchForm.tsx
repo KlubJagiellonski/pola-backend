@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { SearchInput } from './SearchInput';
 import ErrorBoundary from '../../utils/error-boundary';
-import { Device, fontSize, color, margin } from '../../styles/theme';
+import { Device, fontSize, color, margin, lineHeight } from '../../styles/theme';
 import { TitleSection } from '../../styles/GlobalStyle.css';
 import { GooglePlayLink, AppStoreLink } from '../../components/links';
 import { urls } from '../../utils/browser/urls';
@@ -11,8 +11,10 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  padding: 260px 0 70px 0;
+  padding-top: 260px;
+  padding-bottom: 70px;
   position: relative;
+  text-align: left;
 
   @media ${Device.mobile} {
     padding: 100px 0 20px 0;
@@ -23,30 +25,30 @@ const Container = styled.div`
 `;
 
 const Title = styled(TitleSection)`
-  width: 20%;
-  float: left;
+  font-size: ${fontSize.big};
   text-align: center;
   margin: 0;
 
   @media ${Device.mobile} {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: ${margin.normal};
   }
 `;
 
 const Text = styled.div`
   display: flex;
   flex-flow: column;
-  margin: 10px 0;
+  margin: ${margin.small} 0;
   padding: 0;
-  font-family: 'Roboto';
-  font-size: ${fontSize.small};
+  font-size: ${fontSize.normal};
   text-align: left;
-  line-height: 1rem;
+  line-height: ${lineHeight.normal};
   color: ${color.text.secondary};
 
   @media ${Device.mobile} {
-    font-size: 12px;
+    text-align: center;
+    font-size: ${fontSize.small};
+    line-height: ${lineHeight.normal};
   }
 
   a {
@@ -59,24 +61,36 @@ const SearchWrapper = styled.div`
   display: flex;
   flex-flow: column;
   gap: ${margin.small};
+  width: 100%;
+  max-width: 30rem;
 
   @media ${Device.desktop} {
     flex-flow: row nowrap;
+    justify-content: center;
   }
 
   .mobile-apps {
+    width: 100%;
+    max-width: 20rem;
+    background-color: red;
     display: flex;
     flex-flow: row nowrap;
     gap: ${margin.small};
-    justify-content: space-between;
+
+    @media ${Device.mobile} {
+      margin-top: ${margin.normal};
+      justify-content: space-around;
+      gap: 0;
+    }
   }
 `;
 
 interface ISearchForm {
+  isLoading: boolean;
   onSearch: (phrase: string) => void;
 }
 
-export const SearchForm: React.FC<ISearchForm> = ({ onSearch }) => {
+export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onSearch }) => {
   return (
     <ErrorBoundary scope="search-container">
       <Container>
@@ -91,10 +105,10 @@ export const SearchForm: React.FC<ISearchForm> = ({ onSearch }) => {
           </span>
         </Text>
         <SearchWrapper>
-          <SearchInput onSearch={onSearch} />
+          <SearchInput onSearch={onSearch} disabled={isLoading} />
           <div className="mobile-apps">
-            <AppStoreLink height={44} />
-            <GooglePlayLink height={44} />
+            <AppStoreLink height={48} />
+            <GooglePlayLink height={48} />
           </div>
         </SearchWrapper>
       </Container>

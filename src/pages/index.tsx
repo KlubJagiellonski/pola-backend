@@ -28,6 +28,7 @@ import { SearchStateName } from '../state/search/search-reducer';
 const Content = styled.div`
   width: 100%;
   margin: 0 auto;
+
   @media ${Device.mobile} {
     padding: ${padding.normal};
   }
@@ -48,6 +49,10 @@ const Background = styled.div<{ img?: string }>`
     width: 100%;
     height: 100%;
   }
+
+  @media ${Device.mobile} {
+    left: 20rem;
+  }
 `;
 
 const MissingProductInfo = styled.div`
@@ -61,10 +66,10 @@ const MissingProductInfo = styled.div`
 
 interface IHomePage {
   location: Location;
-  phrase: string;
+  phrase?: string;
   searchResults?: IProductData[];
   token?: string;
-  searchState: string;
+  searchState: SearchStateName;
   articles?: IArticle[];
   friends?: IFriend[];
 
@@ -92,12 +97,12 @@ const HomePage = (props: IHomePage) => {
   return (
     <PageLayout>
       <SEO title="Pola Web | Strona główna" />
-      <PageSection size="full" styles={{ backgroundColor: color.background.primary }}>
+      <PageSection size="full" styles={{ backgroundColor: color.background.search }}>
         <Background>
           <ResponsiveImage imageSrc={'background.png'} />
         </Background>
         <Content>
-          <SearchForm onSearch={props.invokeSearch} />
+          <SearchForm onSearch={props.invokeSearch} isLoading={isLoading} />
         </Content>
       </PageSection>
       <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />
