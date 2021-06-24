@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { padding } from '../../styles/theme';
 
 const CounterText = styled.p`
-  padding: ${padding.small} 0;
   font-weight: bold;
 `;
 

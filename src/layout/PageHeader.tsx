@@ -43,7 +43,6 @@ interface IPageHeader {
   activePage: PageType;
   isMenuExpanded: boolean;
 
-  onSelect: (type: PageType) => void;
   onExpand: (expanded: boolean) => void;
 }
 
@@ -58,9 +57,7 @@ export const PageHeader = (props: IPageHeader) => {
     { type: PageType.FAQ, label: 'FAQ', url: urls.pola.faq },
     { type: PageType.CONTACT, label: 'Kontakt', url: urls.pola.contact },
   ];
-  const navItems = items.map((item) => (
-    <NavItem key={item.type} data={item} activePage={props.activePage} onClick={props.onSelect} />
-  ));
+  const navItems = items.map((item) => <NavItem key={item.type} data={item} activePage={props.activePage} />);
 
   return (
     <HeaderContainer>

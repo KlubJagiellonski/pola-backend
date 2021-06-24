@@ -7,12 +7,13 @@ import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
 import { fontSize, lineHeight, margin } from '../../styles/theme';
 import { SearchStateName } from '../../state/search/search-reducer';
+import { PageType } from '../../domain/generic';
 
 const Header = styled.header`
   font-size: ${fontSize.big};
   font-weight: bold;
   line-height: ${lineHeight.normal};
-  margin-top: ${margin.normal};
+  margin: ${margin.normal} 0 ${margin.small} 0;
 `;
 
 interface ISearchResultsHeader {
@@ -20,6 +21,8 @@ interface ISearchResultsHeader {
   phrase: string;
   searchResults?: IProductData[];
   resultsUrl?: string;
+
+  setActivePage?: (type: PageType) => void;
 }
 
 export const SearchResultsHeader: React.FC<ISearchResultsHeader> = ({
@@ -27,6 +30,7 @@ export const SearchResultsHeader: React.FC<ISearchResultsHeader> = ({
   phrase,
   searchResults,
   resultsUrl,
+  setActivePage,
 }) => {
   const isLoading = searchState === SearchStateName.LOADING;
   const emptyResults = !searchResults || searchResults.length < 1;
@@ -45,11 +49,17 @@ export const SearchResultsHeader: React.FC<ISearchResultsHeader> = ({
   }
 
   if (!header) {
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (setActivePage) {
+        setActivePage(PageType.PRODUCTS);
+      }
+    };
+
     header = (
       <>
         <Header>Uzyskano</Header>
         {resultsUrl ? (
-          <Link to={resultsUrl}>
+          <Link to={resultsUrl} onClick={handleClick}>
             <ProductCounter phrase={phrase} amount={searchResults?.length || 0} />
           </Link>
         ) : (

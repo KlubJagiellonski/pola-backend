@@ -7,7 +7,7 @@ import { PageSection } from '../layout/PageSection';
 import { color } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
-import { LoadBrowserLocation } from '../state/app/app-actions';
+import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { IProductData } from '../domain/products';
 import { IArticle } from '../domain/articles';
 import { IFriend } from '../domain/friends';
@@ -20,6 +20,7 @@ import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader'
 import { navigateTo } from '../utils/browser';
 import { urls } from '../utils/browser/urls';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
+import { PageType } from '../domain/generic';
 
 interface IProductsPage {
   location?: Location;
@@ -43,6 +44,7 @@ const ProductsPage = (props: IProductsPage) => {
   React.useEffect(() => {
     if (location) {
       dispatch(LoadBrowserLocation(location));
+      dispatch(SelectActivePage(PageType.PRODUCTS));
     }
   }, []);
 

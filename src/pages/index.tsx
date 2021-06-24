@@ -10,7 +10,7 @@ import { PageSection } from '../layout/PageSection';
 import { Device, pageWidth, padding, margin, color, fontSize } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
-import { LoadBrowserLocation } from '../state/app/app-actions';
+import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { IProductData } from '../domain/products';
 import { IArticle } from '../domain/articles';
 import { ResponsiveImage } from '../components/responsive-image';
@@ -24,6 +24,7 @@ import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader'
 import { urls } from '../utils/browser/urls';
 import { openNewTab } from '../utils/browser';
 import { SearchStateName } from '../state/search/search-reducer';
+import { PageType } from '../domain/generic';
 
 const Content = styled.div`
   width: 100%;
@@ -87,6 +88,7 @@ const HomePage = (props: IHomePage) => {
   React.useEffect(() => {
     if (location) {
       dispatch(LoadBrowserLocation(location));
+      dispatch(SelectActivePage(PageType.HOME));
     }
   }, []);
 

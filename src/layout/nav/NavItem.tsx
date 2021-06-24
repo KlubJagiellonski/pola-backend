@@ -41,17 +41,13 @@ const Cricle = styled.div`
 interface INavItem {
   data: PageLinkData;
   activePage: PageType;
-  onClick: (type: PageType) => void;
 }
 
-export const NavItem: React.FC<INavItem> = ({ data, activePage, onClick }) => {
+export const NavItem: React.FC<INavItem> = ({ data, activePage }) => {
   const selected = data.type === activePage;
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    onClick(data.type);
-  };
 
   return (
-    <Item className={data.type} selected={selected} onClick={handleClick}>
+    <Item className={data.type} selected={selected}>
       <Link to={data.url}>{data.label}</Link>
       {selected && <Cricle />}
     </Item>

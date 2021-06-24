@@ -4,8 +4,9 @@ import { connect, useDispatch } from 'react-redux';
 import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
 import { IPolaState } from '../state/types';
-import { LoadBrowserLocation } from '../state/app/app-actions';
+import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
+import { PageType } from '../domain/generic';
 
 interface ISupportPage {
   location?: Location;
@@ -18,6 +19,7 @@ const SupportPage = (props: ISupportPage) => {
   React.useEffect(() => {
     if (location) {
       dispatch(LoadBrowserLocation(location));
+      dispatch(SelectActivePage(PageType.SUPPORT));
     }
   }, []);
 

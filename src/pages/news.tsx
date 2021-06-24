@@ -6,7 +6,8 @@ import { IArticle } from '../domain/articles';
 import { connect, useDispatch } from 'react-redux';
 import ArticlesList from '../components/articles/ArticlesList';
 import { IPolaState } from '../state/types';
-import { LoadBrowserLocation } from '../state/app/app-actions';
+import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
+import { PageType } from '../domain/generic';
 
 interface NewsPage {
   location?: Location;
@@ -19,6 +20,7 @@ const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
   React.useEffect(() => {
     if (location) {
       dispatch(LoadBrowserLocation(location));
+      dispatch(SelectActivePage(PageType.NEWS));
     }
   }, []);
 

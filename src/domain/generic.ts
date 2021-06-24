@@ -17,6 +17,8 @@ export enum PageType {
   TEAM = 'team',
   FAQ = 'faq',
   CONTACT = 'contact',
+  PRODUCTS = 'products',
+  ERROR_404 = '404',
 }
 
 export interface PageLinkData {

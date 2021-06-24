@@ -55,10 +55,10 @@ const Field = styled.label<CheckboxStyles & { disabled?: boolean }>`
     content: '';
     position: absolute;
     display: none;
-    left: 7px;
-    top: 3px;
-    width: 10px;
-    height: 15px;
+    left: 8px;
+    top: 0px;
+    width: 5px;
+    height: 16px;
     border: solid ${(props) => props.shevronColor || color.background.white};
     border-width: 0 4px 4px 0;
     -webkit-transform: rotate(45deg);
