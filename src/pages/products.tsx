@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import { PageLayout } from '../layout/PageLayout';
-import SEOMetadata from '../layout/SEOMetadata';
+import SEOMetadata from '../utils/browser/SEOMetadata';
 import { PageSection } from '../layout/PageSection';
 import { color } from '../styles/theme';
 import { IPolaState } from '../state/types';

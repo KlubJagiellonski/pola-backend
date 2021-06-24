@@ -16,10 +16,11 @@ const ModalLayout = styled.div`
 const ModalContainer = styled.div`
   background-color: ${color.background.white};
   position: absolute;
+  overflow-x: hidden;
+  overflow-y: scroll;
   display: flex;
   flex-flow: column;
-  height: 75vh;
-  //min-height: 30rem;
+  height: 85vh;
   z-index: 1;
   max-width: 800px;
   box-sizing: border-box;
@@ -40,11 +41,9 @@ const ModalContainer = styled.div`
 
   @media ${Device.phone} {
     width: calc(100% - 2 * ${padding.small});
-    //padding: ${padding.small};
   }
   @media ${Device.desktop} {
     width: calc(100% - 2 * ${padding.big});
-    //padding: ${padding.normal};
   }
 `;
 

@@ -2,24 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { IProductEAN } from '../../domain/products';
 import { Modal } from '../../layout/modal/Modal';
-import { color, padding } from '../../styles/theme';
+import { color, fontSize, padding } from '../../styles/theme';
 import { ButtonColor } from '../../styles/button-theme';
 import { ClickOutside } from '../../components/ClickOutside';
 import { ProductModalAction } from './ProductModalAction';
-import { ProductScore } from '../ProductScore';
-
-const ProductDetails = styled.div`
-  padding: ${padding.small} ${padding.normal};
-
-  ul {
-    list-style: none;
-    padding: 0;
-
-    li {
-      margin-bottom: ${padding.small};
-    }
-  }
-`;
+import { ScoreBar } from '../ScoreBar';
+import { Checkbox } from '../../components/checkbox';
+import { openNewTab } from '../../utils/browser';
+import { urls } from '../../utils/browser/urls';
+import { ProductDetails } from './ProductDetails';
 
 const AppDownload = styled.div`
   h4 {
@@ -46,29 +37,19 @@ interface IProductModal {
 }
 
 export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
-  const reportCallbackMock = () => true;
-  const friendsCallbackMock = () => true;
-  const downloadCallbackMock = () => true;
+  const reportCallbackMock = () => {
+    openNewTab(urls.external.openFoods);
+  };
+  const downloadCallbackMock = () => {
+    openNewTab(urls.external.polaGooglePlay);
+  };
 
   return (
     <ClickOutside clickOutsideHandler={onClose}>
       <Modal title={`EAN: ${product.data?.code}`} onClose={onClose}>
-        <ProductDetails>
-          <h3>{product.name}</h3>
-          <ul>
-            {product.data?.company && <li>{product.data?.company?.name}</li>}
-            {product.data?.brand && <li>{product.data?.brand?.name}</li>}
-            <li>
-              <span>Punkty w rankingu Poli: {product.data?.score}</span>
-              <ProductScore value={product.data?.score || 0} />
-            </li>
-          </ul>
-        </ProductDetails>
+        <ProductDetails product={product} />
         <ProductModalAction actionName={product.report_text} actionCallback={reportCallbackMock}>
           <span>Posiadasz aktualne dane na temat tego produktu?</span>
-        </ProductModalAction>
-        <ProductModalAction actionName="Button" actionCallback={friendsCallbackMock}>
-          <span>MIEJSCE NA PRZYJACIÓŁ?</span>
         </ProductModalAction>
         <ProductModalAction
           actionName="Pobierz"

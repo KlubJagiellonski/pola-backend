@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IProductData } from '../../domain/products';
 import { padding, color, fontSize, lineHeight } from '../../styles/theme';
-import { ProductScore } from '../ProductScore';
+import { ScoreBar } from '../ScoreBar';
 
 const ListElement = styled.li`
   margin-bottom: ${padding.normal};
@@ -33,12 +33,12 @@ interface ISearchResultElement {
 }
 
 export const SearchResultElement: React.FC<ISearchResultElement> = ({ product, onSelect }) => (
-  <ListElement onClick={e => onSelect(product.code, product.id)}>
+  <ListElement onClick={(e) => onSelect(product.code, product.id)}>
     <ResultElement>
       {product.company && <span className="manufacturer">{product.company.name}</span>}
       {product.brand && <span className="brand">{product.brand.name}</span>}
       <span className="name">{product.name}</span>
     </ResultElement>
-    <ProductScore value={product.score} />
+    <ScoreBar value={product.score} />
   </ListElement>
 );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { PageLayout } from '../layout/PageLayout';
-import SEOMetadata from '../layout/SEOMetadata';
+import SEOMetadata from '../utils/browser/SEOMetadata';
 
 const NotFoundPage = () => (
   <PageLayout>

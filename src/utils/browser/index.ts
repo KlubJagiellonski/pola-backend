@@ -6,7 +6,7 @@ export const isBrowserEnv = () => typeof window !== 'undefined';
 
 /**
  * Redirects to website page
- * @param url Object representing address of the page
+ * @param url path to page
  */
 export const navigateTo = (url: string) => {
   if (isBrowserEnv()) {
