@@ -68,7 +68,7 @@ const SearchWrapper = styled.div`
   @media ${Device.desktop} {
     flex-flow: row nowrap;
     justify-content: center;
-    width: 47rem;
+    width: 51rem;
   }
   @media ${Device.mobile} {
     max-width: 30rem;
@@ -110,8 +110,8 @@ export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onSearch }) => {
         <SearchWrapper>
           <SearchInput onSearch={onSearch} disabled={isLoading} />
           <div className="mobile-apps">
-            <AppStoreLink height={48} />
-            <GooglePlayLink height={48} />
+            <AppStoreLink height={56} />
+            <GooglePlayLink height={56} />
           </div>
         </SearchWrapper>
       </Container>

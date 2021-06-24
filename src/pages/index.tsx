@@ -29,6 +29,7 @@ import { PageType } from '../domain/generic';
 const Content = styled.div`
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 
   @media ${Device.mobile} {
     padding: ${padding.normal};

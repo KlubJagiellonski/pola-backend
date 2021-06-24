@@ -18,11 +18,11 @@ const FormSearch = styled.div`
 `;
 
 const InputSection = styled.div`
-  padding: 0 1em 0 1em;
+  padding: 0 1em;
   position: relative;
   width: 100%;
   min-width: 28em;
-  height: 2.5em;
+  height: 56px;
   background-color: white;
   border-radius: 3em;
 
@@ -36,6 +36,7 @@ const InputSection = styled.div`
 `;
 
 const InputText = styled.input`
+  background-color: transparent;
   border: none;
   font-size: ${fontSize.normal};
   width: 100%;
@@ -45,6 +46,10 @@ const InputText = styled.input`
   &:active {
     border: none;
     outline: none;
+  }
+
+  @media ${Device.mobile} {
+    max-width: none;
   }
 `;
 
@@ -128,8 +133,8 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
           disabled={disabled}
         />
         <InputIconSection>
-          <InputIcon imagePath={Kod} size={36} />
-          <InputIcon imagePath={Microphone} size={36} />
+          <InputIcon imagePath={Kod} size={48} />
+          <InputIcon imagePath={Microphone} size={48} />
         </InputIconSection>
       </InputSection>
       {showSubmitButton && (
