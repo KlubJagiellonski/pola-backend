@@ -7,7 +7,6 @@ import { Device, padding, color } from '../../styles/theme';
 interface INavbarMenu {}
 
 const NavbarLayout = styled.nav`
-  background: ${color.background.white};
   @media ${Device.mobile} {
     display: none;
   }
@@ -15,7 +14,6 @@ const NavbarLayout = styled.nav`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  padding: ${padding.normal};
 
   flex: 1 1 100%;
   align-items: center;

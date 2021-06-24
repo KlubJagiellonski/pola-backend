@@ -55,6 +55,7 @@ export const PageHeader = (props: IPageHeader) => {
     { type: PageType.SUPPORT, label: 'Wesprzyj aplikację', url: urls.pola.support },
     { type: PageType.FRIENDS, label: 'Klub przyjaciół Poli', url: urls.pola.friends },
     { type: PageType.TEAM, label: 'Dołącz do zespołu', url: urls.pola.team },
+    { type: PageType.FAQ, label: 'FAQ', url: urls.pola.faq },
     { type: PageType.CONTACT, label: 'Kontakt', url: urls.pola.contact },
   ];
   const navItems = items.map((item) => (

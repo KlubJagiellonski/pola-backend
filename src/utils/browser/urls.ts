@@ -8,6 +8,7 @@ export const urls = {
     team: '/join',
     faq: '/faq',
     contact: '/contact',
+    products: '/products',
   },
   external: {
     openFoods: new URL('https://pl.openfoodfacts.org/'),

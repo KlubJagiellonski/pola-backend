@@ -1,4 +1,11 @@
 import React from 'react';
+import styled from 'styled-components';
+import { padding } from '../../styles/theme';
+
+const CounterText = styled.p`
+  padding: ${padding.small} 0;
+  font-weight: bold;
+`;
 
 interface IProductCounter {
   phrase: string;
@@ -8,11 +15,7 @@ interface IProductCounter {
 export const ProductCounter: React.FC<IProductCounter> = ({ phrase, amount }) => {
   const text = `${amount} ${getPolishNumeralPostfix('wynik', amount)} dla "${phrase}"`;
 
-  return (
-    <header>
-      <h4>{text}</h4>
-    </header>
-  );
+  return <CounterText>{text}</CounterText>;
 };
 
 const getPolishNumeralPostfix = (baseWord: string, amount: number) => {

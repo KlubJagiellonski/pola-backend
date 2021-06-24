@@ -108,7 +108,12 @@ const HomePage = (props: IHomePage) => {
           <SearchForm onSearch={props.invokeSearch} isLoading={isLoading} />
         </Content>
       </PageSection>
-      <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />
+      <SearchResultsHeader
+        phrase={phrase}
+        searchResults={searchResults}
+        searchState={searchState}
+        resultsUrl={urls.pola.products}
+      />
       {!emptyResults && (
         <PageSection>
           <SearchResultsList

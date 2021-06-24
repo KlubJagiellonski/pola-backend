@@ -23,6 +23,6 @@ export const PageSection = styled.section<IPageSection>`
   }
   @media ${Device.desktop} {
     max-width: ${(props) => (props.size === 'full' ? undefined : pageWidth)};
-    padding: ${(props) => (props.size === 'full' ? 0 : padding.normal)};
+    //padding: ${(props) => (props.size === 'full' ? 0 : padding.normal)};
   }
 `;

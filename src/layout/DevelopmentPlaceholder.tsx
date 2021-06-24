@@ -7,14 +7,19 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 20rem;
+  min-height: 12rem;
 `;
 
-export const DevelopmentPlaceholder: React.FC = () => (
+interface IDevelopmentPlaceholder {
+  text?: string;
+}
+
+export const DevelopmentPlaceholder: React.FC<IDevelopmentPlaceholder> = ({ text = 'Strona w budowie' }) => (
   <PageSection
+    size="full"
     styles={{ backgroundColor: color.background.secondary, textColor: color.text.primary, textAlign: 'center' }}>
     <Container>
-      <h2>Strona w budowie</h2>
+      <h2>{text}</h2>
     </Container>
   </PageSection>
 );

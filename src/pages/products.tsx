@@ -19,6 +19,7 @@ import { SearchStateName } from '../state/search/search-reducer';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
 import { navigateTo } from '../utils/browser';
 import { urls } from '../utils/browser/urls';
+import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
 
 interface IProductsPage {
   location?: Location;
@@ -45,7 +46,7 @@ const ProductsPage = (props: IProductsPage) => {
     }
   }, []);
 
-  const emptyResults = !searchResults || searchResults.length < 1;
+  const emptyResults = searchState === SearchStateName.INITIAL && (!searchResults || searchResults.length < 1);
   if (emptyResults) {
     navigateTo(urls.pola.home);
     return null;
@@ -65,6 +66,7 @@ const ProductsPage = (props: IProductsPage) => {
   return (
     <PageLayout>
       <SEOMetadata title="Pola Web | Znalezione produkty" />
+      <DevelopmentPlaceholder text="Lista produktów" />
       <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />
       {searchResults && (
         <PageSection>

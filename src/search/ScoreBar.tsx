@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { lighten } from 'polished';
-import { color, lineHeight, padding } from '../styles/theme';
+import { color, fontSize, lineHeight, padding } from '../styles/theme';
 
 const Bar = styled.div<{ value: number }>`
   width: 100%;
@@ -20,9 +20,10 @@ const Bar = styled.div<{ value: number }>`
   }
 
   .score {
-    width: 100%;
     position: absolute;
+    font-size: ${fontSize.small};
     padding-right: ${padding.normal};
+    width: 100%;
     z-index: 1;
   }
 `;

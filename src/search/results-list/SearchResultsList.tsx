@@ -1,18 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IProductData } from '../../domain/products';
+import { margin } from '../../styles/theme';
 import { SearchResultElement } from './ProductElement';
 
 const ResultsList = styled.div`
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
   .products-list {
     padding: 0;
     list-style: none;
+    max-width: 50em;
   }
 
   .actions {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
+    margin-bottom: ${margin.normal};
   }
 `;
 
