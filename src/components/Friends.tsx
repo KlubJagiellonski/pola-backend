@@ -5,9 +5,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import { TitleSection, WrapperSection } from '../styles/GlobalStyle.css';
-import { Device, color, margin, padding } from './../styles/theme'
+import { Device, color, margin, padding } from './../styles/theme';
 import { IFriend } from '../domain/friends';
-import { ResponsiveImage } from './responsive-image';
+import { ResponsiveImage } from './images/ResponsiveImage';
 
 const Wrapper = styled(WrapperSection)`
   width: 100%;
@@ -29,34 +29,33 @@ const ImageWrapper = styled.div`
 `;
 
 const FriendsSlider = styled(Slider)`
-    height: 6em;
+  height: 6em;
 
   .slick-dots li.slick-active button:before {
     color: ${color.button.red} !important;
   }
-`
+`;
 
 const Image = styled.div`
   height: 5.6em;
 
-  div{
+  div {
     width: 100%;
     height: 100%;
 
-    picture{
-      img{
+    picture {
+      img {
         object-fit: contain !important;
       }
     }
   }
-`
+`;
 
 interface IFriends {
   friends?: IFriend[];
 }
 
 const Friends: React.FC<IFriends> = ({ friends }) => {
-
   const settings = {
     dots: true,
     infinite: true,
@@ -80,25 +79,24 @@ const Friends: React.FC<IFriends> = ({ friends }) => {
           slidesToScroll: 2,
         },
       },
-    ]
-  }
+    ],
+  };
 
   return (
     <Wrapper color={color.background.white}>
       <TitleSection>Przyjaciele Poli</TitleSection>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        {friends &&
+        {friends && (
           <ImageWrapper>
             <FriendsSlider {...settings}>
               {friends.map((el, id) => (
                 <div key={`friend_${id}`}>
-                  <Image>
-                    {el.image && <ResponsiveImage imageSrc={el.image}/>}
-                  </Image>
+                  <Image>{el.image && <ResponsiveImage imageSrc={el.image} />}</Image>
                 </div>
               ))}
             </FriendsSlider>
-        </ImageWrapper>}
+          </ImageWrapper>
+        )}
       </div>
     </Wrapper>
   );

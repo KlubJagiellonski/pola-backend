@@ -13,7 +13,7 @@ import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { IProductData } from '../domain/products';
 import { IArticle } from '../domain/articles';
-import { ResponsiveImage } from '../components/responsive-image';
+import { ResponsiveImage } from '../components/images/ResponsiveImage';
 import { IFriend } from '../domain/friends';
 import Download from '../components/Download';
 import { SearchResultsList } from '../search/results-list/SearchResultsList';

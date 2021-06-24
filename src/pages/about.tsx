@@ -7,6 +7,7 @@ import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
 import { PageType } from '../domain/generic';
+import About from '../components/About';
 
 interface IAboutPage {
   location?: Location;
@@ -27,6 +28,7 @@ const AboutPage = (props: IAboutPage) => {
     <PageLayout>
       <SEOMetadata title="Pola Web | O Poli" />
       <DevelopmentPlaceholder />
+      <About />
     </PageLayout>
   );
 };

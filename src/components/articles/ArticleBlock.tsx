@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ResponsiveImage } from '../../components/responsive-image';
+import { ResponsiveImage } from '../images/ResponsiveImage';
 import { ButtonColor } from '../../styles/button-theme';
 import { WrapperSection, Text, TitleSection } from '../../styles/GlobalStyle.css';
 import { Device, fontSize, margin, color } from '../../styles/theme';

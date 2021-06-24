@@ -4,7 +4,7 @@ import { IProductEAN } from '../../domain/products';
 import { Modal } from '../../layout/modal/Modal';
 import { color, padding } from '../../styles/theme';
 import { ButtonColor } from '../../styles/button-theme';
-import { ClickOutside } from '../../components/ClickOutside';
+import { ClickOutside } from '../../utils/click-outside';
 import { ProductModalAction } from './ProductModalAction';
 import { openNewTab } from '../../utils/browser';
 import { urls } from '../../utils/browser/urls';
