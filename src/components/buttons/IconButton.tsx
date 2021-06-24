@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { color, padding } from '../../styles/theme';
+import { color, fontSize, padding } from '../../styles/theme';
 
 const Button = styled.button`
   display: flex;
@@ -12,6 +12,7 @@ const Button = styled.button`
   background-color: ${color.button.white};
   border: none;
   padding: ${padding.normal};
+  font-size: ${fontSize.big};
   white-space: nowrap;
   font-weight: bold;
   width: 1.4rem;

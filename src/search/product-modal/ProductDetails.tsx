@@ -6,7 +6,7 @@ import { ScoreBar } from '../ScoreBar';
 import { Checkbox } from '../../components/checkbox';
 
 const DetailsContainer = styled.div`
-  padding: ${padding.small} ${padding.normal};
+  padding: 0 ${padding.normal};
 `;
 
 const Field = styled.div`
@@ -27,19 +27,19 @@ export const ProductDetails: React.FC<IProductDetails> = ({ product }) => {
       </Field>
       <Field>
         <span>udział polskiego kapitału</span>
-        <ScoreBar value={product.data?.score || 0} unit="%" />
+        <ScoreBar value={product.data?.polishCapital || 0} unit="%" />
       </Field>
       <Field>
-        <Checkbox label="produkuje w Polsce" checked={true} styles={{ fontSize: fontSize.small }} />
+        <Checkbox label="produkuje w Polsce" checked={true} disabled={true} />
       </Field>
       <Field>
-        <Checkbox label="prowadzi badania i rozwój w Polsce" checked={true} />
+        <Checkbox label="prowadzi badania i rozwój w Polsce" checked={true} disabled={true} />
       </Field>
       <Field>
-        <Checkbox label="zajerestrowana w Polsce" checked={true} />
+        <Checkbox label="zajerestrowana w Polsce" checked={true} disabled={true} />
       </Field>
       <Field>
-        <Checkbox label="nie jest częścią zagranicznego koncernu" checked={true} />
+        <Checkbox label="nie jest częścią zagranicznego koncernu" checked={true} disabled={true} />
       </Field>
       <Field>
         {product.data?.company && <p>{product.data?.company?.name}</p>}

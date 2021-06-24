@@ -17,7 +17,7 @@ const ModalContainer = styled.div`
   background-color: ${color.background.white};
   position: absolute;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-flow: column;
   height: 85vh;

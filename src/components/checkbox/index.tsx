@@ -8,14 +8,14 @@ type CheckboxStyles = {
   shevronColor?: string;
 };
 
-const Field = styled.label<CheckboxStyles>`
+const Field = styled.label<CheckboxStyles & { disabled?: boolean }>`
   font-size: ${(props) => props.fontSize || fontSize.normal};
 
   display: block;
   position: relative;
   padding-left: 35px;
   margin-bottom: 12px;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   font-size: 22px;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -25,7 +25,7 @@ const Field = styled.label<CheckboxStyles>`
   input {
     position: absolute;
     opacity: 0;
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     height: 0;
     width: 0;
 
@@ -35,6 +35,10 @@ const Field = styled.label<CheckboxStyles>`
 
     &:checked ~ .checkmark:after {
       display: block;
+    }
+
+    &[disabled='true'] {
+      cursor: default;
     }
   }
 
@@ -66,14 +70,15 @@ const Field = styled.label<CheckboxStyles>`
 interface ICheckbox {
   label?: string;
   checked?: boolean;
+  disabled?: boolean;
   styles?: CheckboxStyles;
 }
 
-export const Checkbox: React.FC<ICheckbox> = ({ label, checked, styles }) => {
+export const Checkbox: React.FC<ICheckbox> = ({ label, checked, disabled, styles }) => {
   return (
-    <Field {...styles}>
+    <Field {...styles} disabled>
       {label}
-      <input type="checkbox" checked={checked} />
+      <input type="checkbox" checked={checked} disabled={disabled} />
       <span className="checkmark"></span>
     </Field>
   );

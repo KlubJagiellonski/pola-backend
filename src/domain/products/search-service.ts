@@ -65,6 +65,7 @@ export class ProductService extends ApiService {
                 name: mock.category,
               },
               score: getNumber(0, 100),
+              polishCapital: getNumber(0, 100),
             } as IProductData)
         ),
       };

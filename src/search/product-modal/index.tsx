@@ -2,12 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { IProductEAN } from '../../domain/products';
 import { Modal } from '../../layout/modal/Modal';
-import { color, fontSize, padding } from '../../styles/theme';
+import { color, padding } from '../../styles/theme';
 import { ButtonColor } from '../../styles/button-theme';
 import { ClickOutside } from '../../components/ClickOutside';
 import { ProductModalAction } from './ProductModalAction';
-import { ScoreBar } from '../ScoreBar';
-import { Checkbox } from '../../components/checkbox';
 import { openNewTab } from '../../utils/browser';
 import { urls } from '../../utils/browser/urls';
 import { ProductDetails } from './ProductDetails';
@@ -52,8 +50,8 @@ export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
           <span>Posiadasz aktualne dane na temat tego produktu?</span>
         </ProductModalAction>
         <ProductModalAction
-          actionName="Pobierz"
           theme={{ backgroundColor: color.background.white, buttonColor: ButtonColor.Red }}
+          actionName="Pobierz"
           actionCallback={downloadCallbackMock}>
           <AppDownload>
             <h4>Skanuj kody w aplikacji:</h4>

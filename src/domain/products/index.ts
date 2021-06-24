@@ -13,6 +13,7 @@ export interface IProductData {
   code: string;
   name: string;
   score: number;
+  polishCapital: number;
   company?: ICompany;
   brand?: IBrand;
 }
