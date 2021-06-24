@@ -68,7 +68,7 @@ export const HamburgerMenu: React.FC<IHamburgerMenu> = ({ expanded, children, on
     <HamburgerLayout className="hamburger-menu">
       <Navbar>
         <img width="auto" height="100%" src={LogoColor} />
-        <FontAwesomeIcon icon={faBars} onClick={handleOpen} className="menu-icon" />
+        <FontAwesomeIcon icon={faBars} onClick={handleOpen} className="menu-icon" size="2x" />
       </Navbar>
       <Items ref={itemsRef} className={classNames('nav-items', ['open', expanded])}>
         {children}
