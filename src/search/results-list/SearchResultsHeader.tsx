@@ -7,7 +7,7 @@ import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
 import { fontSize, lineHeight, margin } from '../../styles/theme';
 import { SearchStateName } from '../../state/search/search-reducer';
-import { PageType } from '../../domain/generic';
+import { PageType } from '../../domain/website';
 
 const Header = styled.header`
   font-size: ${fontSize.big};

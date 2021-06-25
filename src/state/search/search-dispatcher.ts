@@ -4,6 +4,8 @@ import { ProductService } from '../../domain/products/search-service';
 import { IPolaState } from '../types';
 import * as actions from './search-actions';
 
+const simulateApiDelay = true;
+
 export const searchDispatcher = {
   invokeSearch: (phrase: string) => async (dispatch: Dispatch, getState: () => IPolaState) => {
     try {
@@ -11,8 +13,11 @@ export const searchDispatcher = {
       const service = ProductService.getInstance();
       const response = await service.searchProducts(phrase);
       const products = response.products;
-      await setTimeout(() => dispatch(actions.LoadResults(phrase, response.nextPageToken, products)), 1000);
-      //await dispatch(actions.LoadResults(phrase, response.nextPageToken, products));
+      if (simulateApiDelay) {
+        await setTimeout(() => dispatch(actions.LoadResults(phrase, response.nextPageToken, products)), 1000);
+      } else {
+        await dispatch(actions.LoadResults(phrase, response.nextPageToken, products));
+      }
     } catch (error) {
       console.error('cannot search', error);
       await dispatch(actions.SearchFailed(error));
@@ -27,11 +32,14 @@ export const searchDispatcher = {
         const service = ProductService.getInstance();
         const response = await service.searchProducts(state.search.phrase, state.search.token);
         const products = response.products;
-        await setTimeout(
-          () => dispatch(actions.LoadResults(state.search.phrase, response.nextPageToken, products)),
-          1000
-        );
-        //await dispatch(actions.LoadResults(state.search.phrase, response.nextPageToken, products));
+        if (simulateApiDelay) {
+          await setTimeout(
+            () => dispatch(actions.LoadResults(state.search.phrase, response.nextPageToken, products)),
+            1000
+          );
+        } else {
+          await dispatch(actions.LoadResults(state.search.phrase, response.nextPageToken, products));
+        }
       }
     } catch (error) {
       console.error('cannot load more products', error);
