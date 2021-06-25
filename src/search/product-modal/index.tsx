@@ -7,8 +7,8 @@ import { ButtonColor } from '../../styles/button-theme';
 import { ClickOutside } from '../../utils/click-outside';
 import { ProductModalAction } from './ProductModalAction';
 import { openNewTab } from '../../utils/browser';
-import { urls } from '../../utils/browser/urls';
 import { ProductDetails } from './ProductDetails';
+import { urls } from '../../domain/website';
 
 const AppDownload = styled.div`
   h4 {

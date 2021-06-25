@@ -21,10 +21,9 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { SecondaryButton } from '../components/buttons/SecondaryButton';
 import { ButtonColor } from '../styles/button-theme';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
-import { urls } from '../utils/browser/urls';
 import { openNewTab } from '../utils/browser';
 import { SearchStateName } from '../state/search/search-reducer';
-import { PageType } from '../domain/generic';
+import { PageType } from '../domain/website';
 
 const Content = styled.div`
   width: 100%;

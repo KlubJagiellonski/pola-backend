@@ -6,8 +6,8 @@ import SEOMetadata from '../utils/browser/SEOMetadata';
 import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
-import { PageType } from '../domain/generic';
 import About from '../components/About';
+import { PageType } from '../domain/website';
 
 interface IAboutPage {
   location?: Location;

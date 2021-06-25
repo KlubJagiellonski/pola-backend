@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { PageSection } from '../../layout/PageSection';
 import { IProductData } from '../../domain/products';
-import { Spinner } from '../../layout/Spinner';
+import { Spinner } from '../../components/Spinner';
 import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
 import { fontSize, lineHeight, margin } from '../../styles/theme';

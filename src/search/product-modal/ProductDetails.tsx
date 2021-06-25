@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IProductEAN } from '../../domain/products';
 import { fontSize, padding } from '../../styles/theme';
-import { ScoreBar } from '../ScoreBar';
+import { ScoreBar } from '../../components/ScoreBar';
 import { Checkbox } from '../../components/checkbox';
 
 const DetailsContainer = styled.div`

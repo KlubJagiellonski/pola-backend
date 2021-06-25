@@ -1,5 +1,5 @@
 import React from 'react';
-import { urls } from '../../utils/browser/urls';
+import { urls } from '../../domain/website';
 
 interface IIconLink {
   height?: number;

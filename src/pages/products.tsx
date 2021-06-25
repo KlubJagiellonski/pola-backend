@@ -14,13 +14,12 @@ import { IFriend } from '../domain/friends';
 import { SearchResultsList } from '../search/results-list/SearchResultsList';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { ButtonColor } from '../styles/button-theme';
-import { Spinner } from '../layout/Spinner';
+import { Spinner } from '../components/Spinner';
 import { SearchStateName } from '../state/search/search-reducer';
 import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
 import { navigateTo } from '../utils/browser';
-import { urls } from '../utils/browser/urls';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
-import { PageType } from '../domain/generic';
+import { PageType, urls } from '../domain/website';
 
 interface IProductsPage {
   location?: Location;

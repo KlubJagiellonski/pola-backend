@@ -7,7 +7,7 @@ import { connect, useDispatch } from 'react-redux';
 import ArticlesList from '../components/articles/ArticlesList';
 import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
-import { PageType } from '../domain/generic';
+import { PageType } from '../domain/website';
 
 interface NewsPage {
   location?: Location;

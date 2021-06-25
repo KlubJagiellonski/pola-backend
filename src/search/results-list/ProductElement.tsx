@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IProductData } from '../../domain/products';
 import { padding, color, fontSize, lineHeight } from '../../styles/theme';
-import { ScoreBar } from '../ScoreBar';
+import { ScoreBar } from '../../components/ScoreBar';
 
 const ListElement = styled.li`
   margin-bottom: ${padding.normal};

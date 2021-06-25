@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { PageType } from '../domain/generic';
+import { PageType } from '../domain/website';
 import { DevelopmentPlaceholder } from '../layout/DevelopmentPlaceholder';
 import { PageLayout } from '../layout/PageLayout';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';

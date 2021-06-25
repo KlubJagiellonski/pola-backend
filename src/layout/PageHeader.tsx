@@ -5,8 +5,7 @@ import { HamburgerMenu } from './nav/HamburgerMenu';
 import { NavbarMenu } from './nav/NavbarMenu';
 import { desktopHeaderHeight, Device, pageWidth, color } from '../styles/theme';
 import { NavItem } from './nav/NavItem';
-import { PageLinkData, PageType } from '../domain/generic';
-import { urls } from '../utils/browser/urls';
+import { pageLinks, PageType } from '../domain/website';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -47,17 +46,7 @@ interface IPageHeader {
 }
 
 export const PageHeader = (props: IPageHeader) => {
-  const items: PageLinkData[] = [
-    { type: PageType.HOME, label: 'Home', url: urls.pola.home },
-    { type: PageType.NEWS, label: 'Aktualności', url: urls.pola.news },
-    { type: PageType.ABOUT, label: 'O Poli', url: urls.pola.about },
-    { type: PageType.SUPPORT, label: 'Wesprzyj aplikację', url: urls.pola.support },
-    { type: PageType.FRIENDS, label: 'Klub przyjaciół Poli', url: urls.pola.friends },
-    { type: PageType.TEAM, label: 'Dołącz do zespołu', url: urls.pola.team },
-    { type: PageType.FAQ, label: 'FAQ', url: urls.pola.faq },
-    { type: PageType.CONTACT, label: 'Kontakt', url: urls.pola.contact },
-  ];
-  const navItems = items.map((item) => <NavItem key={item.type} data={item} activePage={props.activePage} />);
+  const navItems = pageLinks.map((link) => <NavItem key={link.type} data={link} activePage={props.activePage} />);
 
   return (
     <HeaderContainer>

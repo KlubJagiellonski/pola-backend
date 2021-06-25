@@ -5,7 +5,7 @@ import ErrorBoundary from '../../utils/error-boundary';
 import { Device, fontSize, color, margin, lineHeight } from '../../styles/theme';
 import { TitleSection } from '../../styles/GlobalStyle.css';
 import { GooglePlayLink, AppStoreLink } from '../../components/links';
-import { urls } from '../../utils/browser/urls';
+import { urls } from '../../domain/website';
 
 const Container = styled.div`
   display: flex;
