@@ -3,7 +3,7 @@ import { AnyAction, Reducer } from 'redux';
 import { actionTypes } from './app-actions';
 import * as actions from './app-actions';
 import { IAction, IActionReducer } from '../types';
-import { PageType } from '../../domain/generic';
+import { PageType } from '../../domain/website';
 
 export interface IAppState {
   initialized: boolean;

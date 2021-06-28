@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IArticle } from '../../domain/articles';
+import { Article } from '../../../domain/articles';
 import { ArticleBlock } from './ArticleBlock';
-import { ButtonColor } from '../../styles/button-theme';
-import { Device, padding } from './../../styles/theme';
-import { PrimaryButton } from '../buttons/PrimaryButton';
+import { ButtonColor } from '../../../styles/button-theme';
+import { Device, padding } from '../../../styles/theme';
+import { PrimaryButton } from '../../buttons/PrimaryButton';
 
 const Wrapper = styled.div`
   grid-area: articles;
@@ -21,20 +21,21 @@ const ArticlesButton = styled(PrimaryButton)`
 `;
 
 interface IArticlesList {
-  articles?: IArticle[];
+  articles?: Article[];
 }
 
 export const ArticlesList: React.FC<IArticlesList> = ({ articles }) => {
   return (
     <Wrapper>
       {articles &&
-        articles.map((article: IArticle) => (
+        articles.map((article: Article) => (
           <ArticleBlock
             key={article.id}
-            photo={article.image}
             title={article.title}
+            slug={article.slug}
+            photo={article.imagePath}
             date={article.date}
-            text={article.content}
+            text={article.subTitle}
           />
         ))}
       <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" color={ButtonColor.Red} />

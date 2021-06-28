@@ -10,7 +10,7 @@ interface IResponsiveImage {
   imageSrc: string;
 }
 
-export const ResponsiveImage = function(props: IResponsiveImage) {
+export const ResponsiveImage: React.FC<IResponsiveImage> = function ({ imageSrc }) {
   return (
     <StaticQuery
       query={graphql`
@@ -30,9 +30,15 @@ export const ResponsiveImage = function(props: IResponsiveImage) {
           }
         }
       `}
-      render={data => {
-        const image = data.images.edges.find((image: any) => image.node.relativePath === props.imageSrc);
-        return renderImage(image);
+      render={(data) => {
+        try {
+          //console.log('EDGES', data.images.edges);
+          const image = data.images.edges.find((imageEdge: any) => imageEdge.node.relativePath === imageSrc);
+          return renderImage(image);
+        } catch {
+          console.error(`Cannot load image "${imageSrc}"`);
+          return;
+        }
       }}
     />
   );

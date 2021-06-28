@@ -4,7 +4,7 @@ import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
 import { IArticle } from '../domain/articles';
 import { connect, useDispatch } from 'react-redux';
-import ArticlesList from '../components/articles/ArticlesList';
+import ArticlesList from '../components/articles/list/ArticlesList';
 import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { PageType } from '../domain/website';

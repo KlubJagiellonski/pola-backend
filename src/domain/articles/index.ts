@@ -1,19 +1,19 @@
-import { getGuid } from '../../utils/data/random-number';
+import { IArticleNode } from './article-service';
 
-export interface IArticle {
-  id: string;
-  title: string;
-  content: string;
-  date?: string;
-  image?: string;
-}
-
-export class Article implements IArticle {
+export class Article {
   public id: string;
-  public image?: string;
+  public title: string;
+  public subTitle: string;
+  public slug: string;
+  public date?: string;
+  public imagePath?: string;
 
-  constructor(public title: string, public content: string, public date?: string, imageSrc?: string) {
-    this.id = getGuid();
-    this.image = imageSrc;
+  constructor(data: IArticleNode) {
+    this.id = data.id;
+    this.title = data.frontmatter.title;
+    this.subTitle = data.frontmatter.subTitle;
+    this.slug = data.fields.slug;
+    this.date = data.fields.prefix;
+    this.imagePath = data.frontmatter.cover.relativePath;
   }
 }

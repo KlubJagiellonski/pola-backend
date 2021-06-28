@@ -1,6 +1,7 @@
 export enum PageType {
   HOME = 'home',
   NEWS = 'news',
+  ARTICLE = 'article',
   ABOUT = 'about',
   SUPPORT = 'support',
   FRIENDS = 'friends',

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import styled from 'styled-components';
 import { useStaticQuery, graphql } from 'gatsby';
@@ -6,14 +6,12 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { PageHeader } from './PageHeader';
 import { PageFooter } from './PageFooter';
 import { IPolaState } from '../state/types';
-import { articlesDispatcher } from '../state/articles/articles-dispatcher';
-import { friendsDispatcher } from './../state/friends/friends-dispatcher';
 import { appDispatcher } from '../state/app/app-dispatcher';
 import { ProductModal } from '../search/product-modal';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import ErrorBoundary from '../utils/error-boundary';
-
 import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme';
+import { StateLoader2 } from './StateLoader';
 import '../styles/pola-web.css';
 
 const connector = connect(
@@ -23,11 +21,8 @@ const connector = connect(
     selectedProduct: state.search.selectedProduct,
   }),
   {
-    initApp: appDispatcher.initialize,
     selectPage: appDispatcher.selectActivePage,
     expandMenu: appDispatcher.expandMenu,
-    loadArticles: articlesDispatcher.loadArticles,
-    loadFriends: friendsDispatcher.loadFriends,
     unselectProduct: searchDispatcher.unselectProduct,
   }
 );
@@ -62,23 +57,10 @@ const Layout: React.FC<IPageLayout> = ({
   selectedProduct,
   children,
 
-  initApp,
   selectPage,
   expandMenu,
-  loadArticles,
-  loadFriends,
   unselectProduct,
 }) => {
-  const bootApplication = async () => {
-    await initApp();
-    await loadArticles();
-    await loadFriends();
-  };
-
-  useEffect(() => {
-    bootApplication();
-  }, []);
-
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -91,6 +73,7 @@ const Layout: React.FC<IPageLayout> = ({
 
   return (
     <ErrorBoundary scope="page-layout">
+      <StateLoader2 />
       <LayoutContainer>
         {selectedProduct && <ProductModal product={selectedProduct} onClose={unselectProduct} />}
         <PageHeader
