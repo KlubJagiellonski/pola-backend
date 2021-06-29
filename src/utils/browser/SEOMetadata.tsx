@@ -47,7 +47,7 @@ const SEOMetadata: React.FC<ISEOMetadata> = ({ pageTitle, description = '', lang
         },
         {
           property: 'og:title',
-          content: title,
+          content: browserTabTitle,
         },
         {
           property: 'og:description',
@@ -67,7 +67,7 @@ const SEOMetadata: React.FC<ISEOMetadata> = ({ pageTitle, description = '', lang
         },
         {
           name: 'twitter:title',
-          content: title,
+          content: browserTabTitle,
         },
         {
           name: 'twitter:description',
