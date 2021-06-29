@@ -12,7 +12,6 @@ import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { IProductData } from '../domain/products';
-import { IArticle } from '../domain/articles';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
 import { IFriend } from '../domain/friends';
 import Download from '../components/Download';
@@ -24,6 +23,7 @@ import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader'
 import { openNewTab } from '../utils/browser';
 import { SearchStateName } from '../state/search/search-reducer';
 import { PageType, urls } from '../domain/website';
+import { Article } from '../domain/articles';
 
 const Content = styled.div`
   width: 100%;
@@ -72,7 +72,7 @@ interface IHomePage {
   phrase?: string;
   searchResults?: IProductData[];
   token?: string;
-  articles?: IArticle[];
+  articles?: Article[];
   friends?: IFriend[];
 
   invokeSearch: (phrase: string) => void;
@@ -101,7 +101,7 @@ const HomePage = (props: IHomePage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | Strona główna" />
+      <SEOMetadata pageTitle="Strona główna" />
       <PageSection size="full" styles={{ backgroundColor: color.background.search }}>
         <Background>
           <ResponsiveImage imageSrc={'background.png'} />

@@ -23,7 +23,7 @@ const NotFoundPage = (props: INotFoundPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="404: Not found" />
+      <SEOMetadata pageTitle="404: Not found" />
       <DevelopmentPlaceholder text="Strona nie istnieje" />
     </PageLayout>
   );

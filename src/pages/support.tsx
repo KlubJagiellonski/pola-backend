@@ -25,7 +25,7 @@ const SupportPage = (props: ISupportPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | Wesprzyj aplikację" />
+      <SEOMetadata pageTitle="Wesprzyj aplikację" />
       <DevelopmentPlaceholder />
     </PageLayout>
   );

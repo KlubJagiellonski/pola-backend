@@ -25,7 +25,7 @@ const TeamPage = (props: ITeamPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | Dołącz do zespołu" />
+      <SEOMetadata pageTitle="Dołącz do zespołu Pola" />
       <DevelopmentPlaceholder />
     </PageLayout>
   );

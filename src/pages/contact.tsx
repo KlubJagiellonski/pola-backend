@@ -25,7 +25,7 @@ const ContactPage = (props: IContactPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | Kontakt" />
+      <SEOMetadata pageTitle="Kontakt" />
       <DevelopmentPlaceholder />
     </PageLayout>
   );

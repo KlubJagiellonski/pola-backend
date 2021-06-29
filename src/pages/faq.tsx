@@ -25,7 +25,7 @@ const FAQPage = (props: IFAQPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | O Poli" />
+      <SEOMetadata pageTitle="FAQ" />
       <DevelopmentPlaceholder text="FAQ" />
     </PageLayout>
   );

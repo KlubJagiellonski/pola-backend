@@ -9,8 +9,6 @@ import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { IProductData } from '../domain/products';
-import { IArticle } from '../domain/articles';
-import { IFriend } from '../domain/friends';
 import { SearchResultsList } from '../search/results-list/SearchResultsList';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { ButtonColor } from '../styles/button-theme';
@@ -25,14 +23,9 @@ interface IProductsPage {
   location?: Location;
   phrase: string;
   searchResults: IProductData[];
-  token?: string;
   searchState: SearchStateName;
-  articles?: IArticle[];
-  friends?: IFriend[];
 
-  invokeSearch: (phrase: string) => void;
   onLoadMore: () => void;
-  clearResults: () => void;
   selectProduct: (code: string, id: string) => void;
 }
 
@@ -66,7 +59,7 @@ const ProductsPage = (props: IProductsPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | Znalezione produkty" />
+      <SEOMetadata pageTitle="Znalezione produkty" />
       <DevelopmentPlaceholder text="Lista produktów" />
       <SearchResultsHeader phrase={phrase} searchResults={searchResults} searchState={searchState} />
       {searchResults && (
@@ -83,15 +76,10 @@ export default connect(
     location: state.app.location,
     phrase: state.search.phrase,
     searchResults: state.search.products,
-    token: state.search.token,
     searchState: state.search.stateName,
-    articles: state.articles.data,
-    friends: state.friends.data,
   }),
   {
-    invokeSearch: searchDispatcher.invokeSearch,
     onLoadMore: searchDispatcher.invokeLoadMore,
-    clearResults: searchDispatcher.clearResults,
     selectProduct: searchDispatcher.selectProduct,
   }
 )(ProductsPage);

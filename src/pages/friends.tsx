@@ -25,7 +25,7 @@ const FriendsPage = (props: IFriendsPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | Klub przyjaciół Poli" />
+      <SEOMetadata pageTitle="Klub przyjaciół Poli" />
       <DevelopmentPlaceholder text="Treść przyjaciół Poli w budowie" />
     </PageLayout>
   );

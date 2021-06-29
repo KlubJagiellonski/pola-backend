@@ -26,7 +26,7 @@ const AboutPage = (props: IAboutPage) => {
 
   return (
     <PageLayout>
-      <SEOMetadata title="Pola Web | O Poli" />
+      <SEOMetadata pageTitle="O Poli" />
       <DevelopmentPlaceholder />
       <About />
     </PageLayout>
