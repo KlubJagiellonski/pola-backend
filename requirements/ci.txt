@@ -35,7 +35,7 @@ django-test-plus==2.2.0
 django-webtest==1.9.7
 docopt==0.6.2
 factory-boy==3.2.0
-Faker==8.9.0
+Faker==8.9.1
 flake8==3.9.2
 future==0.18.2
 gtin==0.1.13
