@@ -139,7 +139,7 @@ const HomePage = (props: IHomePage) => {
         </PageSection>
       )}
       <PageSection>
-        <Contents articles={props.articles} friends={props.friends} />
+        <Contents articles={props.articles?.slice(0,3)} friends={props.friends} />
       </PageSection>
       <PageSection size="full" styles={{ backgroundColor: color.background.black }}>
         <Download />

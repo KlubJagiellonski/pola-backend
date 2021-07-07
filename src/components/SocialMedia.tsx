@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import SocialImg from '../assets/social.png';
 import { color, Device } from '../styles/theme';
 import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
+import Facebbok from '../assets/social-media/facebook.png';
+import Instagram from '../assets/social-media/instagram.png';
+import Twitter from '../assets/social-media/twitter.png';
 
 const Wrapper = styled(WrapperSection)`
   min-height: 5em;
@@ -54,19 +56,18 @@ const Title = styled(TitleSection)`
 const SocialMedia = () => {
   return (
     <Wrapper color={color.background.white}>
-      <Title>Social Media</Title>
+      <Title>Śledź nas na:</Title>
       <Items>
         <Item>
-          <img src={SocialImg} />
+          <img src={Facebbok} />
         </Item>
         <Item>
-          <img src={SocialImg} />
+          <img src={Instagram} />
         </Item>
         <Item>
-          <img src={SocialImg} />
+          <img src={Twitter} />
         </Item>
         <Item>
-          <img src={SocialImg} />
         </Item>
       </Items>
     </Wrapper>

@@ -27,7 +27,7 @@ const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
   return (
     <PageLayout>
       <SEOMetadata pageTitle="Aktualności" />
-      <ArticlesList articles={articles} width={600} />
+      <ArticlesList articles={articles} />
       <Link to="/">Go back to the homepage</Link>
     </PageLayout>
   );

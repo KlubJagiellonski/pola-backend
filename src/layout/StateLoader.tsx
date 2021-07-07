@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ArticleService, IArticleEdge } from '../domain/articles/article-service';
 import { appDispatcher } from '../state/app/app-dispatcher';
@@ -29,7 +29,11 @@ export const StateLoader = (props: IStateLoader) => {
 
   const queryResult = ArticleService.getAll();
   if (!props.isArticlesLoaded && queryResult?.allMarkdownRemark?.edges && props.loadArticles) {
-    props.loadArticles(queryResult.allMarkdownRemark.edges);
+    const data = queryResult.allMarkdownRemark.edges;
+    data.sort((a : IArticleEdge, b : IArticleEdge)=>{
+        return Date.parse(b.node.fields.prefix) - Date.parse(a.node.fields.prefix);
+    })
+    props.loadArticles(data);
   }
 
   return null;
