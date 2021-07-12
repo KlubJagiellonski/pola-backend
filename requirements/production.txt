@@ -25,7 +25,7 @@ django-model-utils==4.1.1
 django-ratelimit==3.0.1
 django-redis==5.0.0
 django-redis-cache==2.1.1
-django-reversion==3.0.9
+django-reversion==4.0.0
 django-storages==1.11.1
 future==0.18.2
 gevent==21.1.2
