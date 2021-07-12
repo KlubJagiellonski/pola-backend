@@ -15,7 +15,7 @@ coveralls==3.1.0
 cryptography==3.4.7
 decorator==5.0.7
 defusedxml==0.7.1
-django-allauth==0.44.0
+django-allauth==0.45.0
 django-autocomplete-light==3.8.2
 django-autoslug==1.9.8
 django-braces==1.14.0
