@@ -15,7 +15,7 @@ colorama==0.4.3
 cryptography==3.4.7
 dbt==0.19.1
 dbt-bigquery==0.19.1
-dbt-core==0.19.1
+dbt-core==0.20.0
 dbt-postgres==0.19.1
 dbt-redshift==0.19.1
 dbt-snowflake==0.19.1
