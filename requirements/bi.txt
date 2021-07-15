@@ -59,7 +59,7 @@ pycryptodomex==3.10.1
 PyJWT==1.7.1
 pyOpenSSL==20.0.1
 pyrsistent==0.18.0
-python-dateutil==2.8.1
+python-dateutil==2.8.2
 python-slugify==5.0.2
 pytimeparse==1.1.8
 pytz==2020.5
