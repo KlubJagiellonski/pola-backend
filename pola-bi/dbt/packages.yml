@@ -1,4 +1,4 @@
 ---
 packages:
-  - package: fishtown-analytics/codegen
-    version: 0.3.1
+  - package: dbt-labs/codegen
+    version: 0.4.0
