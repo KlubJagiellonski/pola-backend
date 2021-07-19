@@ -11,6 +11,7 @@ click==8.0.1
 Collectfast==2.2.0
 cryptography==3.4.7
 defusedxml==0.7.1
+dictpath==0.1.3
 Django==3.2.5
 django-allauth==0.45.0
 django-anymail==8.4
@@ -34,10 +35,17 @@ gtin==0.1.13
 gunicorn==20.1.0
 idna==2.10
 importlib-metadata==4.6.1
+isodate==0.6.0
 jmespath==0.10.0
 jsonfield==3.1.0
 jsonschema==3.2.0
+lazy-object-proxy==1.6.0
+more-itertools==8.8.0
 oauthlib==3.1.1
+openapi-core==0.14.2
+openapi-schema-validator==0.1.5
+openapi-spec-validator==0.3.1
+parse==1.19.0
 Pillow==8.3.1
 psycopg2-binary==2.9.1
 pycparser==2.20
@@ -46,6 +54,7 @@ pyrsistent==0.18.0
 python-dateutil==2.8.2
 python3-openid==3.2.0
 pytz==2021.1
+PyYAML==5.4.1
 redis==3.5.3
 reportlab==3.5.68
 requests==2.25.1
@@ -59,6 +68,7 @@ typing-extensions==3.7.4.3
 unicode-slugify==0.1.3
 Unidecode==1.2.0
 urllib3==1.26.4
+Werkzeug==2.0.1
 zipp==3.5.0
 zope.event==4.5.0
 zope.interface==5.4.0

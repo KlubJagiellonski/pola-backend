@@ -1,0 +1,174 @@
+---
+openapi: 3.0.3
+
+info:
+  title: "Pola API"
+  version: '-'
+
+  description: |
+    # Wprowadzenie
+
+
+    # Operacje
+    N/A
+
+    # Konwencje
+    N/A
+
+    # Błędy
+    N/A
+
+servers:
+  - url: https://www.pola-app.pl/
+    description: Sttable environemnt
+  - url: http://testserver/
+    description: CI environemnt
+
+paths:
+  /a/v4/get_by_code:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/NoAI'
+        - $ref: '#/components/parameters/Code'
+        - $ref: '#/components/parameters/DeviceId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+
+    post:
+      parameters:
+        - $ref: '#/components/parameters/NoAI'
+        - $ref: '#/components/parameters/Code'
+        - $ref: '#/components/parameters/DeviceId'
+      responses:
+        '200':
+          $ref: '#/components/responses/getByCodeV4'
+
+components:
+  parameters:
+    NoAI:
+      name: noai
+      in: query
+      required: false
+      schema:
+        type: boolean
+
+    Code:
+      name: code
+      in: query
+      required: true
+      schema:
+        type: string
+
+    DeviceId:
+      name: device_id
+      in: query
+      required: true
+      schema:
+        type: string
+  responses:
+    getByCodeV4:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              altText:
+                type: string
+                nullable: true
+              card_type:
+                type: string
+              code:
+                type: string
+              donate:
+                type: object
+                properties:
+                  show_button:
+                    type: boolean
+                  title:
+                    type: string
+                  url:
+                    type: string
+                required:
+                  - show_button
+                  - title
+                  - url
+              name:
+                type: string
+              companies:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    plCapital:
+                      type: integer
+                      nullable: true
+                    plCapital_notes:
+                      type: string
+                      nullable: true
+                    plNotGlobEnt:
+                      type: integer
+                      nullable: true
+                    plNotGlobEnt_notes:
+                      type: string
+                      nullable: true
+                    plRegistered:
+                      type: integer
+                      nullable: true
+                    plRegistered_notes:
+                      type: string
+                      nullable: true
+                    plRnD:
+                      type: integer
+                      nullable: true
+                    plRnD_notes:
+                      type: string
+                      nullable: true
+                    plScore:
+                      type: integer
+                      nullable: true
+                    plWorkers:
+                      type: integer
+                      nullable: true
+                    plWorkers_notes:
+                      type: string
+                      nullable: true
+                  required:
+                    - name
+                    - plCapital
+                    - plCapital_notes
+                    - plNotGlobEnt
+                    - plNotGlobEnt_notes
+                    - plRegistered
+                    - plRegistered_notes
+                    - plRnD
+                    - plRnD_notes
+                    - plScore
+                    - plWorkers
+                    - plWorkers_notes
+              product_id:
+                type: integer
+                nullable: true
+              report:
+                type: object
+                properties:
+                  button_text:
+                    type: string
+                  button_type:
+                    type: string
+                  text:
+                    type: string
+            required:
+              - altText
+              - card_type
+              - code
+              - name
+              - donate
+              - product_id
