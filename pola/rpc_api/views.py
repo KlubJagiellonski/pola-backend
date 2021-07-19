@@ -20,6 +20,7 @@ from ratelimit.decorators import ratelimit
 from ai_pics.models import AIAttachment, AIPics
 from pola import logic, logic_ai
 from pola.models import Query
+from pola.rpc_api.openapi import validate_pola_openapi_spec
 from pola.rpc_api.rates import whitelist
 from product.models import Product
 from report.models import Attachment, Report
@@ -56,78 +57,7 @@ def validate_json_response(schema, *args, **kwargs):
 
 # API v4
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-            "altText": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-            "card_type": {"type": "string"},
-            "code": {"type": "string"},
-            "donate": {
-                "type": "object",
-                "properties": {
-                    "show_button": {"type": "boolean"},
-                    "title": {"type": "string"},
-                    "url": {"type": "string"},
-                },
-                "required": ["show_button", "title", "url"],
-            },
-            "name": {"type": "string"},
-            "companies": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "name": {"type": "string"},
-                        "plCapital": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-                        "plCapital_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-                        "plNotGlobEnt": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-                        "plNotGlobEnt_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-                        "plRegistered": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-                        "plRegistered_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-                        "plRnD": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-                        "plRnD_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-                        "plScore": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-                        "plWorkers": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-                        "plWorkers_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-                    },
-                    "required": [
-                        "name",
-                        "plCapital",
-                        "plCapital_notes",
-                        "plNotGlobEnt",
-                        "plNotGlobEnt_notes",
-                        "plRegistered",
-                        "plRegistered_notes",
-                        "plRnD",
-                        "plRnD_notes",
-                        "plScore",
-                        "plWorkers",
-                        "plWorkers_notes",
-                    ],
-                },
-            },
-            "product_id": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "report": {
-                "type": "object",
-                "properties": {
-                    "button_text": {"type": "string"},
-                    "button_type": {"type": "string"},
-                    "text": {"type": "string"},
-                },
-            },
-        },
-        "required": [
-            "altText",
-            "card_type",
-            "code",
-            "name",
-            "donate",
-            "product_id",
-        ],
-    }
-)
+@validate_pola_openapi_spec
 def get_by_code_v4(request):
     noai = request.GET.get('noai')
     result = get_by_code_internal(
