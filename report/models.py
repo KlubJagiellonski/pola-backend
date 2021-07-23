@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from reversion.models import Revision
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from product.models import Product
 
@@ -87,7 +88,11 @@ class Report(models.Model):
 
 class Attachment(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
-    attachment = models.FileField(upload_to="reports/%Y/%m/%d", verbose_name=_("File"))
+    attachment = models.FileField(
+        upload_to="reports/%Y/%m/%d",
+        verbose_name=_("File"),
+        storage=S3Boto3Storage(querystring_auth=True, bucket_name=settings.AWS_STORAGE_BACKEND_BUCKET_NAME),
+    )
 
     @property
     def filename(self):

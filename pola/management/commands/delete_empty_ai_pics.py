@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         conn = create_s3_connection()
-        bucket = Bucket(conn, name=settings.AWS_STORAGE_BUCKET_AI_NAME)
+        bucket = Bucket(conn, name=settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
 
         s3_files = set()
         for key in bucket.list():

@@ -20,7 +20,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('Loading list of S3 files')
         conn = create_s3_connection()
-        bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_NAME)
+        bucket = Bucket(conn, settings.AWS_STORAGE_BACKEND_BUCKET_NAME)
 
         s3_files = set()
         for key in bucket.list():
