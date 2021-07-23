@@ -12,6 +12,7 @@ urlpatterns = [
     # url(r'(?P<code>[-\w]+)/history$',
     #     views.CompanyHistoryView.as_view(), name="view-history"),
     path('<int:pk>', views.CompanyDetailView.as_view(), name="detail"),
+    path('<int:pk>/move-products', views.CompanyMoveProducts.as_view(), name="move-products"),
     # Brand
     path('brand', views.BrandListView.as_view(), name="brand-list"),
     path('create-brand', views.BrandCreate.as_view(), name="brand-create"),

@@ -1,5 +1,5 @@
 # Create your views here.
-from braces.views import FormValidMessageMixin
+from braces.views import FormValidMessageMixin, MessageMixin
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, QueryDict
@@ -21,7 +21,12 @@ from product.models import Product
 from report.models import Report
 
 from .filters import BrandFilter, CompanyFilter
-from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm
+from .forms import (
+    BrandForm,
+    CompanyCreateFromKRSForm,
+    CompanyForm,
+    MoveProductsForm,
+)
 
 
 class CompanyListView(LoginPermissionRequiredMixin, FilterView):
@@ -145,6 +150,31 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
         context['product_list'] = Product.objects.filter(company=self.get_object())
 
         return context
+
+
+class CompanyMoveProducts(LoginPermissionRequiredMixin, MessageMixin, FormView, DetailView):
+    permission_required = 'company.change_company'
+    template_name = 'company/company_move_products.html'
+    form_class = MoveProductsForm
+    queryset = Company.objects.all()
+
+    def form_valid(self, form):
+        pk = self.kwargs['pk']
+        success, failed = form.save(pk)
+        msg = ""
+        if "success" in success:
+            msg += f"Przeniesiono {success[1]} produktów!"
+            self.messages.success(msg, fail_silently=True)
+            return HttpResponseRedirect(reverse("company:detail", args=[pk]))
+        else:
+            if "the_same_company" in failed:
+                msg += "Nie można przenieść produktów do tej samej firmy!"
+            elif "no_products" in failed:
+                msg += "Ta firma nie ma żadnych produktów!"
+            else:
+                msg += "Nie udało się zapisać produktów."
+            self.messages.error(msg, fail_silently=True)
+            return HttpResponseRedirect(reverse("company:move-products", args=[pk]))
 
 
 class CompanyAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):

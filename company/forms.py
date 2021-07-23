@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from dal import autocomplete
 from django import forms
+from django.forms import Select
 
 from pola.forms import (
     CommitDescriptionMixin,
@@ -9,8 +10,10 @@ from pola.forms import (
     SaveButtonMixin,
     SingleButtonMixin,
 )
+from product.models import Product
 
 from . import models
+from .models import Company
 
 
 class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
@@ -35,6 +38,33 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin, Com
             'nip',
             'address',
         ]
+
+
+class MoveProductsForm(SingleButtonMixin, forms.Form):
+    new_company = forms.ModelChoiceField(
+        queryset=Company.objects.all(),
+        widget=Select(),
+        label="Wybierz firmę do której produkty mają być przeniesione",
+    )
+
+    def save(self, pk):
+        failed = []
+        success = []
+        new_company = self.cleaned_data['new_company']
+        if new_company.pk == pk:
+            failed.append("the_same_company")
+            return success, failed
+        products = Product.objects.filter(company=pk)
+        count = products.count()
+        if count == 0:
+            failed.append("no_products")
+            return success, failed
+
+        products.update(company=new_company)
+        success.append("success")
+        success.append(count)
+
+        return success, failed
 
 
 class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.Form):
