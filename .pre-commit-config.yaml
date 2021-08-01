@@ -10,12 +10,12 @@ repos:
     hooks:
       - id: check-hooks-apply
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.7
+    rev: v1.1.10
     hooks:
       - id: remove-tabs
         exclude: ^pola/tests/commands/test_import_brands_fixture\.tsv$
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
       - id: check-added-large-files
       - id: check-ast
@@ -44,18 +44,18 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.10.0
+    rev: v2.23.1
     hooks:
       - id: pyupgrade
         args: ['--py38-plus']
   - repo: https://github.com/psf/black
-    rev: '20.8b1'
+    rev: '21.7b0'
     hooks:
       - id: black
         args: ["--line-length", "120", "--skip-string-normalization", "--target-version", "py38"]
         language_version: python
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.7.1
+    rev: v1.9.0
     hooks:
       - id: python-check-blanket-noqa
       - id: python-check-mock-methods
@@ -66,44 +66,32 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
-  #  - repo: https://github.com/pre-commit/mirrors-pylint
-  #    rev: 'v2.5.2'
-  #    hooks:
-  #      - id: pylint
   - repo: https://gitlab.com/pycqa/flake8
-    rev: '3.8.4'
+    rev: '3.9.2'
     hooks:
       - id: flake8
-  - repo: local
+  - repo: https://github.com/adrienverge/yamllint
+    rev: 'v1.26.1'
+    hooks:
+      - id: yamllint
+        entry: yamllint -c yamllint-config.yml
+  - repo: https://github.com/ikamensh/flynt
+    rev: '0.63'
     hooks:
       - id: flynt
-        name: Convert to f-strings with flynt
-        entry: flynt
-        language: python
-        language_version: python3
-        additional_dependencies: ['flynt']
-        files: \.py$
-      - id: yamllint
-        name: Check yaml files with yamllint
-        entry: yamllint -c yamllint-config.yml
-        language: python
-        additional_dependencies: ['yamllint']
-        types: [yaml]
+  - repo: https://github.com/hadolint/hadolint
+    rev: 'v2.6.0'
+    hooks:
+      - id: hadolint-docker
+        entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.6.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
+  - repo: https://github.com/PyCQA/isort
+    rev: '5.9.3'
+    hooks:
+      - id: isort
+  - repo: local
+    hooks:
       - id: shellcheck
         name: Check Shell scripts syntax correctness
         language: docker_image
-        entry: koalaman/shellcheck:stable -x -a
+        entry: koalaman/shellcheck:v0.7.2 -x -a
         files: \.sh$
-      - id: hadolint
-        name: Hadolint
-        description: Haskell-based Docker image linter
-        language: docker_image
-        types:
-          - dockerfile
-        entry: --entrypoint /bin/hadolint hadolint/hadolint:latest --ignore DL3013 --ignore DL3018 --ignore DL3008 -
-      - id: isort
-        name: Run isort to sort imports
-        language: python
-        entry: isort
-        files: \.py$
-        additional_dependencies: ['isort']
