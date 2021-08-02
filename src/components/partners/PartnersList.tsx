@@ -36,7 +36,7 @@ const List = styled.ul`
 export const PartnersList: React.FC<IPartnersList> = ({ partners }) => (
   <List>
     {partners.map((partner) => (
-      <li>
+      <li key={partner.name}>
         <PartnerTile {...partner} />
       </li>
     ))}

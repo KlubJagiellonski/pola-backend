@@ -17,9 +17,10 @@ export const PageSection = styled.section<IPageSection>`
   color: ${({ styles }) => styles?.textColor || color.text.primary};
   text-align: ${({ styles }) => styles?.textAlign || 'left'};
   position: relative;
+  box-sizing: border-box;
 
   @media ${Device.mobile} {
-    padding: 0;
+    padding: 0 ${padding.normal};
   }
   @media ${Device.desktop} {
     max-width: ${(props) => (props.size === 'full' ? undefined : pageWidth)};
