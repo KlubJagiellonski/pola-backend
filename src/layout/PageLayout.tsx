@@ -30,7 +30,13 @@ const connector = connect(
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type IPageLayout = ReduxProps & {};
+type ILayoutStyles = {
+  marginTop?: string;
+}
+
+type IPageLayout = ReduxProps & {
+  styles?: ILayoutStyles;
+};
 
 const LayoutContainer = styled.div`
   display: flex;
@@ -38,9 +44,10 @@ const LayoutContainer = styled.div`
   height: 100vh;
 `;
 
-const PageContent = styled.main`
+const PageContent = styled.main<ILayoutStyles>`
   width: 100%;
   margin: 0 auto;
+  margin-top: ${props => props.marginTop || 0};
   padding: 0;
   flex: 1 1 auto;
 
@@ -61,6 +68,8 @@ const Layout: React.FC<IPageLayout> = ({
   selectPage,
   expandMenu,
   unselectProduct,
+
+  styles,
 }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -84,7 +93,7 @@ const Layout: React.FC<IPageLayout> = ({
           isMenuExpanded={isMenuExpanded}
           onExpand={expandMenu}
         />
-        <PageContent>{children}</PageContent>
+        <PageContent {...styles}>{children}</PageContent>
         <Download />
         <PageFooter />
       </LayoutContainer>

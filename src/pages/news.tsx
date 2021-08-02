@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { margin, Device } from '../styles/theme'
-import ReactPaginate from "react-paginate";
 import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
 import { Article } from '../domain/articles';
