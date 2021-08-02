@@ -11,7 +11,7 @@ cachetools==4.2.2
 certifi==2021.5.30
 cffi==1.14.6
 chardet==4.0.0
-charset-normalizer==2.0.3
+charset-normalizer==2.0.4
 colorama==0.4.4
 cryptography==3.4.7
 dbt==0.20.0
