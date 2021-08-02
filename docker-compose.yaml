@@ -1,0 +1,19 @@
+services: 
+  pola_web-init:
+    image: node:14.17.3-stretch 
+    working_dir: /app
+    volumes: 
+     - .:/app
+    command: npm install
+  pola_web:
+    image: node:14.17.3-stretch 
+    working_dir: /app
+    volumes: 
+     - .:/app
+    command: npm run develop -- -H=0.0.0.0
+    ports: 
+      - 8000:8000
+    depends_on: 
+      pola_web-init: 
+        condition: service_completed_successfully
+     

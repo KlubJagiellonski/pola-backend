@@ -13,6 +13,7 @@ import ErrorBoundary from '../utils/error-boundary';
 import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme';
 import { StateLoader2 } from './StateLoader';
 import '../styles/pola-web.css';
+import Download from '../components/Download';
 
 const connector = connect(
   (state: IPolaState) => ({
@@ -84,6 +85,7 @@ const Layout: React.FC<IPageLayout> = ({
           onExpand={expandMenu}
         />
         <PageContent>{children}</PageContent>
+        <Download />
         <PageFooter />
       </LayoutContainer>
     </ErrorBoundary>

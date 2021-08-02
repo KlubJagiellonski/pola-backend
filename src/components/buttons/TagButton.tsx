@@ -16,7 +16,7 @@ const ButtonContainer = styled(Button)`
   }
 `;
 
-export interface ISecondaryButton {
+export interface ITagButton {
   label?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
@@ -28,7 +28,7 @@ export interface ISecondaryButton {
   onClick?: () => void;
 }
 
-export const SecondaryButton: React.FC<ISecondaryButton> = ({
+export const TagButton: React.FC<ITagButton> = ({
   label,
   icon,
   className,

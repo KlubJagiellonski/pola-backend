@@ -14,7 +14,6 @@ import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions'
 import { IProductData } from '../domain/products';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
 import { IFriend } from '../domain/friends';
-import Download from '../components/Download';
 import { SearchResultsList } from '../search/results-list/SearchResultsList';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { SecondaryButton } from '../components/buttons/SecondaryButton';
@@ -73,6 +72,7 @@ interface IHomePage {
   searchResults?: IProductData[];
   token?: string;
   articles?: Article[];
+  activeTags: string[];
   friends?: IFriend[];
 
   invokeSearch: (phrase: string) => void;
@@ -139,10 +139,7 @@ const HomePage = (props: IHomePage) => {
         </PageSection>
       )}
       <PageSection>
-        <Contents articles={props.articles?.slice(0,3)} friends={props.friends} />
-      </PageSection>
-      <PageSection size="full" styles={{ backgroundColor: color.background.black }}>
-        <Download />
+        <Contents articles={props.articles?.slice(0, 3)} friends={props.friends} />
       </PageSection>
     </PageLayout>
   );

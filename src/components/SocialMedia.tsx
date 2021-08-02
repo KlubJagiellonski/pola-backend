@@ -6,6 +6,7 @@ import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
 import Facebbok from '../assets/social-media/facebook.png';
 import Instagram from '../assets/social-media/instagram.png';
 import Twitter from '../assets/social-media/twitter.png';
+import { urls } from '../domain/website';
 
 const Wrapper = styled(WrapperSection)`
   min-height: 5em;
@@ -36,7 +37,7 @@ const Items = styled.div`
   }
 `;
 
-const Item = styled.div`
+const Item = styled.a`
   flex: 1;
   text-align: center;
 `;
@@ -58,13 +59,13 @@ const SocialMedia = () => {
     <Wrapper color={color.background.white}>
       <Title>Śledź nas na:</Title>
       <Items>
-        <Item>
+        <Item href={urls.external.polaSocialMedia.facebook.href} target="blank">
           <img src={Facebbok} />
         </Item>
-        <Item>
+        <Item href={urls.external.polaSocialMedia.instagram.href} target="blank">
           <img src={Instagram} />
         </Item>
-        <Item>
+        <Item href={urls.external.polaSocialMedia.twitter.href} target="blank">
           <img src={Twitter} />
         </Item>
         <Item>

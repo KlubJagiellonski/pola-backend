@@ -2,9 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Article } from '../../../domain/articles';
 import { ArticleBlock } from './ArticleBlock';
-import { ButtonColor } from '../../../styles/button-theme';
-import { Device, padding } from '../../../styles/theme';
-import { PrimaryButton } from '../../buttons/PrimaryButton';
+import { Device } from '../../../styles/theme';
 
 const Wrapper = styled.div`
   grid-area: articles;
@@ -13,11 +11,6 @@ const Wrapper = styled.div`
     padding: 15px 30px;
     margin-bottom: 15px;
   }
-`;
-
-const ArticlesButton = styled(PrimaryButton)`
-  width: 100%;
-  padding: ${padding.normal};
 `;
 
 interface IArticlesList {
@@ -36,9 +29,9 @@ export const ArticlesList: React.FC<IArticlesList> = ({ articles }) => {
             photo={article.imagePath}
             date={article.date}
             text={article.subTitle}
+            tag={article.tag}
           />
         ))}
-      <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" color={ButtonColor.Red} />
     </Wrapper>
   );
 };

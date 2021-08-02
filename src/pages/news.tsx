@@ -1,34 +1,82 @@
-import React from 'react';
-import { Link } from 'gatsby';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { margin, Device } from '../styles/theme'
+import ReactPaginate from "react-paginate";
 import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
 import { Article } from '../domain/articles';
 import { connect, useDispatch } from 'react-redux';
-import ArticlesList from '../components/articles/list/ArticlesList';
 import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { PageType } from '../domain/website';
+import { PageSection } from '../layout/PageSection';
+import './../components/Pagination.css'
+import SocialMedia from '../components/SocialMedia';
+import TagsList from '../components/tags/TagsList';
+import { ArrayParam, withDefault, useQueryParams, NumberParam } from "use-query-params";
+import { getTagsList } from './../utils/tags'
+import NewsPageArticles from '../components/articles/list/NewsPagesArticles';
+
+const Title = styled.p`
+  margin-top: ${margin.veryBig};
+  font-weight: bold;
+`
+
+const InfoSection = styled.div`
+    display: flex;
+    margin: ${margin.normal} 0;
+
+    div {
+      flex: 1;
+    }
+`
 
 interface NewsPage {
   location?: Location;
   articles?: Article[];
 }
 
-const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
-  const dispatch = useDispatch();
+interface IQuery {
+  tags: string[],
+  id: number
+}
 
-  React.useEffect(() => {
+const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
+  const [tag, setTag] = useState<string[]>([]);
+  const dispatch = useDispatch();
+  const [query, setQuery] = useQueryParams<IQuery>({
+    tags: withDefault(ArrayParam, []),
+    id: NumberParam
+  });
+
+  useEffect(() => {
     if (location) {
       dispatch(LoadBrowserLocation(location));
       dispatch(SelectActivePage(PageType.NEWS));
     }
   }, []);
 
+  useEffect(() => {
+    if (articles) {
+      setTag(getTagsList(articles))
+    }
+  }, [articles, location]);
+
   return (
     <PageLayout>
       <SEOMetadata pageTitle="Aktualności" />
-      <ArticlesList articles={articles} />
-      <Link to="/">Go back to the homepage</Link>
+      <PageSection>
+        <Title>Aktualności</Title>
+        <NewsPageArticles
+          articles={articles}
+          query={query}
+          setQuery={setQuery}
+        />
+        <InfoSection>
+          <TagsList tag={tag} activeTags={query.tags} />
+          <SocialMedia />
+        </InfoSection>
+      </PageSection>
     </PageLayout>
   );
 };

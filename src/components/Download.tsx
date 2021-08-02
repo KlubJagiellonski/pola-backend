@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: 11.4em;
   padding: ${padding.big} 0;
+  background: ${color.background.black};
 
   @media ${Device.mobile} {
     min-height: 0;

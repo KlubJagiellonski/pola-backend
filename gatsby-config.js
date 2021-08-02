@@ -6,6 +6,7 @@ module.exports = {
     author: `Klub Jagielloński`,
   },
   plugins: [
+    'gatsby-plugin-use-query-params',
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-react-helmet`,
     // generic images

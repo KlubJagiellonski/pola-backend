@@ -23,7 +23,7 @@ export const getButtonColor = (buttonColor?: ButtonColor): IButtonColor => {
     case ButtonColor.LightGray:
       return {
         background: color.button.lightGray,
-        hover: color.button.white,
+        hover: color.background.gray,
         text: color.text.primary,
       };
     case ButtonColor.Gray:

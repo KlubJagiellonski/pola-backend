@@ -1,7 +1,7 @@
 import { Link } from 'gatsby';
 import React from 'react';
 import styled from 'styled-components';
-import { PageLinkData, PageType } from '../../domain/generic';
+import { PageLinkData, PageType } from '../../domain/website';
 import { color, Device, margin } from '../../styles/theme';
 
 const Item = styled.div<{ selected: boolean }>`

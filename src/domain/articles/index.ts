@@ -7,6 +7,7 @@ export class Article {
   public slug: string;
   public date?: string;
   public imagePath?: string;
+  public tag: string;
 
   constructor(data: IArticleNode) {
     this.id = data.id;
@@ -15,5 +16,6 @@ export class Article {
     this.slug = data.fields.slug;
     this.date = data.fields.prefix;
     this.imagePath = data.frontmatter.cover.relativePath;
+    this.tag = data.frontmatter.category;
   }
 }

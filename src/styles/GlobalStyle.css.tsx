@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { color, fontSize } from './theme';
+import { color, fontSize, margin } from './theme';
 
 type Color = {
   color: string;
@@ -14,8 +14,7 @@ export const WrapperSection = styled.div`
 `;
 
 export const TitleSection = styled.p`
-  margin-top: 15px;
-  margin-bottom: 10px;
+  margin-top: ${margin.normal} 0;
   padding: 0;
   font-size: ${fontSize.normal};
   font-weight: 700;
