@@ -13,7 +13,7 @@ interface IStateLoader {
   loadFriends?: () => void;
 }
 
-export const StateLoader = (props: IStateLoader) => {
+const Loader = (props: IStateLoader) => {
   const bootApplication = async () => {
     if (props.initApp) {
       await props.initApp();
@@ -30,16 +30,16 @@ export const StateLoader = (props: IStateLoader) => {
   const queryResult = ArticleService.getAll();
   if (!props.isArticlesLoaded && queryResult?.allMarkdownRemark?.edges && props.loadArticles) {
     const data = queryResult.allMarkdownRemark.edges;
-    data.sort((a : IArticleEdge, b : IArticleEdge)=>{
-        return Date.parse(b.node.fields.prefix) - Date.parse(a.node.fields.prefix);
-    })
+    data.sort((a: IArticleEdge, b: IArticleEdge) => {
+      return Date.parse(b.node.fields.prefix) - Date.parse(a.node.fields.prefix);
+    });
     props.loadArticles(data);
   }
 
   return null;
 };
 
-export const StateLoader2 = connect(
+export const StateLoader = connect(
   (state: IPolaState) => ({
     isArticlesLoaded: state.articles.initialized,
   }),
@@ -48,4 +48,4 @@ export const StateLoader2 = connect(
     loadArticles: articlesDispatcher.loadArticles,
     loadFriends: friendsDispatcher.loadFriends,
   }
-)(StateLoader);
+)(Loader);

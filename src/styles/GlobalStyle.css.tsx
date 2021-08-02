@@ -29,4 +29,10 @@ export const Text = styled.p`
   font-size: ${fontSize.small};
   color: ${color.text.secondary};
   line-height: 1rem;
+
+  font-feature-settings: 'kern', 'liga', 'clig', 'calt';
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
 `;

@@ -50,12 +50,12 @@ const About = () => {
   return (
     <Wrapper color={color.background.dark}>
       <Info>
-        <AboutTitle>O Poli</AboutTitle>
-        <AboutText>
+        <TitleSection>O Poli</TitleSection>
+        <Text>
           Masz dość masówki globalnych koncernów? Szukasz lokalnych firm tworzących unikatowe produkty? Pola pomoże Ci
           odnaleźć polskie wyroby. Zabierając Polę na zakupy, odnajdujesz produkty „z duszą” i wspierasz polską
           gospodarkę.
-        </AboutText>
+        </Text>
         <AboutButton label="Dowiedz się więcej... " color={ButtonColor.White} fontSize={fontSize.small} />
       </Info>
       <MockUp>
