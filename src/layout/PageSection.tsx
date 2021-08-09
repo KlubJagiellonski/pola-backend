@@ -20,8 +20,8 @@ export const PageSection = styled.section<IPageSection>`
   box-sizing: border-box;
 
   @media ${Device.mobile} {
-    padding: 0 ${padding.normal};
-  }
+    padding: 0 ${padding.tiny};
+  } 
   @media ${Device.desktop} {
     max-width: ${(props) => (props.size === 'full' ? undefined : pageWidth)};
     padding-bottom: ${(props) => (props.size === 'full' ? 0 : padding.normal)};

@@ -1,10 +1,12 @@
+import { Link } from 'gatsby';
 import React from 'react';
 import styled from 'styled-components';
 import { Article } from '../../../domain/articles';
-import { ButtonColor} from '../../../styles/button-theme';
-import {Device, padding} from '../../../styles/theme'
-import {PrimaryButton } from '../../buttons/PrimaryButton';
-import ArticlesList from './ArticlesList';
+import { urls } from '../../../domain/website';
+import { ButtonColor } from '../../../styles/button-theme';
+import { Device, padding, margin } from '../../../styles/theme'
+import { PrimaryButton } from '../../buttons/PrimaryButton';
+import ArticlesListPreview from './ArticlesListPrewiev';
 
 const Wrapper = styled.div`
   grid-area: articles;
@@ -15,8 +17,12 @@ const Wrapper = styled.div`
 `;
 
 const ArticlesButton = styled(PrimaryButton)`
-  width: 100%;
+  width: calc(100% - 2 * ${margin.normal});
   padding: ${padding.normal};
+  margin: 0 ${margin.normal};
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 `;
 
 interface IArticlesList {
@@ -26,8 +32,10 @@ interface IArticlesList {
 export const ArticlesMainPage: React.FC<IArticlesList> = ({ articles }) => {
   return (
     <Wrapper>
-      <ArticlesList articles={articles}/>
-      <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" color={ButtonColor.Red} />
+      <ArticlesListPreview articles={articles} />
+      <Link to={urls.pola.news}>
+        <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" color={ButtonColor.Red} />
+      </Link>
     </Wrapper>
   );
 };

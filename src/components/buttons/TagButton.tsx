@@ -2,18 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from './Button';
 import { ButtonColor, getButtonColor } from '../../styles/button-theme';
-import { color, Device, fontSize } from '../../styles/theme';
+import { color } from '../../styles/theme';
 
 const ButtonContainer = styled(Button)`
   border-radius: 20px;
   border: 2px solid ${color.border.white};
   font-weight: 300;
   text-transform: uppercase; 
-
-  @media ${Device.mobile} {
-    display: none;
-    font-size: ${fontSize.tiny};
-  }
 `;
 
 export interface ITagButton {

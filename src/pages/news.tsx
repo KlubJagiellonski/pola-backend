@@ -19,6 +19,10 @@ import NewsPageArticles from '../components/articles/list/NewsPagesArticles';
 const Title = styled.p`
   margin-top: ${margin.veryBig};
   font-weight: bold;
+
+  @media ${Device.mobile} {
+      display: none;
+  }
 `
 
 const InfoSection = styled.div`
@@ -27,6 +31,10 @@ const InfoSection = styled.div`
 
     div {
       flex: 1;
+    }
+
+    @media ${Device.mobile} {
+      flex-direction: column;
     }
 `
 
@@ -59,7 +67,7 @@ const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
     if (articles) {
       setTag(getTagsList(articles))
     }
-  }, [articles, location]);
+  }, [articles, query]);
 
   return (
     <PageLayout>

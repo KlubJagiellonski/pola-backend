@@ -15,7 +15,9 @@ const Wrapper = styled(WrapperSection)`
   min-height: 16.1em;
 
   @media ${Device.mobile} {
-    min-height: 15em;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -23,6 +25,12 @@ const Info = styled.div`
   width: 50%;
   height: initial;
   position: relative;
+
+  @media ${Device.mobile} {
+    width: 8em;
+    height: 10em;
+    margin: 0 auto;
+  }
 `;
 
 const TextSection = styled.div`
@@ -32,24 +40,22 @@ const TextSection = styled.div`
   width: 50%;
 
   @media ${Device.mobile} {
-    padding: 0 ${padding.small};
+    padding: ${padding.normal};
+    width: 100%;
+    margin-bottom: ${margin.normal};
+    min-height: 10em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
 
 const DevelopmentTitle = styled(TitleSection)`
   margin-bottom: ${margin.normal};
-
-  @media ${Device.mobile} {
-    font-size: ${fontSize.tiny};
-  }
 `;
 
 const DevelopmentText = styled(Text)`
   margin-bottom: ${margin.big};
-
-  @media ${Device.mobile} {
-    font-size: ${fontSize.tiny};
-  }
 `;
 
 const ImgSection = styled.div`
@@ -60,7 +66,7 @@ const ImgSection = styled.div`
   top: 50%;
   transform: translateY(-50%);
 
-  @media ${Device.mobile} and (min-width : 550px){
+  @media ${Device.mobile}{
     top: 0;
     transform: translateY(0px);
 
@@ -68,7 +74,6 @@ const ImgSection = styled.div`
     picture {
       img{
         width: auto !important;
-        height: 15em !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
       }
@@ -82,13 +87,15 @@ const DevelopmentSection = () => {
     <Wrapper color={color.background.red}>
       <Info>
         <ImgSection>
-          <ResponsiveImage imageSrc='smutny-2.png'/>
+          <ResponsiveImage imageSrc='smutny-2.png' />
         </ImgSection>
       </Info>
       <TextSection>
         <DevelopmentTitle>Zobacz jak rozwija się Aplikacja Pola i wspomóż ją!</DevelopmentTitle>
         <DevelopmentText>Dowiedz się co możesz jeszcze zrobić, aby wspierać polskich producentów.</DevelopmentText>
-        <SecondaryButton label="Czytaj dalej..." fontSize={fontSize.small} color={ButtonColor.Red} />
+        <div className='buttons'>
+          <SecondaryButton label="Czytaj dalej..." fontSize={fontSize.small} color={ButtonColor.Red} />
+        </div>
       </TextSection>
     </Wrapper>
   );

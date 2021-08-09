@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { margin, Device } from './../../../styles/theme'
 import ReactPaginate from "react-paginate";
 import { Article } from './../../../domain/articles';
-import ArticlesList from './../../../components/articles/list/ArticlesList';
+import ArticlesList from './ArticlesList';
 import './../../../components/Pagination.css'
 import LatestArticle from './../../../components/articles/list/LatestArticle';
 import { DecodedValueMap, SetQuery } from "use-query-params";
 import { IArticlesTwoColumns, getArticlesTwoColumns } from './../../../utils/articles'
+import { ArticleBlock } from './ArticleBlock';
 
 const Wrapper = styled.div`
   display: flex;
@@ -20,12 +21,23 @@ const Wrapper = styled.div`
 
   @media ${Device.mobile} {
     flex-direction: column;
+    margin-top: 0;
   }
 `
 
 const PaginationSection = styled.div`
   display: flex;
   justify-content: center;
+`
+
+const FirstArticle = styled.div<{ inVisible?: boolean }>`
+  margin-top: ${margin.veryBig};
+  margin-left: ${margin.normal};
+  margin-right: ${margin.normal};
+
+  @media ${Device.desktop} {
+    display: none;
+  }
 `
 
 interface NewsPage {
@@ -61,7 +73,7 @@ const NewsPageArticles: React.FC<NewsPage> = ({ articles, query, setQuery }) => 
         setCurrentPage(query.id)
       }
     }
-  }, [articles]);
+  }, [articles, query]);
 
   const handlePageClick = ({ selected: selectedPage }) => {
     setQuery(
@@ -83,6 +95,21 @@ const NewsPageArticles: React.FC<NewsPage> = ({ articles, query, setQuery }) => 
           text={articles[0].subTitle}
           tag={articles[0].tag}
         />
+      }
+      {
+        currentPage === 0 && articles &&
+        (query.tags.includes(articles[0].tag) || query.tags.length === 0) &&
+        <FirstArticle>
+          <ArticleBlock
+            key={articles[0].id}
+            title={articles[0].title}
+            slug={articles[0].slug}
+            photo={articles[0].imagePath}
+            date={articles[0].date}
+            text={articles[0].subTitle}
+            tag={articles[0].tag}
+          />
+        </FirstArticle>
       }
       {sortedArticles && sortedArticles.length > 0 &&
         <Wrapper>

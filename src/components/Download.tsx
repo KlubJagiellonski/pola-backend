@@ -16,7 +16,8 @@ const Wrapper = styled.div`
   background: ${color.background.black};
 
   @media ${Device.mobile} {
-    min-height: 0;
+    min-height: initial;
+    padding: ${padding.normal} 0;
   }
 `;
 
@@ -26,7 +27,7 @@ const DownoladTitle = styled(TitleSection)`
   font-size: ${fontSize.normal};
 
   @media ${Device.mobile} {
-    ${margin.normal}
+    margin: ${margin.small}
   }
 `;
 
@@ -40,7 +41,7 @@ const DownloadLinks = styled.div`
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        width: 200px;
+        width: 8em;
       }
     }
   }

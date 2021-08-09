@@ -6,7 +6,13 @@ import { getDate } from '../../../utils/dates';
 import Tag from '../../tags/Tag';
 
 const ArticleTag = styled.div`
-  margin-top: ${margin.big};
+  @media ${Device.desktop} {
+    margin-top: ${margin.big};
+  }
+
+  @media ${Device.mobile} {
+    display: none;
+  }
 `;
 
 const ArticleDate = styled(Text)`
@@ -17,29 +23,28 @@ const ArticleDate = styled(Text)`
   }
 `;
 
-const ArticleText = styled(Text) <{ lines?: number }>`
+const ArticleText = styled(Text)`
    overflow: hidden;
    text-overflow: ellipsis;
    display: -webkit-box;
-   -webkit-line-clamp: ${(props) => props.lines};
+   -webkit-line-clamp: 4;
    -webkit-box-orient: vertical;
 
   @media ${Device.mobile} {
-    font-size: ${fontSize.tiny};
+    font-size: ${fontSize.small};
   }
 `;
 
 interface IArticleContents {
   date?: string;
   text: string;
-  lines?: number;
   tag?: String;
 }
 
-const ArticleContents: React.FC<IArticleContents> = ({ date, text, lines, tag }) => {
+const ArticleContents: React.FC<IArticleContents> = ({ date, text, tag }) => {
   return (
     <>
-      <ArticleText lines={lines}>{text}</ArticleText>
+      <ArticleText>{text}</ArticleText>
       {date && <ArticleDate>{getDate(date)}</ArticleDate>}
       {tag &&
         <ArticleTag>

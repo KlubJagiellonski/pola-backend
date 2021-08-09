@@ -55,6 +55,12 @@ const Background = styled.div<{ img?: string }>`
   }
 `;
 
+const WrapperContents = styled(PageSection)`
+  @media ${Device.mobile} {
+    padding: 0;
+  } 
+`
+
 const MissingProductInfo = styled.div`
   background-color: ${color.background.red};
   color: ${color.text.light};
@@ -138,9 +144,9 @@ const HomePage = (props: IHomePage) => {
           </MissingProductInfo>
         </PageSection>
       )}
-      <PageSection>
+      <WrapperContents>
         <Contents articles={props.articles?.slice(0, 3)} friends={props.friends} />
-      </PageSection>
+      </WrapperContents>
     </PageLayout>
   );
 };

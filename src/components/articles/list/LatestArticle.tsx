@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { color, padding } from '../../../styles/theme';
+import { color, padding, Device } from '../../../styles/theme';
 import { ResponsiveImage } from '../../images/ResponsiveImage';
 import ArticleContents from './ArticleContents';
 import ArticleTitle from './ArticleTitle';
@@ -17,6 +17,10 @@ interface IArticleBlock {
 const Wrapper = styled.div`
   height: 16em;
   position: relative;
+
+  @media ${Device.mobile} {
+    display: none;
+  }
 `
 
 const Image = styled.div`
@@ -59,11 +63,10 @@ const LatestArticle: React.FC<IArticleBlock> = ({ photo, title, slug, date, text
           {photo && <ResponsiveImage imageSrc={photo} />}
         </ImageSection>
         <TextSection>
-          <ArticleTitle title={title} slug={slug} />
+          <ArticleTitle title={title} slug={slug} tag={tag} date={date} />
           <ArticleContents
             date={date}
             text={text}
-            lines={4}
             tag={tag}
           />
         </TextSection>

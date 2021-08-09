@@ -18,20 +18,17 @@ const FormSearch = styled.div`
 `;
 
 const InputSection = styled.div`
-  padding: 0 1em;
-  position: relative;
+  padding-left: 1em;
   width: 100%;
   min-width: 28em;
   height: 56px;
   background-color: white;
   border-radius: 3em;
+  display: flex;
+  justify-content: flex-end;
 
   @media ${Device.mobile} {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding-right: ${padding.normal};
-    min-width: 24em;
+    min-width: 0;
   }
 `;
 
@@ -41,6 +38,7 @@ const InputText = styled.input`
   font-size: ${fontSize.normal};
   width: 100%;
   height: 100%;
+  padding-right: ${padding.small};
 
   &:focus,
   &:active {
@@ -50,16 +48,13 @@ const InputText = styled.input`
 
   @media ${Device.mobile} {
     max-width: none;
+    width: 100%;
   }
 `;
 
 const InputIconSection = styled.div`
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
   display: flex;
   align-items: center;
-  right: 0px;
   padding: ${padding.tiny} 0;
 `;
 

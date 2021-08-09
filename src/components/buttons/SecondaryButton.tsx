@@ -11,7 +11,6 @@ const ButtonContainer = styled(Button)`
   text-transform: uppercase; 
 
   @media ${Device.mobile} {
-    display: none;
     font-size: ${fontSize.tiny};
   }
 `;

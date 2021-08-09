@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import DevelopmentSection from './DevelopmentSection';
 import SocialMedia from './SocialMedia';
-import { ArticlesList } from '../components/articles/list/ArticlesList';
 import Friends from './Friends';
 import Teams from './Teams';
 import About from './About';
