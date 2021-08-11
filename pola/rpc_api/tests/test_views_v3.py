@@ -209,7 +209,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 },
                 'friend_text': 'To jest przyjaciel Poli',
                 'is_friend': True,
-                'name': 'company_official_125',
+                'name': c1.official_name,
                 'plCapital': 100,
                 'plCapital_notes': 'AAA',
                 'plNotGlobEnt': 100,

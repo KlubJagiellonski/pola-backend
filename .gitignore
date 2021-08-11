@@ -63,3 +63,4 @@ pola/media/
 utils/*.dump
 runserver.sh
 .pycharm_helpers
+coverage.xml
