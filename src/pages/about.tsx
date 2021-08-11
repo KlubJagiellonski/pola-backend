@@ -87,6 +87,8 @@ const AboutPage = (props: IAboutPage) => {
               <a href={urls.external.polaPrivacyPolicy.href} target="__blank">
                 polityką prywatności
               </a>
+              
+              <TitleSection>Partnerzy</TitleSection>
               .
             </Text>
           </PageSection>
