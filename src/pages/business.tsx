@@ -36,6 +36,15 @@ const BusinessPage = (props: IBusinessPage) => {
     <PageLayout styles={{ marginTop: padding.big }}>
       <SEOMetadata pageTitle="Oferta Biznesowa" />
       <PageSection>
+         <TitleSection>Oferta biznesowa</TitleSection>
+        <Text>
+          Głównym celem działań biznesowych jest promocja oraz wsparcie polskich przedsiębiorstw. Będzie to możliwe
+          dzięki stworzeniu silnego środowiska społeczno-biznesowego, które poprzez kooperację i wspólne działania
+          przyczyni się do popularyzacji mody na patriotyzm gospodarczy.
+
+           Stworzyliśmy narzędzia wsparcia biznesu, które odzwierciedlają aktualne nawyki konsumenckie i pozwalają
+          uzyskać przewagę konkurencyjną.
+        </Text>
         <TitleSection>Znak towarowy</TitleSection>
         <Text>
           Według badań nawet 90% Polaków chce kupować polskie produkty. Jak jednak rozpoznać polską firmę? Jakie
@@ -45,6 +54,8 @@ const BusinessPage = (props: IBusinessPage) => {
           częścią zagranicznego koncernu. Ponieważ zdecydowana większość Polaków chce kupować polskie produkty, warto
           podkreślać ich pochodzenie na opakowaniu. Nasz znak towarowy jest skierowany do wszystkich firm, którym
           aplikacja Pola przyznaje maksymalną liczbę punktów.
+          
+          <p><strong><a href="https://klubjagiellonski.github.io/pola-web/business//">Członkowie Klubu Przyjaciół Poli posługujący się naszym znakiem towarowym</a></strong></p>
         </Text>
         <ImageContainer>
           <ResponsiveImage imageSrc="pola.jpg" />
