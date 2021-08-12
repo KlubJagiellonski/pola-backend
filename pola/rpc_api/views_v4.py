@@ -1,10 +1,18 @@
+from django.core.paginator import InvalidPage
+from django.db.models import Q
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views import View
 from ratelimit.decorators import ratelimit
 
 from pola import logic, logic_ai
 from pola.models import Query
+from pola.rpc_api.api_models import SearchResult, SearchResultCollection
+from pola.rpc_api.http import JsonProblemResponse
 from pola.rpc_api.openapi import validate_pola_openapi_spec
+from pola.rpc_api.paginator import TokenizedPaginator
 from pola.rpc_api.rates import whitelist
+from product.models import Product
 
 
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
@@ -54,3 +62,33 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
         "title": "Potrzebujemy 1 zł",
     }
     return result
+
+
+class SearchV4ApiView(View):
+    PAGE_SIZE = 10
+
+    @method_decorator(ratelimit(key='ip', rate=whitelist('2/s'), block=True))
+    @method_decorator(validate_pola_openapi_spec)
+    def get(self, request):
+        query = request.GET['query']
+        qs = self.get_queryset(query)
+        paginator = TokenizedPaginator(qs.all(), self.PAGE_SIZE, token_salt=self.__class__.__name__)
+        try:
+            page = paginator.get_page_by_token(request.GET.get('pageToken'))
+        except InvalidPage as e:
+            return JsonProblemResponse(status=400, title="Invalid page", detail=str(e))
+
+        return JsonResponse(
+            SearchResultCollection(
+                nextPageToken=page.next_page_token() if page.has_next() else None,
+                products=[SearchResult.create_from_product(p) for p in page],
+                totalItems=paginator.count,
+            )
+        )
+
+    def get_queryset(self, query):
+        pred = Q(name__icontains=query)
+        if len(query) == 13 and query.isnumeric():
+            pred = pred | Q(code=query)
+        qs = Product.objects.filter(pred)
+        return qs
