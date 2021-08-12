@@ -20,7 +20,9 @@ info:
 
 servers:
   - url: https://www.pola-app.pl/
-    description: Sttable environemnt
+    description: Production environemnt
+  - url: https://pola-staging.herokuapp.com/
+    description: Staging environment
   - url: http://testserver/
     description: CI environemnt
   - url: http://0.0.0.0:8080
