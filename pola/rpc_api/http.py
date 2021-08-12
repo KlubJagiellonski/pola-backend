@@ -13,7 +13,7 @@ class JsonProblemResponse(JsonResponse):
         context_data: Dict[str, Any] = None,
         **kwargs,
     ):
-        response_data = {"type": error_type, "title": title, "detail": detail}
+        response_data = {"type": error_type, "title": title, "detail": detail, "status": status}
         if context_data:
             response_data.update(context_data)
 
