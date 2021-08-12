@@ -31,7 +31,7 @@ const FriendsPage = (props: IFriendsPage) => {
           <PageSection>
             <TitleSection>Klub Przyjaciół Poli</TitleSection>
             <Text>
-              h2>Partner aplikacji Pola</h2>
+              <h2>Partner aplikacji Pola</h2>
 <p><strong><a href="https://polskiekupujeto.pl/">PGE Polska Grupa Energetyczna</a></strong></p>
 <div style="display: flex; padding: 1em 0;">
     <div>
