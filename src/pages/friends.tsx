@@ -24,85 +24,9 @@ const FriendsPage = (props: IFriendsPage) => {
   }, []);
 
   return (
-    <PageLayout styles={{ marginTop: padding.big }}>
+    <PageLayout>
       <SEOMetadata pageTitle="Klub przyjaciół Poli" />
-      <ColumnsLayout>
-        <ContentColumn>
-          <PageSection>
-            <TitleSection>Klub Przyjaciół Poli</TitleSection>
-            <Text>
-              <h2>Partner aplikacji Pola</h2>
-<p><strong><a href="https://polskiekupujeto.pl/">PGE Polska Grupa Energetyczna</a></strong></p>
-<div style="display: flex; padding: 1em 0;">
-    <div>
-        <img class="img50" src="{% static "images/friends/logo-pge-2.png" %}"/>
-    </div>
-    <div style="padding-left: 1em;">
-        <img class="img50" src="{% static "images/friends/logo_polskiekupujeto.png" %}"/>
-    </div>
-
-</div>
-<p>Celem zainicjowanej przez Pracowników oraz Grupę Kapitałową PGE akcji <b>POLSKIE – KUPUJĘ TO!</b> jest zachęcanie Polaków do kupowania rodzimych produktów i usług. W ramach tego przedsięwzięcia PGE wspiera rozwój aplikacji Pola.</p>
-
-
-<h2>Wspieramy polskie firmy - oto Przyjaciele Poli:</h2>
-<p><strong><a href="https://www.radziemska.pl/">1. Radziemska</a></strong></p>
-<img class="img50" src="{% static "images/friends/logo_radziemska.png" %}"/>
-<p>Rodzime przedsiębiorstwo chemiczne powstałe w 1982 roku. Firma specjalizuje się w produkcji chemii gospodarczej, w tym odplamiaczy, proszków do prania czy wybielaczy. Jest laureatem wielu nagród konsumenckich, a jej siedziba znajduje się w Łomiankach pod Warszawą.</p>
-<p><strong><a href="https://wodadlafirmy.pl/">2. Woda Staropolska</a></strong></p>
-<img class="img50" src="{% static "images/friends/logo_staropolska.png" %}"/>
-<p>Polski producent wody mineralnej pochodzący z Iłży. Jest to firma rodzinna o ponad 30-letniej tradycji, która specjalizuje się w produkcji bogatych w magnez i wapń wód mineralnych pod marką „Staropolska”. Od 1986 r. przedsiębiorstwo realizuje swoją misję, stając się w ostatnim czasie liderem wśród producentów i dostawców butelkowanej wody mineralnej przeznaczonej dla firm.</p>
-<p><strong><a href="https://www.italianfashion.pl/">3. Italian Fashion</a></strong></p>
-<img class="img50" src="{% static "images/friends/logo_italian_fashion.png" %}"/>
-<p>Firma Italian Fashion istnieje na rynku polskim od 1990 roku. Zatrudnia około 300 pracowników. Od początku istnienia zajmuje się produkcją bielizny damskiej, męskiej i dziecięcej oraz wygodnej odzieży domowej i akcesoriów, takich jak skarpety. W ofercie firmy znaleźć można również kolekcje dedykowane dla kobiet w ciąży i mam karmiących, jak również piżamy i koszule nocne dla kobiet puszystych.”</p>
-<p><strong><a href="https://avetpharma.pl//">4. AvetPharma</a></strong></p>
-<img class="img50" src="{% static "images/friends/logo_avetpharma.png" %}"/>
-<p>Spółka farmaceutyczna założona 10 lat temu przez magistra farmacji z wieloletnim doświadczeniem w branży leków OTC oraz suplementów diety. Firma zajmuje się produkcją oraz dystrybucją suplementów diety. Przez dekadę wprowadziła na rynek ponad 40 produktów własnych, które są dostępne w aptekach, sklepach zielarsko-medycznych oraz marketach. Siedziba spółki znajduje się w Warszawie.</p>
-<p><strong><a href="http://www.piwojad.pl//">5. Browar Piwojad</a></strong></p>
-<img class="img50" src="{% static "images/friends/logo_piwojad.png" %}" style="max-width: 200px"/>
-<p>Piwojad to kontraktowy browar rzemieślniczy z Krakowa założony przez Pawła Świdniewicza i Pawła Teodorczyka, którzy przygodę z piwowarstwem zaczęli od domowej produkcji na małą skalę. Piwojad dużą wagę przywiązuje do regionu, w którym warzy piwa. Priorytetem jest zaopatrywanie się w surowce dostępne u lokalnych dostawców i producentów żywności.</p>
-<p><strong><a href="https://spraykon.pl//">6. AmeriPol Trading</a></strong></p>
-<img class="img50" src="{% static "images/friends/Logo_AmeriPol.PNG" %}"/>
-
-<p>Firma Ameri-Pol Trading Ltd sp. z o.o. jest polską firmą założoną w 1992 r. jako spółka polsko amerykańska, jednak w ciągu lat działalności udziałowiec amerykański został wykupiony przez polskich udziałowców. Firma oferuje szeroki wybór klejów kontaktowych w pojemnikach ciśnieniowych oraz rozpuszczalników mających zastosowanie w różnych branżach, m.in. w meblarstwie, w branży motoryzacyjnej, w produkcji jachtów, w branży budowlanej. Oferowane przez nas kleje są sprzedawane pod własną wspólną marką SPRAY-KON i LEP-KON.</p>
-<p><strong><a href="https://sklep.kawapluton.com//">7. Pluton Kawa</a></strong></p>
-<img class="img50" src="{% static "images/friends/logo_kawa_pluton.png" %}"/>
-<p>Historia firmy sięga XIX wieku. Jej założycielem był Tadeusz Tarasiewicz, który założył pierwszą na ziemiach polskich palarnię kawy, pod nazywą Pluton. Firma przetrwała do 1950 r. W 2017 r. została reaktywowana. Pluton Kawa kultywuje tradycje i z powodzeniem stosuje współcześnie wartości kupieckie XX-lecia międzywojennego.</p>
-
-<p><strong>Jak rozpoznać polską firmę?</strong></p>
-<p>Można to ustalić weryfikując kilka czynników. Nasz program kierowany jest do przedsiębiorstw, które spełniają poniższe kryteria:
-<ul>
-    <li>są zarejestrowane w Polsce;</li>
-    <li>posiadają 100% polskiego kapitału;</li>
-    <li>prowadzą produkcję na terenie naszego kraju;</li>
-    <li>tworzą wykwalifikowane miejsca pracy;</li>
-    <li>nie są częścią zagranicznego koncernu.</li>
-</ul>
-<p>Ponadto przedsiębiorstwo musi charakteryzować się nieposzlakowaną opinią na swój temat oraz aktywnie angażować się w działania podejmowane na rzecz promocji patriotyzmu gospodarczego w Polsce.</p>
-<p><strong>Czym jest Klub Przyjaciół Poli?</strong></p>
-<p>Głównym celem Klubu Przyjaciół Poli jest promocja oraz wsparcie polskich przedsiębiorstw. Będzie to możliwe dzięki stworzeniu silnego środowiska społeczno-biznesowego, które poprzez kooperację i wspólne działania przyczyni się do popularyzacji mody na patriotyzm gospodarczy.</p>
-<p><strong>Co zyskuje Przyjaciel Poli?</strong></p>
-<ol type="a">
-    <li>
-        <p><strong>Znak Towarowy Polski produkt - 100 pkt Pola</strong></p>
-        <p>Stworzyliśmy własne oznaczenie <strong>Polski produkt - 100 pkt Pola</strong> przeznaczone wyłącznie dla produktów, które uzyskały w naszym algorytmie maksymalny wynik 100 punktów. Będzie to tym samym pierwszy znak towarowy, którego pojawienie się na etykiecie jest poparte merytoryczną analizą danego przedsiębiorstwa.</p>
-        <p>Głównym powodem rozszerzenia naszej działalności są doświadczenia związane z oznaczeniami funkcjonującymi na polskim rynku spożywczym. W większości przypadków w sposób jednoznaczny sugerują one polskie pochodzenie produktów, chociaż po zweryfikowaniu ich producentów okazuje się, że są własnością zagranicznych podmiotów. Znak <strong>Polski produkt - 100 pkt Pola</strong> jest naszą odpowiedzią, która w formie prostego graficznego przekazu umożliwi szybką weryfikację produktu, co będzie szczególnie ważne dla osób niekorzystających z urządzeń mobilnych.</p>
-    </li>
-    <li>
-        <strong>Ekspozycja informacji o firmie</strong>
-        <p>Oprócz samego znaku towarowego status Przyjaciela Poli jest jednoznaczny z aktywnym udziałem w rozwoju aplikacji <strong>Pola. Zabierz ja na zakupy</strong>, którą używa już ponad 750 000 użytkowników. Informacja o firmie znajduje w specjalnych zakładkach w aplikacji oraz na naszej stronie internetowej, dzieki czemu każdy konsument może poznać historię oraz profil działalności wszystkich współpracujących z Klubem Jagiellońskim przedsiębiorstw. Dodatkowo po zeskanowaniu produktu należącego do Przyjaciela Poli użytkownik zostanie poinformowany o jego specjalnym statusie.</p>
-    </li>
-    <li>
-        <strong>Działalność promocyjna oraz społeczna</strong>
-        <p>Wszyscy Przyjaciele Poli mają możliwość aktywnego udziału w prowadzonych przez nas kampaniach społecznych oraz internetowych, mających na celu popularyzację polskich firm i patriotyzmu gospodarczego wśród obywateli.</p>
-    </li>
-</ol>
-<p><strong>Chcesz do nas dołączyć?</strong></p>
-<p>Wszystkie przedsiębiorstwa zainteresowane dołączeniem do grona Przyjaciół Poli zachęcamy do kontaktu z Mateuszem Perowiczem (tel. <a href="tel:+48660010034">660 010 034</a>, e-mail: <a href="mailto:mateusz.perowicz@klubjagiellonski.pl">mateusz.perowicz@klubjagiellonski.pl</a>), który odpowiada za rozwój projektu.</p>
-</Text>
-  </PageSection>
-   </ContentColumn>
-   </ColumnsLayout>
+      <DevelopmentPlaceholder text="Treść przyjaciół Poli w budowie" />
     </PageLayout>
   );
 };
