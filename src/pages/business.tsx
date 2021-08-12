@@ -54,8 +54,9 @@ const BusinessPage = (props: IBusinessPage) => {
           częścią zagranicznego koncernu. Ponieważ zdecydowana większość Polaków chce kupować polskie produkty, warto
           podkreślać ich pochodzenie na opakowaniu. Nasz znak towarowy jest skierowany do wszystkich firm, którym
           aplikacja Pola przyznaje maksymalną liczbę punktów.
-          
-          <p><strong><a href="https://klubjagiellonski.github.io/pola-web/business//">Członkowie Klubu Przyjaciół Poli posługujący się naszym znakiem towarowym</a></strong></p>
+          </Text>
+          <Text>
+          <p><strong><a href="https://https://klubjagiellonski.github.io/pola-web/friends">Członkowie Klubu Przyjaciół Poli posługujący się naszym znakiem towarowym</a></strong></p>
         </Text>
         <ImageContainer>
           <ResponsiveImage imageSrc="pola.jpg" />
