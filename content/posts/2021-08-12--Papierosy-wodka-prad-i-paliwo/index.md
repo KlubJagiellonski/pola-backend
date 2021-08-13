@@ -1,5 +1,5 @@
 ---
-title: Papierosy, wódka, prąd i paliwo.
+title: Papierosy, wódka, prąd i paliwo Najwięksi płatnicy podatków w Polsce
 subTitle: Czterdzieści największych firm wpłaciło do budżetu państwa 99 mld zł. Jest to równowartość niemal połowy wpływów budżetu państwa.
 category: "Krótko"
 cover: zdjecie-stacja.PNG
@@ -8,9 +8,11 @@ cover: zdjecie-stacja.PNG
 
 Czterdzieści największych firm wpłaciło do budżetu państwa 99 mld zł. Jest to równowartość niemal połowy wpływów budżetu państwa. Oprócz spółek Skarbu Państwa, czołowe pozycje zajmują Philip Morris z branży tytoniowej i Stock Polska.
 
-### Kto płaci podatki w Polsce
-
 „Przeanalizowaliśmy dane 60 największych spółek giełdowych, a także nienotowanych na giełdzie firm zatrudniających wielu pracowników (tych, które udostępniły już sprawozdanie finansowe w KRS) oraz tych zajmujących się produkcją towarów akcyzowanych i grami losowymi. Z tego powstał obraz wpływów podatkowych w Polsce w 2020 r.” – [informuje Business Insider.](https://businessinsider.com.pl/firmy/podatki/najwieksi-platnicy-podatkow-2020-oto-kto-zapewnia-budzetowi-wplywy/l81xvdc)
+
+![](PG.PNG)
+
+## **Materiał ukazał się na poratlu Klubu Jagiellońskiego, wydawcy aplikacji Pola. Czytaj więcej w dziale [Podmiotowa Gospodarka](https://klubjagiellonski.pl/temat/podmiotowa-gospodarka/)**
 
 „I tak czterdziestu największych płatników z tego grona wniosło w ub. r. aż 98,7 mld zł w formie różnych podatków i opłat. To równowartość aż 42 proc. wpływów podatkowych budżetu państwa w ub.r. z wyłączeniem VAT, który płacą ostatecznie zawsze konsumenci. Te czterdzieści firm to część gospodarki, która, można powiedzieć, że swoją działalnością utrzymuje struktury państwowe” – czytamy w artykule.
 
