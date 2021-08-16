@@ -76,7 +76,7 @@ class SearchV4ApiView(View):
         try:
             page = paginator.get_page_by_token(request.GET.get('pageToken'))
         except InvalidPage as e:
-            return JsonProblemResponse(status=400, title="Invalid page", detail=str(e))
+            return JsonProblemResponse(status=400, title="Invalid pageToken", detail=str(e))
 
         return JsonResponse(
             SearchResultCollection(
@@ -90,5 +90,5 @@ class SearchV4ApiView(View):
         pred = Q(name__icontains=query)
         if len(query) == 13 and query.isnumeric():
             pred = pred | Q(code=query)
-        qs = Product.objects.filter(pred)
+        qs = Product.objects.filter(pred).order_by('pk')
         return qs

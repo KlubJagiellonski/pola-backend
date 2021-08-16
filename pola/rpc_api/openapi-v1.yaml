@@ -229,6 +229,7 @@ components:
                 type: string
               company:
                 type: object
+                nullable: true
                 properties:
                   name:
                     type: string
@@ -236,6 +237,7 @@ components:
                   - name
               brand:
                 type: object
+                nullable: true
                 properties:
                   name:
                     type: string
