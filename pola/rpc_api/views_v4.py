@@ -76,7 +76,7 @@ class SearchV4ApiView(View):
         try:
             page = paginator.get_page_by_token(request.GET.get('pageToken'))
         except InvalidPage as e:
-            return JsonProblemResponse(status=400, title="Invalid pageToken", detail=str(e))
+            return JsonProblemResponse(status=400, title="Invalid value of pageToken parameter", detail=str(e))
 
         return JsonResponse(
             SearchResultCollection(
