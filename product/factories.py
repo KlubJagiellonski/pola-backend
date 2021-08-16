@@ -8,6 +8,6 @@ class ProductFactory(factory.django.DjangoModelFactory):
         model = 'product.Product'
 
     name = factory.Sequence(lambda n: f'product{n}')
-    code = factory.sequence(lambda n: f'00000000{n}')
+    code = factory.sequence(lambda n: f"{n:013}")
     company = factory.SubFactory(CompanyFactory)
     brand = factory.SubFactory(BrandFactory)

@@ -4,8 +4,11 @@ from test_plus import TestCase
 
 class TestApiUrls(TestCase):
     def test_should_render(self):
-        self.assertEqual("/a/v3/add_ai_pics", reverse("api:add_ai_pics"))
+        # API v4
+        self.assertEqual("/a/v4/search", reverse("api:search_v4"))
+        self.assertEqual("/a/v4/get_by_code", reverse("api:get_by_code_v4"))
         # API v3
+        self.assertEqual("/a/v3/add_ai_pics", reverse("api:add_ai_pics"))
         self.assertEqual("/a/v3/get_by_code", reverse("api:get_by_code_v3"))
         self.assertEqual("/a/v3/create_report", reverse("api:create_report_v3"))
         self.assertEqual("/a/v3/update_report", reverse("api:update_report_v3"))

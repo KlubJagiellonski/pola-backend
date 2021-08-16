@@ -195,3 +195,133 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             },
             json.loads(response.content),
         )
+
+
+class TestSearchV4(TestCase):
+    url = '/a/v4/search'
+
+    def test_should_return_error_when_parameter_missing(self):
+        response = self.client.get(self.url, content_type="application/json")
+        self.assertEqual(400, response.status_code)
+        self.assertEqual(
+            {
+                'detail': '1 errors encountered',
+                'errors': ['Missing required parameter: query'],
+                'status': 400,
+                'title': 'Request validation failed',
+                'type': 'about:blank',
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_error_when_query_is_empty(self):
+        response = self.client.get(f"{self.url}?query=", content_type="application/json")
+        self.assertEqual(400, response.status_code)
+        self.assertEqual(
+            {
+                'detail': '1 errors encountered',
+                'errors': ['Value of parameter cannot be empty: query'],
+                'status': 400,
+                'title': 'Request validation failed',
+                'type': 'about:blank',
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_empty_result_when_no_product_found(self):
+        response = self.client.get(f"{self.url}?query=invalid_name", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual({'nextPageToken': None, 'products': [], 'totalItems': 0}, json.loads(response.content))
+
+    def test_should_return_results_by_product_name(self):
+        p1 = ProductFactory(name="baton")
+        response = self.client.get(f"{self.url}?query=bat", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            {
+                'nextPageToken': None,
+                'products': [
+                    {
+                        'brand': {'name': p1.brand.name},
+                        'code': p1.code,
+                        'company': {'name': p1.company.name},
+                        'name': p1.name,
+                    }
+                ],
+                'totalItems': 1,
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_return_results_by_product_code(self):
+        p1 = ProductFactory(name="test-product")
+        response = self.client.get(f"{self.url}?query={p1.code}", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            {
+                'nextPageToken': None,
+                'products': [
+                    {
+                        'brand': {'name': p1.brand.name},
+                        'code': p1.code,
+                        'company': {'name': p1.company.name},
+                        'name': p1.name,
+                    }
+                ],
+                'totalItems': 1,
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_serialize_products(self):
+        p1 = ProductFactory(name="baton1")
+        p2 = ProductFactory(name="baton2", company=None)
+        p3 = ProductFactory(name="baton3", brand=None)
+
+        response = self.client.get(f"{self.url}?query=baton", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            {
+                'nextPageToken': None,
+                'products': [
+                    {
+                        'brand': {'name': p1.brand.name},
+                        'code': p1.code,
+                        'company': {'name': p1.company.name},
+                        'name': p1.name,
+                    },
+                    {
+                        'brand': {'name': p2.brand.name},
+                        'code': p2.code,
+                        'company': None,
+                        'name': p2.name,
+                    },
+                    {
+                        'brand': None,
+                        'code': p3.code,
+                        'company': {'name': p3.company.name},
+                        'name': p3.name,
+                    },
+                ],
+                'totalItems': 3,
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_support_pagination(self):
+        ProductFactory.create_batch(11, name="baton")
+
+        response = self.client.get(f"{self.url}?query=baton", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        response_data = json.loads(response.content)
+        self.assertEqual(10, len(response_data['products']))
+        self.assertEqual(11, response_data['totalItems'])
+        next_page_token = response_data['nextPageToken']
+
+        response = self.client.get(
+            f"{self.url}?query=baton&pageToken={next_page_token}", content_type="application/json"
+        )
+        self.assertEqual(200, response.status_code)
+        response_data = json.loads(response.content)
+        self.assertEqual(1, len(response_data['products']))
+        self.assertEqual(11, response_data['totalItems'])

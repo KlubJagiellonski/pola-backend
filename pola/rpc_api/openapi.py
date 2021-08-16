@@ -8,6 +8,7 @@ from openapi_core.contrib.django import (
     DjangoOpenAPIResponse,
 )
 from openapi_core.spec.paths import SpecPath
+from openapi_core.unmarshalling.schemas.exceptions import InvalidSchemaValue
 from openapi_core.validation.request.validators import RequestValidator
 from openapi_core.validation.response.validators import ResponseValidator
 from yaml import safe_load as yaml_load
@@ -26,6 +27,7 @@ def validate_openapi_spec(spec: SpecPath):
             result = validator.validate(openapi_request)
             if result.errors:
                 return JsonProblemResponse(
+                    status=400,
                     title="Request validation failed",
                     detail=f"{len(result.errors)} errors encountered",
                     context_data={'errors': [str(e) for e in result.errors]},
@@ -36,11 +38,19 @@ def validate_openapi_spec(spec: SpecPath):
             validator = ResponseValidator(spec)
             result = validator.validate(openapi_request, openapi_response)
             if result.errors:
-                return JsonProblemResponse(
-                    title="Response validation failed",
-                    detail=f"{len(result.errors)} errors encountered",
-                    context_data={'errors': [str(e) for e in result.errors]},
-                )
+                if len(result.errors) == 1 and isinstance(result.errors[0], InvalidSchemaValue):
+                    error: InvalidSchemaValue = result.errors[0]
+                    return JsonProblemResponse(
+                        title="Response schema validation failed",
+                        detail=f"Value {error.value} not valid for schema of type {error.type}",
+                        context_data={'schema_errors': [str(e) for e in error.schema_errors]},
+                    )
+                else:
+                    return JsonProblemResponse(
+                        title="Response validation failed",
+                        detail=f"{len(result.errors)} errors encountered",
+                        context_data={'errors': [str(e) for e in result.errors]},
+                    )
 
             return django_response
 
