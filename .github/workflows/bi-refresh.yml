@@ -42,7 +42,7 @@ jobs:
       - name: "Set environment env variable"
         run: |-
           pip install django-environ
-          source <(python ./pola-bi/dbt/dev.py --environment "${TARGET_ENV}")
+          source <(python ./pola-bi/env.py --environment "${TARGET_ENV}")
           printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
           printenv | grep POLA_APP >> $GITHUB_ENV;
         env:

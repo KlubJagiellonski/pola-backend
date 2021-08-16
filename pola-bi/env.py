@@ -17,14 +17,14 @@ def print_env_vars(all_env_vars: Dict[str, str]) -> None:
         print(f'export {shlex.quote(key)}={shlex.quote(value)}')
 
 
-def db_url_to_env_var(database_url: str, prefix: str) -> Dict[str, str]:
+def db_url_to_env_var(database_url: str) -> Dict[str, str]:
     db_config = environ.Env.db_url_config(database_url)
     db_config_env_var = {
-        f"{prefix}_HOST": str(db_config['HOST']),
-        f"{prefix}_PORT": str(db_config['PORT'] or 5432),
-        f"{prefix}_USER": str(db_config['USER']),
-        f"{prefix}_PASS": str(db_config['PASSWORD']),
-        f"{prefix}_DB_NAME": str(db_config['NAME']),
+        "PGHOST": str(db_config['HOST']),
+        "PGPORT": str(db_config['PORT'] or 5432),
+        "PGUSER": str(db_config['USER']),
+        "PGPASSWORD": str(db_config['PASSWORD']),
+        "PGDATABASE": str(db_config['NAME']),
     }
     return db_config_env_var
 
@@ -36,6 +36,8 @@ def load_database_url(environment: str) -> str:
         return fetch_database_url_from_heroku(app_name='pola-app')
     elif environment == 'local':
         return "postgres://pola_app:pola_app@localhost/pola_app"
+    elif environment == 'docker':
+        return "postgres://pola_app:pola_app@postgres/pola_app"
     raise SystemExit(f"Unknown environment:{environment}")
 
 
@@ -54,7 +56,12 @@ def fetch_heroku_env_vars(app_name: str) -> Dict[str, str]:
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='Fetch credentials to database access.')
     parser.add_argument(
-        '--environment', metavar='ENV', choices=('local', 'prod', 'staging'), help='Environment', default='local'
+        "-e",
+        '--environment',
+        metavar='ENV',
+        choices=('local', 'docker', 'prod', 'staging'),
+        help='Environment',
+        default='local',
     )
     return parser
 
@@ -65,7 +72,7 @@ def main() -> None:
     environment = args.environment
 
     database_url = load_database_url(environment)
-    db_config_env_var = db_url_to_env_var(database_url, prefix="POLA_APP")
+    db_config_env_var = db_url_to_env_var(database_url)
     all_env_vars = {
         **db_config_env_var,
         'POLA_APP_SCHEMA': 'public',
@@ -76,9 +83,10 @@ def main() -> None:
     print_env_vars(all_env_vars)
 
     print("# To load variable, run:")
-    print("# Local: eval $(python dev.py)")
-    print("# Prod: eval $(python dev.py --environment prod)")
-    print("# Staging: eval $(python dev.py --environment staging)")
+    print(f"# Local: eval $(python {__file__})")
+    print(f"# Docker: eval $(python {__file__} --environment docker)")
+    print(f"# Prod: eval $(python {__file__} --environment prod)")
+    print(f"# Staging: eval $(python {__file__} --environment staging)")
 
 
 if __name__ == '__main__':

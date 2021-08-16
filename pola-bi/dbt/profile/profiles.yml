@@ -9,21 +9,21 @@ pola_app_postgres:
     dev:
       type: postgres
       threads: 4
-      host: "{{ env_var('POLA_APP_HOST') }}"
-      port: "{{ env_var('POLA_APP_PORT') | as_number }}"
-      user: "{{ env_var('POLA_APP_USER') }}"
-      pass: "{{ env_var('POLA_APP_PASS') }}"
-      schema: "{{ env_var('POLA_APP_SCHEMA') }}"
-      dbname: "{{ env_var('POLA_APP_DB_NAME') }}"
+      host: "{{ env_var('PGHOST') }}"
+      port: "{{ env_var('PGPORT') | as_number }}"
+      user: "{{ env_var('PGUSER') }}"
+      pass: "{{ env_var('PGPASS') }}"
+      schema: "public"
+      dbname: "{{ env_var('PGDATABASE') }}"
 
     prod:
       type: postgres
       threads: 4
-      host: "{{ env_var('POLA_APP_HOST') }}"
-      port: "{{ env_var('POLA_APP_PORT') | as_number }}"
-      user: "{{ env_var('POLA_APP_USER') }}"
-      pass: "{{ env_var('POLA_APP_PASS') }}"
-      schema: "{{ env_var('POLA_APP_SCHEMA') }}"
-      dbname: "{{ env_var('POLA_APP_DB_NAME') }}"
+      host: "{{ env_var('PGHOST') }}"
+      port: "{{ env_var('PGPORT') | as_number }}"
+      user: "{{ env_var('PGUSER') }}"
+      pass: "{{ env_var('PGPASSWORD') }}"
+      schema: "public"
+      dbname: "{{ env_var('PGDATABASE') }}"
 
   target: dev

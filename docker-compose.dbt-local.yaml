@@ -11,10 +11,9 @@ services:
       web-init:
         condition: service_started
     environment:
-      - POLA_APP_HOST=postgres
-      - POLA_APP_PORT=5432
-      - POLA_APP_USER=pola_app
-      - POLA_APP_PASS=pola_app
-      - POLA_APP_DB_NAME=pola_app
-      - POLA_APP_SCHEMA=public
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGUSER=pola_app
+      - PGPASSWORD=pola_app
+      - PGDATABASE=pola_app
       - DBT_PROFILES_DIR=/app/dbt/profile

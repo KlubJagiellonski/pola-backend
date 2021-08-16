@@ -216,15 +216,15 @@ jobs:
       - name: "Set environment env variable"
         if: github.ref == 'refs/heads/prod'
         run: |
-          source <(python ./pola-bi/dbt/dev.py --environment prod)
-          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
-          printenv | grep POLA_APP >> $GITHUB_ENV;
+          source <(python ./pola-bi/env.py --environment prod)
+          printenv | grep PG | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
+          printenv | grep PG >> $GITHUB_ENV;
       - name: "Set environment env variable"
         if: github.ref == 'refs/heads/master'
         run: |
-          source <(python ./pola-bi/dbt/dev.py --environment staging)
-          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
-          printenv | grep POLA_APP >> $GITHUB_ENV;
+          source <(python ./pola-bi/env.py --environment staging)
+          printenv | grep PG | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
+          printenv | grep PG >> $GITHUB_ENV;
       - run: ./run_dbt.sh dbt deps
       - run: ./run_dbt.sh dbt snapshot
       - run: ./run_dbt.sh dbt seed
