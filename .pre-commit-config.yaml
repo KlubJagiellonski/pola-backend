@@ -44,7 +44,7 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.23.1
+    rev: v2.23.3
     hooks:
       - id: pyupgrade
         args: ['--py38-plus']
@@ -71,16 +71,16 @@ repos:
     hooks:
       - id: flake8
   - repo: https://github.com/adrienverge/yamllint
-    rev: 'v1.26.1'
+    rev: 'v1.26.2'
     hooks:
       - id: yamllint
         entry: yamllint -c yamllint-config.yml
   - repo: https://github.com/ikamensh/flynt
-    rev: '0.63'
+    rev: '0.66'
     hooks:
       - id: flynt
   - repo: https://github.com/hadolint/hadolint
-    rev: 'v2.6.0'
+    rev: 'v2.6.1'
     hooks:
       - id: hadolint-docker
         entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.6.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
