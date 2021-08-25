@@ -57,8 +57,7 @@ LOCAL_APPS = (
     'pola.concurency',
     'pola.rpc_api',
     'pola.webviews',
-    # custom users app
-    # Your stuff: custom apps go here
+    'pola.bi_export',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
