@@ -1,0 +1,2431 @@
+{
+  "streams": [
+    {
+      "table_name": "bi_stats_queries_uq_users_by_week",
+      "stream": "bi_stats_queries_uq_users_by_week",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 0,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "seq"
+          ],
+          "metadata": {
+            "sql-datatype": "date",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "count_uq_user"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "count_request"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_stats_queries_uq_users_by_week",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "seq": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "count_uq_user": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "count_request": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    },
+    {
+      "table_name": "bi_product_by_time",
+      "stream": "bi_product_by_time",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 105,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "seq"
+          ],
+          "metadata": {
+            "sql-datatype": "timestamp without time zone",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "count_total"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "count_with_company"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "count_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "count_with_company_and_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "count_without_company_and_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percentage_with_company"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percentage_590"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percentage_wtih_company_and_590"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percentage_wtihout_company_and_590"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_product_by_time",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "seq": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "count_total": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "count_with_company": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "count_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "count_with_company_and_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "count_without_company_and_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "percentage_with_company": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "percentage_590": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "percentage_wtih_company_and_590": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "percentage_wtihout_company_and_590": {
+            "type": [
+              "null",
+              "number"
+            ]
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    },
+    {
+      "table_name": "bi_popular_not_verified_products",
+      "stream": "bi_popular_not_verified_products",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 0,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "name"
+          ],
+          "metadata": {
+            "sql-datatype": "character varying",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "code"
+          ],
+          "metadata": {
+            "sql-datatype": "character varying",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created_at"
+          ],
+          "metadata": {
+            "sql-datatype": "timestamp with time zone",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "ilim_queried_at"
+          ],
+          "metadata": {
+            "sql-datatype": "timestamp with time zone",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "query_count"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "ai_pics_count"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "brand_id"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "company_id"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_popular_not_verified_products",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "maxLength": 255
+          },
+          "code": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "maxLength": 20
+          },
+          "created_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "ilim_queried_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "query_count": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "ai_pics_count": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "brand_id": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "company_id": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    },
+    {
+      "table_name": "bi_new_product_by_hour",
+      "stream": "bi_new_product_by_hour",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 0,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "dd"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "rozpoznaana"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "nieroznanaa"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "wszystkie"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_new_product_by_hour",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "dd": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "rozpoznaana": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "nieroznanaa": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "wszystkie": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    },
+    {
+      "table_name": "bi_companies_with_count_group",
+      "stream": "bi_companies_with_count_group",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 0,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "query_count_group"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "nip"
+          ],
+          "metadata": {
+            "sql-datatype": "character varying",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "name"
+          ],
+          "metadata": {
+            "sql-datatype": "character varying",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "official_name"
+          ],
+          "metadata": {
+            "sql-datatype": "character varying",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "common_name"
+          ],
+          "metadata": {
+            "sql-datatype": "character varying",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "address"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plCapital"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plCapital_notes"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plRnD"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plRnD_notes"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plWorkers"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plWorkers_notes"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "verified"
+          ],
+          "metadata": {
+            "sql-datatype": "boolean",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plNotGlobEnt"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plNotGlobEnt_notes"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plRegistered"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plRegistered_notes"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created_at"
+          ],
+          "metadata": {
+            "sql-datatype": "timestamp with time zone",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "Editor_notes"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "sources"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "query_count"
+          ],
+          "metadata": {
+            "sql-datatype": "integer",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "is_friend"
+          ],
+          "metadata": {
+            "sql-datatype": "boolean",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_companies_with_count_group",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "query_count_group": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "nip": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "maxLength": 10
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "maxLength": 255
+          },
+          "official_name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "maxLength": 255
+          },
+          "common_name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "maxLength": 255
+          },
+          "address": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "plCapital": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "plCapital_notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "plRnD": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "plRnD_notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "plWorkers": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "plWorkers_notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "verified": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "plNotGlobEnt": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "plNotGlobEnt_notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "plRegistered": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "plRegistered_notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "created_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "Editor_notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "sources": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "query_count": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "is_friend": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    },
+    {
+      "table_name": "bi_companies_by_query_group",
+      "stream": "bi_companies_by_query_group",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 0,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "query_count_group"
+          ],
+          "metadata": {
+            "sql-datatype": "text",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "sum_query_count"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "sum_total"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "sum_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percentage_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percentage_query_count"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_companies_by_query_group",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "query_count_group": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "sum_query_count": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "sum_total": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "sum_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "percentage_verified": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "percentage_query_count": {
+            "type": [
+              "null",
+              "number"
+            ]
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    },
+    {
+      "table_name": "bi_queries_stats_intervals",
+      "stream": "bi_queries_stats_intervals",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 0,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_total"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_day"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_week"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_month"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_3_month"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_6_month"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_day_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_week_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_month_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_3_month_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_6_month_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_total_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_day_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_week_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_month_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_3_month_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_6_month_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_total_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_day_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_week_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_month_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_3_month_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_6_month_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_total_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "uq_user_total"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "uq_user_day"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "uq_user_week"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "uq_user_month"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "uq_user_3_month"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "uq_user_6_month"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_queries_stats_intervals",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "request_total": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_day": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_week": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_month": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_3_month": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_6_month": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_day_was_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_week_was_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_month_was_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_3_month_was_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_6_month_was_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_total_was_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_day_was_plscore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_week_was_plscore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_month_was_plscore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_3_month_was_plscore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_6_month_was_plscore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_total_was_plscore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_day_was_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_week_was_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_month_was_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_3_month_was_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_6_month_was_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_total_was_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "uq_user_total": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "uq_user_day": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "uq_user_week": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "uq_user_month": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "uq_user_3_month": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "uq_user_6_month": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    },
+    {
+      "table_name": "bi_queries_by_time",
+      "stream": "bi_queries_by_time",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": [],
+            "schema-name": "public",
+            "database-name": "pola_app",
+            "row-count": 105,
+            "is-view": false
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "seq"
+          ],
+          "metadata": {
+            "sql-datatype": "timestamp without time zone",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_total"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percetage_request_was_590"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percetage_request_was_plscore"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percetage_request_was_verified"
+          ],
+          "metadata": {
+            "sql-datatype": "double precision",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "uq_user"
+          ],
+          "metadata": {
+            "sql-datatype": "bigint",
+            "inclusion": "available",
+            "selected-by-default": true
+          }
+        }
+      ],
+      "tap_stream_id": "pola_app-public-bi_queries_by_time",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "seq": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "request_total": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_was_590": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_was_plscore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "request_was_verified": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          },
+          "percetage_request_was_590": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "percetage_request_was_plscore": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "percetage_request_was_verified": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "uq_user": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "minimum": -9223372036854776000,
+            "maximum": 9223372036854776000
+          }
+        },
+        "definitions": {
+          "sdc_recursive_integer_array": {
+            "type": [
+              "null",
+              "integer",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_integer_array"
+            }
+          },
+          "sdc_recursive_number_array": {
+            "type": [
+              "null",
+              "number",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_number_array"
+            }
+          },
+          "sdc_recursive_string_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_string_array"
+            }
+          },
+          "sdc_recursive_boolean_array": {
+            "type": [
+              "null",
+              "boolean",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_boolean_array"
+            }
+          },
+          "sdc_recursive_timestamp_array": {
+            "type": [
+              "null",
+              "string",
+              "array"
+            ],
+            "format": "date-time",
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_timestamp_array"
+            }
+          },
+          "sdc_recursive_object_array": {
+            "type": [
+              "null",
+              "object",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/definitions/sdc_recursive_object_array"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

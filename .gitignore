@@ -64,3 +64,4 @@ utils/*.dump
 runserver.sh
 .pycharm_helpers
 coverage.xml
+pola-bi/singer/.virtualenvs

@@ -1,0 +1,6 @@
+{
+  "project_id": "pola-bi",
+  "dataset_id": "singer",
+  "table_id": "github_timeline",
+  "validate_records": true
+}

@@ -1,0 +1,2 @@
+tap-postgres==0.2.0
+target-bigquery==1.4.0
