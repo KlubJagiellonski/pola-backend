@@ -16,17 +16,13 @@ class ExportView(View):
     def get(self, request: HttpRequest):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = f'attachment; filename="{self.get_filename()}"'
-        rows = self.get_rows()
-        if rows:
-            fieldnames = ['No data']
-        else:
-            fieldnames = rows[0].keys()
-        writer = csv.DictWriter(response, fieldnames=fieldnames)
+        rows, columns = self.get_rows_and_columns()
+        writer = csv.DictWriter(response, fieldnames=columns)
         writer.writeheader()
         writer.writerows(rows)
         return response
 
-    def get_rows(self):
+    def get_rows_and_columns(self):
         with connection.cursor() as cursor:
             cursor.execute(
                 """
@@ -49,7 +45,8 @@ LIMIT 100;
             """
             )
             rows = dictfetchall(cursor)
-        return rows
+            columns = [col[0] for col in cursor.description]
+        return rows, columns
 
     def get_filename(self):
         date_suffix = datetime.today().strftime('%Y-%m-%d-%H-%M-%S')

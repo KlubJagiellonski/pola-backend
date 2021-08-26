@@ -50,7 +50,7 @@ urlpatterns = [
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
     # re_path(r'^api/', include('pola.api.urls', namespace='api')),
     path('a/', ('pola.rpc_api.urls', 'api', 'api')),
-    path('bi_export/', ('pola.bi_export.urls', 'bi_export', 'bi_export')),
+    path('bi-export/', ('pola.bi_export.urls', 'bi_export', 'bi_export')),
     re_path(r'^m/', ('pola.webviews.urls', 'webviews', 'webviews')),
     re_path(r'^concurency/', ('pola.concurency.urls', 'pola.concurency', 'concurency')),
     re_path(
