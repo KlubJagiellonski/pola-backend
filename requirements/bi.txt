@@ -32,7 +32,7 @@ googleapis-common-protos==1.53.0
 grpcio==1.39.0
 hologram==0.0.14
 idna==2.10
-importlib-metadata==4.6.4
+importlib-metadata==4.7.0
 isodate==0.6.0
 jeepney==0.7.1
 Jinja2==2.11.3
