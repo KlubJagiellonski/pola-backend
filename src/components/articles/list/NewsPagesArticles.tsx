@@ -67,17 +67,17 @@ const NewsPageArticles: React.FC<NewsPage> = ({ articles, query, setQuery }) => 
       const sortedArticles = getArticlesTwoColumns(art);
       setArticles(sortedArticles.slice());
       setPageCount(sortedArticles.length);
-      if (query.id === undefined || query.id >= sortedArticles.length) {
-        setCurrentPage(0)
+      if (query.id === undefined || query.id > sortedArticles.length) {
+        setQuery({ tags: query.tags, id: 1 }, 'push')
       } else {
-        setCurrentPage(query.id)
+        setCurrentPage(query.id - 1)
       }
     }
   }, [articles, query]);
 
   const handlePageClick = ({ selected: selectedPage }) => {
     setQuery(
-      { tags: query.tags, id: selectedPage },
+      { tags: query.tags, id: selectedPage + 1 },
       'push'
     )
   }
