@@ -64,6 +64,8 @@ const Friends: React.FC<IFriends> = ({ friends }) => {
     adaptiveHeight: true,
     slidesToScroll: 5,
     arrows: false,
+    autoplay: true,
+    autoplaySpeed: 5000,
     responsive: [
       {
         breakpoint: 1272,
