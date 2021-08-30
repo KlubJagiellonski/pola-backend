@@ -17,12 +17,16 @@ const Wrapper = styled.div`
 `;
 
 const ArticlesButton = styled(PrimaryButton)`
-  width: calc(100% - 2 * ${margin.normal});
+  width: 100%;
   padding: ${padding.normal};
-  margin: 0 ${margin.normal};
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+
+  @media ${Device.mobile}{
+    width: calc(100% - 2 * ${margin.normal});
+    margin: 0 ${margin.normal};
+  }
 `;
 
 interface IArticlesList {

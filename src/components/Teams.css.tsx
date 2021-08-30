@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
-import {Device, margin, padding} from '../styles/theme'
-import {PrimaryButton } from './buttons/PrimaryButton';
+import { Device, margin, padding } from '../styles/theme'
+import { PrimaryButton } from './buttons/PrimaryButton';
 
 export const WrapperTeams = styled(WrapperSection)`
   height: 100%;
@@ -39,3 +39,9 @@ export const ButtonTeams = styled(PrimaryButton)`
     margin-top: ${margin.normal}
   }
 `;
+
+export const IconTeams = styled.div`
+  margin: auto;
+  width: 7.5em;
+  height: 7.5em;
+`

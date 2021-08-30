@@ -8,7 +8,8 @@ export const color = {
     red: '#D8152F',
     white: '#ffffff',
     search: '#E5E5E5',
-    transparencyGrey: '#e5e5e5d8'
+    transparencyGrey: '#e5e5e5d8',
+    transparencyRed: '#d8152fd8'
   },
   text: {
     primary: '#333333',

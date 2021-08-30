@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import SocialFooter from '../assets/SocialFooter.png';
 import LogoWhite from '../assets/logo/pola-white.svg';
 import { color, Device, padding, pageWidth } from '../styles/theme';
+import Facebook from './../assets/social-media/facebook_fill.png'
+import Twitter from './../assets/social-media/twitter_fill.png'
+import Instagram from './../assets/social-media/instagram_fill.png'
 
 export const FooterContainer = styled.footer`
   background-color: ${color.background.dark};
@@ -42,7 +44,6 @@ export const FooterContainer = styled.footer`
 `;
 
 export const Section = styled.div`
-  background-color: ${color.background.white};
   flex: 1 1 25%;
 
   .text {
@@ -125,10 +126,9 @@ export const PageFooter = () => {
           </FooterSection>
           <FooterSection title="Social media Title">
             <div className="social-rows">
-              <img className="social-image" src={SocialFooter}></img>
-              <img className="social-image" src={SocialFooter}></img>
-              <img className="social-image" src={SocialFooter}></img>
-              <img className="social-image" src={SocialFooter}></img>
+              <img className="social-image" src={Facebook}></img>
+              <img className="social-image" src={Instagram}></img>
+              <img className="social-image" src={Twitter}></img>
             </div>
           </FooterSection>
         </div>
