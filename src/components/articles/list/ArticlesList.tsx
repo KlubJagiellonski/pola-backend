@@ -1,38 +1,66 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Article } from '../../../domain/articles';
 import { ArticleBlock } from './ArticleBlock';
 import { Device, margin, padding } from '../../../styles/theme';
+import { IArticlesTwoColumns } from './../../../utils/articles'
 
 const Wrapper = styled.div`
-  grid-area: articles;
-
   @media ${Device.mobile} {
     padding: ${padding.normal};
     margin-bottom: ${margin.normal};
     padding-top: 0;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media ${Device.mobile} {
+    display: flex;
+    flex-direction: column;
+  }
+
+  div{
+    flex: 1;
+  }
+`
+
 interface IArticlesList {
-  articles?: Article[];
+  articles?: IArticlesTwoColumns[];
 }
 
 export const ArticlesList: React.FC<IArticlesList> = ({ articles }) => {
   return (
     <Wrapper>
       {articles &&
-        articles.map((article: Article) => (
-          <ArticleBlock
-            id={article.id}
-            key={article.id}
-            title={article.title}
-            slug={article.slug}
-            imagePath={article.imagePath}
-            date={article.date}
-            subTitle={article.subTitle}
-            tag={article.tag}
-          />
+        articles.map((article: IArticlesTwoColumns) => (
+          <Row key={article.first.id}>
+            <ArticleBlock
+              id={article.first.id}
+              title={article.first.title}
+              slug={article.first.slug}
+              imagePath={article.first.imagePath}
+              date={article.first.date}
+              subTitle={article.first.subTitle}
+              tag={article.first.tag}
+            />
+            {
+              article.second ?
+                <ArticleBlock
+                  id={article.second.id}
+                  title={article.second.title}
+                  slug={article.second.slug}
+                  imagePath={article.second.imagePath}
+                  date={article.second.date}
+                  subTitle={article.second.subTitle}
+                  tag={article.second.tag}
+                /> : <div></div>
+            }
+          </Row>
+
         ))}
     </Wrapper>
   );

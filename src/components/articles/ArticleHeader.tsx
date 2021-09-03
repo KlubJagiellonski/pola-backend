@@ -1,26 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
-import { padding } from '../../styles/theme';
 import { getDate } from '../../utils/dates';
+import Img, { FluidObject } from 'gatsby-image';
+import { Text } from '../../styles/GlobalStyle.css';
 
-const Header = styled.div`
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  padding: ${padding.big} 0;
-`;
+const Title = styled.h1`
+  padding: 0;
+  margin: 0;
+`
+
+const Image = styled(Img)`
+  max-height: 80vh;
+`
 
 interface IArticleHeader {
   title: string;
   subTitle: string;
   date: string;
+  fluid: FluidObject | FluidObject[];
+  category?: string
 }
 
-export const ArticleHeader: React.FC<IArticleHeader> = ({ title, subTitle, date }) => (
-  <Header>
-    <h1>{title}</h1>
-    <h2>{subTitle}</h2>
-    <div>{getDate(date)}</div>
-  </Header>
+export const ArticleHeader: React.FC<IArticleHeader> = ({ title, subTitle, date, fluid, category }) => (
+  <>
+    <Title>{title}</Title>
+    <Text>{category} | {getDate(date)}</Text>
+    <p>{subTitle}</p>
+    <Image fluid={fluid} />
+  </>
 );

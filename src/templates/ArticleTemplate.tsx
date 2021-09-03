@@ -27,10 +27,11 @@ export const postQuery = graphql`
       frontmatter {
         title
         subTitle
+        category
         cover {
           childImageSharp {
-            resize(width: 300) {
-              src
+            fluid {
+              ...GatsbyImageSharpFluid
             }
           }
         }

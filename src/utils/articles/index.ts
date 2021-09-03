@@ -1,40 +1,40 @@
 import { Article } from '../../domain/articles';
 
 export interface IArticlesTwoColumns {
-  first: Article[];
-  second: Article[];
+  first: Article;
+  second?: Article;
 }
 
 export function getArticlesTwoColumns(articles: Article[]) {
   const sortedArticles: IArticlesTwoColumns[] = [];
-  let firstColumn: Article[] = [];
-  let secondColumn: Article[] = [];
-  let currentColumn: number = 1;
+  let section: IArticlesTwoColumns[] = [];
 
-  for (let i = 0; i < articles.length; i++) {
-    if (i % 6 === 0) {
-      currentColumn = 1;
-    } else if (i % 3 === 0) {
-      currentColumn = 2;
-    }
-
-    if (currentColumn === 1) {
-      firstColumn.push(articles[i]);
-      currentColumn = 2;
+  for (let i = 0; i < articles.length; i = i + 2) {
+    if (articles[i + 1] !== undefined) {
+      section.push({ first: articles[i], second: articles[i + 1] });
     } else {
-      secondColumn.push(articles[i]);
-      currentColumn = 1;
+      section.push({ first: articles[i] });
     }
 
-    if (firstColumn.length + secondColumn.length === 6) {
-      sortedArticles.push({ first: firstColumn.slice(), second: secondColumn.slice() });
-      firstColumn = [];
-      secondColumn = [];
+    if (section.length === 3 || i + 2 >= articles.length) {
+      sortedArticles.push(section.slice());
+      section = [];
     }
-  }
-  if (firstColumn.length + secondColumn.length !== 6) {
-    sortedArticles.push({ first: firstColumn.slice(), second: secondColumn.slice() });
   }
 
   return sortedArticles;
+}
+
+export function getVisibleArticles(actualArticleId: string, articles: Article[]) {
+  let art = articles.slice();
+  for (let i = 0; i < art.length; i++) {
+    if (art[i].id === actualArticleId) {
+      art.splice(i, 1);
+    }
+  }
+  if (art.length > 3) {
+    art = art.slice(0, 3);
+  }
+
+  return art;
 }

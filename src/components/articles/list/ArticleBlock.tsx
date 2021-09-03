@@ -26,18 +26,14 @@ const ArticleImage = styled.div<{ img?: string }>`
   width: 50%;
   text-align: left;
 
-  @media ${Device.mobile} {
-    width: 100%;
-
+  div{
     div{
-    height: 12em !important;
-
-    picture {
-    img{
-      height: auto !important;
-      }
+      padding-bottom: 14em !important;
     }
   }
+
+  @media ${Device.mobile} {
+    width: 100%;
   }
 `;
 

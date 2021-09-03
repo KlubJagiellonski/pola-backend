@@ -67,6 +67,7 @@ const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
     if (articles) {
       setTag(getTagsList(articles))
     }
+    document.querySelector('body').scrollTo(0, 0)
   }, [articles, query]);
 
   return (

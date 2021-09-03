@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import Tag from './Tag'
-import { margin } from './../../styles/theme'
 
 const Wrapper = styled.div`
   display: flex;
@@ -10,7 +9,7 @@ const Wrapper = styled.div`
 `
 
 const Title = styled.p`
-  margin: ${margin.normal}; 
+  font-weight: bold;
 `
 
 interface ITagsList {

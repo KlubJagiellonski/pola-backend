@@ -10,7 +10,7 @@ import TeamsFriend from './TeamsFriend';
 import { IFriend } from '../domain/friends';
 import { Device, padding } from './../styles/theme';
 import { Article } from '../domain/articles';
-import ArticlesMainPage from './articles/list/MainPageArticles';
+import ArticlesListPreview from './articles/list/ArticlesListPrewiev';
 
 const Wrapper = styled.div`
   -webkit-box-sizing: border-box;
@@ -50,7 +50,7 @@ interface IContent {
 const Contents: React.FC<IContent> = ({ articles, friends }) => {
   return (
     <Wrapper>
-      <ArticlesMainPage articles={articles} />
+      <ArticlesListPreview articles={articles} />
       <DevelopmentSection />
       <SocialMedia />
       <About />

@@ -1,13 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
+import styledContainerQuery from 'styled-container-query'
 import { ResponsiveImage } from '../../images/ResponsiveImage';
 import { WrapperSection } from '../../../styles/GlobalStyle.css';
-import { Device, color } from '../../../styles/theme';
+import { Device, color, fontSize } from '../../../styles/theme';
 import ArticleContents from './ArticleContents';
 import ArticleTitle from './ArticleTitle';
 import { Article } from '../../../domain/articles';
+import { ArticleDate, ArticleTag, ArticleText } from './ArticleContents.css';
 
-const Wrapper = styled(WrapperSection)`
+const ArticleImage = styled.div`
+  width: 50%;
+  text-align: left;
+  .gatsby-image-wrapper{
+    div{
+      padding-bottom: 14em !important;
+    }
+  }
+
+  @media ${Device.mobile} {
+    .gatsby-image-wrapper{
+      div{
+        padding-bottom: 5em !important;
+      }
+    }
+  }
+`;
+
+const Wrapper = styled(WrapperSection)``;
+
+const Container = styledContainerQuery.div`
   display: flex;
   flex-direction: row;
   min-height: 16.5em;
@@ -16,11 +38,30 @@ const Wrapper = styled(WrapperSection)`
   @media ${Device.mobile} {
     min-height: 0;
   }
-`;
 
-const ArticleImage = styled.div<{ img?: string }>`
-  width: 50%;
-  text-align: left;
+  &:container(max-width: 450px) {
+    min-height: 0;
+
+    ${ArticleTag} {
+      display: none;
+    }
+
+    ${ArticleDate} {
+      display: none;
+    }
+
+    ${ArticleText} {
+      font-size: ${fontSize.small};
+    }
+
+    ${ArticleImage}{
+      .gatsby-image-wrapper{
+        div{
+          padding-bottom: 5em !important;
+        }
+      }
+    }
+  }
 `;
 
 const ArticleSection = styled.div`
@@ -34,7 +75,7 @@ const ArticleSection = styled.div`
 
 export const ArticlePreview: React.FC<Article> = ({ imagePath, title, slug, date, subTitle, tag }) => {
   return (
-    <Wrapper color={color.background.white}>
+    <Container color={color.background.white}>
       <ArticleImage>{imagePath && <ResponsiveImage imageSrc={imagePath} />}</ArticleImage>
       <ArticleSection>
         <ArticleTitle title={title} slug={slug} />
@@ -44,6 +85,6 @@ export const ArticlePreview: React.FC<Article> = ({ imagePath, title, slug, date
           tag={tag}
         />
       </ArticleSection>
-    </Wrapper>
+    </Container>
   );
 };
