@@ -4,7 +4,7 @@ Babel==2.9.1
 backcall==0.2.0
 beautifulsoup4==4.10.0
 boto==2.49.0
-boto3==1.18.36
+boto3==1.18.37
 botocore==1.21.37
 certifi==2021.5.30
 cffi==1.14.6
