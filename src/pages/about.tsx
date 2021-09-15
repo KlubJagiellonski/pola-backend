@@ -14,6 +14,7 @@ import { PartnerService } from '../domain/partners/partners-service';
 import { PartnersList } from '../components/partners/PartnersList';
 import { padding } from '../styles/theme';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
+import Faq from '../components/Faq';
 
 const ImageContainer = styled.div`
 min-width: 20em;
@@ -94,7 +95,7 @@ const AboutPage = (props: IAboutPage) => {
             <TitleSection>Partnerzy</TitleSection>
             <PartnersList partners={PartnerService.getAll()} />
           </PageSection>
-
+          <Faq />
         </ContentColumn>
         <ContentColumn hideOnMobile={true}>
           <ImageContainer>

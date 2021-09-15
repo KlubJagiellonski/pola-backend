@@ -51,6 +51,7 @@
     "lodash.debounce": "^4.0.8",
     "query-string": "^5.1.1",
     "react": "^16.14.0",
+    "react-accessible-accordion": "^3.3.5",
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.14.0",
     "react-helmet": "^6.1.0",

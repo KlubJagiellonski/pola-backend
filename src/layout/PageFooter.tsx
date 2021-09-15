@@ -120,7 +120,6 @@ export const PageFooter = () => {
           </FooterSection>
           <FooterSection title="Jakieś pytania?">
             <p className="text">Kontakt</p>
-            <p className="text">FAQ</p>
             <p className="text hide-desktop">Polityka prywatności</p>
             <p className="text hide-mobile">Uzupełnij dane o firmie</p>
           </FooterSection>

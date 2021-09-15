@@ -7,7 +7,6 @@ export enum PageType {
   FRIENDS = 'friends',
   BUSINESS = 'business',
   TEAM = 'team',
-  FAQ = 'faq',
   CONTACT = 'contact',
   PRODUCTS = 'products',
   ERROR_404 = '404',
@@ -28,7 +27,6 @@ export const urls = {
     friends: '/friends',
     business: '/business',
     team: '/join',
-    faq: '/faq',
     contact: '/contact',
     products: '/products',
   },
@@ -42,6 +40,12 @@ export const urls = {
     klubJagiellonski: new URL('https://klubjagiellonski.pl/projekty/centrum-analiz/'),
     instytutLogistyki: new URL('https://ilim.lukasiewicz.gov.pl/'),
     mojePanstwo: new URL('https://mojepanstwo.pl/'),
+    githubAndroid: new URL('https://github.com/KlubJagiellonski/pola-android/issues'),
+    githubIos: new URL('https://github.com/KlubJagiellonski/pola-ios/issues'),
+    githubWeb: new URL('https://github.com/KlubJagiellonski/pola-backend/issues'),
+    form: new URL(
+      'https://docs.google.com/forms/d/e/1FAIpQLSfJ14U66y_Z_thn9wiUHaBGOfKlZNhL4BGYuHjO2tJuzXi9gQ/viewform'
+    ),
     polaSocialMedia: {
       facebook: new URL('https://www.facebook.com/app.pola'),
       twitter: new URL('https://twitter.com/pola_app'),
@@ -58,6 +62,5 @@ export const pageLinks: PageLinkData[] = [
   { type: PageType.FRIENDS, label: 'Klub przyjaciół Poli', url: urls.pola.friends },
   { type: PageType.BUSINESS, label: 'Oferta biznesowa', url: urls.pola.business },
   { type: PageType.TEAM, label: 'Dołącz do zespołu', url: urls.pola.team },
-  { type: PageType.FAQ, label: 'FAQ', url: urls.pola.faq },
   { type: PageType.CONTACT, label: 'Kontakt', url: urls.pola.contact },
 ];
