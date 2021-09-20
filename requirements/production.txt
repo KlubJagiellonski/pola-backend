@@ -3,7 +3,7 @@ attrs==21.2.0
 Babel==2.9.1
 boto==2.49.0
 boto3==1.18.43
-botocore==1.21.43
+botocore==1.21.44
 certifi==2021.5.30
 cffi==1.14.6
 chardet==4.0.0
