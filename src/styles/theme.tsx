@@ -35,7 +35,7 @@ export const color = {
 export const mobileHeaderHeight = '40px';
 export const desktopHeaderHeight = '96px';
 
-const width = 1272;
+export const width = 1272;
 export const pageWidth = width + 'px';
 export const padding = {
   tiny: '4px',

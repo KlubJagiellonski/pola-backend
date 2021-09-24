@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 import DevelopmentSection from './DevelopmentSection';
 import SocialMedia from './SocialMedia';
-import Friends from './Friends';
+import Friends from './friends/Friends';
 import Teams from './Teams';
 import About from './About';
 import TeamsFriend from './TeamsFriend';
-import { IFriend } from '../domain/friends';
+import { Friend } from '../domain/friends';
 import { Device, padding } from './../styles/theme';
 import { Article } from '../domain/articles';
 import ArticlesListPreview from './articles/list/ArticlesListPrewiev';
@@ -44,7 +44,7 @@ const Wrapper = styled.div`
 
 interface IContent {
   articles?: Article[];
-  friends?: IFriend[];
+  friends?: Friend[];
 }
 
 const Contents: React.FC<IContent> = ({ articles, friends }) => {

@@ -25,6 +25,14 @@ module.exports = {
         path: `${__dirname}/content/posts/`,
       },
     },
+    //image for logos friends
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/content/logos/images/`,
+      },
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
@@ -61,6 +69,27 @@ module.exports = {
         path: `${__dirname}/content/posts`,
       },
     },
+    `gatsby-transformer-yaml-full`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/logos`,
+      },
+    },
+    {
+      resolve: `gatsby-transformer-yaml-full`,
+      options: {
+        plugins: [
+          {
+            resolve: `gatsby-yaml-full-file`,
+            options: {
+              path: `${__dirname}/content/logos`,
+            },
+          },
+        ],
+      },
+    },
+    `gatsby-plugin-anchor-links`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {

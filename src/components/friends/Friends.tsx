@@ -4,10 +4,13 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { TitleSection, WrapperSection } from '../styles/GlobalStyle.css';
-import { Device, color, margin, padding } from './../styles/theme';
-import { IFriend } from '../domain/friends';
-import { ResponsiveImage } from './images/ResponsiveImage';
+import { TitleSection, WrapperSection } from '../../styles/GlobalStyle.css';
+import { Device, color, margin, padding, fontSize, width } from './../../styles/theme';
+import { Friend } from '../../domain/friends';
+import { ResponsiveImage } from './../images/ResponsiveImage';
+import { AnchorLink } from "gatsby-plugin-anchor-links";
+import { buildFriendUrl } from './friends-url-service';
+import { hash } from '../../domain/website';
 
 const Wrapper = styled(WrapperSection)`
   width: 100%;
@@ -29,8 +32,6 @@ const ImageWrapper = styled.div`
 `;
 
 const FriendsSlider = styled(Slider)`
-  height: 6em;
-
   .slick-dots li.slick-active button:before {
     color: ${color.button.red} !important;
   }
@@ -51,49 +52,61 @@ const Image = styled.div`
   }
 `;
 
+const FriendLink = styled(AnchorLink)`
+  font-size: ${fontSize.small};
+  position: relative;
+  bottom: 0;
+  color: ${color.text.secondary};
+  opacity: 0.6;
+`
+
 interface IFriends {
-  friends?: IFriend[];
+  friends?: Friend[];
+  rows?: number
 }
 
-const Friends: React.FC<IFriends> = ({ friends }) => {
+const Friends: React.FC<IFriends> = ({ friends, rows }) => {
+  const rowsSettingsDesktop = rows && rows > 1 ? { rows, slidesPerRow: 4 } : {}
+  const rowsSettingsMobile = rows && rows > 1 ? { rows, slidesPerRow: 3 } : {}
+  const slidesSettingsDesktop = rows && rows > 1 ? {} : { slidesToShow: 5, slidesToScroll: 5 }
+  const slidesSettingsMobile = rows && rows > 1 ? {} : { slidesToShow: 3, slidesToScroll: 3 }
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
     adaptiveHeight: true,
-    slidesToScroll: 5,
+    ...slidesSettingsDesktop,
     arrows: false,
     autoplay: true,
     autoplaySpeed: 5000,
+    ...rowsSettingsDesktop,
     responsive: [
       {
-        breakpoint: 1272,
+        breakpoint: width,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          ...slidesSettingsMobile,
+          ...rowsSettingsMobile
         },
       },
     ],
   };
 
   return (
-    <Wrapper color={color.background.white}>
-      <TitleSection>Przyjaciele Poli</TitleSection>
+    <Wrapper className="friends_wrapper" color={color.background.white}>
+      <TitleSection className="friends_title">Przyjaciele Poli</TitleSection>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {friends && (
           <ImageWrapper>
             <FriendsSlider {...settings}>
               {friends.map((el, id) => (
-                <div key={`friend_${id}`}>
+                <div className="friend-item" key={`friend_${id}`}>
                   <Image>{el.image && <ResponsiveImage imageSrc={el.image} />}</Image>
+                  {el.slug &&
+                    <FriendLink to={buildFriendUrl(el.slug, hash.friends.friend.id)}>
+                      Zobacz {'>'}
+                    </FriendLink>
+                  }
                 </div>
               ))}
             </FriendsSlider>

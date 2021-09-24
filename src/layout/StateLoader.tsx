@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ArticleService, IArticleEdge } from '../domain/articles/article-service';
+import { FriendsService, IFriendNode } from '../domain/friends/friend-service';
 import { appDispatcher } from '../state/app/app-dispatcher';
 import { articlesDispatcher } from '../state/articles/articles-dispatcher';
 import { friendsDispatcher } from '../state/friends/friends-dispatcher';
@@ -8,9 +9,10 @@ import { IPolaState } from '../state/types';
 
 interface IStateLoader {
   isArticlesLoaded?: boolean;
+  isFriendsLoaded?: boolean;
   initApp?: () => void;
   loadArticles?: (edges: IArticleEdge[]) => void;
-  loadFriends?: () => void;
+  loadFriends?: (node: IFriendNode[]) => void;
 }
 
 const Loader = (props: IStateLoader) => {
@@ -18,14 +20,17 @@ const Loader = (props: IStateLoader) => {
     if (props.initApp) {
       await props.initApp();
     }
-    if (props.loadFriends) {
-      await props.loadFriends();
-    }
   };
 
   useEffect(() => {
     bootApplication();
   }, []);
+
+  const queryResultFriend = FriendsService.getAll();
+  if (!props.isFriendsLoaded && queryResultFriend?.allLogosFriendsYaml?.nodes && props.loadFriends) {
+    const data = queryResultFriend.allLogosFriendsYaml.nodes;
+    props.loadFriends(data);
+  }
 
   const queryResult = ArticleService.getAll();
   if (!props.isArticlesLoaded && queryResult?.allMarkdownRemark?.edges && props.loadArticles) {
@@ -42,6 +47,7 @@ const Loader = (props: IStateLoader) => {
 export const StateLoader = connect(
   (state: IPolaState) => ({
     isArticlesLoaded: state.articles.initialized,
+    isFriendsLoaded: state.friends.initialized,
   }),
   {
     initApp: appDispatcher.initialize,

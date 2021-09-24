@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { connect, useDispatch } from 'react-redux';
 
@@ -9,10 +9,10 @@ import { LoadBrowserLocation, SelectActivePage } from '../../state/app/app-actio
 import { PageType } from '../../domain/website';
 import { PageSection } from '../../layout/PageSection';
 import { ArticleHeader } from './ArticleHeader';
-import { ArticleFooter } from './ArticleFooter';
 import { Device, margin } from '../../styles/theme';
 import { Article } from '../../domain/articles';
 import SideInformations from '../SideInformations';
+import { Friend } from '../../domain/friends';
 
 const Content = (props: any) => {
   const { html, children } = props;
@@ -28,6 +28,7 @@ interface IArticlePage {
   location?: Location;
   article: any;
   articles: Article[];
+  friends: Friend[];
   author?: any;
   slug?: string;
   facebook?: any;
@@ -61,7 +62,7 @@ const SecondColumn = styled.div`
 `
 
 const ArticlePage = (props: IArticlePage) => {
-  const { location, article, author, slug, facebook, articles } = props;
+  const { location, article, author, slug, facebook, articles, friends } = props;
   const title = ((article || {}).frontmatter || {}).title;
   const subTitle = ((article || {}).frontmatter || {}).subTitle;
   const category = ((article || {}).frontmatter || {}).category;
@@ -98,7 +99,7 @@ const ArticlePage = (props: IArticlePage) => {
             </PageSection>
           </FirstColumn>
           <SecondColumn>
-            <SideInformations actualArticleId={article.id} articles={articles} />
+            <SideInformations actualArticleId={article.id} articles={articles} friends={friends} />
           </SecondColumn>
         </Wrapper>
       </PageSection>
@@ -108,5 +109,6 @@ const ArticlePage = (props: IArticlePage) => {
 
 export default connect((state: IPolaState) => ({
   location: state.app.location,
-  articles: state.articles.data
+  articles: state.articles.data,
+  friends: state.friends.data
 }), {})(ArticlePage);

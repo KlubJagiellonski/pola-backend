@@ -1,0 +1,36 @@
+friends:
+  - slug: radziemska
+    name: Radziemska
+    description: Rodzime przedsiębiorstwo chemiczne powstałe w 1982 roku. Firma specjalizuje się w produkcji chemii gospodarczej, w tym odplamiaczy, proszków do prania czy wybielaczy. Jest laureatem wielu nagród konsumenckich, a jej siedziba znajduje się w Łomiankach pod Warszawą.
+    image: ./images/logo_radziemska.jpg
+    page: https://www.radziemska.pl/
+  - slug: woda-staropolska
+    name: Woda Staropolska
+    description: Polski producent wody mineralnej pochodzący z Iłży. Jest to firma rodzinna o ponad 30-letniej tradycji, która specjalizuje się w produkcji bogatych w magnez i wapń wód mineralnych pod marką „Staropolska”. Od 1986 r. przedsiębiorstwo realizuje swoją misję, stając się w ostatnim czasie liderem wśród producentów i dostawców butelkowanej wody mineralnej przeznaczonej dla firm.
+    image: ./images/staropolska-logo.png
+    page: https://wodadlafirmy.pl/
+  - slug: italian-fashion
+    name: Italian Fashion
+    description: Firma Italian Fashion istnieje na rynku polskim od 1990 roku. Zatrudnia około 300 pracowników. Od początku istnienia zajmuje się produkcją bielizny damskiej, męskiej i dziecięcej oraz wygodnej odzieży domowej i akcesoriów, takich jak skarpety. W ofercie firmy znaleźć można również kolekcje dedykowane dla kobiet w ciąży i mam karmiących, jak również piżamy i koszule nocne dla kobiet puszystych.”
+    image: ./images/italian-fashion.jpg
+    page: https://www.italianfashion.pl/
+  - slug: avetpharma
+    name: AvetPharma
+    description: Spółka farmaceutyczna założona 10 lat temu przez magistra farmacji z wieloletnim doświadczeniem w branży leków OTC oraz suplementów diety. Firma zajmuje się produkcją oraz dystrybucją suplementów diety. Przez dekadę wprowadziła na rynek ponad 40 produktów własnych, które są dostępne w aptekach, sklepach zielarsko-medycznych oraz marketach. Siedziba spółki znajduje się w Warszawie.
+    image: ./images/AvetPharma.png
+    page: https://avetpharma.pl/
+  - slug: browar-piwojad
+    name: Browar Piwojad
+    description: Piwojad to kontraktowy browar rzemieślniczy z Krakowa założony przez Pawła Świdniewicza i Pawła Teodorczyka, którzy przygodę z piwowarstwem zaczęli od domowej produkcji na małą skalę. Piwojad dużą wagę przywiązuje do regionu, w którym warzy piwa. Priorytetem jest zaopatrywanie się w surowce dostępne u lokalnych dostawców i producentów żywności.
+    image: ./images/Browar-Piwojad.png
+    page: http://www.piwojad.pl/
+  - slug: ameripol-trading
+    name: AmeriPol Trading
+    description: Firma Ameri-Pol Trading Ltd sp. z o.o. jest polską firmą założoną w 1992 r. jako spółka polsko amerykańska, jednak w ciągu lat działalności udziałowiec amerykański został wykupiony przez polskich udziałowców. Firma oferuje szeroki wybór klejów kontaktowych w pojemnikach ciśnieniowych oraz rozpuszczalników mających zastosowanie w różnych branżach, m.in. w meblarstwie, w branży motoryzacyjnej, w produkcji jachtów, w branży budowlanej. Oferowane przez nas kleje są sprzedawane pod własną wspólną marką SPRAY-KON i LEP-KON.
+    image: ./images/AmeriPol-Trading.png
+    page: https://spraykon.pl/
+  - slug: pluton-kawa
+    name: Pluton Kawa
+    description: Historia firmy sięga XIX wieku. Jej założycielem był Tadeusz Tarasiewicz, który założył pierwszą na ziemiach polskich palarnię kawy, pod nazywą Pluton. Firma przetrwała do 1950 r. W 2017 r. została reaktywowana. Pluton Kawa kultywuje tradycje i z powodzeniem stosuje współcześnie wartości kupieckie XX-lecia międzywojennego.
+    image: ./images/logo_pluton.png
+    page: https://kawapluton.com/

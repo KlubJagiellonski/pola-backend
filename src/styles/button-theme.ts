@@ -14,6 +14,12 @@ export const getButtonColor = (buttonColor?: ButtonColor): IButtonColor => {
         hover: color.button.redLight,
         text: color.text.light,
       };
+    case ButtonColor.WhiteRed:
+      return {
+        background: color.button.white,
+        hover: color.button.white,
+        text: color.text.red,
+      };
     case ButtonColor.White:
       return {
         background: color.button.white,
@@ -41,4 +47,5 @@ export enum ButtonColor {
   LightGray,
   Red,
   White,
+  WhiteRed,
 }

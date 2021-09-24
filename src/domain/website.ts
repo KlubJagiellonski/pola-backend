@@ -18,6 +18,19 @@ export interface PageLinkData {
   url: string;
 }
 
+export const hash = {
+  friends: {
+    profit: {
+      id: 'profit',
+      url: '/friends#profit',
+    },
+    friend: {
+      id: 'friend',
+      url: '/friends#friend',
+    },
+  },
+};
+
 export const urls = {
   pola: {
     home: '/',
