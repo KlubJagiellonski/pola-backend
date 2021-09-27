@@ -233,6 +233,9 @@ components:
                 properties:
                   name:
                     type: string
+                  score:
+                    type: integer
+                    nullable: true
                 required:
                   - name
               brand:
