@@ -1,10 +1,12 @@
 from typing import List, Optional, TypedDict
 
+from pola import logic
 from product.models import Product
 
 
 class CompanyBasicInfo(TypedDict):
     name: str
+    score: Optional[int]
 
 
 class BrandBasicInfo(TypedDict):
@@ -22,7 +24,9 @@ class SearchResult(TypedDict):
         return cls(
             name=str(product),
             code=product.code,
-            company=CompanyBasicInfo(name=product.company.name) if product.company else None,
+            company=CompanyBasicInfo(name=product.company.name, score=logic.get_plScore(product.company))
+            if product.company
+            else None,
             brand=BrandBasicInfo(name=product.brand.name) if product.brand else None,
         )
 

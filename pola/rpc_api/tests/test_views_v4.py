@@ -244,7 +244,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name},
+                        'company': {'name': p1.company.name, 'score': None},
                         'name': p1.name,
                     }
                 ],
@@ -264,7 +264,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name},
+                        'company': {'name': p1.company.name, 'score': None},
                         'name': p1.name,
                     }
                 ],
@@ -287,7 +287,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name},
+                        'company': {'name': p1.company.name, 'score': None},
                         'name': p1.name,
                     },
                     {
@@ -299,7 +299,64 @@ class TestSearchV4(TestCase):
                     {
                         'brand': None,
                         'code': p3.code,
-                        'company': {'name': p3.company.name},
+                        'company': {'name': p3.company.name, 'score': None},
+                        'name': p3.name,
+                    },
+                ],
+                'totalItems': 3,
+            },
+            json.loads(response.content),
+        )
+
+    def test_should_calculate_products(self):
+        p1 = ProductFactory(
+            name="baton1",
+            company__plCapital=100,
+            company__plWorkers=100,
+            company__plRnD=100,
+            company__plRegistered=100,
+            company__plNotGlobEnt=100,
+        )
+        p2 = ProductFactory(
+            name="baton2",
+            company__plCapital=0,
+            company__plWorkers=100,
+            company__plRnD=100,
+            company__plRegistered=100,
+            company__plNotGlobEnt=100,
+        )
+        p3 = ProductFactory(
+            name="baton4",
+            company__plCapital=0,
+            company__plWorkers=0,
+            company__plRnD=100,
+            company__plRegistered=100,
+            company__plNotGlobEnt=100,
+        )
+
+        response = self.client.get(f"{self.url}?query=baton", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.maxDiff = None
+        self.assertEqual(
+            {
+                'nextPageToken': None,
+                'products': [
+                    {
+                        'brand': {'name': p1.brand.name},
+                        'code': p1.code,
+                        'company': {'name': p1.company.name, 'score': 100},
+                        'name': p1.name,
+                    },
+                    {
+                        'brand': {'name': p2.brand.name},
+                        'code': p2.code,
+                        'company': {'name': p2.company.name, 'score': 65},
+                        'name': p2.name,
+                    },
+                    {
+                        'brand': {'name': p3.brand.name},
+                        'code': p3.code,
+                        'company': {'name': p3.company.name, 'score': 35},
                         'name': p3.name,
                     },
                 ],
