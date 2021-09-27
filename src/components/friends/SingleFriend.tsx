@@ -27,10 +27,6 @@ const RightColumn = styled(ContentColumn)`
 
 const LeftColumn = styled(ContentColumn)`
   flex: 2;
-/* 
-  @media ${Device.mobile} {
-    text-align: center;
-  } */
 `
 
 const ImageSection = styled.div`

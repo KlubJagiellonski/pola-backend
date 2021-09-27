@@ -9,7 +9,7 @@ import { TitleSection, WrapperSection, Text } from '../../styles/GlobalStyle.css
 import { color, padding, margin, fontSize } from '../../styles/theme'
 import { SecondaryButton } from '../buttons/SecondaryButton'
 import { ResponsiveImage } from '../images/ResponsiveImage'
-import { friendUrl } from './friends-url-service'
+import { buildFriendUrl } from './friends-url-service'
 
 const Wrapper = styled(WrapperSection)`
   padding: ${padding.normal};
@@ -64,7 +64,7 @@ const FriendCard: React.FC<Friend> = (friend) => {
       <Content>{friend.description}</Content>
       <ButtonSection>
         {friend.slug &&
-          <Link to={friendUrl(friend.slug, hash.friends.friend.id)}>
+          <Link to={buildFriendUrl(friend.slug, hash.friends.friend.id)}>
             <Button
               label="Czytaj Więcej..."
               color={ButtonColor.Red}
