@@ -38,7 +38,7 @@ jeepney==0.7.1
 Jinja2==2.11.3
 jmespath==0.10.0
 json-rpc==1.13.0
-jsonschema==3.1.1
+jsonschema==4.0.0
 keyring==21.8.0
 leather==0.3.3
 Logbook==1.5.3
