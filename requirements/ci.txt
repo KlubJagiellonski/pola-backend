@@ -40,7 +40,7 @@ factory-boy==3.2.0
 Faker==8.14.0
 flake8==3.9.2
 future==0.18.2
-gtin==0.1.13
+gtin==1.0.1631641032
 idna==2.10
 importlib-metadata==4.8.1
 ipdb==0.13.9

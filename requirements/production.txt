@@ -32,7 +32,7 @@ django-storages==1.11.1
 future==0.18.2
 gevent==21.8.0
 greenlet==1.1.2
-gtin==0.1.13
+gtin==1.0.1631641032
 gunicorn==20.1.0
 idna==2.10
 importlib-metadata==4.8.1
