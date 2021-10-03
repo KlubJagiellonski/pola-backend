@@ -19,14 +19,14 @@ class TestPolaWebView(TestCase):
         self.s3_client.delete_bucket(Bucket=self.bucket_name)
 
     def test_should_return_404_for_invalid_cms_view(self):
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name, ENABLE_POLA_WEB_CUSTOMIZATION=True):
             response = self.client.get('/cms/invalid')
             self.assertEqual(response.status_code, 404)
             self.assertIn("<title>Nie ma takiej strony</title>", response.content.decode())
             self.assertIn("<h1>Nie ma takiej strony</h1>", response.content.decode())
 
     def test_should_return_404_for_invalid_normal_view(self):
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name, ENABLE_POLA_WEB_CUSTOMIZATION=True):
             response = self.client.get('/invalid')
             self.assertEqual(response.status_code, 404)
             self.assertIn("<title>Nie ma takiej strony</title>", response.content.decode())
@@ -40,7 +40,7 @@ class TestPolaWebView(TestCase):
             Key="404.html",
         )
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name, ENABLE_POLA_WEB_CUSTOMIZATION=True):
             response = self.client.get('/invalid')
             self.assertEqual(response.status_code, 404)
             self.assertEqual(content, response.content.decode())
@@ -53,7 +53,7 @@ class TestPolaWebView(TestCase):
             Key="article/index.html",
         )
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name, ENABLE_POLA_WEB_CUSTOMIZATION=True):
             response = self.client.get('/article/')
             self.assertEqual(response.status_code, 200)
             self.assertEqual(content, response.content.decode())
@@ -66,7 +66,7 @@ class TestPolaWebView(TestCase):
             Key="test.js",
         )
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name, ENABLE_POLA_WEB_CUSTOMIZATION=True):
             response = self.client.get('/test.js')
             self.assertEqual(response.status_code, 200)
             self.assertEqual(content, response.content.decode())
