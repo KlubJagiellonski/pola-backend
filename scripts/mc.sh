@@ -18,6 +18,11 @@ if [ -t 0 ] ; then
   )
 fi
 
-docker run "${DOCKER_ARGS[@]}" \
-  minio/mc \
-    "${@}"
+if [[ "$#" -eq 0 ]]; then
+  docker run "${DOCKER_ARGS[@]}" \
+    minio/mc
+else
+  docker run "${DOCKER_ARGS[@]}" \
+    minio/mc \
+      "${@}"
+fi
