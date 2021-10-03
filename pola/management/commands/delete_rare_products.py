@@ -23,21 +23,12 @@ FROM product_product
 WHERE 1 = 1
   AND company_id IS NULL
   AND name IS NULL
-  AND (SELECT count(*)
-       FROM product_product_companies
-       WHERE product_id = product_product_companies.id) = 0
-  AND (SELECT count(*)
-       FROM report_report
-       WHERE product_id = product_product.id) = 0
-  AND (SELECT count(*)
-       FROM ai_pics_aipics
-       WHERE product_id = product_product.id) = 0
-  AND (SELECT count(*)
-       FROM pola_query
-       WHERE product_id = product_product.id
-      )
+  AND (SELECT count(*) FROM report_report WHERE product_id = product_product.id) = 0
+  AND (SELECT count(*) FROM ai_pics_aipics WHERE product_id = product_product.id) = 0
+  AND
+    (SELECT count(*) FROM pola_query WHERE product_id = product_product.id)
       <
-      (12 * date_part('year', age(created_at)) + date_part('month', age(created_at)))
+    (12 * date_part('year', age(created_at)) + date_part('month', age(created_at)))
 LIMIT %s
 """
                 ),
