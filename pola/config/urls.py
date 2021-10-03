@@ -93,7 +93,7 @@ FAVICON_FILES = [
     "browserconfig.xml",
 ]
 
-if settings.ENABLE_POLA_WEB_CUSTOMIZATION:
+if not settings.ENABLE_POLA_WEB_CUSTOMIZATION:
     for filename in FAVICON_FILES:
         urlpatterns.append(
             url(
