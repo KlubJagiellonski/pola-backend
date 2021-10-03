@@ -17,7 +17,7 @@ class BucketMixin:
     @property
     def _bucket(self):
         conn = create_s3_connection()
-        bucket = Bucket(conn, settings.AWS_STORAGE_BUCKET_AI_NAME)
+        bucket = Bucket(conn, settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
         return bucket
 
 
