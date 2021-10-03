@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 from functools import reduce
+from textwrap import dedent
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import connection
-from django.db.models import Count, Q
+from django.db.models import Q
 from django.db.models.functions import Length
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -65,9 +66,25 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
             :10
         ]
 
-        c['companies_with_most_open_reports'] = Company.objects.annotate(
-            no_of_open_reports=Count('companies__report')
-        ).order_by('no_of_open_reports')[:10]
+        sq = dedent(
+            """\
+            select
+                count(*)
+            from
+                report_report
+                join
+                    product_product on report_report.product_id = product_product.id
+            where company_company.id=product_product.company_id and resolved_at is NULL
+        """
+        )
+        c['companies_with_most_open_reports'] = Company.objects.raw(
+            'select '
+            '*, '
+            '(' + sq + ') as no_of_open_reports '
+            'from '
+            'company_company '
+            'order by no_of_open_reports desc limit 10'
+        )
 
         # Reports
         c['newest_reports'] = Report.objects.only_open().order_by('-created_at')[:10]
