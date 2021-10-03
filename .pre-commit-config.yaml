@@ -95,3 +95,11 @@ repos:
         language: docker_image
         entry: koalaman/shellcheck:v0.7.2 -x -a
         files: \.sh$
+      - id: version-checks
+        name: Checks Django Version in docker-compose.yaml
+        language: system
+        entry: scripts/static_checks/django-version-check.sh
+        files: >
+          (?x)
+          ^requirements/production\.txt$|
+          ^docker-compose.yaml$|
