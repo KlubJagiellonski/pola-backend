@@ -1,6 +1,6 @@
 [run]
 branch = True
 include = ./*
-omit = */site-packages/*,**/migrations/*
+omit = */site-packages/*,**/migrations/*,scripts/*,requirements/*
 plugins =
     django_coverage_plugin
