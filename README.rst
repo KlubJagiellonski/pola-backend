@@ -145,7 +145,7 @@ Zmienna środowiskowa                    Ustawienia Django                      
 POLA_APP_AWS_ACCESS_KEY_ID              AWS_ACCESS_KEY_ID                       n/a                                            <zgłasza wyjątek>
 POLA_APP_AWS_SECRET_ACCESS_KEY          AWS_SECRET_ACCESS_KEY                   n/a                                            <zgłasza wyjątek>
 POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME      AWS_STORAGE_BUCKET_NAME                 n/a                                            <zgłasza wyjątek>
-POLA_APP_AWS_S3_WEB_BUCKET_NAME         AWS_STORAGE_WEB__BUCKET_NAME            n/a                                            <zgłasza wyjątek>
+POLA_APP_AWS_S3_WEB_BUCKET_NAME         AWS_STORAGE_WEB_BUCKET_NAME             n/a                                            <zgłasza wyjątek>
 POLA_APP_AWS_S3_BACKEND_BUCKET_NAME     AWS_STORAGE_BACKEND_BUCKET_NAME         n/a                                            <zgłasza wyjątek>
 POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME     AWS_STORAGE_AI_PICS_BUCKET_NAME         n/a                                            <zgłasza wyjątek>
 DJANGO_MAILGUN_API_KEY                  MAILGUN_ACCESS_KEY                      n/a                                            <zgłasza wyjątek>
