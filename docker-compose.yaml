@@ -23,7 +23,7 @@ x-pola-backend-common:
     POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME: 'pola-app-public'
     POLA_APP_AWS_S3_BACKEND_BUCKET_NAME: 'pola-app-backend'
     POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME: 'pola-app-ai-pics'
-    POLA_APP_AWS_S3_WEB_BUCKET_NAME: 'pola-app-web'
+    POLA_APP_AWS_S3_WEB_BUCKET_NAME: 'pola-web-public'
     POLA_APP_AWS_S3_ENDPOINT_URL: 'http://minio:9000'
 
   env_file: .env
@@ -91,7 +91,7 @@ services:
       - mc mb local/pola-app-public || true;
         mc mb local/pola-app-backend || true;
         mc mb local/pola-app-ai-pics || true;
-        mc mb local/pola-app-web || true;
+        mc mb local/pola-web-public || true;
         mc policy set public local/pola-app-public || true;
 
   postgres:
