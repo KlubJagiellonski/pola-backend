@@ -289,7 +289,7 @@ AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')  # noqa: F405
 AWS_STORAGE_BUCKET_NAME = env('POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME')  # noqa: F405
 AWS_STORAGE_BACKEND_BUCKET_NAME = env('POLA_APP_AWS_S3_BACKEND_BUCKET_NAME')  # noqa: F405
 AWS_STORAGE_AI_PICS_BUCKET_NAME = env('POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME')  # noqa: F405
-AWS_STORAGE_WEB_BUCKET_NAME = env('POLA_APP_AWS_S3_WEB_BUCKET_NAME')  # noqa: F405
+AWS_STORAGE_WEB_BUCKET_NAME = env.str('POLA_APP_AWS_S3_WEB_BUCKET_NAME', '')  # noqa: F405
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto
