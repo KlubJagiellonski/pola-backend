@@ -79,9 +79,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
         str(ai_pics.product.code), str(ai_pics.id), str(file_no), str(uuid.uuid1()), file_ext
     )
 
-    signed_request = create_signed_request_boto3(
-        mime_type, object_name, settings.settings.AWS_STORAGE_AI_PICS_BUCKET_NAME
-    )
+    signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
 
     attachment = AIAttachment(ai_pics=ai_pics)
     attachment.attachment.name = object_name
