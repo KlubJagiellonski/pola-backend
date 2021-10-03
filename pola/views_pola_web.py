@@ -12,6 +12,7 @@ from pola.s3 import create_s3_client
 class PolaWebView(View):
     def get_s3_stream_response(self, s3_client, key, status_code=200):
         try:
+            print(f"PolaWebView:get_s3_stream_response::key={key}, bucket={settings.AWS_STORAGE_WEB_BUCKET_NAME}")
             s3_obj = s3_client.get_object(
                 Bucket=settings.AWS_STORAGE_WEB_BUCKET_NAME,
                 Key=key,

@@ -103,7 +103,7 @@ if not settings.ENABLE_POLA_WEB_CUSTOMIZATION:
         )
 
 # Serving static files
-if settings.ENABLE_POLA_WEB_CUSTOMIZATION:
+if not settings.ENABLE_POLA_WEB_CUSTOMIZATION:
     urlpatterns += [
         url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     ]
