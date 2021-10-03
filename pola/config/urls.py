@@ -125,4 +125,4 @@ if settings.DEBUG:
     ]
 
 if settings.ENABLE_POLA_WEB_CUSTOMIZATION:
-    urlpatterns += [re_path('^.+', views_pola_web.page_not_found_handler)]
+    urlpatterns += [re_path('^.*', views_pola_web.page_not_found_handler)]

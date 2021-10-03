@@ -25,7 +25,7 @@ x-pola-backend-common:
     POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME: 'pola-app-ai-pics'
     POLA_APP_AWS_S3_WEB_BUCKET_NAME: 'pola-web-public'
     POLA_APP_AWS_S3_ENDPOINT_URL: 'http://minio:9000'
-    ENABLE_POLA_WEB_CUSTOMIZATION: '${ENABLE_POLA_WEB_CUSTOMIZATION:-False}'
+    POLA_APP_ENABLE_POLA_WEB_CUSTOMIZATION: '${ENABLE_POLA_WEB_CUSTOMIZATION:-False}'
 
   env_file: .env
   volumes:

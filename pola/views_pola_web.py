@@ -29,10 +29,11 @@ class PolaWebView(View):
         if request.path.startswith('/cms/'):
             return defaults.page_not_found(request, self.kwargs.get('exception', None))
         s3_client = create_s3_client()
-        file_path = request.path.rstrip("/")
-        response = self.get_s3_stream_response(s3_client, file_path)
-        if response:
-            return response
+        file_path = request.path.strip("/")
+        if file_path:
+            response = self.get_s3_stream_response(s3_client, file_path)
+            if response:
+                return response
 
         splited_path = os.path.splitext(file_path)
         if not splited_path[1]:

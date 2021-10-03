@@ -71,6 +71,19 @@ class TestPolaWebView(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(content, response.content.decode())
 
+    def test_should_return_200_for_home_page(self):
+        content = "index.html"
+        self.s3_client.put_object(
+            Body=content,
+            Bucket=self.bucket_name,
+            Key="index.html",
+        )
+
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+            response = self.client.get('')
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(content, response.content.decode())
+
     def test_should_return_200_when_file_exists(self):
         content = "test.js"
         self.s3_client.put_object(
