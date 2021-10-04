@@ -1,3 +1,4 @@
+import functools
 from urllib.parse import urlparse
 
 import boto3
@@ -6,6 +7,7 @@ from botocore.config import Config
 from django.conf import settings
 
 
+@functools.lru_cache(maxsize=None)
 def create_s3_connection():
     if not settings.AWS_S3_ENDPOINT_URL:
         return S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
@@ -20,6 +22,7 @@ def create_s3_connection():
     )
 
 
+@functools.lru_cache(maxsize=None)
 def create_s3_client():
     session = boto3.session.Session()
 
@@ -41,6 +44,7 @@ def create_s3_client():
     )
 
 
+@functools.lru_cache(maxsize=None)
 def create_s3_resource():
     session = boto3.session.Session()
 

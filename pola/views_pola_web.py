@@ -4,8 +4,11 @@ from botocore.exceptions import ClientError
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.cache import add_never_cache_headers
+from django.utils.decorators import method_decorator
+from django.utils.http import http_date
 from django.views import View, defaults
 from django.views.decorators.cache import cache_page
+from django.views.decorators.gzip import gzip_page
 
 from pola.s3 import create_s3_client
 
@@ -15,8 +18,10 @@ MAX_CACHE_KEY_SIZE = int(256 * 1024)
 CACHE_TIMEOUT = 60 * 15
 
 
+@method_decorator(cache_page(CACHE_TIMEOUT), name='dispatch')
+@method_decorator(gzip_page, name='dispatch')
 class PolaWebView(View):
-    def get_s3_data(self, s3_client, key):
+    def get_s3_response(self, s3_client, key, status_code=200):
         try:
             print(f"PolaWebView:get_s3_stream_response::key={key}, bucket={settings.AWS_STORAGE_WEB_BUCKET_NAME}")
             s3_obj = s3_client.get_object(
@@ -25,7 +30,12 @@ class PolaWebView(View):
             )
             body = s3_obj['Body'].read()
             content_type = s3_obj.get('ContentType') or 'application/octet-stream'
-            return body, content_type
+            response = HttpResponse(body, content_type=content_type, status=status_code)
+            if s3_obj.get('ETag'):
+                response['ETag'] = s3_obj['ETag']
+            if s3_obj.get('LastModified'):
+                response['Last-Modified'] = http_date(s3_obj['LastModified'])
+            return response
         except ClientError as ex:
             if ex.response['Error']['Code'] == 'NoSuchKey':
                 return None
@@ -38,14 +48,12 @@ class PolaWebView(View):
         s3_client = create_s3_client()
         file_path = request.path.strip("/")
         for candidate_key, status_code in self.get_candidates(file_path):
-            s3_response = self.get_s3_data(s3_client, candidate_key)
+            s3_response = self.get_s3_response(s3_client, candidate_key, status_code=status_code)
             if not s3_response:
                 continue
-            body, content_type = s3_response
-            response = HttpResponse(body, content_type=content_type, status=status_code)
-            if len(body) > MAX_CACHE_KEY_SIZE:
-                add_never_cache_headers(response)
-            return response
+            if len(s3_response.content) > MAX_CACHE_KEY_SIZE:
+                add_never_cache_headers(s3_response)
+            return s3_response
 
         return defaults.page_not_found(request, self.kwargs.get('exception', None))
 
@@ -60,4 +68,4 @@ class PolaWebView(View):
         return candidates
 
 
-page_not_found_handler = cache_page(CACHE_TIMEOUT)(PolaWebView.as_view())
+page_not_found_handler = PolaWebView.as_view()
