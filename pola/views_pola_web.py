@@ -1,3 +1,4 @@
+import calendar
 import os
 
 from botocore.exceptions import ClientError
@@ -5,7 +6,6 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.cache import add_never_cache_headers
 from django.utils.decorators import method_decorator
-from django.utils.http import http_date
 from django.views import View, defaults
 from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
@@ -34,7 +34,7 @@ class PolaWebView(View):
             if s3_obj.get('ETag'):
                 response['ETag'] = s3_obj['ETag']
             if s3_obj.get('LastModified'):
-                response['Last-Modified'] = http_date(s3_obj['LastModified'])
+                response['Last-Modified'] = calendar.timegm(s3_obj['LastModified'].utctimetuple())
             return response
         except ClientError as ex:
             if ex.response['Error']['Code'] == 'NoSuchKey':
