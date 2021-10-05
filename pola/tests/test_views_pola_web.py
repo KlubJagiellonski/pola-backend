@@ -2,6 +2,7 @@ import random
 import string
 import sys
 
+from django.core.cache import cache
 from django.test import override_settings
 from django.urls import clear_url_caches
 from test_plus.test import TestCase
@@ -96,3 +97,57 @@ class TestPolaWebView(TestCase):
             response = self.client.get('/test.js')
             self.assertEqual(response.status_code, 200)
             self.assertEqual(content, response.content.decode())
+
+    def test_should_support_caching_based_on_etag(self):
+        content = "test.js"
+        self.s3_client.put_object(
+            Body=content,
+            Bucket=self.bucket_name,
+            Key="test.js",
+        )
+
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+            response = self.client.get('/test.js')
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(content, response.content.decode())
+
+            valid_etag = response.headers['ETag']
+            invalid_etag = response.headers['ETag'] + "2"
+            for method, header_name, etag, expected_code, expected_content in (
+                ('get', 'HTTP_IF_NONE_MATCH', valid_etag, 304, ''),
+                ('head', 'HTTP_IF_NONE_MATCH', valid_etag, 304, ''),
+                ('get', 'HTTP_IF_MATCH', valid_etag, 200, content),
+                ('head', 'HTTP_IF_MATCH', valid_etag, 200, ''),
+                ('get', 'HTTP_IF_NONE_MATCH', invalid_etag, 200, content),
+                ('head', 'HTTP_IF_NONE_MATCH', invalid_etag, 200, ''),
+                ('get', 'HTTP_IF_MATCH', invalid_etag, 200, content),
+                ('head', 'HTTP_IF_MATCH', invalid_etag, 200, ''),
+            ):
+                cache.clear()
+                if method == 'get':
+                    response = self.client.get('/test.js', **{header_name: etag})
+                elif method == 'head':
+                    response = self.client.head('/test.js', **{header_name: etag})
+                self.assertEqual(response.status_code, expected_code)
+                self.assertEqual(expected_content, response.content.decode())
+
+    def test_should_support_conditional_requests(self):
+        content = "test.js"
+        self.s3_client.put_object(
+            Body=content,
+            Bucket=self.bucket_name,
+            Key="test.js",
+        )
+
+        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+            response = self.client.get('/test.js')
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(content, response.content.decode())
+
+            response = self.client.get('/test.js', **{'HTTP_IF_MODIFIED_SINCE': response.headers['Last-Modified']})
+            self.assertEqual(response.status_code, 304)
+            self.assertEqual('', response.content.decode())
+
+            response = self.client.head('/test.js', **{'HTTP_IF_MODIFIED_SINCE': response.headers['Last-Modified']})
+            self.assertEqual(response.status_code, 304)
+            self.assertEqual('', response.content.decode())
