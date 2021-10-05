@@ -20,7 +20,7 @@ dbt-core==0.20.2
 dbt-extractor==0.4.0
 dbt-postgres==0.20.2
 dbt-redshift==0.20.2
-dbt-snowflake==0.20.2
+dbt-snowflake==0.21.0
 decorator==4.4.2
 google-api-core==1.31.2
 google-auth==1.35.0
