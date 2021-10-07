@@ -5,13 +5,14 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apt-transport-https \
         apt-utils \
-        ca-certificates \
         binutils \
         binutils-common \
         binutils-x86-64-linux-gnu \
+        ca-certificates \
         gcc \
         libc6-dev \
         libcc1-0 \
+        libffi-dev \
         libgcc-8-dev \
         libpq-dev \
         libpq5 \
@@ -28,7 +29,7 @@ WORKDIR /app
 COPY ./scripts/ci-docker-image/entrypoint.sh /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
-RUN pip install --no-cache-dir  --upgrade "pip" && pip --version
+RUN pip install --no-cache-dir --upgrade "pip" && pip --version
 
 ARG DJANGO_VERSION
 ENV DJANGO_VERSION=${DJANGO_VERSION}
