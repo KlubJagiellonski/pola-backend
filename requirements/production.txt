@@ -22,7 +22,7 @@ django-braces==1.14.0
 django-crispy-forms==1.13.0
 django-environ==0.7.0
 django-filter==21.1
-django-grappelli==2.15.1
+django-grappelli==2.15.3
 django-model-utils==4.1.1
 django-ratelimit==3.0.1
 django-redis==5.0.0
