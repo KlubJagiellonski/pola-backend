@@ -99,10 +99,7 @@ jobs:
       - run: ./run_manage.sh migrate
       - run: ./run_manage.sh populate_db
       - run: ./run_dbt.sh dbt deps
-      - run: ./run_dbt.sh dbt snapshot
-      - run: ./run_dbt.sh dbt seed
-      - run: ./run_dbt.sh dbt run
-      - run: ./run_dbt.sh dbt test
+      - run: ./run_dbt.sh dbt build
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/bi-docker-image/push_image.sh
@@ -226,10 +223,7 @@ jobs:
           printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
           printenv | grep POLA_APP >> $GITHUB_ENV;
       - run: ./run_dbt.sh dbt deps
-      - run: ./run_dbt.sh dbt snapshot
-      - run: ./run_dbt.sh dbt seed
-      - run: ./run_dbt.sh dbt run
-      - run: ./run_dbt.sh dbt test
+      - run: ./run_dbt.sh dbt build
       - name: "Push image (push)"
         if: github.event_name == 'push'
         run: ./scripts/bi-docker-image/push_image.sh
