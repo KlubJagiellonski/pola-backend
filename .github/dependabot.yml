@@ -9,7 +9,7 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
-    open-pull-requests-limit: 30
+    open-pull-requests-limit: 40
 
   - package-ecosystem: "github-actions"
     labels:
@@ -25,6 +25,13 @@ updates:
     labels:
       - "dependencies"
       - "automerge"
-    directory: "/"
+    directory: "/scripts/ci-docker-image"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    labels:
+      - "dependencies"
+      - "automerge"
+    directory: "/scripts/bi-docker-image"
     schedule:
       interval: "daily"
