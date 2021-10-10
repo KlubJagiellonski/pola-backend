@@ -48,7 +48,4 @@ jobs:
         env:
           TARGET_ENV: ${{ matrix.environment }}
       - run: ./run_dbt.sh dbt deps
-      - run: ./run_dbt.sh dbt snapshot
-      - run: ./run_dbt.sh dbt seed
-      - run: ./run_dbt.sh dbt run
-      - run: ./run_dbt.sh dbt test
+      - run: ./run_dbt.sh dbt build
