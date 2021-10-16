@@ -113,9 +113,8 @@ def handle_unknown_company(code, report, result):
                 result['card_type'] = TYPE_GREY
                 result['name'] = f'Miejsce rejestracji: {CODE_PREFIX_TO_COUNTRY[prefix]}'
                 result['altText'] = (
-                    'Ten produkt został wyprodukowany '
-                    'przez zagraniczną firmę, której '
-                    'miejscem rejestracji jest: {}.'.format(CODE_PREFIX_TO_COUNTRY[prefix])
+                    f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+                    f'której miejscem rejestracji jest: {CODE_PREFIX_TO_COUNTRY[prefix]}.'
                 )
                 break
         else:
@@ -234,8 +233,7 @@ def create_from_api(code, obj, product=None):
             ):
                 create_bot_report(
                     product,
-                    "Wg. najnowszego odpytania w bazie ILiM "
-                    "producent tego produktu to:\"{}\"".format(obj_owner_name),
+                    f"Wg. najnowszego odpytania w bazie ILiM producent tego produktu to:\"{obj_owner_name}\"",
                     check_if_already_exists=not company_created,
                 )
         else:

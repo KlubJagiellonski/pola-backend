@@ -34,8 +34,9 @@ class Command(BaseCommand):
                 "where ai_pics_aipics.created_at > current_timestamp - interval '1 day' "
             )
             row = cursor.fetchone()
-            msg = 'W ciągu ostatniej doby użytkownicy Poli przysłali {} zdjęć w {} sesjach dla {} produktów.'.format(
-                row[0], row[1], row[2]
+            msg = (
+                f'W ciągu ostatniej doby użytkownicy Poli przysłali {row[0]} zdjęć w {row[1]} '
+                f'sesjach dla {row[2]} produktów.'
             )
             send_ai_pics_stats(msg)
 
