@@ -79,6 +79,9 @@ repos:
     rev: '0.66'
     hooks:
       - id: flynt
+        args:
+         - --line-length
+         - '99999'
   - repo: https://github.com/hadolint/hadolint
     rev: 'v2.6.1'
     hooks:
