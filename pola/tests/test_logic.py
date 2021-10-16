@@ -154,8 +154,8 @@ class TestGetResultFromCode(TestCase):
         expected_response = (
             {
                 "altText": (
-                    'Ten produkt został wyprodukowany przez zagraniczną firmę, której '
-                    'miejscem rejestracji jest: {}.'.format(country)
+                    f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+                    f'której miejscem rejestracji jest: {country}.'
                 ),
                 "card_type": "type_grey",
                 "code": current_ean,

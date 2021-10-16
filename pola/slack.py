@@ -36,19 +36,11 @@ def send_ai_pics(
             'token': settings.SLACK_TOKEN,
             'channel': settings.SLACK_CHANNEL_AI_PICS,
             'username': 'New AI pics',
-            'text': 'Product: *{}*\n'
-            'Device: *{}*\n'
-            'Dimensions: *{}x{}* (Original: {}x{})\n'
-            '*{} {}* files ({})'.format(
-                product,
-                device_name,
-                width,
-                height,
-                original_width,
-                original_height,
-                files_count,
-                file_ext,
-                mime_type,
+            'text': (
+                f'Product: *{product}*\n'
+                f'Device: *{device_name}*\n'
+                f'Dimensions: *{width}x{height}* (Original: {original_width}x{original_height})\n'
+                f'*{files_count} {file_ext}* files ({mime_type})'
             ),
             'attachments': json.dumps(files),
         }
