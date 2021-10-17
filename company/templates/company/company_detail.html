@@ -70,14 +70,24 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Produkowane produkty</h3>
                 </div>
-                <ul class="list-group">
-                    {% for product in object.product_set.all %}
-                        <li class="list-group-item">
-                            <a href="{{ product.get_absolute_url }}">{{ product }}</a>
-                        </li>
+                <table class="table" id="company-table">
+                    {% for product in product_list %}
+                        <tr>
+                            <td>
+                                <a href="{{ product.get_absolute_url }}">{{ product }}</a>
+                            </td>
+                            <td class="text-right">
+                                <div>({{ product.query_count }})</div>
+                            </td>
+                        </tr>
                     {% empty%}
-                        <li class="list-group-item">{% trans "Nie ma żadnych produktów" %}</li>
+                        <tr>
+                            <td>
+                                {% trans "Nie ma żadnych produktów" %}
+                            </td>
+                        </tr>
                     {% endfor %}
+                    </table>
                 </ul>
             </div>
         </div>
