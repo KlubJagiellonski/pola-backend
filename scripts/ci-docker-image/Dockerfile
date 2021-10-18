@@ -1,6 +1,8 @@
 ARG PYTHON_VERSION="3.9"
 FROM python:${PYTHON_VERSION}-slim-buster
 
+SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apt-transport-https \
@@ -9,7 +11,9 @@ RUN apt-get update \
         binutils-common \
         binutils-x86-64-linux-gnu \
         ca-certificates \
+        curl \
         gcc \
+        gnupg2 \
         libc6-dev \
         libcc1-0 \
         libffi-dev \
@@ -17,7 +21,12 @@ RUN apt-get update \
         libpq-dev \
         libpq5 \
         linux-libc-dev \
+        lsb-release \
         netcat-openbsd \
+    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends postgresql-client-13 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
