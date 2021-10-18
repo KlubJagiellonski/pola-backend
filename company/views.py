@@ -142,7 +142,7 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
         context['report_list'] = Report.objects.only_open().filter(product__company=self.get_object())
 
         context['brand_list'] = Brand.objects.filter(company=self.get_object())
-        context['product_list'] = Product.objects.filter(company=self.get_object())
+        context['product_list'] = Product.objects.filter(company=self.get_object()).order_by('-query_count')
 
         return context
 

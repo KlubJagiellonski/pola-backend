@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
@@ -8,6 +9,7 @@ from company.factories import CompanyFactory
 from company.models import Company
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
+from product.factories import ProductFactory
 
 
 class TemplateUsedMixin:
@@ -133,6 +135,17 @@ class TestCompanyDetailView(InstanceMixin, PermissionMixin, TemplateUsedMixin, T
     def setUp(self):
         super().setUp()
         self.url = reverse('company:detail', kwargs={'pk': self.instance.pk})
+
+    def test_should_products_be_sorted(self):
+        self.login()
+        p1 = ProductFactory(company=self.instance, query_count=100)
+        p2 = ProductFactory(company=self.instance, query_count=50)
+        p3 = ProductFactory(company=self.instance, query_count=75)
+
+        resp = self.client.get(self.url)
+        doc = BeautifulSoup(resp.content, 'html.parser')
+        product_names = [d.text for d in doc.select("#company-table tr td:nth-child(1) > a")]
+        self.assertEqual([str(p1), str(p3), str(p2)], product_names)
 
 
 class TestCompanyListView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
