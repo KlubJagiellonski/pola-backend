@@ -4,7 +4,7 @@ import requests
 from test_plus import TestCase
 
 from ai_pics.models import AIAttachment, AIPics
-from company.factories import CompanyFactory
+from company.factories import BrandFactory, CompanyFactory
 from pola.rpc_api.tests.test_views import JsonRequestMixin, _create_image
 from product.factories import ProductFactory
 from product.models import Product
@@ -191,8 +191,8 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEE",
         )
-
-        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c1)
+        b = BrandFactory(company=c1)
+        p = ProductFactory.create(code=5900049011829, company=c1, brand=b)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
         self.maxDiff = None
@@ -201,7 +201,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'altText': None,
                 'card_type': 'type_white',
                 'code': '5900049011829',
-                'description': 'TEST',
+                'description': f'TEST\nMarka naależaca do firmy: {str(b)}.',
                 'donate': {
                     'show_button': True,
                     'title': 'Potrzebujemy 1 zł',
