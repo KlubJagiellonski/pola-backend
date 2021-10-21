@@ -20,7 +20,7 @@ django-autocomplete-light==3.8.2
 django-autoslug==1.9.8
 django-braces==1.14.0
 django-crispy-forms==1.13.0
-django-environ==0.8.0
+django-environ==0.8.1
 django-filter==21.1
 django-grappelli==2.15.3
 django-model-utils==4.2.0
