@@ -6,7 +6,7 @@ azure-core==1.19.0
 azure-storage-blob==12.9.0
 Babel==2.9.1
 boto3==1.18.65
-botocore==1.21.65
+botocore==1.22.2
 cachetools==4.2.4
 certifi==2021.10.8
 cffi==1.15.0
