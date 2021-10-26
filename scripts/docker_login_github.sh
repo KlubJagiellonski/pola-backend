@@ -17,5 +17,5 @@ echo "Logging in to the Github Registry as ${USERNAME}."
 echo "${GITHUB_TOKEN}" | docker login \
   --username "${USERNAME}" \
   --password-stdin \
-  "https://docker.pkg.github.com"
+  "ghcr.io"
 echo "Logged in"
