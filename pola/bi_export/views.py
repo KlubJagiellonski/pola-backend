@@ -57,7 +57,7 @@ FROM company_company
 GROUP BY company_company.common_name, company_company.official_name, company_company.name,
          company_company.nip, company_company.query_count, pola_score
 ORDER BY company_company.query_count DESC
-LIMIT 100;
+LIMIT 1000;
             """
             )
             rows = dictfetchall(cursor)
