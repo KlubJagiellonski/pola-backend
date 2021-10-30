@@ -7,11 +7,13 @@ const Header = styled.div`
   display: flex;
   flex-flow: row nowrap;
   padding: ${padding.small} ${padding.normal};
+  align-items: baseline;
 
   h3 {
     font-weight: bold;
     color: ${color.text.dark};
     flex: 1 1 100%;
+    margin: 0;
 
     @media ${Device.phone} {
       font-size: 0.8em;

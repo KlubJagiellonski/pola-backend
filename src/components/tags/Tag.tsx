@@ -1,40 +1,39 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
-import { ButtonColor } from '../../styles/button-theme'
-import { fontSize } from '../../styles/theme'
-import { TagButton } from '../buttons/TagButton'
+import { ButtonThemes, ButtonFlavor } from '../../components/buttons/Button';
+import { fontSize } from '../../styles/theme';
+import { TagButton } from '../buttons/TagButton';
 import { ArrayParam, useQueryParams, withDefault } from 'use-query-params';
 import { tagUrl } from './url-service';
 import { Link } from 'gatsby';
 
 interface ITag {
   label?: string;
-  active?: boolean
+  active?: boolean;
 }
 
 interface IQuery {
-  tags: string[],
+  tags: string[];
 }
 
 const Tag: React.FC<ITag> = ({ label, active }) => {
   const [query] = useQueryParams<IQuery>({ tags: withDefault(ArrayParam, []) });
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     if (label) {
-      setUrl(tagUrl(label, query))
+      setUrl(tagUrl(label, query));
     }
   }, [label]);
 
+  const flavor = active ? ButtonFlavor.GRAY : ButtonFlavor.LIGHT_GRAY;
+  const styles = ButtonThemes[flavor];
+
   return (
     <Link to={url}>
-      <TagButton
-        label={label}
-        color={active ? ButtonColor.Gray : ButtonColor.LightGray}
-        fontSize={fontSize.small}
-      />
+      <TagButton label={label} styles={styles} />
     </Link>
-  )
-}
+  );
+};
 
 export default Tag;

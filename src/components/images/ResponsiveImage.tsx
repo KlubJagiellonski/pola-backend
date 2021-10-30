@@ -32,7 +32,6 @@ export const ResponsiveImage: React.FC<IResponsiveImage> = function ({ imageSrc 
       `}
       render={(data) => {
         try {
-          //console.log('EDGES', data.images.edges);
           const image = data.images.edges.find((imageEdge: any) => imageEdge.node.relativePath === imageSrc);
           return renderImage(image);
         } catch {

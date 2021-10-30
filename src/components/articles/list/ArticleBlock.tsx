@@ -6,7 +6,7 @@ import { Device, color, margin, padding } from '../../../styles/theme';
 import ArticleContents from './ArticleContents';
 import ArticleTitle from './ArticleTitle';
 import { PrimaryButton } from '../../buttons/PrimaryButton';
-import { ButtonColor } from '../../../styles/button-theme';
+import { ButtonThemes, ButtonFlavor } from '../../../components/buttons/Button';
 import { Link } from 'gatsby';
 import { Article } from '../../../domain/articles';
 
@@ -26,8 +26,8 @@ const ArticleImage = styled.div<{ img?: string }>`
   width: 50%;
   text-align: left;
 
-  div{
-    div{
+  div {
+    div {
       padding-bottom: 14em !important;
     }
   }
@@ -59,27 +59,23 @@ const ArticlesButton = styled(PrimaryButton)`
 
 const Contents = styled.div`
   @media ${Device.mobile} {
-    p:first-child{
+    p:first-child {
       -webkit-line-clamp: 8;
     }
   }
-`
+`;
 
 export const ArticleBlock: React.FC<Article> = ({ imagePath, title, slug, date, subTitle, tag }) => {
   return (
     <Wrapper color={color.background.white}>
       <Link to={slug}>
-        <ArticlesButton label="CZYTAJ DALEJ" color={ButtonColor.Red} />
+        <ArticlesButton label="CZYTAJ DALEJ" styles={ButtonThemes[ButtonFlavor.RED]} />
       </Link>
       <ArticleImage>{imagePath && <ResponsiveImage imageSrc={imagePath} />}</ArticleImage>
       <ArticleSection>
         <ArticleTitle title={title} slug={slug} tag={tag} date={date} />
         <Contents>
-          <ArticleContents
-            date={date}
-            text={subTitle}
-            tag={tag}
-          />
+          <ArticleContents date={date} text={subTitle} tag={tag} />
         </Contents>
       </ArticleSection>
     </Wrapper>

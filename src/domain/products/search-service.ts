@@ -1,25 +1,22 @@
-import axios from 'axios';
-import { IProductData, IProductMock } from '.';
-import { ApiService } from '../../services/api-service';
-import { getEAN, getNumber } from '../../utils/data/random-number';
+import axios, { AxiosResponse } from 'axios';
+import { IProductData, ISearchSuccessResponse } from '.';
+import { ApiAdapter } from '../../services/api-adapter';
 import config from '../../app-config.json';
-import { EmptyResponseDataError, FetchError } from '../../services/api-errors';
-
-export interface ISearchParams {
-  phrase: string;
-}
-
-export interface IProductSearchSuccess {
-  nextPageToken: string;
-  totalItems: number;
-  products: IProductData[];
-}
+import { InvalidSearchResultError } from '../../services/api-errors';
+import { ISearchResultPage } from '../../state/search/search-reducer';
 
 export interface ISearchError {
-  error: unknown;
+  type: string;
+  status: number;
+  title: string;
+  detail: string;
+  instance?: string;
+  errors?: string[];
 }
 
-export class ProductService extends ApiService {
+const API_NAME = 'Search Product API';
+
+export class ProductService extends ApiAdapter {
   public static getInstance(): ProductService {
     if (!ProductService.instance) {
       ProductService.instance = new ProductService();
@@ -29,48 +26,54 @@ export class ProductService extends ApiService {
   private static instance: ProductService;
 
   private constructor() {
-    super(config.searchApiURL);
+    super(API_NAME, config.searchEndpoint);
   }
 
-  private page: number = 0;
-
-  public async searchProducts(phrase: string, token?: string): Promise<IProductSearchSuccess> {
+  public async searchProducts(phrase: string, token?: string) {
     try {
-      if (token) {
-        this.page += 1;
-      } else {
-        this.page = 0;
-      }
-      const amount = 5 + this.page;
-      const response = await axios.get(`${this.apiUrl}?limit=${amount}`);
-      const products: IProductMock[] = response.data;
+      const searchQuery = this.buildSearchQuery(phrase, token);
+      const response = await axios.get<ISearchSuccessResponse>(searchQuery);
 
-      if (!products) {
-        throw new EmptyResponseDataError('products');
+      if (!response) {
+        throw new Error('Response in empty');
+      }
+      if (response instanceof Error) {
+        throw new Error('Got error response');
+      }
+      if (!this.isValidSearchResults(response)) {
+        throw new InvalidSearchResultError();
       }
 
-      return {
-        nextPageToken: token || 'mock_token',
-        totalItems: amount,
-        products: products.map(
-          (mock) =>
-            ({
-              id: mock.id.toString(),
-              code: getEAN(),
-              name: mock.title,
-              company: {
-                name: mock.description,
-              },
-              brand: {
-                name: mock.category,
-              },
-              score: getNumber(0, 100),
-              polishCapital: getNumber(0, 100),
-            } as IProductData)
-        ),
-      };
-    } catch (e) {
-      throw new FetchError('Search API', e);
+      return response.data;
+    } catch (error: unknown) {
+      const apiError = this.handleError(error);
+      throw apiError;
     }
   }
+
+  private buildSearchQuery(phrase: string, token?: string): string {
+    let params = `query=${phrase}`;
+
+    if (token) {
+      params = params + `&pageToken=${token}`;
+    }
+
+    return `${this.apiUrl}?${params}`;
+  }
+
+  private isValidSearchResults(response: AxiosResponse): boolean {
+    const responseBody = response.data;
+    return responseBody?.totalItems !== undefined && !!responseBody?.products;
+  }
+}
+
+/**
+ * Reduces search result pages to one results collection
+ * @param search API response data
+ * @returns agreggated results collection
+ */
+export function reduceToFlatProductsList(pages: ISearchResultPage[]): IProductData[] {
+  return pages.reduce((products: IProductData[], page: ISearchResultPage) => {
+    return [...products, ...page.products];
+  }, []);
 }

@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from './Button';
-import { ButtonColor, getButtonColor } from '../../styles/button-theme';
+import { Button, IButtonTheme } from './Button';
 import { color, Device, fontSize } from '../../styles/theme';
 
 const ButtonContainer = styled(Button)`
   border-radius: 20px;
   border: 2px solid ${color.border.white};
   font-weight: 300;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 
   @media ${Device.mobile} {
     font-size: ${fontSize.tiny};
@@ -19,7 +18,7 @@ export interface ISecondaryButton {
   label?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
-  color?: ButtonColor;
+  styles: IButtonTheme;
   fontSize?: string;
   className?: string;
   children?: React.ReactNode;
@@ -32,8 +31,7 @@ export const SecondaryButton: React.FC<ISecondaryButton> = ({
   icon,
   className,
   disabled,
-  color,
-  fontSize,
+  styles,
   children,
   onClick,
 }) => {
@@ -42,15 +40,8 @@ export const SecondaryButton: React.FC<ISecondaryButton> = ({
     !disabled && onClick && onClick();
   };
 
-  const themeColor = getButtonColor(color);
-
-  const theme = {
-    color: themeColor,
-    fontSize,
-  };
-
   return (
-    <ButtonContainer theme={theme} className={className} onClick={handleClick} disabled={disabled}>
+    <ButtonContainer theme={styles} className={className} onClick={handleClick} disabled={disabled}>
       {icon}
       {label}
       {children}

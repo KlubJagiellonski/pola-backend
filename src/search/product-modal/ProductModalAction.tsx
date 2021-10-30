@@ -1,20 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import { color, padding } from '../../styles/theme';
-import { ButtonColor } from '../../styles/button-theme';
+import { IButtonTheme } from '../../components/buttons/Button';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 
 interface ITheme {
   backgroundColor?: string;
-  buttonColor?: ButtonColor;
+  buttonTheme?: IButtonTheme;
 }
 
 const Container = styled.div<{ theme?: ITheme }>`
   display: flex;
   flex-flow: row nowrap;
-  padding: ${padding.small} ${padding.normal};
+  padding: ${padding.normal} ${padding.normal};
   align-items: center;
-  border-top: 1px solid ${color.background.primary};
+  border-top: 1px solid ${color.background.transparencyGrey};
   background-color: ${(props) => props.theme?.backgroundColor || color.background.white};
 
   .action-btn {
@@ -32,6 +32,6 @@ interface IProductModalAction {
 export const ProductModalAction: React.FC<IProductModalAction> = ({ actionName, actionCallback, theme, children }) => (
   <Container theme={theme}>
     <div className="content">{children}</div>
-    <PrimaryButton color={theme?.buttonColor} label={actionName} className="action-btn" onClick={actionCallback} />
+    <PrimaryButton styles={theme?.buttonTheme} label={actionName} className="action-btn" onClick={actionCallback} />
   </Container>
 );

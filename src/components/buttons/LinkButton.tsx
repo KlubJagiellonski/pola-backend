@@ -1,17 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, IButtonTheme } from './Button';
-import { color, fontSize } from '../../styles/theme';
+import { Button, ButtonThemes, IButtonTheme } from './Button';
+import { padding } from '../../styles/theme';
 
 const ButtonContainer = styled(Button)`
-  border-radius: 20px;
-  border: 2px solid ${color.border.white};
-  font-weight: 300;
-  text-transform: uppercase;
-  font-size: ${fontSize.small};
+  padding: ${padding.small};
+  min-width: 8rem;
+  max-width: 16rem;
+  height: 2rem;
+  border-radius: 0;
 `;
 
-export interface ITagButton {
+export interface ILinkButton {
   label?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
@@ -22,7 +22,15 @@ export interface ITagButton {
   onClick?: () => void;
 }
 
-export const TagButton: React.FC<ITagButton> = ({ label, icon, className, disabled, styles, children, onClick }) => {
+export const LinkButton: React.FC<ILinkButton> = ({
+  label,
+  icon,
+  className,
+  disabled,
+  styles = ButtonThemes.WhiteRed,
+  onClick,
+  children,
+}) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     !disabled && onClick && onClick();

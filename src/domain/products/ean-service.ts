@@ -1,21 +1,20 @@
 import axios from 'axios';
-import { IProductEAN, IProductMock } from '.';
-import { ApiService } from '../../services/api-service';
+import { EAN, IProductEAN } from '.';
+import { ApiAdapter } from '../../services/api-adapter';
 import config from '../../app-config.json';
 import { EmptyResponseDataError, FetchError } from '../../services/api-errors';
 
 export interface IProductEANParams {
-  code: string;
+  code: EAN;
 }
 
 export interface IProductEANError {
   error: unknown;
 }
 
-const MOCK_PRODUCT_EAN_API = 'https://fakestoreapi.com/products';
-const PRODUCT_EAN_API = config.searchApiURL;
+const API_NAME = 'EAN Product API';
 
-export class ProductEANService extends ApiService {
+export class ProductEANService extends ApiAdapter {
   public static getInstance(): ProductEANService {
     if (!ProductEANService.instance) {
       ProductEANService.instance = new ProductEANService();
@@ -25,34 +24,26 @@ export class ProductEANService extends ApiService {
   private static instance: ProductEANService;
 
   private constructor() {
-    super(MOCK_PRODUCT_EAN_API);
+    super(API_NAME, config.eanEndpoint);
   }
 
-  public async getProduct(code: string, id: string): Promise<IProductEAN> {
+  private buildQuery(code: EAN): string {
+    return `code=${code}&device_id="0"`;
+  }
+
+  public async getProduct(code: EAN): Promise<IProductEAN> {
     try {
-      //const response = await axios.get(`${this.apiUrl}/get_by_code?code=${code}&device_id=NONE`);
-      const response = await axios.get(`${MOCK_PRODUCT_EAN_API}/${id}`);
-      const product: IProductMock = response.data;
+      const query = this.buildQuery(code);
+      const response = await await axios.get(`${this.apiUrl}?${query}`);
+      const product: IProductEAN = response.data;
 
       if (!product) {
         throw new EmptyResponseDataError('product');
       }
 
-      return {
-        product_id: parseInt(product.id),
-        name: product.title,
-        plScore: 0,
-        report_text: 'Zgłoś',
-        report_button_type: 'report button',
-        report_button_text: 'Zgłoś informacje o tym produkcie',
-        donate: {
-          show_button: true,
-          title: 'Potrzebujemy 1 zł',
-          url: 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
-        },
-      };
+      return product;
     } catch (e) {
-      throw new FetchError('EAN API', e);
+      throw new FetchError(API_NAME, e);
     }
   }
 }

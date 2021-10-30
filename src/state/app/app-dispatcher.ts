@@ -1,7 +1,9 @@
 import { Dispatch } from 'redux';
-import { PageType } from '../../domain/generic';
+import { PageType } from '../../domain/website';
+import { SearchStateName } from '../search/search-reducer';
 import { IPolaState } from '../types';
 import * as actions from './app-actions';
+import * as searchActions from '../search/search-actions';
 
 export const appDispatcher = {
   initialize: () => async (dispatch: Dispatch, getState: () => IPolaState) => {
@@ -13,6 +15,10 @@ export const appDispatcher = {
   },
 
   selectActivePage: (type: PageType) => async (dispatch: Dispatch, getState: () => IPolaState) => {
+    const { search } = getState();
+    if (search.stateName === SearchStateName.LOADED) {
+      await dispatch(searchActions.ClearResults());
+    }
     await dispatch(actions.SelectActivePage(type));
   },
 

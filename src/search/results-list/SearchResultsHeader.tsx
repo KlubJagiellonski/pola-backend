@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PageSection } from '../../layout/PageSection';
-import { IProductData } from '../../domain/products';
 import { Spinner } from '../../components/Spinner';
 import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
@@ -19,55 +18,34 @@ const Header = styled.header`
 interface ISearchResultsHeader {
   searchState: SearchStateName;
   phrase: string;
-  searchResults?: IProductData[];
+  totalItems: number;
   resultsUrl?: string;
 
   setActivePage?: (type: PageType) => void;
 }
 
 export const SearchResultsHeader: React.FC<ISearchResultsHeader> = ({
-  searchState,
   phrase,
-  searchResults,
+  totalItems,
   resultsUrl,
   setActivePage,
 }) => {
-  const isLoading = searchState === SearchStateName.LOADING;
-  const emptyResults = !searchResults || searchResults.length < 1;
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (setActivePage) {
+      setActivePage(PageType.PRODUCTS);
+    }
+  };
 
-  let header: React.ReactNode;
-  if (!phrase && !searchResults && !isLoading) {
-    return null;
-  }
-
-  if (isLoading) {
-    header = <Spinner text="Wyszukiwanie produktów..." />;
-  }
-
-  if (emptyResults && !isLoading) {
-    header = <Header>Nie znaleziono produktów</Header>;
-  }
-
-  if (!header) {
-    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-      if (setActivePage) {
-        setActivePage(PageType.PRODUCTS);
-      }
-    };
-
-    header = (
-      <>
-        <Header>Uzyskano</Header>
-        {resultsUrl ? (
-          <Link to={resultsUrl} onClick={handleClick}>
-            <ProductCounter phrase={phrase} amount={searchResults?.length || 0} />
-          </Link>
-        ) : (
-          <ProductCounter phrase={phrase} amount={searchResults?.length || 0} />
-        )}
-      </>
-    );
-  }
-
-  return <PageSection styles={{ textAlign: isLoading ? 'center' : 'left' }}>{header}</PageSection>;
+  return (
+    <PageSection styles={{ textAlign: 'left' }}>
+      <Header>Uzyskano</Header>
+      {resultsUrl ? (
+        <Link to={resultsUrl} onClick={handleClick}>
+          <ProductCounter phrase={phrase} amount={totalItems} />
+        </Link>
+      ) : (
+        <ProductCounter phrase={phrase} amount={totalItems} />
+      )}
+    </PageSection>
+  );
 };

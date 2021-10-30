@@ -70,15 +70,16 @@ const Field = styled.label<CheckboxStyles & { disabled?: boolean }>`
 interface ICheckbox {
   label?: string;
   checked?: boolean;
+  readonly?: boolean;
   disabled?: boolean;
   styles?: CheckboxStyles;
 }
 
-export const Checkbox: React.FC<ICheckbox> = ({ label, checked, disabled, styles }) => {
+export const Checkbox: React.FC<ICheckbox> = ({ label, checked, disabled, readonly, styles }) => {
   return (
     <Field {...styles} disabled>
       {label}
-      <input type="checkbox" checked={checked} disabled={disabled} />
+      <input type="checkbox" checked={checked} disabled={disabled} readOnly={readonly} />
       <span className="checkmark"></span>
     </Field>
   );

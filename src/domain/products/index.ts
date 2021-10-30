@@ -1,7 +1,7 @@
-import { getGuid, getNumber } from '../../utils/data/random-number';
-
+export type EAN = string;
 export interface ICompany {
   name: string;
+  score: number;
 }
 
 export interface IBrand {
@@ -9,13 +9,26 @@ export interface IBrand {
 }
 
 export interface IProductData {
-  id: string;
-  code: string;
+  code: EAN;
   name: string;
-  score: number;
-  polishCapital: number;
   company?: ICompany;
   brand?: IBrand;
+}
+
+export interface ISearchSuccessResponse {
+  nextPageToken: string | null;
+  totalItems: number;
+  products: IProductData[];
+}
+
+export class ProductSearchResults implements ISearchSuccessResponse {
+  public static Empty: ISearchSuccessResponse = {
+    nextPageToken: null,
+    totalItems: 0,
+    products: [],
+  };
+
+  constructor(public totalItems: number, public products: IProductData[], public nextPageToken: string) {}
 }
 
 interface IDonate {
@@ -24,44 +37,48 @@ interface IDonate {
   url: string;
 }
 
+interface IReport {
+  button_text: string;
+  button_type: string;
+  text: string;
+}
+
+export interface IManufacturer {
+  name: string;
+  plCapital: number;
+  plCapital_notes: string;
+  plNotGlobEnt: number;
+  plNotGlobEnt_notes: string;
+  plRegistered: number;
+  plRegistered_notes: string;
+  plRnD: number;
+  plRnD_notes: string;
+  plScore: number;
+  plWorkers: number;
+  plWorkers_notes: string;
+}
+
 export interface IProductEAN {
   product_id: number;
   name: string;
-  data?: IProductData;
-
-  card_type?: string;
-  altText?: string;
-  plCapital?: string;
-  plCapital_notes?: string;
-  plWorkers?: string;
-  plWorkers_notes?: string;
-  plRnD?: string;
-  plRnD_notes?: string;
-  plRegistered?: string;
-  plRegistered_notes?: string;
-  plNotGlobEnt?: string;
-  plNotGlobEnt_notes?: string;
-  plScore: number;
-  report_text: string;
-  report_button_type: string;
-  report_button_text: string;
+  altText: string;
+  card_type: string;
+  code: EAN;
   donate: IDonate;
+  companies: IManufacturer[];
+  report: IReport;
 }
 
-export interface IProductMock {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  image: URL;
-}
+export class Product {
+  public code: EAN;
+  public manufacturer: IManufacturer;
+  public donate: IDonate;
+  public report: IReport;
 
-export class ProductMock implements IProductMock {
-  public id: string;
-  public image: URL;
-
-  constructor(public title: string, public description: string, public category: string, imageSrc: string) {
-    this.id = getGuid();
-    this.image = new URL(imageSrc);
+  constructor(public name: string, productEntityEAN: IProductEAN) {
+    this.code = productEntityEAN.code;
+    this.manufacturer = productEntityEAN.companies[0];
+    this.donate = productEntityEAN.donate;
+    this.report = productEntityEAN.report;
   }
 }

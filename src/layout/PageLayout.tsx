@@ -14,15 +14,15 @@ import { desktopHeaderHeight, Device, mobileHeaderHeight } from '../styles/theme
 import { StateLoader } from './StateLoader';
 import '../styles/pola-web.css';
 import Download from '../components/Download';
+import { SearchStateName } from '../state/search/search-reducer';
 
 const connector = connect(
   (state: IPolaState) => ({
     activePage: state.app.activePage,
     isMenuExpanded: state.app.isMenuExpanded,
-    selectedProduct: state.search.selectedProduct,
+    selectedProduct: state.search.stateName === SearchStateName.SELECTED ? state.search.selectedProduct : undefined,
   }),
   {
-    selectPage: appDispatcher.selectActivePage,
     expandMenu: appDispatcher.expandMenu,
     unselectProduct: searchDispatcher.unselectProduct,
   }
@@ -32,7 +32,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 type ILayoutStyles = {
   marginTop?: string;
-}
+};
 
 type IPageLayout = ReduxProps & {
   styles?: ILayoutStyles;
@@ -47,7 +47,7 @@ const LayoutContainer = styled.div`
 const PageContent = styled.main<ILayoutStyles>`
   width: 100%;
   margin: 0 auto;
-  margin-top: ${props => props.marginTop || 0};
+  margin-top: ${(props) => props.marginTop || 0};
   padding: 0;
   flex: 1 1 auto;
 
@@ -64,11 +64,8 @@ const Layout: React.FC<IPageLayout> = ({
   isMenuExpanded,
   selectedProduct,
   children,
-
-  selectPage,
   expandMenu,
   unselectProduct,
-
   styles,
 }) => {
   const data = useStaticQuery(graphql`
@@ -89,7 +86,6 @@ const Layout: React.FC<IPageLayout> = ({
         <PageHeader
           siteTitle={data.site.siteMetadata.title}
           activePage={activePage}
-          onSelect={selectPage}
           isMenuExpanded={isMenuExpanded}
           onExpand={expandMenu}
         />

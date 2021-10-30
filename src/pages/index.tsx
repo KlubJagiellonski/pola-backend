@@ -7,22 +7,18 @@ import SEOMetadata from '../utils/browser/SEOMetadata';
 import { SearchForm } from '../search/form/SearchForm';
 import Contents from '../components/Contents';
 import { PageSection } from '../layout/PageSection';
-import { Device, pageWidth, padding, margin, color, fontSize } from '../styles/theme';
+import { Device, pageWidth, padding, color } from '../styles/theme';
 import { IPolaState } from '../state/types';
 import { searchDispatcher } from '../state/search/search-dispatcher';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
-import { IProductData } from '../domain/products';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
-import { IFriend } from '../domain/friends';
-import { SearchResultsList } from '../search/results-list/SearchResultsList';
-import { PrimaryButton } from '../components/buttons/PrimaryButton';
-import { SecondaryButton } from '../components/buttons/SecondaryButton';
-import { ButtonColor } from '../styles/button-theme';
-import { SearchResultsHeader } from '../search/results-list/SearchResultsHeader';
-import { openNewTab } from '../utils/browser';
-import { SearchStateName } from '../state/search/search-reducer';
-import { PageType, urls } from '../domain/website';
+import { PageType } from '../domain/website';
 import { Article } from '../domain/articles';
+import { reduceToFlatProductsList } from '../domain/products/search-service';
+import { SearchStateName } from '../state/search/search-reducer';
+import { FirstPageResults } from '../search/results-list/FirstPageResults';
+import { EAN, IProductData } from '../domain/products';
+import { Friend } from '../domain/friends';
 
 const Content = styled.div`
   width: 100%;
@@ -40,10 +36,10 @@ const Content = styled.div`
 
 const Background = styled.div<{ img?: string }>`
   position: absolute;
-  top: 0px;
-  left: 0px;
-  bottom: 0px;
-  right: 0px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 
   div {
     width: 100%;
@@ -58,51 +54,42 @@ const Background = styled.div<{ img?: string }>`
 const WrapperContents = styled(PageSection)`
   @media ${Device.mobile} {
     padding: 0;
-  } 
-`
-
-const MissingProductInfo = styled.div`
-  background-color: ${color.background.red};
-  color: ${color.text.light};
-  text-align: center;
-  font-size: ${fontSize.big};
-  padding: ${padding.normal};
-  margin-top: ${margin.big};
+  }
 `;
 
-interface IHomePage {
-  searchState: SearchStateName;
-
-  location?: Location;
+interface ISearchResults {
   phrase?: string;
-  searchResults?: IProductData[];
+  products?: IProductData[];
+  totalItems?: number;
   token?: string;
+}
+
+interface IHomePage {
+  location?: Location;
+  searchState: SearchStateName;
+  searchResults?: ISearchResults;
   articles?: Article[];
   activeTags: string[];
-  friends?: IFriend[];
+  friends?: Friend[];
 
   invokeSearch: (phrase: string) => void;
   invokeLoadMore: () => void;
   clearResults: () => void;
-  selectProduct: (code: string, id: string) => void;
+  selectProduct: (code: EAN) => void;
 }
 
 const HomePage = (props: IHomePage) => {
-  const { phrase, searchResults, location, searchState } = props;
+  const { location, searchState, searchResults } = props;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (location) {
       dispatch(LoadBrowserLocation(location));
       dispatch(SelectActivePage(PageType.HOME));
+      props.clearResults();
     }
   }, []);
 
-  const handleCancel = () => {
-    props.clearResults();
-  };
-
-  const emptyResults = !searchResults || searchResults.length < 1;
   const isLoading = searchState === SearchStateName.LOADING;
 
   return (
@@ -113,37 +100,16 @@ const HomePage = (props: IHomePage) => {
           <ResponsiveImage imageSrc={'background.png'} />
         </Background>
         <Content>
-          <SearchForm onSearch={props.invokeSearch} isLoading={isLoading} />
+          <SearchForm onSearch={props.invokeSearch} onEmptyInput={props.clearResults} isLoading={isLoading} />
         </Content>
       </PageSection>
-      <SearchResultsHeader
-        phrase={phrase}
-        searchResults={searchResults}
-        searchState={searchState}
-        resultsUrl={urls.pola.products}
+      <FirstPageResults
+        {...searchResults}
+        state={searchState}
+        onSelect={props.selectProduct}
+        onClear={props.clearResults}
       />
-      {!emptyResults && (
-        <PageSection>
-          <SearchResultsList
-            results={searchResults}
-            actions={
-              <PrimaryButton color={ButtonColor.Gray} onClick={handleCancel}>
-                <span>Anuluj</span>
-              </PrimaryButton>
-            }
-            onSelect={props.selectProduct}
-          />
-          <MissingProductInfo>
-            <p>Nie znalazłeś czego szukasz?</p>
-            <SecondaryButton
-              onClick={() => openNewTab(urls.external.openFoods)}
-              color={ButtonColor.Red}
-              fontSize={fontSize.small}>
-              Zgłoś produkt do bazy
-            </SecondaryButton>
-          </MissingProductInfo>
-        </PageSection>
-      )}
+      )
       <WrapperContents>
         <Contents articles={props.articles?.slice(0, 3)} friends={props.friends} />
       </WrapperContents>
@@ -152,16 +118,24 @@ const HomePage = (props: IHomePage) => {
 };
 
 export default connect(
-  (state: IPolaState) => ({
-    searchState: state.search.stateName,
-
-    location: state.app.location,
-    phrase: state.search.phrase,
-    searchResults: state.search.products,
-    token: state.search.token,
-    articles: state.articles.data,
-    friends: state.friends.data,
-  }),
+  (state: IPolaState) => {
+    const { app, search, articles, friends } = state;
+    return {
+      location: app.location,
+      searchState: search.stateName,
+      searchResults:
+        search.stateName === SearchStateName.LOADED || search.stateName === SearchStateName.SELECTED
+          ? {
+              phrase: search.phrase,
+              products: reduceToFlatProductsList(search.resultPages),
+              totalItems: search.totalItems,
+              token: search.nextPageToken,
+            }
+          : undefined,
+      articles: articles.data,
+      friends: friends.data,
+    };
+  },
   {
     invokeSearch: searchDispatcher.invokeSearch,
     invokeLoadMore: searchDispatcher.invokeLoadMore,

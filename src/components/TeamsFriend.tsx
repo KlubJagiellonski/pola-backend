@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { WrapperTeams, Title, TextSection, ButtonTeams, IconTeams } from './Teams.css';
 import { Text } from '../styles/GlobalStyle.css';
 import { color } from '../styles/theme';
-import { ButtonColor } from '../styles/button-theme';
+import { ButtonFlavor, ButtonThemes } from '../components/buttons/Button';
 import { ResponsiveImage } from './images/ResponsiveImage';
 
 const Wrapper = styled(WrapperTeams)`
@@ -20,7 +20,7 @@ const TeamsFriend = () => {
         </IconTeams>
         <Title>Dołącz do Przyjaciół Poli i odnieś sukces!</Title>
         <Text>Jedno zdanie, że sekcja jest kierowana do firm</Text>
-        <ButtonTeams label="POZNAJ SZCZEGÓŁY" color={ButtonColor.Red} />
+        <ButtonTeams label="POZNAJ SZCZEGÓŁY" styles={ButtonThemes[ButtonFlavor.RED]} />
       </TextSection>
     </Wrapper>
   );

@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { padding } from '../../styles/theme';
 
-const CounterText = styled.p`
-  font-weight: bold;
+const CounterText = styled.p<{ fontWeight: string }>`
+  font-weight: ${(props) => props.fontWeight};
 `;
 
 interface IProductCounter {
@@ -12,9 +11,14 @@ interface IProductCounter {
 }
 
 export const ProductCounter: React.FC<IProductCounter> = ({ phrase, amount }) => {
-  const text = `${amount} ${getPolishNumeralPostfix('wynik', amount)} dla "${phrase}"`;
-
-  return <CounterText>{text}</CounterText>;
+  if (phrase === undefined || amount === undefined) {
+    const text = 'ładownie wyników...';
+    return <CounterText fontWeight="normal">{text}</CounterText>;
+  } else {
+    const postfix = getPolishNumeralPostfix('wynik', amount);
+    const text = `${amount} ${postfix} dla "${phrase}"`;
+    return <CounterText fontWeight="bold">{text}</CounterText>;
+  }
 };
 
 const getPolishNumeralPostfix = (baseWord: string, amount: number) => {

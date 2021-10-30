@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import debounce from 'lodash.debounce';
 
-import { ButtonColor } from '../../styles/button-theme';
+import { ButtonThemes, ButtonFlavor } from '../../components/buttons/Button';
 import { SecondaryButton } from '../../components/buttons/SecondaryButton';
 import { Device, fontSize, color, padding, margin, px } from '../../styles/theme';
 import Kod from '../../assets/kod.svg';
@@ -11,25 +11,36 @@ import Microphone from '../../assets/microphone.svg';
 const FormSearch = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
 
   @media ${Device.mobile} {
     flex-direction: column;
   }
 `;
 
-const InputSection = styled.div`
-  padding-left: 1em;
+const InputElement = styled.div`
+  padding-left: 0.25em;
   width: 100%;
   min-width: 28em;
   height: 56px;
-  background-color: white;
   border-radius: 3em;
+`;
+
+const InputSection = styled(InputElement)`
+  background-color: white;
   display: flex;
   justify-content: flex-end;
 
   @media ${Device.mobile} {
     min-width: 0;
   }
+`;
+
+const InputOverlay = styled(InputElement)`
+  background-color: black;
+  opacity: 0.33;
+  position: absolute;
+  z-index: 10;
 `;
 
 const InputText = styled.input`
@@ -87,12 +98,16 @@ const SubmitButton = styled(SecondaryButton)`
 interface ISearchInput {
   disabled: boolean;
   onSearch: (phrase: string) => void;
+  onEmptyInput: () => void;
 }
 
-export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
+const isNotEmpty = (value: string) => !!value && value.length && value.length > 0;
+
+export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch, onEmptyInput }) => {
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
   const showSubmitButton = false;
+  let inputRef = useRef<HTMLInputElement>(null);
 
   const onPhraseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handlePhraseChange(event.currentTarget.value);
@@ -101,7 +116,11 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
   const handlePhraseChange = debounce(
     (value: string) => {
       setPhrase(value);
-      onSearch(value);
+      if (isNotEmpty(value)) {
+        onSearch(value);
+      } else {
+        onEmptyInput();
+      }
     },
     500,
     {
@@ -117,10 +136,23 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
     }
   };
 
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [phrase, disabled]);
+
   return (
     <FormSearch>
+      {disabled && <InputOverlay />}
       <InputSection>
+        <InputIconSection>
+          <InputIcon imagePath={Kod} size={48} />
+        </InputIconSection>
+
         <InputText
+          autoFocus
+          ref={inputRef}
           placeholder="nazwa produktu / producent / kod EAN"
           type="text"
           onChange={onPhraseChange}
@@ -133,7 +165,12 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch }) => {
         </InputIconSection>
       </InputSection>
       {showSubmitButton && (
-        <SubmitButton label="Sprawdź" color={ButtonColor.Red} disabled={!hasPhrase} onClick={handleSearch} />
+        <SubmitButton
+          label="Sprawdź"
+          styles={ButtonThemes[ButtonFlavor.RED]}
+          disabled={!hasPhrase}
+          onClick={handleSearch}
+        />
       )}
     </FormSearch>
   );

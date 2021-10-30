@@ -1,0 +1,280 @@
+---
+openapi: 3.0.3
+
+info:
+  title: 'Pola API'
+  version: '-'
+
+  description: |
+    # Wprowadzenie
+    # Operacje
+    N/A
+    # Konwencje
+    N/A
+    # Błędy
+    N/A
+servers:
+  - url: https://www.pola-app.pl/
+    description: Production environemnt
+  - url: https://pola-staging.herokuapp.com/
+    description: Staging environment
+  - url: http://testserver/
+    description: CI environemnt
+  - url: http://0.0.0.0:8080
+    description: Docker
+
+paths:
+  /a/v4/get_by_code:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/NoAI'
+        - $ref: '#/components/parameters/Code'
+        - $ref: '#/components/parameters/DeviceId'
+      responses:
+        200:
+          $ref: '#/components/responses/getByCodeV4'
+
+    post:
+      parameters:
+        - $ref: '#/components/parameters/NoAI'
+        - $ref: '#/components/parameters/Code'
+        - $ref: '#/components/parameters/DeviceId'
+      responses:
+        200:
+          $ref: '#/components/responses/getByCodeV4'
+
+  /a/v4/search:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/QueryFilter'
+        - $ref: '#/components/parameters/PageToken'
+      responses:
+        200:
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResultCollection'
+        400:
+          $ref: '#/components/responses/BadRequest'
+
+components:
+  parameters:
+    NoAI:
+      name: noai
+      in: query
+      required: false
+      schema:
+        type: boolean
+
+    Code:
+      name: code
+      in: query
+      required: true
+      schema:
+        type: string
+
+    DeviceId:
+      name: device_id
+      in: query
+      required: true
+      schema:
+        type: string
+
+    QueryFilter:
+      name: query
+      in: query
+      required: true
+      schema:
+        type: string
+
+    PageToken:
+      name: pageToken
+      in: query
+      required: false
+      schema:
+        type: string
+
+  responses:
+    BadRequest:
+      description: Client specified an invalid argument.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    getByCodeV4:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              altText:
+                type: string
+                nullable: true
+              card_type:
+                type: string
+              code:
+                type: string
+              donate:
+                type: object
+                properties:
+                  show_button:
+                    type: boolean
+                  title:
+                    type: string
+                  url:
+                    type: string
+                required:
+                  - show_button
+                  - title
+                  - url
+              name:
+                type: string
+              companies:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    plCapital:
+                      type: integer
+                      nullable: true
+                    plCapital_notes:
+                      type: string
+                      nullable: true
+                    plNotGlobEnt:
+                      type: integer
+                      nullable: true
+                    plNotGlobEnt_notes:
+                      type: string
+                      nullable: true
+                    plRegistered:
+                      type: integer
+                      nullable: true
+                    plRegistered_notes:
+                      type: string
+                      nullable: true
+                    plRnD:
+                      type: integer
+                      nullable: true
+                    plRnD_notes:
+                      type: string
+                      nullable: true
+                    plScore:
+                      type: integer
+                      nullable: true
+                    plWorkers:
+                      type: integer
+                      nullable: true
+                    plWorkers_notes:
+                      type: string
+                      nullable: true
+                  required:
+                    - name
+                    - plCapital
+                    - plCapital_notes
+                    - plNotGlobEnt
+                    - plNotGlobEnt_notes
+                    - plRegistered
+                    - plRegistered_notes
+                    - plRnD
+                    - plRnD_notes
+                    - plScore
+                    - plWorkers
+                    - plWorkers_notes
+              product_id:
+                type: integer
+                nullable: true
+              report:
+                type: object
+                properties:
+                  button_text:
+                    type: string
+                  button_type:
+                    type: string
+                  text:
+                    type: string
+            required:
+              - altText
+              - card_type
+              - code
+              - name
+              - donate
+              - product_id
+
+  schemas:
+    SearchResultCollection:
+      type: object
+      properties:
+        nextPageToken:
+          type: string
+          nullable: true
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              code:
+                type: string
+              company:
+                type: object
+                nullable: true
+                properties:
+                  name:
+                    type: string
+                  score:
+                    type: integer
+                required:
+                  - name
+                  - score
+              brand:
+                type: object
+                nullable: true
+                properties:
+                  name:
+                    type: string
+                required:
+                  - name
+            required:
+              - name
+              - code
+        totalItems:
+          type: integer
+      required:
+        - nextPageToken
+        - products
+        - totalItems
+
+    Error:
+      description: |
+        [RFC7807](https://tools.ietf.org/html/rfc7807) compliant response.
+      type: object
+      properties:
+        type:
+          type: string
+          description: |
+            A URI reference [RFC3986] that identifies the problem type. This specification
+            encourages that, when dereferenced, it provide human-readable documentation for
+            the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: number
+          description: The HTTP status code generated by the API server for this occurrence of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+        instance:
+          type: string
+          description: |
+            A URI reference that identifies the specific occurrence of the problem. It may or may
+            not yield further information if dereferenced.
+      required:
+        - type
+        - title
+        - status

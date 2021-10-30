@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { padding, margin, color, fontSize } from '../styles/theme';
-import { ButtonColor } from '../styles/button-theme';
+import { ButtonFlavor, ButtonThemes } from './buttons/Button';
 import { WrapperSection, Text, TitleSection } from '../styles/GlobalStyle.css';
 import { SecondaryButton } from './buttons/SecondaryButton';
 import { ResponsiveImage } from './images/ResponsiveImage';
@@ -37,11 +37,11 @@ const AboutButton = styled(SecondaryButton)`
 
 const AboutTitle = styled(TitleSection)`
   color: ${color.text.light};
-`
+`;
 
 const AboutText = styled(Text)`
   color: ${color.text.light};
-`
+`;
 
 const About = () => {
   return (
@@ -53,7 +53,11 @@ const About = () => {
           odnaleźć polskie wyroby. Zabierając Polę na zakupy, odnajdujesz produkty „z duszą” i wspierasz polską
           gospodarkę.
         </AboutText>
-        <AboutButton label="Dowiedz się więcej... " color={ButtonColor.White} fontSize={fontSize.small} />
+        <AboutButton
+          label="Dowiedz się więcej... "
+          styles={ButtonThemes[ButtonFlavor.WHITE]}
+          fontSize={fontSize.small}
+        />
       </Info>
       <MockUp>
         <ResponsiveImage imageSrc="1-prom-strona.png" />

@@ -2,13 +2,20 @@ import { AnyAction, Reducer } from 'redux';
 import { actionTypes } from './search-actions';
 import * as actions from './search-actions';
 import { IAction, IActionReducer } from '../types';
-import { IProductData, IProductEAN } from '../../domain/products';
+import { IProductData, Product } from '../../domain/products';
+import { ErrorHandler } from '../../services/api-errors';
+
+export interface ISearchResultPage {
+  pageIndex: number;
+  products: IProductData[];
+}
 
 export enum SearchStateName {
   INITIAL = 'initial',
   LOADING = 'loading',
   LOADED = 'loaded',
   SELECTED = 'selected',
+  ERROR = 'error',
 }
 
 export type SearchState =
@@ -18,22 +25,30 @@ export type SearchState =
   | {
       stateName: SearchStateName.LOADING;
       phrase: string;
-      error?: unknown;
     }
   | {
       stateName: SearchStateName.LOADED;
       phrase: string;
-      token: string;
-      products: IProductData[];
-      error?: unknown;
+      nextPageToken: string;
+      resultPages: ISearchResultPage[];
+      totalItems: number;
     }
   | {
       stateName: SearchStateName.SELECTED;
       phrase: string;
-      token: string;
-      products: IProductData[];
-      selectedProduct: IProductEAN;
-      error?: unknown;
+      nextPageToken: string;
+      resultPages: ISearchResultPage[];
+      totalItems: number;
+      selectedProduct: Product;
+    }
+  | {
+      stateName: SearchStateName.ERROR;
+      phrase?: string;
+      nextPageToken?: string;
+      resultPages?: ISearchResultPage[];
+      totalItems?: number;
+      selectedProduct?: Product;
+      error: ErrorHandler;
     };
 
 const initialState: SearchState = {
@@ -41,32 +56,65 @@ const initialState: SearchState = {
 };
 
 const reducers: IActionReducer<SearchState> = {
-  [actionTypes.INVOKE_SEARCH]: (state: SearchState = initialState, action: ReturnType<typeof actions.InvokePhrase>) => {
+  [actionTypes.INVOKE_SEARCH]: (state: SearchState = initialState, action: ReturnType<typeof actions.InvokeSearch>) => {
     return {
       ...state,
       stateName: SearchStateName.LOADING,
       phrase: action.payload.phrase,
-      token: undefined,
+      pageToken: undefined,
+      nextPageToken: undefined,
     };
   },
 
   [actionTypes.LOAD_RESULTS]: (state: SearchState = initialState, action: ReturnType<typeof actions.LoadResults>) => {
-    return {
-      ...state,
-      stateName: SearchStateName.LOADED,
-      phrase: action.payload.phrase,
-      token: action.payload.token,
-      products: action.payload.products,
-    };
+    if (state.stateName === SearchStateName.LOADING) {
+      return {
+        ...state,
+        stateName: SearchStateName.LOADED,
+        //phrase: action.payload.phrase,
+        nextPageToken: action.payload.token,
+        totalItems: action.payload.totalItems,
+        resultPages: [
+          {
+            pageIndex: 1,
+            products: action.payload.pageProducts,
+          },
+        ],
+      };
+    }
+
+    return state;
   },
 
-  [actionTypes.CLEAR_RESULTS]: (state: SearchState = initialState, action: ReturnType<typeof actions.ClearResults>) => {
+  [actionTypes.LOAD_NEXT_PAGE]: (
+    state: SearchState = initialState,
+    action: ReturnType<typeof actions.LoadNextPage>
+  ) => {
+    if (state.stateName === SearchStateName.LOADED) {
+      return {
+        ...state,
+        stateName: SearchStateName.LOADED,
+        resultPages: [
+          ...state.resultPages,
+          {
+            pageIndex: state.resultPages.length + 1,
+            products: action.payload.pageProducts,
+          },
+        ],
+      };
+    }
+
+    return state;
+  },
+
+  [actionTypes.CLEAR_RESULTS]: (state: SearchState = initialState) => {
     return initialState;
   },
 
   [actionTypes.SEARCH_FAILED]: (state: SearchState = initialState, action: ReturnType<typeof actions.SearchFailed>) => {
     return {
       ...state,
+      stateName: SearchStateName.ERROR,
       error: action.payload.error,
     };
   },
@@ -75,22 +123,27 @@ const reducers: IActionReducer<SearchState> = {
     state: SearchState = initialState,
     action: ReturnType<typeof actions.ShowProductDetails>
   ) => {
-    return {
-      ...state,
-      stateName: SearchStateName.SELECTED,
-      selectedProduct: action.payload.product,
-    };
+    if (state.stateName === SearchStateName.LOADED) {
+      return {
+        ...state,
+        stateName: SearchStateName.SELECTED,
+        selectedProduct: action.payload.product,
+      };
+    }
+
+    return state;
   },
 
-  [actionTypes.UNSELECT_PRODUCT]: (
-    state: SearchState = initialState,
-    action: ReturnType<typeof actions.ShowProductDetails>
-  ) => {
-    return {
-      ...state,
-      stateName: SearchStateName.LOADED,
-      selectedProduct: undefined,
-    };
+  [actionTypes.UNSELECT_PRODUCT]: (state: SearchState = initialState) => {
+    if (state.stateName === SearchStateName.SELECTED) {
+      return {
+        ...state,
+        stateName: SearchStateName.LOADED,
+        selectedProduct: undefined,
+      };
+    }
+
+    return state;
   },
 };
 

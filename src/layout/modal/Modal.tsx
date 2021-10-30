@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { color, Device, padding } from '../../styles/theme';
+import { CustomScrollbarDiv } from '../CustomScrollbar';
 import { ModalHeader } from './ModalHeader';
 
 const ModalLayout = styled.div`
@@ -13,7 +14,7 @@ const ModalLayout = styled.div`
   align-items: center;
 `;
 
-const ModalContainer = styled.div`
+const ModalContainer = styled(CustomScrollbarDiv)`
   background-color: ${color.background.white};
   position: absolute;
   overflow-x: hidden;

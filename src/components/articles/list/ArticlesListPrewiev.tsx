@@ -6,7 +6,7 @@ import { Device, padding, margin } from '../../../styles/theme';
 import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { Link } from 'gatsby';
 import { urls } from '../../../domain/website';
-import { ButtonColor } from '../../../styles/button-theme';
+import { ButtonThemes, ButtonFlavor } from '../../../components/buttons/Button';
 
 const Wrapper = styled.div`
   grid-area: articles;
@@ -46,7 +46,7 @@ export const ArticlesListPreview: React.FC<IArticlesList> = ({ articles }) => {
           />
         ))}
       <Link to={urls.pola.news}>
-        <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" color={ButtonColor.Red} />
+        <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" styles={ButtonThemes[ButtonFlavor.RED]} />
       </Link>
     </Wrapper>
   );
