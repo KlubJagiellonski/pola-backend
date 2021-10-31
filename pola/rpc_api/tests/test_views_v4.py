@@ -326,6 +326,26 @@ class TestSearchV4(TestCase):
             json.loads(response.content),
         )
 
+    def test_should_skip_company_without_name(self):
+        p1 = ProductFactory(name="test-product", company__name=None)
+        response = self.client.get(f"{self.url}?query={p1.code}", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            {
+                'nextPageToken': None,
+                'products': [
+                    {
+                        'brand': {'name': p1.brand.name},
+                        'code': p1.code,
+                        'company': None,
+                        'name': p1.name,
+                    }
+                ],
+                'totalItems': 1,
+            },
+            json.loads(response.content),
+        )
+
     def test_should_serialize_products(self):
         p1 = ProductFactory(name="baton1")
         p2 = ProductFactory(name="baton2", company=None)
