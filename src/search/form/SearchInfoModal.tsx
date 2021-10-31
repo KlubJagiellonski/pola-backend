@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { urls } from '../../domain/website';
 import { Modal } from '../../layout/modal/Modal';
 import { padding } from '../../styles/theme';
 import { ClickOutside } from '../../utils/click-outside';
@@ -23,10 +24,15 @@ export const SearchInfoModal: React.FC<ISearchInfoModal> = ({ onClose }) => {
         <Info>
           <p>
             Jeśli chcesz znaleźć produkty polskich firm, możesz wkleić lub wpisać w polu tekstowym kod EAN dowolnego
-            produktu. Kod znajdziesz na opakowaniu lub w opisie produktu na stronie sklepu internetowego. Możesz także
-            wpisać nazwę producenta lub nazwę produktu.
+            produktu. Kod znajdziesz na opakowaniu, w opisie produktu na stronie sklepu internetowego lub w&nbsp;
+            <a target="blank" href={urls.external.openFoods.href}>
+              bazie Open Foods
+            </a>
           </p>
-          <span>Jeśli potrzebujesz więcej informacji lub chcesz zgłosić błąd, prosimy o kontakt:</span>
+          <span>
+            Możesz także wpisać nazwę producenta lub nazwę produktu. Jeśli potrzebujesz więcej informacji lub chcesz
+            zgłosić błąd, prosimy o kontakt:
+          </span>
           <a href="mailto:pola@klubjagiellonski.pl">pola@klubjagiellonski.pl</a>
         </Info>
       </Modal>

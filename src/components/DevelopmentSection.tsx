@@ -8,6 +8,8 @@ import { SecondaryButton } from './buttons/SecondaryButton';
 import { WrapperSection } from '../styles/GlobalStyle.css';
 import { TitleSection, Text } from '../styles/GlobalStyle.css';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
+import { openNewTab } from '../utils/browser';
+import { urls } from '../domain/website';
 
 const Info = styled.div`
   width: 50%;
@@ -135,6 +137,10 @@ const Container = styledContainerQuery(Wrapper)`
   }
 `;
 
+const handleReadMore = () => {
+  openNewTab(urls.external.polaSupport);
+};
+
 const DevelopmentSection = () => {
   return (
     <Container color={color.background.red}>
@@ -152,6 +158,7 @@ const DevelopmentSection = () => {
               label="Czytaj dalej..."
               fontSize={fontSize.small}
               styles={ButtonThemes[ButtonFlavor.RED]}
+              onClick={handleReadMore}
             />
           </div>
         </TextSection>

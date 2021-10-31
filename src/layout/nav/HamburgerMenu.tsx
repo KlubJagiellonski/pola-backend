@@ -6,6 +6,8 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import LogoColor from '../../assets/logo/pola-color.svg';
 import { Device, mobileHeaderHeight, padding, color } from '../../styles/theme';
 import { classNames } from '../../utils/class-names';
+import { urls } from '../../domain/website';
+import { Link } from 'gatsby';
 
 const HamburgerLayout = styled.nav`
   background: ${color.background.white};
@@ -67,7 +69,9 @@ export const HamburgerMenu: React.FC<IHamburgerMenu> = ({ expanded, children, on
   return (
     <HamburgerLayout className="hamburger-menu">
       <Navbar>
-        <img width="auto" height="100%" src={LogoColor} />
+        <Link to={urls.pola.home}>
+          <img width="auto" height="100%" src={LogoColor} />
+        </Link>
         <FontAwesomeIcon icon={faBars} onClick={handleOpen} className="menu-icon" size="2x" />
       </Navbar>
       <Items ref={itemsRef} className={classNames('nav-items')}>

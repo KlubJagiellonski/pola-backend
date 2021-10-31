@@ -100,15 +100,6 @@ export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onInfoClicked, on
     <ErrorBoundary scope="search-container">
       <Container>
         <Title>Sprawdź informacje o produkcie</Title>
-        <Text>
-          <span>Wpisz tekst, podyktuj lub zeskanuj kod</span>
-          <span>
-            Nie znasz kodu?&nbsp;
-            <a target="blank" href={urls.external.openFoods.href}>
-              Znajdź go w bazie
-            </a>
-          </span>
-        </Text>
         <SearchWrapper>
           <SearchInput
             onInfoClicked={onInfoClicked}

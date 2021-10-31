@@ -50,7 +50,7 @@ const InputText = styled.input`
   font-size: ${fontSize.normal};
   width: 100%;
   height: 100%;
-  padding-right: ${padding.small};
+  padding: 0 ${padding.small} 0 ${padding.normal};
 
   &:focus,
   &:active {
@@ -91,6 +91,7 @@ const InfoIcon = styled.div<{ width: number; height: number }>`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  margin-right: ${margin.tiny};
   background-color: ${color.background.red};
   width: ${(props) => px(props.width)};
   height: ${(props) => px(props.height)};
@@ -131,6 +132,8 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
   const showSubmitButton = false;
+  const showBarcodeIcon = false;
+  const showVoiceInputIcon = false;
   let inputRef = useRef<HTMLInputElement>(null);
 
   const onPhraseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,9 +172,7 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
   return (
     <FormSearch>
       {disabled && <InputOverlay />}
-      <InfoIcon width={54} height={48} onClick={onInfoClicked}>
-        <h2>i</h2>
-      </InfoIcon>
+
       <InputSection>
         <InputText
           autoFocus
@@ -183,8 +184,11 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
           disabled={disabled}
         />
         <InputIconSection>
-          <InputIcon imagePath={Kod} size={48} />
-          <InputIcon imagePath={Microphone} size={48} />
+          <InfoIcon width={50} height={48} onClick={onInfoClicked}>
+            <h2>i</h2>
+          </InfoIcon>
+          {showBarcodeIcon && <InputIcon imagePath={Kod} size={48} />}
+          {showVoiceInputIcon && <InputIcon imagePath={Microphone} size={48} />}
         </InputIconSection>
       </InputSection>
       {showSubmitButton && (
