@@ -1,6 +1,7 @@
 import functools
 from pathlib import Path
 
+import sentry_sdk
 from django.http import HttpRequest, HttpResponse
 from openapi_core import create_spec
 from openapi_core.contrib.django import (
@@ -38,6 +39,8 @@ def validate_openapi_spec(spec: SpecPath):
             validator = ResponseValidator(spec)
             result = validator.validate(openapi_request, openapi_response)
             if result.errors:
+                for error in result.errors:
+                    sentry_sdk.capture_exception(error)
                 if len(result.errors) == 1 and isinstance(result.errors[0], InvalidSchemaValue):
                     error: InvalidSchemaValue = result.errors[0]
                     return JsonProblemResponse(
