@@ -90,11 +90,12 @@ const SearchWrapper = styled.div`
 
 interface ISearchForm {
   isLoading: boolean;
+  onInfoClicked: () => void;
   onSearch: (phrase: string) => void;
   onEmptyInput: () => void;
 }
 
-export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onSearch, onEmptyInput }) => {
+export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onInfoClicked, onSearch, onEmptyInput }) => {
   return (
     <ErrorBoundary scope="search-container">
       <Container>
@@ -109,7 +110,12 @@ export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onSearch, onEmpty
           </span>
         </Text>
         <SearchWrapper>
-          <SearchInput onSearch={onSearch} onEmptyInput={onEmptyInput} disabled={isLoading} />
+          <SearchInput
+            onInfoClicked={onInfoClicked}
+            onSearch={onSearch}
+            onEmptyInput={onEmptyInput}
+            disabled={isLoading}
+          />
           <div className="mobile-apps">
             <AppStoreLink height={56} />
             <GooglePlayLink height={56} />

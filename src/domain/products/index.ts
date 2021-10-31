@@ -21,6 +21,13 @@ export interface ISearchSuccessResponse {
   products: IProductData[];
 }
 
+export interface ISearchResults {
+  phrase?: string;
+  products?: IProductData[];
+  totalItems?: number;
+  token?: string;
+}
+
 export class ProductSearchResults implements ISearchSuccessResponse {
   public static Empty: ISearchSuccessResponse = {
     nextPageToken: null,

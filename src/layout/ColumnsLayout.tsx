@@ -24,12 +24,19 @@ export const ColumnsLayout = styled.div<IColumnsLayout>`
   }
 `;
 
-export const ContentColumn = styled.div<{ hideOnMobile?: boolean }>`
+export interface IContentColumn {
+  fraction?: number;
+  hideOnMobile?: boolean;
+}
+
+export const ContentColumn = styled.div<IContentColumn>`
   display: flex;
   flex-flow: column;
   flex: 1 1 auto;
+  width: ${({ fraction }) => (fraction ? fraction + '%' : 'auto')};
 
   @media ${Device.mobile} {
+    width: 100%;
     display: ${(props) => (props.hideOnMobile ? 'none' : 'block')};
   }
 `;

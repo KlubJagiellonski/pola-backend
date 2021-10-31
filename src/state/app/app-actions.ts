@@ -5,6 +5,7 @@ export const actionTypes = {
   LOAD_BROWSER_LOCATION: 'APP:LOAD_BROWSER_LOCATION',
   SELECT_ACTIVE_PAGE: 'APP:SELECT_ACTIVE_PAGE',
   EXPAND_MENU: 'APP:EXPAND_MENU',
+  TOGGLE_SEARCH_INFO: 'APP:TOGGLE_SEARCH_INFO',
 };
 
 export const Initialize = (): IAction => ({
@@ -30,4 +31,8 @@ export const ExpandMenu = (expanded: boolean): IAction => ({
   payload: {
     expanded,
   },
+});
+
+export const ToggleSearchInfo = (): IAction => ({
+  type: actionTypes.TOGGLE_SEARCH_INFO,
 });

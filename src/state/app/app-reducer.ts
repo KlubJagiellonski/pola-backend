@@ -10,12 +10,14 @@ export interface IAppState {
   location?: Location;
   activePage: PageType;
   isMenuExpanded: boolean;
+  isSearchInfoVisible: boolean;
 }
 
 const initialState: IAppState = {
   initialized: false,
   activePage: PageType.HOME,
   isMenuExpanded: false,
+  isSearchInfoVisible: false,
 };
 
 const reducers: IActionReducer<IAppState> = {
@@ -50,6 +52,16 @@ const reducers: IActionReducer<IAppState> = {
     return {
       ...state,
       isMenuExpanded: action.payload.expanded,
+    };
+  },
+
+  [actionTypes.TOGGLE_SEARCH_INFO]: (
+    state: IAppState = initialState,
+    action: ReturnType<typeof actions.ToggleSearchInfo>
+  ) => {
+    return {
+      ...state,
+      isSearchInfoVisible: !state.isSearchInfoVisible,
     };
   },
 };

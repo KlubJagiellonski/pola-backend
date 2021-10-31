@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import { EAN, IProductEAN, Product } from '../../domain/products';
 import { ProductEANService } from '../../domain/products/ean-service';
 import { ProductService } from '../../domain/products/search-service';
-import { ErrorHandler } from '../../services/api-errors';
+import { ErrorHandler, EmptyResponseDataError, ProductNotFoundError } from '../../services/api-errors';
 import { IPolaState } from '../types';
 import { ProductSelectors } from './product-selectors';
 import * as actions from './search-actions';
@@ -60,12 +60,17 @@ export const searchDispatcher = {
 
           await dispatch(actions.LoadNextPage(phrase, products));
         } else {
-          throw new Error('Search response is empty');
+          throw new EmptyResponseDataError('EAN Product');
         }
       }
-    } catch (error) {
-      console.error('cannot load more products', error);
-      await dispatch(actions.SearchFailed(error));
+    } catch (error: unknown) {
+      if (error instanceof ErrorHandler) {
+        console.error('[Product search error]:', error);
+        await dispatch(actions.SearchFailed(error));
+      } else {
+        console.error('[Unhandled error]:', error);
+        throw error;
+      }
     }
   },
 
@@ -76,9 +81,14 @@ export const searchDispatcher = {
   clearResults: () => async (dispatch: Dispatch, getState: () => IPolaState) => {
     try {
       dispatch(actions.ClearResults());
-    } catch (error) {
-      console.error('cannot clear results', error);
-      await dispatch(actions.SearchFailed(error));
+    } catch (error: unknown) {
+      if (error instanceof ErrorHandler) {
+        console.error('[Search clearing error]:', error);
+        await dispatch(actions.SearchFailed(error));
+      } else {
+        console.error('[Unhandled error]:', error);
+        throw error;
+      }
     }
   },
 
@@ -98,12 +108,17 @@ export const searchDispatcher = {
           const product = new Product(prod.name, productEntityEAN);
           await dispatch(actions.ShowProductDetails(product));
         } else {
-          throw new Error('Cannot find product');
+          throw new ProductNotFoundError('Cannot find product');
         }
       }
-    } catch (error) {
-      console.error('cannot select product', error);
-      await dispatch(actions.SearchFailed(error));
+    } catch (error: unknown) {
+      if (error instanceof ErrorHandler) {
+        console.error('[Selected product error]:', error);
+        await dispatch(actions.SearchFailed(error));
+      } else {
+        console.error('[Unhandled error]:', error);
+        throw error;
+      }
     }
   },
 
@@ -119,9 +134,14 @@ export const searchDispatcher = {
       if (stateName === SearchStateName.SELECTED) {
         await dispatch(actions.UnselectProduct());
       }
-    } catch (error) {
-      console.error('cannot unselect product', error);
-      await dispatch(actions.SearchFailed(error));
+    } catch (error: unknown) {
+      if (error instanceof ErrorHandler) {
+        console.error('[Selected product error]:', error);
+        await dispatch(actions.SearchFailed(error));
+      } else {
+        console.error('[Unhandled error]:', error);
+        throw error;
+      }
     }
   },
 };

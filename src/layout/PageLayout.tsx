@@ -15,14 +15,18 @@ import { StateLoader } from './StateLoader';
 import '../styles/pola-web.css';
 import Download from '../components/Download';
 import { SearchStateName } from '../state/search/search-reducer';
+import { SearchInfoModal } from '../search/form/SearchInfoModal';
 
 const connector = connect(
   (state: IPolaState) => ({
+    isSearchInfoVisible: state.app.isSearchInfoVisible,
     activePage: state.app.activePage,
     isMenuExpanded: state.app.isMenuExpanded,
+    isSearchInfoVisible: state.app.isSearchInfoVisible,
     selectedProduct: state.search.stateName === SearchStateName.SELECTED ? state.search.selectedProduct : undefined,
   }),
   {
+    toggleSearchInfo: appDispatcher.toggleSearchInfo,
     expandMenu: appDispatcher.expandMenu,
     unselectProduct: searchDispatcher.unselectProduct,
   }
@@ -62,8 +66,10 @@ const PageContent = styled.main<ILayoutStyles>`
 const Layout: React.FC<IPageLayout> = ({
   activePage,
   isMenuExpanded,
+  isSearchInfoVisible,
   selectedProduct,
   children,
+  toggleSearchInfo,
   expandMenu,
   unselectProduct,
   styles,
@@ -83,6 +89,7 @@ const Layout: React.FC<IPageLayout> = ({
       <StateLoader />
       <LayoutContainer>
         {selectedProduct && <ProductModal product={selectedProduct} onClose={unselectProduct} />}
+        {isSearchInfoVisible && <SearchInfoModal onClose={toggleSearchInfo} />}
         <PageHeader
           siteTitle={data.site.siteMetadata.title}
           activePage={activePage}

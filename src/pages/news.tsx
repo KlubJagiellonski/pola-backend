@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { margin, Device } from '../styles/theme'
+import { margin, Device } from '../styles/theme';
 import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
 import { Article } from '../domain/articles';
@@ -9,34 +9,35 @@ import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { PageType } from '../domain/website';
 import { PageSection } from '../layout/PageSection';
-import './../components/Pagination.css'
+import './../components/Pagination.css';
 import SocialMedia from '../components/SocialMedia';
 import TagsList from '../components/tags/TagsList';
-import { ArrayParam, withDefault, useQueryParams, NumberParam } from "use-query-params";
-import { getTagsList } from './../utils/tags'
+import { ArrayParam, withDefault, useQueryParams, NumberParam } from 'use-query-params';
+import { getTagsList } from './../utils/tags';
 import NewsPageArticles from '../components/articles/list/NewsPagesArticles';
+import Placeholder from '../components/Placeholder';
 
 const Title = styled.p`
   margin-top: ${margin.veryBig};
   font-weight: bold;
 
   @media ${Device.mobile} {
-      display: none;
+    display: none;
   }
-`
+`;
 
 const InfoSection = styled.div`
-    display: flex;
-    margin: ${margin.normal} 0;
+  display: flex;
+  margin: ${margin.normal} 0;
 
-    div {
-      flex: 1;
-    }
+  div {
+    flex: 1;
+  }
 
-    @media ${Device.mobile} {
-      flex-direction: column;
-    }
-`
+  @media ${Device.mobile} {
+    flex-direction: column;
+  }
+`;
 
 interface NewsPage {
   location?: Location;
@@ -44,8 +45,8 @@ interface NewsPage {
 }
 
 interface IQuery {
-  tags: string[],
-  id: number
+  tags: string[];
+  id: number;
 }
 
 const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
@@ -53,7 +54,7 @@ const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
   const dispatch = useDispatch();
   const [query, setQuery] = useQueryParams<IQuery>({
     tags: withDefault(ArrayParam, []),
-    id: NumberParam
+    id: NumberParam,
   });
 
   useEffect(() => {
@@ -65,21 +66,17 @@ const NewsPage: React.FC<NewsPage> = ({ location, articles }) => {
 
   useEffect(() => {
     if (articles) {
-      setTag(getTagsList(articles))
+      setTag(getTagsList(articles));
     }
-    document.querySelector('body').scrollTo(0, 0)
+    document.querySelector('body').scrollTo(0, 0);
   }, [articles, query]);
 
   return (
     <PageLayout>
       <SEOMetadata pageTitle="Aktualności" />
+      <Placeholder text="Aktualności" />
       <PageSection>
-        <Title>Aktualności</Title>
-        <NewsPageArticles
-          articles={articles}
-          query={query}
-          setQuery={setQuery}
-        />
+        <NewsPageArticles articles={articles} query={query} setQuery={setQuery} />
         <InfoSection>
           <TagsList tag={tag} activeTags={query.tags} />
           <SocialMedia />

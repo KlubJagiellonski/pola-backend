@@ -6,7 +6,8 @@ export enum ErrorMessage {
   EMPTY_PAYLOAD = 'Obtained empty payload',
   INVALID_DATA = 'Obtained invalid data for search query',
   INVALID_REQUEST = 'Invalid request structure',
-  NOT_FOUND = 'Not found',
+  METHOD_NOT_FOUND = 'Method not found',
+  PRODUCT_NOT_FOUND = 'Product not found',
   NETWORK_ERROR = 'Service is unreachable',
   API_ADAPTER_ERROR = 'Something unexpected happened on communication with a service.',
   SERVICE_ERROR = 'Something unexpected happened on the service. Please try again later.',
@@ -88,8 +89,20 @@ export class MethodNotFoundError extends ErrorHandler {
    */
   constructor(public handledError?: unknown) {
     super();
-    this.name = 'Method not found';
-    this.message = this.buildMessage(ErrorMessage.NOT_FOUND);
+    this.name = 'Cannot recognize specified operation';
+    this.message = this.buildMessage(ErrorMessage.METHOD_NOT_FOUND);
+  }
+}
+
+export class ProductNotFoundError extends ErrorHandler {
+  /**
+   * Error describes "NOT FOUND" case
+   * @param handledError Handled incoming error object
+   */
+  constructor(public handledError?: unknown) {
+    super();
+    this.name = 'Cannot find product by EAN code';
+    this.message = this.buildMessage(ErrorMessage.PRODUCT_NOT_FOUND);
   }
 }
 

@@ -31,7 +31,8 @@ const Cricle = styled.div`
   border-radius: 50%;
   z-index: 0;
   position: absolute;
-  top: 0.5rem;
+  top: 1rem;
+  box-shadow: 0 10px 10px -9px ${color.background.secondary};
 
   @media ${Device.mobile} {
     display: none;

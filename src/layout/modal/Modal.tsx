@@ -14,14 +14,15 @@ const ModalLayout = styled.div`
   align-items: center;
 `;
 
-const ModalContainer = styled(CustomScrollbarDiv)`
+const ModalContainer = styled(CustomScrollbarDiv)<{ height?: string }>`
   background-color: ${color.background.white};
   position: absolute;
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
   flex-flow: column;
-  height: 85vh;
+  min-height: 12rem;
+  height: ${(props) => props.height || '85vh'};
   z-index: 1;
   max-width: 800px;
   box-sizing: border-box;
@@ -58,13 +59,16 @@ const ModalOverlay = styled.div`
 
 interface IModal {
   title: string;
+  styles?: {
+    height?: string;
+  };
   onClose: () => void;
 }
 
-export const Modal: React.FC<IModal> = ({ title, onClose, children }) => (
+export const Modal: React.FC<IModal> = ({ title, onClose, children, styles }) => (
   <ModalLayout>
     <ModalOverlay />
-    <ModalContainer>
+    <ModalContainer height={styles?.height}>
       <ModalHeader title={title} onClose={onClose} />
       <div className="content">{children}</div>
     </ModalContainer>

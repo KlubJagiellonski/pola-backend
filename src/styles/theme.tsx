@@ -9,7 +9,7 @@ export const color = {
     white: '#ffffff',
     search: '#E5E5E5',
     transparencyGrey: '#e5e5e5d8',
-    transparencyRed: '#d8152fd8'
+    transparencyRed: '#d8152fd8',
   },
   text: {
     primary: '#333333',
@@ -33,7 +33,7 @@ export const color = {
 };
 
 export const mobileHeaderHeight = '40px';
-export const desktopHeaderHeight = '96px';
+export const desktopHeaderHeight = '112px';
 
 export const width = 1272;
 export const pageWidth = width + 'px';

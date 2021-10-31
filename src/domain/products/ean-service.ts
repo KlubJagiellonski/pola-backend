@@ -38,7 +38,7 @@ export class ProductEANService extends ApiAdapter {
       const product: IProductEAN = response.data;
 
       if (!product) {
-        throw new EmptyResponseDataError('product');
+        throw new EmptyResponseDataError('EAN Product');
       }
 
       return product;

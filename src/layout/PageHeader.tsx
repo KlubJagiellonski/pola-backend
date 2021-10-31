@@ -16,6 +16,7 @@ const HeaderContainer = styled.header`
   z-index: 10;
   width: 100%;
   background: ${color.background.white};
+  box-shadow: 0 1px 10px ${color.background.secondary};
 
   .header-content {
     display: flex;

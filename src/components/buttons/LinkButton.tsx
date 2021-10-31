@@ -5,9 +5,7 @@ import { padding } from '../../styles/theme';
 
 const ButtonContainer = styled(Button)`
   padding: ${padding.small};
-  min-width: 8rem;
-  max-width: 16rem;
-  height: 2rem;
+  min-width: 16rem;
   border-radius: 0;
 `;
 

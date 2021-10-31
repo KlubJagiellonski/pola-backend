@@ -25,4 +25,13 @@ export const appDispatcher = {
   expandMenu: (expanded: boolean) => async (dispatch: Dispatch, getState: () => IPolaState) => {
     await dispatch(actions.ExpandMenu(expanded));
   },
+
+  /**
+   * Toggles visibility of search info modal.
+   *
+   * [EXPLANATION]: inside app dispatcher as this operation is valid for all search states
+   */
+  toggleSearchInfo: () => async (dispatch: Dispatch, getState: () => IPolaState) => {
+    await dispatch(actions.ToggleSearchInfo());
+  },
 };

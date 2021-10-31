@@ -5,6 +5,7 @@ export interface IButtonColors {
   background: string;
   hover: string;
   text: string;
+  border?: string;
 }
 
 export interface IButtonTheme {
@@ -37,6 +38,7 @@ export const ButtonThemes: IButtonThemes = {
       background: color.button.white,
       hover: color.button.white,
       text: color.text.red,
+      border: color.button.red,
     },
   },
   [ButtonFlavor.WHITE]: {
@@ -67,7 +69,8 @@ export const Button = styled.button<{ theme: IButtonTheme; disabled?: boolean }>
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   color: ${(props) => props.theme.colors.text};
   background-color: ${(props) => props.theme.colors.background};
-  border: none;
+  border-color: ${(props) => props.theme.colors.border || 'none'};
+  border-width: ${(props) => (props.theme.colors.border ? '2px' : '0')};
   padding: ${padding.small} ${padding.normal};
   white-space: nowrap;
   font-weight: bold;

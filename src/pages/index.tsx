@@ -17,8 +17,38 @@ import { Article } from '../domain/articles';
 import { reduceToFlatProductsList } from '../domain/products/search-service';
 import { SearchStateName } from '../state/search/search-reducer';
 import { FirstPageResults } from '../search/results-list/FirstPageResults';
-import { EAN, IProductData } from '../domain/products';
+import { EAN, ISearchResults } from '../domain/products';
 import { Friend } from '../domain/friends';
+import { appDispatcher } from '../state/app/app-dispatcher';
+
+const connector = connect(
+  (state: IPolaState) => {
+    const { app, search, articles, friends } = state;
+    return {
+      searchState: search.stateName,
+      searchResults:
+        search.stateName === SearchStateName.LOADED || search.stateName === SearchStateName.SELECTED
+          ? {
+              phrase: search.phrase,
+              products: reduceToFlatProductsList(search.resultPages),
+              totalItems: search.totalItems,
+              token: search.nextPageToken,
+            }
+          : undefined,
+      articles: articles.data,
+      friends: friends.data,
+    };
+  },
+  {
+    toggleSearchInfo: appDispatcher.toggleSearchInfo,
+    invokeSearch: searchDispatcher.invokeSearch,
+    invokeLoadMore: searchDispatcher.invokeLoadMore,
+    clearResults: searchDispatcher.clearResults,
+    selectProduct: searchDispatcher.selectProduct,
+  }
+);
+
+type ReduxProps = ConnectedProps<typeof connector>;
 
 const Content = styled.div`
   width: 100%;
@@ -57,14 +87,7 @@ const WrapperContents = styled(PageSection)`
   }
 `;
 
-interface ISearchResults {
-  phrase?: string;
-  products?: IProductData[];
-  totalItems?: number;
-  token?: string;
-}
-
-interface IHomePage {
+type IHomePage = ReduxProps & {
   location?: Location;
   searchState: SearchStateName;
   searchResults?: ISearchResults;
@@ -72,11 +95,12 @@ interface IHomePage {
   activeTags: string[];
   friends?: Friend[];
 
+  toggleSearchInfo: () => void;
   invokeSearch: (phrase: string) => void;
   invokeLoadMore: () => void;
   clearResults: () => void;
   selectProduct: (code: EAN) => void;
-}
+};
 
 const HomePage = (props: IHomePage) => {
   const { location, searchState, searchResults } = props;
@@ -100,7 +124,12 @@ const HomePage = (props: IHomePage) => {
           <ResponsiveImage imageSrc={'background.png'} />
         </Background>
         <Content>
-          <SearchForm onSearch={props.invokeSearch} onEmptyInput={props.clearResults} isLoading={isLoading} />
+          <SearchForm
+            onInfoClicked={props.toggleSearchInfo}
+            onSearch={props.invokeSearch}
+            onEmptyInput={props.clearResults}
+            isLoading={isLoading}
+          />
         </Content>
       </PageSection>
       <FirstPageResults
@@ -117,29 +146,4 @@ const HomePage = (props: IHomePage) => {
   );
 };
 
-export default connect(
-  (state: IPolaState) => {
-    const { app, search, articles, friends } = state;
-    return {
-      location: app.location,
-      searchState: search.stateName,
-      searchResults:
-        search.stateName === SearchStateName.LOADED || search.stateName === SearchStateName.SELECTED
-          ? {
-              phrase: search.phrase,
-              products: reduceToFlatProductsList(search.resultPages),
-              totalItems: search.totalItems,
-              token: search.nextPageToken,
-            }
-          : undefined,
-      articles: articles.data,
-      friends: friends.data,
-    };
-  },
-  {
-    invokeSearch: searchDispatcher.invokeSearch,
-    invokeLoadMore: searchDispatcher.invokeLoadMore,
-    clearResults: searchDispatcher.clearResults,
-    selectProduct: searchDispatcher.selectProduct,
-  }
-)(HomePage);
+export default connector(HomePage);

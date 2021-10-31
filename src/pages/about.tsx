@@ -15,12 +15,7 @@ import { PartnersList } from '../components/partners/PartnersList';
 import { padding } from '../styles/theme';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
 import Faq from '../components/Faq';
-
-const ImageContainer = styled.div`
-min-width: 20em;
-  max-width: 40em;
-  margin: 0 auto;
-`;
+import { ImageContainer } from '../layout/ImageContainer';
 
 interface IAboutPage {
   location?: Location;
@@ -41,7 +36,7 @@ const AboutPage = (props: IAboutPage) => {
     <PageLayout styles={{ marginTop: padding.big }}>
       <SEOMetadata pageTitle="O Poli" />
       <ColumnsLayout>
-        <ContentColumn>
+        <ContentColumn fraction={60}>
           <PageSection>
             <TitleSection>O Poli</TitleSection>
             <Text>
@@ -97,14 +92,14 @@ const AboutPage = (props: IAboutPage) => {
           </PageSection>
           <Faq />
         </ContentColumn>
-        <ContentColumn hideOnMobile={true}>
+        <ContentColumn hideOnMobile={true} fraction={40}>
           <ImageContainer>
             <ResponsiveImage imageSrc="sok.png" />
           </ImageContainer>
         </ContentColumn>
       </ColumnsLayout>
-    </PageLayout >
+    </PageLayout>
   );
 };
 
-export default connect((state: IPolaState) => ({ location: state.app.location }), {})(AboutPage);
+export default connect((state: IPolaState) => ({}))(AboutPage);

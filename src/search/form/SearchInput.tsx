@@ -10,6 +10,7 @@ import Microphone from '../../assets/microphone.svg';
 
 const FormSearch = styled.div`
   display: flex;
+  flex-flow: row nowrap;
   align-items: center;
   position: relative;
 
@@ -72,8 +73,8 @@ const InputIconSection = styled.div`
 const InputIcon = styled.div<{ size: number; imagePath: string }>`
   border-radius: 50%;
   background-color: ${color.background.red};
-  height: ${(props) => px(props.size)};
   width: ${(props) => px(props.size)};
+  height: ${(props) => px(props.size)};
   margin-right: ${margin.tiny};
   display: flex;
   align-items: center;
@@ -82,6 +83,28 @@ const InputIcon = styled.div<{ size: number; imagePath: string }>`
   background-image: url(${(props) => props.imagePath});
   background-position: center;
   background-repeat: no-repeat;
+`;
+
+const InfoIcon = styled.div<{ width: number; height: number }>`
+  display: flex;
+  flex: 1 1 ${(props) => px(props.width)};
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: ${color.background.red};
+  width: ${(props) => px(props.width)};
+  height: ${(props) => px(props.height)};
+  color: ${color.text.light};
+  cursor: pointer;
+
+  h1,
+  h2,
+  h3,
+  p,
+  span {
+    margin-top: 6px;
+    line-height: 0;
+  }
 `;
 
 const SubmitButton = styled(SecondaryButton)`
@@ -97,13 +120,14 @@ const SubmitButton = styled(SecondaryButton)`
 
 interface ISearchInput {
   disabled: boolean;
+  onInfoClicked: () => void;
   onSearch: (phrase: string) => void;
   onEmptyInput: () => void;
 }
 
 const isNotEmpty = (value: string) => !!value && value.length && value.length > 0;
 
-export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch, onEmptyInput }) => {
+export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, onSearch, onEmptyInput }) => {
   const [phrase, setPhrase] = React.useState<string>('');
   const hasPhrase = !!phrase && phrase.length > 0;
   const showSubmitButton = false;
@@ -145,11 +169,10 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onSearch, onEmpt
   return (
     <FormSearch>
       {disabled && <InputOverlay />}
+      <InfoIcon width={54} height={48} onClick={onInfoClicked}>
+        <h2>i</h2>
+      </InfoIcon>
       <InputSection>
-        <InputIconSection>
-          <InputIcon imagePath={Kod} size={48} />
-        </InputIconSection>
-
         <InputText
           autoFocus
           ref={inputRef}
