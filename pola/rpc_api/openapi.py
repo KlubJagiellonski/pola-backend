@@ -11,6 +11,7 @@ from openapi_core.spec.paths import SpecPath
 from openapi_core.unmarshalling.schemas.exceptions import InvalidSchemaValue
 from openapi_core.validation.request.validators import RequestValidator
 from openapi_core.validation.response.validators import ResponseValidator
+from sentry_sdk import capture_exception
 from yaml import safe_load as yaml_load
 
 from pola.rpc_api.http import JsonProblemResponse
@@ -38,6 +39,8 @@ def validate_openapi_spec(spec: SpecPath):
             validator = ResponseValidator(spec)
             result = validator.validate(openapi_request, openapi_response)
             if result.errors:
+                for error in result.errors:
+                    capture_exception(error)
                 if len(result.errors) == 1 and isinstance(result.errors[0], InvalidSchemaValue):
                     error: InvalidSchemaValue = result.errors[0]
                     return JsonProblemResponse(
