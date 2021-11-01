@@ -41,7 +41,7 @@ const ProductsPage = (props: IProductsPage) => {
   }, []);
 
   if (!searchResults) {
-    navigateTo(urls.pola.home);
+    navigateTo(urls.pola.home());
     return null;
   }
 

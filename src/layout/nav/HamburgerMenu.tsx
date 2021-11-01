@@ -69,7 +69,7 @@ export const HamburgerMenu: React.FC<IHamburgerMenu> = ({ expanded, children, on
   return (
     <HamburgerLayout className="hamburger-menu">
       <Navbar>
-        <Link to={urls.pola.home}>
+        <Link to={urls.pola.home()}>
           <img width="auto" height="100%" src={LogoColor} />
         </Link>
         <FontAwesomeIcon icon={faBars} onClick={handleOpen} className="menu-icon" size="2x" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Friend } from '../../domain/friends';
-import { hash } from '../../domain/website';
+import { urls } from '../../domain/website';
 import { PageSection } from '../../layout/PageSection';
 import { color, Device, fontSize, margin } from '../../styles/theme';
 import { ResponsiveImage } from '../images/ResponsiveImage';
@@ -9,7 +9,6 @@ import { TitleSection, Text } from '../../styles/GlobalStyle.css';
 import { SecondaryButton } from '../buttons/SecondaryButton';
 import { ButtonFlavor, ButtonThemes } from '../../components/buttons/Button';
 import { AnchorLink } from 'gatsby-plugin-anchor-links';
-import { buildFriendUrl } from './friends-url-service';
 import { ColumnsLayout, ContentColumn } from '../../layout/ColumnsLayout';
 
 const WrapperContents = styled(PageSection)`
@@ -115,7 +114,7 @@ const SingleFriend: React.FC<Friend> = ({ name, description, image, page, slug }
               />
             </a>
             {slug && (
-              <AnchorLink to={buildFriendUrl(slug, hash.friends.profit.id)}>
+              <AnchorLink to={urls.pola.friends('profit', slug)}>
                 <ButtonWhiteRed
                   label="Wypromuj swoją firmę"
                   styles={ButtonThemes[ButtonFlavor.WHITE_RED]}

@@ -9,8 +9,7 @@ import { Device, color, margin, padding, fontSize, width } from './../../styles/
 import { Friend } from '../../domain/friends';
 import { ResponsiveImage } from './../images/ResponsiveImage';
 import { AnchorLink } from "gatsby-plugin-anchor-links";
-import { buildFriendUrl } from './friends-url-service';
-import { hash } from '../../domain/website';
+import { urls } from '../../domain/website';
 
 const Wrapper = styled(WrapperSection)`
   width: 100%;
@@ -32,6 +31,10 @@ const ImageWrapper = styled.div`
 `;
 
 const FriendsSlider = styled(Slider)`
+  .slick-dots li button::before{
+    font-size: 0.5rem;
+  }
+
   .slick-dots li.slick-active button:before {
     color: ${color.button.red} !important;
   }
@@ -101,12 +104,14 @@ const Friends: React.FC<IFriends> = ({ friends, rows }) => {
             <FriendsSlider {...settings}>
               {friends.map((el, id) => (
                 <div className="friend-item" key={`friend_${id}`}>
-                  <Image>{el.image && <ResponsiveImage imageSrc={el.image} />}</Image>
-                  {el.slug &&
-                    <FriendLink to={buildFriendUrl(el.slug, hash.friends.friend.id)}>
-                      Zobacz {'>'}
-                    </FriendLink>
-                  }
+                  <FriendLink to={urls.pola.friends('friend', el.slug)}>
+                    <Image>{el.image && <ResponsiveImage imageSrc={el.image} />}</Image>
+                    {el.slug &&
+                      <>
+                        Zobacz {'>'}
+                      </>
+                    }
+                  </FriendLink>
                 </div>
               ))}
             </FriendsSlider>

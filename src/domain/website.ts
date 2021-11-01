@@ -19,30 +19,27 @@ export interface PageLinkData {
   url: string;
 }
 
-export const hash = {
-  friends: {
-    profit: {
-      id: 'profit',
-      url: '/friends#profit',
-    },
-    friend: {
-      id: 'friend',
-      url: '/friends#friend',
-    },
-  },
+const hashableUrl = (pageName: string) => (sectionId?: FriendHash | AboutHash | HomeHash) =>
+  sectionId ? `/${pageName}#${sectionId}` : `/${pageName}`;
+
+const slugableUrl = (pageName: string) => (sectionId?: FriendHash | AboutHash | HomeHash, slug?: string) => {
+  if (slug) {
+    return sectionId ? `/${pageName}?value=${slug}#${sectionId}` : `/${pageName}?value=${slug}`;
+  } else {
+    return sectionId ? `/${pageName}#${sectionId}` : `/${pageName}`;
+  }
 };
 
 export const urls = {
   pola: {
-    home: '/',
+    home: hashableUrl(''),
     news: '/news',
-    about: '/about',
+    about: hashableUrl('about'),
     support: '/support',
-    friends: '/friends',
+    friends: slugableUrl('friends'),
     partners: '/partners',
     business: '/business',
     team: '/join',
-    contact: '/contact',
     products: '/products',
   },
   external: {
@@ -71,12 +68,16 @@ export const urls = {
 };
 
 export const pageLinks: PageLinkData[] = [
-  { type: PageType.ABOUT, label: 'O Poli', url: urls.pola.about },
+  { type: PageType.ABOUT, label: 'O Poli', url: urls.pola.about() },
   { type: PageType.NEWS, label: 'Aktualności', url: urls.pola.news },
-  { type: PageType.FRIENDS, label: 'Klub przyjaciół Poli', url: urls.pola.friends },
+  { type: PageType.FRIENDS, label: 'Klub przyjaciół Poli', url: urls.pola.friends() },
   { type: PageType.PARTNERS, label: 'Partnerzy', url: urls.pola.partners },
   { type: PageType.BUSINESS, label: 'Oferta biznesowa', url: urls.pola.business },
   { type: PageType.TEAM, label: 'Dołącz do zespołu', url: urls.pola.team },
-  { type: PageType.CONTACT, label: 'Kontakt', url: urls.pola.contact },
+  { type: PageType.CONTACT, label: 'Kontakt', url: urls.pola.home('contact') },
   { type: PageType.SUPPORT, label: 'Wesprzyj aplikację', url: urls.external.polaSupport.href },
 ];
+
+type FriendHash = 'profit' | 'friend';
+type AboutHash = 'faq';
+type HomeHash = 'contact';

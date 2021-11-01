@@ -4,7 +4,6 @@ import { Friend } from '../../domain/friends'
 import { margin, Device } from '../../styles/theme'
 import SingleFriend from './SingleFriend'
 import Friends from './Friends'
-import { hash } from '../../domain/website'
 import { StringParam, useQueryParams } from 'use-query-params';
 import { useState } from 'react'
 import { getFriendBySlug } from '../../utils/friends'
@@ -42,7 +41,7 @@ const FriendsSection: React.FC<IFriendsSection> = ({ friends }) => {
   }, [friends, query]);
 
   return (
-    <Wrapper id={hash.friends.friend.id}>
+    <Wrapper id='friend'>
       <Friends friends={friends} />
       {friend && friends && <SingleFriend {...friend} />}
     </Wrapper>

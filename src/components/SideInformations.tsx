@@ -9,7 +9,7 @@ import { getTagsList } from '../utils/tags';
 import ArticlesListPreview from './articles/list/ArticlesListPrewiev';
 import DevelopmentSection from './DevelopmentSection';
 import FriendCard from './friends/FriendCard';
-import SocialMedia from './SocialMedia';
+import SocialMedia from './social-media/SocialMedia';
 import TagsList from './tags/TagsList';
 
 const Wrapper = styled.div`

@@ -91,6 +91,13 @@ module.exports = {
         ],
       },
     },
+    `gatsby-transformer-json`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/faq`,
+      },
+    },
     `gatsby-plugin-anchor-links`,
     {
       resolve: `gatsby-transformer-remark`,

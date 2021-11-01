@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import DevelopmentSection from './DevelopmentSection';
-import SocialMedia from './SocialMedia';
+import SocialMedia from './social-media/SocialMedia';
 import Friends from './friends/Friends';
 import Teams from './Teams';
 import About from './About';

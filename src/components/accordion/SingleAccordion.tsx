@@ -49,16 +49,16 @@ const ItemPanel = styled(AccordionItemPanel)`
   padding-left: 30px;
 `
 
-const SingleAccordion: React.FC<ISingleAccordion> = ({ question, answer, key }) => {
+const SingleAccordion: React.FC<ISingleAccordion> = ({ question, answer, id }) => {
   return (
-    <AccordionItem key={key}>
+    <AccordionItem>
       <AccordionItemHeading>
         <ItemButton>
           {question}
         </ItemButton>
       </AccordionItemHeading>
       <ItemPanel>
-        {answer}
+        <div dangerouslySetInnerHTML={{ __html: answer }} />
       </ItemPanel>
     </AccordionItem>
   )

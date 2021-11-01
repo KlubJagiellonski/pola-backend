@@ -2,12 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import styledContainerQuery from 'styled-container-query'
 
-import { color, Device } from '../styles/theme';
-import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
-import Facebbok from '../assets/social-media/facebook.png';
-import Instagram from '../assets/social-media/instagram.png';
-import Twitter from '../assets/social-media/twitter.png';
-import { urls } from '../domain/website';
+import { color, Device } from '../../styles/theme';
+import { WrapperSection, TitleSection } from '../../styles/GlobalStyle.css';
+import { Facebook, Instagram, Twitter } from './Icons';
 
 const Items = styled.div`
   align-items: center;
@@ -74,17 +71,10 @@ const SocialMedia = () => {
     <Container color={color.background.white}>
       <Title>Śledź nas na:</Title>
       <Items>
-        <Item href={urls.external.polaSocialMedia.facebook.href} target="blank">
-          <img src={Facebbok} />
-        </Item>
-        <Item href={urls.external.polaSocialMedia.instagram.href} target="blank">
-          <img src={Instagram} />
-        </Item>
-        <Item href={urls.external.polaSocialMedia.twitter.href} target="blank">
-          <img src={Twitter} />
-        </Item>
-        <Item>
-        </Item>
+        <Facebook />
+        <Instagram />
+        <Twitter />
+        <Item />
       </Items>
     </Container>
   );

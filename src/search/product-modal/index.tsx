@@ -52,7 +52,7 @@ export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
   };
   const redirectToFriends = () => {
     onClose();
-    navigateTo(urls.pola.friends);
+    navigateTo(urls.pola.friends());
   };
   const handleDonate = () => {
     const donateUrl = new URL(product.donate.url);

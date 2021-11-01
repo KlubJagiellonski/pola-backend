@@ -10,7 +10,7 @@ import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions'
 import { PageType } from '../domain/website';
 import { PageSection } from '../layout/PageSection';
 import './../components/Pagination.css';
-import SocialMedia from '../components/SocialMedia';
+import SocialMedia from '../components/social-media/SocialMedia';
 import TagsList from '../components/tags/TagsList';
 import { ArrayParam, withDefault, useQueryParams, NumberParam } from 'use-query-params';
 import { getTagsList } from './../utils/tags';

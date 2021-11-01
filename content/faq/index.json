@@ -1,0 +1,29 @@
+{
+  "faq": [
+    {
+      "question": "Mam telefon z systemem operacyjnym Android. Nie mogę znaleźć aplikacji w Google Play. Dlaczego?",
+      "answer": "<p>Aplikacja Pola działa na telefonach wyposażonych w system Android 4.1 lub nowszy. Aktualnie nie planujemy wsparcia dla wcześniejszych wersji.</p>",
+      "id": 1
+    },
+    {
+      "question": "Mam telefon iPhone (iPad). Nie mogę znaleźć aplikacji w App Store. Dlaczego?",
+      "answer": "<p>Aplikacja Pola działa na urządzeniach wyposażonych w system operacyjny iOS w wersji 11.0 lub nowszej. Aktualnie nie planujemy wsparcia dla wcześniejszych wersji.</p>",
+      "id": 2
+    },
+    {
+      "question": "Reprezentuję producenta. Moja firma nie została jeszcze zweryfikowana przez redakcję. Co mam zrobić?",
+      "answer": "<p>W pierwszej kolejności zajmujemy się tymi firmami, których produkty są najczęściej skanowane. Jednak możesz nam pomóc w weryfikacji firmy wypełniając <a target='_blank' href='https://docs.google.com/forms/d/e/1FAIpQLSfJ14U66y_Z_thn9wiUHaBGOfKlZNhL4BGYuHjO2tJuzXi9gQ/viewform'>formularz</a>.</p>",
+      "id": 3
+    },
+    {
+      "question": "Jak mogę zgłosić uwagi lub błąd w serwisie Pola?",
+      "answer": "<p>Korzystamy z serwisu GitHub do zgłaszania błędów i uwag. Wybierz do jakiej części Poli chcesz zgłosić uwagi: <a target='_blank' href='https://github.com/KlubJagiellonski/pola-android/issues'>aplikacja na Androida</a>, <a target='_blank' href='https://github.com/KlubJagiellonski/pola-ios/issues'>aplikacja na iPhone'a</a>, <a target='_blank' href='https://github.com/KlubJagiellonski/pola-web/issues'>strona internetowa</a>.</p>",
+      "id": 4
+    },
+    {
+      "question": "Chcę pomóc w projekcie",
+      "answer": "<p>Zapraszamy do włączenia się w pracę nad serwisem Pola. Dołącz do nas i pracuj nad <a target='_blank' href='https://github.com/KlubJagiellonski/pola-android/issues'>aplikacją na Androida</a>, <a target='_blank' href='https://github.com/KlubJagiellonski/pola-ios/issues'>aplikacją na iPhone'a</a> lub <a target='_blank' href='https://github.com/KlubJagiellonski/pola-web/issues'>stroną internetową</a>. Stale poszukujemy też wolontariuszy chcących pomóc nam rozwijać bazę danych o firmach - zachęcamy do kontaktu z Mateuszem Perowiczem (tel. 660 010 034, e-mail: <a href='mailto:mateusz.perowicz@klubjagiellonski.pl'>mateusz.perowicz@klubjagiellonski.pl)</a></p>",
+      "id": 5
+    }
+  ]
+}

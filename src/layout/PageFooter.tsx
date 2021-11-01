@@ -2,21 +2,27 @@ import React from 'react';
 import styled from 'styled-components';
 
 import LogoWhite from '../assets/logo/pola-white.svg';
-import { color, Device, padding, pageWidth } from '../styles/theme';
-import Facebook from './../assets/social-media/facebook_fill.png'
-import Twitter from './../assets/social-media/twitter_fill.png'
-import Instagram from './../assets/social-media/instagram_fill.png'
+import { color, Device, fontSize, padding, pageWidth, margin } from '../styles/theme';
+import { Link } from 'gatsby';
+import { urls } from '../domain/website';
+import { AnchorLink } from 'gatsby-plugin-anchor-links';
+import { Facebook, Instagram, Twitter } from '../components/social-media/Icons';
 
-export const FooterContainer = styled.footer`
+const FooterContainer = styled.footer`
   background-color: ${color.background.dark};
-  padding: ${padding.big};
+  color: ${color.text.light};
+  margin: 0 auto;
+  width: 100%;
+  padding: ${padding.big} 0;
 
   .footer-content {
     display: flex;
     flex-flow: row nowrap;
     margin: 0 auto;
 
-    max-width: ${pageWidth};
+    @media ${Device.Desktop} {
+      max-width: ${pageWidth};
+    }
 
     .sections {
       flex: 1 1 100%;
@@ -25,12 +31,10 @@ export const FooterContainer = styled.footer`
       margin: 0;
     }
 
-    .logo {
-      margin-right: ${padding.normal};
-    }
     @media ${Device.mobile} {
       .sections {
         flex-flow: column;
+        gap: 0;
       }
     }
 
@@ -43,20 +47,23 @@ export const FooterContainer = styled.footer`
   }
 `;
 
-export const Section = styled.div`
+const Section = styled.div`
   flex: 1 1 25%;
 
+  .link {
+    text-decoration: none;
+  }
+
   .text {
-    font-family: 'Roboto';
-    font-size: 18px;
+    font-size: ${fontSize.normal};
     font-weight: 400;
     line-height: 21px;
+    color: ${color.text.light};
   }
 
   .title {
-    font-family: Roboto;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: ${fontSize.normal};
+    font-weight: bold;
     line-height: 21px;
   }
 
@@ -65,14 +72,10 @@ export const Section = styled.div`
     flex-direction: row;
   }
 
-  .social-image {
-    width: 20%;
-    padding-right: 5px;
-  }
-
   @media ${Device.mobile} {
     background-color: transparent;
     text-align: right;
+    margin-right: ${margin.normal};
 
     .title,
     .social-rows,
@@ -90,7 +93,7 @@ export const Section = styled.div`
 `;
 
 interface IFooterSection {
-  title: string;
+  title?: string;
 }
 
 const FooterSection: React.FC<IFooterSection> = ({ title, children }) => (
@@ -104,30 +107,53 @@ export const PageFooter = () => {
   return (
     <FooterContainer>
       <div className="footer-content">
-        <div className="logo">
-          <img width="80" height="80" src={LogoWhite} />
-        </div>
+        <FooterSection>
+          <div className="logo">
+            <img src={LogoWhite} />
+          </div>
+        </FooterSection>
         <div className="sections">
           <FooterSection title="Informacje">
-            <p className="text">Home</p>
-            <p className="text">Aktualności</p>
-            <p className="text">O Poli</p>
+            <Link className='link' to={urls.pola.home()}>
+              <p className="text">Home</p>
+            </Link>
+            <Link className='link' to={urls.pola.news}>
+              <p className="text">Aktualności</p>
+            </Link>
+            <Link className='link' to={urls.pola.about()}>
+              <p className="text">O Poli</p>
+            </Link>
           </FooterSection>
           <FooterSection title="Działaj z nami">
-            <p className="text">Wesprzyj aplikację</p>
-            <p className="text">Klub przyjaciół Poli</p>
-            <p className="text">Dołącz do zespołu</p>
+            <Link className='link' to={urls.pola.support}>
+              <p className="text">Wesprzyj aplikację</p>
+            </Link>
+            <Link className='link' to={urls.pola.friends()}>
+              <p className="text">Klub przyjaciół Poli</p>
+            </Link>
+            <Link className='link' to={urls.pola.team}>
+              <p className="text">Dołącz do zespołu</p>
+            </Link>
           </FooterSection>
           <FooterSection title="Jakieś pytania?">
-            <p className="text">Kontakt</p>
-            <p className="text hide-desktop">Polityka prywatności</p>
-            <p className="text hide-mobile">Uzupełnij dane o firmie</p>
+            <AnchorLink className='link' to={urls.pola.home('contact')}>
+              <p className="text">Kontakt</p>
+            </AnchorLink>
+            <AnchorLink className='link' to={urls.pola.about('faq')}>
+              <p className="text">FAQ</p>
+            </AnchorLink>
+            <Link className='link' to={urls.pola.home()}>
+              <p className="text hide-desktop">Polityka prywatności</p>
+            </Link>
+            <Link className='link' to={urls.pola.home()}>
+              <p className="text hide-mobile">Uzupełnij dane o firmie</p>
+            </Link>
           </FooterSection>
-          <FooterSection title="Social media Title">
+          <FooterSection title="Śledź nas na:">
             <div className="social-rows">
-              <img className="social-image" src={Facebook}></img>
-              <img className="social-image" src={Instagram}></img>
-              <img className="social-image" src={Twitter}></img>
+              <Facebook type='filled' />
+              <Instagram type='filled' />
+              <Twitter type='filled' />
             </div>
           </FooterSection>
         </div>
