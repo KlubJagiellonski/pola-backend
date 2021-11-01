@@ -118,7 +118,7 @@ const FriendsPage = (props: IFriendsPage) => {
           </Text>
         </FullContentInfo>
       </FullWrapperInfo>
-      <WrapperInfo id='profit'>
+      <WrapperInfo id="profit">
         <Info color={color.background.white}>
           <TitleInfo>Czym jest Klub Przyjaciół Poli?</TitleInfo>
           <Text>
@@ -164,12 +164,12 @@ const FriendsPage = (props: IFriendsPage) => {
         </Info>
       </WrapperInfo>
       <WrapperInfo>
-        <Card
-          title="Dołącz do Przyjaciół Poli"
-          content="Lorem ipsum dolor sit amet."
-          buttonLabel="KONTAKT"
-          url={urls.pola.home('contact')}
-        />
+        <Card title="Dołącz do Przyjaciół Poli" url={urls.pola.home('contact')}>
+          <Text>Koordynator projektu Mateusz Perowicz</Text>
+          <Text>
+            <a href={urls.external.mail.Perowicz.href}>mateusz.perowicz@klubjagiellonski.pl</a>, tel. 660 010 034
+          </Text>
+        </Card>
       </WrapperInfo>
     </PageLayout>
   );

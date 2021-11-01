@@ -127,9 +127,9 @@ const Container = styledContainerQuery(Wrapper)`
       div {
       picture {
         img{
-          width: auto !important;
+          width: auto;
           left: 50% !important;
-          transform: translateX(-50%) !important;
+          transform: translateX(-50%);
         }
       }
     }

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { WrapperSection, TitleSection } from '../styles/GlobalStyle.css';
-import { Device, margin, padding } from '../styles/theme'
+import { Device, margin, padding } from '../styles/theme';
 import { PrimaryButton } from './buttons/PrimaryButton';
 
 export const WrapperTeams = styled(WrapperSection)`
@@ -11,6 +11,7 @@ export const WrapperTeams = styled(WrapperSection)`
   position: relative;
   padding: 0px;
   margin: 0px;
+  padding-top: 10px;
 `;
 
 export const TextSection = styled.div`
@@ -28,7 +29,7 @@ export const Title = styled(TitleSection)`
 
 export const ButtonTeams = styled(PrimaryButton)`
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   left: 0px;
   right: 0px;
   width: 100%;
@@ -36,7 +37,7 @@ export const ButtonTeams = styled(PrimaryButton)`
 
   @media ${Device.mobile} {
     position: relative;
-    margin-top: ${margin.normal}
+    margin-top: ${margin.normal};
   }
 `;
 
@@ -44,4 +45,4 @@ export const IconTeams = styled.div`
   margin: auto;
   width: 7.5em;
   height: 7.5em;
-`
+`;

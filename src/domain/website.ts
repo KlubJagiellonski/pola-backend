@@ -59,10 +59,15 @@ export const urls = {
     form: new URL(
       'https://docs.google.com/forms/d/e/1FAIpQLSfJ14U66y_Z_thn9wiUHaBGOfKlZNhL4BGYuHjO2tJuzXi9gQ/viewform'
     ),
+    fundraising: new URL('https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/'),
     polaSocialMedia: {
       facebook: new URL('https://www.facebook.com/app.pola'),
       twitter: new URL('https://twitter.com/pola_app'),
       instagram: new URL('https://www.instagram.com/pola_skanuj_zakupy/'),
+    },
+    mail: {
+      Perowicz: new URL('mailto:mateusz.perowicz@klubjagiellonski.pl'),
+      Klub: new URL('mailto:Pola@klubjagiellonski.pl'),
     },
   },
 };
