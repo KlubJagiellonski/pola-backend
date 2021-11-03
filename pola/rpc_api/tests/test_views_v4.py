@@ -236,7 +236,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         "plScore": 70,
                         "is_friend": True,
                         "friend_text": "To jest przyjaciel Poli",
-                        "description": f"TEST\nMarka naależaca do firmy: {str(b)}.",
+                        "description": f"TEST\nMarka należaca do firmy: {str(b)}.",
                         "sources": {"TEST": "BBBB"},
                     },
                 ],
