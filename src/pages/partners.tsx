@@ -6,14 +6,15 @@ import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
 import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
-import { PageType } from '../domain/website';
+import { PageType, urls } from '../domain/website';
 import { PageSection } from '../layout/PageSection';
 import { PartnerService } from '../domain/partners/partners-service';
 import { PartnersList } from '../components/partners/PartnersList';
 import { Device, margin, padding } from '../styles/theme';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
-import { Text, TitleSection } from '../styles/GlobalStyle.css';
+import { Text } from '../styles/GlobalStyle.css';
 import Placeholder from '../components/Placeholder';
+import { ExternalLink } from '../utils/browser/links';
 
 const Wrapper = styled.div`
   margin-top: ${margin.veryBig};
@@ -78,10 +79,14 @@ const PartnersPage = (props: IPartnersPage) => {
         <Wrapper>
           <ImageSection>
             <li>
-              <ResponsiveImage imageSrc="PGE_logo.png" />
+              <ExternalLink url={urls.external.links.pge}>
+                <ResponsiveImage imageSrc="PGE_logo.png" />
+              </ExternalLink>
             </li>
             <li>
-              <ResponsiveImage imageSrc="polskie_kupuje.png" />
+              <ExternalLink url={urls.external.links.polskieKupujeTo}>
+                <ResponsiveImage imageSrc="polskie_kupuje.png" />
+              </ExternalLink>
             </li>
           </ImageSection>
           <TextSection>

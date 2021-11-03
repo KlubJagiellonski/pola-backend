@@ -34,7 +34,7 @@ const Teams = () => {
           <Text>
             <a href={urls.external.mail.Klub.href}>pola@klubjagiellonski.pl</a>, tel. 660 010 034
           </Text>
-          <Link to={urls.pola.team}>
+          <Link to={urls.pola.team()}>
             <ButtonTeams label="DOŁĄCZ DO ZESPOŁU" styles={ButtonThemes[ButtonFlavor.RED]} />
           </Link>
         </TextSection>

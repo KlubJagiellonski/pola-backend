@@ -11,6 +11,7 @@ export interface IButtonColors {
 export interface IButtonTheme {
   colors: IButtonColors;
   fontSize?: string;
+  lowercase?: boolean;
 }
 
 export type IButtonThemes = {
@@ -76,6 +77,10 @@ export const Button = styled.button<{ theme: IButtonTheme; disabled?: boolean }>
   font-weight: bold;
   transition-duration: 0.5s;
   font-size: ${(props) => (props.theme.fontSize ? props.theme.fontSize : px(18))};
+
+  p {
+    margin: 0;
+  }
 
   &:hover {
     background-color: ${(props) => props.theme.colors.hover};

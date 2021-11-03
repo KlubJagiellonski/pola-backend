@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PageSection } from '../../layout/PageSection';
-import { Spinner } from '../../components/Spinner';
 import { ProductCounter } from './ProductCounter';
 import { Link } from 'gatsby';
 import { fontSize, lineHeight, margin } from '../../styles/theme';
@@ -17,8 +16,8 @@ const Header = styled.header`
 
 interface ISearchResultsHeader {
   searchState: SearchStateName;
-  phrase: string;
-  totalItems: number;
+  totalItems?: number;
+  phrase?: string;
   resultsUrl?: string;
 
   setActivePage?: (type: PageType) => void;

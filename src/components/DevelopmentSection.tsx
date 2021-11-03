@@ -138,12 +138,12 @@ const Container = styledContainerQuery(Wrapper)`
 `;
 
 const handleReadMore = () => {
-  openNewTab(urls.external.polaSupport);
+  openNewTab(urls.external.links.polaSupport);
 };
 
 const DevelopmentSection = () => {
   return (
-    <Container color={color.background.red}>
+    <Container className="development-container" borderColor={color.background.red}>
       <Info>
         <ImgSection>
           <ResponsiveImage imageSrc="smutny-2.png" />

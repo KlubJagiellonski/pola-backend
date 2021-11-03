@@ -25,7 +25,7 @@ export const SearchInfoModal: React.FC<ISearchInfoModal> = ({ onClose }) => {
           <p>
             Jeśli chcesz znaleźć produkty polskich firm, możesz wkleić lub wpisać w polu tekstowym kod EAN dowolnego
             produktu. Kod znajdziesz na opakowaniu, w opisie produktu na stronie sklepu internetowego lub w&nbsp;
-            <a target="blank" href={urls.external.openFoods.href}>
+            <a target="blank" href={urls.external.links.openFoods.href}>
               bazie Open Foods
             </a>
           </p>

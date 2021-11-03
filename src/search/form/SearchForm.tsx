@@ -4,8 +4,7 @@ import { SearchInput } from './SearchInput';
 import ErrorBoundary from '../../utils/error-boundary';
 import { Device, fontSize, color, margin, lineHeight } from '../../styles/theme';
 import { TitleSection } from '../../styles/GlobalStyle.css';
-import { GooglePlayLink, AppStoreLink } from '../../components/links';
-import { urls } from '../../domain/website';
+import { GooglePlayLink, AppStoreLink, HuaweiAppGalleryLink } from '../../components/links';
 
 const Container = styled.div`
   display: flex;
@@ -68,7 +67,6 @@ const SearchWrapper = styled.div`
   @media ${Device.desktop} {
     flex-flow: row nowrap;
     justify-content: center;
-    width: 51rem;
   }
   @media ${Device.mobile} {
     max-width: 30rem;
@@ -79,6 +77,7 @@ const SearchWrapper = styled.div`
     display: flex;
     flex-flow: row nowrap;
     gap: ${margin.normal};
+    align-items: center;
 
     @media ${Device.mobile} {
       margin-top: ${margin.normal};
@@ -108,8 +107,9 @@ export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onInfoClicked, on
             disabled={isLoading}
           />
           <div className="mobile-apps">
-            <AppStoreLink height={56} />
-            <GooglePlayLink height={56} />
+            <AppStoreLink height={40} />
+            <GooglePlayLink height={40} />
+            <HuaweiAppGalleryLink height={56} />
           </div>
         </SearchWrapper>
       </Container>

@@ -11,5 +11,5 @@ export function tagUrl(label: string, query: any) {
     tags = tags.filter((tag: string) => tag !== label);
   }
   const encodedQuery = encodeQueryParams({ tags: withDefault(ArrayParam, []) }, { tags });
-  return `${urls.pola.news}?${stringify(encodedQuery)}`;
+  return `${urls.pola.news()}?${stringify(encodedQuery)}`;
 }

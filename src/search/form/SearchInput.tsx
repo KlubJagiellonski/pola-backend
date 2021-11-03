@@ -7,6 +7,7 @@ import { SecondaryButton } from '../../components/buttons/SecondaryButton';
 import { Device, fontSize, color, padding, margin, px } from '../../styles/theme';
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
+import InfoIcon from '../../assets/info-2.png';
 
 const FormSearch = styled.div`
   display: flex;
@@ -20,11 +21,12 @@ const FormSearch = styled.div`
 `;
 
 const InputElement = styled.div`
-  padding-left: 0.25em;
+  padding: 0.25rem;
   width: 100%;
   min-width: 28em;
   height: 56px;
   border-radius: 3em;
+  box-sizing: border-box;
 `;
 
 const InputSection = styled(InputElement)`
@@ -50,7 +52,7 @@ const InputText = styled.input`
   font-size: ${fontSize.normal};
   width: 100%;
   height: 100%;
-  padding: 0 ${padding.small} 0 ${padding.normal};
+  padding: 0 ${padding.small};
 
   &:focus,
   &:active {
@@ -70,11 +72,11 @@ const InputIconSection = styled.div`
   padding: ${padding.tiny} 0;
 `;
 
-const InputIcon = styled.div<{ size: number; imagePath: string }>`
+const InputIcon = styled.div<{ width: number; imagePath: string }>`
   border-radius: 50%;
   background-color: ${color.background.red};
-  width: ${(props) => px(props.size)};
-  height: ${(props) => px(props.size)};
+  width: ${(props) => px(props.width)};
+  height: 100%;
   margin-right: ${margin.tiny};
   display: flex;
   align-items: center;
@@ -83,29 +85,7 @@ const InputIcon = styled.div<{ size: number; imagePath: string }>`
   background-image: url(${(props) => props.imagePath});
   background-position: center;
   background-repeat: no-repeat;
-`;
-
-const InfoIcon = styled.div<{ width: number; height: number }>`
-  display: flex;
-  flex: 1 1 ${(props) => px(props.width)};
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  margin-right: ${margin.tiny};
-  background-color: ${color.background.red};
-  width: ${(props) => px(props.width)};
-  height: ${(props) => px(props.height)};
-  color: ${color.text.light};
-  cursor: pointer;
-
-  h1,
-  h2,
-  h3,
-  p,
-  span {
-    margin-top: 6px;
-    line-height: 0;
-  }
+  background-size: contain;
 `;
 
 const SubmitButton = styled(SecondaryButton)`
@@ -174,6 +154,7 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
       {disabled && <InputOverlay />}
 
       <InputSection>
+        <InputIcon imagePath={InfoIcon} width={55} onClick={onInfoClicked} />
         <InputText
           autoFocus
           ref={inputRef}
@@ -184,11 +165,8 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
           disabled={disabled}
         />
         <InputIconSection>
-          <InfoIcon width={50} height={48} onClick={onInfoClicked}>
-            <h2>i</h2>
-          </InfoIcon>
-          {showBarcodeIcon && <InputIcon imagePath={Kod} size={48} />}
-          {showVoiceInputIcon && <InputIcon imagePath={Microphone} size={48} />}
+          {showBarcodeIcon && <InputIcon imagePath={Kod} width={48} />}
+          {showVoiceInputIcon && <InputIcon imagePath={Microphone} width={48} />}
         </InputIconSection>
       </InputSection>
       {showSubmitButton && (

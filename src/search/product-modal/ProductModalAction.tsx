@@ -14,6 +14,7 @@ const Container = styled.div<{ theme?: ITheme }>`
   flex-flow: row nowrap;
   padding: ${padding.normal} ${padding.normal};
   align-items: center;
+  justify-content: space-between;
   border-top: 1px solid ${color.background.transparencyGrey};
   background-color: ${(props) => props.theme?.backgroundColor || color.background.white};
 

@@ -12,6 +12,7 @@ export const LogoColor = styled.div`
   border-radius: 50%;
   padding: ${padding.normal};
   margin-top: 60px;
+  box-shadow: 0 10px 10px -9px ${color.background.secondary};
 `;
 
 export const PolaLogo: React.FC<IPolaLogo> = ({ size = 80 }) => (

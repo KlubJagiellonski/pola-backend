@@ -70,7 +70,7 @@ const BusinessPage = (props: IBusinessPage) => {
               6 lat działania aplikacji, to także sześć lat analizy zachowań i nawyków konsumenckich. Wiemy jakich
               informacji potrzebują Polacy podczas codziennych zakupów i posiadamy odpowiednie narzędzia, by tych
               informacji dostarczać.{' '}
-              <a href={urls.external.openSearch.href} target="__blank">
+              <a href={urls.external.links.openSearch.href} target="__blank">
                 91% Polaków chce znać pochodzenie produktów przed podjęciem decyzji zakupowej
               </a>
               . Posiadając liczne i zaangażowane grono odbiorców, znamy preferencje konsumentów i chętnie przeniesiemy

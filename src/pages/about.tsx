@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
@@ -10,8 +9,6 @@ import { PageType, urls } from '../domain/website';
 import { PageSection } from '../layout/PageSection';
 import { Text, TitleSection } from '../styles/GlobalStyle.css';
 import { ColumnsLayout, ContentColumn } from '../layout/ColumnsLayout';
-import { PartnerService } from '../domain/partners/partners-service';
-import { PartnersList } from '../components/partners/PartnersList';
 import { padding } from '../styles/theme';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
 import Faq from '../components/Faq';
@@ -74,27 +71,23 @@ const AboutPage = (props: IAboutPage) => {
             <Text>
               Staramy się być maksymalnie przejrzyści w naszych działaniach. Całość kodu źródłowego serwisu udostępniamy
               na zasadach otwartego oprogramowania na{' '}
-              <a href={urls.external.polaGitHub.href} target="__blank">
+              <a href={urls.external.links.polaGitHub.href} target="__blank">
                 koncie Klubu Jagiellońskiego
               </a>{' '}
               w serwisie GitHub. Wktórce planujemy udostępnić w Internecie całość bazy danych producentów wraz z
               historią zmian i źródłami, na podstawie których podejmujemy decyzję o liczbie punktów, które im
               przyznajemy. Działamy zgodnie z naszą{' '}
-              <a href={urls.external.polaPrivacyPolicy.href} target="__blank">
+              <a href={urls.external.links.polaPrivacyPolicy.href} target="__blank">
                 polityką prywatności
               </a>
               .
             </Text>
           </PageSection>
-          <PageSection>
-            <TitleSection>Partnerzy</TitleSection>
-            <PartnersList partners={PartnerService.getAll()} />
-          </PageSection>
           <Faq />
         </ContentColumn>
         <ContentColumn hideOnMobile={true} fraction={40}>
           <ImageContainer>
-            <ResponsiveImage imageSrc="sok.png" />
+            <ResponsiveImage imageSrc="3-bez_loga.png" />
           </ImageContainer>
         </ContentColumn>
       </ColumnsLayout>

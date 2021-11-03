@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { color, fontSize, Device, padding, margin } from './../styles/theme';
 import { TitleSection } from './../styles/GlobalStyle.css';
-import { GooglePlayLink, AppStoreLink } from './links';
+import { GooglePlayLink, AppStoreLink, HuaweiAppGalleryLink } from './links';
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,11 +27,13 @@ const DownoladTitle = styled(TitleSection)`
   font-size: ${fontSize.normal};
 
   @media ${Device.mobile} {
-    margin: ${margin.small}
+    margin: ${margin.small};
   }
 `;
 
 const DownloadLinks = styled.div`
+  display: flex;
+  align-items: center;
   a {
     padding: ${padding.small};
 
@@ -54,6 +56,7 @@ const Download = () => {
       <DownloadLinks>
         <GooglePlayLink />
         <AppStoreLink />
+        <HuaweiAppGalleryLink />
       </DownloadLinks>
     </Wrapper>
   );

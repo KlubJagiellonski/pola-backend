@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IPartner } from '../../domain/website';
+import { IPartner } from '../../domain/partners';
 import { ResponsiveImage } from '../images/ResponsiveImage';
 
 const Tile = styled.div`
@@ -10,13 +10,26 @@ const Tile = styled.div`
   .title {
     width: 100%;
   }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  padding: 0 2rem;
+  margin-bottom: 1rem;
 `;
 
 export const PartnerTile: React.FC<IPartner> = ({ name, imageSrc, description, sourceUrl }) => (
   <Tile>
     <a href={sourceUrl} target="__blank">
-      <ResponsiveImage imageSrc={imageSrc} />
+      <ImageContainer>
+        <ResponsiveImage imageSrc={imageSrc} />
+      </ImageContainer>
+      <p className="title">{description}</p>
     </a>
-    <p className="title">{description}</p>
   </Tile>
 );

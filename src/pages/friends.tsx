@@ -126,7 +126,7 @@ const FriendsPage = (props: IFriendsPage) => {
             dzięki stworzeniu silnego środowiska społeczno-biznesowego, które poprzez kooperację i wspólne działania
             przyczyni się do popularyzacji mody na patriotyzm gospodarczy.
           </Text>
-          <ResponsiveImage imageSrc="szproty.png" />
+          <ResponsiveImage imageSrc="szproty-2.png" />
         </Info>
         <Info color={color.background.transparencyGrey}>
           <TitleInfo>Co zyskuje przyjaciel Poli?</TitleInfo>

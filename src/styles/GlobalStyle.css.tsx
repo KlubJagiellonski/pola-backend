@@ -1,15 +1,17 @@
 import styled from 'styled-components';
 import { color, fontSize, margin } from './theme';
 
-type Color = {
-  color: string;
+type IWrapperSection = {
+  color?: string;
+  borderColor?: string;
 };
 
-export const WrapperSection = styled.div`
+export const WrapperSection = styled.div<IWrapperSection>`
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  background: ${({ color }: Color) => color};
+  background: ${({ color }) => color};
+  border-right: ${({ borderColor }) => (borderColor ? `8px solid ${borderColor}` : 'none')};
   width: 100%;
 `;
 

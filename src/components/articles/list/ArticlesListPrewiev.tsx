@@ -45,7 +45,7 @@ export const ArticlesListPreview: React.FC<IArticlesList> = ({ articles }) => {
             tag={article.tag}
           />
         ))}
-      <Link to={urls.pola.news}>
+      <Link to={urls.pola.news()}>
         <ArticlesButton label="ZOBACZ POPRZEDNIE ARTYKUŁY" styles={ButtonThemes[ButtonFlavor.RED]} />
       </Link>
     </Wrapper>

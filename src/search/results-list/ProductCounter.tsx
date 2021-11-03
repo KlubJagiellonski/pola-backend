@@ -6,8 +6,8 @@ const CounterText = styled.p<{ fontWeight: string }>`
 `;
 
 interface IProductCounter {
-  phrase: string;
-  amount: number;
+  phrase?: string;
+  amount?: number;
 }
 
 export const ProductCounter: React.FC<IProductCounter> = ({ phrase, amount }) => {

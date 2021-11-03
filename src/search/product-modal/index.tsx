@@ -45,10 +45,10 @@ interface IProductModal {
 
 export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
   const handleReport = () => {
-    openNewTab(urls.external.openFoods);
+    openNewTab(urls.external.links.openFoods);
   };
   const handleDownloadApp = () => {
-    openNewTab(urls.external.polaGooglePlay);
+    openNewTab(urls.external.links.polaGooglePlay);
   };
   const redirectToFriends = () => {
     onClose();

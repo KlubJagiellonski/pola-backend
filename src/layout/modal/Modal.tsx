@@ -14,11 +14,10 @@ const ModalLayout = styled.div`
   align-items: center;
 `;
 
-const ModalContainer = styled(CustomScrollbarDiv)<{ height?: string }>`
+const ModalContainer = styled.div<{ height?: string }>`
   background-color: ${color.background.white};
   position: absolute;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-flow: column;
   min-height: 12rem;
@@ -37,16 +36,18 @@ const ModalContainer = styled(CustomScrollbarDiv)<{ height?: string }>`
     }
   }
 
-  .content {
-    flex: 1 1 100%;
-  }
-
   @media ${Device.phone} {
     width: calc(100% - 2 * ${padding.small});
   }
   @media ${Device.desktop} {
     width: calc(100% - 2 * ${padding.big});
   }
+`;
+
+const ModalContent = styled(CustomScrollbarDiv)`
+  flex: 1 1 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const ModalOverlay = styled.div`
@@ -70,7 +71,7 @@ export const Modal: React.FC<IModal> = ({ title, onClose, children, styles }) =>
     <ModalOverlay />
     <ModalContainer height={styles?.height}>
       <ModalHeader title={title} onClose={onClose} />
-      <div className="content">{children}</div>
+      <ModalContent>{children}</ModalContent>
     </ModalContainer>
   </ModalLayout>
 );

@@ -8,14 +8,13 @@ interface IPartnersList {
   partners: IPartner[];
 }
 
-const List = styled.ul`
+const List = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  list-style: none;
   align-items: center;
   margin: 0 auto;
   padding: 0;
-  gap: ${padding.big};
+  gap: 10rem;
 
   li {
     flex: 1;
@@ -30,15 +29,14 @@ const List = styled.ul`
     padding: 0;
     flex-flow: column;
     max-width: 20em;
+    gap: 1rem;
   }
 `;
 
 export const PartnersList: React.FC<IPartnersList> = ({ partners }) => (
   <List>
     {partners.map((partner) => (
-      <li key={partner.name}>
-        <PartnerTile {...partner} />
-      </li>
+      <PartnerTile key={partner.name} {...partner} />
     ))}
   </List>
 );
