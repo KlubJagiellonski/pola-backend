@@ -148,7 +148,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
 
         self.assertEqual(200, response.status_code, response.content)
         self.assertEqual(
-            f"TEST\nMarki naależace do firmy: {brands[0]}, {brands[1]}, {brands[2]}, {brands[3]}, {brands[4]}.",
+            f"TEST\nMarki należace do firmy: {brands[0]}, {brands[1]}, {brands[2]}, {brands[3]}, {brands[4]}.",
             json.loads(response.content)['companies'][0]['description'],
         )
 
@@ -236,7 +236,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         "plScore": 70,
                         "is_friend": True,
                         "friend_text": "To jest przyjaciel Poli",
-                        "description": f"TEST\nMarka naależaca do firmy: {str(b)}.",
+                        "description": f"TEST\nMarka należaca do firmy: {str(b)}.",
                         "sources": {"TEST": "BBBB"},
                     },
                 ],
