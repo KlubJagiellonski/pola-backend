@@ -75,14 +75,7 @@ jobs:
       uses: actions/setup-node@v2.1.5
       with:
         node-version: 14.x
-    - name: 🗂 Cache npm files
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        cache: 'npm'
     - name: 🟢 Install dependencies
       run: npm ci
     # - name: 🔎 Run the tests
@@ -95,25 +88,26 @@ jobs:
         name: app
         path: ./public
         if-no-files-found: error
-    - name: Configure AWS credentials
+    - name: 🟠 Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       if: |
         github.repository == 'KlubJagiellonski/pola-web' && 
         (
         (github.event_name == 'pull_request' && github.event.sender.type == 'User') ||
-        (github.event_name == 'push' && github.ref == 'refs/heads/master')
+        (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+        (github.event_name == 'push' && github.ref == 'refs/heads/prod')
         )
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-    - name: "Upload staging to AWS S3"
+    - name: 🚀 Upload production app to AWS S3
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/master'
       run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_STAG}/"
-    - name: "Upload staging to AWS S3"
+    - name: 🚀 Upload staging app to AWS S3
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/prod'
       run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_PROD}/"
-    - name: "Upload preview to AWS S3"
+    - name: 🚀 Upload preview app to AWS S3
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender.type == 'User'
       run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_PREVIEW}/${PREVIEW_DIR}"
     - name: Set success deployment status
