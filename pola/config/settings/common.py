@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount',  # registration
     'reversion',
     'django_filters',
+    'corsheaders',
 )
 
 # Apps specific for this project go here.
@@ -69,7 +70,7 @@ MIDDLEWARE = (
     # Make sure djangosecure.middleware.SecurityMiddleware is listed first
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'corsheaders',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
