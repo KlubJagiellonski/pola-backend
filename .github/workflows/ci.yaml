@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master,  prod ]
   pull_request:
     branches: [ master ]
 
@@ -62,9 +62,9 @@ jobs:
         echo "PREVIEW_DIR=${PREVIEW_DIR}" >> $GITHUB_ENV
         echo "PUBLIC_URL=${PUBLIC_URL}" >> $GITHUB_ENV
     - name: "Set public URL"
-      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/prod'
       run: |
-        echo 'PUBLIC_URL=https://klubjagiellonski.github.io/pola-web/' >> $GITHUB_ENV
+        echo 'PUBLIC_URL=https://www.pola-app.pl/' >> $GITHUB_ENV
     - name: "Set public URL"
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/master'
       run: |
@@ -110,6 +110,9 @@ jobs:
     - name: "Upload staging to AWS S3"
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/master'
       run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_STAG}/"
+    - name: "Upload staging to AWS S3"
+      if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/prod'
+      run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_PROD}/"
     - name: "Upload preview to AWS S3"
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'pull_request' && github.event.sender.type == 'User'
       run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_PREVIEW}/${PREVIEW_DIR}"
