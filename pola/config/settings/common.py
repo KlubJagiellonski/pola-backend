@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount',  # registration
     'reversion',
     'django_filters',
+    'corsheaders',
 )
 
 # Apps specific for this project go here.
@@ -69,6 +70,7 @@ MIDDLEWARE = (
     # Make sure djangosecure.middleware.SecurityMiddleware is listed first
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -314,5 +316,19 @@ else:
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 STATIC_URL = f'http://localhost:9000/static/{AWS_STORAGE_BUCKET_NAME}/'
 
-# Feature-flags
+# CORS CONFIGURATION
+# ------------------------
+# For details, see: https://github.com/adamchainz/django-cors-headers
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://localhost:8000",
+    "https://www.pola-app.pl",
+    "https://pola-staging.herokuapp.com",
+    "http://kj-pola-app-web-preview.s3-website.eu-central-1.amazonaws.com",
+]
+
+CORS_URLS_REGEX = r"^/a/.*$"
+
+# APP CONFIGURATION
+# ------------------------
 ENABLE_POLA_WEB_CUSTOMIZATION = env.bool('POLA_APP_ENABLE_POLA_WEB_CUSTOMIZATION', False)  # noqa: F405
