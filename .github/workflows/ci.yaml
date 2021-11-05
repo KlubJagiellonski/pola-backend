@@ -101,10 +101,10 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-    - name: 🚀 Upload production app to AWS S3
+    - name: 🚀 Upload staging app to AWS S3
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/master'
       run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_STAG}/"
-    - name: 🚀 Upload staging app to AWS S3
+    - name: 🚀 Upload production app to AWS S3
       if: github.repository == 'KlubJagiellonski/pola-web' && github.event_name == 'push' && github.ref == 'refs/heads/prod'
       run: aws s3 sync --delete ./public/ "s3://${AWS_S3_BUCKET_PROD}/"
     - name: 🚀 Upload preview app to AWS S3
