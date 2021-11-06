@@ -79,6 +79,7 @@ export const urls: WebsiteMap = {
       githubAndroid: new URL('https://github.com/KlubJagiellonski/pola-android/issues'),
       githubIos: new URL('https://github.com/KlubJagiellonski/pola-ios/issues'),
       githubWeb: new URL('https://github.com/KlubJagiellonski/pola-backend/issues'),
+      github: new URL('https://github.com/KlubJagiellonski'),
       pge: new URL('https://www.gkpge.pl/'),
       polskieKupujeTo: new URL('https://polskiekupujeto.pl'),
       form: new URL(
