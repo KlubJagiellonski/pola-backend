@@ -18,7 +18,7 @@ django-allauth==0.45.0
 django-anymail==8.4
 django-autocomplete-light==3.8.2
 django-autoslug==1.9.8
-django-braces==1.14.0
+django-braces==1.15.0
 django-cors-headers==3.10.0
 django-crispy-forms==1.13.0
 django-environ==0.8.1
