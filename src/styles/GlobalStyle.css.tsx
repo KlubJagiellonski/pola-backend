@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { color, fontSize, margin } from './theme';
+import { color, fontSize, margin, evalPx } from './theme';
 
 type IWrapperSection = {
   color?: string;
@@ -24,13 +24,20 @@ export const TitleSection = styled.p`
   color: ${color.text.primary};
 `;
 
-export const Text = styled.p`
+interface IText {
+  styles?: {
+    maxWidth?: number | string;
+  };
+}
+
+export const Text = styled.p<IText>`
   margin-top: 5px;
   padding: 0;
   font-family: 'Merriweather';
   font-size: ${fontSize.small};
   color: ${color.text.secondary};
   line-height: 1rem;
+  max-width: ${({ styles }) => evalPx(styles?.maxWidth)};
 
   font-feature-settings: 'kern', 'liga', 'clig', 'calt';
 

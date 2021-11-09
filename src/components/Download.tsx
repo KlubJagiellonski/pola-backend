@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { color, fontSize, Device, padding, margin } from './../styles/theme';
 import { TitleSection } from './../styles/GlobalStyle.css';
-import { GooglePlayLink, AppStoreLink, HuaweiAppGalleryLink } from './links';
+import { MobileApps } from './MobileApps';
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,33 +31,11 @@ const DownoladTitle = styled(TitleSection)`
   }
 `;
 
-const DownloadLinks = styled.div`
-  display: flex;
-  align-items: center;
-  a {
-    padding: ${padding.small};
-
-    img {
-      @media ${Device.mobile} {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        width: 8em;
-      }
-    }
-  }
-`;
-
 const Download = () => {
   return (
     <Wrapper>
       <DownoladTitle>APLIKACJA POLA</DownoladTitle>
-      <DownloadLinks>
-        <GooglePlayLink />
-        <AppStoreLink />
-        <HuaweiAppGalleryLink />
-      </DownloadLinks>
+      <MobileApps />
     </Wrapper>
   );
 };

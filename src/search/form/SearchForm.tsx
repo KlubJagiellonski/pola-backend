@@ -4,7 +4,7 @@ import { SearchInput } from './SearchInput';
 import ErrorBoundary from '../../utils/error-boundary';
 import { Device, fontSize, color, margin, lineHeight } from '../../styles/theme';
 import { TitleSection } from '../../styles/GlobalStyle.css';
-import { GooglePlayLink, AppStoreLink, HuaweiAppGalleryLink } from '../../components/links';
+import { MobileApps } from '../../components/MobileApps';
 
 const Container = styled.div`
   display: flex;
@@ -107,9 +107,7 @@ export const SearchForm: React.FC<ISearchForm> = ({ isLoading, onInfoClicked, on
             disabled={isLoading}
           />
           <div className="mobile-apps">
-            <AppStoreLink height={40} />
-            <GooglePlayLink height={40} />
-            <HuaweiAppGalleryLink height={56} />
+            <MobileApps size={48} />
           </div>
         </SearchWrapper>
       </Container>

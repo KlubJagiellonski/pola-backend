@@ -1,5 +1,40 @@
 import React from 'react';
-import { urls } from '../../domain/website';
+import styled from 'styled-components';
+import { urls } from '../domain/website';
+import { AppSettings } from '../state/app-settings';
+import { Device, padding } from './../styles/theme';
+
+const DownloadLinks = styled.div`
+  display: flex;
+  align-items: center;
+  a {
+    padding: ${padding.small};
+
+    img {
+      @media ${Device.mobile} {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 8em;
+      }
+    }
+  }
+`;
+
+interface IMobileApps {
+  size?: number;
+}
+
+export const MobileApps: React.FC<IMobileApps> = ({ size = 64 }) => {
+  return (
+    <DownloadLinks>
+      {AppSettings.mobile.SHOW_APPLE_STORE_LINK && <AppStoreLink height={size} />}
+      {AppSettings.mobile.SHOW_GOOGLE_PLAY_LINK && <GooglePlayLink height={size} />}
+      {AppSettings.mobile.SHOW_HUAWEI_GALLERY_LINK && <HuaweiAppGalleryLink height={size * 1.4} />}
+    </DownloadLinks>
+  );
+};
 
 interface IIconLink {
   height?: number;

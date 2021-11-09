@@ -3,6 +3,7 @@ import { EAN, IProductEAN, Product } from '../../domain/products';
 import { ProductEANService } from '../../domain/products/ean-service';
 import { ProductService } from '../../domain/products/search-service';
 import { ErrorHandler, EmptyResponseDataError, ProductNotFoundError } from '../../services/api-errors';
+import { isNotEmpty } from '../../utils/strings';
 import { IPolaState } from '../types';
 import { ProductSelectors } from './product-selectors';
 import * as actions from './search-actions';
@@ -16,6 +17,10 @@ export const searchDispatcher = {
    */
   invokeSearch: (phrase: string) => async (dispatch: Dispatch, getState: () => IPolaState) => {
     try {
+      if (!isNotEmpty(phrase)) {
+        throw new Error('search phrase is empty');
+      }
+
       const {
         search: { stateName },
       } = getState();

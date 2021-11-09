@@ -8,6 +8,9 @@ import { Device, fontSize, color, padding, margin, px } from '../../styles/theme
 import Kod from '../../assets/kod.svg';
 import Microphone from '../../assets/microphone.svg';
 import InfoIcon from '../../assets/info-2.png';
+import { AppSettings } from '../../state/app-settings';
+import { isNotEmpty } from '../../utils/strings';
+import { keys } from '../../utils/keyboard';
 
 const FormSearch = styled.div`
   display: flex;
@@ -18,6 +21,10 @@ const FormSearch = styled.div`
   @media ${Device.mobile} {
     flex-direction: column;
   }
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
 `;
 
 const InputElement = styled.div`
@@ -41,7 +48,7 @@ const InputSection = styled(InputElement)`
 
 const InputOverlay = styled(InputElement)`
   background-color: black;
-  opacity: 0.33;
+  opacity: 0.1;
   position: absolute;
   z-index: 10;
 `;
@@ -90,7 +97,8 @@ const InputIcon = styled.div<{ width: number; imagePath: string }>`
 
 const SubmitButton = styled(SecondaryButton)`
   margin-left: 15px;
-
+  height: 56px;
+  border-radius: 3em;
   @media ${Device.mobile} {
     padding: 5px 0;
     margin-left: 0;
@@ -106,40 +114,34 @@ interface ISearchInput {
   onEmptyInput: () => void;
 }
 
-const isNotEmpty = (value: string) => !!value && value.length && value.length > 0;
-
 export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, onSearch, onEmptyInput }) => {
   const [phrase, setPhrase] = React.useState<string>('');
-  const hasPhrase = !!phrase && phrase.length > 0;
-  const showSubmitButton = false;
-  const showBarcodeIcon = false;
-  const showVoiceInputIcon = false;
+  const hasPhrase = isNotEmpty(phrase);
+  const submitButtonTheme = disabled || !hasPhrase ? ButtonThemes[ButtonFlavor.GRAY] : ButtonThemes[ButtonFlavor.RED];
   let inputRef = useRef<HTMLInputElement>(null);
-
-  const onPhraseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handlePhraseChange(event.currentTarget.value);
+  const search = () => {
+    if (isNotEmpty(phrase)) {
+      onSearch(phrase);
+    } else {
+      onEmptyInput();
+    }
   };
 
-  const handlePhraseChange = debounce(
-    (value: string) => {
-      setPhrase(value);
-      if (isNotEmpty(value)) {
-        onSearch(value);
-      } else {
-        onEmptyInput();
-      }
-    },
-    500,
-    {
-      leading: false,
-      trailing: true,
-    }
-  );
+  const handlePhraseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    setPhrase(value);
 
-  const handleSearch = () => onSearch(phrase);
+    if (AppSettings.search.SEARCH_ON_INPUT_CHANGE) {
+      search();
+    }
+  };
+
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === 13) {
-      onSearch(phrase);
+    if (hasPhrase) {
+      if (event.key === keys.ENTER.name || event.keyCode === keys.ENTER.code) {
+        const inputPhrase = event.currentTarget.value;
+        onSearch(inputPhrase);
+      }
     }
   };
 
@@ -151,30 +153,31 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
 
   return (
     <FormSearch>
-      {disabled && <InputOverlay />}
-
-      <InputSection>
-        <InputIcon imagePath={InfoIcon} width={55} onClick={onInfoClicked} />
-        <InputText
-          autoFocus
-          ref={inputRef}
-          placeholder="nazwa produktu / producent / kod EAN"
-          type="text"
-          onChange={onPhraseChange}
-          onKeyDown={handleEnter}
-          disabled={disabled}
-        />
-        <InputIconSection>
-          {showBarcodeIcon && <InputIcon imagePath={Kod} width={48} />}
-          {showVoiceInputIcon && <InputIcon imagePath={Microphone} width={48} />}
-        </InputIconSection>
-      </InputSection>
-      {showSubmitButton && (
+      <InputWrapper>
+        {disabled && <InputOverlay />}
+        <InputSection>
+          <InputIcon imagePath={InfoIcon} width={55} onClick={onInfoClicked} />
+          <InputText
+            autoFocus
+            ref={inputRef}
+            placeholder="nazwa produktu / producent / kod EAN"
+            type="text"
+            onChange={handlePhraseChange}
+            onKeyDown={handleEnter}
+            disabled={disabled}
+          />
+          <InputIconSection>
+            {AppSettings.search.SHOW_BARCODE_ICON && <InputIcon imagePath={Kod} width={48} />}
+            {AppSettings.search.SHOW_VOICE_INPUT_ICON && <InputIcon imagePath={Microphone} width={48} />}
+          </InputIconSection>
+        </InputSection>
+      </InputWrapper>
+      {AppSettings.search.SHOW_SUBMIT_BUTTON && (
         <SubmitButton
           label="Sprawdź"
-          styles={ButtonThemes[ButtonFlavor.RED]}
-          disabled={!hasPhrase}
-          onClick={handleSearch}
+          styles={{ ...submitButtonTheme, lowercase: true }}
+          disabled={disabled || !hasPhrase}
+          onClick={search}
         />
       )}
     </FormSearch>

@@ -17,7 +17,13 @@ import Placeholder from '../components/Placeholder';
 import { ExternalLink } from '../utils/browser/links';
 
 const Wrapper = styled.div`
+  text-align: center;
   margin-top: ${margin.veryBig};
+`;
+
+const TextWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const TextSection = styled(Text)`
@@ -89,11 +95,16 @@ const PartnersPage = (props: IPartnersPage) => {
               </ExternalLink>
             </li>
           </ImageSection>
-          <TextSection>
-            Celem zainicjowanej przez Pracowników oraz Grupę Kapitałową PGE kampanii społecznej POLSKIE – KUPUJĘ TO!
-            jest zachęcanie Polaków do kupowania rodzimych produktów i usług. W ramach tego przedsięwzięcia PGE wspiera
-            rozwój aplikacji Pola.
-          </TextSection>
+          <TextWrapper>
+            <TextSection styles={{ maxWidth: '32rem' }}>
+              Celem zainicjowanej przez Pracowników oraz Grupę Kapitałową PGE kampanii społecznej&nbsp;
+              <ExternalLink url={urls.external.links.polskieKupujeTo}>
+                <span>POLSKIE – KUPUJĘ TO!</span>
+              </ExternalLink>
+              &nbsp;jest zachęcanie Polaków do kupowania rodzimych produktów i usług. W ramach tego przedsięwzięcia PGE
+              wspiera rozwój aplikacji Pola.
+            </TextSection>
+          </TextWrapper>
         </Wrapper>
       </PageSection>
       <PageSection>

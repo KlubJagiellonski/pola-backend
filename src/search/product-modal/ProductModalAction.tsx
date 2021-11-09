@@ -23,16 +23,26 @@ const Container = styled.div<{ theme?: ITheme }>`
   }
 `;
 
-interface IProductModalAction {
-  actionName: string;
-  theme?: ITheme;
-
-  actionCallback: () => void;
+interface IModalAction {
+  label: string;
+  callback: () => void;
 }
 
-export const ProductModalAction: React.FC<IProductModalAction> = ({ actionName, actionCallback, theme, children }) => (
+interface IProductModalAction {
+  action?: IModalAction;
+  theme?: ITheme;
+}
+
+export const ProductModalAction: React.FC<IProductModalAction> = ({ action, theme, children }) => (
   <Container theme={theme}>
     <div className="content">{children}</div>
-    <PrimaryButton styles={theme?.buttonTheme} label={actionName} className="action-btn" onClick={actionCallback} />
+    {action && (
+      <PrimaryButton
+        styles={theme?.buttonTheme}
+        label={action.label}
+        className="action-btn"
+        onClick={action.callback}
+      />
+    )}
   </Container>
 );

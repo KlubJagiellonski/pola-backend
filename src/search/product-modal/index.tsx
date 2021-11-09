@@ -10,6 +10,7 @@ import { navigateTo, openNewTab } from '../../utils/browser';
 import { ProductDetails } from './ProductDetails';
 import { urls } from '../../domain/website';
 import { LinkButton } from '../../components/buttons/LinkButton';
+import { MobileApps } from '../../components/MobileApps';
 
 const Actions = styled.div`
   display: flex;
@@ -45,10 +46,8 @@ interface IProductModal {
 
 export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
   const handleReport = () => {
-    openNewTab(urls.external.links.openFoods);
-  };
-  const handleDownloadApp = () => {
-    openNewTab(urls.external.links.polaGooglePlay);
+    onClose();
+    navigateTo(urls.pola.home('contact'));
   };
   const redirectToFriends = () => {
     onClose();
@@ -69,19 +68,14 @@ export const ProductModal: React.FC<IProductModal> = ({ product, onClose }) => {
             <LinkButton label="Potrzebujemy 1 ZŁ" styles={ButtonThemes.Red} onClick={handleDonate} />
           )}
         </Actions>
-        <ProductModalAction actionName={product.report.button_text} actionCallback={handleReport}>
+        <ProductModalAction action={{ label: product.report.button_text, callback: handleReport }}>
           <span>Posiadasz aktualne dane na temat tego produktu?</span>
         </ProductModalAction>
         <ProductModalAction
-          theme={{ backgroundColor: color.background.white, buttonTheme: ButtonThemes[ButtonFlavor.RED] }}
-          actionName="Pobierz"
-          actionCallback={handleDownloadApp}>
+          theme={{ backgroundColor: color.background.white, buttonTheme: ButtonThemes[ButtonFlavor.RED] }}>
           <AppDownload>
-            <h4>Skanuj kody w aplikacji:</h4>
-            <div className="app">
-              <div className="image" />
-              <span>Pola. Zabierz ją na zakupy</span>
-            </div>
+            <p>Zabierz Polę na zakupy! Skanuj kody w aplikacji:</p>
+            <MobileApps size={64} />
           </AppDownload>
         </ProductModalAction>
       </Modal>

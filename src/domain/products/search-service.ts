@@ -4,6 +4,7 @@ import { ApiAdapter } from '../../services/api-adapter';
 import config from '../../app-config.json';
 import { InvalidSearchResultError } from '../../services/api-errors';
 import { ISearchResultPage } from '../../state/search/search-reducer';
+import { isNotEmpty } from '../../utils/strings';
 
 export interface ISearchError {
   type: string;
@@ -31,20 +32,23 @@ export class ProductService extends ApiAdapter {
 
   public async searchProducts(phrase: string, token?: string) {
     try {
-      const searchQuery = this.buildSearchQuery(phrase, token);
-      const response = await axios.get<ISearchSuccessResponse>(searchQuery);
+      if (isNotEmpty(phrase)) {
+        const searchQuery = this.buildSearchQuery(phrase, token);
+        const response = await axios.get<ISearchSuccessResponse>(searchQuery);
 
-      if (!response) {
-        throw new Error('Response in empty');
-      }
-      if (response instanceof Error) {
-        throw new Error('Got error response');
-      }
-      if (!this.isValidSearchResults(response)) {
-        throw new InvalidSearchResultError();
-      }
+        if (!response) {
+          throw new Error('Response in empty');
+        }
+        if (response instanceof Error) {
+          throw new Error('Got error response');
+        }
+        if (!this.isValidSearchResults(response)) {
+          throw new InvalidSearchResultError();
+        }
 
-      return response.data;
+        return response.data;
+      }
+      throw new Error('cannot search for empty phrase');
     } catch (error: unknown) {
       const apiError = this.handleError(error);
       throw apiError;

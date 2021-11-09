@@ -83,3 +83,6 @@ export type pixels = number;
  * @returns string for CSS
  */
 export const px = (value: pixels): string => value + 'px';
+
+export const evalPx = (value?: string | number) =>
+  value ? (typeof value === 'string' ? value : px(value)) : undefined;
