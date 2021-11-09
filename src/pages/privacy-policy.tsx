@@ -20,7 +20,7 @@ const List = styled.ol`
   }
 `;
 const Title = styled.p``;
-const Text = styled.p`
+const Text = styled.div`
   font-weight: normal;
 `;
 const LetterList = styled.p`

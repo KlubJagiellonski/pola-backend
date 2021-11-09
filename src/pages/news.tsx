@@ -35,6 +35,7 @@ const InfoSection = styled.div`
   }
 
   @media ${Device.mobile} {
+    margin: ${margin.normal} ${margin.normal};
     flex-direction: column;
   }
 `;
