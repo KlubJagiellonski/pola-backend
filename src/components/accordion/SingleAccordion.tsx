@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
 import {
@@ -8,6 +8,7 @@ import {
   AccordionItemPanel,
 } from 'react-accessible-accordion';
 import { ISingleAccordion } from './AccordionList';
+import { fontSize } from '../../styles/theme';
 
 const ItemButton = styled(AccordionItemButton)`
   cursor: pointer;
@@ -15,10 +16,10 @@ const ItemButton = styled(AccordionItemButton)`
   width: 100%;
   text-align: left;
   border: none;
-  font-size: 14px;
+  font-size: ${fontSize.small};
   font-weight: bolder;
 
-  ::before{
+  ::before {
     display: inline-block;
     content: '';
     height: 7px;
@@ -29,10 +30,11 @@ const ItemButton = styled(AccordionItemButton)`
     transform: rotate(-135deg);
   }
 
-  &[aria-expanded='true']::before, &[aria-selected='true']::before{
+  &[aria-expanded='true']::before,
+  &[aria-selected='true']::before {
     transform: rotate(45deg);
   }
-`
+`;
 const fadein = keyframes`
   0% {
     opacity: 0;
@@ -44,24 +46,22 @@ const fadein = keyframes`
 
 const ItemPanel = styled(AccordionItemPanel)`
   padding: 10px;
-  font-size: 14px;
+  font-size: ${fontSize.small};
   animation: ${fadein} 0.35s ease-in;
   padding-left: 30px;
-`
+`;
 
 const SingleAccordion: React.FC<ISingleAccordion> = ({ question, answer, id }) => {
   return (
     <AccordionItem>
       <AccordionItemHeading>
-        <ItemButton>
-          {question}
-        </ItemButton>
+        <ItemButton>{question}</ItemButton>
       </AccordionItemHeading>
       <ItemPanel>
         <div dangerouslySetInnerHTML={{ __html: answer }} />
       </ItemPanel>
     </AccordionItem>
-  )
-}
+  );
+};
 
 export default SingleAccordion;

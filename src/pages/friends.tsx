@@ -21,18 +21,8 @@ const Title = styled(TitleSection)`
   text-align: center;
 `;
 
-const FullWrapperInfo = styled(WrapperSection)`
-  padding: 0 ${padding.small};
-  display: flex;
-  justify-content: center;
-`;
-
-const FullContentInfo = styled.div`
-  width: 50%;
-
-  @media ${Device.mobile} {
-    width: 100%;
-  }
+const BoldText = styled(Text)`
+  font-weight: bold;
 `;
 
 const UlSection = styled.ul`
@@ -40,6 +30,10 @@ const UlSection = styled.ul`
   font-size: ${fontSize.small};
   margin: ${margin.small};
   padding: ${padding.small};
+`;
+
+const BoldUlSection = styled(UlSection)`
+  font-weight: bold;
 `;
 
 const WrapperInfo = styled(PageSection)`
@@ -98,26 +92,26 @@ const FriendsPage = (props: IFriendsPage) => {
       <PageSection>
         <FriendsSection friends={props.friends} />
       </PageSection>
-      <FullWrapperInfo color={color.background.transparencyGrey}>
-        <FullContentInfo>
+      <PageSection style={{ paddingBottom: 0, marginBottom: 0 }}>
+        <Info style={{ paddingBottom: 0, marginBottom: 0 }}>
           <Title>Jak rozpoznać polską firmę?</Title>
-          <Text>
+          <BoldText>
             Można to ustalić weryfikując kilka czynników. Nasz program kierowany jest do przedsiębiorstw, które
             spełniają poniższe kryteria:
-          </Text>
-          <UlSection>
+          </BoldText>
+          <BoldUlSection>
             <li>są zarejestrowane w Polsce;</li>
             <li>posiadają 100% polskiego kapitału;</li>
             <li>prowadzą produkcję na terenie naszego kraju;</li>
             <li>tworzą wykwalifikowane miejsca pracy;</li>
             <li>nie są częścią zagranicznego koncernu.</li>
-          </UlSection>
-          <Text>
+          </BoldUlSection>
+          <BoldText>
             Ponadto przedsiębiorstwo musi charakteryzować się nieposzlakowaną opinią na swój temat oraz aktywnie
             angażować się w działania podejmowane na rzecz promocji patriotyzmu gospodarczego w Polsce.
-          </Text>
-        </FullContentInfo>
-      </FullWrapperInfo>
+          </BoldText>
+        </Info>
+      </PageSection>
       <WrapperInfo id="profit">
         <Info color={color.background.white}>
           <TitleInfo>Czym jest Klub Przyjaciół Poli?</TitleInfo>

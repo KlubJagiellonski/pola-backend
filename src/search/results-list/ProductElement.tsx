@@ -7,7 +7,7 @@ import { ScoreBar } from '../../components/ScoreBar';
 const ListElement = styled.li`
   max-width: 40em;
   margin-bottom: ${padding.normal};
-  background-color: ${color.background.gray};
+  background-color: ${color.background.lightGray};
   cursor: pointer;
 `;
 

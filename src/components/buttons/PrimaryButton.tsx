@@ -6,7 +6,6 @@ import { padding } from '../../styles/theme';
 const ButtonContainer = styled(Button)`
   padding: ${padding.normal};
   width: 14rem;
-  height: 3.5rem;
 `;
 
 export interface IPrimaryButton {

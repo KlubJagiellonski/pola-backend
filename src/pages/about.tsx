@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 import { PageLayout } from '../layout/PageLayout';
 import SEOMetadata from '../utils/browser/SEOMetadata';
@@ -9,10 +10,30 @@ import { PageType, urls } from '../domain/website';
 import { PageSection } from '../layout/PageSection';
 import { Text, TitleSection } from '../styles/GlobalStyle.css';
 import { ColumnsLayout, ContentColumn } from '../layout/ColumnsLayout';
-import { padding } from '../styles/theme';
+import { margin, padding } from '../styles/theme';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
 import Faq from '../components/Faq';
-import { ImageContainer } from '../layout/ImageContainer';
+
+const Image = styled.div`
+  height: 100%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: ${margin.normal};
+
+  .gatsby-image-wrapper {
+    height: 100%;
+
+    div {
+      padding-bottom: 100% !important;
+    }
+
+    picture {
+      img {
+        width: auto !important;
+      }
+    }
+  }
+`;
 
 interface IAboutPage {
   location?: Location;
@@ -83,14 +104,16 @@ const AboutPage = (props: IAboutPage) => {
               .
             </Text>
           </PageSection>
-          <Faq />
         </ContentColumn>
         <ContentColumn hideOnMobile={true} fraction={40}>
-          <ImageContainer>
+          <Image>
             <ResponsiveImage imageSrc="3-bez_loga.png" />
-          </ImageContainer>
+          </Image>
         </ContentColumn>
       </ColumnsLayout>
+      <PageSection>
+        <Faq />
+      </PageSection>
     </PageLayout>
   );
 };

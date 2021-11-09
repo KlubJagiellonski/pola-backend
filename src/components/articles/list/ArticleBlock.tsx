@@ -13,7 +13,6 @@ import { Article } from '../../../domain/articles';
 const Wrapper = styled(WrapperSection)`
   display: flex;
   flex-direction: row;
-  min-height: 16.5em;
   margin-bottom: ${margin.normal};
 
   @media ${Device.mobile} {
@@ -26,9 +25,9 @@ const ArticleImage = styled.div<{ img?: string }>`
   width: 50%;
   text-align: left;
 
-  div {
+  .gatsby-image-wrapper {
     div {
-      padding-bottom: 14em !important;
+      padding-bottom: 100% !important;
     }
   }
 
@@ -40,6 +39,8 @@ const ArticleImage = styled.div<{ img?: string }>`
 const ArticleSection = styled.div`
   width: 50%;
   margin: 0 ${margin.normal};
+  display: flex;
+  flex-direction: column;
 
   @media ${Device.mobile} {
     width: 100%;
@@ -49,7 +50,6 @@ const ArticleSection = styled.div`
 
 const ArticlesButton = styled(PrimaryButton)`
   width: 100%;
-  padding: ${padding.small};
   margin: ${margin.normal} 0;
 
   @media ${Device.desktop} {
@@ -58,6 +58,10 @@ const ArticlesButton = styled(PrimaryButton)`
 `;
 
 const Contents = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   @media ${Device.mobile} {
     p:first-child {
       -webkit-line-clamp: 8;

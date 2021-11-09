@@ -2,7 +2,8 @@ export const color = {
   background: {
     primary: '#C4C4C4',
     secondary: '#A0A0A0',
-    gray: '#FAFAFA',
+    gray: '#e5e5e5',
+    lightGray: '#FAFAFA',
     dark: '#333333',
     black: '#000000',
     red: '#D8152F',
@@ -55,8 +56,8 @@ export const margin = {
 
 export const fontSize = {
   big: '24px',
-  normal: '18px',
-  small: '14px',
+  normal: '20px',
+  small: '16px',
   tiny: '12px',
 };
 

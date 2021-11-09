@@ -12,15 +12,18 @@ interface IArticleContents {
 const ArticleContents: React.FC<IArticleContents> = ({ date, text, tag }) => {
   return (
     <>
-      <ArticleText>{text}</ArticleText>
+      <div className="article-text-container">
+        <ArticleText>{text}</ArticleText>
+      </div>
+
       {date && <ArticleDate>{getDate(date)}</ArticleDate>}
-      {tag &&
+      {tag && (
         <ArticleTag>
           <Tag label={`${tag}`} />
         </ArticleTag>
-      }
+      )}
     </>
   );
 };
 
-export default ArticleContents
+export default ArticleContents;

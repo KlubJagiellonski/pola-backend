@@ -9,9 +9,31 @@ import { PageType, urls } from '../domain/website';
 import { PageSection } from '../layout/PageSection';
 import { Text, TitleSection } from '../styles/GlobalStyle.css';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
-import { padding } from '../styles/theme';
+import { margin, padding } from '../styles/theme';
 import { ColumnsLayout, ContentColumn } from '../layout/ColumnsLayout';
-import { ImageContainer } from '../layout/ImageContainer';
+import styled from 'styled-components';
+
+const Image = styled.div`
+  height: 100%;
+
+  .gatsby-image-wrapper {
+    height: 100%;
+
+    div {
+      padding-bottom: 0 !important;
+    }
+
+    picture {
+      img {
+        width: auto !important;
+      }
+    }
+  }
+`;
+
+const Columns = styled(ColumnsLayout)`
+  margin-bottom: ${margin.normal};
+`;
 
 interface IBusinessPage {
   location?: Location;
@@ -31,9 +53,14 @@ const BusinessPage = (props: IBusinessPage) => {
   return (
     <PageLayout styles={{ marginTop: padding.big }}>
       <SEOMetadata pageTitle="Oferta Biznesowa" />
-      <ColumnsLayout>
-        <ContentColumn fraction={60}>
-          <PageSection>
+      <PageSection>
+        <Columns>
+          <ContentColumn hideOnMobile={true} fraction={40}>
+            <Image>
+              <ResponsiveImage imageSrc="pola.jpg" />
+            </Image>
+          </ContentColumn>
+          <ContentColumn fraction={60}>
             <TitleSection>Oferta biznesowa</TitleSection>
             <Text>
               Głównym celem działań biznesowych jest promocja oraz wsparcie polskich przedsiębiorstw. Będzie to możliwe
@@ -52,15 +79,17 @@ const BusinessPage = (props: IBusinessPage) => {
               firm, którym aplikacja Pola przyznaje maksymalną liczbę punktów.
             </Text>
             <Text>
-              <p>
-                <strong>
-                  <a href="https://https://klubjagiellonski.github.io/pola-web/friends">
-                    Członkowie Klubu Przyjaciół Poli posługujący się naszym znakiem towarowym
-                  </a>
-                </strong>
-              </p>
+              <strong>
+                <a href="https://https://klubjagiellonski.github.io/pola-web/friends">
+                  Członkowie Klubu Przyjaciół Poli posługujący się naszym znakiem towarowym
+                </a>
+              </strong>
             </Text>
-          </PageSection>
+          </ContentColumn>
+        </Columns>
+      </PageSection>
+      <Columns>
+        <ContentColumn fraction={60}>
           <PageSection>
             <TitleSection>Pola w sklepie internetowym</TitleSection>
             <Text>
@@ -94,14 +123,11 @@ const BusinessPage = (props: IBusinessPage) => {
           </PageSection>
         </ContentColumn>
         <ContentColumn hideOnMobile={true} fraction={40}>
-          <ImageContainer>
-            <ResponsiveImage imageSrc="pola.jpg" />
-          </ImageContainer>
-          <ImageContainer>
+          <Image>
             <ResponsiveImage imageSrc="pola-business.jpg" />
-          </ImageContainer>
+          </Image>
         </ContentColumn>
-      </ColumnsLayout>
+      </Columns>
     </PageLayout>
   );
 };

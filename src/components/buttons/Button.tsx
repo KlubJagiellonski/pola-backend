@@ -52,7 +52,7 @@ export const ButtonThemes: IButtonThemes = {
   [ButtonFlavor.LIGHT_GRAY]: {
     colors: {
       background: color.button.lightGray,
-      hover: color.background.gray,
+      hover: color.background.lightGray,
       text: color.text.primary,
     },
   },

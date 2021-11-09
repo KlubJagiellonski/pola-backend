@@ -6,7 +6,7 @@ import { Text } from '../styles/GlobalStyle.css';
 import { color } from '../styles/theme';
 import { ButtonThemes, ButtonFlavor } from '../components/buttons/Button';
 import { ResponsiveImage } from './images/ResponsiveImage';
-import { urls, hash } from '../domain/website';
+import { urls } from '../domain/website';
 import { Link } from 'gatsby';
 
 const Wrapper = styled(WrapperTeams)`

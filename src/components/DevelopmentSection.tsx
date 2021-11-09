@@ -94,25 +94,30 @@ const Container = styledContainerQuery(Wrapper)`
     min-height: 0;
     display: flex;
     flex-direction: column;
+    border-bottom: 8px solid ${color.background.red};
+    border-right: none;
   }
 
   &:container(max-width: 450px){
     min-height: 0;
     display: flex;
     flex-direction: column;
+    border-bottom: 8px solid ${color.background.red};
+    border-right: none;
 
     ${Info}{
       width: 8em;
-      height: 10em;
+      height: 9em;
       margin: 0 auto;
     }
 
     ${TextSection}{
-      padding: ${padding.normal};
+      padding: ${padding.big};
       width: auto;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
     }
 
     ${Texts}{
@@ -156,8 +161,7 @@ const DevelopmentSection = () => {
           <div className="buttons">
             <SecondaryButton
               label="Czytaj dalej..."
-              fontSize={fontSize.small}
-              styles={ButtonThemes[ButtonFlavor.RED]}
+              styles={{ ...ButtonThemes[ButtonFlavor.RED], fontSize: fontSize.small }}
               onClick={handleReadMore}
             />
           </div>

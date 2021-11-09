@@ -20,7 +20,6 @@ export const TitleSection = styled.p`
   padding: 0;
   font-size: ${fontSize.normal};
   font-weight: 700;
-  line-height: 1rem;
   color: ${color.text.primary};
 `;
 
