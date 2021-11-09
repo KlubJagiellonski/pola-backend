@@ -11,6 +11,7 @@ export enum PageType {
   CONTACT = 'contact',
   PRODUCTS = 'products',
   ERROR_404 = '404',
+  PRIVACY_POLICY = 'privacyPolicy',
 }
 
 type FriendHash = 'profit' | 'friend';
@@ -62,6 +63,7 @@ export const urls: WebsiteMap = {
     business: hashableUrl('business'),
     team: hashableUrl('join'),
     products: hashableUrl('products'),
+    privacyPolicy: hashableUrl('privacy-policy'),
   },
   external: {
     links: {
@@ -82,6 +84,10 @@ export const urls: WebsiteMap = {
       github: new URL('https://github.com/KlubJagiellonski'),
       pge: new URL('https://www.gkpge.pl/'),
       polskieKupujeTo: new URL('https://polskiekupujeto.pl'),
+      getresponsePrivacyPolicy: new URL(
+        'https://www.getresponse.pl/email-marketing/Informacje-prawne/polityka-prywatnosci.html'
+      ),
+      amazonawsRegulamin: new URL('https://s3.eu-central-1.amazonaws.com/secure-pliki/regulamin.pdf'),
       form: new URL(
         'https://docs.google.com/forms/d/e/1FAIpQLSfJ14U66y_Z_thn9wiUHaBGOfKlZNhL4BGYuHjO2tJuzXi9gQ/viewform'
       ),
@@ -95,6 +101,7 @@ export const urls: WebsiteMap = {
     mail: {
       Perowicz: new URL('mailto:mateusz.perowicz@klubjagiellonski.pl'),
       Klub: new URL('mailto:Pola@klubjagiellonski.pl'),
+      biuro: new URL('mailto:biuro@klubjagiellonski.pl'),
     },
   },
 };

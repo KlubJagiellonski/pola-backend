@@ -82,6 +82,10 @@ const Section = styled.div`
     .hide-mobile {
       display: none;
     }
+
+    .logo {
+      padding-left: ${padding.normal};
+    }
   }
 
   @media ${Device.desktop} {
@@ -127,7 +131,7 @@ export const PageFooter = () => {
           <FooterSection title="Jakieś pytania?">
             <TextLink label="Kontakt" href={urls.pola.home('contact')} anchor={true} />
             <TextLink label="FAQ" href={urls.pola.about('faq')} anchor={true} />
-            <TextLink label="Polityka prywatności" href={urls.pola.support()} hideMobile={true} />
+            <TextLink label="Polityka prywatności" href={urls.pola.privacyPolicy()} hideMobile={true} />
             <TextExternalLink label="Uzupełnij dane o firmie" url={urls.external.links.form} hideMobile={true} />
           </FooterSection>
           <FooterSection title="Śledź nas na:">
