@@ -42,7 +42,7 @@ jmespath==0.10.0
 jsonfield==3.1.0
 jsonschema==3.2.0
 lazy-object-proxy==1.6.0
-more-itertools==8.10.0
+more-itertools==8.11.0
 oauthlib==3.1.1
 openapi-core==0.14.2
 openapi-schema-validator==0.1.5
