@@ -33,7 +33,7 @@ export const MissingProductInfo = () => (
       </div>
       <div className="info-tile">
         <Text>Twojej firmy nie ma w bazie?</Text>
-        <SecondaryButton onClick={() => openNewTab(urls.external.links.openFoods)} styles={buttonStyle}>
+        <SecondaryButton onClick={() => openNewTab(urls.external.links.form)} styles={buttonStyle}>
           <p>Wypełnij formularz</p>
         </SecondaryButton>
       </div>

@@ -160,7 +160,7 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
           <InputText
             autoFocus
             ref={inputRef}
-            placeholder="nazwa produktu / producent / kod EAN"
+            placeholder="nazwa produktu / kod EAN"
             type="text"
             onChange={handlePhraseChange}
             onKeyDown={handleEnter}

@@ -46,8 +46,6 @@ const ModalContainer = styled.div<{ height?: string }>`
 
 const ModalContent = styled(CustomScrollbarDiv)`
   flex: 1 1 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
 `;
 
 const ModalOverlay = styled.div`

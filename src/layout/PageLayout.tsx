@@ -16,13 +16,13 @@ import '../styles/pola-web.css';
 import Download from '../components/Download';
 import { SearchStateName } from '../state/search/search-reducer';
 import { SearchInfoModal } from '../search/form/SearchInfoModal';
+import { CustomScrollbarDiv } from './CustomScrollbar';
 
 const connector = connect(
   (state: IPolaState) => ({
     isSearchInfoVisible: state.app.isSearchInfoVisible,
     activePage: state.app.activePage,
     isMenuExpanded: state.app.isMenuExpanded,
-    isSearchInfoVisible: state.app.isSearchInfoVisible,
     selectedProduct: state.search.stateName === SearchStateName.SELECTED ? state.search.selectedProduct : undefined,
   }),
   {
@@ -42,7 +42,7 @@ type IPageLayout = ReduxProps & {
   styles?: ILayoutStyles;
 };
 
-const LayoutContainer = styled.div`
+const LayoutContainer = styled(CustomScrollbarDiv)`
   display: flex;
   flex-flow: column;
   height: 100vh;

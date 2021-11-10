@@ -14,4 +14,7 @@ export const CustomScrollbarDiv = styled.div`
   ::-webkit-scrollbar-thumb {
     background: ${color.border.grey};
   }
+
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
