@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'gatsby';
 import { TitleSection, Text } from '../../../styles/GlobalStyle.css';
-import { Device, fontSize, margin, lineHeight } from '../../../styles/theme';
+import { Device, fontSize, margin } from '../../../styles/theme';
 import { getDate } from '../../../utils/dates';
 
 const Wrapper = styled.div`
@@ -10,6 +10,7 @@ const Wrapper = styled.div`
 
   @media ${Device.mobile} {
     font-size: ${fontSize.small};
+    margin-bottom: 0;
   }
 `;
 

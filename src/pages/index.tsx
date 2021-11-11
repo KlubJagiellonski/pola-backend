@@ -84,8 +84,10 @@ const Background = styled.div<{ img?: string }>`
     height: 100%;
   }
 
+  opacity: 0.6;
+
   @media ${Device.mobile} {
-    opacity: 0.2;
+    opacity: 0.4;
   }
 `;
 
@@ -161,7 +163,7 @@ const HomePage = (props: IHomePage) => {
       <SEOMetadata pageTitle="Strona główna" />
       <PageSection size="full" styles={{ backgroundColor: color.background.search }}>
         <Background>
-          <ResponsiveImage imageSrc={'background.png'} />
+          <ResponsiveImage imageSrc={'background2.jpg'} />
         </Background>
         <Content>
           <SearchForm

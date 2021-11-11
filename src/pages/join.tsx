@@ -8,7 +8,7 @@ import { IPolaState } from '../state/types';
 import { LoadBrowserLocation, SelectActivePage } from '../state/app/app-actions';
 import { PageType, urls } from '../domain/website';
 import { Text, TitleSection } from '../styles/GlobalStyle.css';
-import { fontSize, margin, padding } from '../styles/theme';
+import { fontSize, margin, padding, Device, lineHeight } from '../styles/theme';
 import { PageSection } from '../layout/PageSection';
 import { ColumnsLayout, ContentColumn } from '../layout/ColumnsLayout';
 
@@ -17,7 +17,11 @@ interface ITeamPage {
 }
 
 const Wrapper = styled.div`
-  margin-top: ${padding.veryBig};
+  margin: ${padding.veryBig} 0 ${margin.normal} 0;
+
+  @media ${Device.mobile} {
+    margin: ${padding.veryBig} ${margin.normal} ${margin.normal} ${margin.normal};
+  }
 `;
 
 const List = styled.ul`
@@ -32,6 +36,10 @@ const List = styled.ul`
 
 const Section = styled.div`
   margin-top: ${margin.big};
+`;
+
+const Info = styled(Text)`
+  line-height: ${lineHeight.normal};
 `;
 
 const TeamPage = (props: ITeamPage) => {

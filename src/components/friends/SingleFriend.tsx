@@ -109,7 +109,7 @@ const SingleFriend: React.FC<Friend> = ({ name, description, image, page, slug }
             <a href={page} target="_blank">
               <ButtonRed
                 label="Odwiedź stronę przyjaciela"
-                styles={ButtonThemes[ButtonFlavor.RED]}
+                styles={{ ...ButtonThemes[ButtonFlavor.RED], fontSize: fontSize.small }}
                 fontSize={fontSize.small}
               />
             </a>
@@ -117,7 +117,7 @@ const SingleFriend: React.FC<Friend> = ({ name, description, image, page, slug }
               <AnchorLink to={urls.pola.friends('profit', slug)}>
                 <ButtonWhiteRed
                   label="Wypromuj swoją firmę"
-                  styles={ButtonThemes[ButtonFlavor.WHITE_RED]}
+                  styles={{ ...ButtonThemes[ButtonFlavor.WHITE_RED], fontSize: fontSize.small }}
                   fontSize={fontSize.small}
                 />
               </AnchorLink>

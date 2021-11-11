@@ -63,7 +63,7 @@ export const fontSize = {
 
 export const lineHeight = {
   big: '26px',
-  normal: '20px',
+  normal: '22px',
   small: '16px',
   tiny: '14px',
 };
