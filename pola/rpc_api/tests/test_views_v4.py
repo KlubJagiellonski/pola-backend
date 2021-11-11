@@ -242,8 +242,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 ],
                 "donate": {
                     "show_button": True,
-                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-                    "title": "Potrzebujemy 1 zł",
+                    "url": 'https://www.pola-app.pl/',
+                    "title": 'Wyszukaj produkty po nazwie',
                 },
             },
             json.loads(response.content),
