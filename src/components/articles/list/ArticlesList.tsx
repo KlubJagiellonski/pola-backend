@@ -24,6 +24,10 @@ const Row = styled.div`
   }
 `;
 
+const EmptyBlock = styled.div`
+  width: 100%;
+`;
+
 interface IArticlesList {
   articles?: IArticlesTwoColumns[];
 }
@@ -54,7 +58,7 @@ export const ArticlesList: React.FC<IArticlesList> = ({ articles }) => {
                 tag={article.second.tag}
               />
             ) : (
-              <div></div>
+              <EmptyBlock />
             )}
           </Row>
         ))}

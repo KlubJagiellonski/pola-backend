@@ -84,11 +84,7 @@ const Background = styled.div<{ img?: string }>`
     height: 100%;
   }
 
-  opacity: 0.6;
-
-  @media ${Device.mobile} {
-    opacity: 0.4;
-  }
+  opacity: 0.4;
 `;
 
 const WrapperContents = styled(PageSection)`
