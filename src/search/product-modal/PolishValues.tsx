@@ -10,8 +10,9 @@ export const Field = styled.div`
 `;
 
 export interface IValueCheckbox {
-  checked: boolean;
-  label: string;
+  condition: boolean;
+  trueLabel: string;
+  falseLabel: string;
   notes: string;
 }
 
@@ -20,7 +21,7 @@ export enum PolishPropertyName {
   REGISTERED = 'plRegistered',
   CAPITAL = 'plCapital',
   RnD = 'plRnD',
-  GLOBAL = 'plNotGlobEnt',
+  NOT_GLOBAL = 'plNotGlobEnt',
 }
 
 export const getPropertiesFromManufacturer = (
@@ -33,42 +34,12 @@ export const getPropertiesFromManufacturer = (
   return { value, notes };
 };
 
-export const ValueCheckboxField: React.FC<IValueCheckbox> = ({ checked, label, notes }) => (
-  <Field>
-    <Checkbox label={label} checked={checked} readonly={true} />
-    {AppSettings.SHOW_POLISH_VALUE_NOTES && <p className="notes">{notes}</p>}
-  </Field>
-);
-
-export interface IPolishProperty {
-  value: number;
-  notes: string;
-}
-
-export interface IPolishPropertyField {
-  property: IPolishProperty;
-}
-
-export const ProductionField: React.FC<IPolishPropertyField> = ({ property: { value, notes } }) => {
-  const checked = value > 50;
-  const label = checked ? 'produkuje w Polsce' : 'produkuje poza terytorium Polski';
-  return <ValueCheckboxField checked={checked} label={label} notes={notes} />;
-};
-
-export const ResearchField: React.FC<IPolishPropertyField> = ({ property: { value, notes } }) => {
-  const checked = value > 50;
-  const label = checked ? 'prowadzi badania i rozwój w Polsce' : 'prowadzi badania i rozwój poza terytorium Polski';
-  return <ValueCheckboxField checked={checked} label={label} notes={notes} />;
-};
-
-export const RegisteredField: React.FC<IPolishPropertyField> = ({ property: { value, notes } }) => {
-  const checked = value > 50;
-  const label = checked ? 'zajerestrowana w Polsce' : 'zajerestrowana poza terytorium Polski';
-  return <ValueCheckboxField checked={checked} label={label} notes={notes} />;
-};
-
-export const GlobalEntityField: React.FC<IPolishPropertyField> = ({ property: { value, notes } }) => {
-  const checked = value === 0;
-  const label = checked ? 'nie jest częścią zagranicznego koncernu' : 'jest częścią zagranicznego koncernu';
-  return <ValueCheckboxField checked={checked} label={label} notes={notes} />;
+export const ValueCheckboxField: React.FC<IValueCheckbox> = ({ condition, trueLabel, falseLabel, notes }) => {
+  const label = condition ? trueLabel : falseLabel;
+  return (
+    <Field>
+      <Checkbox label={label} checked={condition} readonly={true} />
+      {AppSettings.SHOW_POLISH_VALUE_NOTES && <p className="notes">{notes}</p>}
+    </Field>
+  );
 };

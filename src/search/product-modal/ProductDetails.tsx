@@ -3,15 +3,8 @@ import styled from 'styled-components';
 import { Product } from '../../domain/products';
 import { padding, fontSize, color } from '../../styles/theme';
 import { ScoreBar } from '../../components/ScoreBar';
-import {
-  Field,
-  ProductionField,
-  ResearchField,
-  RegisteredField,
-  GlobalEntityField,
-  getPropertiesFromManufacturer,
-  PolishPropertyName,
-} from './PolishValues';
+import { Field, getPropertiesFromManufacturer, PolishPropertyName, ValueCheckboxField } from './PolishValues';
+import { AppSettings } from '../../state/app-settings';
 
 const DetailsContainer = styled.div`
   padding: ${padding.normal};
@@ -47,7 +40,7 @@ export const ProductDetails: React.FC<IProductDetails> = ({ product }) => {
   const workersProperty = getPropertiesFromManufacturer(manufacturer, PolishPropertyName.WORKERS);
   const researchProperty = getPropertiesFromManufacturer(manufacturer, PolishPropertyName.RnD);
   const registeredProperty = getPropertiesFromManufacturer(manufacturer, PolishPropertyName.REGISTERED);
-  const globalProperty = getPropertiesFromManufacturer(manufacturer, PolishPropertyName.GLOBAL);
+  const notGlobalProperty = getPropertiesFromManufacturer(manufacturer, PolishPropertyName.NOT_GLOBAL);
   const capitalProperty = getPropertiesFromManufacturer(manufacturer, PolishPropertyName.CAPITAL);
 
   return (
@@ -65,12 +58,32 @@ export const ProductDetails: React.FC<IProductDetails> = ({ product }) => {
       <Field>
         <p className="property">udział polskiego kapitału:</p>
         <ScoreBar value={capitalProperty.value || 0} unit="%" animation={{ duration: 1, delay: 0.2 }} />
-        <p className="notes">{capitalProperty.notes}</p>
+        {AppSettings.SHOW_POLISH_VALUE_NOTES && <p className="notes">{capitalProperty.notes}</p>}
       </Field>
-      <ProductionField property={workersProperty} />
-      <ResearchField property={researchProperty} />
-      <RegisteredField property={registeredProperty} />
-      <GlobalEntityField property={globalProperty} />
+      <ValueCheckboxField
+        condition={workersProperty.value === 100}
+        trueLabel="produkuje w Polsce"
+        falseLabel="produkuje poza terytorium Polski"
+        notes={workersProperty.notes}
+      />
+      <ValueCheckboxField
+        condition={researchProperty.value === 100}
+        trueLabel="prowadzi badania i rozwój w Polsce"
+        falseLabel="prowadzi badania i rozwój poza terytorium Polski"
+        notes={researchProperty.notes}
+      />
+      <ValueCheckboxField
+        condition={registeredProperty.value === 100}
+        trueLabel="zajerestrowana w Polsce"
+        falseLabel="zajerestrowana poza terytorium Polski"
+        notes={registeredProperty.notes}
+      />
+      <ValueCheckboxField
+        condition={notGlobalProperty.value === 100}
+        trueLabel="nie jest częścią zagranicznego koncernu"
+        falseLabel="jest częścią zagranicznego koncernu"
+        notes={notGlobalProperty.notes}
+      />
     </DetailsContainer>
   );
 };

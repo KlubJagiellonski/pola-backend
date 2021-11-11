@@ -13,7 +13,7 @@ const HeaderContainer = styled.header`
   justify-content: center;
   position: absolute;
   top: 0;
-  z-index: 10;
+  z-index: 1;
   width: 100%;
   background: ${color.background.white};
   box-shadow: 0 1px 10px ${color.background.secondary};
