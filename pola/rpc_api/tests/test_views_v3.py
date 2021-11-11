@@ -167,8 +167,8 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 "sources": {"TEST": "BBBB"},
                 "donate": {
                     "show_button": True,
-                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-                    "title": "Potrzebujemy 1 zł",
+                    "url": "https://www.pola-app.pl/",
+                    "title": "Wyszukaj produkty po nazwie",
                 },
             },
             json.loads(response.content),
@@ -204,8 +204,8 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'description': f'TEST\nMarka należaca do firmy: {str(b)}.',
                 'donate': {
                     'show_button': True,
-                    'title': 'Potrzebujemy 1 zł',
-                    'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
+                    'title': 'Wyszukaj produkty po nazwie',
+                    'url': 'https://www.pola-app.pl/',
                 },
                 'friend_text': 'To jest przyjaciel Poli',
                 'is_friend': True,
