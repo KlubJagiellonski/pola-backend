@@ -53,7 +53,7 @@
     "gatsby-transformer-yaml": "^3.13.0",
     "gatsby-transformer-yaml-full": "^0.2.0",
     "gatsby-yaml-full-file": "^0.2.1",
-    "gatsby-yaml-full-markdown": "^0.4.3",
+    "gatsby-yaml-full-markdown": "^0.4.6",
     "js-yaml": "^4.1.0",
     "query-string": "^5.1.1",
     "react": "^16.14.0",
