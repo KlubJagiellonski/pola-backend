@@ -13,7 +13,7 @@ cffi==1.15.0
 chardet==4.0.0
 charset-normalizer==2.0.7
 colorama==0.4.4
-cryptography==3.4.8
+cryptography==35.0.0
 dbt==0.21.0
 dbt-bigquery==0.21.0
 dbt-core==0.21.0
