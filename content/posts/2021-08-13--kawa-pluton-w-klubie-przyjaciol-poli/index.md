@@ -1,5 +1,5 @@
 ---
-title: Kawa Pluton w Klubie Przyajciół Poli
+title: Kawa Pluton w Klubie Przyjaciół Poli
 subTitle: Kolejna firma ze znakiem towarowym Poli
 category: "Znak towarowy"
 cover: pluton.jpg

@@ -75,7 +75,7 @@ const TeamPage = (props: ITeamPage) => {
           <ColumnsLayout>
             <ContentColumn>
               <Section>
-                <TitleSection>Programowanie</TitleSection>
+                <TitleSection>programowanie</TitleSection>
                 <List>
                   <li>Kamil Breguła</li>
                   <li>Rafał Gawlik</li>
@@ -140,7 +140,7 @@ const TeamPage = (props: ITeamPage) => {
                 </List>
               </Section>
               <Section>
-                <TitleSection>Redakcja:</TitleSection>
+                <TitleSection>redakcja:</TitleSection>
                 <List>
                   <li>Bartek Ząbek</li>
                   <li>Piotr Kaźmierski</li>
