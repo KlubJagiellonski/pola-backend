@@ -74,8 +74,8 @@ export const ProductDetails: React.FC<IProductDetails> = ({ product }) => {
       />
       <ValueCheckboxField
         condition={registeredProperty.value === 100}
-        trueLabel="zajerestrowana w Polsce"
-        falseLabel="zajerestrowana poza terytorium Polski"
+        trueLabel="zarejestrowana w Polsce"
+        falseLabel="zarejestrowana poza terytorium Polski"
         notes={registeredProperty.notes}
       />
       <ValueCheckboxField
