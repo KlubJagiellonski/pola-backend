@@ -10,6 +10,7 @@ Production Configurations
 # pylint: disable=unused-wildcard-import
 
 import os
+import tempfile
 from urllib import parse as urlparse
 
 import sentry_sdk
@@ -100,10 +101,14 @@ redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost
 
 CACHES = {
     'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(tempfile.gettempdir(), 'pola-app-cache'),
+    },
+    'redis': {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': f'{redis_url.hostname}:{redis_url.port}',
         'OPTIONS': {'DB': 0, 'PASSWORD': redis_url.password},
-    }
+    },
 }
 
 # Your production stuff: Below this line define 3rd party library settings
