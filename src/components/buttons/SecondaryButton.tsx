@@ -1,17 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from './Button';
-import { color, Device, fontSize } from '../../styles/theme';
+import { Button, IButtonTheme } from './Button';
+import { color } from '../../styles/theme';
 
 const ButtonContainer = styled(Button)`
   border-radius: 20px;
   border: 2px solid ${color.border.white};
-  font-weight: 300;
   text-transform: ${({ theme }) => (theme?.lowercase ? undefined : 'uppercase')};
-
-  @media ${Device.mobile} {
-    font-size: ${fontSize.tiny};
-  }
 `;
 
 export interface ISecondaryButton {

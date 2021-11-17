@@ -12,6 +12,7 @@ export interface IButtonTheme {
   colors: IButtonColors;
   fontSize?: string;
   lowercase?: boolean;
+  fontWeight?: 'lighter' | 'normal' | 'bold';
 }
 
 export type IButtonThemes = {
@@ -74,7 +75,7 @@ export const Button = styled.button<{ theme: IButtonTheme; disabled?: boolean }>
   border-width: ${(props) => (props.theme.colors.border ? '2px' : '0')};
   padding: ${padding.small} ${padding.normal};
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: ${(props) => (props.theme.fontWeight ? props.theme.fontWeight : 'bold')};
   transition-duration: 0.5s;
   font-size: ${(props) => (props.theme.fontSize ? props.theme.fontSize : px(18))};
 

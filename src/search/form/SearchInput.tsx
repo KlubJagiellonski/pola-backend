@@ -175,7 +175,7 @@ export const SearchInput: React.FC<ISearchInput> = ({ disabled, onInfoClicked, o
       {AppSettings.search.SHOW_SUBMIT_BUTTON && (
         <SubmitButton
           label="Sprawdź"
-          styles={{ ...submitButtonTheme, lowercase: true }}
+          styles={{ ...submitButtonTheme, lowercase: true, fontWeight: 'lighter' }}
           disabled={disabled || !hasPhrase}
           onClick={search}
         />

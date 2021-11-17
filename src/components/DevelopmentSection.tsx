@@ -10,16 +10,16 @@ import { TitleSection, Text } from '../styles/GlobalStyle.css';
 import { ResponsiveImage } from '../components/images/ResponsiveImage';
 import { openNewTab } from '../utils/browser';
 import { urls } from '../domain/website';
+import { ColumnsLayout, ContentColumn } from '../layout/ColumnsLayout';
 
 const Info = styled.div`
-  width: 50%;
-  height: initial;
+  width: 100%;
+  height: 12em;
   position: relative;
+  margin: ${margin.small} 0;
 
   @media ${Device.mobile} {
-    width: 8em;
     height: 10em;
-    margin: 0 auto;
   }
 `;
 
@@ -27,27 +27,29 @@ const TextSection = styled.div`
   margin-right: ${margin.normal};
   padding: 0 ${padding.normal};
   background-color: ${color.background.white};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   @media ${Device.mobile} {
-    padding: ${padding.normal};
     width: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
   }
 `;
 
 const Texts = styled.div`
-  width: 50%;
+  width: 100%;
   background-color: ${color.background.white};
   margin-right: ${margin.small};
+`;
 
-  @media ${Device.mobile} {
-    margin-bottom: ${margin.small};
-    margin-right: 0;
-    width: 100%;
-  }
+const Column = styled(ContentColumn)`
+  align-items: center;
+  justify-content: center;
+`;
+
+const Buttons = styled.div`
+  text-align: center;
 `;
 
 const DevelopmentTitle = styled(TitleSection)`
@@ -58,24 +60,21 @@ const DevelopmentText = styled(Text)`
   margin-bottom: ${margin.big};
 `;
 
+const Columns = styled(ColumnsLayout)`
+  gap: ${margin.normal};
+`;
+
 const ImgSection = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: auto;
-  top: 50%;
-  transform: translateY(-50%);
+  .gatsby-image-wrapper {
+    picture {
+      img {
+        height: 12em !important;
+        width: auto !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
 
-  @media ${Device.mobile} {
-    top: 0;
-    transform: translateY(0px);
-
-    div {
-      picture {
-        img {
-          width: auto !important;
-          left: 50% !important;
-          transform: translateX(-50%) !important;
+        @media ${Device.mobile} {
+          height: 10em !important;
         }
       }
     }
@@ -97,6 +96,7 @@ const Container = styledContainerQuery(Wrapper)`
     flex-direction: column;
     border-bottom: 8px solid ${color.background.red};
     border-right: none;
+    margin-top: ${margin.small};
   }
 
   &:container(max-width: 450px){
@@ -105,40 +105,24 @@ const Container = styledContainerQuery(Wrapper)`
     flex-direction: column;
     border-bottom: 8px solid ${color.background.red};
     border-right: none;
-
-    ${Info}{
-      width: 8em;
-      height: 9em;
-      margin: 0 auto;
-    }
-
-    ${TextSection}{
-      padding: ${padding.big};
-      width: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+    margin-top: ${margin.small};
 
     ${Texts}{
-      margin-bottom: ${margin.small};
       width: 100%;
     }
 
-    ${ImgSection}{
-      top: 0;
-      transform: translateY(0px);
+    ${Info}{
+      height: 10em;
+    }
 
-      div {
-      picture {
-        img{
-          width: auto;
-          left: 50% !important;
-          transform: translateX(-50%);
+    ${ImgSection}{
+      .gatsby-image-wrapper {
+        picture {
+          img {
+            height: 10em !important;
+          }
         }
       }
-    }
     }
   }
 `;
@@ -150,24 +134,28 @@ const handleReadMore = () => {
 const DevelopmentSection = () => {
   return (
     <Container className="development-container" borderColor={color.background.red}>
-      <Info>
-        <ImgSection>
-          <ResponsiveImage imageSrc="smutny-2.png" />
-        </ImgSection>
-      </Info>
-      <Texts>
-        <TextSection>
-          <DevelopmentTitle>Zobacz jak rozwija się Aplikacja Pola i wspomóż ją!</DevelopmentTitle>
-          <DevelopmentText>Dowiedz się co możesz jeszcze zrobić, aby wspierać polskich producentów.</DevelopmentText>
-          <div className="buttons">
+      <Columns>
+        <Column fraction={50}>
+          <Buttons>
             <SecondaryButton
-              label="Czytaj dalej..."
+              label="Potrzebujemy 1 zł"
               styles={{ ...ButtonThemes[ButtonFlavor.RED], fontSize: fontSize.small }}
               onClick={handleReadMore}
             />
-          </div>
-        </TextSection>
-      </Texts>
+          </Buttons>
+          <Info>
+            <ImgSection>
+              <ResponsiveImage imageSrc="smutny-2.png" />
+            </ImgSection>
+          </Info>
+        </Column>
+        <Column fraction={50}>
+          <TextSection>
+            <DevelopmentTitle>Zobacz jak rozwija się Aplikacja Pola i wspomóż ją!</DevelopmentTitle>
+            <DevelopmentText>Dowiedz się co możesz jeszcze zrobić, aby wspierać polskich producentów.</DevelopmentText>
+          </TextSection>
+        </Column>
+      </Columns>
     </Container>
   );
 };
