@@ -47,7 +47,7 @@ ipdb==0.13.9
 ipython==7.21.0
 ipython-genutils==0.2.0
 isodate==0.6.0
-jedi==0.18.0
+jedi==0.18.1
 jmespath==0.10.0
 jsonfield==3.1.0
 jsonschema==3.2.0
