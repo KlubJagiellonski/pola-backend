@@ -71,6 +71,14 @@ module.exports = {
         path: `${__dirname}/content/posts`,
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `business`,
+        path: `${__dirname}/content/business`,
+      },
+    },
+    `gatsby-transformer-remark`,
     `gatsby-transformer-yaml-full`,
     {
       resolve: `gatsby-source-filesystem`,

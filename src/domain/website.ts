@@ -60,7 +60,7 @@ export const urls: WebsiteMap = {
     support: hashableUrl('support'),
     friends: sluggableUrl('friends'),
     partners: hashableUrl('partners'),
-    business: hashableUrl('business'),
+    business: sluggableUrl('business'),
     team: hashableUrl('join'),
     products: hashableUrl('products'),
     privacyPolicy: hashableUrl('privacy-policy'),
@@ -92,6 +92,9 @@ export const urls: WebsiteMap = {
         'https://docs.google.com/forms/d/e/1FAIpQLSfJ14U66y_Z_thn9wiUHaBGOfKlZNhL4BGYuHjO2tJuzXi9gQ/viewform'
       ),
       fundraising: new URL('https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/'),
+      biznesKlub: new URL(
+        'https://klubjagiellonski.pl/projekty/oferta-biznesowa-centrum-analiz-klubu-jagiellonskiego/'
+      ),
     },
     polaSocialMedia: {
       facebook: new URL('https://www.facebook.com/app.pola'),
@@ -102,6 +105,7 @@ export const urls: WebsiteMap = {
       Perowicz: new URL('mailto:mateusz.perowicz@klubjagiellonski.pl'),
       Klub: new URL('mailto:Pola@klubjagiellonski.pl'),
       biuro: new URL('mailto:biuro@klubjagiellonski.pl'),
+      Wenclewska: new URL('mailto:marta.wenclewska@klubjagiellonski.pl'),
     },
   },
 };

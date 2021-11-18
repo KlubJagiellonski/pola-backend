@@ -36,7 +36,7 @@ export const Text = styled.p<IText>`
   font-family: 'Merriweather';
   font-size: ${fontSize.small};
   color: ${color.text.secondary};
-  line-height: ${lineHeight.normall};
+  line-height: ${lineHeight.normal};
   max-width: ${({ styles }) => evalPx(styles?.maxWidth)};
 
   font-feature-settings: 'kern', 'liga', 'clig', 'calt';

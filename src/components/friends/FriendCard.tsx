@@ -53,7 +53,7 @@ const ButtonSection = styled.div`
 
 const FriendCard: React.FC<Friend> = (friend) => {
   return (
-    <Wrapper color={color.background.transparencyGrey}>
+    <Wrapper color={color.background.white}>
       <TitleSection>Oto jeden Przyjaciel z wielu Przyjaciół Poli</TitleSection>
       {friend.image && (
         <ImageSection>
