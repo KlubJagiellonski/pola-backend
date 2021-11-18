@@ -326,6 +326,26 @@ class TestSearchV4(TestCase):
             json.loads(response.content),
         )
 
+    def test_should_skip_brand_without_name(self):
+        p1 = ProductFactory(name="test-product", brand__name=None)
+        response = self.client.get(f"{self.url}?query={p1.code}", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            {
+                'nextPageToken': None,
+                'products': [
+                    {
+                        'brand': None,
+                        'code': p1.code,
+                        'company': {'name': p1.company.name, 'score': None},
+                        'name': p1.name,
+                    }
+                ],
+                'totalItems': 1,
+            },
+            json.loads(response.content),
+        )
+
     def test_should_skip_company_without_name(self):
         p1 = ProductFactory(name="test-product", company__name=None)
         response = self.client.get(f"{self.url}?query={p1.code}", content_type="application/json")
