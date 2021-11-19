@@ -27,7 +27,7 @@ class SearchResult(TypedDict):
             company=CompanyBasicInfo(name=product.company.name, score=logic.get_plScore(product.company))
             if product.company and product.company.name
             else None,
-            brand=BrandBasicInfo(name=product.brand.name) if product.brand else None,
+            brand=BrandBasicInfo(name=product.brand.name) if product.brand and product.brand.name else None,
         )
 
 
