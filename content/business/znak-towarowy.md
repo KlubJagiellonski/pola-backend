@@ -9,6 +9,6 @@ Jeśli Twoja firma produkuje w Polsce, posiada polski kapitał i jest zarejestro
 
 Ponieważ zdecydowana większość Polaków chce kupować krajowe produkty, warto podkreślać ich pochodzenie na opakowaniu. Nasz znak towarowy jest skierowany do wszystkich firm, którym aplikacja Pola przyznaje maksymalną liczbę punktów. Jako jedna z niewielu posługuje się precyzyjnym i transparentnym algorytmem przy ocenie pochodzenia produktów.
 
-[lista przyjaciół poli](/friends)
+[Lista Przyjaciół Poli](/friends)
 
-[co zyskuje przyjaciel poli](/friends#profit)
+[Co zyskuje Przyjaciel Poli](/friends#profit)
