@@ -35,7 +35,7 @@ export const getPropertiesFromManufacturer = (
 };
 
 export const ValueCheckboxField: React.FC<IValueCheckbox> = ({ condition, trueLabel, falseLabel, notes }) => {
-  const label = condition ? trueLabel : falseLabel;
+  const label = trueLabel;
   return (
     <Field>
       <Checkbox label={label} checked={condition} readonly={true} />
