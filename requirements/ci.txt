@@ -20,7 +20,7 @@ django-allauth==0.46.0
 django-autocomplete-light==3.8.2
 django-autoslug==1.9.8
 django-braces==1.15.0
-django-cors-headers==3.10.0
+django-cors-headers==3.10.1
 django-coverage-plugin==2.0.2
 django-crispy-forms==1.13.0
 django-debug-toolbar==3.2.2
