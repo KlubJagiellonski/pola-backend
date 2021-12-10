@@ -64,7 +64,7 @@ parso==0.8.3
 pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==8.4.0
-prompt-toolkit==3.0.23
+prompt-toolkit==3.0.24
 psycopg2-binary==2.9.2
 ptyprocess==0.7.0
 pycodestyle==2.8.0
