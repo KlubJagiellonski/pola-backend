@@ -2,7 +2,7 @@ import json
 
 from test_plus import TestCase
 
-from company.factories import BrandFactory, CompanyFactory
+from company.factories import CompanyFactory
 from pola.rpc_api.tests.test_views import JsonRequestMixin
 from product.factories import ProductFactory
 from product.models import Product
@@ -78,7 +78,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEE",
         )
-        p = ProductFactory(code=5900049011829, company=c, brand=None)
+        p = ProductFactory.create(code=5900049011829, company=c, brand=None)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
 
         self.assertEqual(200, response.status_code, response.content)
@@ -124,34 +124,6 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             json.loads(response.content),
         )
 
-    def test_should_return_200_when_one_products_have_brands(self):
-        c = CompanyFactory(
-            plCapital=100,
-            plWorkers=0,
-            plRnD=100,
-            plRegistered=100,
-            plNotGlobEnt=100,
-            description="TEST",
-            sources="TEST|BBBB",
-            verified=True,
-            is_friend=True,
-            plCapital_notes="AAA",
-            plWorkers_notes="BBB",
-            plRnD_notes="CCC",
-            plRegistered_notes="DDD",
-            plNotGlobEnt_notes="EEE",
-        )
-
-        brands = BrandFactory.create_batch(company=c, size=5)
-        p = ProductFactory(code=5900049011829, company=c, brand=None)
-        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
-
-        self.assertEqual(200, response.status_code, response.content)
-        self.assertEqual(
-            f"TEST\nMarki naależace do firmy: {brands[0]}, {brands[1]}, {brands[2]}, {brands[3]}, {brands[4]}.",
-            json.loads(response.content)['companies'][0]['description'],
-        )
-
     def test_should_return_200_when_multiple_companies(self):
         c1 = CompanyFactory(
             plCapital=100,
@@ -185,10 +157,11 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEE",
         )
-        b = BrandFactory(company=c2)
-        p = ProductFactory.create(code=5900049011829, company=c1, brand=b)
+
+        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c2)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
 
         self.assertEqual(
             {
@@ -236,7 +209,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         "plScore": 70,
                         "is_friend": True,
                         "friend_text": "To jest przyjaciel Poli",
-                        "description": f"TEST\nMarka naależaca do firmy: {str(b)}.",
+                        "description": "TEST",
                         "sources": {"TEST": "BBBB"},
                     },
                 ],
