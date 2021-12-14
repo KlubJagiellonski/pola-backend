@@ -201,7 +201,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'altText': None,
                 'card_type': 'type_white',
                 'code': '5900049011829',
-                'description': f'TEST\nMarka należaca do firmy: {str(b)}.',
+                'description': f'TEST\nMarka naależaca do firmy: {str(b)}.',
                 'donate': {
                     'show_button': True,
                     'title': 'Wyszukaj produkty po nazwie',
