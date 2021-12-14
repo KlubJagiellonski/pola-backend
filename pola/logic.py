@@ -161,16 +161,6 @@ def serialize_company(company):
             desc += strip_urls_newlines(company.plNotGlobEnt_notes) + '\n'
 
         company_data['description'] = desc
-
-    brands = company.brand_set.all()
-    if brands:
-        company_data['description'] += "\n"
-        brands_list = ', '.join(sorted(str(d) for d in brands))
-        if len(brands) == 1:
-            company_data['description'] += f"Marka należaca do firmy: {brands_list}."
-        else:
-            company_data['description'] += f"Marki należace do firmy: {brands_list}."
-
     company_data['sources'] = company.get_sources(raise_exp=False)
     if plScore:
         company_data['plScore'] = plScore
