@@ -2,7 +2,7 @@ FROM node:lts-alpine3.12 as build-js
 
 ENV NODE_ENV=production
 WORKDIR /app/
-COPY ./package.json ./package-locj.json ./gulpfile.babel.js /app/
+COPY ./package.json ./package-lock.json ./gulpfile.babel.js /app/
 COPY ./pola/assets /app/pola/assets
 RUN npm install && npm run build
 
