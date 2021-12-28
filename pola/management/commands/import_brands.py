@@ -4,8 +4,8 @@ import re
 
 from django.core.management import BaseCommand
 
-from company.models import Brand, Company
-from product.models import Product
+from pola.company.models import Brand, Company
+from pola.product.models import Product
 
 
 def update_product(self, brand, ean_code, company, product_name):

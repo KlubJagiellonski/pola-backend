@@ -7,11 +7,11 @@ from parameterized import parameterized
 from reversion.models import Version
 from test_plus.test import TestCase
 
-from company.factories import CompanyFactory
+from pola.company.factories import CompanyFactory
+from pola.product.factories import ProductFactory
+from pola.product.forms import AddBulkProductForm
+from pola.product.models import Product
 from pola.tests.test_views import PermissionMixin
-from product.factories import ProductFactory
-from product.forms import AddBulkProductForm
-from product.models import Product
 
 
 class TemplateUsedMixin:

@@ -9,12 +9,12 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ratelimit.decorators import ratelimit
 
-from ai_pics.models import AIAttachment, AIPics
+from pola.ai_pics.models import AIAttachment, AIPics
+from pola.product.models import Product
+from pola.report.models import Attachment, Report
 from pola.rpc_api.jsonschema import validate_json_response
 from pola.rpc_api.rates import whitelist
 from pola.rpc_api.views_v4 import get_by_code_internal
-from product.models import Product
-from report.models import Attachment, Report
 
 
 @csrf_exempt

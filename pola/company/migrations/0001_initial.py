@@ -1,6 +1,6 @@
 from django.db import migrations, models
 
-import company.models
+import pola.company.models
 
 
 class Migration(migrations.Migration):
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('address', models.TextField(null=True, blank=True)),
                 (
                     'plCapital',
-                    company.models.IntegerRangeField(
+                    pola.company.models.IntegerRangeField(
                         null=True, verbose_name='Percentage share of Polish capital', blank=True
                     ),
                 ),
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'plTaxes',
-                    company.models.IntegerRangeField(
+                    pola.company.models.IntegerRangeField(
                         null=True,
                         verbose_name='Payment of taxes and information about registration',
                         blank=True,
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'plRnD',
-                    company.models.IntegerRangeField(
+                    pola.company.models.IntegerRangeField(
                         null=True, verbose_name='Information about R&D center', blank=True
                     ),
                 ),
@@ -74,7 +74,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'plWorkers',
-                    company.models.IntegerRangeField(null=True, verbose_name='Information about workers', blank=True),
+                    pola.company.models.IntegerRangeField(
+                        null=True, verbose_name='Information about workers', blank=True
+                    ),
                 ),
                 (
                     'plWorkers_notes',
@@ -82,7 +84,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'plBrand',
-                    company.models.IntegerRangeField(null=True, verbose_name='Information about brand', blank=True),
+                    pola.company.models.IntegerRangeField(
+                        null=True, verbose_name='Information about brand', blank=True
+                    ),
                 ),
                 ('plBrand_notes', models.TextField(null=True, verbose_name='Notes about brand', blank=True)),
                 ('verified', models.BooleanField(default=False)),

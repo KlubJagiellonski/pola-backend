@@ -1,6 +1,6 @@
 import factory.fuzzy
 
-from company.factories import BrandFactory, CompanyFactory
+from pola.company.factories import BrandFactory, CompanyFactory
 
 
 class ProductFactory(factory.django.DjangoModelFactory):

@@ -3,12 +3,12 @@ import json
 import requests
 from test_plus import TestCase
 
-from ai_pics.models import AIAttachment, AIPics
-from company.factories import CompanyFactory
+from pola.ai_pics.models import AIAttachment, AIPics
+from pola.company.factories import CompanyFactory
+from pola.product.factories import ProductFactory
+from pola.product.models import Product
+from pola.report.models import Attachment, Report
 from pola.rpc_api.tests.test_views import JsonRequestMixin, _create_image
-from product.factories import ProductFactory
-from product.models import Product
-from report.models import Attachment, Report
 
 
 class TestAddAiPics(TestCase, JsonRequestMixin):

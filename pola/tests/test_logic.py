@@ -3,10 +3,10 @@ from unittest import mock
 from parameterized import parameterized
 from test_plus import TestCase
 
-from company.factories import CompanyFactory
+from pola.company.factories import CompanyFactory
 from pola.logic import get_by_code, get_result_from_code
-from product.factories import ProductFactory
-from product.models import Product
+from pola.product.factories import ProductFactory
+from pola.product.models import Product
 
 TEST_EAN13 = "5900084231145"
 

@@ -5,14 +5,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.utils import timezone
 
-from company.models import Company
+from pola.company.models import Company
 from pola.logic import create_from_api
+from pola.product.models import Product
 from pola.produkty_w_sieci_api import (
     Client,
     ConnectionError,
     is_code_supported_by_gs1_api,
 )
-from product.models import Product
 
 REQUERY_590_FREQUENCY = 30
 REQUERY_590_LIMIT = 10000

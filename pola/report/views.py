@@ -7,8 +7,8 @@ from django.views.generic.edit import DeleteView
 from django_filters.views import FilterView
 
 from pola.mixins import LoginPermissionRequiredMixin
+from pola.report.models import Report
 from pola.views import ActionView
-from report.models import Report
 
 from .filters import ReportFilter
 

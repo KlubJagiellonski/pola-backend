@@ -3,11 +3,11 @@ import re
 
 from django.conf import settings
 
-from company.models import Brand, Company
 from pola import produkty_w_sieci_api
+from pola.company.models import Brand, Company
+from pola.product.models import Product
 from pola.produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
-from product.models import Product
-from report.models import Report
+from pola.report.models import Report
 
 
 def get_result_from_code(code, multiple_company_supported=False, report_as_object=False):

@@ -7,8 +7,8 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils import timezone
 
+from pola.report.models import Attachment
 from pola.s3 import create_s3_connection
-from report.models import Attachment
 
 
 class Command(BaseCommand):

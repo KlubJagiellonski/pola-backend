@@ -13,12 +13,12 @@ from django.views.generic.edit import (
 )
 from django_filters.views import FilterView
 
-from company.models import Brand, Company
+from pola.company.models import Brand, Company
 from pola.concurency import ConcurencyProtectUpdateView
 from pola.mixins import LoginPermissionRequiredMixin
+from pola.product.models import Product
+from pola.report.models import Report
 from pola.views import ExprAutocompleteMixin
-from product.models import Product
-from report.models import Report
 
 from .filters import BrandFilter, CompanyFilter
 from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm

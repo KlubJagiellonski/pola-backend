@@ -1,7 +1,7 @@
 import factory.fuzzy
 from django.utils import timezone
 
-from product.factories import ProductFactory
+from pola.product.factories import ProductFactory
 
 
 class AIPicsFactory(factory.django.DjangoModelFactory):

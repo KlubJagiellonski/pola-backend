@@ -1,9 +1,9 @@
 from test_plus import TestCase
 
-from company.factories import CompanyFactory
+from pola.company.factories import CompanyFactory
+from pola.product.factories import ProductFactory
+from pola.report.factories import ReportFactory
 from pola.rpc_api.tests.test_views import JsonRequestMixin
-from product.factories import ProductFactory
-from report.factories import ReportFactory
 
 
 class TestGetByCodeV2(TestCase, JsonRequestMixin):

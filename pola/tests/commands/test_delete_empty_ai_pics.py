@@ -4,8 +4,8 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from ai_pics.factories import AIAttachmentFactory, AIPicsFactory
-from ai_pics.models import AIAttachment, AIPics
+from pola.ai_pics.factories import AIAttachmentFactory, AIPicsFactory
+from pola.ai_pics.models import AIAttachment, AIPics
 
 
 class DeleteEmptyAiPicsTestCase(TestCase):

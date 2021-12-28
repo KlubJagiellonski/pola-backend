@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from company.models import Company
-from product.models import Product
+from pola.company.models import Company
+from pola.product.models import Product
 
 
 class Command(BaseCommand):

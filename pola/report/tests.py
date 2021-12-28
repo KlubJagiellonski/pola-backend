@@ -3,10 +3,10 @@ from django.utils.encoding import force_text
 from django_webtest import WebTestMixin
 from test_plus.test import TestCase
 
+from pola.report.factories import ReportFactory, ResolvedReportFactory
+from pola.report.models import Report
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import UserFactory
-from report.factories import ReportFactory, ResolvedReportFactory
-from report.models import Report
 
 
 class TemplateUsedMixin:

@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from reversion.models import Version
 
-from company.models import Company
+from pola.company.models import Company
 
 
 class Command(BaseCommand):

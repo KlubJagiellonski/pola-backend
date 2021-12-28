@@ -1,6 +1,6 @@
 from django.db import migrations, models
 
-import company.models
+import pola.company.models
 
 
 class Migration(migrations.Migration):
@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plRnD',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True,
                 null=True,
                 verbose_name='Miejsca pracy w BiR w Polsce',
