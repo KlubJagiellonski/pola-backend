@@ -39,23 +39,30 @@ services:
       minio:
         condition: service_healthy
       minio-init:
-        condition: service_started
-      web-init:
-        condition: service_started
+        condition: service_completed_successfully
+      web-collectstatic:
+        condition: service_completed_successfully
+      web-compile-assets:
+        condition: service_completed_successfully
     command: runserver 0.0.0.0:8080
     ports:
       - "8080:8080"
     restart: always
 
-  web-init:
+  web-collectstatic:
     <<: *pola-backend-common
     restart: "no"
     depends_on:
-      minio:
-        condition: service_healthy
-      minio-init:
-        condition: service_started
+      web-compile-assets:
+        condition: service_completed_successfully
     command: ./manage.py collectstatic --no-input
+
+  web-compile-assets:
+    image: node:lts-alpine3.12
+    volumes:
+      - .:/app
+    restart: "no"
+    command: npm install && npm run build
 
   minio:
     image: minio/minio:RELEASE.2020-12-26T01-35-54Z
