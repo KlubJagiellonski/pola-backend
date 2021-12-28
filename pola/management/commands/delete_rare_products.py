@@ -55,4 +55,4 @@ LIMIT %s
                         cursor.execute('delete from reversion_version where id=%s', [version['id']])
                         cursor.execute('delete from reversion_revision where id=%s', [version['revision_id']])
                     cursor.execute('delete from pola_query where product_id=%s', [product_id])
-                    cursor.execute('delete from pola.product_product where id=%s', [product_id])
+                    cursor.execute('delete from product_product where id=%s', [product_id])
