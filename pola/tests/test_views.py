@@ -1,3 +1,6 @@
+import os
+from unittest import mock
+
 from django.urls import reverse_lazy
 from test_plus.test import TestCase
 
@@ -66,3 +69,20 @@ class TestSelectLang(TemplateUsedMixin, PermissionMixin, TestCase):
     def test_template_used(self):
         self.login()
         super().test_template_used()
+
+
+class TestReleaseView(TemplateUsedMixin, TestCase):
+    url = reverse_lazy('release')
+    template_name = 'pages/release-info.html'
+
+    def test_display_unknown_release(self):
+        with mock.patch.dict('os.environ', RELEASE_SHA='VALUE'):
+            del os.environ['RELEASE_SHA']
+            resp = self.client.get(self.url)
+            self.assertContains(resp, 'Unknown')
+
+    def test_display_known_release(self):
+        with mock.patch.dict('os.environ', RELEASE_SHA='9e905684bb2cf6bdf074224e50d1c58e43740bba'):
+            resp = self.client.get(self.url)
+            self.assertContains(resp, '9e905684bb2cf6bdf074224e50d1c58e43740bba')
+            self.assertContains(resp, 'KlubJagiellonski/pola-backend')
