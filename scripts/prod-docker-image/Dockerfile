@@ -1,4 +1,13 @@
-FROM node:lts-alpine3.12 as build-js
+ARG APP_UID="50000"
+ARG APP_GID="0"
+
+ARG APP_HOME=/opt/pola-backend
+
+ARG PYTHON_VERSION="3.9"
+
+######################### NODE BUILD IMAGE ##########################
+
+FROM node:16.13.1-alpine3.12 as build-js
 
 ENV NODE_ENV=production
 WORKDIR /app/
@@ -6,12 +15,10 @@ COPY ./package.json ./package-lock.json ./gulpfile.babel.js /app/
 COPY ./pola/assets /app/pola/assets
 RUN npm install && npm run build
 
-ARG APP_UID="50000"
-ARG APP_GID="0"
 
-ARG APP_HOME=/opt/pola-backend
-
-ARG PYTHON_VERSION="3.9"
+######################### PYTHON BUILD IMAGE ########################
+ARG PYTHON_VERSION
+ARG APP_HOME
 
 FROM python:${PYTHON_VERSION}-slim-buster as build-py
 
@@ -63,7 +70,7 @@ LABEL io.github.klubjagiellonski.distro="debian" \
     io.github.klubjagiellonski.component="pola-backend" \
     io.github.klubjagiellonski.image="pola-backend"
 
-######################### MAIN IMAGE #########################
+######################### MAIN IMAGE ################################
 
 FROM python:${PYTHON_VERSION}-slim-buster as main
 

@@ -22,19 +22,35 @@ function build_image() {
     "--cache-from=python:${PYTHON_VERSION}-slim-buster"
   )
 
-  echo "Building image: ${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
+  echo "Building image: ${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}"
 
-  if [[ "$(docker images -q "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
-    docker pull "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" || true
+  if [[ "$(docker images -q "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
+    docker pull "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}" || true
   fi
 
-  if [[ ! "$(docker images -q "${BUILD_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
-      build_args+=("--cache-from=${BUILD_IMAGE_NAME}:${IMAGE_TAG}")
+  if [[ ! "$(docker images -q "${BUILD_PY_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
+      build_args+=("--cache-from=${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}")
   fi
+
   docker build \
     "${build_args[@]}" \
-    --target "build" \
-    --tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
+    --target "build-py" \
+    --tag "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}"
+
+  echo "Building image: ${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}"
+
+  if [[ "$(docker images -q "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
+    docker pull "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}" || true
+  fi
+
+  if [[ ! "$(docker images -q "${BUILD_JS_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
+      build_args+=("--cache-from=${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}")
+  fi
+
+  docker build \
+    "${build_args[@]}" \
+    --target "build-js" \
+    --tag "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}"
 
   if [[ "$(docker images -q "${PROD_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
     docker pull "${PROD_IMAGE_NAME}:${IMAGE_TAG}" || true
@@ -45,6 +61,7 @@ function build_image() {
   fi
 
   echo "Building image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+
   docker build \
     "${build_args[@]}" \
     --target "main" \
