@@ -101,7 +101,7 @@ repos:
       - id: version-checks
         name: Checks Django Version in docker-compose.yaml
         language: system
-        entry: scripts/static_checks/django-version-check.sh
+        entry: scripts/static_checks/django-version-check.py
         files: >
           (?x)
           ^requirements/production\.txt$|
