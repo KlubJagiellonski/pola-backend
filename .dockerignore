@@ -7,3 +7,6 @@
 !scripts
 !manage.py
 !Procfile
+!package.json
+!package-lock.json
+!gulpfile.esm.js

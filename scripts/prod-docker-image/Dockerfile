@@ -9,11 +9,13 @@ ARG PYTHON_VERSION="3.9"
 
 FROM node:16.13.1-alpine3.12 as build-js
 
-ENV NODE_ENV=production
 WORKDIR /app/
-COPY ./package.json ./package-lock.json ./gulpfile.babel.js /app/
+COPY ./package.json  /app/
+COPY ./package-lock.json /app/
+COPY ./gulpfile.esm.js /app/
+
 COPY ./pola/assets /app/pola/assets
-RUN npm install && npm run build
+RUN npm install && find node_modules/ && npm run build
 
 
 ######################### PYTHON BUILD IMAGE ########################
