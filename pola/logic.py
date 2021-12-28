@@ -1,12 +1,8 @@
 import locale
 import re
 
-from django.conf import settings
-
-from pola import produkty_w_sieci_api
 from pola.company.models import Brand, Company
 from pola.product.models import Product
-from pola.produkty_w_sieci_api import Client, is_code_supported_by_gs1_api
 from pola.report.models import Report
 
 
@@ -175,13 +171,14 @@ def get_by_code(code):
         return Product.objects.get(code=code)
     except Product.DoesNotExist:
         pass
-    try:
-        if is_code_supported_by_gs1_api(code) and ENABLE_GS1_API:
-            client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
-            product_info = client.get_product_by_gtin(code)
-            return create_from_api(code, product_info)
-    except produkty_w_sieci_api.ApiError:
-        pass
+    # try:
+    #     pass
+    #     # if is_code_supported_by_gs1_api(code) and ENABLE_GS1_API:
+    #     #     client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
+    #     #     product_info = client.get_product_by_gtin(code)
+    #     #     return create_from_api(code, product_info)
+    # except produkty_w_sieci_api.ApiError:
+    #     pass
     return Product.objects.create(code=code)
 
 

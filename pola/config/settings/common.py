@@ -194,7 +194,7 @@ STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 STATIC_URL = '/static/'
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [str(APPS_DIR.path('static')), ROOT_DIR('pola-web/static')]
+STATICFILES_DIRS = [str(APPS_DIR.path('static'))]
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
@@ -331,4 +331,4 @@ CORS_URLS_REGEX = r"^/a/.*$"
 
 # APP CONFIGURATION
 # ------------------------
-ENABLE_POLA_WEB_CUSTOMIZATION = env.bool('POLA_APP_ENABLE_POLA_WEB_CUSTOMIZATION', False)  # noqa: F405
+# None yet

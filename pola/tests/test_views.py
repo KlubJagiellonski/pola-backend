@@ -23,11 +23,6 @@ class TemplateUsedMixin:
         self.assertTemplateUsed(resp, self.template_name)
 
 
-class TestHome(TemplateUsedMixin, TestCase):
-    url = reverse_lazy('home')
-    template_name = 'index.html'
-
-
 class TestFrontPageView(TemplateUsedMixin, PermissionMixin, TestCase):
     url = reverse_lazy('home-cms')
     template_name = 'pages/home-cms.html'
@@ -64,24 +59,10 @@ class TestAdminStatsPageView(TemplateUsedMixin, PermissionMixin, TestCase):
         super().test_template_used()
 
 
-class TestSelectLang(PermissionMixin, TemplateUsedMixin, TestCase):
+class TestSelectLang(TemplateUsedMixin, PermissionMixin, TestCase):
     url = reverse_lazy('select_lang')
     template_name = 'pages/lang-cms.html'
 
     def test_template_used(self):
         self.login()
         super().test_template_used()
-
-
-class TestAbout(TemplateUsedMixin, TestCase):
-    url = reverse_lazy('about')
-    template_name = 'pages/about.html'
-
-
-class TestFavicons(TestCase):
-    def test_redirect_happens(self):
-        from pola.config.urls import FAVICON_FILES
-
-        for filename in FAVICON_FILES:
-            resp = self.client.get('/' + filename, follow=False)
-            self.assertEqual(resp.status_code, 301, "Invalid redirect status code")

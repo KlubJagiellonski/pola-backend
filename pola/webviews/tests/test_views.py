@@ -9,30 +9,30 @@ class TemplateUsedMixin:
 
 
 class TestWebViewsAbout(TemplateUsedMixin, TestCase):
-    template_name = 'about.html'
+    template_name = 'webviews/about.html'
     url = reverse_lazy('webviews:about')
 
 
 class TestWebViewsMethod(TemplateUsedMixin, TestCase):
-    template_name = 'method.html'
+    template_name = 'webviews/method.html'
     url = reverse_lazy('webviews:method')
 
 
 class TestWebViewsKj(TemplateUsedMixin, TestCase):
-    template_name = 'kj.html'
+    template_name = 'webviews/kj.html'
     url = reverse_lazy('webviews:kj')
 
 
 class TestWebViewsTeam(TemplateUsedMixin, TestCase):
-    template_name = 'team.html'
+    template_name = 'webviews/team.html'
     url = reverse_lazy('webviews:team')
 
 
 class TestWebViewsPartners(TemplateUsedMixin, TestCase):
-    template_name = 'partners.html'
+    template_name = 'webviews/partners.html'
     url = reverse_lazy('webviews:partners')
 
 
 class TestWebViewsFriends(TemplateUsedMixin, TestCase):
-    template_name = 'm_friends.html'
+    template_name = 'webviews/m_friends.html'
     url = reverse_lazy('webviews:friends')
