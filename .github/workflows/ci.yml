@@ -60,7 +60,9 @@ jobs:
       - name: "Setup Python"
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.9'
+      - name: "Setup Python dependencies"
+        run: pip install -U pip wheel setuptools
       - name: "Run static checks"
         uses: pre-commit/action@v2.0.3
 
