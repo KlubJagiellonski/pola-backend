@@ -87,10 +87,6 @@ repos:
     hooks:
       - id: hadolint-docker
         entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.6.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
-  - repo: https://github.com/PyCQA/isort
-    rev: '5.9.3'
-    hooks:
-      - id: isort
   - repo: local
     hooks:
       - id: shellcheck
@@ -101,8 +97,18 @@ repos:
       - id: version-checks
         name: Checks Django Version in docker-compose.yaml
         language: system
-        entry: scripts/static_checks/django-version-check.sh
+        entry: scripts/static_checks/django-version-check.py
         files: >
           (?x)
           ^requirements/production\.txt$|
           ^docker-compose.yaml$|
+      - id: isort
+        name: isort
+        entry: isort
+        require_serial: true
+        language: python
+        language_version: python3
+        types_or: [cython, pyi, python]
+        args: ['--filter-files']
+        minimum_pre_commit_version: '2.9.2'
+        additional_dependencies: ['isort==5.10.1']
