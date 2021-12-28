@@ -5,11 +5,11 @@ from django_webtest import WebTestMixin
 from reversion.models import Version
 from test_plus.test import TestCase
 
-from company.factories import CompanyFactory
-from company.models import Company
+from pola.company.factories import CompanyFactory
+from pola.company.models import Company
+from pola.product.factories import ProductFactory
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
-from product.factories import ProductFactory
 
 
 class TemplateUsedMixin:

@@ -4,8 +4,8 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from report.factories import AttachmentFactory, ReportFactory
-from report.models import Report
+from pola.report.factories import AttachmentFactory, ReportFactory
+from pola.report.models import Report
 
 
 class DeleteEmptyReportsTestCase(TestCase):

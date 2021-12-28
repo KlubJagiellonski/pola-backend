@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from reversion.models import Revision
 from storages.backends.s3boto3 import S3Boto3Storage
 
-from product.models import Product
+from pola.product.models import Product
 
 
 class ReportQuerySet(models.QuerySet):

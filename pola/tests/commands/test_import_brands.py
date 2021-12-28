@@ -7,9 +7,9 @@ from django.core.management import CommandError, call_command
 from django.test import TestCase
 from parameterized import parameterized
 
-from company.factories import CompanyFactory
-from company.models import Brand, Company
-from product.models import Product
+from pola.company.factories import CompanyFactory
+from pola.company.models import Brand, Company
+from pola.product.models import Product
 
 EXAMPLE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_import_brands_fixture.tsv")
 

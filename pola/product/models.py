@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from reversion import revisions as reversion
 
-from company.models import Brand, Company
+from pola.company.models import Brand, Company
 from pola.concurency import concurency
 
 

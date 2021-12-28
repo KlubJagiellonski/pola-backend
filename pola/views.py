@@ -17,10 +17,10 @@ from django.views.generic.detail import (
     SingleObjectTemplateResponseMixin,
 )
 
-from company.models import Company
+from pola.company.models import Company
 from pola.models import Stats
-from product.models import Product
-from report.models import Report
+from pola.product.models import Product
+from pola.report.models import Report
 
 
 class FrontPageView(LoginRequiredMixin, TemplateView):

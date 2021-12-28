@@ -1,6 +1,6 @@
 from django.db import migrations, models
 
-import company.models
+import pola.company.models
 
 
 class Migration(migrations.Migration):
@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plCapital',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 null=True, verbose_name='Udzia\u0142 polskiego kapita\u0142u', blank=True
             ),
         ),
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plNotGlobEnt',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True,
                 null=True,
                 verbose_name='Struktura kapita\u0142owa',
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plRegistered',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True,
                 null=True,
                 verbose_name='Miejsce rejestracji',
@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plRnD',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True,
                 null=True,
                 verbose_name='Wysokop\u0142atne miejsca pracy',
@@ -109,7 +109,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plWorkers',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True,
                 null=True,
                 verbose_name='Miejsce produkcji',

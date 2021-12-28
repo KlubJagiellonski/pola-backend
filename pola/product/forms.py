@@ -7,7 +7,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
-from company.models import Company
+from pola.company.models import Company
 from pola.forms import (
     CommitDescriptionMixin,
     FormHorizontalMixin,

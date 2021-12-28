@@ -7,12 +7,12 @@ from ratelimit.decorators import ratelimit
 
 from pola import logic, logic_ai
 from pola.models import Query
+from pola.product.models import Product
 from pola.rpc_api.api_models import SearchResult, SearchResultCollection
 from pola.rpc_api.http import JsonProblemResponse
 from pola.rpc_api.openapi import validate_pola_openapi_spec
 from pola.rpc_api.paginator import TokenizedPaginator
 from pola.rpc_api.rates import whitelist
-from product.models import Product
 
 
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)

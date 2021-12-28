@@ -3,9 +3,9 @@ from dal import autocomplete
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from company.models import Company
+from pola.company.models import Company
 from pola.filters import CrispyFilterMixin
-from product.models import Product
+from pola.product.models import Product
 
 from .models import Report
 

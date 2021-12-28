@@ -4,9 +4,9 @@ import io
 from django.urls import reverse_lazy
 from test_plus.test import TestCase
 
-from company.factories import CompanyFactory
+from pola.company.factories import CompanyFactory
+from pola.product.factories import ProductFactory
 from pola.tests.test_views import PermissionMixin
-from product.factories import ProductFactory
 
 
 class TestHome(PermissionMixin, TestCase):

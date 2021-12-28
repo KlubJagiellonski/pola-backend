@@ -12,7 +12,7 @@ FROM
               WHEN count(DISTINCT ai_pics_aiattachment.id)>%s THEN 1
               ELSE 0
           END AS enough_ai_pics
-   FROM product_product
+   from pola.product_product
    JOIN pola_query ON product_product.id=pola_query.product_id
    LEFT OUTER JOIN ai_pics_aipics ON product_product.id = ai_pics_aipics.product_id
    LEFT OUTER JOIN ai_pics_aiattachment ON ai_pics_aipics.id = ai_pics_id

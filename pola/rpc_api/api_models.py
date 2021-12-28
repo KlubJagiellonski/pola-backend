@@ -1,7 +1,7 @@
 from typing import List, Optional, TypedDict
 
 from pola import logic
-from product.models import Product
+from pola.product.models import Product
 
 
 class CompanyBasicInfo(TypedDict):

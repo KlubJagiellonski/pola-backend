@@ -49,10 +49,10 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'pola',
-    'product',
-    'company',
-    'report',
-    'ai_pics',
+    'pola.product',
+    'pola.company',
+    'pola.report',
+    'pola.ai_pics',
     'pola.pagination_custom',
     'pola.users',
     'pola.concurency',

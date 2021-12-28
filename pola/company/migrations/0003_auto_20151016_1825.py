@@ -1,6 +1,6 @@
 from django.db import migrations, models
 
-import company.models
+import pola.company.models
 
 
 class Migration(migrations.Migration):
@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plNotGlobEnt',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True,
                 null=True,
                 verbose_name="Isn't it a global enterprise?",
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plRegistered',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True, null=True, verbose_name='Registered in Poland?', choices=[(0, 0), (100, 100)]
             ),
         ),
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plRnD',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True,
                 null=True,
                 verbose_name='Information about R&D center',
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='company',
             name='plWorkers',
-            field=company.models.IntegerRangeField(
+            field=pola.company.models.IntegerRangeField(
                 blank=True, null=True, verbose_name='Information about workers', choices=[(0, 0), (100, 100)]
             ),
         ),

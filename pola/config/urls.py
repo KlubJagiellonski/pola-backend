@@ -70,10 +70,10 @@ urlpatterns += [
         login_required(TemplateView.as_view(template_name='pages/lang-cms.html')),
         name="select_lang",
     ),
-    re_path(r'^cms/product/', ('product.urls', 'product', 'product')),
-    re_path(r'^cms/company/', ('company.urls', 'company', 'company')),
-    re_path(r'^cms/report/', ('report.urls', 'report', 'report')),
-    re_path(r'^cms/ai_pics/', ('ai_pics.urls', 'ai_pics', 'ai_pics')),
+    re_path(r'^cms/product/', ('pola.product.urls', 'product', 'product')),
+    re_path(r'^cms/company/', ('pola.company.urls', 'company', 'company')),
+    re_path(r'^cms/report/', ('pola.report.urls', 'report', 'report')),
+    re_path(r'^cms/ai_pics/', ('pola.ai_pics.urls', 'ai_pics', 'ai_pics')),
     re_path(r'^cms/concurency/', ('pola.concurency.urls', 'pola.concurency', 'concurency')),
 ]
 

@@ -3,7 +3,7 @@ from dal import autocomplete
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from company.models import Company
+from pola.company.models import Company
 from pola.filters import CrispyFilterMixin
 
 from .models import Product

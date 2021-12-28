@@ -4,11 +4,11 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ratelimit.decorators import ratelimit
 
+from pola.report.models import Report
 from pola.rpc_api.jsonschema import validate_json_response
 from pola.rpc_api.rates import whitelist
 from pola.rpc_api.views_v3 import attach_file_internal, create_report_internal
 from pola.rpc_api.views_v4 import get_by_code_internal
-from report.models import Report
 
 
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)

@@ -5,9 +5,9 @@ from django.db import models
 from django.utils import timezone
 from django.utils.timezone import get_default_timezone
 
-from company.models import Company
-from product.models import Product
-from report.models import Report
+from pola.company.models import Company
+from pola.product.models import Product
+from pola.report.models import Report
 
 
 class Query(models.Model):

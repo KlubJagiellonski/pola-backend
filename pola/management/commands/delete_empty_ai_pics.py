@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils import timezone
 
-from ai_pics.models import AIAttachment
+from pola.ai_pics.models import AIAttachment
 from pola.s3 import create_s3_connection
 
 

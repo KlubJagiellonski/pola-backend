@@ -1,16 +1,16 @@
 from django.core.management import BaseCommand
 from django.db import IntegrityError
 
-from company.factories import CompanyFactory
-from company.models import Company
-from product.factories import ProductFactory
-from product.models import Product
-from report.factories import (
+from pola.company.factories import CompanyFactory
+from pola.company.models import Company
+from pola.product.factories import ProductFactory
+from pola.product.models import Product
+from pola.report.factories import (
     AttachmentFactory,
     ReportFactory,
     ResolvedReportFactory,
 )
-from report.models import Report
+from pola.report.models import Report
 
 
 class Command(BaseCommand):

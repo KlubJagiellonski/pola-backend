@@ -18,9 +18,9 @@ from reversion.models import Version
 
 from pola.concurency import ConcurencyProtectUpdateView
 from pola.mixins import LoginPermissionRequiredMixin
+from pola.product.models import Product
+from pola.report.models import Report
 from pola.views import ExprAutocompleteMixin
-from product.models import Product
-from report.models import Report
 
 from . import models
 from .filters import ProductFilter

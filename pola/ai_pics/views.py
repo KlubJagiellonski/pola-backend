@@ -9,7 +9,7 @@ from django.utils.functional import cached_property
 from django.views import View
 from django.views.generic import DetailView, ListView
 
-from ai_pics.models import AIAttachment, AIPics
+from pola.ai_pics.models import AIAttachment, AIPics
 from pola.s3 import create_s3_connection
 
 

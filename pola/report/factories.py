@@ -1,8 +1,8 @@
 import factory.fuzzy
 from django.utils import timezone
 
+from pola.product.factories import ProductFactory
 from pola.users.factories import UserFactory
-from product.factories import ProductFactory
 
 
 class ReportFactory(factory.django.DjangoModelFactory):
