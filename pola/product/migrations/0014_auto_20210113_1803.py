@@ -6,7 +6,7 @@ SQL_STATEMENT = """
 INSERT INTO product_product_companies(product_id, company_id)
 SELECT product_product.id AS product_id,
        product_product.company_id AS company_id
-from pola.product_product
+from product_product
 WHERE product_product.company_id IS NOT NULL;
 """
 
