@@ -114,9 +114,9 @@ RUN apt-get update \
     && find "${APP_HOME}" -print0 | xargs --null chmod g+rw
 
 COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/js/ "${APP_HOME}pola/static/js/"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/fonts/ "${APP_HOME}pola/static/fonts/"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/css/ "${APP_HOME}pola/static/css/"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/js/ "${APP_HOME}/pola/static/js/"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/fonts/ "${APP_HOME}/pola/static/fonts/"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/css/ "${APP_HOME}/pola/static/css/"
 
 # Make /etc/passwd root-group-writeable so that user can be dynamically added by OpenShift
 # hadolint ignore=DL4005
