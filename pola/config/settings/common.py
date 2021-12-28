@@ -331,4 +331,4 @@ CORS_URLS_REGEX = r"^/a/.*$"
 
 # APP CONFIGURATION
 # ------------------------
-ENABLE_POLA_WEB_CUSTOMIZATION = env.bool('POLA_APP_ENABLE_POLA_WEB_CUSTOMIZATION', False)  # noqa: F405
+# None yet

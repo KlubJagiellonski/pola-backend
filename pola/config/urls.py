@@ -10,8 +10,7 @@ from django.views.defaults import (
     permission_denied,
     server_error,
 )
-from django.views.generic import RedirectView, TemplateView
-from django.views.static import serve
+from django.views.generic import TemplateView
 
 from pola import views_pola_web
 from pola.views import (
@@ -22,13 +21,6 @@ from pola.views import (
 )
 
 urlpatterns = []
-# Add static pages
-if not settings.ENABLE_POLA_WEB_CUSTOMIZATION:
-    urlpatterns += [
-        re_path(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
-        re_path(r'^friends$', TemplateView.as_view(template_name='friends.html'), name="friends"),
-        re_path(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
-    ]
 # Add mobile static pages
 urlpatterns += [
     re_path(r'^m/', ('pola.webviews.urls', 'webviews', 'webviews')),
@@ -77,37 +69,7 @@ urlpatterns += [
     re_path(r'^cms/concurency/', ('pola.concurency.urls', 'pola.concurency', 'concurency')),
 ]
 
-FAVICON_FILES = [
-    "favicon.ico",
-    "apple-touch-icon.png",
-    "apple-touch-icon-57x57.png",
-    "apple-touch-icon-60x60.png",
-    "apple-touch-icon-72x72.png",
-    "apple-touch-icon-76x76.png",
-    "apple-touch-icon-114x114.png",
-    "apple-touch-icon-120x120.png",
-    "apple-touch-icon-144x144.png",
-    "apple-touch-icon-152x152.png",
-    "apple-touch-icon-152x152.png",
-    "apple-touch-icon-180x180.png",
-    "browserconfig.xml",
-]
-
-if not settings.ENABLE_POLA_WEB_CUSTOMIZATION:
-    for filename in FAVICON_FILES:
-        urlpatterns.append(
-            url(
-                rf'^{filename}$',
-                RedirectView.as_view(url=f'{settings.STATIC_URL}favicons/{filename}', permanent=True),
-            )
-        )
-
-# Serving static files
-if not settings.ENABLE_POLA_WEB_CUSTOMIZATION:
-    urlpatterns += [
-        url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-    ]
-
+# Debug stuff
 if settings.DEBUG:
     import debug_toolbar
 
@@ -125,5 +87,5 @@ if settings.DEBUG:
         url(r'^500/$', server_error),
     ]
 
-if settings.ENABLE_POLA_WEB_CUSTOMIZATION:
-    urlpatterns += [re_path('^.*', views_pola_web.page_not_found_handler)]
+# All unknown URls fallback to S#
+urlpatterns += [re_path('^.*', views_pola_web.page_not_found_handler)]

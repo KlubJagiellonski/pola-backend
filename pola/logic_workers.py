@@ -1,18 +1,17 @@
 from datetime import timedelta
 
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.utils import timezone
 
 from pola.company.models import Company
-from pola.logic import create_from_api
 from pola.product.models import Product
-from pola.produkty_w_sieci_api import (
-    Client,
-    ConnectionError,
-    is_code_supported_by_gs1_api,
-)
+
+# from pola.produkty_w_sieci_api import (
+#     Client,
+#     ConnectionError,
+#     is_code_supported_by_gs1_api,
+# )
 
 REQUERY_590_FREQUENCY = 30
 REQUERY_590_LIMIT = 10000
@@ -62,28 +61,29 @@ def requery_all_codes():
 
 
 def requery_products(products):
-    client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
-
-    for prod in products:
-        print(prod.code, prod.query_count, " -> ")
-
-        prod.ilim_queried_at = timezone.now()
-        prod.save()
-
-        try:
-            if is_code_supported_by_gs1_api(prod.code):
-                product_info = client.get_product_by_gtin(prod.code)
-
-                p = create_from_api(prod.code, product_info, product=prod)
-
-                if p.company and p.company.name:
-                    print(p.company.name.encode('utf-8'), p.brand)
-                else:
-                    print(".")
-            else:
-                print(";")
-        except ConnectionError as e:
-            print(e)
+    pass
+    # client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
+    #
+    # for prod in products:
+    #     print(prod.code, prod.query_count, " -> ")
+    #
+    #     prod.ilim_queried_at = timezone.now()
+    #     prod.save()
+    #
+    #     try:
+    #         if is_code_supported_by_gs1_api(prod.code):
+    #             product_info = client.get_product_by_gtin(prod.code)
+    #
+    #             p = create_from_api(prod.code, product_info, product=prod)
+    #
+    #             if p.company and p.company.name:
+    #                 print(p.company.name.encode('utf-8'), p.brand)
+    #             else:
+    #                 print(".")
+    #         else:
+    #             print(";")
+    #     except ConnectionError as e:
+    #         print(e)
 
 
 def update_company_from_krs(prod, company):

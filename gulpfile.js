@@ -1,6 +1,5 @@
 "use strict";
 var fs = require('fs'),
-    path = require('path'),
     merge = require('merge-stream'),
     gulp = require('gulp'),
     $ = require('gulp-load-plugins')(),
@@ -23,7 +22,6 @@ var config = (function () {
         scss: {
             input: [
                 path.assets + '/scss/style.scss',
-                path.assets + '/scss/landing.scss',
             ],
             include: [
                 path.bower + '/bootstrap-sass/assets/stylesheets',
@@ -46,7 +44,6 @@ var config = (function () {
                 landing: [
                     path.bower + "/jquery/dist/jquery.js",
                     // path.bower + "/bootstrap-sass/assets/javascripts/bootstrap.js",
-                    path.assets + "/js/landing/*.js"
                 ]
             },
             output: path.static + "/js/",
@@ -59,15 +56,6 @@ var config = (function () {
                 path.bower + '/font-awesome/fonts/**.*'
             ],
             output: path.static + "/fonts"
-        },
-        images: {
-            input: path.assets + "/images/*",
-            output: path.static + "/images/"
-        },
-        symbols: {
-            input: path.assets + "/svg/*.svg",
-            output: path.static + "/symbols.svg",
-            watch: path.assets + "/svg/*.svg"
         }
     };
 }());
@@ -122,31 +110,6 @@ gulp.task('scss', function () {
         .pipe(livereload());
 });
 
-gulp.task("images", function () {
-    return gulp.src(config.images.input)
-        .pipe($.imagemin())
-        .pipe(gulp.dest(config.images.output));
-});
-
-gulp.task("symbols", function () {
-    return gulp
-        .src(config.symbols.input)
-        .pipe($.svgmin(function (file) {
-            var prefix = path.basename(file.relative, path.extname(file.relative));
-            return {
-                plugins: [{
-                    cleanupIDs: {
-                        prefix: prefix + "-",
-                        minify: true
-                    }
-                }]
-            };
-        }))
-        .pipe($.svgstore())
-        .pipe($.rename(path.basename(config.symbols.output)))
-        .pipe(gulp.dest(path.dirname(config.symbols.output)));
-});
-
 // Rerun the task when a file changes
 gulp.task('watch', function () {
     config.scss.watch.forEach(function (path) {
@@ -157,6 +120,6 @@ gulp.task('watch', function () {
     });
 });
 
-gulp.task('build', ['bower', 'icons', 'images', 'js', 'scss']);
+gulp.task('build', ['bower', 'icons', 'js', 'scss']);
 
 gulp.task('default', ['server', 'build', 'watch']);
