@@ -15,7 +15,7 @@ charset-normalizer==2.0.9
 colorama==0.4.4
 cryptography==3.4.8
 dbt==0.21.1
-dbt-bigquery==0.21.1
+dbt-bigquery==1.0.0
 dbt-core==0.21.1
 dbt-extractor==0.4.0
 dbt-postgres==0.21.1
