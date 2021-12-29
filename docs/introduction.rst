@@ -25,8 +25,11 @@ Architektura
 Założenia
 ---------
 
-* ``pola-ios``, ``pola-android``, ``pola-flutter``, ``pola-web`` łaczy się przez HTTP JSON API do ``pola-web``.
-* ``pola-web`` jest rozwijana, jako niezależna aplikacja Gatsby/React, a następnie w procesie CI/CD uruchamianym na ``Github Action`` jest publikowana na wiaderku ``AWS Bucket Web``. ``pola-web`` odczytuje dane z wiaderka i zwraca użytkowniką. Z tego wynika, że ``pola-backend`` i ``pola-web`` mogą być wdrażane niezależnie, ale wykorzystują wspólne wiaderko.
+* ``pola-backend`` zapewnia dwie funkcjonalności:
+
+  * API wykorzystywany przez ``pola-ios``, ``pola-android``, ``pola-flutter``, ``pola-web``
+  * CMS wykorzystywany przez redakcje do aktualizacji danych
+
 * ``pola-backend`` jest uruchamiana na platformie ``Heroku``
   Platforma dostarcza kilka usług oodpowiedzialnych za monitoring:
 
@@ -43,7 +46,10 @@ Założenia
   Wykorzystywany jest również `MailGun <https://elements.heroku.com/addons/mailgun>`__ do wysyłania wiadomości z przypomniemiem hasła.
 
 * ``pola-backend`` jest aplikacja kontenerową wdrażana przez process Ci/CD uruchamiany na Github Action. Po szczegóły, patrz: `Wdrożęnie <./deploy.rst>`__
-* ``pola-web`` wykorzystuje wiaderka na platformie AWS:
+
+* ``pola-web`` jest rozwijana, jako niezależna aplikacja Gatsby/React, a następnie w procesie CI/CD uruchamianym na ``Github Action`` jest publikowana na wiaderku ``AWS Bucket Web``. ``pola-web`` odczytuje dane z wiaderka i zwraca użytkowniką. Z tego wynika, że ``pola-backend`` i ``pola-web`` mogą być wdrażane niezależnie, ale wykorzystują wspólne wiaderko.
+
+* ``pola-backend`` wykorzystuje wiaderka na platformie AWS:
 
   * ``AWS Bucket AI Pics`` - przechowuje zdjęcia od użytkowników, które miały być wykorzystywane przez ``pola-ai`` (project porzucony).
   * ``AWS Bucket Backend`` - przechowuje pliki przesłane przez uzytkowników, które nie powinny być publiczne np. raporty.
