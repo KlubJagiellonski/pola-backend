@@ -3,7 +3,7 @@
     "bootstrap-sass": "^3.3.6",
     "esm": "^3.2.25",
     "font-awesome": "^4.7.0",
-    "jquery": "^2.2.2",
+    "jquery": "^3.5.0",
     "mousetrap": "^1.5.2"
   },
   "devDependencies": {
