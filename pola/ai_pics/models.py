@@ -5,12 +5,13 @@ from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from model_utils.models import TimeStampedModel
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from pola.product.models import Product
 
 
-class AIPics(models.Model):
+class AIPics(TimeStampedModel):
     STATES = (
         ('valid', 'Valid'),
         ('invalid', 'Invalid'),
@@ -18,8 +19,6 @@ class AIPics(models.Model):
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     client = models.CharField(max_length=40, blank=False, null=False, verbose_name=_('Zgłaszający'))
-
-    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Utworzone'))
 
     original_width = models.IntegerField(null=False)
     original_height = models.IntegerField(null=False)
