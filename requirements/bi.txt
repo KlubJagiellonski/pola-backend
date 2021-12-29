@@ -47,7 +47,7 @@ mashumaro==2.5
 minimal-snowplow-tracker==0.0.2
 msgpack==1.0.3
 msrest==0.6.21
-networkx==2.5.1
+networkx==2.6.3
 oauthlib==3.1.1
 oscrypto==1.2.1
 packaging==20.9
