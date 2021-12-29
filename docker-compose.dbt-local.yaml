@@ -8,7 +8,7 @@ services:
         condition: service_healthy
       minio-init:
         condition: service_started
-      web-init:
+      web-collectstatic:
         condition: service_started
     environment:
       - POLA_APP_HOST=postgres

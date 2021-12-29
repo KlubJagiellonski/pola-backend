@@ -5,7 +5,24 @@ ARG APP_HOME=/opt/pola-backend
 
 ARG PYTHON_VERSION="3.9"
 
-FROM python:${PYTHON_VERSION}-slim-buster as build
+######################### NODE BUILD IMAGE ##########################
+
+FROM node:16.13.1-alpine3.12 as build-js
+
+WORKDIR /app/
+COPY ./package.json  /app/
+COPY ./package-lock.json /app/
+COPY ./gulpfile.esm.js /app/
+
+COPY ./pola/assets /app/pola/assets
+RUN npm install && npm run build
+
+
+######################### PYTHON BUILD IMAGE ########################
+ARG PYTHON_VERSION
+ARG APP_HOME
+
+FROM python:${PYTHON_VERSION}-slim-buster as build-py
 
 ARG APP_HOME
 ENV APP_HOME=${APP_HOME}
@@ -55,7 +72,7 @@ LABEL io.github.klubjagiellonski.distro="debian" \
     io.github.klubjagiellonski.component="pola-backend" \
     io.github.klubjagiellonski.image="pola-backend"
 
-######################### MAIN IMAGE #########################
+######################### MAIN IMAGE ################################
 
 FROM python:${PYTHON_VERSION}-slim-buster as main
 
@@ -105,7 +122,10 @@ RUN apt-get update \
     && find "${APP_HOME}" -executable -print0 | xargs --null chmod g+x  \
     && find "${APP_HOME}" -print0 | xargs --null chmod g+rw
 
-COPY --chown=pola-backend:root --from=build /root/.local "${APP_USER_HOME_DIR}/.local"
+COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/js/ "${APP_HOME}/pola/static/js/"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/fonts/ "${APP_HOME}/pola/static/fonts/"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/css/ "${APP_HOME}/pola/static/css/"
 
 # Make /etc/passwd root-group-writeable so that user can be dynamically added by OpenShift
 # hadolint ignore=DL4005
