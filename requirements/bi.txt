@@ -14,7 +14,7 @@ chardet==4.0.0
 charset-normalizer==2.0.9
 colorama==0.4.4
 cryptography==3.4.8
-dbt==0.21.1
+dbt==1.0.0
 dbt-bigquery==0.21.1
 dbt-core==0.21.1
 dbt-extractor==0.4.0
