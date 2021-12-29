@@ -1,5 +1,5 @@
 ARG APP_UID="50000"
-ARG APP_GID="0"
+ARG APP_GID="50000"
 
 ARG APP_HOME=/opt/pola-backend
 
@@ -15,7 +15,7 @@ COPY ./package-lock.json /app/
 COPY ./gulpfile.esm.js /app/
 
 COPY ./pola/assets /app/pola/assets
-RUN npm install && find node_modules/ && npm run build
+RUN npm install && npm run build
 
 
 ######################### PYTHON BUILD IMAGE ########################

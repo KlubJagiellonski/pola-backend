@@ -80,9 +80,13 @@ function verify_image() {
 }
 
 function push_image() {
-    echo "Pushing image: ${BUILD_IMAGE_NAME}:${IMAGE_TAG}"
-    docker tag "${BUILD_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_IMAGE_NAME}:latest"
-    docker push "${BUILD_IMAGE_NAME}:latest"
+    echo "Pushing image: ${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}"
+    docker tag "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_PY_IMAGE_NAME}:latest"
+    docker push "${BUILD_PY_IMAGE_NAME}:latest"
+
+    echo "Pushing image: ${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}"
+    docker tag "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_JS_IMAGE_NAME}:latest"
+    docker push "${BUILD_JS_IMAGE_NAME}:latest"
 
     echo "Pushing image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
