@@ -12,7 +12,7 @@ chardet==4.0.0
 charset-normalizer==2.0.9
 click==8.0.3
 coverage==6.2
-cryptography==3.4.8
+cryptography==36.0.1
 decorator==5.1.0
 defusedxml==0.7.1
 dictpath==0.1.3
