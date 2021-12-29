@@ -88,7 +88,7 @@ class FrontPageView(LoginRequiredMixin, TemplateView):
         )
 
         # Reports
-        c['newest_reports'] = Report.objects.only_open().order_by('-created_at')[:10]
+        c['newest_reports'] = Report.objects.only_open().order_by('-created')[:10]
         c['no_of_open_reports'] = Report.objects.only_open().count()
         c['no_of_resolved_reports'] = Report.objects.only_resolved().count()
         c['no_of_reports'] = Report.objects.count()

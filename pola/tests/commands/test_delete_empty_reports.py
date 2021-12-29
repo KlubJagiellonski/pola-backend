@@ -43,7 +43,7 @@ class DeleteEmptyReportsTestCase(TestCase):
 
     def test_keep_untouched_old_files(self):
         report = ReportFactory()
-        report.created_at = timezone.now() - timedelta(days=30)
+        report.created = timezone.now() - timedelta(days=30)
         report.save()
         attachment = AttachmentFactory(report=report)
         attachment.attachment.delete()

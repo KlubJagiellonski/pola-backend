@@ -28,7 +28,7 @@ WHERE 1 = 1
   AND
     (SELECT count(*) FROM pola_query WHERE product_id = product_product.id)
       <
-    (12 * date_part('year', age(created_at)) + date_part('month', age(created_at)))
+    (12 * date_part('year', age(created)) + date_part('month', age(created)))
 LIMIT %s
 """
                 ),

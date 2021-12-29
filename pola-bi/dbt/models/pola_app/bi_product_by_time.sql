@@ -18,6 +18,6 @@ FROM
     LEFT JOIN
         {{ source('public', 'product_product') }}
     ON
-        product_product.created_at BETWEEN seq AND (seq + INTERVAL '1 week')
+        product_product.created BETWEEN seq AND (seq + INTERVAL '1 week')
 GROUP BY seq
 ORDER BY seq

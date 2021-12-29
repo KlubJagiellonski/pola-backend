@@ -1,5 +1,5 @@
 {%extends 'product/base.html' %}
-{% load i18n %}
+{% load i18n humanize %}
 {% block breadcrumbs_rows %}
     <li class="active"><a href="{{ obj.get_absolute_url }}">{{ object }} </a></li>
 {% endblock %}
@@ -32,6 +32,12 @@
             </tr>
             <tr>
                 <td>{% trans "Liczba zeskanowań: " %}</td><td>{{ object.query_count }}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Data utworzenia: " %}</td><td>{{ object.created | naturaltime }}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Data modyfikacji: " %}</td><td>{{ object.modified | naturaltime }}</td>
             </tr>
             <tr>
                 <td>{% trans "Kod: " %}</td><td>{{ object.code }}</td>

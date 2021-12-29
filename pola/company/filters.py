@@ -22,6 +22,8 @@ class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
         fields=(
             ('name', _('Nazwa (A-Z)')),
             ('query_count', _('Liczba zapytań (rosnąco)')),
+            ('modified', _('Data modyfikacji (rosnąco)')),
+            ('created', _('Data utworzenia (rosnąco)')),
         )
     )
 
@@ -39,6 +41,15 @@ class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
 class BrandFilter(CrispyFilterMixin, django_filters.FilterSet):
     company = django_filters.ModelChoiceFilter(
         queryset=Company.objects.all(), widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
+    )
+
+    o = django_filters.OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ('name', _('Nazwa (A-Z)')),
+            ('modified', _('Data modyfikacji (rosnąco)')),
+            ('created', _('Data utworzenia (rosnąco)')),
+        )
     )
 
     class Meta:

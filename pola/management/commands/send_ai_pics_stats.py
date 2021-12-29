@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 "select count(*) as c0, count(distinct ai_pics_aipics.id) as c1, count(distinct product_id) as c2 "
                 "from ai_pics_aipics "
                 "join ai_pics_aiattachment on ai_pics_aipics.id = ai_pics_id "
-                "where ai_pics_aipics.created_at > current_timestamp - interval '1 day' "
+                "where ai_pics_aipics.created > current_timestamp - interval '1 day' "
             )
             row = cursor.fetchone()
             msg = (

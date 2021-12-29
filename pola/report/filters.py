@@ -47,7 +47,7 @@ class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
     o = django_filters.OrderingFilter(
         # tuple-mapping retains order
         fields=(
-            ('created_at', _('Data utowrzenia')),
+            ('created', _('Data utowrzenia')),
             ('resolved_at', _('Data rozpatrzenia')),
             ('resolved_by', _('Rozpatrujący')),
         )
@@ -60,7 +60,7 @@ class ReportFilter(CrispyFilterMixin, django_filters.FilterSet):
             'product',
             'product__company',
             'client',
-            'created_at',
+            'created',
             'resolved_at',
             'resolved_by',
         ]

@@ -4,6 +4,7 @@ from django.db import connection, models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
 
 from pola.company.models import Brand, Company
@@ -27,10 +28,7 @@ class ProductQuerySet(models.query.QuerySet):
 
 
 @reversion.register
-class Product(models.Model):
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-    )
+class Product(TimeStampedModel):
     ilim_queried_at = models.DateTimeField(default=timezone.now, null=False)
     name = models.CharField(max_length=255, null=True, verbose_name="Nazwa")
     code = models.CharField(
@@ -96,11 +94,11 @@ class Product(models.Model):
     class Meta:
         verbose_name = _("Produkt")
         verbose_name_plural = _("Produkty")
-        ordering = ['-created_at']
+        ordering = ['-created']
         permissions = (
             # ("view_product", "Can see all product"),
             # ("add_product", "Can add a new product"),
             # ("change_product", "Can edit the product"),
             # ("delete_product", "Can delete the product"),
         )
-        indexes = [BrinIndex(fields=['created_at'], pages_per_range=16)]
+        indexes = [BrinIndex(fields=['created'], pages_per_range=16)]

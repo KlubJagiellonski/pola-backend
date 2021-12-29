@@ -29,7 +29,7 @@ class Command(BaseCommand):
         print(f'Loaded {len(s3_files)} S3 files')
 
         startdate = timezone.now() - timedelta(days=int(options["no_of_days_back"]))
-        attachments = Attachment.objects.select_related('report').filter(report__created_at__gte=startdate)
+        attachments = Attachment.objects.select_related('report').filter(report__created__gte=startdate)
         for attachment in attachments:
             if attachment.attachment not in s3_files:
                 attachment.delete()

@@ -1,5 +1,5 @@
 {%extends 'company/base.html' %}
-{% load i18n %}
+{% load i18n humanize %}
 
 {% block breadcrumbs_rows %}
     <li class="active"><a href="{{ obj.get_absolute_url }}">{{ object }}</a></li>
@@ -30,6 +30,12 @@
                     <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td>{% trans "Data utworzenia: " %}</td><td>{{ object.created | naturaltime }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans "Data modyfikacji: " %}</td><td>{{ object.modified | naturaltime }}</td>
+                </tr>
             </table>
         </div>
     </div>

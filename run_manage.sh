@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-docker-compose run --rm web ./manage.py "${@}"
+docker-compose run --rm --no-deps web ./manage.py "${@}"
