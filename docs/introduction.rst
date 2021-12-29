@@ -47,7 +47,7 @@ Założenia
 
   * ``AWS Bucket AI Pics`` - przechowuje zdjęcia od użytkowników, które miały być wykorzystywane przez ``pola-ai`` (project porzucony).
   * ``AWS Bucket Backend`` - przechowuje pliki przesłane przez uzytkowników, które nie powinny być publiczne np. raporty.
-  * ``AWS Bucket Public`` - przechowuje pliki statyczne np. kod CSS/JS, który jest publiczny dla wszystkich.
+  * ``AWS Bucket Public`` - przechowuje pliki statyczne np. kod CSS/JS,. Zawartość jest publiczna dla wszystkich.
   * ``AWS Bucket Web`` - przechowuje skompilowana aplikacje ``pola-web``.
 
 * ``pola-bi`` jest zbiorem narzędiz, który uruchamia się cyklicznie na Github Action, który transformuje dane w ``Heroku Postgres``, a następnie zapisuje je w ``Google BigQuery``, co pozwala na dostęp do danych przez raporty utworzone w ``Google Datastudio``. Nie jest możliwe wykorzysywane bezpośredniego połączenia z ``Google Datastudio`` do ``Heroku Postgress``, ponieważ ``Heroku Postgress`` regularnie zmienia hasła, a ``Google Datastudio`` nie umożliwia API do aktualizacji danych
