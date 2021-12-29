@@ -42,7 +42,7 @@ keyring==21.8.0
 leather==0.3.4
 Logbook==1.5.3
 MarkupSafe==2.0.1
-mashumaro==2.5
+mashumaro==2.9
 minimal-snowplow-tracker==0.0.2
 msgpack==1.0.3
 msrest==0.6.21
