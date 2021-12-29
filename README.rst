@@ -27,8 +27,8 @@ LICENSE: BSD
 Dokumentacja
 ============
 
-* `Omówienie <introduction.rst>`__
-* `Uruchomienie aplikacji <start.rst>`__
-* `Konfiguracja aplikacji <config.rst>`__
-* `Wdrożęnie aplikacji <deploy.rst>`__
-* `Testowanie aplikacji <testing.rst>`__
+* `Omówienie <./docs/introduction.rst>`__
+* `Uruchomienie aplikacji <./docs/start.rst>`__
+* `Konfiguracja aplikacji <./docs/config.rst>`__
+* `Wdrożęnie aplikacji <./docs/deploy.rst>`__
+* `Testowanie aplikacji <./docs/testing.rst>`__
