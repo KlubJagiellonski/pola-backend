@@ -1,4 +1,4 @@
-agate==1.6.1
+agate==1.6.3
 asn1crypto==1.4.0
 attrs==21.3.0
 azure-common==1.1.27
