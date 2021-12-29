@@ -17,6 +17,7 @@ from pola.views import (
     AdminStatsPageView,
     EditorsStatsPageView,
     FrontPageView,
+    ReleaseView,
     StatsPageView,
 )
 
@@ -53,6 +54,7 @@ urlpatterns += [
 ]
 # Add CMS views
 urlpatterns += [
+    re_path(r'^release/$', ReleaseView.as_view(), name="release"),
     re_path(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
     re_path(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
     re_path(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),

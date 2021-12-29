@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Informacjae o wydaniu" %}</h1><br/>
+{% trans "Wydanie" %}:
+{% if release_sha %}
+<a href="{{ release_link }}">{{ release_sha }}</a>
+{% else %}
+Unknown
+{% endif %}
+.
+{% endblock content %}

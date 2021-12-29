@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from functools import reduce
 from textwrap import dedent
@@ -239,3 +240,20 @@ class AdminStatsPageView(QueryStatsPageView):
         )
 
         return c
+
+
+class ReleaseView(TemplateView):
+    template_name = "pages/release-info.html"
+    GITHUB_LINK_FORMAT = "https://github.com/KlubJagiellonski/pola-backend/commit/{}"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        release_sha = os.environ.get("RELEASE_SHA")
+
+        context.update(
+            {
+                'release_sha': release_sha,
+                'release_link': self.GITHUB_LINK_FORMAT.format(release_sha) if release_sha else "unknown",
+            }
+        )
+        return context
