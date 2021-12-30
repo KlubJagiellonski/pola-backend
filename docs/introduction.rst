@@ -10,9 +10,9 @@ Projekt Pola składa się z kilku podprojektów, którego rdzeniem jest proejkt 
 * `pola-backend <https://github.com/KlubJagiellonski/pola-backend>`__ - rdzeń aplikacji napisany w Django.
 * `pola-ios <https://github.com/KlubJagiellonski/pola-ios>`__  - aplikacja na system iOS.
 * `pola-android <https://github.com/KlubJagiellonski/pola-android>`__ - aplikacja na system Android.
-* `pola-flutter <https://github.com/KlubJagiellonski/pola-flutter>`__ - aplikacja multiplatformowa napisana w Flutter (projekt niewydana).
+* `pola-flutter <https://github.com/KlubJagiellonski/pola-flutter>`__ - aplikacja multiplatformowa napisana w Flutter (projekt niewydany).
 * `pola-web <https://github.com/KlubJagiellonski/pola-web>`__ - statyczna strona napisana w Gatsby.
-* `pola-bi <https://github.com/KlubJagiellonski/pola-backend/tree/master/pola-bi/>`__ - zbiór narzędzi odpowiedzialnych za analityke biznesową (porzuczony).
+* `pola-bi <https://github.com/KlubJagiellonski/pola-backend/tree/master/pola-bi/>`__ - zbiór narzędzi odpowiedzialnych za analityke biznesową (projekt niewydany).
 
 * `pola-ai <https://github.com/KlubJagiellonski/pola-ai>`__ - sztuczna inteligencja rozpoznajaca produkty (projekt porzucony).
 * `pola-facebook <https://github.com/KlubJagiellonski/pola-facebook>`__ - chatbot na Facebook (projekt porzuczony).
