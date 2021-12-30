@@ -49,7 +49,7 @@ openapi-schema-validator==0.1.6
 openapi-spec-validator==0.3.1
 parse==1.19.0
 Pillow==8.4.0
-psycopg2-binary==2.9.2
+psycopg2-binary==2.9.3
 pycparser==2.21
 PyJWT==2.3.0
 pyrsistent==0.18.0

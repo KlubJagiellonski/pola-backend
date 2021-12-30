@@ -25,7 +25,7 @@ msgpack==1.0.3
 networkx==2.6.3
 packaging==21.3
 parsedatetime==2.4
-psycopg2-binary==2.9.2
+psycopg2-binary==2.9.3
 pycparser==2.21
 pyparsing==3.0.6
 pyrsistent==0.18.0
