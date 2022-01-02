@@ -7,8 +7,6 @@
     "mousetrap": "^1.5.2"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.16.5",
-    "@babel/register": "^7.16.5",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-cli": "^2.3.0",
