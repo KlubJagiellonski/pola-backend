@@ -12,11 +12,10 @@ FROM node:16.13.1-alpine3.12 as build-js
 WORKDIR /app/
 COPY ./package.json  /app/
 COPY ./package-lock.json /app/
+RUN npm install && npm cache clean --force
 COPY ./gulpfile.esm.js /app/
-
 COPY ./pola/assets /app/pola/assets
-RUN npm install && npm run build
-
+RUN npm run build
 
 ######################### PYTHON BUILD IMAGE ########################
 ARG PYTHON_VERSION

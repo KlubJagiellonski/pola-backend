@@ -1,12 +1,12 @@
 {
   "dependencies": {
     "bootstrap-sass": "^3.3.6",
-    "esm": "^3.2.25",
     "font-awesome": "^4.7.0",
     "jquery": "^2.2.2",
     "mousetrap": "^1.5.2"
   },
   "devDependencies": {
+    "esm": "^3.2.25",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-cli": "^2.3.0",
