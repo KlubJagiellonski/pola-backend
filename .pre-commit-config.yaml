@@ -15,7 +15,7 @@ repos:
       - id: remove-tabs
         exclude: ^pola/tests/commands/test_import_brands_fixture\.tsv$
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
       - id: check-added-large-files
         exclude: ^package-lock\.json$
@@ -37,19 +37,18 @@ repos:
       - id: fix-encoding-pragma
         args:
           - --remove
-      - id: forbid-new-submodules
       - id: mixed-line-ending
       - id: name-tests-test
         args: ['--django']
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.23.3
+    rev: v2.31.0
     hooks:
       - id: pyupgrade
         args: ['--py38-plus']
   - repo: https://github.com/psf/black
-    rev: '21.7b0'
+    rev: '21.12b0'
     hooks:
       - id: black
         args: ["--line-length", "120", "--skip-string-normalization", "--target-version", "py38"]
@@ -71,28 +70,32 @@ repos:
     hooks:
       - id: flake8
   - repo: https://github.com/adrienverge/yamllint
-    rev: 'v1.26.2'
+    rev: 'v1.26.3'
     hooks:
       - id: yamllint
         entry: yamllint -c yamllint-config.yml
   - repo: https://github.com/ikamensh/flynt
-    rev: '0.66'
+    rev: '0.69'
     hooks:
       - id: flynt
         args:
           - --line-length
           - '99999'
   - repo: https://github.com/hadolint/hadolint
-    rev: 'v2.6.1'
+    rev: 'v2.8.0'
     hooks:
       - id: hadolint-docker
-        entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.6.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
+        entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.8.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
+  - repo: https://github.com/PyCQA/isort
+    rev: '5.10.1'
+    hooks:
+      - id: isort
   - repo: local
     hooks:
       - id: shellcheck
         name: Check Shell scripts syntax correctness
         language: docker_image
-        entry: koalaman/shellcheck:v0.7.2 -x -a
+        entry: koalaman/shellcheck:v0.8.0 -x -a
         files: \.sh$
       - id: version-checks
         name: Checks Django Version in docker-compose.yaml
@@ -102,13 +105,3 @@ repos:
           (?x)
           ^requirements/production\.txt$|
           ^docker-compose.yaml$|
-      - id: isort
-        name: isort
-        entry: isort
-        require_serial: true
-        language: python
-        language_version: python3
-        types_or: [cython, pyi, python]
-        args: ['--filter-files']
-        minimum_pre_commit_version: '2.9.2'
-        additional_dependencies: ['isort==5.10.1']
