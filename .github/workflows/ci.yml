@@ -10,6 +10,7 @@ env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DOCKER_BUILDKIT: 1
 
 jobs:
   django-tests:
