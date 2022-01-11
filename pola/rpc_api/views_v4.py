@@ -56,8 +56,8 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
 
     result["donate"] = {
         "show_button": True,
-        "title": "Wyszukaj produkty po nazwie",
-        "url": "https://www.pola-app.pl/",
+        "title": "Potrzebujemy 1 zł",
+        "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
     }
     return result
 
