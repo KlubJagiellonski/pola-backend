@@ -54,8 +54,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 },
                 'donate': {
                     'show_button': True,
-                    'url': 'https://www.pola-app.pl/',
-                    'title': 'Wyszukaj produkty po nazwie',
+                    'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
+                    'title': 'Potrzebujemy 1 zł',
                 },
             },
             json.loads(response.content),
@@ -117,8 +117,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 ],
                 "donate": {
                     "show_button": True,
-                    "url": "https://www.pola-app.pl/",
-                    "title": "Wyszukaj produkty po nazwie",
+                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+                    "title": "Potrzebujemy 1 zł",
                 },
             },
             json.loads(response.content),
@@ -215,8 +215,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 ],
                 "donate": {
                     "show_button": True,
-                    "url": 'https://www.pola-app.pl/',
-                    "title": 'Wyszukaj produkty po nazwie',
+                    "url": 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
+                    "title": 'Potrzebujemy 1 zł',
                 },
             },
             json.loads(response.content),
