@@ -46,7 +46,7 @@ more-itertools==8.12.0
 oauthlib==3.1.1
 openapi-core==0.14.2
 openapi-schema-validator==0.2.1
-openapi-spec-validator==0.3.1
+openapi-spec-validator==0.3.2
 parse==1.19.0
 Pillow==9.0.0
 psycopg2-binary==2.9.3
