@@ -58,7 +58,7 @@ more-itertools==8.12.0
 oauthlib==3.1.1
 openapi-core==0.14.2
 openapi-schema-validator==0.2.2
-openapi-spec-validator==0.3.1
+openapi-spec-validator==0.3.3
 parameterized==0.8.1
 parse==1.19.0
 parso==0.8.3
