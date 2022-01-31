@@ -9,7 +9,7 @@ botocore==1.23.46
 certifi==2021.10.8
 cffi==1.15.0
 chardet==4.0.0
-charset-normalizer==2.0.10
+charset-normalizer==2.0.11
 click==8.0.3
 coverage==6.3
 cryptography==36.0.1
