@@ -30,5 +30,5 @@ Dokumentacja
 * `Omówienie <./docs/introduction.rst>`__
 * `Uruchomienie aplikacji <./docs/start.rst>`__
 * `Konfiguracja aplikacji <./docs/config.rst>`__
-* `Wdrożęnie aplikacji <./docs/deploy.rst>`__
+* `Wdrożenie aplikacji <./docs/deploy.rst>`__
 * `Testowanie aplikacji <./docs/testing.rst>`__
