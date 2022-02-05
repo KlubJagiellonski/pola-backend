@@ -74,7 +74,11 @@ class AIAttachment(models.Model):
     attachment = models.FileField(
         upload_to="ai/%Y/%m/%d",
         verbose_name=_("File"),
-        storage=S3Boto3Storage(querystring_auth=True, bucket_name=settings.AWS_STORAGE_AI_PICS_BUCKET_NAME),
+        storage=S3Boto3Storage(
+            querystring_auth=True,
+            bucket_name=settings.AWS_STORAGE_AI_PICS_BUCKET_NAME,
+            region_name='eu-central-1'
+        ),
     )
 
     @property
