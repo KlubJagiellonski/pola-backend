@@ -14,6 +14,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='aiattachment',
             name='attachment',
-            field=models.FileField(storage=storages.backends.s3boto3.S3Boto3Storage(bucket_name='pola-app-ai-pics', querystring_auth=True, region_name='eu-central-1'), upload_to='ai/%Y/%m/%d', verbose_name='File'),
+            field=models.FileField(
+                storage=storages.backends.s3boto3.S3Boto3Storage(
+                    bucket_name='pola-app-ai-pics', querystring_auth=True, region_name='eu-central-1'
+                ),
+                upload_to='ai/%Y/%m/%d',
+                verbose_name='File',
+            ),
         ),
     ]
