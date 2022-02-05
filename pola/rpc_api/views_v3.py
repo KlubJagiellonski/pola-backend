@@ -218,7 +218,7 @@ def create_signed_request_boto3(mime_type, object_name, bucket_name):
         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
         config=Config(signature_version='s3v4'),
-        region_name='us-east-2',
+        region_name='eu-central-1',
     )
     response = client.generate_presigned_url(
         'put_object',
