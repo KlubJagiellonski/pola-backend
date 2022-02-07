@@ -34,13 +34,17 @@
         <tr>
             <td>Produkt: </td>
             <td>
-                {% if perms.product.view_product %}<a href="{{ object.product.get_absolute_url }}">{% endif %}
-                    {{ object.product }}
-                {% if perms.product.view_product %}</a>{% endif %}
-                -&gt;
-                {% if perms.company.view_company %}<a href="{{ object.product.company.get_absolute_url }}">{% endif %}
-                    {{ object.product.company }}
-                {% if perms.company.view_company %}</a>{% endif %}
+                {% if object.product %}
+                    {% if perms.product.view_product %}<a href="{{ object.product.get_absolute_url }}">{% endif %}
+                        {{ object.product }}
+                    {% if perms.product.view_product %}</a>{% endif %}
+                    -&gt;
+                    {% if perms.company.view_company %}<a href="{{ object.product.company.get_absolute_url }}">{% endif %}
+                        {{ object.product.company }}
+                    {% if perms.company.view_company %}</a>{% endif %}
+                {% else %}
+                    Brak informacji
+                {% endif %}
             </td>
         </tr>
         <tr>

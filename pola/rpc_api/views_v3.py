@@ -222,7 +222,7 @@ def create_signed_request_boto3(mime_type, object_name, bucket_name):
     )
     response = client.generate_presigned_url(
         'put_object',
-        Params=dict(Bucket=bucket_name, Key=object_name, ACL='public-read', ContentType=mime_type),
+        Params=dict(Bucket=bucket_name, Key=object_name, ContentType=mime_type),
         ExpiresIn=expires,
     )
     return response

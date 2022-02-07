@@ -254,9 +254,7 @@ class TestCreateReportV3(TestCase, JsonRequestMixin):
         self.assertTrue(signed_url.startswith("http://minio:9000"))
 
         # Valid signed URL
-        response = requests.put(
-            signed_url, data=_create_image(), headers={"x-amz-acl": "public-read", 'Content-Type': 'image/jpeg'}
-        )
+        response = requests.put(signed_url, data=_create_image(), headers={'Content-Type': 'image/jpeg'})
         self.assertEqual(200, response.status_code, response.text)
 
         # Assert Report
