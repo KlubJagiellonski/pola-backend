@@ -8,65 +8,32 @@ function initialize() {
 }
 
 function build_image() {
-  echo "Building image"
+  echo "Building image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
   echo "IMAGE_TAG=${IMAGE_TAG}"
 
   RELEASE_SHA=$(git rev-parse HEAD)
   readonly RELEASE_SHA
   echo "RELEASE_SHA=${RELEASE_SHA}"
-  docker pull "python:${PYTHON_VERSION}-slim-buster"
 
-  build_args=(\
-    "."
-    "--file=scripts/prod-docker-image/Dockerfile"
-    "--cache-from=python:${PYTHON_VERSION}-slim-buster"
-  )
+  extra_build_args=()
 
-  echo "Building image: ${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}"
-
-  if [[ "$(docker images -q "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
-    docker pull "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}" || true
+  if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
+      extra_build_args+=(
+          "--cache-to=type=registry,ref=${PROD_IMAGE_NAME}:cache"
+          "--load"
+      )
   fi
 
-  if [[ ! "$(docker images -q "${BUILD_PY_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
-      build_args+=("--cache-from=${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}")
-  fi
-
-  docker build \
-    "${build_args[@]}" \
-    --target "build-py" \
-    --tag "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}"
-
-  echo "Building image: ${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}"
-
-  if [[ "$(docker images -q "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
-    docker pull "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}" || true
-  fi
-
-  if [[ ! "$(docker images -q "${BUILD_JS_IMAGE_NAME}:latest" 2> /dev/null)" == "" ]]; then
-      build_args+=("--cache-from=${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}")
-  fi
-
-  docker build \
-    "${build_args[@]}" \
-    --target "build-js" \
-    --tag "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}"
-
-  if [[ "$(docker images -q "${PROD_IMAGE_NAME}:${IMAGE_TAG}" 2> /dev/null)" == "" ]]; then
-    docker pull "${PROD_IMAGE_NAME}:${IMAGE_TAG}" || true
-  fi
-
-  if [[ ! "$(docker images -q "${PROD_IMAGE_NAME}" 2> /dev/null)" == "" ]]; then
-      build_args+=("--cache-from=${PROD_IMAGE_NAME}:${IMAGE_TAG}")
-  fi
-
-  echo "Building image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
-
-  docker build \
-    "${build_args[@]}" \
-    --target "main" \
+  DOCKER_BUILDKIT=1 docker build \
+    "." \
+    "--file=scripts/prod-docker-image/Dockerfile" \
+    --pull \
+    "${extra_build_args[@]}" \
+    "--cache-from=${PROD_IMAGE_NAME}:cache" \
     --build-arg "RELEASE_SHA=${RELEASE_SHA}" \
     --tag "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+    echo
+    echo
 }
 
 function verify_image() {
@@ -77,24 +44,22 @@ function verify_image() {
       <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | sort) \
       <(sort < ./requirements/production.txt)
     echo "======"
+    echo
+    echo
 }
 
 function push_image() {
-    echo "Pushing image: ${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}"
-    docker tag "${BUILD_PY_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_PY_IMAGE_NAME}:latest"
-    docker push "${BUILD_PY_IMAGE_NAME}:latest"
-
-    echo "Pushing image: ${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}"
-    docker tag "${BUILD_JS_IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_JS_IMAGE_NAME}:latest"
-    docker push "${BUILD_JS_IMAGE_NAME}:latest"
-
     echo "Pushing image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker tag "${PROD_IMAGE_NAME}:${IMAGE_TAG}" "${PROD_IMAGE_NAME}:latest"
     docker push "${PROD_IMAGE_NAME}:latest"
+    echo
+    echo
 }
 
 function pull_image() {
     echo "Pulling image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker pull "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+    echo
+    echo
 }

@@ -10,7 +10,6 @@ env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  DOCKER_BUILDKIT: 1
 
 jobs:
   django-tests:
@@ -50,7 +49,12 @@ jobs:
           verbose: true
       - name: "Push image (push)"
         if: github.event_name == 'push'
-        run: ./scripts/ci-docker-image/push_image.sh
+        env:
+          PREPARE_BUILDX_CACHE: true
+        run: |
+          ./scripts/ci-docker-image/push_image.sh
+          # Push cache
+          ./scripts/ci-docker-image/build_image.sh
 
   static-checks:
     name: "Static checks"
@@ -133,7 +137,12 @@ jobs:
         run: ./scripts/prod-docker-image/verify_image.sh
       - name: "Push image (push)"
         if: github.event_name == 'push'
-        run: ./scripts/prod-docker-image/push_image.sh
+        env:
+          PREPARE_BUILDX_CACHE: true
+        run: |
+          # Build cache
+          ./scripts/prod-docker-image/build_image.sh
+          ./scripts/prod-docker-image/push_image.sh
 
   deploy-app:
     name: "Deploy app (push) - ${{ github.ref }}"
@@ -230,4 +239,9 @@ jobs:
       - run: ./run_dbt.sh dbt build
       - name: "Push image (push)"
         if: github.event_name == 'push'
-        run: ./scripts/bi-docker-image/push_image.sh
+        env:
+          PREPARE_BUILDX_CACHE: true
+        run:
+          # Build cache
+          ./scripts/bi-docker-image/build_image.sh
+          ./scripts/bi-docker-image/push_image.sh
