@@ -18,7 +18,7 @@ function build_image() {
             "--load"
             "--builder" "pola_cache"
         )
-        docker_v buildx inspect pola_cache || docker_v buildx create --name pola_cache
+        docker buildx inspect pola_cache || docker buildx create --name pola_cache
       fi
 
     DOCKER_BUILDKIT=1 docker buildx build \
