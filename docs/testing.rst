@@ -141,6 +141,6 @@ Próba przed wykonywania migracji
 
 Jeśli wprowadzane są większe zmiany w bazie danych warto wykonać próbe wykorzystujać kopie bazy danych.
 
-W tym celu `uruchom przepływ pracy <https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow>`__ o nazwie `"Migration validation" <https://github.com/KlubJagiellonski/pola-backend/actions/workflows/migration_check.yml>`__ na Github Actionkorzystając z twojej gałęzi.
+W tym celu `uruchom przepływ pracy <https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow>`__ o nazwie `"Migration validation" <https://github.com/KlubJagiellonski/pola-backend/actions/workflows/migration_check.yml>`__ na Github Action korzystając z twojej gałęzi.
 
 Nie jest wspieranie testowania migracji dla pull-requestów z forków. Kod musi być w naszym repozytorium.
