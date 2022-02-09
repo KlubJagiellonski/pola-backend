@@ -241,7 +241,7 @@ jobs:
         if: github.event_name == 'push'
         env:
           PREPARE_BUILDX_CACHE: true
-        run:
+        run: |
           # Build cache
           ./scripts/bi-docker-image/build_image.sh
           ./scripts/bi-docker-image/push_image.sh
