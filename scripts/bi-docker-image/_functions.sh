@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 function initialize() {
-  # shellcheck source=scripts/_base_variables.sh
-  source "$( dirname "${BASH_SOURCE[0]}" )/../_base_variables.sh"
+    # shellcheck source=scripts/_base_variables.sh
+    source "$( dirname "${BASH_SOURCE[0]}" )/../_base_variables.sh"
 
-  cd "$( dirname "${BASH_SOURCE[0]}" )/../../" || exit 1
+    cd "$( dirname "${BASH_SOURCE[0]}" )/../../" || exit 1
 }
 
 function build_image() {
@@ -13,10 +13,12 @@ function build_image() {
     docker pull "${BI_IMAGE_NAME}:latest" || true
 
     if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
-          extra_build_args+=(
-              "--cache-to=type=registry,ref=${BI_IMAGE_NAME}:cache"
-              "--load"
-          )
+        extra_build_args+=(
+            "--cache-to=type=registry,ref=${BI_IMAGE_NAME}:cache"
+            "--load"
+            "--builder" "pola_cache"
+        )
+        docker_v buildx inspect pola_cache || docker_v buildx create --name pola_cache
       fi
 
     DOCKER_BUILDKIT=1 docker buildx build \

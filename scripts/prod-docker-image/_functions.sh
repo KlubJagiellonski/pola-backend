@@ -1,39 +1,41 @@
 #!/usr/bin/env bash
 
 function initialize() {
-  # shellcheck source=scripts/_base_variables.sh
-  source "$( dirname "${BASH_SOURCE[0]}" )/../_base_variables.sh"
+    # shellcheck source=scripts/_base_variables.sh
+    source "$( dirname "${BASH_SOURCE[0]}" )/../_base_variables.sh"
 
-  cd "$( dirname "${BASH_SOURCE[0]}" )/../../" || exit 1
+    cd "$( dirname "${BASH_SOURCE[0]}" )/../../" || exit 1
 }
 
 function build_image() {
-  echo "Building image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
-  echo "IMAGE_TAG=${IMAGE_TAG}"
+    echo "Building image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+    echo "IMAGE_TAG=${IMAGE_TAG}"
 
-  RELEASE_SHA=$(git rev-parse HEAD)
-  readonly RELEASE_SHA
-  echo "RELEASE_SHA=${RELEASE_SHA}"
+    RELEASE_SHA=$(git rev-parse HEAD)
+    readonly RELEASE_SHA
+    echo "RELEASE_SHA=${RELEASE_SHA}"
 
-  extra_build_args=()
+    extra_build_args=()
 
-  if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
-      extra_build_args+=(
-          "--cache-to=type=registry,ref=${PROD_IMAGE_NAME}:cache"
-          "--load"
-      )
-  fi
+    if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
+        extra_build_args+=(
+            "--cache-to=type=registry,ref=${PROD_IMAGE_NAME}:cache"
+            "--load"
+            "--builder" "pola_cache"
+        )
+        docker_v buildx inspect pola_cache || docker_v buildx create --name pola_cache
+    fi
 
-  DOCKER_BUILDKIT=1 docker buildx build \
-    "." \
-    "--file=scripts/prod-docker-image/Dockerfile" \
-    --pull \
-    "${extra_build_args[@]}" \
-    "--cache-from=${PROD_IMAGE_NAME}:cache" \
-    --build-arg "RELEASE_SHA=${RELEASE_SHA}" \
-    --tag "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
-    echo
-    echo
+    DOCKER_BUILDKIT=1 docker buildx build \
+        "." \
+        "--file=scripts/prod-docker-image/Dockerfile" \
+        --pull \
+        "${extra_build_args[@]}" \
+        "--cache-from=${PROD_IMAGE_NAME}:cache" \
+        --build-arg "RELEASE_SHA=${RELEASE_SHA}" \
+        --tag "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+        echo
+        echo
 }
 
 function verify_image() {

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 function initialize() {
-  # shellcheck source=scripts/_base_variables.sh
-  source "$( dirname "${BASH_SOURCE[0]}" )/../_base_variables.sh"
+    # shellcheck source=scripts/_base_variables.sh
+    source "$( dirname "${BASH_SOURCE[0]}" )/../_base_variables.sh"
 
-  cd "$( dirname "${BASH_SOURCE[0]}" )/../../" || exit 1
+    cd "$( dirname "${BASH_SOURCE[0]}" )/../../" || exit 1
 }
 
 function build_image() {
@@ -16,17 +16,19 @@ function build_image() {
         extra_build_args+=(
             "--cache-to=type=registry,ref=${CI_IMAGE_NAME}:cache"
             "--load"
+            "--builder" "pola_cache"
         )
+        docker_v buildx inspect pola_cache || docker_v buildx create --name pola_cache
     fi
 
     DOCKER_BUILDKIT=1 docker buildx build \
-      "." \
-      --pull \
-      "${extra_build_args[@]}" \
-      --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
-      --build-arg DJANGO_VERSION="${DJANGO_VERSION}" \
-      --file=scripts/ci-docker-image/Dockerfile \
-      --tag "${CI_IMAGE_NAME}:${IMAGE_TAG}"
+        "." \
+        --pull \
+        "${extra_build_args[@]}" \
+        --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
+        --build-arg DJANGO_VERSION="${DJANGO_VERSION}" \
+        --file=scripts/ci-docker-image/Dockerfile \
+        --tag "${CI_IMAGE_NAME}:${IMAGE_TAG}"
 
     docker tag "${CI_IMAGE_NAME}:${IMAGE_TAG}" "pola-backend_web:latest"
     echo
