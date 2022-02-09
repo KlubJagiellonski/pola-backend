@@ -24,7 +24,7 @@ function build_image() {
       )
   fi
 
-  DOCKER_BUILDKIT=1 docker build \
+  DOCKER_BUILDKIT=1 docker buildx build \
     "." \
     "--file=scripts/prod-docker-image/Dockerfile" \
     --pull \

@@ -19,7 +19,7 @@ function build_image() {
         )
     fi
 
-    docker build \
+    DOCKER_BUILDKIT=1 docker buildx build \
       "." \
       --pull \
       "${extra_build_args[@]}" \
