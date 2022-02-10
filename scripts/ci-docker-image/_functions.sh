@@ -27,6 +27,7 @@ function build_image() {
         "${extra_build_args[@]}" \
         --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
         --build-arg DJANGO_VERSION="${DJANGO_VERSION}" \
+        "--cache-from=${CI_IMAGE_NAME}:cache" \
         --file=scripts/ci-docker-image/Dockerfile \
         --tag "${CI_IMAGE_NAME}:${IMAGE_TAG}"
 

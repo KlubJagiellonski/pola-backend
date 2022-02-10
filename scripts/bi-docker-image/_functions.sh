@@ -25,6 +25,7 @@ function build_image() {
       "." \
       --pull \
       "${extra_build_args[@]}" \
+      "--cache-from=${BI_IMAGE_NAME}:cache" \
       --file=scripts/bi-docker-image/Dockerfile \
       --tag "${BI_IMAGE_NAME}:${IMAGE_TAG}"
 
