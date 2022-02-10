@@ -14,7 +14,7 @@ function build_image() {
 
     if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
         extra_build_args+=(
-            "--cache-to=type=registry,ref=${BI_IMAGE_NAME}:cache"
+            "--cache-to=type=registry,ref=${BI_IMAGE_NAME}:cache,mode=max"
             "--load"
             "--builder" "pola_cache"
         )
