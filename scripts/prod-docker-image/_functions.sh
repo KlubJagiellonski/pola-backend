@@ -25,14 +25,35 @@ function build_image() {
         )
         docker buildx inspect pola_cache || docker buildx create --name pola_cache
     fi
+    GIT_REF=$(git rev-parse HEAD)
+    IMAGE_DESCRIPTION="Pola pomoze Ci odnaleźć polskie wyroby. Zabierając Pole na zakupy odnajdujesz produkty \"z duszą\" i wspierasz polską gospodarkę."
+
+    BASE_PYTHON_IMAGE="python:${PYTHON_VERSION}-slim-buster"
+    docker pull "${BASE_PYTHON_IMAGE}"
+    BASE_PYTHON_IMAGE_DIGEST=$(docker inspect python:3.9-slim-buster --format='{{ index (split (index .RepoDigests 0) "@") 1 }}')
 
     DOCKER_BUILDKIT=1 docker buildx build \
-        "." \
-        "--file=scripts/prod-docker-image/Dockerfile" \
+        . \
+        --file=scripts/prod-docker-image/Dockerfile \
         --pull \
         "${extra_build_args[@]}" \
         "--cache-from=${PROD_IMAGE_NAME}:cache" \
+        --build-arg "BASE_PYTHON_IMAGE=${BASE_PYTHON_IMAGE}@${BASE_PYTHON_IMAGE_DIGEST}" \
         --build-arg "RELEASE_SHA=${RELEASE_SHA}" \
+        --label "org.opencontainers.image.created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+        --label "org.opencontainers.image.authors=pola@klubjagiellonski.pl" \
+        --label "org.opencontainers.image.url=https://www.pola-app.pl/" \
+        --label "org.opencontainers.image.documentation=https://github.com/KlubJagiellonski/pola-backend/blob/${GIT_REF}/README.rst" \
+        --label "org.opencontainers.image.source=${CONTAINER_REGISTRY}" \
+        --label "org.opencontainers.image.version=DEV" \
+        --label "org.opencontainers.image.revision=${GIT_REF}" \
+        --label "org.opencontainers.image.vendor=Klub Jagielloński" \
+        --label "org.opencontainers.image.licenses=BSD-3-Clause" \
+        --label "org.opencontainers.image.ref.name=pola-backend" \
+        --label "org.opencontainers.image.title=Pola-backend - based on ${BASE_PYTHON_IMAGE}" \
+        --label "org.opencontainers.image.description=${IMAGE_DESCRIPTION}" \
+        --label "org.opencontainers.image.base.digest=${BASE_PYTHON_IMAGE_DIGEST}" \
+        --label "org.opencontainers.image.base.name=${BASE_PYTHON_IMAGE}" \
         --tag "${PROD_IMAGE_NAME}:${IMAGE_TAG}"
         echo
         echo
