@@ -60,8 +60,8 @@ COPY ./requirements/production.txt ${APP_HOME}/requirements/
 
 RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.txt" \
     && pip check \
-    && find /root/.local/ -name '*.pyc' --delete \
-    && find /root/.local/ -type d -name '__pycache__' --delete \
+    && find /root/.local/ -name '*.pyc' -delete \
+    && find /root/.local/ -type d -name '__pycache__' -delete \
     # make sure that all directories and files in .local are also group accessible
     && find /root/.local -executable -print0 | xargs --null chmod g+x  \
     && find /root/.local -print0 | xargs --null chmod g+rw
