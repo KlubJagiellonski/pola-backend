@@ -3,7 +3,7 @@ ARG APP_GID="50000"
 
 ARG APP_HOME=/opt/pola-backend
 
-ARG PYTHON_VERSION="3.9"
+ARG BASE_PYTHON_IMAGE="python:3.9-slim-buster"
 
 ######################### NODE BUILD IMAGE ##########################
 
@@ -18,10 +18,11 @@ COPY ./pola/assets /app/pola/assets
 RUN npm run build
 
 ######################### PYTHON BUILD IMAGE ########################
-ARG PYTHON_VERSION
+ARG BASE_PYTHON_IMAGE
 ARG APP_HOME
 
-FROM python:${PYTHON_VERSION}-slim-buster as build-py
+# hadolint ignore=DL3006
+FROM ${BASE_PYTHON_IMAGE} as build-py
 
 ARG APP_HOME
 ENV APP_HOME=${APP_HOME}
@@ -59,21 +60,15 @@ COPY ./requirements/production.txt ${APP_HOME}/requirements/
 
 RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.txt" \
     && pip check \
-    && find /root/.local/ -name '*.pyc' -print0 | xargs -0 rm -r \
-    && find /root/.local/ -type d -name '__pycache__' -print0 | xargs -0 rm -r \
+    && find /root/.local/ -name '*.pyc' -delete \
+    && find /root/.local/ -type d -name '__pycache__' -delete \
     # make sure that all directories and files in .local are also group accessible
     && find /root/.local -executable -print0 | xargs --null chmod g+x  \
     && find /root/.local -print0 | xargs --null chmod g+rw
 
-LABEL io.github.klubjagiellonski.distro="debian" \
-    io.github.klubjagiellonski.distro.version="buster" \
-    io.github.klubjagiellonski.module="pola" \
-    io.github.klubjagiellonski.component="pola-backend" \
-    io.github.klubjagiellonski.image="pola-backend"
-
 ######################### MAIN IMAGE ################################
-
-FROM python:${PYTHON_VERSION}-slim-buster as main
+# hadolint ignore=DL3006
+FROM ${BASE_PYTHON_IMAGE} as main
 
 ARG APP_UID
 ARG APP_GID
@@ -152,12 +147,6 @@ USER ${APP_UID}
 
 ARG RELEASE_SHA
 ENV RELEASE_SHA=${RELEASE_SHA}
-
-LABEL io.github.klubjagiellonski.distro="debian" \
-    io.github.klubjagiellonski.distro.version="buster" \
-    io.github.klubjagiellonski.module="pola" \
-    io.github.klubjagiellonski.component="pola-backend" \
-    io.github.klubjagiellonski.image="pola-backend"
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint"]
 CMD ["gunicorn", "pola.config.wsgi:application"]
