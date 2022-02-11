@@ -12,7 +12,7 @@ dbt-postgres==1.0.1
 future==0.18.2
 hologram==0.0.14
 idna==3.3
-importlib-metadata==4.10.1
+importlib-metadata==4.11.0
 isodate==0.6.1
 Jinja2==2.11.3
 jsonschema==3.1.1
