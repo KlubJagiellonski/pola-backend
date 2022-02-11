@@ -298,7 +298,7 @@ class TestSearchV4(TestCase):
             },
             json.loads(response.content),
         )
-    
+
     def test_should_return_results_by_product_code_ean_9(self):
         p1 = ProductFactory(name="test-product", code=f"{42:09}")
         response = self.client.get(f"{self.url}?query={p1.code}", content_type="application/json")
