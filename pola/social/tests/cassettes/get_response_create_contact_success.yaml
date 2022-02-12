@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: |
+      {"name": "Charles Smith", "campaign": {"campaignId": "ZyQTm"}, "email":
+      "yhill@hotmail.com"}
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '92'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.27.1
+    method: POST
+    uri: https://api.getresponse.com/v3/contacts
+  response:
+    body:
+      string: ''
+    headers:
+      content-type:
+      - application/json
+      date:
+      - Thu, 10 Feb 2022 16:44:05 GMT
+      transfer-encoding:
+      - chunked
+      x-ratelimit-limit:
+      - '30000'
+      x-ratelimit-remaining:
+      - '29991'
+      x-ratelimit-reset:
+      - 124 seconds
+      x-unique-id:
+      - 59404425:9AFD_68A0400D:01BB_620540D5_1790AC:0557
+    status:
+      code: 202
+      message: Accepted
+version: 1

@@ -35,6 +35,8 @@ POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME      AWS_STORAGE_BUCKET_NAME                 
 POLA_APP_AWS_S3_WEB_BUCKET_NAME         AWS_STORAGE_WEB_BUCKET_NAME             n/a                                            <zgłasza wyjątek>
 POLA_APP_AWS_S3_BACKEND_BUCKET_NAME     AWS_STORAGE_BACKEND_BUCKET_NAME         n/a                                            <zgłasza wyjątek>
 POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME     AWS_STORAGE_AI_PICS_BUCKET_NAME         n/a                                            <zgłasza wyjątek>
+POLA_APP_GET_RESPONSE_API_TOKEN         GET_RESPONSE['API_KEY']                 n/a                                            <zgłasza wyjątek>
+POLA_APP_GET_RESPONSE_CAMPAIGN_ID       GET_RESPONSE['CAMPAIGN_ID']             n/a                                            <zgłasza wyjątek>
 DJANGO_MAILGUN_API_KEY                  MAILGUN_ACCESS_KEY                      n/a                                            <zgłasza wyjątek>
 DJANGO_MAILGUN_SERVER_NAME              MAILGUN_SERVER_NAME                     n/a                                            <zgłasza wyjątek>
 ======================================= ======================================= ============================================== ======================================================================

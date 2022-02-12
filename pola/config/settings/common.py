@@ -59,6 +59,7 @@ LOCAL_APPS = (
     'pola.rpc_api',
     'pola.webviews',
     'pola.bi_export',
+    'pola.social',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
