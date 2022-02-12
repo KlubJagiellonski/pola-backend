@@ -1,4 +1,4 @@
-FROM python:3.10.7-slim-buster
+FROM python:3.10.7-slim-bullseye
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

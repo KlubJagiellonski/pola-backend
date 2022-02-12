@@ -3,7 +3,7 @@ ARG APP_GID="50000"
 
 ARG APP_HOME=/opt/pola-backend
 
-ARG BASE_PYTHON_IMAGE="python:3.9-slim-buster"
+ARG BASE_PYTHON_IMAGE="python:3.9-slim-bullseye"
 
 ######################### NODE BUILD IMAGE ##########################
 
@@ -38,15 +38,20 @@ RUN apt-get update \
         binutils \
         binutils-common \
         binutils-x86-64-linux-gnu \
+        curl \
         gcc \
         git \
+        gnupg2 \
         libc6-dev \
         libcc1-0 \
-        libgcc-8-dev \
+        linux-libc-dev \
+        lsb-release \
+    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
         libpq-dev \
         libpq5 \
-        linux-libc-dev \
-        netcat-openbsd \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -92,9 +97,9 @@ RUN apt-get update \
         ca-certificates \
         curl \
         dumb-init \
+        gnupg2 \
         locales \
         lsb-release \
-        postgresql-client \
         sudo \
         # Required by encrypoint.sh
         netcat \
@@ -102,6 +107,12 @@ RUN apt-get update \
         openssh-client \
         openssh-server \
         iproute2 \
+    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client \
+        libpq5 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -114,7 +125,8 @@ RUN apt-get update \
     && mkdir -pv "${APP_HOME}" \
     && chown -R "pola-backend:root" "${APP_USER_HOME_DIR}" "${APP_HOME}" \
     && find "${APP_HOME}" -executable -print0 | xargs --null chmod g+x  \
-    && find "${APP_HOME}" -print0 | xargs --null chmod g+rw
+    && find "${APP_HOME}" -print0 | xargs --null chmod g+rw \
+    && rm -rf /var/log/* /var/cache/*
 
 COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
 COPY --chown=pola-backend:root --from=build-js /app/pola/static/js/ "${APP_HOME}/pola/static/js/"
