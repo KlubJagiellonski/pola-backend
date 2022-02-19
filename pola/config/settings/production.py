@@ -79,12 +79,6 @@ EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 EMAIL_SUBJECT_PREFIX = ''
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-# GET RESPONSE
-# ------------------------------------------------------------------------------
-GET_RESPONSE = {
-    'API_KEY': env('POLA_APP_GET_RESPONSE_API_TOKEN'),
-    'CAMPAIGN_ID': env('POLA_APP_GET_RESPONSE_CAMPAIGN_ID'),
-}
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See:

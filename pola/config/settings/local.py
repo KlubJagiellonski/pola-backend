@@ -46,10 +46,3 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Your local stuff: Below this line define 3rd party library settings
 AI_SHARED_SECRET = env('AI_SHARED_SECRET', default='')  # noqa: F405
-
-# GET RESPONSE
-# ------------------------------------------------------------------------------
-GET_RESPONSE = {
-    'API_KEY': env('POLA_APP_GET_RESPONSE_API_TOKEN'),
-    'CAMPAIGN_ID': env('POLA_APP_GET_RESPONSE_CAMPAIGN_ID'),
-}
