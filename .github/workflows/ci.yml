@@ -57,7 +57,7 @@ jobs:
           ./scripts/ci-docker-image/build_image.sh
       - name: Show logs on fail
         if: ${{ failure() }}
-        run: docker-compoe logs
+        run: docker-compose logs
 
   static-checks:
     name: "Static checks"
