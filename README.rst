@@ -32,3 +32,4 @@ Dokumentacja
 * `Konfiguracja aplikacji <./docs/config.rst>`__
 * `Wdrożenie aplikacji <./docs/deploy.rst>`__
 * `Testowanie aplikacji <./docs/testing.rst>`__
+* `API Referencyjna <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/KlubJagiellonski/pola-backend/master/pola/rpc_api/openapi-v1.yaml>`__
