@@ -11,7 +11,6 @@ class GetResponseClient:
         self._base_url = base_url
 
     def create_contact(self, campaign_id, email, name=None, num_retries=5):
-        print(f"create_contact: email={email} name={name}")
         uri = self._base_url + "/contacts"
         body = {
             "name": name,
@@ -33,13 +32,10 @@ class GetResponseClient:
                     sleep(sleep_time)
                 try:
                     exception = None
-                    print(f"{method} {url}")
                     response = session.request(method, url, **kwargs)
-                    print(f"response={response}")
                     response.raise_for_status()
                 except requests.HTTPError as http_error:
                     exception = http_error
-                    print(f"{exception} {exception.__dict__}")
 
                 if exception:
                     if retry_num == num_retries:
