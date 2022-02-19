@@ -55,7 +55,7 @@ jobs:
           ./scripts/ci-docker-image/push_image.sh
           # Push cache
           ./scripts/ci-docker-image/build_image.sh
-      - name: Upload logs on fail
+      - name: Show logs on fail
         if: ${{ failure() }}
         run: docker-compoe logs
 

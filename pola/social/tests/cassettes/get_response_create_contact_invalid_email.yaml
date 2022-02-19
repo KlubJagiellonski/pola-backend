@@ -1,215 +1,227 @@
+---
 interactions:
-- request:
-    body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-      "A@example.org"}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '87'
-      Content-Type:
-      - application/json
-      User-Agent:
-      - python-requests/2.27.1
-    method: POST
-    uri: https://api.getresponse.com/v3/contacts
-  response:
-    body:
-      string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
-        that kind of action","message":"Cannot add contact that is blocked","moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],"uuid":"33872574-96b3-4176-aff6-6a777f5e3164"}'
-    headers:
-      content-type:
-      - application/json
-      date:
-      - Fri, 11 Feb 2022 02:12:28 GMT
-      transfer-encoding:
-      - chunked
-      x-unique-id:
-      - 59404425:9AD2_68A0400D:01BB_6205C60B_2E5BC:499C
-    status:
-      code: 400
-      message: Bad Request
-- request:
-    body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-      "A@example.org"}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '87'
-      Content-Type:
-      - application/json
-      User-Agent:
-      - python-requests/2.27.1
-    method: POST
-    uri: https://api.getresponse.com/v3/contacts
-  response:
-    body:
-      string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
-        that kind of action","message":"Cannot add contact that is blocked","moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],"uuid":"ce1a8579-75aa-4479-b6e4-2aaf96443202"}'
-    headers:
-      content-type:
-      - application/json
-      date:
-      - Fri, 11 Feb 2022 02:12:30 GMT
-      transfer-encoding:
-      - chunked
-      x-unique-id:
-      - 59404425:9AD2_68A0400D:01BB_6205C60C_2E5E1:499C
-    status:
-      code: 400
-      message: Bad Request
-- request:
-    body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-      "A@example.org"}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '87'
-      Content-Type:
-      - application/json
-      User-Agent:
-      - python-requests/2.27.1
-    method: POST
-    uri: https://api.getresponse.com/v3/contacts
-  response:
-    body:
-      string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
-        that kind of action","message":"Cannot add contact that is blocked","moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],"uuid":"acb004a5-7c28-4731-832e-ac2505ba9948"}'
-    headers:
-      content-type:
-      - application/json
-      date:
-      - Fri, 11 Feb 2022 02:12:31 GMT
-      transfer-encoding:
-      - chunked
-      x-unique-id:
-      - 59404425:9AD2_68A0400D:01BB_6205C60E_2E855:499C
-    status:
-      code: 400
-      message: Bad Request
-- request:
-    body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-      "A@example.org"}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '87'
-      Content-Type:
-      - application/json
-      User-Agent:
-      - python-requests/2.27.1
-    method: POST
-    uri: https://api.getresponse.com/v3/contacts
-  response:
-    body:
-      string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
-        that kind of action","message":"Cannot add contact that is blocked","moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],"uuid":"3ac9572a-a9b0-452d-afc2-5bfce0fc0f4b"}'
-    headers:
-      content-type:
-      - application/json
-      date:
-      - Fri, 11 Feb 2022 02:12:35 GMT
-      server-timing:
-      - dtSInfo;desc="1"
-      set-cookie:
-      - dtCookie=v_4_srv_5_sn_69F364E9F7908B8DB69568E41CD7CBFB_perc_100000_ol_0_mul_1_app-3Ab4e45dc50c521743_0_rcs-3Acss_0;
-        Path=/; Domain=.getresponse.com
-      transfer-encoding:
-      - chunked
-      x-unique-id:
-      - 59404425:9AD2_68A0400D:01BB_6205C60F_2E9AC:499C
-    status:
-      code: 400
-      message: Bad Request
-- request:
-    body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-      "A@example.org"}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '87'
-      Content-Type:
-      - application/json
-      Cookie:
-      - dtCookie=v_4_srv_5_sn_69F364E9F7908B8DB69568E41CD7CBFB_perc_100000_ol_0_mul_1_app-3Ab4e45dc50c521743_0_rcs-3Acss_0
-      User-Agent:
-      - python-requests/2.27.1
-    method: POST
-    uri: https://api.getresponse.com/v3/contacts
-  response:
-    body:
-      string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
-        that kind of action","message":"Cannot add contact that is blocked","moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],"uuid":"64d783ab-0848-4c98-8c71-4394e61cb246"}'
-    headers:
-      content-type:
-      - application/json
-      date:
-      - Fri, 11 Feb 2022 02:12:49 GMT
-      transfer-encoding:
-      - chunked
-      x-unique-id:
-      - 59404425:9AD2_68A0400D:01BB_6205C613_2ECC6:499C
-    status:
-      code: 400
-      message: Bad Request
-- request:
-    body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-      "A@example.org"}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '87'
-      Content-Type:
-      - application/json
-      Cookie:
-      - dtCookie=v_4_srv_5_sn_69F364E9F7908B8DB69568E41CD7CBFB_perc_100000_ol_0_mul_1_app-3Ab4e45dc50c521743_0_rcs-3Acss_0
-      User-Agent:
-      - python-requests/2.27.1
-    method: POST
-    uri: https://api.getresponse.com/v3/contacts
-  response:
-    body:
-      string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
-        that kind of action","message":"Cannot add contact that is blocked","moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],"uuid":"a36b462d-0325-4e1b-ba1e-5216028b144c"}'
-    headers:
-      content-type:
-      - application/json
-      date:
-      - Fri, 11 Feb 2022 02:13:01 GMT
-      transfer-encoding:
-      - chunked
-      x-unique-id:
-      - 59404425:9AD2_68A0400D:01BB_6205C621_2FC0D:499C
-    status:
-      code: 400
-      message: Bad Request
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
+          that kind of action","message":"Cannot add contact that is blocked",
+          "moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],
+          "uuid":"33872574-96b3-4176-aff6-6a777f5e3164"}'
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:28 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60B_2E5BC:499C
+      status:
+        code: 400
+        message: Bad Request
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
+          that kind of action","message":"Cannot add contact that is blocked","moreInfo":
+          "https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],
+          "uuid":"ce1a8579-75aa-4479-b6e4-2aaf96443202"}'
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:30 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60C_2E5E1:499C
+      status:
+        code: 400
+        message: Bad Request
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
+          that kind of action","message":"Cannot add contact that is blocked",
+          "moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],
+          "uuid":"acb004a5-7c28-4731-832e-ac2505ba9948"}'
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:31 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60E_2E855:499C
+      status:
+        code: 400
+        message: Bad Request
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
+          that kind of action","message":"Cannot add contact that is blocked",
+          "moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],
+          "uuid":"3ac9572a-a9b0-452d-afc2-5bfce0fc0f4b"}'
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:35 GMT
+        server-timing:
+          - dtSInfo;desc="1"
+        set-cookie:
+          - dtCookie=TEST; Path=/; Domain=.getresponse.com
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60F_2E9AC:499C
+      status:
+        code: 400
+        message: Bad Request
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        Cookie:
+          - dtCookie=TEST
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
+          that kind of action","message":"Cannot add contact that is blocked",
+          "moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002",
+          "context":[],"uuid":"64d783ab-0848-4c98-8c71-4394e61cb246"}'
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:49 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C613_2ECC6:499C
+      status:
+        code: 400
+        message: Bad Request
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        Cookie:
+          - dtCookie=TEST
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: '{"httpStatus":400,"code":1002,"codeDescription":"Resource state forbids
+          that kind of action","message":"Cannot add contact that is blocked",
+          "moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1002","context":[],
+          "uuid":"a36b462d-0325-4e1b-ba1e-5216028b144c"}'
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:13:01 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C621_2FC0D:499C
+      status:
+        code: 400
+        message: Bad Request
 version: 1
