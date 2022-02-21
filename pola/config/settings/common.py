@@ -59,6 +59,7 @@ LOCAL_APPS = (
     'pola.rpc_api',
     'pola.webviews',
     'pola.bi_export',
+    'pola.social',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -330,4 +331,10 @@ CORS_URLS_REGEX = r"^/a/.*$"
 
 # APP CONFIGURATION
 # ------------------------
-# None yet
+
+# GET RESPONSE
+# ------------------------------------------------------------------------------
+GET_RESPONSE = {
+    'API_KEY': env('POLA_APP_GET_RESPONSE_API_TOKEN'),  # noqa: F405
+    'CAMPAIGN_ID': env('POLA_APP_GET_RESPONSE_CAMPAIGN_ID'),  # noqa: F405
+}

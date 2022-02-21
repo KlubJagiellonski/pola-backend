@@ -64,8 +64,8 @@ function verify_image() {
     docker run --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
     echo "=== Compare requirements ==="
     diff \
-      <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | sort) \
-      <(sort < ./requirements/production.txt)
+      <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | LC_ALL=C sort -f) \
+      <(LC_ALL=C sort -f < ./requirements/production.txt)
     echo "======"
     echo
     echo

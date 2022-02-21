@@ -63,6 +63,33 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
 
+  /a/v4/subscribe_newsletter:
+    post:
+      summary: Subscribe to a newsletter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscribeNewsletterRequest'
+      responses:
+        '204':
+          description: "No error"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: The throttling limit has been reached.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: The throttling limit has been reached.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   parameters:
     NoAI:
@@ -286,3 +313,15 @@ components:
         - type
         - title
         - status
+
+    SubscribeNewsletterRequest:
+      type: object
+      properties:
+        contact_email:
+          description: E-mail address of the contact that will be subscribed to the newsletter
+          type: string
+        contact_name:
+          description: Name of the contact that will be subscribed to the newsletter
+          type: string
+      required:
+        - contact_email
