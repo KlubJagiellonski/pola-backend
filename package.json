@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "bootstrap-sass": "^3.3.6",
+    "bootstrap-sass": "^3.4.3",
     "font-awesome": "^4.7.0",
     "jquery": "^2.2.2",
     "mousetrap": "^1.5.2"
