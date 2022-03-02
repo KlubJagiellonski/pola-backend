@@ -23,7 +23,7 @@ jobs:
       PYTHON_VERSION: ${{ matrix.python_version }}
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
       - name: "Login to Githhub Container Registry"
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: "Setup Python"
         uses: actions/setup-python@v2
         with:
@@ -82,7 +82,7 @@ jobs:
       COMPOSE_FILE: "docker-compose.yaml:docker-compose.dbt.yaml:docker-compose.dbt-local.yaml"
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
       - name: "Setup Python"
@@ -121,7 +121,7 @@ jobs:
     needs: [django-tests, static-checks]
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Set image tag"
@@ -158,7 +158,7 @@ jobs:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Login to Heroku Docker Registry"
@@ -210,7 +210,7 @@ jobs:
       COMPOSE_FILE: "docker-compose.dbt.yaml"
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
       - name: "Setup Python"
