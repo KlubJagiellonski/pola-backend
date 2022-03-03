@@ -6,6 +6,7 @@ from django.views import View
 from ratelimit.decorators import ratelimit
 
 from pola import logic, logic_ai
+from pola.constants import DONATE_TEXT, DONATE_URL
 from pola.models import Query
 from pola.product.models import Product
 from pola.rpc_api.api_models import SearchResult, SearchResultCollection
@@ -56,8 +57,8 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
 
     result["donate"] = {
         "show_button": True,
-        "title": "Potrzebujemy 1 zł",
-        "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
+        "title": DONATE_TEXT,
+        "url": DONATE_URL,
     }
     return result
 

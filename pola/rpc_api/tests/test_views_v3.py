@@ -5,6 +5,7 @@ from test_plus import TestCase
 
 from pola.ai_pics.models import AIAttachment, AIPics
 from pola.company.factories import CompanyFactory
+from pola.constants import DONATE_TEXT, DONATE_URL
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.report.models import Attachment, Report
@@ -167,8 +168,8 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 "sources": {"TEST": "BBBB"},
                 "donate": {
                     "show_button": True,
-                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-                    "title": "Potrzebujemy 1 zł",
+                    "url": DONATE_URL,
+                    "title": DONATE_TEXT,
                 },
             },
             json.loads(response.content),
@@ -204,8 +205,8 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'description': 'TEST',
                 'donate': {
                     'show_button': True,
-                    'title': 'Potrzebujemy 1 zł',
-                    'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
+                    'title': DONATE_TEXT,
+                    'url': DONATE_URL,
                 },
                 'friend_text': 'To jest przyjaciel Poli',
                 'is_friend': True,

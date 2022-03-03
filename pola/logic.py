@@ -2,8 +2,11 @@ import locale
 import re
 
 from pola.company.models import Brand, Company
+from pola.countries import get_registration_country
 from pola.product.models import Product
 from pola.report.models import Report
+
+WAR_COUNTRIES = ('Federacja Rosyjska', "Białoruś")
 
 
 def get_result_from_code(code, multiple_company_supported=False, report_as_object=False):
@@ -32,10 +35,10 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
         if not product_company:
             handle_unknown_company(code, report, result)
         elif multiple_company_supported:
-            handle_multiple_companies(companies, result, stats)
+            handle_multiple_companies(code, companies, result, stats)
         else:
             handle_companies_when_multiple_companies_are_not_supported(
-                companies, multiple_company_supported, result, stats
+                code, companies, multiple_company_supported, result, stats
             )
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
@@ -52,9 +55,12 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
     return result, stats, product
 
 
-def handle_companies_when_multiple_companies_are_not_supported(companies, multiple_company_supported, result, stats):
+def handle_companies_when_multiple_companies_are_not_supported(
+    code, companies, multiple_company_supported, result, stats
+):
     company = companies[0]
     company_data = serialize_company(company)
+    append_ru_by_warning_tto_description(code, company_data)
     stats['was_plScore'] = bool(get_plScore(company))
 
     result.update(company_data)
@@ -62,11 +68,31 @@ def handle_companies_when_multiple_companies_are_not_supported(companies, multip
     result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
 
 
-def handle_multiple_companies(companies, result, stats):
+def append_ru_by_warning_tto_description(code, company_data):
+    registration_country = get_registration_country(code)
+    if registration_country in WAR_COUNTRIES:
+        if company_data['description']:
+            company_data['description'] += "\n"
+
+        company_data['description'] += (
+            f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+            f'której miejscem rejestracji jest: {registration_country}. \n'
+            f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
+        )
+
+
+def handle_multiple_companies(code, companies, result, stats):
     companies_data = []
+    registration_country = get_registration_country(code)
+
     for company in companies:
         company_data = serialize_company(company)
-
+        if registration_country in WAR_COUNTRIES:
+            company_data['description'] += (
+                f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+                f'której miejscem rejestracji jest: {registration_country}. \n'
+                f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
+            )
         stats['was_plScore'] = all(get_plScore(c) for c in companies)
         companies_data.append(company_data)
     if len(companies) > 1:
@@ -102,17 +128,26 @@ def handle_unknown_company(code, report, result):
         )
         report['text'] = "To nie jest książka, czasopismo lub album muzyczny? Prosimy o zgłoszenie"
     else:
-        # let's try to associate the code with a country
-        for prefix in CODE_PREFIX_TO_COUNTRY.keys():
-            if code.startswith(prefix):
+        registration_country = get_registration_country(code)
+
+        if registration_country:
+            if registration_country in ('Federacja Rosyjska', "Białoruś"):
                 result['plScore'] = 0
                 result['card_type'] = TYPE_GREY
-                result['name'] = f'Miejsce rejestracji: {CODE_PREFIX_TO_COUNTRY[prefix]}'
+                result['name'] = f'Miejsce rejestracji: {registration_country}'
                 result['altText'] = (
                     f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
-                    f'której miejscem rejestracji jest: {CODE_PREFIX_TO_COUNTRY[prefix]}.'
+                    f'której miejscem rejestracji jest: {registration_country}. \n'
+                    f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
                 )
-                break
+            else:
+                result['plScore'] = 0
+                result['card_type'] = TYPE_GREY
+                result['name'] = f'Miejsce rejestracji: {registration_country}'
+                result['altText'] = (
+                    f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+                    f'której miejscem rejestracji jest: {registration_country}.'
+                )
         else:
             # Ups. It seems to be an internal code
             result['name'] = 'Kod wewnętrzny'
@@ -375,122 +410,3 @@ DEFAULT_RESULT = {
 }
 
 DEFAULT_STATS = {'was_verified': False, 'was_590': False, 'was_plScore': False}
-
-CODE_PREFIX_TO_COUNTRY = {
-    "30": "Francja",
-    "31": "Francja",
-    "32": "Francja",
-    "33": "Francja",
-    "34": "Francja",
-    "35": "Francja",
-    "36": "Francja",
-    "37": "Francja",
-    "380": "Bułgaria",
-    "383": "Słowenia",
-    "385": "Chorwacja",
-    "387": "Bośnia-Hercegowina",
-    "40": "Niemcy",
-    "41": "Niemcy",
-    "42": "Niemcy",
-    "43": "Niemcy",
-    "44": "Niemcy",
-    "45": "Japonia",
-    "46": "Federacja Rosyjska",
-    "470": "Kirgistan",
-    "471": "Taiwan",
-    "474": "Estonia",
-    "475": "Łotwa",
-    "476": "Azerbejdżan",
-    "477": "Litwa",
-    "478": "Uzbekistan",
-    "479": "Sri Lanka",
-    "480": "Filipiny",
-    "481": "Białoruś",
-    "482": "Ukraina",
-    "484": "Mołdova",
-    "485": "Armenia",
-    "486": "Gruzja",
-    "487": "Kazachstan",
-    "489": "Hong Kong",
-    "49": "Japonia",
-    "50": "Wielka Brytania",
-    "520": "Grecja",
-    "528": "Liban",
-    "529": "Cypr",
-    "531": "Macedonia",
-    "535": "Malta",
-    "539": "Irlandia",
-    "54": "Belgia & Luksemburg",
-    "560": "Portugalia",
-    "569": "Islandia",
-    "57": "Dania",
-    # "590": "Polska",
-    "594": "Rumunia",
-    "599": "Węgry",
-    "600": "Południowa Afryka",
-    "601": "Południowa Afryka",
-    "608": "Bahrain",
-    "609": "Mauritius",
-    "611": "Maroko",
-    "613": "Algeria",
-    "619": "Tunezja",
-    "621": "Syria",
-    "622": "Egipt",
-    "624": "Libia",
-    "625": "Jordania",
-    "626": "Iran",
-    "627": "Kuwejt",
-    "628": "Arabia Saudyjska",
-    "64": "Finlandia",
-    "690": "Chiny",
-    "691": "Chiny",
-    "692": "Chiny",
-    "70": "Norwegia",
-    "729": "Izrael",
-    "73": "Szwecja",
-    "740": "Gwatemala",
-    "741": "Salwador",
-    "742": "Honduras",
-    "743": "Nikaragua",
-    "744": "Kostaryka",
-    "745": "Panama",
-    "746": "Dominikana",
-    "750": "Meksyk",
-    "759": "Wenezuela",
-    "76": "Szwajcaria",
-    "770": "Kolumbia",
-    "773": "Urugwaj",
-    "775": "Peru",
-    "777": "Boliwia",
-    "779": "Argentyna",
-    "780": "Chile",
-    "784": "Paragwaj",
-    "786": "Ekwador",
-    "789": "Brazylia",
-    "790": "Brazylia",
-    "80": "Włochy",
-    "81": "Włochy",
-    "82": "Włochy",
-    "83": "Włochy",
-    "84": "Hiszpania",
-    "850": "Kuba",
-    "858": "Słowacja",
-    "859": "Czechy",
-    "860": "Jugosławia",
-    "867": "Korea Północna",
-    "869": "Turcja",
-    "87": "Holandia",
-    "880": "Korea Południowa",
-    "885": "Tajlandia",
-    "888": "Singapur",
-    "890": "Indie",
-    "893": "Wietnam",
-    "899": "Indonezja",
-    "90": "Austria",
-    "91": "Austria",
-    "93": "Australia",
-    "94": "Nowa Zelandia",
-    "950": "EAN - IDA",
-    "955": "Malezja",
-    "958": "Makao",
-}
