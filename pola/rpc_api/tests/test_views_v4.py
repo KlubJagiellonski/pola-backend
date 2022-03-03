@@ -3,6 +3,7 @@ import json
 from test_plus import TestCase
 
 from pola.company.factories import CompanyFactory
+from pola.constants import DONATE_TEXT, DONATE_URL
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.rpc_api.tests.test_views import JsonRequestMixin
@@ -54,8 +55,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 },
                 'donate': {
                     'show_button': True,
-                    'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
-                    'title': 'Potrzebujemy 1 zł',
+                    'url': DONATE_URL,
+                    'title': DONATE_TEXT,
                 },
             },
             json.loads(response.content),
@@ -117,8 +118,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 ],
                 "donate": {
                     "show_button": True,
-                    "url": "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/",
-                    "title": "Potrzebujemy 1 zł",
+                    "url": DONATE_URL,
+                    "title": DONATE_TEXT,
                 },
             },
             json.loads(response.content),
@@ -215,8 +216,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 ],
                 "donate": {
                     "show_button": True,
-                    "url": 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
-                    "title": 'Potrzebujemy 1 zł',
+                    "url": DONATE_URL,
+                    "title": DONATE_TEXT,
                 },
             },
             json.loads(response.content),

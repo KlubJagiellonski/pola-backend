@@ -303,10 +303,57 @@ class TestGetResultFromCode(TestCase):
         self.assertEqual(expected_response[0], response[0])
         self.assertEqual(expected_response, response)
 
+    def test_russian_code_with_one_company(self):
+        prefix = "462"
+        current_ean = prefix + TEST_EAN13[3:]
+        company = CompanyFactory.create(description='test-description')
+        product = ProductFactory.create(code=current_ean, company=company, brand=None)
+
+        with mock.patch("pola.logic.get_by_code", return_value=product):
+            response = get_result_from_code(current_ean)
+
+        expected_response = (
+            {
+                'altText': None,
+                'card_type': 'type_grey',
+                'code': '4620084231145',
+                'description': (
+                    'test-description\n'
+                    'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+                    'której miejscem rejestracji jest: Federacja Rosyjska. \n'
+                    'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz '
+                    'go kupić.'
+                ),
+                'is_friend': False,
+                'name': company.official_name,
+                'plCapital': None,
+                'plCapital_notes': None,
+                'plNotGlobEnt': None,
+                'plNotGlobEnt_notes': None,
+                'plRegistered': None,
+                'plRegistered_notes': None,
+                'plRnD': None,
+                'plRnD_notes': None,
+                'plScore': None,
+                'plWorkers': None,
+                'plWorkers_notes': None,
+                'product_id': product.id,
+                'report_button_text': 'Zgłoś',
+                'report_button_type': 'type_white',
+                'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+                'sources': {},
+            },
+            {"was_590": False, "was_plScore": False, "was_verified": False},
+            product,
+        )
+        self.maxDiff = None
+        self.assertEqual(expected_response[0], response[0])
+        self.assertEqual(expected_response, response)
+
     def test_code_with_multiple_company(self):
         current_ean = TEST_EAN13
-        company1 = CompanyFactory.create(name='test-company1', description='test-description')
-        company2 = CompanyFactory.create(name='test-company2', description='test-description')
+        company1 = CompanyFactory.create(name='test-company1', description='test-description1.')
+        company2 = CompanyFactory.create(name='test-company2', description='test-description2.')
 
         product = ProductFactory.create(code=current_ean, company=company1, brand__company=company2)
 
@@ -318,7 +365,7 @@ class TestGetResultFromCode(TestCase):
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': '5900084231145',
-                'description': 'test-description',
+                'description': 'test-description1.',
                 'is_friend': False,
                 'name': company1.official_name,
                 'plCapital': None,
@@ -339,6 +386,55 @@ class TestGetResultFromCode(TestCase):
                 'sources': {},
             },
             {"was_590": True, "was_plScore": False, "was_verified": False},
+            product,
+        )
+        self.maxDiff = None
+        self.assertEqual(expected_response[0], response[0])
+        self.assertEqual(expected_response, response)
+
+    def test_russian_code_with_multiple_company(self):
+        prefix = "462"
+        current_ean = prefix + TEST_EAN13[3:]
+        company1 = CompanyFactory.create(name='test-company1', description='test-description1.')
+        company2 = CompanyFactory.create(name='test-company2', description='test-description2.')
+
+        product = ProductFactory.create(code=current_ean, company=company1, brand__company=company2)
+
+        with mock.patch("pola.logic.get_by_code", return_value=product):
+            response = get_result_from_code(current_ean)
+        # TODO: Add support for multiple companies in this response
+        expected_response = (
+            {
+                'altText': None,
+                'card_type': 'type_grey',
+                'code': '4620084231145',
+                'description': (
+                    'test-description1.\n'
+                    'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+                    'której miejscem rejestracji jest: Federacja Rosyjska. \n'
+                    'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz '
+                    'go kupić.'
+                ),
+                'is_friend': False,
+                'name': company1.official_name,
+                'plCapital': None,
+                'plCapital_notes': None,
+                'plNotGlobEnt': None,
+                'plNotGlobEnt_notes': None,
+                'plRegistered': None,
+                'plRegistered_notes': None,
+                'plRnD': None,
+                'plRnD_notes': None,
+                'plScore': None,
+                'plWorkers': None,
+                'plWorkers_notes': None,
+                'product_id': product.id,
+                'report_button_text': 'Zgłoś',
+                'report_button_type': 'type_white',
+                'report_text': ('Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu'),
+                'sources': {},
+            },
+            {"was_590": False, "was_plScore": False, "was_verified": False},
             product,
         )
         self.maxDiff = None

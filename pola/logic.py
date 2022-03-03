@@ -6,6 +6,8 @@ from pola.countries import get_registration_country
 from pola.product.models import Product
 from pola.report.models import Report
 
+WAR_COUNTRIES = ('Federacja Rosyjska', "Białoruś")
+
 
 def get_result_from_code(code, multiple_company_supported=False, report_as_object=False):
     result = DEFAULT_RESULT.copy()
@@ -33,10 +35,10 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
         if not product_company:
             handle_unknown_company(code, report, result)
         elif multiple_company_supported:
-            handle_multiple_companies(companies, result, stats)
+            handle_multiple_companies(code, companies, result, stats)
         else:
             handle_companies_when_multiple_companies_are_not_supported(
-                companies, multiple_company_supported, result, stats
+                code, companies, multiple_company_supported, result, stats
             )
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
@@ -53,9 +55,12 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
     return result, stats, product
 
 
-def handle_companies_when_multiple_companies_are_not_supported(companies, multiple_company_supported, result, stats):
+def handle_companies_when_multiple_companies_are_not_supported(
+    code, companies, multiple_company_supported, result, stats
+):
     company = companies[0]
     company_data = serialize_company(company)
+    append_ru_by_warning_tto_description(code, company_data)
     stats['was_plScore'] = bool(get_plScore(company))
 
     result.update(company_data)
@@ -63,11 +68,31 @@ def handle_companies_when_multiple_companies_are_not_supported(companies, multip
     result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
 
 
-def handle_multiple_companies(companies, result, stats):
+def append_ru_by_warning_tto_description(code, company_data):
+    registration_country = get_registration_country(code)
+    if registration_country in WAR_COUNTRIES:
+        if company_data['description']:
+            company_data['description'] += "\n"
+
+        company_data['description'] += (
+            f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+            f'której miejscem rejestracji jest: {registration_country}. \n'
+            f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
+        )
+
+
+def handle_multiple_companies(code, companies, result, stats):
     companies_data = []
+    registration_country = get_registration_country(code)
+
     for company in companies:
         company_data = serialize_company(company)
-
+        if registration_country in WAR_COUNTRIES:
+            company_data['description'] += (
+                f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+                f'której miejscem rejestracji jest: {registration_country}. \n'
+                f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
+            )
         stats['was_plScore'] = all(get_plScore(c) for c in companies)
         companies_data.append(company_data)
     if len(companies) > 1:
