@@ -42,5 +42,5 @@ class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
         model = Product
         fields = {
             'name': ['icontains'],
-            'code': ['icontains'],
+            'code': ['icontains', 'istartswith'],
         }
