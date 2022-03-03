@@ -131,6 +131,47 @@ class TestGetResultFromCode(TestCase):
         self.maxDiff = None
         self.assertEqual(expected_response, response)
 
+    @parameterized.expand([("481", "Białoruś"), ('462', "Federacja Rosyjska")])
+    def test_missing_company_and_russia(self, prefix, country):
+        current_ean = prefix + TEST_EAN13[3:]
+        product = ProductFactory.create(code=current_ean, company=None, brand=None)
+
+        with mock.patch("pola.logic.get_by_code", return_value=product):
+            response = get_result_from_code(current_ean)
+
+        expected_response = (
+            {
+                "altText": (
+                    'Ten produkt został wyprodukowany przez zagraniczną firmę, której '
+                    f'miejscem rejestracji jest: {country}. \n'
+                    'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go '
+                    'kupić.'
+                ),
+                "card_type": "type_grey",
+                "code": current_ean,
+                "name": f'Miejsce rejestracji: {country}',
+                "plCapital": None,
+                "plCapital_notes": None,
+                "plNotGlobEnt": None,
+                "plNotGlobEnt_notes": None,
+                "plRegistered": None,
+                "plRegistered_notes": None,
+                "plRnD": None,
+                "plRnD_notes": None,
+                "plScore": 0,
+                "plWorkers": None,
+                "plWorkers_notes": None,
+                "product_id": product.id,
+                "report_button_text": "Zgłoś",
+                "report_button_type": "type_white",
+                "report_text": 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+            },
+            {"was_590": False, "was_plScore": False, "was_verified": False},
+            product,
+        )
+        self.maxDiff = None
+        self.assertEqual(expected_response, response)
+
     @parameterized.expand(
         [
             (
