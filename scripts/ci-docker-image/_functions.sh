@@ -11,7 +11,8 @@ function build_image() {
     echo "Building image: ${CI_IMAGE_NAME}:${IMAGE_TAG}"
 
     extra_build_args=()
-    LOCAL_CACHE_FILE="$(pwd)/.build/docer-caache-${CI_IMAGE_NAME}"
+    mkdir -p "$(pwd)/.build"
+    LOCAL_CACHE_FILE="$(pwd)/.build/docker-caache-${CI_IMAGE_NAME}"
     echo "LOCAL_CACHE_FILE=${LOCAL_CACHE_FILE}"
     if [[ ${PUSH_BUILDX_CACHE:-"false"} == "true" ]]; then
         extra_build_args+=(
