@@ -48,7 +48,7 @@ jobs:
           fail_ci_if_error: false
           verbose: true
       - name: "Push image (push)"
-        if: github.event_name == 'push'
+#        if: github.event_name == 'push'
         env:
           PUSH_BUILDX_CACHE: true
         run: |
