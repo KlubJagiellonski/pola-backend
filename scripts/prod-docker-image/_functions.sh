@@ -17,7 +17,7 @@ function build_image() {
 
     extra_build_args=()
 
-    if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
+    if [[ ${PUSH_BUILDX_CACHE:-"false"} == "true" ]]; then
         extra_build_args+=(
             "--cache-to=type=registry,ref=${PROD_IMAGE_NAME}:cache,mode=max"
             "--load"

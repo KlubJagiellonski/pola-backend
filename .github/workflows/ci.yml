@@ -50,7 +50,7 @@ jobs:
       - name: "Push image (push)"
         if: github.event_name == 'push'
         env:
-          PREPARE_BUILDX_CACHE: true
+          PUSH_BUILDX_CACHE: true
         run: |
           ./scripts/ci-docker-image/push_image.sh
           # Push cache
@@ -141,7 +141,7 @@ jobs:
       - name: "Push image (push)"
         if: github.event_name == 'push'
         env:
-          PREPARE_BUILDX_CACHE: true
+          PUSH_BUILDX_CACHE: true
         run: |
           # Build cache
           ./scripts/prod-docker-image/build_image.sh
@@ -243,7 +243,7 @@ jobs:
       - name: "Push image (push)"
         if: github.event_name == 'push'
         env:
-          PREPARE_BUILDX_CACHE: true
+          PUSH_BUILDX_CACHE: true
         run: |
           # Build cache
           ./scripts/bi-docker-image/build_image.sh

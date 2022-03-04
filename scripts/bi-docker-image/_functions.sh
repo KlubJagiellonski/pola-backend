@@ -12,7 +12,7 @@ function build_image() {
 
     docker pull "${BI_IMAGE_NAME}:latest" || true
 
-    if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
+    if [[ ${PUSH_BUILDX_CACHE:-"false"} == "true" ]]; then
         extra_build_args+=(
             "--cache-to=type=registry,ref=${BI_IMAGE_NAME}:cache,mode=max"
             "--load"

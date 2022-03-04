@@ -11,15 +11,25 @@ function build_image() {
     echo "Building image: ${CI_IMAGE_NAME}:${IMAGE_TAG}"
 
     extra_build_args=()
-
-    if [[ ${PREPARE_BUILDX_CACHE:-"false"} == "true" ]]; then
+    LOCAL_CACHE_FILE="$(pwd)/.build/docer-caache-${CI_IMAGE_NAME}"
+    echo "LOCAL_CACHE_FILE=${LOCAL_CACHE_FILE}"
+    if [[ ${PUSH_BUILDX_CACHE:-"false"} == "true" ]]; then
         extra_build_args+=(
+            "--cache-from=${CI_IMAGE_NAME}:cache"
+            "--cache-from=type=local,src=${LOCAL_CACHE_FILE}"
             "--cache-to=type=registry,ref=${CI_IMAGE_NAME}:cache,mode=max"
             "--load"
             "--builder" "pola_cache"
         )
-        docker buildx inspect pola_cache || docker buildx create --name pola_cache
+    else
+        extra_build_args+=(
+            "--cache-from=${CI_IMAGE_NAME}:cache"
+            "--cache-to=type=local,src=${LOCAL_CACHE_FILE}"
+            "--load"
+            "--builder" "pola_cache"
+        )
     fi
+    docker buildx inspect pola_cache || docker buildx create --name pola_cache
 
     DOCKER_BUILDKIT=1 docker buildx build \
         "." \
@@ -27,7 +37,6 @@ function build_image() {
         "${extra_build_args[@]}" \
         --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
         --build-arg DJANGO_VERSION="${DJANGO_VERSION}" \
-        "--cache-from=${CI_IMAGE_NAME}:cache" \
         --file=scripts/ci-docker-image/Dockerfile \
         --tag "${CI_IMAGE_NAME}:${IMAGE_TAG}"
 
