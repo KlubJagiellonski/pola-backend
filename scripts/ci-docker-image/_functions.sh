@@ -25,7 +25,7 @@ function build_image() {
     else
         extra_build_args+=(
             "--cache-from=${CI_IMAGE_NAME}:cache"
-            "--cache-to=type=local,src=${LOCAL_CACHE_FILE}"
+            "--cache-to=type=local,dest=${LOCAL_CACHE_FILE}"
             "--load"
             "--builder" "pola_cache"
         )
