@@ -36,7 +36,7 @@ greenlet==1.1.2
 gtin==1.3.1631641032
 gunicorn==20.1.0
 idna==3.3
-importlib-metadata==4.11.2
+importlib-metadata==4.11.3
 isodate==0.6.1
 jmespath==0.10.0
 jsonfield==3.1.0
