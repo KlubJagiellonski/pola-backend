@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 ARG PYTHON_VERSION="3.9"
 FROM python:${PYTHON_VERSION}-slim-buster
 
@@ -35,7 +36,7 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /app
 WORKDIR /app
 
-COPY ./scripts/ci-docker-image/entrypoint.sh /entrypoint
+COPY --link ./scripts/ci-docker-image/entrypoint.sh /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
 RUN pip install --no-cache-dir --upgrade "pip" && pip --version
@@ -45,6 +46,6 @@ ENV DJANGO_VERSION=${DJANGO_VERSION}
 
 RUN pip install --no-cache-dir --no-deps "django==${DJANGO_VERSION}"
 
-COPY requirements/ci.txt /app/requirements/
+COPY --link requirements/ci.txt /app/requirements/
 
 RUN pip install --no-cache-dir -r requirements/ci.txt && pip check

@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 ARG APP_UID="50000"
 ARG APP_GID="50000"
 
@@ -10,11 +11,10 @@ ARG BASE_PYTHON_IMAGE="python:3.9-slim-buster"
 FROM node:16.13.1-alpine3.12 as build-js
 
 WORKDIR /app/
-COPY ./package.json  /app/
-COPY ./package-lock.json /app/
+COPY --link ./package.json ./package-lock.json /app/
 RUN npm install && npm cache clean --force
-COPY ./gulpfile.esm.js /app/
-COPY ./pola/assets /app/pola/assets
+COPY --link ./gulpfile.esm.js /app/
+COPY --link ./pola/assets /app/pola/assets
 RUN npm run build
 
 ######################### PYTHON BUILD IMAGE ########################
@@ -56,7 +56,7 @@ ENV PYTHONUNBUFFERED=1 \
     PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin && pip install --no-cache-dir --upgrade "pip" && pip --version
 
-COPY ./requirements/production.txt ${APP_HOME}/requirements/
+COPY --link ./requirements/production.txt ${APP_HOME}/requirements/
 
 RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.txt" \
     && pip check \
@@ -116,10 +116,10 @@ RUN apt-get update \
     && find "${APP_HOME}" -executable -print0 | xargs --null chmod g+x  \
     && find "${APP_HOME}" -print0 | xargs --null chmod g+rw
 
-COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/js/ "${APP_HOME}/pola/static/js/"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/fonts/ "${APP_HOME}/pola/static/fonts/"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/css/ "${APP_HOME}/pola/static/css/"
+COPY --link --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
+COPY --link --chown=pola-backend:root --from=build-js /app/pola/static/js/ "${APP_HOME}/pola/static/js/"
+COPY --link --chown=pola-backend:root --from=build-js /app/pola/static/fonts/ "${APP_HOME}/pola/static/fonts/"
+COPY --link --chown=pola-backend:root --from=build-js /app/pola/static/css/ "${APP_HOME}/pola/static/css/"
 
 # Make /etc/passwd root-group-writeable so that user can be dynamically added by OpenShift
 # hadolint ignore=DL4005
@@ -129,13 +129,13 @@ RUN chmod g=u /etc/passwd \
     && rm /bin/sh \
     && ln -s /bin/bash /bin/sh
 
-COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
+COPY --link ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
 
 ENV PATH="${APP_USER_HOME_DIR}/.local/bin:${PATH}" \
     GUNICORN_CMD_ARGS="--worker-tmp-dir /dev/shm"
 
-COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
-COPY ./ ${APP_HOME}
+COPY --link --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
+COPY --link ./ ${APP_HOME}
 
 WORKDIR ${APP_HOME}
 
