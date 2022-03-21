@@ -77,7 +77,7 @@ PyJWT==2.3.0
 pyrsistent==0.18.1
 python-dateutil==2.8.2
 python3-openid==3.2.0
-pytz==2021.3
+pytz==2022.1
 PyYAML==6.0
 redis==3.5.3
 reportlab==3.6.8
