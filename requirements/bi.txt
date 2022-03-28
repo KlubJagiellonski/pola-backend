@@ -14,7 +14,7 @@ hologram==0.0.14
 idna==3.3
 importlib-metadata==4.11.3
 isodate==0.6.1
-Jinja2==2.11.3
+Jinja2==3.1.1
 jsonschema==3.1.1
 leather==0.3.4
 Logbook==1.5.3
