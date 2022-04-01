@@ -4,7 +4,7 @@ Babel==2.9.1
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.12
-click==8.1.1
+click==8.1.2
 colorama==0.4.4
 dbt-core==1.0.3
 dbt-extractor==0.4.0
