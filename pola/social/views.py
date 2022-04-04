@@ -14,7 +14,7 @@ from pola.social.forms import SubscribeNewsletterForm
 
 @method_decorator(ratelimit(key='ip', rate=whitelist('2/s'), block=True), name='dispatch')
 @method_decorator(validate_pola_openapi_spec, name='dispatch')
-@method_decorator(csrf_exempt)
+@method_decorator(csrf_exempt, name='dispatch')
 class SubscribeNewsletterFormView(BaseFormView):
     form_class = SubscribeNewsletterForm
 
