@@ -3,7 +3,7 @@ from unittest import mock
 from parameterized import parameterized
 from test_plus import TestCase
 
-from pola.company.factories import CompanyFactory
+from pola.company.factories import BrandFactory, CompanyFactory
 from pola.logic import get_by_code, get_result_from_code
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
@@ -344,6 +344,48 @@ class TestGetResultFromCode(TestCase):
                 'sources': {},
             },
             {"was_590": False, "was_plScore": False, "was_verified": False},
+            product,
+        )
+        self.maxDiff = None
+        self.assertEqual(expected_response[0], response[0])
+        self.assertEqual(expected_response, response)
+
+    def test_display_brand_when_enabled_on_company(self):
+        current_ean = TEST_EAN13
+        company = CompanyFactory.create(description='test-description', display_brands_in_description=True)
+        product = ProductFactory.create(code=current_ean, company=company, brand=None)
+        BrandFactory.create(common_name="brand-1", company=company)
+        BrandFactory.create(common_name="brand-2", company=company)
+
+        with mock.patch("pola.logic.get_by_code", return_value=product):
+            response = get_result_from_code(current_ean)
+
+        expected_response = (
+            {
+                'altText': None,
+                'card_type': 'type_grey',
+                'code': '5900084231145',
+                'description': ('test-description\n' 'Ten producent psoiada marki: brand-1, brand-2.'),
+                'is_friend': False,
+                'name': company.official_name,
+                'plCapital': None,
+                'plCapital_notes': None,
+                'plNotGlobEnt': None,
+                'plNotGlobEnt_notes': None,
+                'plRegistered': None,
+                'plRegistered_notes': None,
+                'plRnD': None,
+                'plRnD_notes': None,
+                'plScore': None,
+                'plWorkers': None,
+                'plWorkers_notes': None,
+                'product_id': product.id,
+                'report_button_text': 'Zgłoś',
+                'report_button_type': 'type_white',
+                'report_text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+                'sources': {},
+            },
+            {"was_590": True, "was_plScore": False, "was_verified": False},
             product,
         )
         self.maxDiff = None

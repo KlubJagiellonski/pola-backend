@@ -117,6 +117,11 @@ class Company(TimeStampedModel):
     is_friend = models.BooleanField(
         default=False, verbose_name=_("Przyjaciel Poli"), choices=((True, _("Tak")), (False, _("Nie")))
     )
+    display_brands_in_description = models.BooleanField(
+        default=False,
+        verbose_name=_("Wyświetlaj informacje o markach w opisie"),
+        choices=((True, _("Tak")), (False, _("Nie"))),
+    )
 
     objects = CompanyQuerySet.as_manager()
 
