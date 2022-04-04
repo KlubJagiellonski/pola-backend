@@ -354,8 +354,8 @@ class TestGetResultFromCode(TestCase):
         current_ean = TEST_EAN13
         company = CompanyFactory.create(description='test-description', display_brands_in_description=True)
         product = ProductFactory.create(code=current_ean, company=company, brand=None)
-        BrandFactory.create(name="brand-1", company=company)
-        BrandFactory.create(name="brand-2", company=company)
+        BrandFactory.create(common_name="brand-1", company=company)
+        BrandFactory.create(common_name="brand-2", company=company)
 
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
@@ -365,9 +365,7 @@ class TestGetResultFromCode(TestCase):
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': '5900084231145',
-                'description': (
-                    'test-description\n' 'Ten producent psoiada marki: common_brand_name418, common_brand_name419.'
-                ),
+                'description': ('test-description\n' 'Ten producent psoiada marki: brand-1, brand-2.'),
                 'is_friend': False,
                 'name': company.official_name,
                 'plCapital': None,
