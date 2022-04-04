@@ -2,6 +2,7 @@ import json
 
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import BaseFormView
 from ratelimit.decorators import ratelimit
 
@@ -13,6 +14,7 @@ from pola.social.forms import SubscribeNewsletterForm
 
 @method_decorator(ratelimit(key='ip', rate=whitelist('2/s'), block=True), name='dispatch')
 @method_decorator(validate_pola_openapi_spec, name='dispatch')
+@method_decorator(csrf_exempt)
 class SubscribeNewsletterFormView(BaseFormView):
     form_class = SubscribeNewsletterForm
 
