@@ -61,6 +61,7 @@ def handle_companies_when_multiple_companies_are_not_supported(
     company = companies[0]
     company_data = serialize_company(company)
     append_ru_by_warning_tto_description(code, company_data)
+    append_brands_if_enabled(company, company_data)
     stats['was_plScore'] = bool(get_plScore(company))
 
     result.update(company_data)
@@ -70,29 +71,36 @@ def handle_companies_when_multiple_companies_are_not_supported(
 
 def append_ru_by_warning_tto_description(code, company_data):
     registration_country = get_registration_country(code)
-    if registration_country in WAR_COUNTRIES:
-        if company_data['description']:
-            company_data['description'] += "\n"
+    if registration_country not in WAR_COUNTRIES:
+        return
 
-        company_data['description'] += (
-            f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
-            f'której miejscem rejestracji jest: {registration_country}. \n'
-            f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
-        )
+    if company_data['description']:
+        company_data['description'] += "\n"
+
+    company_data['description'] += (
+        f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
+        f'której miejscem rejestracji jest: {registration_country}. \n'
+        f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
+    )
+
+
+def append_brands_if_enabled(company, company_data):
+    if not company.display_brands_in_description:
+        return
+    if company_data['description']:
+        company_data['description'] += "\n"
+
+    brand_list = ", ".join(sorted(str(brand) for brand in Brand.objects.filter(company=company)))
+    company_data['description'] += f'Ten producent psoiada marki: {brand_list}.'
 
 
 def handle_multiple_companies(code, companies, result, stats):
     companies_data = []
-    registration_country = get_registration_country(code)
 
     for company in companies:
         company_data = serialize_company(company)
-        if registration_country in WAR_COUNTRIES:
-            company_data['description'] += (
-                f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
-                f'której miejscem rejestracji jest: {registration_country}. \n'
-                f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
-            )
+        append_ru_by_warning_tto_description(code, company_data)
+        append_brands_if_enabled(company, company_data)
         stats['was_plScore'] = all(get_plScore(c) for c in companies)
         companies_data.append(company_data)
     if len(companies) > 1:

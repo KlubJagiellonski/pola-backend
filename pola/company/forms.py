@@ -23,6 +23,7 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin, Com
             'official_name',
             'common_name',
             'is_friend',
+            'display_brands_in_description',
             'plCapital',
             'plWorkers',
             'plRnD',
