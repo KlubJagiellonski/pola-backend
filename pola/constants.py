@@ -1,5 +1,5 @@
 DONATE_URL = (
-    "https://klubjagiellonski.pl/2022/03/03/"
-    "odinstaluj-kasperskyego-nie-graj-w-world-of-tanks-bojkot-rosyjskich-produktow-w-aplikacji-pola/"
+    "https://klubjagiellonski.pl/2022/04/07/"
+    "zawieszenie-dzialalnosci-warwashing-business-as-usual-globalne-korporacje-w-rosji/"
 )
-DONATE_TEXT = "Lista rosyjskich firm"
+DONATE_TEXT = "Firmy, które nie opuściły Rosji"
