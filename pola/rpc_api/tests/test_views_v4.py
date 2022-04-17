@@ -323,7 +323,7 @@ class TestSearchV4(TestCase):
         self.assertTrue(SearchQuery.objects.filter(text="ciastec", client=device_id).exists())
 
     def test_should_return_results_by_company_name(self):
-        c1 = CompanyFactory(name="bat")
+        c1 = CompanyFactory(common_name="bat")
         p1 = ProductFactory(company=c1)
         response = self.client.get(f"{self.url}?query=bat", content_type="application/json")
         self.assertEqual(200, response.status_code)
@@ -334,7 +334,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': None},
+                        'company': {'name': p1.company.common_name, 'score': None},
                         'name': p1.name,
                     }
                 ],
