@@ -89,7 +89,7 @@ class SearchV4ApiView(View):
         )
 
     def get_queryset(self, query):
-        pred = Q(name__icontains=query) | Q(company__name__icontains=query)
+        pred = Q(name__icontains=query) | Q(company__common_name__icontains=query)
         if len(query) in (13, 9) and query.isnumeric():
             pred = pred | Q(code=query)
         qs = Product.objects.filter(pred).order_by('pk')
