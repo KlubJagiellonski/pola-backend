@@ -271,7 +271,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': None},
+                        'company': {'name': p1.company.common_name, 'score': None},
                         'name': p1.name,
                     }
                 ],
@@ -291,7 +291,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': None},
+                        'company': {'name': p1.company.common_name, 'score': None},
                         'name': p1.name,
                     }
                 ],
@@ -311,7 +311,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': None},
+                        'company': {'name': p1.company.common_name, 'score': None},
                         'name': p1.name,
                     }
                 ],
@@ -331,7 +331,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': None,
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': None},
+                        'company': {'name': p1.company.common_name, 'score': None},
                         'name': p1.name,
                     }
                 ],
@@ -374,7 +374,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': None},
+                        'company': {'name': p1.company.common_name, 'score': None},
                         'name': p1.name,
                     },
                     {
@@ -386,7 +386,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': None,
                         'code': p3.code,
-                        'company': {'name': p3.company.name, 'score': None},
+                        'company': {'name': p3.company.common_name, 'score': None},
                         'name': p3.name,
                     },
                 ],
@@ -431,19 +431,19 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': 100},
+                        'company': {'name': p1.company.common_name, 'score': 100},
                         'name': p1.name,
                     },
                     {
                         'brand': {'name': p2.brand.name},
                         'code': p2.code,
-                        'company': {'name': p2.company.name, 'score': 65},
+                        'company': {'name': p2.company.common_name, 'score': 65},
                         'name': p2.name,
                     },
                     {
                         'brand': {'name': p3.brand.name},
                         'code': p3.code,
-                        'company': {'name': p3.company.name, 'score': 35},
+                        'company': {'name': p3.company.common_name, 'score': 35},
                         'name': p3.name,
                     },
                 ],
