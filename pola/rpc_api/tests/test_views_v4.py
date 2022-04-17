@@ -4,6 +4,7 @@ from test_plus import TestCase
 
 from pola.company.factories import CompanyFactory
 from pola.constants import DONATE_TEXT, DONATE_URL
+from pola.models import SearchQuery
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.rpc_api.tests.test_views import JsonRequestMixin
@@ -260,9 +261,27 @@ class TestSearchV4(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual({'nextPageToken': None, 'products': [], 'totalItems': 0}, json.loads(response.content))
 
+    def test_should_return_error_when_query_is_too_long(self):
+        query = "A" * 300
+        response = self.client.get(f"{self.url}?query={query}", content_type="application/json")
+        self.assertEqual(400, response.status_code)
+        self.assertEqual(
+            {
+                "type": "about:blank",
+                "title": "Request validation failed",
+                "detail": "1 errors encountered",
+                "status": 400,
+                "errors": [
+                    f"Value {query} not valid for schema of type string: "
+                    f"(<ValidationError: \"'{query}' is too long\">,)"
+                ],
+            },
+            json.loads(response.content),
+        )
+
     def test_should_return_results_by_product_name(self):
-        p1 = ProductFactory(name="baton")
-        response = self.client.get(f"{self.url}?query=bat", content_type="application/json")
+        p1 = ProductFactory(name="ciasteczko")
+        response = self.client.get(f"{self.url}?query=ciaste", content_type="application/json")
         self.assertEqual(200, response.status_code)
         self.assertEqual(
             {
@@ -279,6 +298,29 @@ class TestSearchV4(TestCase):
             },
             json.loads(response.content),
         )
+        self.assertTrue(SearchQuery.objects.filter(text="ciaste").exists())
+
+    def test_should_save_device_id(self):
+        p1 = ProductFactory(name="ciasteczko")
+        device_id = 'TEST-DEVICE'
+        response = self.client.get(f"{self.url}?query=ciastec&device_id={device_id}", content_type="application/json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            {
+                'nextPageToken': None,
+                'products': [
+                    {
+                        'brand': {'name': p1.brand.name},
+                        'code': p1.code,
+                        'company': {'name': p1.company.name, 'score': None},
+                        'name': p1.name,
+                    }
+                ],
+                'totalItems': 1,
+            },
+            json.loads(response.content),
+        )
+        self.assertTrue(SearchQuery.objects.filter(text="ciastec", client=device_id).exists())
 
     def test_should_return_results_by_product_code(self):
         p1 = ProductFactory(name="test-product")

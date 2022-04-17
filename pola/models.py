@@ -23,6 +23,16 @@ class Query(models.Model):
         indexes = [BrinIndex(fields=['timestamp'], pages_per_range=64)]
 
 
+class SearchQuery(models.Model):
+    client = models.CharField(max_length=40, blank=True, null=True, default=None)
+    text = models.CharField(max_length=255, blank=True, null=True, default=None)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        get_latest_by = 'timestamp'
+        indexes = [BrinIndex(fields=['timestamp'], pages_per_range=64)]
+
+
 class Stats(models.Model):
     year = models.IntegerField()
     month = models.IntegerField()
