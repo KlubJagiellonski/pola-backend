@@ -5,9 +5,10 @@ from django_webtest import WebTestMixin
 from reversion.models import Version
 from test_plus.test import TestCase
 
-from pola.company.factories import CompanyFactory
-from pola.company.models import Company
+from pola.company.factories import BrandFactory, CompanyFactory
+from pola.company.models import Brand, Company
 from pola.product.factories import ProductFactory
+from pola.product.models import Product
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
 
@@ -19,7 +20,7 @@ class TemplateUsedMixin:
         self.assertTemplateUsed(resp, self.template_name)
 
 
-class InstanceMixin:
+class CompanyInstanceMixin:
     def setUp(self):
         super().setUp()
         self.instance = CompanyFactory()
@@ -28,6 +29,18 @@ class InstanceMixin:
         self.login()
         resp = self.client.get(self.url)
         self.assertContains(resp, self.instance.official_name)
+
+
+class BrandInstanceMixin:
+    def setUp(self):
+        super().setUp()
+        self.company_instance = CompanyFactory()
+        self.brand_instance = BrandFactory(company=self.company_instance)
+
+    def test_contains_official_name(self):
+        self.login()
+        resp = self.client.get(self.url)
+        self.assertContains(resp, self.brand_instance.common_name)
 
 
 class TestCompanyCreateView(PermissionMixin, TemplateUsedMixin, TestCase):
@@ -40,7 +53,7 @@ class TestCompanyCreateFromKRSView(PermissionMixin, TemplateUsedMixin, WebTestMi
     template_name = 'company/company_from_krs.html'
 
 
-class TestCompanyUpdate(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyUpdate(CompanyInstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_form.html'
 
     def setUp(self):
@@ -116,7 +129,7 @@ class TestConcurencyComapnyUpdate(TestCase):
             self.response_302(response)
 
 
-class TestCompanyDeleteView(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyDeleteView(CompanyInstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_confirm_delete.html'
 
     def setUp(self):
@@ -129,7 +142,7 @@ class TestCompanyDeleteView(InstanceMixin, PermissionMixin, TemplateUsedMixin, T
         self.assertFalse(Company.objects.filter(pk=self.instance.pk).exists())
 
 
-class TestCompanyDetailView(InstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyDetailView(CompanyInstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_detail.html'
 
     def setUp(self):
@@ -168,3 +181,19 @@ class TestCompanyListView(PermissionMixin, TemplateUsedMixin, WebTestMixin, Test
 
 class CompanyAutocomplete(PermissionMixin, TestCase):
     url = reverse_lazy('company:company-autocomplete')
+
+
+class TestBrandDeleteView(BrandInstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+    template_name = 'company/brand_confirm_delete.html'
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('company:brand-delete', kwargs={'pk': self.brand_instance.pk})
+
+    def test_object_delete(self):
+        product_instance = ProductFactory(brand=self.brand_instance)
+        self.login()
+        self.client.post(self.url)
+        self.assertFalse(Brand.objects.filter(pk=self.brand_instance.pk).exists())
+        self.assertTrue(Company.objects.filter(pk=self.brand_instance.company.pk).exists())
+        self.assertTrue(Product.objects.filter(pk=product_instance.pk).exists())

@@ -35,7 +35,7 @@ class Product(TimeStampedModel):
         max_length=20, db_index=True, verbose_name="Kod", unique=True, validators=[validators.validate_integer]
     )
     company = models.ForeignKey(Company, null=True, blank=True, verbose_name="Producent", on_delete=models.CASCADE)
-    brand = models.ForeignKey(Brand, null=True, blank=True, verbose_name="Marka produktu", on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, null=True, blank=True, verbose_name="Marka produktu", on_delete=models.SET_NULL)
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
 
