@@ -16,7 +16,7 @@
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-terser": "^2.1.0",
-    "sass": "^1.50.0"
+    "sass": "^1.50.1"
   },
   "scripts": {
     "build": "gulp"
