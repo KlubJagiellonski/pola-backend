@@ -345,12 +345,9 @@ def shareholders_to_str(krs, id, indent):
         if udzialy_wartosc is None:
             str += f"{indent}* {wspolnik['nazwa']} -------\n"
         else:
-            str += '{}* {} {}/{} {:.0f}%\n'.format(
-                indent,
-                wspolnik['nazwa'],
-                udzialy_wartosc,
-                kapital_zakladowy,
-                100 * locale.atof(udzialy_wartosc) / kapital_zakladowy,
+            str += (
+                f"{indent}* {wspolnik['nazwa']} {udzialy_wartosc}/{kapital_zakladowy} "
+                f"{100 * locale.atof(udzialy_wartosc) / kapital_zakladowy:.0f}%\n"
             )
         if wspolnik['krs_id'] is not None:
             str += shareholders_to_str(krs, wspolnik['krs_id'], indent + '  ')
