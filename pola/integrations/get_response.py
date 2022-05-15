@@ -28,7 +28,7 @@ class GetResponseClient:
             for retry_num in range(num_retries + 1):
                 if retry_num > 0:
                     # Sleep before retrying.
-                    sleep_time = random() * 2 ** retry_num
+                    sleep_time = random() * 2**retry_num
                     sleep(sleep_time)
                 try:
                     exception = None
