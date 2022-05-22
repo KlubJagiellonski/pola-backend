@@ -290,7 +290,7 @@ class TestSearchV4(TestCase):
                     {
                         'brand': {'name': p1.brand.name},
                         'code': p1.code,
-                        'company': {'name': p1.company.name, 'score': None},
+                        'company': {'name': p1.company.common_name, 'score': None},
                         'name': p1.name,
                     }
                 ],
