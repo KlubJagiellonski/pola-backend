@@ -281,7 +281,7 @@ class Brand(TimeStampedModel):
     class Meta:
         verbose_name = _("Marka")
         verbose_name_plural = _("Marki")
-        ordering = ['-created']
+        ordering = ['-name']
         permissions = (
             # ("view_brand", "Can see all brands"),
         )
