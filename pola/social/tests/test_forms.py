@@ -33,7 +33,7 @@ class TestSubscribeNewsletterForm(unittest.TestCase):
 
     @vcr.use_cassette('get_response_create_contact_invalid_email.yaml', filter_headers=['X-Auth-Token'])
     @mock.patch('pola.integrations.get_response.sleep')
-    def test_form_invalid(self, mock_sleep):
+    def test_form_server_error(self, mock_sleep):
         form = SubscribeNewsletterForm(
             data={
                 'contact_email': 'A@example.org',
@@ -42,6 +42,9 @@ class TestSubscribeNewsletterForm(unittest.TestCase):
         )
         self.assertTrue(form.is_valid())
         form.save()
+
+        self.assertEqual(len(mock_sleep.mock_calls), 5)
+        self.assertLess(sum(d.args[0] for d in mock_sleep.mock_calls), 20)
 
     def test_form_invalid_email(self):
         form = SubscribeNewsletterForm(
@@ -55,6 +58,21 @@ class TestSubscribeNewsletterForm(unittest.TestCase):
             form.errors.get_json_data(),
             {"contact_email": [{"message": "Wprowad\u017a poprawny adres email.", "code": "invalid"}]},
         )
+
+    @vcr.use_cassette('get_response_create_contact_duplicate_email.yaml', filter_headers=['X-Auth-Token'])
+    @mock.patch('pola.integrations.get_response.sleep')
+    def test_form_duplicate_email(self, mock_sleep):
+        for _ in range(2):
+            form = SubscribeNewsletterForm(
+                data={
+                    'contact_email': fake.email(domain="kj.org.pl"),
+                    'contact_name': fake.name(),
+                }
+            )
+            self.assertTrue(form.is_valid())
+            form.save()
+
+        self.assertEqual(len(mock_sleep.mock_calls), 0)
 
     def test_form_empty_email(self):
         form = SubscribeNewsletterForm(
