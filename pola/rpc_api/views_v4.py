@@ -7,7 +7,7 @@ from ratelimit.decorators import ratelimit
 
 from pola import logic, logic_ai
 from pola.constants import DONATE_TEXT, DONATE_URL
-from pola.models import Query
+from pola.models import Query, SearchQuery
 from pola.product.models import Product
 from pola.rpc_api.api_models import SearchResult, SearchResultCollection
 from pola.rpc_api.http import JsonProblemResponse
@@ -72,8 +72,11 @@ class SearchV4ApiView(View):
         query = request.GET['query']
         qs = self.get_queryset(query)
         paginator = TokenizedPaginator(qs.all(), self.PAGE_SIZE, token_salt=self.__class__.__name__)
+        page_token = request.GET.get('pageToken')
+        if page_token is None:
+            SearchQuery(client=request.GET.get('device_id'), text=query).save()
         try:
-            page = paginator.get_page_by_token(request.GET.get('pageToken'))
+            page = paginator.get_page_by_token(page_token)
         except InvalidPage as e:
             return JsonProblemResponse(status=400, title="Invalid value of pageToken parameter", detail=str(e))
 
