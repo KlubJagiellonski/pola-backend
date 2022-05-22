@@ -28,7 +28,7 @@ class GetResponseClient:
             for retry_num in range(num_retries + 1):
                 if retry_num > 0:
                     # Sleep before retrying.
-                    sleep_time = random() * 2**retry_num
+                    sleep_time = random() * 2**retry_num / 4
                     sleep(sleep_time)
                 try:
                     exception = None
@@ -38,7 +38,7 @@ class GetResponseClient:
                     exception = http_error
 
                 if exception:
-                    if retry_num == num_retries:
+                    if retry_num == num_retries or 400 <= response.status_code < 500:
                         raise exception
                     else:
                         continue

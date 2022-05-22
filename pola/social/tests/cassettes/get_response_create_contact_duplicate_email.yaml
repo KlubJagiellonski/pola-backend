@@ -1,0 +1,81 @@
+---
+interactions:
+  - request:
+      body: '{"name": "Anthony Smith", "campaign": {"campaignId": "i1ufA"}, "email":
+        "rodriguezana@kj.org.pl"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '97'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: ''
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Sun, 22 May 2022 16:35:38 GMT
+        transfer-encoding:
+          - chunked
+        x-ratelimit-limit:
+          - '30000'
+        x-ratelimit-remaining:
+          - '29980'
+        x-ratelimit-reset:
+          - 60 seconds
+        x-unique-id:
+          - 59404386:8142_68A0400D:01BB_628A665A_2EA37E:4D61
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: '{"name": "Kristin Riggs", "campaign": {"campaignId": "i1ufA"}, "email":
+        "ilopez@kj.org.pl"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '91'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: ''
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Sun, 22 May 2022 16:35:38 GMT
+        transfer-encoding:
+          - chunked
+        x-ratelimit-limit:
+          - '30000'
+        x-ratelimit-remaining:
+          - '29979'
+        x-ratelimit-reset:
+          - 60 seconds
+        x-unique-id:
+          - 59404386:8143_68A0400D:01BB_628A665A_CDC8A5:4D5F
+      status:
+        code: 202
+        message: Accepted
+version: 1
