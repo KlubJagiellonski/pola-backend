@@ -40,7 +40,7 @@ importlib-metadata==4.11.4
 isodate==0.6.1
 jmespath==0.10.0
 jsonfield==3.1.0
-jsonschema==3.2.0
+jsonschema==4.5.1
 lazy-object-proxy==1.7.1
 more-itertools==8.13.0
 oauthlib==3.2.0
