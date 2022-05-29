@@ -31,7 +31,7 @@ class TestSubscribeNewsletterForm(unittest.TestCase):
         self.assertTrue(form.is_valid())
         form.save()
 
-    @vcr.use_cassette('get_response_create_contact_invalid_email.yaml', filter_headers=['X-Auth-Token'])
+    @vcr.use_cassette('get_response_create_contact_server_error.yaml', filter_headers=['X-Auth-Token'])
     @mock.patch('pola.integrations.get_response.sleep')
     def test_form_server_error(self, mock_sleep):
         form = SubscribeNewsletterForm(
