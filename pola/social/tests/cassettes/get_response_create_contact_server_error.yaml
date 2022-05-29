@@ -1,0 +1,207 @@
+---
+interactions:
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: ''
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:28 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60B_2E5BC:499C
+      status:
+        code: 500
+        message: Server error
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: ''
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:30 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60C_2E5E1:499C
+      status:
+        code: 500
+        message: Server error
+  - request:
+      body: ''
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: ''
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:31 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60E_2E855:499C
+      status:
+        code: 500
+        message: Server error
+  - request:
+      body: ''
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: '{'
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:35 GMT
+        server-timing:
+          - dtSInfo;desc="1"
+        set-cookie:
+          - dtCookie=TEST; Path=/; Domain=.getresponse.com
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C60F_2E9AC:499C
+      status:
+        code: 500
+        message: Server error
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        Cookie:
+          - dtCookie=TEST
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: ''
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:12:49 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C613_2ECC6:499C
+      status:
+        code: 500
+        message: Server error
+  - request:
+      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
+        "A@example.org"}'
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '87'
+        Content-Type:
+          - application/json
+        Cookie:
+          - dtCookie=TEST
+        User-Agent:
+          - python-requests/2.27.1
+      method: POST
+      uri: https://api.getresponse.com/v3/contacts
+    response:
+      body:
+        string: ''
+      headers:
+        content-type:
+          - application/json
+        date:
+          - Fri, 11 Feb 2022 02:13:01 GMT
+        transfer-encoding:
+          - chunked
+        x-unique-id:
+          - 59404425:9AD2_68A0400D:01BB_6205C621_2FC0D:499C
+      status:
+        code: 500
+        message: Server error
+version: 1

@@ -1,8 +1,7 @@
 ---
 interactions:
   - request:
-      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-        "A@example.org"}'
+      body: '{"name": "", "campaign": {"campaignId": "i1ufA"}, "email": "A@example.org"}'
       headers:
         Accept:
           - '*/*'
@@ -11,7 +10,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '87'
+          - '75'
         Content-Type:
           - application/json
         User-Agent:
@@ -20,188 +19,23 @@ interactions:
       uri: https://api.getresponse.com/v3/contacts
     response:
       body:
-        string: ''
+        string: '{"httpStatus":400,"code":1000,"codeDescription":"General error of validation
+          process, more details should be in context section","message":"Validation
+          error, see context section for more information",
+          "moreInfo":"https:\/\/apidocs.getresponse.com\/en\/v3\/errors\/1000",
+          "context":[{"validationType":"body","fieldName":["name"],
+          "originalValue":"","errorDescription":"Expected string length between: 1 and 128"}],
+          "uuid":"1a947af9-fbb5-46f8-a9f0-15e63166a622"}'
       headers:
         content-type:
           - application/json
         date:
-          - Fri, 11 Feb 2022 02:12:28 GMT
+          - Sun, 22 May 2022 17:03:17 GMT
         transfer-encoding:
           - chunked
         x-unique-id:
-          - 59404425:9AD2_68A0400D:01BB_6205C60B_2E5BC:499C
+          - 59404386:8162_68A0400D:01BB_628A6CD5_3725EDD:4D65
       status:
-        code: 500
-        message: Server error
-  - request:
-      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-        "A@example.org"}'
-      headers:
-        Accept:
-          - '*/*'
-        Accept-Encoding:
-          - gzip, deflate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '87'
-        Content-Type:
-          - application/json
-        User-Agent:
-          - python-requests/2.27.1
-      method: POST
-      uri: https://api.getresponse.com/v3/contacts
-    response:
-      body:
-        string: ''
-      headers:
-        content-type:
-          - application/json
-        date:
-          - Fri, 11 Feb 2022 02:12:30 GMT
-        transfer-encoding:
-          - chunked
-        x-unique-id:
-          - 59404425:9AD2_68A0400D:01BB_6205C60C_2E5E1:499C
-      status:
-        code: 500
-        message: Server error
-  - request:
-      body: ''
-      headers:
-        Accept:
-          - '*/*'
-        Accept-Encoding:
-          - gzip, deflate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '87'
-        Content-Type:
-          - application/json
-        User-Agent:
-          - python-requests/2.27.1
-      method: POST
-      uri: https://api.getresponse.com/v3/contacts
-    response:
-      body:
-        string: ''
-      headers:
-        content-type:
-          - application/json
-        date:
-          - Fri, 11 Feb 2022 02:12:31 GMT
-        transfer-encoding:
-          - chunked
-        x-unique-id:
-          - 59404425:9AD2_68A0400D:01BB_6205C60E_2E855:499C
-      status:
-        code: 500
-        message: Server error
-  - request:
-      body: ''
-      headers:
-        Accept:
-          - '*/*'
-        Accept-Encoding:
-          - gzip, deflate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '87'
-        Content-Type:
-          - application/json
-        User-Agent:
-          - python-requests/2.27.1
-      method: POST
-      uri: https://api.getresponse.com/v3/contacts
-    response:
-      body:
-        string: '{'
-      headers:
-        content-type:
-          - application/json
-        date:
-          - Fri, 11 Feb 2022 02:12:35 GMT
-        server-timing:
-          - dtSInfo;desc="1"
-        set-cookie:
-          - dtCookie=TEST; Path=/; Domain=.getresponse.com
-        transfer-encoding:
-          - chunked
-        x-unique-id:
-          - 59404425:9AD2_68A0400D:01BB_6205C60F_2E9AC:499C
-      status:
-        code: 500
-        message: Server error
-  - request:
-      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-        "A@example.org"}'
-      headers:
-        Accept:
-          - '*/*'
-        Accept-Encoding:
-          - gzip, deflate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '87'
-        Content-Type:
-          - application/json
-        Cookie:
-          - dtCookie=TEST
-        User-Agent:
-          - python-requests/2.27.1
-      method: POST
-      uri: https://api.getresponse.com/v3/contacts
-    response:
-      body:
-        string: ''
-      headers:
-        content-type:
-          - application/json
-        date:
-          - Fri, 11 Feb 2022 02:12:49 GMT
-        transfer-encoding:
-          - chunked
-        x-unique-id:
-          - 59404425:9AD2_68A0400D:01BB_6205C613_2ECC6:499C
-      status:
-        code: 500
-        message: Server error
-  - request:
-      body: '{"name": "Jay Mcintosh", "campaign": {"campaignId": "ZyQTm"}, "email":
-        "A@example.org"}'
-      headers:
-        Accept:
-          - '*/*'
-        Accept-Encoding:
-          - gzip, deflate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '87'
-        Content-Type:
-          - application/json
-        Cookie:
-          - dtCookie=TEST
-        User-Agent:
-          - python-requests/2.27.1
-      method: POST
-      uri: https://api.getresponse.com/v3/contacts
-    response:
-      body:
-        string: ''
-      headers:
-        content-type:
-          - application/json
-        date:
-          - Fri, 11 Feb 2022 02:13:01 GMT
-        transfer-encoding:
-          - chunked
-        x-unique-id:
-          - 59404425:9AD2_68A0400D:01BB_6205C621_2FC0D:499C
-      status:
-        code: 500
-        message: Server error
+        code: 400
+        message: Bad Request
 version: 1
