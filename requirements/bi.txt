@@ -22,7 +22,7 @@ MarkupSafe==2.0.1
 mashumaro==2.9
 minimal-snowplow-tracker==0.0.2
 msgpack==1.0.3
-networkx==2.8.2
+networkx==2.8.3
 packaging==21.3
 parsedatetime==2.4
 psycopg2-binary==2.9.3
