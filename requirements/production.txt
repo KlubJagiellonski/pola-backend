@@ -2,7 +2,7 @@ asgiref==3.5.2
 attrs==21.4.0
 Babel==2.10.1
 boto==2.49.0
-boto3==1.23.10
+boto3==1.24.7
 botocore==1.26.10
 certifi==2022.5.18.1
 cffi==1.15.0
