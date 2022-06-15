@@ -1,6 +1,6 @@
 asgiref==3.5.2
 attrs==21.4.0
-Babel==2.10.1
+Babel==2.10.2
 backcall==0.2.0
 beautifulsoup4==4.11.1
 boto==2.49.0
