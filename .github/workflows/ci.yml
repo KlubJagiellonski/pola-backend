@@ -68,7 +68,7 @@ jobs:
       - name: "Setup Python"
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version-file: '.python-version'
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv
       - name: "Run static checks"
@@ -88,7 +88,7 @@ jobs:
       - name: "Setup Python"
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Copy .env.example to .env"
@@ -216,7 +216,7 @@ jobs:
       - name: "Setup Python"
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Build BI image"
