@@ -1,5 +1,5 @@
 agate==1.6.3
-attrs==21.4.0
+attrs==22.1.0
 Babel==2.10.3
 certifi==2022.6.15
 cffi==1.15.1
