@@ -66,9 +66,9 @@ jobs:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v3
       - name: "Setup Python"
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version-file: '.python-version'
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv
       - name: "Run static checks"
@@ -86,9 +86,9 @@ jobs:
         with:
           fetch-depth: 2
       - name: "Setup Python"
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Copy .env.example to .env"
@@ -214,9 +214,9 @@ jobs:
         with:
           fetch-depth: 2
       - name: "Setup Python"
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Build BI image"
