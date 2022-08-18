@@ -5,6 +5,7 @@ import re
 from django.core.management import BaseCommand
 
 from pola.company.models import Brand, Company
+from pola.management.command_utils import ask_yes_no
 from pola.product.models import Product
 
 
@@ -27,18 +28,6 @@ def nip_number(value):
     raise argparse.ArgumentTypeError(f"Invalid NIP number: '{value}'")
 
 
-def ask_yes_no(question):
-    confirm = input(question)
-    while True:
-        if confirm not in ('Y', 'n', 'yes', 'no'):
-            confirm = input('Please enter either "yes" or "no": ')
-            continue
-        if confirm in ('Y', 'yes'):
-            return True
-        else:
-            return False
-
-
 class Command(BaseCommand):
     help = 'Import lidl companies from .tsv file'
 
@@ -50,7 +39,7 @@ class Command(BaseCommand):
             '--no-input',
             action='store_false',
             dest='interactive',
-            help=('Tells Django to NOT prompt the user for input of any kind. '),
+            help='Tells Django to NOT prompt the user for input of any kind. ',
         )
 
     def handle(self, *args, **options):
@@ -60,7 +49,7 @@ class Command(BaseCommand):
             return
 
         if options['interactive'] and not ask_yes_no(
-            f'You seleceted company: {brand_owner.official_name} with nip: {brand_owner.nip}. Proceed? (Y/n)'
+            f'You selected company: {brand_owner.official_name} with nip: {brand_owner.nip}. Proceed? (Y/n)'
         ):
             self.stdout.write(self.style.ERROR('Operation cancelled.'))
             return

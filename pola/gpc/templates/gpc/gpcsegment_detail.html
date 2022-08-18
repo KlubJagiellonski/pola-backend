@@ -1,0 +1,50 @@
+{%extends 'gpc/gpcsegment_base.html' %}
+{% load i18n humanize %}
+{% block breadcrumbs_rows %}
+    <li class="active"><a href="{{ object.get_absolute_url }}">{{ object }} </a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="btn-group">
+        {% if perms.gpc.change_gpcsegment %}
+            <a href="{% url 'gpc:segment-edit' object.code %}" class="btn btn-primary"><i class="fa fa-pencil"></i> {% trans "Zmień" %}</a>
+        {% endif %}
+    </div>
+    <h1>
+        {{ object }} <small>#{{ object.pk }}</small>
+    </h1>
+    <div class="panel panel-primary">
+        <div class="panel-heading">{% trans "Dane" %}</div>
+        <table class="table">
+            <tr>
+                <td>{% trans "Hierarchia: " %}</td>
+                <td>
+                    <ul>
+                        <li><a href="{{ object.get_absolute_url }}">{{ object }} </a></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>{% trans "ID: " %}</td><td>{{ object.pk }}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Kod: " %}</td><td>{{ object.code }}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Text: " %}</td><td>{{ object.text }}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Definition: " %}</td><td>{{ object.definition }}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Active: " %}</td><td>{{ object.active }}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Nazwa alternatywna: " %}</td><td>{{ object.alias }}</td>
+            </tr>
+
+        </table>
+    </div>
+    {% include 'gpc/_simple_list.html' with title="Family" items=family_list only %}
+
+{% endblock content %}

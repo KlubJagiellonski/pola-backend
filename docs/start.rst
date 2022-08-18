@@ -36,6 +36,12 @@ Poczatkowo baza jest pusta, wiec konieczne jest przeprowadzenie migracji:
 
     docker-compose run web migrate
 
+Zaimportuj dane GPC
+
+.. code-block:: bash
+
+    docker-compose run web import_gdc pola/product/fixtures/GPC_as_of-May_2021_GDSN_v20210723_PL.xml
+
 Zapełnij baze danych przykładowymi danymi:
 
 .. code-block:: bash
