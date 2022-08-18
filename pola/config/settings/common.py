@@ -335,6 +335,12 @@ CORS_URLS_REGEX = r"^/a/.*$"
 # GET RESPONSE
 # ------------------------------------------------------------------------------
 GET_RESPONSE = {
-    'API_KEY': env('POLA_APP_GET_RESPONSE_API_TOKEN'),
+    'API_TOKEN': env('POLA_APP_GET_RESPONSE_API_TOKEN'),
     'CAMPAIGN_ID': env('POLA_APP_GET_RESPONSE_CAMPAIGN_ID'),
+}
+
+# PRODUKTY W SIECI
+# ------------------------------------------------------------------------------
+PRODUKTY_W_SIECI = {
+    'API_TOKEN': env('POLA_APP_PRODUKTY_W_SIECI_API_TOKEN'),
 }

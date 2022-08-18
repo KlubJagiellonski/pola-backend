@@ -1,14 +1,18 @@
+import os
 from unittest import mock
 
 from parameterized import parameterized
 from test_plus import TestCase
+from vcr import VCR
 
 from pola.company.factories import BrandFactory, CompanyFactory
 from pola.logic import get_by_code, get_result_from_code
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 
-TEST_EAN13 = "5900084231145"
+TEST_EAN13 = "5901520000059"
+
+vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), 'cassettes'))
 
 
 class TestGetResultFromCode(TestCase):
@@ -68,7 +72,7 @@ class TestGetResultFromCode(TestCase):
                     "Jeśli chcesz zgłosić błąd lub wyrazić opinię, prosimy o kontakt: pola@klubjagiellonski.pl"
                 ),
                 "card_type": "type_grey",
-                "code": "5900084231145",
+                "code": TEST_EAN13,
                 "name": "Tego produktu nie mamy jeszcze w bazie",
                 "plCapital": None,
                 "plCapital_notes": None,
@@ -275,7 +279,7 @@ class TestGetResultFromCode(TestCase):
             {
                 'altText': None,
                 'card_type': 'type_grey',
-                'code': '5900084231145',
+                'code': TEST_EAN13,
                 'description': 'test-description',
                 'is_friend': False,
                 'name': company.official_name,
@@ -316,7 +320,7 @@ class TestGetResultFromCode(TestCase):
             {
                 'altText': None,
                 'card_type': 'type_grey',
-                'code': '4620084231145',
+                'code': '4621520000059',
                 'description': (
                     'test-description\n'
                     'Ten produkt został wyprodukowany przez zagraniczną firmę, '
@@ -364,7 +368,7 @@ class TestGetResultFromCode(TestCase):
             {
                 'altText': None,
                 'card_type': 'type_grey',
-                'code': '5900084231145',
+                'code': TEST_EAN13,
                 'description': ('test-description\n' 'Ten producent psoiada marki: brand-1, brand-2.'),
                 'is_friend': False,
                 'name': company.official_name,
@@ -406,7 +410,7 @@ class TestGetResultFromCode(TestCase):
             {
                 'altText': None,
                 'card_type': 'type_grey',
-                'code': '5900084231145',
+                'code': TEST_EAN13,
                 'description': 'test-description1.',
                 'is_friend': False,
                 'name': company1.official_name,
@@ -449,7 +453,7 @@ class TestGetResultFromCode(TestCase):
             {
                 'altText': None,
                 'card_type': 'type_grey',
-                'code': '4620084231145',
+                'code': '4621520000059',
                 'description': (
                     'test-description1.\n'
                     'Ten produkt został wyprodukowany przez zagraniczną firmę, '
@@ -485,15 +489,17 @@ class TestGetResultFromCode(TestCase):
 
 
 class TestGetByCode(TestCase):
+    @vcr.use_cassette('product_ean13.yaml', filter_headers=['X-API-Key'])
     def test_should_read_existing_object(self):
         Product(code=TEST_EAN13, name="NAME").save()
         response = get_by_code(TEST_EAN13)
         self.assertEqual(response.name, "NAME")
 
+    @vcr.use_cassette('product_ean13.yaml', filter_headers=['X-API-Key'])
     def test_should_create_new_when_missing(self):
         self.assertEqual(0, Product.objects.count())
         response = get_by_code(TEST_EAN13)
-        self.assertEqual(response.name, None)
+        self.assertEqual(response.name, 'Muszynianka Naturalna woda mineralna MUSZYNIANKA 1.5l')
         self.assertEqual(1, Product.objects.count())
 
 
@@ -514,20 +520,4 @@ class TestGetPlScore(TestCase):
 
 
 class TestShareholdersToStr(TestCase):
-    pass
-
-
-class TestRemDblNewlines(TestCase):
-    pass
-
-
-class TestStripDblSpaces(TestCase):
-    pass
-
-
-class TestIlimCompareStr(TestCase):
-    pass
-
-
-class TestStripUrlsNewlines(TestCase):
     pass
