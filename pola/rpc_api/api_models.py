@@ -21,14 +21,17 @@ class SearchResult(TypedDict):
 
     @classmethod
     def create_from_product(cls, product: Product):
+        company_info = (
+            CompanyBasicInfo(
+                name=product.company.common_name or product.company.name, score=logic.get_plScore(product.company)
+            )
+            if product.company and (product.company.common_name or product.company.name)
+            else None
+        )
         return cls(
             name=str(product),
             code=product.code,
-            company=CompanyBasicInfo(
-                name=product.company.common_name or product.company.name, score=logic.get_plScore(product.company)
-            )
-            if product.company and product.company.name
-            else None,
+            company=,
             brand=BrandBasicInfo(name=product.brand.name) if product.brand and product.brand.name else None,
         )
 
