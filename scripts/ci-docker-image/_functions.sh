@@ -40,7 +40,7 @@ function verify_image() {
     echo "Verifying image: ${CI_IMAGE_NAME}:${IMAGE_TAG}"
     docker run --rm "${CI_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
     echo "=== Compare requirements ==="
-    diff \
+    diff -y \
       <(
         docker run --entrypoint /bin/bash --rm "${CI_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | \
           grep -v -i "Django==" | LC_ALL=C sort -f \
