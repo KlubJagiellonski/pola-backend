@@ -1,4 +1,4 @@
 DONATE_URL = (
-    "https://klubjagiellonski.pl/2022/09/14/polska-flaga-na-produkcie-nic-nie-znaczy-jak-zrobiono-biznes-z-patriotyzmu/"
+    "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/"
 )
-DONATE_TEXT = "Fałszywe oznaczenia produktów"
+DONATE_TEXT = "Wspieraj aplikację Pola!"
