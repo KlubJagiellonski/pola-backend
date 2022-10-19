@@ -54,7 +54,7 @@ jsonschema==3.2.0
 lazy-object-proxy==1.7.1
 matplotlib-inline==0.1.6
 mccabe==0.7.0
-more-itertools==8.14.0
+more-itertools==9.0.0
 multidict==6.0.2
 oauthlib==3.2.2
 openapi-core==0.14.5
