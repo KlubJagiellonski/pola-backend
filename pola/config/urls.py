@@ -22,10 +22,6 @@ from pola.views import (
 )
 
 urlpatterns = []
-# Add mobile static pages
-urlpatterns += [
-    re_path(r'^m/', ('pola.webviews.urls', 'webviews', 'webviews')),
-]
 # Add RPC API
 urlpatterns += [
     path('a/', ('pola.rpc_api.urls', 'api', 'api')),
