@@ -73,4 +73,4 @@ urllib3==1.26.12
 Werkzeug==2.1.2
 zipp==3.10.0
 zope.event==4.5.0
-zope.interface==5.5.0
+zope.interface==5.5.1
