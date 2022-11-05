@@ -57,7 +57,6 @@ LOCAL_APPS = (
     'pola.users',
     'pola.concurency',
     'pola.rpc_api',
-    'pola.webviews',
     'pola.bi_export',
     'pola.social',
 )
