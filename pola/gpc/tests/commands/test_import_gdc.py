@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 
-from django.core.management import call_command, CommandError
+from django.core.management import CommandError, call_command
 from django.test import TestCase
 
 from pola.gpc import models
