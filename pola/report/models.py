@@ -1,5 +1,5 @@
 import re
-from os.path import basename
+from pathlib import Path
 
 from babel.dates import format_timedelta
 from django.conf import settings
@@ -98,7 +98,7 @@ class Attachment(models.Model):
 
     @property
     def filename(self):
-        return basename(self.attachment.name)
+        return Path(self.attachment.name).name
 
     def __str__(self):
         return f"{self.filename}"

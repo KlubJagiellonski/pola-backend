@@ -11,6 +11,7 @@ Production Configurations
 
 import os
 import tempfile
+from pathlib import Path
 from urllib import parse as urlparse
 
 import sentry_sdk
@@ -102,7 +103,7 @@ redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(tempfile.gettempdir(), 'pola-app-cache'),
+        'LOCATION': Path(tempfile.gettempdir()) / 'pola-app-cache',
     },
     'redis': {
         'BACKEND': 'redis_cache.RedisCache',

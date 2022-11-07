@@ -1,4 +1,5 @@
 from datetime import timedelta
+from pathlib import Path
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -91,7 +92,7 @@ def update_company_from_krs(prod, company):
 
 
 def update_from_kbpoz(db_filename):
-    with open(db_filename) as f:
+    with Path(db_filename).open() as f:
         for line in f:
             split = line.split('\t')
             gtin = split[0].strip()

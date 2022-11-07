@@ -8,11 +8,11 @@ Local settings
 """
 # pylint: disable=unused-wildcard-import
 
-import os
+from pathlib import Path
 
 from .tests import *  # noqa: F403
 
-IS_DOCKER = os.path.exists('/.dockerenv')
+IS_DOCKER = Path('/.dockerenv').exists()
 # DEBUG
 # ------------------------------------------------------------------------------
 DEBUG = env.bool('DJANGO_DEBUG', default=True)  # noqa: F405
