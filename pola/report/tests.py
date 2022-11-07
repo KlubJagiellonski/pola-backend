@@ -1,5 +1,5 @@
 from django.urls import reverse, reverse_lazy
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django_webtest import WebTestMixin
 from test_plus.test import TestCase
 
@@ -24,7 +24,7 @@ class InstanceMixin:
     def test_contains_official_name(self):
         self.login()
         resp = self.client.get(self.url)
-        self.assertContains(resp, force_text(self.instance))
+        self.assertContains(resp, force_str(self.instance))
 
 
 class TestReportListView(PermissionMixin, TemplateUsedMixin, InstanceMixin, WebTestMixin, TestCase):
