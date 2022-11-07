@@ -1,0 +1,28 @@
+{%extends 'gpc/gpcsegment_base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block content %}
+    <h1>{% trans "GPC Segment" %}</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            {% crispy filter.form %}
+        </div>
+        <div class="col-md-9">
+            <ul>
+            {% for obj in object_list %}
+                <li>
+                    <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
+                </li>
+            {% empty %}
+                <li>{% trans "Nic nie znaleziono" %}</li>
+            {% endfor %}
+            </ul>
+            {% include 'pagination_custom/pager.html' with page=page_obj %}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block javascript %}
+    {{ filter.form.media }}
+{% endblock javascript %}

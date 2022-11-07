@@ -45,7 +45,17 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
                 <ul class="nav navbar-nav">
+
                     <li><a href="{% url 'home-cms' %}">{% trans "Start" %}</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GPC <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'gpc:brick-list' %}">{% trans "Brick" %}</a></li>
+                            <li><a href="{% url 'gpc:class-list' %}">{% trans "Class" %}</a></li>
+                            <li><a href="{% url 'gpc:family-list' %}">{% trans "Family" %}</a></li>
+                            <li><a href="{% url 'gpc:segment-list' %}">{% trans "Segment" %}</a></li>
+                        </ul>
+                    </li>
                     {% if perms.product.view_product %}
                         <li><a href="{% url 'product:list' %}">{% trans "Produkty" %}</a></li>
                     {% endif %}

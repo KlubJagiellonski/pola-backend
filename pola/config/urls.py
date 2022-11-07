@@ -22,10 +22,6 @@ from pola.views import (
 )
 
 urlpatterns = []
-# Add mobile static pages
-urlpatterns += [
-    re_path(r'^m/', ('pola.webviews.urls', 'webviews', 'webviews')),
-]
 # Add RPC API
 urlpatterns += [
     path('a/', ('pola.rpc_api.urls', 'api', 'api')),
@@ -68,6 +64,7 @@ urlpatterns += [
     re_path(r'^cms/company/', ('pola.company.urls', 'company', 'company')),
     re_path(r'^cms/report/', ('pola.report.urls', 'report', 'report')),
     re_path(r'^cms/ai_pics/', ('pola.ai_pics.urls', 'ai_pics', 'ai_pics')),
+    re_path(r'^cms/gpc/', ('pola.gpc.urls', 'gpc', 'gpc')),
     re_path(r'^cms/concurency/', ('pola.concurency.urls', 'pola.concurency', 'concurency')),
 ]
 

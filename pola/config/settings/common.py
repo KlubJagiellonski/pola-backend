@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'pola',
+    'pola.gpc',
     'pola.product',
     'pola.company',
     'pola.report',
@@ -57,7 +58,6 @@ LOCAL_APPS = (
     'pola.users',
     'pola.concurency',
     'pola.rpc_api',
-    'pola.webviews',
     'pola.bi_export',
     'pola.social',
 )

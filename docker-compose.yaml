@@ -55,6 +55,8 @@ services:
     depends_on:
       web-compile-assets:
         condition: service_completed_successfully
+      minio-init:
+        condition: service_completed_successfully
     command: ./manage.py collectstatic --no-input
 
   web-compile-assets:
