@@ -1,9 +1,8 @@
 from django.conf import settings
-from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from django.urls import path, re_path
+from django.urls import include, path, re_path
 from django.views.defaults import (
     bad_request,
     page_not_found,
@@ -44,14 +43,14 @@ urlpatterns += [
 ]
 # Add CMS views
 urlpatterns += [
-    re_path(r'^release/$', pola_views.ReleaseView.as_view(), name="release"),
-    re_path(r'^cms/$', pola_views.FrontPageView.as_view(), name="home-cms"),
-    re_path(r'^cms/stats$', pola_views.StatsPageView.as_view(), name="home-stats"),
-    re_path(r'^cms/config$', pola_views.AppConfigurationUpdateView.as_view(), name="app-config"),
-    re_path(r'^cms/editors-stats$', pola_views.EditorsStatsPageView.as_view(), name="home-editors-stats"),
-    re_path(r'^cms/admin-stats$', pola_views.AdminStatsPageView.as_view(), name="home-admin-stats"),
-    re_path(
-        r'^cms/lang/$',
+    path(r'release/', pola_views.ReleaseView.as_view(), name="release"),
+    path(r'cms/', pola_views.FrontPageView.as_view(), name="home-cms"),
+    path(r'cms/stats', pola_views.StatsPageView.as_view(), name="home-stats"),
+    path(r'cms/config', pola_views.AppConfigurationUpdateView.as_view(), name="app-config"),
+    path(r'cms/editors-stats', pola_views.EditorsStatsPageView.as_view(), name="home-editors-stats"),
+    path(r'cms/admin-stats', pola_views.AdminStatsPageView.as_view(), name="home-admin-stats"),
+    path(
+        r'cms/lang/',
         login_required(TemplateView.as_view(template_name='pages/lang-cms.html')),
         name="select_lang",
     ),
@@ -68,17 +67,17 @@ if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        re_path(r'^__debug__/', include(debug_toolbar.urls)),
     ]
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [
-        url(r'^400/$', bad_request, kwargs={'exception': Exception("Bad request")}),
-        url(r'^403/$', permission_denied, kwargs={'exception': Exception("Permission Denied")}),
-        url(r'^404/$', page_not_found, kwargs={'exception': Exception("Page not found")}),
-        url(r'^500/$', server_error),
+        path('400/', bad_request, kwargs={'exception': Exception("Bad request")}),
+        path('403/', permission_denied, kwargs={'exception': Exception("Permission Denied")}),
+        path('404/', page_not_found, kwargs={'exception': Exception("Page not found")}),
+        path('500/', server_error),
     ]
 
 # All unknown URls fallback to S#
