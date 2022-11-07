@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ title }}</h3>
+            </div>
+            {% if items %}
+                <ul class="list-group">
+                    {% for item in items %}
+                        <li class="list-group-item">
+                            <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="panel-body">
+                    {% trans "Nie ma żadnych elementów" %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

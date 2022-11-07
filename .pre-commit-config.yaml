@@ -18,7 +18,7 @@ repos:
     rev: v4.2.0
     hooks:
       - id: check-added-large-files
-        exclude: ^package-lock\.json$
+        exclude: ^package-lock\.json$|^pola/gpc/fixtures/$
       - id: check-ast
       - id: check-builtin-literals
       - id: check-case-conflict
