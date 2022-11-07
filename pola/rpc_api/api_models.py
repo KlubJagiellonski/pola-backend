@@ -1,4 +1,4 @@
-from typing import List, Optional, TypedDict
+from typing import Optional, TypedDict
 
 from pola import logic
 from pola.product.models import Product
@@ -35,5 +35,5 @@ class SearchResult(TypedDict):
 
 class SearchResultCollection(TypedDict):
     nextPageToken: Optional[str]
-    products: List[SearchResult]
+    products: list[SearchResult]
     totalItems: int

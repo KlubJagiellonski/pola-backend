@@ -1,6 +1,5 @@
 import csv
 from tempfile import NamedTemporaryFile
-from typing import Dict
 
 from dal import autocomplete
 from django import forms
@@ -89,7 +88,7 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
         company = self.cleaned_data['company']
         success = []
         failed = []
-        row: Dict[str, str]
+        row: dict[str, str]
         product_by_code = {
             p.code: p for p in Product.objects.filter(code__in=[row['code'] for row in self.cleaned_data['rows']])
         }

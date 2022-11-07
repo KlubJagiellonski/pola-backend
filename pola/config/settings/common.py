@@ -283,26 +283,26 @@ AI_PICS_PAGE_SIZE = 5000
 # Uploaded Media Files
 # ------------------------
 # See: https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
-INSTALLED_APPS += ('storages',)  # noqa: F405
+INSTALLED_APPS += ('storages',)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_ACCESS_KEY_ID = env('POLA_APP_AWS_ACCESS_KEY_ID')  # noqa: F405
-AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')  # noqa: F405
-AWS_STORAGE_BUCKET_NAME = env('POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME')  # noqa: F405
-AWS_STORAGE_BACKEND_BUCKET_NAME = env('POLA_APP_AWS_S3_BACKEND_BUCKET_NAME')  # noqa: F405
-AWS_STORAGE_AI_PICS_BUCKET_NAME = env('POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME')  # noqa: F405
-AWS_STORAGE_WEB_BUCKET_NAME = env.str('POLA_APP_AWS_S3_WEB_BUCKET_NAME', '')  # noqa: F405
+AWS_ACCESS_KEY_ID = env('POLA_APP_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME')
+AWS_STORAGE_BACKEND_BUCKET_NAME = env('POLA_APP_AWS_S3_BACKEND_BUCKET_NAME')
+AWS_STORAGE_AI_PICS_BUCKET_NAME = env('POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME')
+AWS_STORAGE_WEB_BUCKET_NAME = env.str('POLA_APP_AWS_S3_WEB_BUCKET_NAME', '')
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto
 AWS_EXPIRY = 60 * 60 * 24 * 7
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)}
 AWS_DEFAULT_ACL = 'public-read'
-AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)  # noqa: F405
+AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_S3_ENDPOINT_URL = env.str('POLA_APP_AWS_S3_ENDPOINT_URL', default=None)
-AI_SHARED_SECRET = env('AI_SHARED_SECRET')  # noqa: F405
+AI_SHARED_SECRET = env('AI_SHARED_SECRET')
 
 # URL that handles the media served from MEDIA_ROOT, used for managing
 # stored files.
@@ -335,6 +335,6 @@ CORS_URLS_REGEX = r"^/a/.*$"
 # GET RESPONSE
 # ------------------------------------------------------------------------------
 GET_RESPONSE = {
-    'API_KEY': env('POLA_APP_GET_RESPONSE_API_TOKEN'),  # noqa: F405
-    'CAMPAIGN_ID': env('POLA_APP_GET_RESPONSE_CAMPAIGN_ID'),  # noqa: F405
+    'API_KEY': env('POLA_APP_GET_RESPONSE_API_TOKEN'),
+    'CAMPAIGN_ID': env('POLA_APP_GET_RESPONSE_CAMPAIGN_ID'),
 }

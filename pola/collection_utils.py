@@ -1,9 +1,10 @@
-from typing import Generator, List, TypeVar
+from collections.abc import Generator
+from typing import TypeVar
 
 T = TypeVar('T')
 
 
-def chunks(items: List[T], chunk_size: int) -> Generator[List[T], None, None]:
+def chunks(items: list[T], chunk_size: int) -> Generator[list[T], None, None]:
     """Yield successive chunks of a given size from a list of items"""
     if chunk_size <= 0:
         raise ValueError('Chunk size must be a positive integer')

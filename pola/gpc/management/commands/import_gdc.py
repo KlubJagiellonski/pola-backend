@@ -2,7 +2,7 @@ import argparse
 import itertools
 import xml.etree.ElementTree as ET
 from functools import cached_property
-from typing import Any, Dict, List, NamedTuple, Tuple
+from typing import Any, NamedTuple
 
 from django.core.management import BaseCommand
 from tqdm import tqdm
@@ -45,8 +45,8 @@ def normalize_string(v):
 
 
 class GDCImportPlan(NamedTuple):
-    to_add: List[Tuple[type, Dict[str, Any]]]
-    to_update: List[Tuple[type, Dict[str, Any]]]
+    to_add: list[tuple[type, dict[str, Any]]]
+    to_update: list[tuple[type, dict[str, Any]]]
 
     def __repr__(self):
         return (
@@ -57,12 +57,12 @@ class GDCImportPlan(NamedTuple):
         )
 
     @property
-    def counts_to_add_by_type(self) -> Dict[str, int]:
+    def counts_to_add_by_type(self) -> dict[str, int]:
         sorted_list = sorted(self.to_add, key=lambda d: d[0].__name__)
         return {k: len(list(g)) for k, g in itertools.groupby(sorted_list, lambda d: d[0].__name__)}
 
     @property
-    def counts_to_update_by_type(self) -> Dict[str, int]:
+    def counts_to_update_by_type(self) -> dict[str, int]:
         sorted_list = sorted(self.to_update, key=lambda d: d[0].__name__)
         return {k: len(list(g)) for k, g in itertools.groupby(sorted_list, lambda d: d[0].__name__)}
 

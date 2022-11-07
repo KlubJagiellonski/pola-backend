@@ -5,19 +5,18 @@ import json
 import os
 import shlex
 import subprocess
-from typing import Dict
 
 from environ import environ
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-def print_env_vars(all_env_vars: Dict[str, str]) -> None:
+def print_env_vars(all_env_vars: dict[str, str]) -> None:
     for key, value in all_env_vars.items():
         print(f'export {shlex.quote(key)}={shlex.quote(value)}')
 
 
-def db_url_to_env_var(database_url: str, prefix: str) -> Dict[str, str]:
+def db_url_to_env_var(database_url: str, prefix: str) -> dict[str, str]:
     db_config = environ.Env.db_url_config(database_url)
     db_config_env_var = {
         f"{prefix}_HOST": str(db_config['HOST']),
@@ -47,7 +46,7 @@ def fetch_database_url_from_heroku(app_name: str) -> str:
     return database_url
 
 
-def fetch_heroku_env_vars(app_name: str) -> Dict[str, str]:
+def fetch_heroku_env_vars(app_name: str) -> dict[str, str]:
     return json.loads(subprocess.check_output(['heroku', 'config', '--app', app_name, '--json']))
 
 
