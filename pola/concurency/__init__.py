@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 
 class BaseConcurency:
@@ -62,7 +62,7 @@ class ConcurencyProtectUpdateView:
 
     def get_concurency_url(self):
         if self.concurency_url:
-            return force_text(self.concurency_url)
+            return force_str(self.concurency_url)
         else:
             raise ImproperlyConfigured("No URL to redirect to. Provide a concurency_url.")
 

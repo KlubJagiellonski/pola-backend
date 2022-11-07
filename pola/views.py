@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.db.models.functions import Length
 from django.http import HttpResponseRedirect
 from django.utils import timezone
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.timezone import get_default_timezone
 from django.views.generic import TemplateView
 from django.views.generic.detail import (
@@ -133,7 +133,7 @@ class ActionMixin:
 
     def get_success_url(self):
         if self.success_url:
-            self.success_url = force_text(self.success_url)
+            self.success_url = force_str(self.success_url)
             return self.success_url.format(**self.object.__dict__)
         else:
             raise ImproperlyConfigured("No URL to redirect to. Provide a success_url.")
