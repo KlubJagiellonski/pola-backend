@@ -65,14 +65,14 @@ AWS_PRELOAD_METADATA = True
 COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 COLLECTFAST_THREADS = 20
 
-INSTALLED_APPS = ('collectfast',) + INSTALLED_APPS  # noqa: F405
+INSTALLED_APPS = ('collectfast',) + INSTALLED_APPS
 
 # EMAIL
 # ------------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')  # noqa: F405
 ANYMAIL = {
     "MAILGUN_API_KEY": env('DJANGO_MAILGUN_API_KEY'),  # noqa: F405
-    "MAILGUN_API_URL": "https://api.eu.mailgun.net/v3",  # noqa: F405
+    "MAILGUN_API_URL": "https://api.eu.mailgun.net/v3",
     "MAILGUN_SENDER_DOMAIN": env('DJANGO_MAILGUN_SERVER_NAME'),  # noqa: F405
 }
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"

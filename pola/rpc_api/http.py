@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from django.http import JsonResponse
 
@@ -10,7 +10,7 @@ class JsonProblemResponse(JsonResponse):
         detail: str,
         status: int = 500,
         error_type: str = "about:blank",
-        context_data: Dict[str, Any] = None,
+        context_data: dict[str, Any] = None,
         **kwargs,
     ):
         response_data = {"type": error_type, "title": title, "detail": detail, "status": status}
