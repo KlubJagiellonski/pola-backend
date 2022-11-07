@@ -38,7 +38,7 @@ function verify_image() {
     echo "Verifying image: ${BI_IMAGE_NAME}:${IMAGE_TAG}"
     docker run --rm "${BI_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
     echo "=== Compare requirements ==="
-    diff \
+    diff -y \
       <(docker run --entrypoint /bin/bash --rm "${BI_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | LC_ALL=C sort -f) \
       <(LC_ALL=C sort -f < ./requirements/bi.txt)
     echo "======"
