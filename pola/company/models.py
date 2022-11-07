@@ -5,7 +5,7 @@ from django.core.validators import ValidationError
 from django.db import connection, models
 from django.forms.models import model_to_dict
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
 

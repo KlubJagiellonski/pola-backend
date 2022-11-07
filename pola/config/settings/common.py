@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import environ
 from boto.s3.connection import OrdinaryCallingFormat
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 ROOT_DIR = environ.Path(__file__) - 4  # (/a/b/myfile.py - 3 = /)
 APPS_DIR = ROOT_DIR.path('pola')
