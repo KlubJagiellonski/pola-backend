@@ -1,5 +1,6 @@
 from braces.views import FormValidMessageMixin, MessageMixin
 from dal import autocomplete
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -87,6 +88,7 @@ class ProductHistoryView(LoginPermissionRequiredMixin, DetailView):
         return context
 
 
+@login_required
 @cache_page(0)
 def get_image(request, code):
     response = HttpResponse(content_type="image/png")
