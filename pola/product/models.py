@@ -3,7 +3,7 @@ from django.core import validators
 from django.db import connection, models
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
 

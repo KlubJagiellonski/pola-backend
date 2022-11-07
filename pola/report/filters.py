@@ -1,7 +1,7 @@
 import django_filters
 from dal import autocomplete
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pola.company.models import Company
 from pola.filters import CrispyFilterMixin
