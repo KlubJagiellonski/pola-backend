@@ -30,7 +30,7 @@ jobs:
       - name: "Setup Python"
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.9'
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.sh
       - name: "Build BI image"
