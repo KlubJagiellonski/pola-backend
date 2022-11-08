@@ -2,13 +2,13 @@
 
 import argparse
 import json
-import os
 import shlex
 import subprocess
+from pathlib import Path
 
 from environ import environ
 
-CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
+CURRENT_DIR = Path(__file__).resolve().parent
 
 
 def print_env_vars(all_env_vars: dict[str, str]) -> None:
@@ -69,7 +69,7 @@ def main() -> None:
         **db_config_env_var,
         'POLA_APP_SCHEMA': 'public',
         'DATABASE_URL': database_url,
-        'DBT_PROFILES_DIR': os.path.join(CURRENT_DIR, 'profile'),
+        'DBT_PROFILES_DIR': str(CURRENT_DIR / 'profile'),
     }
 
     print_env_vars(all_env_vars)

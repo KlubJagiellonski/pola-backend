@@ -1,5 +1,6 @@
 import functools
 import os
+from pathlib import Path
 
 from botocore.exceptions import ClientError
 from django.conf import settings
@@ -24,8 +25,8 @@ def get_candidates(file_path):
     candidates = []
     if file_path:
         candidates.append(file_path)
-    splited_path = os.path.splitext(file_path)
-    if not splited_path[1]:
+    splited_path = Path(file_path).suffix
+    if not splited_path:
         candidates.append(os.path.join(file_path, "index.html"))
     return candidates
 

@@ -1,6 +1,6 @@
-import os
 import re
 from io import StringIO
+from pathlib import Path
 
 from django.core.files.temp import NamedTemporaryFile
 from django.core.management import CommandError, call_command
@@ -11,7 +11,7 @@ from pola.company.factories import CompanyFactory
 from pola.company.models import Brand, Company
 from pola.product.models import Product
 
-EXAMPLE_FILE = os.path.join(os.path.dirname(__file__), "test_import_brands_fixture.tsv")
+EXAMPLE_FILE = Path(__file__).resolve().parent / "test_import_brands_fixture.tsv"
 
 ANSI_ESCAPE_SEQUENCE_REGEXP = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
 

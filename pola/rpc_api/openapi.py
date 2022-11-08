@@ -63,7 +63,7 @@ def validate_openapi_spec(spec: SpecPath):
 
 
 def create_pola_openapi_spec_validator():
-    with open(SPEC_FILE) as spec_file:
+    with Path(SPEC_FILE).open() as spec_file:
         spec_dict = yaml_load(spec_file)
 
     spec = create_spec(spec_dict)
