@@ -129,7 +129,6 @@ jobs:
           github.event_name == 'push' &&
           (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
         run: |
-          set -x;
           bash -x ./scripts/detect_app_name.sh;
           APP_NAME="$(./scripts/detect_app_name.sh)";
           echo "IMAGE_TAG=${APP_NAME}" >> $GITHUB_ENV;
@@ -144,8 +143,9 @@ jobs:
           PREPARE_BUILDX_CACHE: true
         run: |
           # Build cache
-          ./scripts/prod-docker-image/build_image.sh
-          ./scripts/prod-docker-image/push_image.sh
+          set -x
+          bash -x ./scripts/prod-docker-image/build_image.sh
+          bash -x ./scripts/prod-docker-image/push_image.sh
 
   deploy-app:
     name: "Deploy app (push) - ${{ github.ref }}"
