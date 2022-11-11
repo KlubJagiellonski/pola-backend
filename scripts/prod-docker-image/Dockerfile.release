@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 ARG BASE_IMAGE
 
 # hadolint ignore=DL3006
