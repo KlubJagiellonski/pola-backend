@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.4
 FROM python:3.10.7-slim-buster
 
 RUN apt-get update \
@@ -17,9 +16,9 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /app
 WORKDIR /app
 
-COPY --link ./scripts/bi-docker-image/entrypoint.sh /entrypoint
+COPY ./scripts/bi-docker-image/entrypoint.sh /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
-COPY --link requirements/bi.txt /app/requirements/
+COPY requirements/bi.txt /app/requirements/
 
 RUN pip install --no-cache-dir -r requirements/bi.txt && pip check

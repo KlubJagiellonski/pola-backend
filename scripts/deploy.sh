@@ -45,7 +45,7 @@ IMAGE_TO_DEPLOY="${IMAGE_NAME}:${IMAGE_TAG}"
 echo "Start deploying '${IMAGE_TO_DEPLOY}' to '${APP_NAME}' app"
 echo "Preparing images:"
 docker tag "${IMAGE_TO_DEPLOY}" "${HEROKU_REGISTRY_URL}/web"
-docker buildx build prod-docker-image \
+docker build prod-docker-image \
   --build-arg "BASE_IMAGE=${IMAGE_TO_DEPLOY}" \
   --file=prod-docker-image/Dockerfile.release \
   --tag "${HEROKU_REGISTRY_URL}/release"
