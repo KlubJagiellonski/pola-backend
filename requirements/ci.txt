@@ -53,7 +53,7 @@ isodate==0.6.1
 jedi==0.18.2
 jmespath==1.0.1
 jsonfield==3.1.0
-jsonschema==3.2.0
+jsonschema==4.17.0
 lazy-object-proxy==1.8.0
 matplotlib-inline==0.1.6
 mccabe==0.7.0
