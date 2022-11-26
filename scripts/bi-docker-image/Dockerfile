@@ -19,6 +19,9 @@ WORKDIR /app
 COPY ./scripts/bi-docker-image/entrypoint.sh /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
-COPY requirements/bi.txt /app/requirements/
+COPY dependencies/constraints-bi.txt dependencies/requirements-bi.txt  /app/dependencies/
 
-RUN pip install --no-cache-dir -r requirements/bi.txt && pip check
+RUN pip install \
+      --no-cache-dir \
+      --requirement dependencies/constraints-bi.txt \
+      --constraint dependencies/constraints-bi.txt && pip check
