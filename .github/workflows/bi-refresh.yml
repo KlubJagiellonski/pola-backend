@@ -32,7 +32,7 @@ jobs:
         with:
           python-version: '3.9'
       - name: "Login to Github Docker Registry"
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: "Build BI image"
         run: |
           # Build BI image

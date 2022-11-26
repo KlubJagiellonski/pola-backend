@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: Login to Github Docker Registry
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: Copy .env.example to .env
         run: cp .env.example .env
       - name: Build image
