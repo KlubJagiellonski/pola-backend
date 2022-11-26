@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: "Login to Githhub Container Registry"
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
@@ -35,7 +35,7 @@ jobs:
           ./scripts/ci-docker-image/build_image.sh
           ./scripts/ci-docker-image/verify_image.sh
       - name: Pull images
-        run: ./scripts/pull_images.sh
+        run: ./scripts/pull_images.py
       - name: "Run tests"
         run: ./run_test.sh
       - name: "Check missing migrations"
@@ -90,7 +90,7 @@ jobs:
         with:
           python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
@@ -104,7 +104,7 @@ jobs:
           # Verify BI image
           ./scripts/bi-docker-image/verify_image.sh
       - name: Pull images
-        run: ./scripts/pull_images.sh
+        run: ./scripts/pull_images.py
       - run: docker-compose config
       - run: docker-compose up -d
       - run: ./run_manage.sh migrate
@@ -123,15 +123,15 @@ jobs:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v3
       - name: "Login to Githhub Container Registry"
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: "Set image tag"
         if: |
           github.event_name == 'push' &&
           (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
         run: |
           set -x;
-          bash -x ./scripts/detect_app_name.sh;
-          APP_NAME="$(./scripts/detect_app_name.sh)";
+          APP_NAME="$(./scripts/detect_app_name.py)";
+          echo "APP_NAME=${APP_NAME}"
           echo "IMAGE_TAG=${APP_NAME}" >> $GITHUB_ENV;
           echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
       - name: "Build image"
@@ -160,17 +160,18 @@ jobs:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v3
       - name: "Login to Githhub Container Registry"
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: "Login to Heroku Docker Registry"
-        run: "./scripts/docker_login_heroku.sh"
+        run: ./scripts/docker_login_heroku.py
       - name: "Install Heroku CLI"
         run: "curl https://cli-assets.heroku.com/install.sh | sh"
       - name: "Set environment env variable"
         run: |
           APP_NAME="$(./scripts/detect_app_name.sh)";
+          echo "APP_NAME=${APP_NAME}"
           echo "IMAGE_TAG=${APP_NAME}" >> $GITHUB_ENV;
           echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
-          echo "HEROKU_DOMAIN=$(./scripts/fetch_domain.sh "${APP_NAME}")" >> $GITHUB_ENV;
+          echo "HEROKU_DOMAIN=$(./scripts/fetch_domain.py "${APP_NAME}")" >> $GITHUB_ENV;
       - uses: chrnorm/deployment-action@releases/v1
         name: Create GitHub deployment
         id: deployment
@@ -218,7 +219,7 @@ jobs:
         with:
           python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: "Build BI image"
         run: |
           # Build BI image
