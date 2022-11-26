@@ -10,5 +10,7 @@ if not HEROKU_API_KEY:
     sys.exit(1)
 
 subprocess.run(
-    ['docker', 'login', '--username=_', '--password-stdin', 'registry.heroku.com'], check=True, input=HEROKU_API_KEY
+    ['docker', 'login', '--username=_', '--password-stdin', 'registry.heroku.com'],
+    check=True,
+    input=HEROKU_API_KEY.encode(),
 )

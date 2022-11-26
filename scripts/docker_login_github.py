@@ -23,7 +23,7 @@ subprocess.run(
         '--password-stdin',
         "ghcr.io",
     ],
-    input=GITHUB_TOKEN,
+    input=GITHUB_TOKEN.encode(),
     check=True,
 )
 print("Logged in")
