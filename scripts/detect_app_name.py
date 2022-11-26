@@ -2,6 +2,12 @@
 import os
 import sys
 
+if __name__ not in ("__main__", "__mp_main__"):
+    raise SystemExit(
+        "This file is intended to be executed as an executable program. You cannot use it as a module."
+        f"To run this script, run the ./{__file__} command"
+    )
+
 GITHUB_REF = os.environ.get('GITHUB_REF')
 
 if not GITHUB_REF:
