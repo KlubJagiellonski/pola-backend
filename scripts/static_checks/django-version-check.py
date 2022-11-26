@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parents[2]
 DJANGO_VERSION = next(
     line
-    for line in (ROOT_DIR / "requirements" / "production.txt").read_text().splitlines()
+    for line in (ROOT_DIR / "dependencies" / "constraints-production.txt").read_text().splitlines()
     if line.lower().startswith("django==")
 ).split("==")[1]
 

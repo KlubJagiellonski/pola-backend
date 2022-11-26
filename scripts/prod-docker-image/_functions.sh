@@ -62,10 +62,10 @@ function build_image() {
 function verify_image() {
     echo "Verifying image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     docker run --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
-    echo "=== Compare requirements ==="
+    echo "=== Compare constraints ==="
     diff -y \
       <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | LC_ALL=C sort -f) \
-      <(LC_ALL=C sort -f < ./requirements/production.txt)
+      <(LC_ALL=C sort -f < ./dependencies/constraints-production.txt)
     echo "======"
     echo
     echo

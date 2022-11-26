@@ -2,7 +2,7 @@
 **
 # ...except stated below:
 !pola
-!requirements
+!dependencies
 !utils
 !scripts
 !manage.py

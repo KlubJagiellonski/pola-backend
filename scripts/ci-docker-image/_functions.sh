@@ -39,13 +39,13 @@ function build_image() {
 function verify_image() {
     echo "Verifying image: ${CI_IMAGE_NAME}:${IMAGE_TAG}"
     docker run --rm "${CI_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
-    echo "=== Compare requirements ==="
+    echo "=== Compare constraints ==="
     diff -y \
       <(
         docker run --entrypoint /bin/bash --rm "${CI_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | \
           grep -v -i "Django==" | LC_ALL=C sort -f \
       ) \
-      <(LC_ALL=C sort -f < ./requirements/ci.txt | grep -v -i "Django==")
+      <(LC_ALL=C sort -f < ./dependencies/constraints-ci.txt | grep -v -i "Django==")
     echo "======"
     echo
     echo
