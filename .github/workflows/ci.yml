@@ -32,7 +32,7 @@ jobs:
         run: cp .env.example .env
       - name: "Build CI image"
         run: |
-          ./scripts/ci-docker-image.py build_image
+          ./scripts/ci_docker_image.py build_image
           ./scripts/ci-docker-image/verify_image.sh
       - name: Pull images
         run: ./scripts/pull_images.py
