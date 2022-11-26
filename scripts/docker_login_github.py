@@ -6,7 +6,7 @@ import sys
 GITHUB_ORGANIZATION = os.environ.get('GITHUB_ORGANIZATION', 'KlubJagiellonski')
 
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
-if GITHUB_TOKEN:
+if not GITHUB_TOKEN:
     print("Missing environment variable: GITHUB_TOKEN", file=sys.stderr)
     sys.exit(1)
 
