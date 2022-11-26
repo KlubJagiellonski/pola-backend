@@ -167,7 +167,7 @@ jobs:
         run: "curl https://cli-assets.heroku.com/install.sh | sh"
       - name: "Set environment env variable"
         run: |
-          APP_NAME="$(./scripts/detect_app_name.sh)";
+          APP_NAME="$(./scripts/detect_app_name.py)";
           echo "APP_NAME=${APP_NAME}"
           echo "IMAGE_TAG=${APP_NAME}" >> $GITHUB_ENV;
           echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
