@@ -29,7 +29,7 @@ jobs:
           fetch-depth: 2
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.py
-      - if: matrix.django_version == 'current'
+      - if: matrix.django_version != 'current'
         run: |
           echo "DJANGO_VERSION=${DJANGO_VERSION}" >> $GITHUB_ENV;
         env:
