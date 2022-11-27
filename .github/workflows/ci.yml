@@ -177,7 +177,7 @@ jobs:
         id: deployment
         with:
           token: "${{ github.token }}"
-          target_url: "${{ env.HEROKU_DOMAIN }}"
+          target_url: "https://${{ env.HEROKU_DOMAIN }}"
           state: in_progress
           environment: "${{ env.HEROKU_APP }}"
       - name: "Pull image"
