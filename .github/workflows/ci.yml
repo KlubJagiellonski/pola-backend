@@ -32,6 +32,8 @@ jobs:
       - if: matrix.django_version == 'current'
         run: |
           echo "DJANGO_VERSION=${DJANGO_VERSION}" >> $GITHUB_ENV;
+        env:
+          DJANGO_VERSION: ${{ matrix.django_version }}
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
