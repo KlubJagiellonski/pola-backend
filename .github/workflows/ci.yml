@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version: ["3.9", "3.10", "3.11"]
-        django_version: ['current', "4"]
+        django_version: ['current', "latest"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
     steps:
@@ -29,9 +29,10 @@ jobs:
           fetch-depth: 2
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.py
-      - if: matrix.django_version != 'current'
+      - if: matrix.django_version != 'latest'
         run: |
-          echo "DJANGO_VERSION=${DJANGO_VERSION}" >> $GITHUB_ENV;
+          latest_version=$(curl 'https://pypi.org/pypi/django/json' | jq .info.version -r)
+          echo "DJANGO_VERSION=${latest_version}" | tee "${GITHUB_ENV}";
         env:
           DJANGO_VERSION: ${{ matrix.django_version }}
       - name: "Copy .env.example to .env"
