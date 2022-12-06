@@ -1,5 +1,5 @@
 asgiref==3.5.2
-asttokens==2.2.0
+asttokens==2.2.1
 attrs==22.1.0
 Babel==2.11.0
 backcall==0.2.0
