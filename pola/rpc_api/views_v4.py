@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 from pola import logic, logic_ai
 from pola.constants import DONATE_TEXT, DONATE_URL

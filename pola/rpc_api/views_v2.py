@@ -2,7 +2,7 @@ import json
 
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 from pola.report.models import Report
 from pola.rpc_api.jsonschema import validate_json_response
