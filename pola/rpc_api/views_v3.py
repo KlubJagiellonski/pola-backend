@@ -7,7 +7,7 @@ from botocore.config import Config
 from django.conf import settings
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 from pola.ai_pics.models import AIAttachment, AIPics
 from pola.product.models import Product
