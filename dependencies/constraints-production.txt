@@ -1,4 +1,4 @@
-asgiref==3.5.2
+asgiref==3.6.0
 attrs==22.1.0
 Babel==2.11.0
 boto==2.49.0
