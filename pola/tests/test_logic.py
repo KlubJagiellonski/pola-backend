@@ -6,6 +6,7 @@ from test_plus import TestCase
 from vcr import VCR
 
 from pola.company.factories import BrandFactory, CompanyFactory
+from pola.gpc.factories import GPCBrickFactory
 from pola.logic import get_by_code, get_result_from_code
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
@@ -497,6 +498,7 @@ class TestGetByCode(TestCase):
 
     @vcr.use_cassette('product_ean13.yaml', filter_headers=['X-API-Key'])
     def test_should_create_new_when_missing(self):
+        GPCBrickFactory(code="10000232")
         self.assertEqual(0, Product.objects.count())
         response = get_by_code(TEST_EAN13)
         self.assertEqual(response.name, 'Muszynianka Naturalna woda mineralna MUSZYNIANKA 1.5l')

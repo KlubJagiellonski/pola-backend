@@ -70,7 +70,7 @@ class GPCClass(models.Model):
 
 class GPCBrick(models.Model):
     parent = models.ForeignKey(GPCClass, null=False, blank=False, verbose_name="Class", on_delete=models.CASCADE)
-    code = models.CharField(max_length=255, null=False, verbose_name="Kod")
+    code = models.CharField(max_length=255, null=False, verbose_name="Kod", db_index=True)
     text = models.CharField(max_length=255, null=False, verbose_name="Nazwa brick")
     definition = models.TextField(null=True, verbose_name="Opis brick")
     definitionExcludes = models.TextField(null=True, verbose_name="Opis wykluczeń")

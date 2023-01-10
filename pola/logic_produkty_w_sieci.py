@@ -2,6 +2,7 @@ import logging
 from typing import Optional
 
 from pola.company.models import Brand, Company
+from pola.gpc.models import GPCBrick
 from pola.integrations.produkty_w_sieci import ProductQueryResult
 from pola.logic_bot_report import create_bot_report
 from pola.product.models import Product
@@ -36,6 +37,7 @@ def create_from_api(code: str, get_products_response: ProductQueryResult, produc
             code=code,
             company=expected_company,
             brand=expected_brand,
+            gpc_brick=GPCBrick.objects.get(code=result_product.gpc) if result_product.gpc else None,
             commit_desc="Produkt utworzony automatycznie na podstawie skanu użytkownika",
         )
         return product
@@ -91,6 +93,25 @@ def create_from_api(code: str, get_products_response: ProductQueryResult, produc
             product.brand = expected_brand
             product_commit_desc += 'Marka produktu zmieniona na podstawie bazy GS1. '
 
+    if product.gpc_brick:
+        if result_product.gpc and product.gpc_brick.code != result_product.gpc:
+            LOGGER.info(
+                "GPC Brick mismatch. Old value: %s, new name: %s, Creating a report.",
+                product.name,
+                result_product.name,
+            )
+            create_bot_report(
+                product,
+                f"Wg. najnowszego odpytania w bazie ILiM kod GPC tego produktu to: {result_product.gpc}",
+                check_if_already_exists=not company_created,
+            )
+    else:
+        if result_product.gpc:
+            LOGGER.info("A previously unknown GPC Brick name was found. Updating the product.")
+            product_commit_desc += 'Kod GPC zmieniona na podstawie bazy GS1. '
+            product.gpc_brick = GPCBrick.objects.get(code=result_product.gpc)
+
+    product.gs1_last_response = get_products_response.dict()
     product.save(commit_desc=product_commit_desc)
 
     return product

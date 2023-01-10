@@ -2,6 +2,7 @@ from parameterized import parameterized
 from test_plus import TestCase
 
 from pola import logic_produkty_w_sieci
+from pola.gpc.factories import GPCBrickFactory
 from pola.integrations.produkty_w_sieci import ProductQueryResult
 from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
 from pola.product.models import Product
@@ -91,6 +92,67 @@ class TestCreateFromApi(TestCase):
                 'INFO:/app/pola/logic_produkty_w_sieci.py:Product missing. Creating a new product.',
             ],
         )
+
+    def test_should_set_gpc_when_gpc_in_product_is_not_set(self):
+        code = '5900102025473'
+
+        product_query_response = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "facets": {},
+            "results": [
+                {
+                    "id": "e4aa0425-f552-4a59-91c3-c5932cb1e327",
+                    "gtinNumber": f"0{code}",
+                    "gtinStatus": "active",
+                    "name": "Gorzka 70% cocoa 90g - czekolada pełna",
+                    "targetMarket": ["WW"],
+                    "netContent": "90.0g",
+                    "imageUrls": [],
+                    "description": None,
+                    "descriptionLanguage": "pl",
+                    "productPage": None,
+                    "isPublic": True,
+                    "isVerified": False,
+                    "lastModified": "2021-04-20T13:24:24.970000+00:00",
+                    "brand": "Wawel",
+                    "company": {
+                        "name": "WAWEL Spółka Akcyjna",
+                        "nip": "6760076868",
+                        "street": "ul. Władysława Warneńczyka 14",
+                        "webPage": "http://www.wawel.com.pl",
+                        "city": "Kraków",
+                        "postalCode": "30-520",
+                    },
+                    "gpc": "10000045",
+                }
+            ],
+        }
+        gpc_brick = GPCBrickFactory(code="10000045")
+        with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
+            result_product = create_from_api(
+                code=code,
+                get_products_response=ProductQueryResult.parse_obj(product_query_response),
+                product=None,
+            )
+        product_db = Product.objects.get(code=code)
+        self.assertEqual(
+            log.output,
+            [
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
+                'company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about brand: '
+                'name=Wawel. Checking db.',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Product missing. Creating a new product.',
+            ],
+        )
+        self.assertEqual(result_product.pk, product_db.pk)
+        self.assertEqual(product_db.gpc_brick.code, "10000045")
+        self.assertEqual(product_db.gpc_brick.pk, gpc_brick.pk)
+        self.assertEqual(Report.objects.count(), 0)
 
     def test_should_create_product_when_product_is_missing(self):
         product_query_response = {
@@ -412,6 +474,78 @@ class TestCreateFromApi(TestCase):
                 'INFO:/app/pola/logic_produkty_w_sieci.py:Product exists. Updating a product.',
                 'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown company was '
                 'found. Updating the product.',
+            ],
+        )
+
+    def test_should_set_gpc_when_product_without_gpc_exists(self):
+        p = Product.objects.create(
+            name=TEST_PRODUCT_NAME,
+            code=TEST_EAN13,
+            commit_desc="Utworzono produkt przez test",
+        )
+
+        product_query_response = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "facets": {},
+            "results": [
+                {
+                    "id": "e4aa0425-f552-4a59-91c3-c5932cb1e327",
+                    "gtinNumber": f"0{TEST_EAN13}",
+                    "gtinStatus": "active",
+                    "name": TEST_PRODUCT_NAME,
+                    "targetMarket": ["WW"],
+                    "netContent": "90.0g",
+                    "imageUrls": [],
+                    "description": None,
+                    "descriptionLanguage": "pl",
+                    "productPage": None,
+                    "isPublic": True,
+                    "isVerified": False,
+                    "lastModified": "2021-04-20T13:24:24.970000+00:00",
+                    "brand": "Wawel",
+                    "company": {
+                        "name": "WAWEL Spółka Akcyjna",
+                        "nip": "6760076868",
+                        "street": "ul. Władysława Warneńczyka 14",
+                        "webPage": "http://www.wawel.com.pl",
+                        "city": "Kraków",
+                        "postalCode": "30-520",
+                    },
+                    "gpc": "10000045",
+                }
+            ],
+        }
+        gpc_brick = GPCBrickFactory(code="10000045")
+        with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
+            result_product = create_from_api(
+                code=TEST_EAN13, get_products_response=ProductQueryResult.parse_obj(product_query_response), product=p
+            )
+        product_db = Product.objects.get(code=TEST_EAN13)
+        self.assertEqual(result_product.pk, product_db.pk)
+        self.assertEqual(product_db.name, product_query_response["results"][0]['name'])
+        self.assertEqual(product_db.gpc_brick.code, gpc_brick.code)
+        self.assertEqual(product_db.gpc_brick.pk, gpc_brick.pk)
+
+        self.assertEqual(product_db.company.name, product_query_response["results"][0]['company']['name'])
+        self.assertEqual(Report.objects.count(), 0)
+        self.assertEqual(
+            log.output,
+            [
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
+                'company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
+                'brand: name=Wawel. Checking db.',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:Product exists. Updating a product.',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown company was '
+                'found. Updating the product.',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown brand was '
+                'found. Updating the product.',
+                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown GPC Brick name '
+                'was found. Updating the product.',
             ],
         )
 

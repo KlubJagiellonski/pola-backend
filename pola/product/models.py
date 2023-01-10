@@ -9,6 +9,7 @@ from reversion import revisions as reversion
 
 from pola.company.models import Brand, Company
 from pola.concurency import concurency
+from pola.gpc.models import GPCBrick
 
 
 class ProductQuerySet(models.query.QuerySet):
@@ -36,8 +37,10 @@ class Product(TimeStampedModel):
     )
     company = models.ForeignKey(Company, null=True, blank=True, verbose_name="Producent", on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, null=True, blank=True, verbose_name="Marka produktu", on_delete=models.SET_NULL)
+    gpc_brick = models.ForeignKey(GPCBrick, null=True, blank=True, verbose_name="GPC Brick", on_delete=models.SET_NULL)
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
+    gs1_last_response = models.JSONField(null=True)
 
     objects = ProductQuerySet.as_manager()
 
