@@ -19,8 +19,7 @@ def is_code_supported(code: str):
 def create_from_api(code: str, get_products_response: ProductQueryResult, product: Optional[Product] = None):
     if not is_code_supported(code):
         raise Exception(f"Unsupported code: {code}")
-    if get_products_response:
-        assert len(get_products_response.results) == 1
+    if get_products_response.count == 1:
         result_product = get_products_response.results[0]
     else:
         result_product = None
