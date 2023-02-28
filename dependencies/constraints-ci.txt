@@ -51,7 +51,7 @@ jmespath==1.0.1
 jsonschema==3.2.0
 lazy-object-proxy==1.9.0
 matplotlib-inline==0.1.6
-more-itertools==9.0.0
+more-itertools==9.1.0
 multidict==6.0.4
 oauthlib==3.2.2
 openapi-core==0.14.5
