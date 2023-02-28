@@ -36,7 +36,7 @@ class TestCreateFromApi(TestCase):
 
     def test_should_create_product_brand_and_company_when_product_is_missing(self):
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
@@ -156,7 +156,7 @@ class TestCreateFromApi(TestCase):
 
     def test_should_create_product_when_product_is_missing(self):
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
@@ -201,7 +201,7 @@ class TestCreateFromApi(TestCase):
 
     def test_should_create_product_and_company_when_product_is_missing(self):
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
@@ -256,7 +256,7 @@ class TestCreateFromApi(TestCase):
 
     def test_should_create_product_and_brand_when_product_is_missing(self):
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
@@ -309,7 +309,7 @@ class TestCreateFromApi(TestCase):
             commit_desc="Utworzono produkt przez test",
         )
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
@@ -374,7 +374,7 @@ class TestCreateFromApi(TestCase):
             commit_desc="Utworzono produkt przez test",
         )
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
@@ -423,7 +423,7 @@ class TestCreateFromApi(TestCase):
         )
 
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
@@ -556,7 +556,7 @@ class TestCreateFromApi(TestCase):
             commit_desc="Utworzono produkt przez test",
         )
         product_query_response = {
-            "count": 12341,
+            "count": 1,
             "next": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=2000",
             "prev": "<baseURL>/external_api/v1/products/?last_modified__gte=2020-06-01&limit=1000?offset=0",
             "results": [
