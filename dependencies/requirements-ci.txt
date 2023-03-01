@@ -6,6 +6,6 @@ django-test-plus==2.2.1
 django-webtest==1.9.10
 django_debug_toolbar==3.8.1
 factory-boy==3.2.1
-ipdb==0.13.9
+ipdb==0.13.11
 parameterized==0.8.1
 vcrpy==4.2.1
