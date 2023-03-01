@@ -1,6 +1,6 @@
 agate==1.6.3
 attrs==22.2.0
-Babel==2.11.0
+Babel==2.12.1
 certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==3.0.1
