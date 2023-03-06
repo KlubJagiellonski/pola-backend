@@ -88,7 +88,7 @@ soupsieve==2.3.2.post1
 sqlparse==0.4.3
 stack-data==0.6.2
 toml==0.10.2
-tqdm==4.64.1
+tqdm==4.65.0
 traitlets==5.8.1
 typing_extensions==4.4.0
 urllib3==1.26.14
