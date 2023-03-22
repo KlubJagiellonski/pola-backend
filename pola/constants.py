@@ -1,2 +1,2 @@
-DONATE_URL = "https://klubjagiellonski.pl/petycje/auchan-zrozum-ze-nie-zawsze-sie-oplaca-petycja/"
-DONATE_TEXT = "Petycja do sieci Auchan!"
+DONATE_URL = "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/"
+DONATE_TEXT = "Wpłać 1 zł!"
