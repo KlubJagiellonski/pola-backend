@@ -21,7 +21,7 @@ Django==3.2.16
 django-allauth==0.54.0
 django-anymail==9.1
 django-autocomplete-light==3.9.4
-django-autoslug==1.9.8
+django-autoslug==1.9.9
 django-braces==1.15.0
 django-cors-headers==3.14.0
 django-coverage-plugin==3.0.0
