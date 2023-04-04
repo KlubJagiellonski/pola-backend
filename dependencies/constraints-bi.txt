@@ -26,7 +26,7 @@ networkx==2.8.8
 packaging==21.3
 parsedatetime==2.4
 pathspec==0.9.0
-psycopg2-binary==2.9.5
+psycopg2-binary==2.9.6
 pycparser==2.21
 pyparsing==3.0.9
 pyrsistent==0.19.3
