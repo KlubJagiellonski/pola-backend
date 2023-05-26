@@ -90,7 +90,7 @@ stack-data==0.6.2
 toml==0.10.2
 tqdm==4.65.0
 traitlets==5.9.0
-typing_extensions==4.6.1
+typing_extensions==4.6.2
 urllib3==1.26.15
 vcrpy==4.3.0
 waitress==2.1.2
