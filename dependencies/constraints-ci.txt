@@ -1,4 +1,4 @@
-asgiref==3.7.1
+asgiref==3.7.2
 asttokens==2.2.1
 attrs==23.1.0
 Babel==2.12.1
