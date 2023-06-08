@@ -28,6 +28,6 @@ openapi-spec-validator==0.4.0
 psycopg2-binary==2.9.6
 pydantic==1.10.9
 reportlab==3.6.13
-rq==1.14.1
+rq==1.15.0
 sentry-sdk==1.25.1
 tqdm==4.65.0
