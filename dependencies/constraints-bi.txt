@@ -28,7 +28,7 @@ parsedatetime==2.4
 pathspec==0.9.0
 psycopg2-binary==2.9.6
 pycparser==2.21
-pyparsing==3.0.9
+pyparsing==3.1.0
 pyrsistent==0.19.3
 python-dateutil==2.8.2
 python-slugify==8.0.1
