@@ -31,7 +31,6 @@ def add_ask_for_pics(product, result):
         and product.company.query_count > QUERY_COUNT_THRESHOLD
         and random.randint(0, DESIRED_AI_PICS_COUNT) > product.ai_pics_count
     ):
-
         ai = result['ai'] = {}
         ai['ask_for_pics'] = True
         ai['ask_for_pics_preview'] = random.choice(preview_texts)

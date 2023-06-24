@@ -52,7 +52,6 @@ def save_company_fk(apps, schema):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('company', '0023_auto_20210215_0756'),
         ('product', '0015_remove_product_company'),

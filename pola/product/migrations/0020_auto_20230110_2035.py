@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('gpc', '0002_alter_gpcbrick_code'),
         ('product', '0019_alter_product_brand'),

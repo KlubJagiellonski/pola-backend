@@ -4,7 +4,6 @@ import pola.company.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('company', '0009_company_editor_notes'),
     ]
