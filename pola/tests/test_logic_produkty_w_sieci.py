@@ -454,7 +454,6 @@ class TestCreateFromApi(TestCase):
             ],
         }
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
-
             result_product = create_from_api(
                 code=TEST_EAN13, get_products_response=ProductQueryResult.parse_obj(product_query_response), product=p
             )

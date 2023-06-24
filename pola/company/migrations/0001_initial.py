@@ -4,7 +4,6 @@ import pola.company.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = []
 
     operations = [

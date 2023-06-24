@@ -12,7 +12,6 @@ WHERE product_product.company_id IS NOT NULL;
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('product', '0013_auto_20210117_0109'),
     ]

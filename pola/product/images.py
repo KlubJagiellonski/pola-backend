@@ -6,7 +6,6 @@ from reportlab.lib import units
 class Barcode:
     @staticmethod
     def get_barcode(value, width, barWidth=0.05 * units.inch, fontSize=30, humanReadable=True):
-
         barcode = createBarcodeDrawing(
             'Code128', value=value, barWidth=barWidth, fontSize=fontSize, humanReadable=humanReadable
         )

@@ -7,7 +7,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('ai_pics', '0010_auto_20211003_0556'),
     ]

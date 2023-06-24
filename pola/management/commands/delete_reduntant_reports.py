@@ -18,14 +18,12 @@ class Command(BaseCommand):
         )
 
         for product in products:
-
             print(f"{product['name'].encode('UTF-8') if product['name'] else ''} (id:{product['id']})")
 
             reports = Report.objects.filter(product__id=product['id'], client='krs-bot').order_by('created')
 
             desc = set()
             for report in reports:
-
                 if report.description in desc:
                     print(report.description.encode('utf-8') + ' - deleted')
                     report.delete()
