@@ -36,7 +36,7 @@ django-reversion==5.0.4
 django-storages==1.13.2
 django-test-plus==2.2.1
 django-webtest==1.9.10
-django_debug_toolbar==3.8.1
+django_debug_toolbar==4.1.0
 executing==1.2.0
 factory-boy==3.2.1
 Faker==18.10.1
