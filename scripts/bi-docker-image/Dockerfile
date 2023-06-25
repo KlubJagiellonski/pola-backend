@@ -23,5 +23,5 @@ COPY dependencies/constraints-bi.txt dependencies/requirements-bi.txt  /app/depe
 
 RUN pip install \
       --no-cache-dir \
-      --requirement dependencies/constraints-bi.txt \
+      --requirement dependencies/requirements-bi.txt \
       --constraint dependencies/constraints-bi.txt && pip check
