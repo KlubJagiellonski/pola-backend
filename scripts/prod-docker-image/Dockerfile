@@ -7,7 +7,7 @@ ARG BASE_PYTHON_IMAGE="python:3.9-slim-buster"
 
 ######################### NODE BUILD IMAGE ##########################
 
-FROM node:16.13.1-alpine3.12 as build-js
+FROM node:17.3.0-alpine3.12 as build-js
 
 WORKDIR /app/
 COPY ./package.json  /app/
