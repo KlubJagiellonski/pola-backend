@@ -9,7 +9,7 @@ updates:
     schedule:
       interval: "daily"
       time: "04:00"
-    open-pull-requests-limit: 40
+    open-pull-requests-limit: 60
     groups:
       dbt:
         patterns:
