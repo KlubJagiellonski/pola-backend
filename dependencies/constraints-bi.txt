@@ -8,7 +8,7 @@ click==8.1.5
 colorama==0.4.4
 dbt-core==1.5.2
 dbt-extractor==0.4.1
-dbt-postgres==1.5.2
+dbt-postgres==1.5.3
 future==0.18.3
 hologram==0.0.15
 idna==3.4
