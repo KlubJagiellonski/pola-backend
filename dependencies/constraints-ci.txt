@@ -41,7 +41,7 @@ executing==1.2.0
 factory-boy==3.2.1
 Faker==19.1.0
 gtin==1.3.1649173518
-gunicorn==20.1.0
+gunicorn==21.1.0
 idna==3.4
 ipdb==0.13.9
 ipython==8.14.0
