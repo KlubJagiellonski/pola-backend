@@ -4,7 +4,7 @@ Babel==2.12.1
 boto==2.49.0
 boto3==1.28.9
 botocore==1.31.9
-certifi==2023.5.7
+certifi==2023.7.22
 cffi==1.15.1
 charset-normalizer==3.2.0
 click==8.1.6
