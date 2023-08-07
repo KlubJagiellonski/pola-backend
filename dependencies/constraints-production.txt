@@ -33,7 +33,7 @@ gunicorn==20.1.0
 idna==3.4
 isodate==0.6.1
 jmespath==1.0.1
-jsonschema==3.2.0
+jsonschema==4.18.6
 lazy-object-proxy==1.9.0
 MarkupSafe==2.1.3
 more-itertools==10.1.0
