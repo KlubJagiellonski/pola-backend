@@ -5,8 +5,8 @@ Babel==2.12.1
 backcall==0.2.0
 beautifulsoup4==4.12.2
 boto==2.49.0
-boto3==1.28.22
-botocore==1.31.22
+boto3==1.28.23
+botocore==1.31.23
 certifi==2023.7.22
 cffi==1.15.1
 charset-normalizer==3.2.0
