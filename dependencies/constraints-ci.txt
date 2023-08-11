@@ -69,7 +69,7 @@ psycopg2-binary==2.9.7
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pycparser==2.21
-pydantic==1.10.9
+pydantic==2.1.1
 Pygments==2.16.1
 PyJWT==2.8.0
 pyrsistent==0.19.3
