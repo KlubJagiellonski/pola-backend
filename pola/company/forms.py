@@ -35,6 +35,7 @@ class CompanyForm(ReadOnlyFieldsMixin, SaveButtonMixin, FormHorizontalMixin, Com
             'Editor_notes',
             'nip',
             'address',
+            'logotype'
         ]
 
 
