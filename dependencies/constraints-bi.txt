@@ -27,7 +27,7 @@ packaging==21.3
 parsedatetime==2.4
 pathspec==0.11.2
 protobuf==4.24.3
-psycopg2-binary==2.9.7
+psycopg2-binary==2.9.8
 pycparser==2.21
 pyparsing==3.1.1
 pyrsistent==0.19.3
