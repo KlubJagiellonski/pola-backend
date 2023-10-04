@@ -90,7 +90,7 @@ sqlparse==0.4.4
 stack-data==0.6.3
 toml==0.10.2
 tqdm==4.66.1
-traitlets==5.10.1
+traitlets==5.11.2
 typing_extensions==4.8.0
 urllib3==1.26.15
 vcrpy==5.1.0
