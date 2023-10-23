@@ -1,7 +1,7 @@
 asgiref==3.7.2
 asttokens==2.3.0
 attrs==23.1.0
-Babel==2.12.1
+Babel==2.13.0
 backcall==0.2.0
 beautifulsoup4==4.12.2
 boto==2.49.0
