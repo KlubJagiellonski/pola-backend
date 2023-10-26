@@ -47,7 +47,7 @@ psycopg2-binary==2.9.9
 pycparser==2.21
 pydantic==1.10.9
 PyJWT==2.8.0
-pyrsistent==0.19.3
+pyrsistent==0.20.0
 python-dateutil==2.8.2
 python3-openid==3.2.0
 pytz==2023.3
