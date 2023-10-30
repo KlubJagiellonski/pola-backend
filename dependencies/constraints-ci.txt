@@ -37,7 +37,7 @@ django-storages==1.14.2
 django-test-plus==2.2.3
 django-webtest==1.9.11
 django_debug_toolbar==3.8.1
-executing==2.0.0
+executing==2.0.1
 factory-boy==3.3.0
 Faker==19.12.0
 gtin==1.3.1649173518
