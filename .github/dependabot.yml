@@ -21,9 +21,10 @@ updates:
           - "s3transfer"
       openapi:
         patterns:
+          - "jsonschema"
           - "openapi-core"
           - "openapi-schema-validator"
-          - "jsonschema"
+          - "openapi-spec-validator"
 
   - package-ecosystem: "github-actions"
     labels:
