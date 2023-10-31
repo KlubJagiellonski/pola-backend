@@ -2,7 +2,6 @@ asgiref==3.7.2
 asttokens==2.4.1
 attrs==23.1.0
 Babel==2.13.1
-backcall==0.2.0
 beautifulsoup4==4.12.2
 boto==2.49.0
 boto3==1.28.54
@@ -62,7 +61,6 @@ parameterized==0.9.0
 parse==1.19.1
 parso==0.8.3
 pexpect==4.8.0
-pickleshare==0.7.5
 Pillow==10.1.0
 prompt-toolkit==3.0.39
 psycopg2-binary==2.9.9
