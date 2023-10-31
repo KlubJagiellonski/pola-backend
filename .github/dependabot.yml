@@ -13,7 +13,7 @@ updates:
     groups:
       dbt:
         patterns:
-          - "dbt"
+          - "dbt*"
       aws:
         patterns:
           - "boto3"
