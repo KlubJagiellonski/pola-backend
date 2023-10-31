@@ -19,6 +19,10 @@ updates:
           - "boto3"
           - "botocore"
           - "s3transfer"
+      openapi:
+        patterns:
+          - "openapi-core"
+          - "openapi-schema-validator"
 
   - package-ecosystem: "github-actions"
     labels:
