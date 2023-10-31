@@ -23,6 +23,7 @@ updates:
         patterns:
           - "openapi-core"
           - "openapi-schema-validator"
+          - "jsonschema"
 
   - package-ecosystem: "github-actions"
     labels:
