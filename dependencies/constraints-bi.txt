@@ -10,7 +10,7 @@ dbt-core==1.6.7
 dbt-extractor
 dbt-postgres==1.6.7
 future==0.18.3
-hologram==0.0.15
+hologram
 idna==3.4
 importlib-metadata==6.8.0
 isodate==0.6.1
