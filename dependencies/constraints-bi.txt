@@ -1,4 +1,4 @@
-agate==1.6.3
+agate
 attrs==23.1.0
 Babel==2.13.1
 certifi==2023.7.22
