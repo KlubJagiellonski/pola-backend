@@ -4,7 +4,6 @@ import pola.company.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('company', '0001_initial'),
     ]

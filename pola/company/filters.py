@@ -10,7 +10,6 @@ from .models import Brand, Company
 
 
 class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
-
     verified = django_filters.TypedChoiceFilter(
         choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
         coerce=strtobool,

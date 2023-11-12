@@ -50,7 +50,7 @@ class GetResponseClient:
 
 if 'BASE_URL' in settings.GET_RESPONSE:
     get_response_client = GetResponseClient(
-        api_token=settings.GET_RESPONSE['API_KEY'], base_url=settings.GET_RESPONSE['BASE_URL']
+        api_token=settings.GET_RESPONSE['API_TOKEN'], base_url=settings.GET_RESPONSE['BASE_URL']
     )
 else:
-    get_response_client = GetResponseClient(api_token=settings.GET_RESPONSE['API_KEY'])
+    get_response_client = GetResponseClient(api_token=settings.GET_RESPONSE['API_TOKEN'])

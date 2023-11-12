@@ -1,3 +1,4 @@
+---
 name: Migration validation
 
 on:
@@ -19,11 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout ${{ github.ref }} ( ${{ github.sha }} )
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
       - name: Login to Github Docker Registry
-        run: ./scripts/docker_login_github.sh
+        run: ./scripts/docker_login_github.py
       - name: Copy .env.example to .env
         run: cp .env.example .env
       - name: Build image

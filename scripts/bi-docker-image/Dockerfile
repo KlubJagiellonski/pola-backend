@@ -1,4 +1,4 @@
-FROM python:3.10.7-slim-bullseye
+FROM python:3.11.4-slim-bullseye
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -19,6 +19,9 @@ WORKDIR /app
 COPY ./scripts/bi-docker-image/entrypoint.sh /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
-COPY requirements/bi.txt /app/requirements/
+COPY dependencies/constraints-bi.txt dependencies/requirements-bi.txt  /app/dependencies/
 
-RUN pip install --no-cache-dir -r requirements/bi.txt && pip check
+RUN pip install \
+      --no-cache-dir \
+      --requirement dependencies/requirements-bi.txt \
+      --constraint dependencies/constraints-bi.txt && pip check

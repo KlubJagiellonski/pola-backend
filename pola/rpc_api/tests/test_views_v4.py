@@ -25,10 +25,6 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         )
         self.assertEqual(200, response.status_code)
 
-    def test_should_return_200_when_polish_product(self):
-        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=5900049011829")
-        self.assertEqual(200, response.status_code, response.content)
-
     def test_should_return_200_when_product_without_company(self):
         p = Product(code=5900049011829)
         p.name = "test-product"

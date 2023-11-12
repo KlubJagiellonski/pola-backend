@@ -61,9 +61,13 @@ ENV PYTHONUNBUFFERED=1 \
     PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin && pip install --no-cache-dir --upgrade "pip" && pip --version
 
-COPY ./requirements/production.txt ${APP_HOME}/requirements/
+COPY ./dependencies/constraints-production.txt ./dependencies/requirements-production.txt ${APP_HOME}/dependencies/
 
-RUN pip install --no-cache-dir --user -r "${APP_HOME}/requirements/production.txt" \
+RUN pip install \
+      --no-cache-dir \
+      --user \
+      --requirement "${APP_HOME}/dependencies/requirements-production.txt" \
+      --constraint "${APP_HOME}/dependencies/constraints-production.txt" \
     && pip check \
     && find /root/.local/ -name '*.pyc' -delete \
     && find /root/.local/ -type d -name '__pycache__' -delete \

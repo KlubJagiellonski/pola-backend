@@ -1,12 +1,51 @@
-import locale
-import re
+import sentry_sdk
 
-from pola.company.models import Brand, Company
+from pola.company.models import Brand
 from pola.countries import get_registration_country
+from pola.integrations.produkty_w_sieci import (
+    ApiException,
+    produkty_w_sieci_client,
+)
+from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
 from pola.product.models import Product
-from pola.report.models import Report
+from pola.text_utils import strip_urls_newlines
 
 WAR_COUNTRIES = ('Federacja Rosyjska', "Białoruś")
+
+TYPE_RED = 'type_red'
+TYPE_WHITE = 'type_white'
+TYPE_GREY = 'type_grey'
+
+DEFAULT_COMPANY_DATA = {
+    'name': None,
+    'plCapital': None,
+    'plCapital_notes': None,
+    'plWorkers': None,
+    'plWorkers_notes': None,
+    'plRnD': None,
+    'plRnD_notes': None,
+    'plRegistered': None,
+    'plRegistered_notes': None,
+    'plNotGlobEnt': None,
+    'plNotGlobEnt_notes': None,
+    'plScore': None,
+}
+
+DEFAULT_REPORT_DATA = {
+    'text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+    'button_text': 'Zgłoś',
+    'button_type': TYPE_WHITE,
+}
+
+DEFAULT_RESULT = {
+    'product_id': None,
+    'code': None,
+    'name': None,
+    'card_type': TYPE_WHITE,
+    'altText': None,
+}
+
+DEFAULT_STATS = {'was_verified': False, 'was_590': False, 'was_plScore': False}
 
 
 def get_result_from_code(code, multiple_company_supported=False, report_as_object=False):
@@ -60,7 +99,7 @@ def handle_companies_when_multiple_companies_are_not_supported(
 ):
     company = companies[0]
     company_data = serialize_company(company)
-    append_ru_by_warning_tto_description(code, company_data)
+    append_ru_by_warning_to_description(code, company_data)
     append_brands_if_enabled(company, company_data)
     stats['was_plScore'] = bool(get_plScore(company))
 
@@ -69,7 +108,7 @@ def handle_companies_when_multiple_companies_are_not_supported(
     result['card_type'] = TYPE_WHITE if company.verified else TYPE_GREY
 
 
-def append_ru_by_warning_tto_description(code, company_data):
+def append_ru_by_warning_to_description(code, company_data):
     registration_country = get_registration_country(code)
     if registration_country not in WAR_COUNTRIES:
         return
@@ -99,7 +138,7 @@ def handle_multiple_companies(code, companies, result, stats):
 
     for company in companies:
         company_data = serialize_company(company)
-        append_ru_by_warning_tto_description(code, company_data)
+        append_ru_by_warning_to_description(code, company_data)
         append_brands_if_enabled(company, company_data)
         stats['was_plScore'] = all(get_plScore(c) for c in companies)
         companies_data.append(company_data)
@@ -206,113 +245,18 @@ def serialize_company(company):
     return company_data
 
 
-ENABLE_GS1_API = False
-
-
 def get_by_code(code):
     try:
         return Product.objects.get(code=code)
     except Product.DoesNotExist:
-        pass
-    # try:
-    #     pass
-    #     # if is_code_supported_by_gs1_api(code) and ENABLE_GS1_API:
-    #     #     client = Client(settings.PRODUKTY_W_SIECI_API_USERNAME, settings.PRODUKTY_W_SIECI_API_PASSWORD)
-    #     #     product_info = client.get_product_by_gtin(code)
-    #     #     return create_from_api(code, product_info)
-    # except produkty_w_sieci_api.ApiError:
-    #     pass
+        try:
+            if is_code_supported(code):
+                products_response = produkty_w_sieci_client.get_products(gtin_number__prefix=f"0{code}")
+
+                return create_from_api(code, products_response, product=None)
+        except ApiException as ex:
+            sentry_sdk.capture_exception(ex)
     return Product.objects.create(code=code)
-
-
-def create_from_api(code, obj, product=None):
-    obj_owner_name = None
-    obj_product_name = None
-
-    if obj:
-        obj_owner_name = obj.get('BrandOwner', None)
-        obj_product_name = obj.get('ProductName', None)
-        obj_brand = obj.get('Brand', None)
-
-    company_created = False
-    if obj_owner_name:
-        company, company_created = Company.objects.get_or_create(
-            name=obj_owner_name, commit_desc='Firma utworzona automatycznie na podstawie API' ' ILiM'
-        )
-    else:
-        company = None
-
-    commit_desc = ""
-
-    if not product:
-        product = Product.objects.create(
-            name=obj_product_name,
-            code=code,
-            company=company,
-            commit_desc="Produkt utworzony automatycznie na podstawie skanu " "użytkownika",
-        )
-    else:
-        if product.name:
-            if obj_product_name and product.name != obj_product_name:
-                create_bot_report(
-                    product,
-                    f"Wg. najnowszego odpytania w bazie ILiM nazwa tego produktu to:\"{obj_product_name}\"",
-                    check_if_already_exists=not company_created,
-                )
-        else:
-            if obj_product_name != code:
-                commit_desc += 'Nazwa produktu zmieniona na podstawie bazy GS1. '
-                product.name = obj_product_name
-
-        if product.company:
-            if (
-                company
-                and product.company.name
-                and obj_owner_name
-                and not ilim_compare_str(product.company.name, obj_owner_name)
-            ):
-                create_bot_report(
-                    product,
-                    f"Wg. najnowszego odpytania w bazie ILiM producent tego produktu to:\"{obj_owner_name}\"",
-                    check_if_already_exists=not company_created,
-                )
-        else:
-            commit_desc += 'Producent produktu zmieniony na podstawie bazy GS1. '
-            product.company = company
-
-        if product.company and obj and obj_brand:
-            if product.brand:
-                if product.brand.name != obj_brand:
-                    create_bot_report(
-                        product,
-                        f"Wg. najnowszego odpytania w bazie ILiM marka tego produktu to:\"{obj_brand}\"",
-                        check_if_already_exists=True,
-                    )
-            else:
-                brand, _ = Brand.objects.get_or_create(
-                    name=obj_brand,
-                    company=product.company,
-                    commit_desc='Marka utworzona automatycznie na podstawie API' ' ILiM',
-                )
-                product.brand = brand
-                commit_desc += 'Marka produktu zmieniona na podstawie bazy GS1. '
-
-        product.save(commit_desc=commit_desc)
-
-    return product
-
-
-def create_bot_report(product, description, check_if_already_exists=False):
-    if (
-        check_if_already_exists
-        and Report.objects.filter(product=product, client='krs-bot', description=description).exists()
-    ):
-        return
-
-    report = Report(description=description)
-    report.product = product
-    report.client = 'krs-bot'
-    report.save()
 
 
 def get_plScore(company):
@@ -332,86 +276,3 @@ def get_plScore(company):
         )
     else:
         return None
-
-
-def shareholders_to_str(krs, id, indent):
-    str = ''
-    json = krs.query_shareholders(id)
-    data = json['data']
-    kapital_zakladowy = data['krs_podmioty.wartosc_kapital_zakladowy']
-    wspolnicy = json['layers']['wspolnicy']
-    for wspolnik in wspolnicy:
-        udzialy_wartosc = wspolnik.get('udzialy_wartosc', None)
-        if udzialy_wartosc is None:
-            str += f"{indent}* {wspolnik['nazwa']} -------\n"
-        else:
-            str += (
-                f"{indent}* {wspolnik['nazwa']} {udzialy_wartosc}/{kapital_zakladowy} "
-                f"{100 * locale.atof(udzialy_wartosc) / kapital_zakladowy:.0f}%\n"
-            )
-        if wspolnik['krs_id'] is not None:
-            str += shareholders_to_str(krs, wspolnik['krs_id'], indent + '  ')
-    return str
-
-
-def rem_dbl_newlines(str):
-    return str.replace('\r\n\r\n', '\r\n').replace('\n\n', '\n')
-
-
-def strip_dbl_spaces(str):
-    return re.sub(' +', ' ', str).strip()
-
-
-def ilim_compare_str(s1, s2):
-    s1 = strip_dbl_spaces(s1)
-    s2 = strip_dbl_spaces(s2)
-    return s1.upper() == s2.upper()
-
-
-def strip_urls_newlines(str):
-    s = re.sub(
-        r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|'
-        r'(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’'
-        r']))',
-        '',
-        str,
-    )
-    s = rem_dbl_newlines(s)
-    s = s.strip(' \t\n\r')
-    return s
-
-
-TYPE_RED = 'type_red'
-TYPE_WHITE = 'type_white'
-TYPE_GREY = 'type_grey'
-
-DEFAULT_COMPANY_DATA = {
-    'name': None,
-    'plCapital': None,
-    'plCapital_notes': None,
-    'plWorkers': None,
-    'plWorkers_notes': None,
-    'plRnD': None,
-    'plRnD_notes': None,
-    'plRegistered': None,
-    'plRegistered_notes': None,
-    'plNotGlobEnt': None,
-    'plNotGlobEnt_notes': None,
-    'plScore': None,
-}
-
-DEFAULT_REPORT_DATA = {
-    'text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
-    'button_text': 'Zgłoś',
-    'button_type': TYPE_WHITE,
-}
-
-DEFAULT_RESULT = {
-    'product_id': None,
-    'code': None,
-    'name': None,
-    'card_type': TYPE_WHITE,
-    'altText': None,
-}
-
-DEFAULT_STATS = {'was_verified': False, 'was_590': False, 'was_plScore': False}

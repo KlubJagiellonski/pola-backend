@@ -23,8 +23,7 @@ from pola.product.models import Product
 from pola.report.models import Report
 from pola.views import ExprAutocompleteMixin
 
-from . import models
-from .filters import ProductFilter
+from . import filters, models
 from .forms import AddBulkProductForm, ProductForm
 from .images import Barcode
 
@@ -47,7 +46,7 @@ class ProductDetailView(LoginPermissionRequiredMixin, DetailView):
 class ProductListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'product.view_product'
     model = models.Product
-    filterset_class = ProductFilter
+    filterset_class = filters.ProductFilter
     paginate_by = 25
 
 
@@ -88,7 +87,7 @@ class ProductHistoryView(LoginPermissionRequiredMixin, DetailView):
         return context
 
 
-@login_required
+@login_required()
 @cache_page(0)
 def get_image(request, code):
     response = HttpResponse(content_type="image/png")

@@ -10,12 +10,12 @@ repos:
     hooks:
       - id: check-hooks-apply
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.3.1
+    rev: v1.5.1
     hooks:
       - id: remove-tabs
         exclude: ^pola/tests/commands/test_import_brands_fixture\.tsv$
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: check-added-large-files
         exclude: ^package-lock\.json$|^pola/gpc/fixtures/$
@@ -42,20 +42,21 @@ repos:
       - id: name-tests-test
         args: ['--django']
       - id: requirements-txt-fixer
+        files: ^dependencies/.+\.txt$
       - id: trailing-whitespace
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.0
+    rev: v3.7.0
     hooks:
       - id: pyupgrade
         args: ['--py39-plus']
   - repo: https://github.com/psf/black
-    rev: '22.10.0'
+    rev: '23.3.0'
     hooks:
       - id: black
         args: ["--line-length", "120", "--skip-string-normalization", "--target-version", "py38"]
         language_version: python
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.9.0
+    rev: v1.10.0
     hooks:
       - id: python-check-blanket-noqa
       - id: python-check-mock-methods
@@ -67,12 +68,12 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
   - repo: https://github.com/adrienverge/yamllint
-    rev: 'v1.28.0'
+    rev: 'v1.32.0'
     hooks:
       - id: yamllint
         entry: yamllint -c yamllint-config.yml
   - repo: https://github.com/ikamensh/flynt
-    rev: '0.76'
+    rev: '0.78'
     hooks:
       - id: flynt
         args:
@@ -82,29 +83,26 @@ repos:
           - --line-length
           - '99999'
   - repo: https://github.com/asottile/yesqa
-    rev: v1.3.0
+    rev: v1.5.0
     hooks:
       - id: yesqa
         name: Remove unnecessary noqa statements
-        exclude: |
-          (?x)
-          ^airflow/_vendor/
         additional_dependencies: ['flake8>=4.0.1']
   - repo: https://github.com/PyCQA/autoflake
-    rev: v1.7.7
+    rev: v2.1.1
     hooks:
       - id: autoflake
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: '5.0.4'
+  - repo: https://github.com/PyCQA/flake8
+    rev: '6.0.0'
     hooks:
       - id: flake8
   - repo: https://github.com/hadolint/hadolint
-    rev: 'v2.10.0'
+    rev: 'v2.12.1-beta'
     hooks:
       - id: hadolint-docker
-        entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.10.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
+        entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.12.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
   - repo: https://github.com/PyCQA/isort
-    rev: '5.10.1'
+    rev: '5.12.0'
     hooks:
       - id: isort
   - repo: local
@@ -118,7 +116,8 @@ repos:
         name: Checks Django Version in docker-compose.yaml
         language: system
         entry: scripts/static_checks/django-version-check.py
+        pass_filenames: false
         files: >
           (?x)
-          ^requirements/production\.txt$|
+          ^dependencies/production\.txt$|
           ^docker-compose.yaml$|

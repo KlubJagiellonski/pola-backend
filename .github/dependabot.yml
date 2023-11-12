@@ -9,7 +9,22 @@ updates:
     schedule:
       interval: "daily"
       time: "04:00"
-    open-pull-requests-limit: 40
+    open-pull-requests-limit: 60
+    groups:
+      dbt:
+        patterns:
+          - "dbt*"
+      aws:
+        patterns:
+          - "boto3"
+          - "botocore"
+          - "s3transfer"
+      openapi:
+        patterns:
+          - "jsonschema"
+          - "openapi-core"
+          - "openapi-schema-validator"
+          - "openapi-spec-validator"
 
   - package-ecosystem: "github-actions"
     labels:
@@ -38,5 +53,11 @@ updates:
       - "dependencies"
       - "automerge"
     directory: "/scripts/bi-docker-image"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    labels:
+      - "dependencies"
+    directory: "/scripts/prod-docker-image"
     schedule:
       interval: "daily"

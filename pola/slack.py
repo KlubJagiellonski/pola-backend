@@ -24,7 +24,6 @@ def send_ai_pics(
     mime_type,
     filenames,
 ):
-
     files = []
     i = 1
     for filename in filenames:
@@ -51,7 +50,6 @@ def send_ai_pics(
 
 
 def send_ai_pics_request(product, preview_text):
-
     url = 'https://slack.com/api/chat.postMessage?' + urlencode(
         {
             'token': settings.SLACK_TOKEN,
@@ -66,7 +64,6 @@ def send_ai_pics_request(product, preview_text):
 
 
 def send_ai_pics_stats(msg):
-
     url = 'https://slack.com/api/chat.postMessage?' + urlencode(
         {
             'token': settings.SLACK_TOKEN,

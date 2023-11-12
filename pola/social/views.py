@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import BaseFormView
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 from pola.rpc_api.http import JsonProblemResponse
 from pola.rpc_api.openapi import validate_pola_openapi_spec

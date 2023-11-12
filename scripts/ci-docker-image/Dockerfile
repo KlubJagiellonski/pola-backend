@@ -45,6 +45,9 @@ ENV DJANGO_VERSION=${DJANGO_VERSION}
 
 RUN pip install --no-cache-dir --no-deps "django==${DJANGO_VERSION}"
 
-COPY requirements/ci.txt /app/requirements/
+COPY dependencies/constraints-ci.txt dependencies/requirements-ci.txt dependencies/requirements-production.txt /app/dependencies/
 
-RUN pip install --no-cache-dir -r requirements/ci.txt && pip check
+RUN pip install \
+      --no-cache-dir \
+      --requirement /app/dependencies/requirements-ci.txt \
+      --constraint /app/dependencies/constraints-ci.txt && pip check

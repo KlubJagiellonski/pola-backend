@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('ai_pics', '0005_auto_20180527_0848'),
     ]
