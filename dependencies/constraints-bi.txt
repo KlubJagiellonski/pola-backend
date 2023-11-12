@@ -24,7 +24,7 @@ mashumaro==3.10
 minimal-snowplow-tracker==0.0.2
 more-itertools==10.1.0
 msgpack==1.0.7
-networkx==2.8.8
+networkx==3.2.1
 packaging==21.3
 parsedatetime==2.4
 pathspec==0.11.2
