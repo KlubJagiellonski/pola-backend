@@ -1,5 +1,4 @@
 import textwrap
-import uuid
 
 from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
@@ -119,7 +118,7 @@ class Company(TimeStampedModel):
 
     logotype = models.ImageField(
         _("Logotyp"),
-        upload_to=uuid.uuid4().hex,
+        upload_to='logo/%Y/%m/%d',
         null=True,
         blank=True,
         storage=S3Boto3Storage(
