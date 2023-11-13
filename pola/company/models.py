@@ -1,5 +1,6 @@
 import textwrap
 import uuid
+
 from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.core.validators import ValidationError
@@ -121,11 +122,17 @@ class Company(TimeStampedModel):
         upload_to=uuid.uuid4().hex,
         null=True,
         blank=True,
-        storage=S3Boto3Storage(querystring_auth=True,
-                               bucket_name=settings.AWS_STORAGE_AI_PICS_BUCKET_NAME,
-                               region_name='eu-central-1'),
+        storage=S3Boto3Storage(
+            querystring_auth=True,
+            bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
+            region_name='eu-central-1',
+        ),
     )
-    official_url = models.URLField(_("Link do strony firmy"), null=True, blank=True,)
+    official_url = models.URLField(
+        _("Link do strony firmy"),
+        null=True,
+        blank=True,
+    )
 
     is_friend = models.BooleanField(
         default=False, verbose_name=_("Przyjaciel Poli"), choices=((True, _("Tak")), (False, _("Nie")))

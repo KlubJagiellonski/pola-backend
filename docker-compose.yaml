@@ -73,9 +73,11 @@ services:
     restart: always
     ports:
       - 9000:9000
+      - 9090:9090
     expose:
       - 9000
-    command: server /data
+      - 9090
+    command: server /data --console-address ":9090"
     volumes:
       - minio-data:/data
     environment:
@@ -103,7 +105,8 @@ services:
         mc mb local/pola-app-backend || true;
         mc mb local/pola-app-ai-pics || true;
         mc mb local/pola-web-public || true;
-        mc policy set public local/pola-app-public || true;
+        mc mb local/pola-app-company-logotype || true;
+        mc anonymous set public local/pola-app-public || true;
 
   postgres:
     image: postgres:13.1

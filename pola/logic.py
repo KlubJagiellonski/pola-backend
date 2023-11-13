@@ -29,6 +29,8 @@ DEFAULT_COMPANY_DATA = {
     'plNotGlobEnt': None,
     'plNotGlobEnt_notes': None,
     'plScore': None,
+    'official_url': None,
+    'logotype_url': None,
 }
 
 DEFAULT_REPORT_DATA = {
@@ -66,8 +68,6 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
         if product_company:
             companies.append(product_company)
             result['name'] = product_company.common_name or product_company.official_name or product_company.name
-            result['official_url'] = product_company.official_url
-            result['logotype_url'] = product_company.logotype.url
         if brand_company:
             companies.append(brand_company)
         companies = list(({c.pk: c for c in companies}).values())
@@ -244,6 +244,9 @@ def serialize_company(company):
     company_data['sources'] = company.get_sources(raise_exp=False)
     if plScore:
         company_data['plScore'] = plScore
+    company_data['official_url'] = company.official_url
+    if company.logotype:
+        company_data['logotype_url'] = company.logotype.url
     return company_data
 
 
