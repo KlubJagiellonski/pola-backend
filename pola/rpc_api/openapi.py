@@ -8,7 +8,6 @@ from openapi_core.contrib.django import (
     DjangoOpenAPIRequest,
     DjangoOpenAPIResponse,
 )
-from openapi_core.spec.paths import SpecPath
 from openapi_core.unmarshalling.schemas.exceptions import InvalidSchemaValue
 from openapi_core.validation.request.validators import RequestValidator
 from openapi_core.validation.response.validators import ResponseValidator
@@ -19,7 +18,7 @@ from pola.rpc_api.http import JsonProblemResponse
 SPEC_FILE = Path(__file__).resolve().parent / "openapi-v1.yaml"
 
 
-def validate_openapi_spec(spec: SpecPath):
+def validate_openapi_spec(spec: Spec):
     def wrapper(func):
         @functools.wraps(func)
         def validate_json_schema(django_request: HttpRequest):
