@@ -3,7 +3,7 @@ from pathlib import Path
 
 import sentry_sdk
 from django.http import HttpRequest, HttpResponse
-from openapi_core import SchemaPath
+from openapi_core import Spec
 from openapi_core.contrib.django import (
     DjangoOpenAPIRequest,
     DjangoOpenAPIResponse,
@@ -63,7 +63,7 @@ def validate_openapi_spec(spec: SpecPath):
 
 
 def create_pola_openapi_spec_validator():
-    spec = SchemaPath.from_file_path(SPEC_FILE)
+    spec = Spec.from_file_path(SPEC_FILE)
     return validate_openapi_spec(spec)
 
 
