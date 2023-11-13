@@ -1,6 +1,7 @@
 import os
 from unittest import mock
 
+from django.core.files.base import ContentFile
 from parameterized import parameterized
 from test_plus import TestCase
 from vcr import VCR
@@ -10,6 +11,7 @@ from pola.gpc.factories import GPCBrickFactory
 from pola.logic import get_by_code, get_result_from_code
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
+from pola.tests.test_utils import get_dummy_image
 
 TEST_EAN13 = "5901520000059"
 
@@ -321,6 +323,24 @@ class TestGetResultFromCode(TestCase):
         self.maxDiff = None
         self.assertEqual(expected_response[0], response[0])
         self.assertEqual(expected_response, response)
+
+    def test_code_with_one_company_with_logo(self):
+        current_ean = TEST_EAN13
+        dummy_logo = get_dummy_image()
+        dummy_file = ContentFile(dummy_logo, name="AA.jpg")
+
+        company = CompanyFactory.create(
+            description='test-description',
+            official_url="http://google.com",
+            logotype=dummy_file,
+        )
+        product = ProductFactory.create(code=current_ean, company=company, brand=None)
+
+        with mock.patch("pola.logic.get_by_code", return_value=product):
+            response = get_result_from_code(current_ean)
+
+        self.assertIn("http://minio:9000/", response[0]["logotype_url"])
+        self.assertEqual("AAAA", response[0]["official_url"])
 
     def test_russian_code_with_one_company(self):
         prefix = "462"

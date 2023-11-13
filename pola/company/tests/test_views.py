@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
-from reportlab.graphics import renderPM
 from reversion.models import Version
 from test_plus.test import TestCase
 from webtest import Upload
@@ -10,16 +9,10 @@ from webtest import Upload
 from pola.company.factories import BrandFactory, CompanyFactory
 from pola.company.models import Brand, Company
 from pola.product.factories import ProductFactory
-from pola.product.images import Barcode
 from pola.product.models import Product
+from pola.tests.test_utils import get_dummy_image
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
-
-
-def get_dummy_image(code="123", width=300):
-    barcode = Barcode.get_barcode(code, width)
-    data = renderPM.drawToString(barcode, fmt='PNG')
-    return data
 
 
 class TemplateUsedMixin:
