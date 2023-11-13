@@ -28,9 +28,9 @@ function build_image() {
     GIT_REF=$(git rev-parse HEAD)
     IMAGE_DESCRIPTION="Pola pomoze Ci odnaleźć polskie wyroby. Zabierając Pole na zakupy odnajdujesz produkty \"z duszą\" i wspierasz polską gospodarkę."
 
-    BASE_PYTHON_IMAGE="python:${PYTHON_VERSION}-slim-buster"
+    BASE_PYTHON_IMAGE="python:${PYTHON_VERSION}-slim-bullseye"
     docker pull "${BASE_PYTHON_IMAGE}"
-    BASE_PYTHON_IMAGE_DIGEST=$(docker inspect python:3.9-slim-buster --format='{{ index (split (index .RepoDigests 0) "@") 1 }}')
+    BASE_PYTHON_IMAGE_DIGEST=$(docker inspect "${BASE_PYTHON_IMAGE}" --format='{{ index (split (index .RepoDigests 0) "@") 1 }}')
 
     DOCKER_BUILDKIT=1 docker buildx build \
         . \
@@ -61,12 +61,19 @@ function build_image() {
 
 function verify_image() {
     echo "Verifying image: ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+    echo "Checking dependencies"
     docker run --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" pip freeze
     echo "=== Compare constraints ==="
     diff -y \
       <(docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | LC_ALL=C sort -f) \
       <(LC_ALL=C sort -f < ./dependencies/constraints-production.txt)
     echo "======"
+    echo
+    echo "Checking image layers"
+    docker run --rm \
+        -e CI=true \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        wagoodman/dive:latest "docker://${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     echo
     echo
 }
