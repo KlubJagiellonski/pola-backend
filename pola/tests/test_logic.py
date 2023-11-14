@@ -331,7 +331,7 @@ class TestGetResultFromCode(TestCase):
 
         company = CompanyFactory.create(
             description='test-description',
-            official_url="http://google.com",
+            official_url="https://google.com/",
             logotype=dummy_file,
         )
         product = ProductFactory.create(code=current_ean, company=company, brand=None)
@@ -340,7 +340,7 @@ class TestGetResultFromCode(TestCase):
             response = get_result_from_code(current_ean)
 
         self.assertIn("http://minio:9000/", response[0]["logotype_url"])
-        self.assertEqual("AAAA", response[0]["official_url"])
+        self.assertEqual("https://google.com/", response[0]["official_url"])
 
     def test_russian_code_with_one_company(self):
         prefix = "462"
