@@ -1,2 +1,2 @@
-dbt-core==1.7.1
-dbt-postgres==1.7.1
+dbt-core==1.7.2
+dbt-postgres==1.7.2
