@@ -110,7 +110,7 @@ class TestCompanyUpdateWeb(WebTestMixin, TestCase):
         self.assertEqual(self.instance.name, "company_name")
 
     @override_settings(LANGUAGE_CODE='en-EN')
-    def test_form_readonly_fields222(self):
+    def test_form_logotype_field(self):
         random_image = get_dummy_image()
 
         page = self.app.get(self.url, user=self.user)
