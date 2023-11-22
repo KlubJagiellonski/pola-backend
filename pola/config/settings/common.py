@@ -292,6 +292,7 @@ AWS_STORAGE_BUCKET_NAME = env('POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME')
 AWS_STORAGE_BACKEND_BUCKET_NAME = env('POLA_APP_AWS_S3_BACKEND_BUCKET_NAME')
 AWS_STORAGE_AI_PICS_BUCKET_NAME = env('POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME')
 AWS_STORAGE_WEB_BUCKET_NAME = env.str('POLA_APP_AWS_S3_WEB_BUCKET_NAME', '')
+AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME = env('POLA_APP_AWS_S3_COMPANY_LOGOTYPE_BUCKET_NAME')
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto

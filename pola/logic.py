@@ -29,6 +29,8 @@ DEFAULT_COMPANY_DATA = {
     'plNotGlobEnt': None,
     'plNotGlobEnt_notes': None,
     'plScore': None,
+    'official_url': None,
+    'logotype_url': None,
 }
 
 DEFAULT_REPORT_DATA = {
@@ -242,6 +244,9 @@ def serialize_company(company):
     company_data['sources'] = company.get_sources(raise_exp=False)
     if plScore:
         company_data['plScore'] = plScore
+    company_data['official_url'] = company.official_url
+    if company.logotype:
+        company_data['logotype_url'] = company.logotype.url
     return company_data
 
 

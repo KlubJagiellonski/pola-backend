@@ -1,5 +1,6 @@
 import textwrap
 
+from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.core.validators import ValidationError
 from django.db import connection, models
@@ -8,6 +9,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from pola.concurency import concurency
 
@@ -113,6 +115,23 @@ class Company(TimeStampedModel):
     nip = models.CharField(max_length=10, db_index=True, null=True, blank=True, verbose_name=_("NIP/Tax ID"))
     address = models.TextField(null=True, blank=True, verbose_name=_("Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
+
+    logotype = models.ImageField(
+        _("Logotyp"),
+        upload_to='logo/%Y/%m/%d',
+        null=True,
+        blank=True,
+        storage=S3Boto3Storage(
+            querystring_auth=True,
+            bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
+            region_name='eu-central-1',
+        ),
+    )
+    official_url = models.URLField(
+        _("Link do strony firmy"),
+        null=True,
+        blank=True,
+    )
 
     is_friend = models.BooleanField(
         default=False, verbose_name=_("Przyjaciel Poli"), choices=((True, _("Tak")), (False, _("Nie")))

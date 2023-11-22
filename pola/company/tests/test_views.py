@@ -4,11 +4,13 @@ from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
 from reversion.models import Version
 from test_plus.test import TestCase
+from webtest import Upload
 
 from pola.company.factories import BrandFactory, CompanyFactory
 from pola.company.models import Brand, Company
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
+from pola.tests.test_utils import get_dummy_image
 from pola.tests.test_views import PermissionMixin
 from pola.users.factories import StaffFactory, UserFactory
 
@@ -106,6 +108,20 @@ class TestCompanyUpdateWeb(WebTestMixin, TestCase):
         self.assertRedirects(page, self.instance.get_absolute_url())
         self.instance.refresh_from_db()
         self.assertEqual(self.instance.name, "company_name")
+
+    @override_settings(LANGUAGE_CODE='en-EN')
+    def test_form_logotype_field(self):
+        random_image = get_dummy_image()
+
+        page = self.app.get(self.url, user=self.user)
+
+        page.form['logotype'] = Upload('filename.jpg', random_image, 'image/jpeg')
+        page.form['commit_desc'] = "Commit desc"
+        page = page.form.submit()
+
+        self.assertRedirects(page, self.instance.get_absolute_url())
+        self.instance.refresh_from_db()
+        self.assertIn("http://minio:9000", self.instance.logotype.url)
 
 
 class TestConcurencyComapnyUpdate(TestCase):

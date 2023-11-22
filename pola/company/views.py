@@ -134,6 +134,8 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
         'verified',
         'address',
         'nip',
+        'logotype',
+        'official_url',
     )
 
     def get_context_data(self, **kwargs):
