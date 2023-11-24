@@ -3,12 +3,11 @@ from pathlib import Path
 
 import sentry_sdk
 from django.http import HttpRequest, HttpResponse
-from openapi_core import create_spec
+from openapi_core import Spec
 from openapi_core.contrib.django import (
     DjangoOpenAPIRequest,
     DjangoOpenAPIResponse,
 )
-from openapi_core.spec.paths import SpecPath
 from openapi_core.unmarshalling.schemas.exceptions import InvalidSchemaValue
 from openapi_core.validation.request.validators import RequestValidator
 from openapi_core.validation.response.validators import ResponseValidator
@@ -19,7 +18,7 @@ from pola.rpc_api.http import JsonProblemResponse
 SPEC_FILE = Path(__file__).resolve().parent / "openapi-v1.yaml"
 
 
-def validate_openapi_spec(spec: SpecPath):
+def validate_openapi_spec(spec: Spec):
     def wrapper(func):
         @functools.wraps(func)
         def validate_json_schema(django_request: HttpRequest):
@@ -63,10 +62,7 @@ def validate_openapi_spec(spec: SpecPath):
 
 
 def create_pola_openapi_spec_validator():
-    with Path(SPEC_FILE).open() as spec_file:
-        spec_dict = yaml_load(spec_file)
-
-    spec = create_spec(spec_dict)
+    spec = Spec.from_file_path(SPEC_FILE)
     return validate_openapi_spec(spec)
 
 
