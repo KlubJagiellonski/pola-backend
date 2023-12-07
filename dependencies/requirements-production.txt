@@ -1,7 +1,7 @@
 Babel==2.13.1
 boto==2.49.0
-boto3==1.33.8
-botocore==1.33.8
+boto3==1.33.9
+botocore==1.33.9
 Collectfast==2.2.0
 Django==3.2.16
 django-allauth==0.55.2
