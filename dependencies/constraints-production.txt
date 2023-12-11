@@ -63,5 +63,5 @@ six==1.16.0
 sqlparse==0.4.4
 tqdm==4.66.1
 typing_extensions==4.9.0
-urllib3==1.26.15
+urllib3==2.1.0
 Werkzeug==3.0.1
