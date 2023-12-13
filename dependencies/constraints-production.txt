@@ -1,6 +1,6 @@
 asgiref==3.7.2
 attrs==23.1.0
-Babel==2.13.1
+Babel==2.14.0
 boto==2.49.0
 boto3==1.33.12
 botocore==1.33.12
