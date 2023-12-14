@@ -64,7 +64,7 @@ parso==0.8.3
 pexpect==4.9.0
 pickleshare==0.7.5
 Pillow==10.1.0
-prompt-toolkit==3.0.42
+prompt-toolkit==3.0.43
 psycopg2-binary==2.9.9
 ptyprocess==0.7.0
 pure-eval==0.2.2
