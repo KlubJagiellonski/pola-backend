@@ -125,6 +125,7 @@ class Company(TimeStampedModel):
             querystring_auth=True,
             bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
             region_name='eu-central-1',
+            default_acl=None,
         ),
     )
     official_url = models.URLField(
