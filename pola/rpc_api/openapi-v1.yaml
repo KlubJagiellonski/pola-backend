@@ -152,6 +152,7 @@ components:
         application/json:
           schema:
             type: object
+            additionalProperties: false
             properties:
               altText:
                 type: string
@@ -162,6 +163,7 @@ components:
                 type: string
               donate:
                 type: object
+                additionalProperties: false
                 properties:
                   show_button:
                     type: boolean
@@ -179,6 +181,7 @@ components:
                 type: array
                 items:
                   type: object
+                  additionalProperties: false
                   properties:
                     name:
                       type: string
@@ -215,6 +218,22 @@ components:
                     plWorkers_notes:
                       type: string
                       nullable: true
+                    sources:
+                      type: object
+                      additionalProperties: true
+                    is_friend:
+                      type: boolean
+                    description:
+                      type: string
+                    friend_text:
+                      type: string
+                      nullable: true
+                    logotype_url:
+                      type: integer
+                      nullable: true
+                    official_url:
+                      type: integer
+                      nullable: true
                   required:
                     - name
                     - plCapital
@@ -233,6 +252,7 @@ components:
                 nullable: true
               report:
                 type: object
+                additionalProperties: false
                 properties:
                   button_text:
                     type: string
@@ -251,6 +271,7 @@ components:
   schemas:
     SearchResultCollection:
       type: object
+      additionalProperties: false
       properties:
         nextPageToken:
           type: string
@@ -259,6 +280,7 @@ components:
           type: array
           items:
             type: object
+            additionalProperties: false
             properties:
               name:
                 type: string
@@ -266,6 +288,7 @@ components:
                 type: string
               company:
                 type: object
+                additionalProperties: false
                 nullable: true
                 properties:
                   name:
@@ -278,6 +301,7 @@ components:
                   - score
               brand:
                 type: object
+                additionalProperties: false
                 nullable: true
                 properties:
                   name:
@@ -298,6 +322,7 @@ components:
       description: |
         [RFC7807](https://tools.ietf.org/html/rfc7807) compliant response.
       type: object
+      additionalProperties: false
       properties:
         type:
           type: string
@@ -326,6 +351,7 @@ components:
 
     SubscribeNewsletterRequest:
       type: object
+      additionalProperties: false
       properties:
         contact_email:
           description: E-mail address of the contact that will be subscribed to the newsletter
