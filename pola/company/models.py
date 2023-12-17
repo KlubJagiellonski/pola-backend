@@ -7,6 +7,7 @@ from django.db import connection, models
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -116,11 +117,13 @@ class Company(TimeStampedModel):
     address = models.TextField(null=True, blank=True, verbose_name=_("Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
-    logotype = models.ImageField(
+    logotype = ResizedImageField(
         _("Logotyp"),
-        upload_to='logo/%Y/%m/%d',
+        upload_to='company-logotype/%Y/%m/%d',
+        size=[None, 200],
         null=True,
         blank=True,
+        force_format='PNG',
         storage=S3Boto3Storage(
             querystring_auth=True,
             bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
