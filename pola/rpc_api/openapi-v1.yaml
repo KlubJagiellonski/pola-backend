@@ -322,7 +322,7 @@ components:
       description: |
         [RFC7807](https://tools.ietf.org/html/rfc7807) compliant response.
       type: object
-      additionalProperties: false
+      additionalProperties: true
       properties:
         type:
           type: string
