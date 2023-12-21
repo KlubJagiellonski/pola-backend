@@ -72,5 +72,5 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
 class BrandForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):
     class Meta:
         model = models.Brand
-        fields = ['name', 'common_name', 'company']
+        fields = ['name', 'common_name', 'company', 'logotype']
         widgets = {'company': autocomplete.ModelSelect2(url='company:company-autocomplete')}

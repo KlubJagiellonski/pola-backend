@@ -40,6 +40,7 @@ DEFAULT_REPORT_DATA = {
 }
 
 DEFAULT_RESULT = {
+    'all_company_brands': [],
     'product_id': None,
     'code': None,
     'name': None,
@@ -81,6 +82,10 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
             handle_companies_when_multiple_companies_are_not_supported(
                 code, companies, multiple_company_supported, result, stats
             )
+        if product_company:
+            result['all_company_brands'] = [
+                serialize_brand(brand) for brand in Brand.objects.filter(company=product_company)
+            ]
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
         result['name'] = 'Nieprawidłowy kod'
@@ -94,6 +99,11 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
     else:
         result.update({("report_" + k, v) for k, v in report.items()})
     return result, stats, product
+
+
+def serialize_brand(brand):
+    logotype_url = brand.logotype.url if brand.logotype else None
+    return {'name': str(brand), 'logotype_url': logotype_url}
 
 
 def handle_companies_when_multiple_companies_are_not_supported(

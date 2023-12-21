@@ -294,6 +294,20 @@ class Brand(TimeStampedModel):
     )
     common_name = models.CharField(max_length=128, null=True, blank=True, verbose_name=_("Nazwa dla użytkownika"))
     objects = BrandQuerySet.as_manager()
+    logotype = ResizedImageField(
+        _("Logotyp"),
+        upload_to='brand-logotype/%Y/%m/%d',
+        size=[None, 200],
+        null=True,
+        blank=True,
+        force_format='PNG',
+        storage=S3Boto3Storage(
+            querystring_auth=True,
+            bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
+            region_name='eu-central-1',
+            default_acl=None,
+        ),
+    )
 
     def __str__(self):
         return self.common_name or self.name
