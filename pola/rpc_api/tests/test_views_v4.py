@@ -35,6 +35,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         self.maxDiff = None
         self.assertEqual(
             {
+                'all_company_brands': [],
                 'product_id': p.pk,
                 'code': '5900049011829',
                 'name': 'Tego produktu nie mamy jeszcze w bazie',
@@ -83,6 +84,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         self.maxDiff = None
         self.assertEqual(
             {
+                'all_company_brands': [],
                 "product_id": p.pk,
                 "code": "5900049011829",
                 "name": c.common_name,
@@ -165,6 +167,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
 
         self.assertEqual(
             {
+                'all_company_brands': [],
                 "product_id": p.id,
                 "code": "5900049011829",
                 "name": 'Marka własna - Sieć Lidl',

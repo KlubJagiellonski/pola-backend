@@ -173,7 +173,7 @@ class BrandCreate(GetInitalFormMixin, LoginPermissionRequiredMixin, FormValidMes
 
     def get_success_url(self):
         if self.object.company:
-            return reverse("company:detail", args=[self.object.company.pk])
+            return reverse("company:brand-detail", args=[self.object.company.pk])
         return reverse("company:brand-detail", args=[self.object.pk])
 
 

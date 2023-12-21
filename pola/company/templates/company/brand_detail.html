@@ -24,26 +24,41 @@
     {% if object.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ object.locked_by }}"></i>{% endif %}
     {{ object }}  <small>#{{ object.pk }}</small>
 </h1>
-<div class="panel panel-primary">
-    <div class="panel-heading">{% trans "Data metric" %}</div>
-    <table class="table">
-        {% for field in fields %}
-            <tr>
-                <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
-            </tr>
-        {% endfor %}
-        <tr>
-            <td>{% trans "Data utworzenia: " %}</td><td>{{ object.created | naturaltime }}</td>
-        </tr>
-        <tr>
-            <td>{% trans "Data modyfikacji: " %}</td><td>{{ object.modified | naturaltime }}</td>
-        </tr>
-    </table>
-</div>
-
 <div class="row">
-    {% if perms.product.view_product %}
-    <div class="col-md-6">
+    <div class="col-lg-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">{% trans "Data metric" %}</div>
+            <table class="table">
+                {% for field in fields %}
+                    <tr>
+                        <td>{{ field.name }}</td><td>{{ field.value|linebreaksbr }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>{% trans "Data utworzenia: " %}</td><td>{{ object.created | naturaltime }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans "Data modyfikacji: " %}</td><td>{{ object.modified | naturaltime }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Logotyp
+                </div>
+            </div>
+            <div class="panel-body">
+                {% if object.logotype %}
+                    <img src="{{ object.logotype.url }}" class="img-responsive"/>
+                {% else %}
+                    Brak logotypu
+                {% endif %}
+            </div>
+        </div>
+        {% if perms.product.view_product %}
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">Produkowane produkty</h3>
@@ -53,11 +68,12 @@
                     <li class="list-group-item">
                         <a href="{{ product.get_absolute_url }}">{{ product }}</a>
                     </li>
-                {% empty%}
+                    {% empty%}
                     <li class="list-group-item">{% trans "Nie ma żadnych produktów" %}</li>
                 {% endfor %}
             </ul>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
+</div>
 {% endblock content %}
