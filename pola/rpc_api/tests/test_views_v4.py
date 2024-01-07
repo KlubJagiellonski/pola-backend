@@ -1,13 +1,15 @@
 import json
 
+from django.core.files.base import ContentFile
 from test_plus import TestCase
 
-from pola.company.factories import CompanyFactory
+from pola.company.factories import BrandFactory, CompanyFactory
 from pola.constants import DONATE_TEXT, DONATE_URL
 from pola.models import SearchQuery
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.rpc_api.tests.test_views import JsonRequestMixin
+from pola.tests.test_utils import get_dummy_image
 
 
 class TestGetByCodeV4(TestCase, JsonRequestMixin):
@@ -124,6 +126,85 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 },
             },
             json.loads(response.content),
+        )
+
+    def test_should_return_200_when_product_with_brand_and_image(self):
+        c = CompanyFactory(
+            plCapital=100,
+            plWorkers=0,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+            description="TEST",
+            sources="TEST|BBBB",
+            verified=True,
+            is_friend=True,
+            plCapital_notes="AAA",
+            plWorkers_notes="BBB",
+            plRnD_notes="CCC",
+            plRegistered_notes="DDD",
+            plNotGlobEnt_notes="EEE",
+            official_url="https://google.com/",
+            logotype=ContentFile(get_dummy_image(), name="AA.jpg"),
+        )
+        b = BrandFactory(name="test-brand", company=c, logotype=ContentFile(get_dummy_image(), name="AA.jpg"))
+        p = ProductFactory.create(code=5900049011829, company=c, brand=b)
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+        response_json = json.loads(response.content)
+
+        self.assertIn('pola-app-company-logotype', response_json['all_company_brands'][0]['logotype_url'])
+        del response_json['all_company_brands'][0]['logotype_url']
+
+        self.assertIn('ola-app-company-logotype', response_json['companies'][0]['logotype_url'])
+        del response_json['companies'][0]['logotype_url']
+        self.assertEqual(
+            {
+                'all_company_brands': [
+                    {
+                        'name': b.common_name,
+                    }
+                ],
+                'product_id': p.pk,
+                'code': '5900049011829',
+                'name': c.common_name,
+                'card_type': 'type_white',
+                'altText': None,
+                'companies': [
+                    {
+                        'name': c.official_name,
+                        'plCapital': 100,
+                        'plCapital_notes': 'AAA',
+                        'plWorkers': 0,
+                        'plWorkers_notes': 'BBB',
+                        'plRnD': 100,
+                        'plRnD_notes': 'CCC',
+                        'plRegistered': 100,
+                        'plRegistered_notes': 'DDD',
+                        'plNotGlobEnt': 100,
+                        'plNotGlobEnt_notes': 'EEE',
+                        'plScore': 70,
+                        'official_url': 'https://google.com/',
+                        'is_friend': True,
+                        'friend_text': 'To jest przyjaciel Poli',
+                        'description': 'TEST',
+                        'sources': {'TEST': 'BBBB'},
+                    },
+                ],
+                'report': {
+                    'text': 'Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu',
+                    'button_text': 'Zgłoś',
+                    'button_type': 'type_white',
+                },
+                'donate': {
+                    'show_button': True,
+                    'title': 'Wpłać 1 zł!',
+                    'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
+                },
+            },
+            response_json,
         )
 
     def test_should_return_200_when_multiple_companies(self):

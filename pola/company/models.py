@@ -125,7 +125,7 @@ class Company(TimeStampedModel):
         blank=True,
         force_format='PNG',
         storage=S3Boto3Storage(
-            querystring_auth=True,
+            querystring_auth=False,
             bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
             region_name='eu-central-1',
             default_acl=None,
@@ -302,7 +302,7 @@ class Brand(TimeStampedModel):
         blank=True,
         force_format='PNG',
         storage=S3Boto3Storage(
-            querystring_auth=True,
+            querystring_auth=False,
             bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
             region_name='eu-central-1',
             default_acl=None,

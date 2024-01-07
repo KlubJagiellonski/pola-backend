@@ -9,7 +9,8 @@ from pola.constants import DONATE_TEXT, DONATE_URL
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.report.models import Attachment, Report
-from pola.rpc_api.tests.test_views import JsonRequestMixin, _create_image
+from pola.rpc_api.tests.test_views import JsonRequestMixin
+from pola.tests.test_utils import get_dummy_image
 
 
 class TestAddAiPics(TestCase, JsonRequestMixin):
@@ -43,7 +44,7 @@ class TestAddAiPics(TestCase, JsonRequestMixin):
 
         # Valid signed URL
         response = requests.put(
-            signed_url, data=_create_image(), headers={"x-amz-acl": "public-read", 'Content-Type': 'image/jpeg'}
+            signed_url, data=get_dummy_image(), headers={"x-amz-acl": "public-read", 'Content-Type': 'image/jpeg'}
         )
         self.assertEqual(200, response.status_code, response.text)
 
@@ -257,7 +258,7 @@ class TestCreateReportV3(TestCase, JsonRequestMixin):
         self.assertTrue(signed_url.startswith("http://minio:9000"))
 
         # Valid signed URL
-        response = requests.put(signed_url, data=_create_image(), headers={'Content-Type': 'image/jpeg'})
+        response = requests.put(signed_url, data=get_dummy_image(), headers={'Content-Type': 'image/jpeg'})
         self.assertEqual(200, response.status_code, response.text)
 
         # Assert Report
