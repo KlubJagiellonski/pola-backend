@@ -164,7 +164,6 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             {
                 'all_company_brands': [
                     {
-                        'logotype_url': 'http://minio:9000/pola-app-company-logotype/brand-logotype/2024/01/07/AA.png',
                         'name': 'common_brand_name1',
                     }
                 ],
