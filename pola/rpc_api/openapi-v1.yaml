@@ -243,10 +243,10 @@ components:
                       type: string
                       nullable: true
                     logotype_url:
-                      type: integer
+                      type: string
                       nullable: true
                     official_url:
-                      type: integer
+                      type: string
                       nullable: true
                   required:
                     - name
