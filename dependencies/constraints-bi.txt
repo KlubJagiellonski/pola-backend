@@ -22,7 +22,7 @@ Logbook==1.5.3
 MarkupSafe==2.1.3
 mashumaro==3.11
 minimal-snowplow-tracker==0.0.2
-more-itertools==10.1.0
+more-itertools==10.2.0
 msgpack==1.0.7
 networkx==3.2.1
 packaging==21.3
