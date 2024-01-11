@@ -12,7 +12,7 @@ dbt-postgres==1.7.4
 dbt-semantic-interfaces==0.4.3
 future==0.18.3
 idna==3.6
-importlib-metadata==6.8.0
+importlib-metadata==7.0.1
 isodate==0.6.1
 Jinja2==3.1.3
 jsonschema==4.19.2
