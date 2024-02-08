@@ -72,7 +72,7 @@ jobs:
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv
       - name: "Run static checks"
-        uses: pre-commit/action@v3.0.0
+        uses: pre-commit/action@v3.0.1
 
   bi-validate:
     name: "BI Validate"
