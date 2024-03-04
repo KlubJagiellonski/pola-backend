@@ -1,2 +1,2 @@
-DONATE_URL = "https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/"
-DONATE_TEXT = "Wpłać 1 zł!"
+DONATE_URL = "https://www.pola-app.pl/1-5-podatku-na-aplikacje-pola/"
+DONATE_TEXT = "1,5% na aplikację Pola"
