@@ -21,6 +21,12 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         )
         self.assertEqual(200, response.status_code)
 
+    def test_should_return_200_for_non_pl_code(self):
+        response = self.json_request(
+            self.url + "?device_id=TEST-DEVICE-ID&code=5702017399829",
+        )
+        self.assertEqual(200, response.status_code)
+
     def test_should_return_200_when_ai_not_supported(self):
         response = self.json_request(
             self.url + "?device_id=TEST-DEVICE-ID&code=123&noai=false",

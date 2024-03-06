@@ -75,7 +75,7 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
         result['product_id'] = product.id
         stats['was_590'] = code.startswith('590')
         if not product_company:
-            handle_unknown_company(code, report, result)
+            handle_unknown_company(code, report, result, multiple_company_supported)
         elif multiple_company_supported:
             handle_multiple_companies(code, companies, result, stats)
         else:
@@ -159,7 +159,7 @@ def handle_multiple_companies(code, companies, result, stats):
     result['companies'] = companies_data
 
 
-def handle_unknown_company(code, report, result):
+def handle_unknown_company(code, report, result, multiple_company_supported):
     # we don't know the manufacturer
     if code.startswith('590'):
         # the code is registered in Poland, we want more data!
@@ -191,7 +191,8 @@ def handle_unknown_company(code, report, result):
 
         if registration_country:
             if registration_country in ('Federacja Rosyjska', "Białoruś"):
-                result['plScore'] = 0
+                if not multiple_company_supported:
+                    result['plScore'] = 0
                 result['card_type'] = TYPE_GREY
                 result['name'] = f'Miejsce rejestracji: {registration_country}'
                 result['altText'] = (
@@ -200,7 +201,8 @@ def handle_unknown_company(code, report, result):
                     f'Ten kraj dokonał inwazji na Ukrainę. Zastanów się, czy chcesz go kupić.'
                 )
             else:
-                result['plScore'] = 0
+                if not multiple_company_supported:
+                    result['plScore'] = 0
                 result['card_type'] = TYPE_GREY
                 result['name'] = f'Miejsce rejestracji: {registration_country}'
                 result['altText'] = (
