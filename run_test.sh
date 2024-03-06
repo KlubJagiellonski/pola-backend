@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+# docker-compose run --no-deps --rm web /app/manage.py test --verbosity=2 --keepdb
+
 docker-compose run --rm web bash -x -c "
   coverage run \
     --source=. \
