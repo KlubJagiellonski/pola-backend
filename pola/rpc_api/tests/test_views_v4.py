@@ -206,8 +206,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 },
                 'donate': {
                     'show_button': True,
-                    'title': '1,5% na aplikację Pola',
-                    'url': 'https://www.pola-app.pl/1-5-podatku-na-aplikacje-pola/',
+                    'title': 'Twój 1 zł może nam pomóc!,
+                    'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
                 },
             },
             response_json,
