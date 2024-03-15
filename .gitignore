@@ -64,3 +64,6 @@ utils/*.dump
 runserver.sh
 .pycharm_helpers
 coverage.xml
+
+# Build
+.build
