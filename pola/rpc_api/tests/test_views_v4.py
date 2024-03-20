@@ -206,7 +206,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 },
                 'donate': {
                     'show_button': True,
-                    'title': 'Twój 1 zł może nam pomóc!',
+                    'title': 'Wspieraj_aplikacje_Pola',
                     'url': 'https://klubjagiellonski.pl/zbiorka/wspieraj-aplikacje-pola/',
                 },
             },
