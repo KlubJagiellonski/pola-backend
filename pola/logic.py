@@ -1,4 +1,5 @@
 import sentry_sdk
+from django.conf import settings
 
 from pola.company.models import Brand
 from pola.countries import get_registration_country
@@ -267,7 +268,7 @@ def get_by_code(code):
         return Product.objects.get(code=code)
     except Product.DoesNotExist:
         try:
-            if is_code_supported(code):
+            if is_code_supported(code) and settings.PRODUKTY_W_SIECI_ENABLE:
                 products_response = produkty_w_sieci_client.get_products(gtin_number__prefix=f"0{code}")
 
                 return create_from_api(code, products_response, product=None)

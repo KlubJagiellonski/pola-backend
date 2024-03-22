@@ -114,7 +114,7 @@ class ProduktyWSieciClient:
 
 if 'BASE_URL' in settings.PRODUKTY_W_SIECI:
     produkty_w_sieci_client = ProduktyWSieciClient(
-        api_token=settings.GET_RESPONSE['API_TOKEN'], base_url=settings.PRODUKTY_W_SIECI['BASE_URL']
+        api_token=settings.PRODUKTY_W_SIECI['API_TOKEN'], base_url=settings.PRODUKTY_W_SIECI['BASE_URL']
     )
 else:
     produkty_w_sieci_client = ProduktyWSieciClient(api_token=settings.PRODUKTY_W_SIECI['API_TOKEN'])
