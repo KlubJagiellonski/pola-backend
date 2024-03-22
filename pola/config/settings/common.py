@@ -267,9 +267,6 @@ LOGGING = {
 IS_PRODUCTION = env("IS_PRODUCTION", default=False)
 
 # Your common stuff: Below this line define 3rd party library settings
-PRODUKTY_W_SIECI_API_USERNAME = env("PRODUKTY_W_SIECI_API_USERNAME", default=None)
-PRODUKTY_W_SIECI_API_PASSWORD = env("PRODUKTY_W_SIECI_API_PASSWORD", default=None)
-
 SLACK_TOKEN = env("SLACK_TOKEN", default=None)
 SLACK_CHANNEL_AI_STATS = env("SLACK_CHANNEL_AI_STATS", default=None)
 
@@ -342,6 +339,7 @@ GET_RESPONSE = {
 
 # PRODUKTY W SIECI
 # ------------------------------------------------------------------------------
+PRODUKTY_W_SIECI_ENABLE = env.bool("POLA_APP_PRODUKTY_W_SIECI_ENABLE", default=True)
 PRODUKTY_W_SIECI = {
     'API_TOKEN': env('POLA_APP_PRODUKTY_W_SIECI_API_TOKEN'),
 }
