@@ -305,7 +305,6 @@ class Brand(TimeStampedModel):
             querystring_auth=False,
             bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
             region_name='eu-central-1',
-            default_acl=None,
         ),
     )
 
