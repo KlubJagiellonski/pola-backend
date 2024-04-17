@@ -346,7 +346,7 @@ class TestGetResultFromCode(TestCase):
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
 
-        self.assertIn("http://minio:9000/", response[0]["logotype_url"])
+        self.assertIn(os.environ.get("POLA_APP_AWS_S3_ENDPOINT_URL"), response[0]["logotype_url"])
         self.assertEqual("https://google.com/", response[0]["official_url"])
 
     def test_russian_code_with_one_company(self):
@@ -546,13 +546,13 @@ class TestGetResultFromCode(TestCase):
 
 
 class TestGetByCode(TestCase):
-    @vcr.use_cassette('product_ean13.yaml', filter_headers=['X-API-Key'])
+    @vcr.use_cassette('product_ean13_v2.yaml', filter_headers=['X-API-KEY'])
     def test_should_read_existing_object(self):
         Product(code=TEST_EAN13, name="NAME").save()
         response = get_by_code(TEST_EAN13)
         self.assertEqual(response.name, "NAME")
 
-    @vcr.use_cassette('product_ean13.yaml', filter_headers=['X-API-Key'])
+    @vcr.use_cassette('product_ean13_v2.yaml', filter_headers=['X-API-KEY'])
     def test_should_create_new_when_missing(self):
         GPCBrickFactory(code="10000232")
         self.assertEqual(0, Product.objects.count())

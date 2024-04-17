@@ -1,3 +1,4 @@
+import environ
 from bs4 import BeautifulSoup
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
@@ -121,7 +122,7 @@ class TestCompanyUpdateWeb(WebTestMixin, TestCase):
 
         self.assertRedirects(page, self.instance.get_absolute_url())
         self.instance.refresh_from_db()
-        self.assertIn("http://minio:9000", self.instance.logotype.url)
+        self.assertIn(environ.Env().str('POLA_APP_AWS_S3_ENDPOINT_URL'), self.instance.logotype.url)
 
 
 class TestConcurencyComapnyUpdate(TestCase):
