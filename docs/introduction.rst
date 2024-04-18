@@ -12,7 +12,7 @@ Projekt Pola składa się z kilku podprojektów, którego rdzeniem jest proejkt 
 * `pola-android <https://github.com/KlubJagiellonski/pola-android>`__ - aplikacja na system Android.
 * `pola-flutter <https://github.com/KlubJagiellonski/pola-flutter>`__ - aplikacja multiplatformowa napisana w Flutter (projekt niewydany).
 * `pola-web <https://github.com/KlubJagiellonski/pola-web>`__ - statyczna strona napisana w Gatsby.
-* `pola-bi <https://github.com/KlubJagiellonski/pola-backend/tree/master/pola-bi/>`__ - zbiór narzędzi odpowiedzialnych za analityke biznesową (projekt niewydany).
+* `pola-bi <https://github.com/KlubJagiellonski/pola-backend/tree/master/pola-bi/>`__ - zbiór narzędzi odpowiedzialnych za analityke biznesową.
 
 * `pola-ai <https://github.com/KlubJagiellonski/pola-ai>`__ - sztuczna inteligencja rozpoznajaca produkty (projekt porzucony).
 * `pola-facebook <https://github.com/KlubJagiellonski/pola-facebook>`__ - chatbot na Facebook (projekt porzuczony).
@@ -27,8 +27,8 @@ Założenia
 
 * ``pola-backend`` zapewnia dwie funkcjonalności:
 
-  * API wykorzystywany przez ``pola-ios``, ``pola-android``, ``pola-flutter``, ``pola-web``
-  * CMS wykorzystywany przez redakcje do aktualizacji danych
+  * API wykorzystywany jest przez ``pola-ios``, ``pola-android``, ``pola-flutter``, ``pola-web``.
+  * CMS wykorzystywany jest przez redakcje do aktualizacji danych
 
 * ``pola-backend`` jest uruchamiana na platformie ``Heroku``
   Platforma dostarcza kilka usług oodpowiedzialnych za monitoring:
@@ -41,7 +41,7 @@ Założenia
   Ponad to dostarcza usługi składowania danych:
 
   * `Redis To Go <https://elements.heroku.com/addons/redistogo>`__ - cache
-  * `Heroku Postgres <https://elements.heroku.com/addons/heroku-postgresql>`__ - baza danych\
+  * `Heroku Postgres <https://elements.heroku.com/addons/heroku-postgresql>`__ - baza danych
 
   Wykorzystywany jest również `MailGun <https://elements.heroku.com/addons/mailgun>`__ do wysyłania wiadomości z przypomniemiem hasła.
 
@@ -56,4 +56,13 @@ Założenia
   * ``AWS Bucket Public`` - przechowuje pliki statyczne np. kod CSS/JS,. Zawartość jest publiczna dla wszystkich.
   * ``AWS Bucket Web`` - przechowuje skompilowana aplikacje ``pola-web``.
 
-* ``pola-bi`` jest zbiorem narzędzi, który uruchamia się cyklicznie na Github Action, który transformuje dane w ``Heroku Postgres`` i zapisuje do tej samej instacji, co pozwala na dostęp do danych przez raporty utworzone w ``Preset``.
+* ``pola-bi`` jest składa się dwóch elementów:
+
+  Kodu w tym repozytorium:
+
+  * ``dbt``` - projet `dbt <https://docs.getdbt.com/docs/introduction>`__, który pozwala na wykonywanie transformacji danych.
+  * ``postgres_to_gcs``- skryptu Python, który kopiuje dane z ``PostgresSQL`` do `Gogole BigQuery <https://cloud.google.com/bigquery>`__
+
+  Obydwa narzędzia są uruchamiane na ``GitHub Action``.
+
+  Do wizualizacji danych wykorzystywany jest `Google Looker Studio/Google Data Studio <https://lookerstudio.google.com/>`__. On łączy się z ``Google BigQuery``.

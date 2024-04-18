@@ -3,15 +3,6 @@ name: Transfer PostgresSQL to BigQuery
 
 on:
   workflow_dispatch:
-    inputs:
-      heroku_app:
-        description: 'Heroku app name[pola-app/pola-staging]'
-        required: true
-        default: 'pola-app'
-  # TODO: !!! Remove before merging !!!!!
-  pull_request:
-    branches: ['master']
-
 
 permissions:
   id-token: write # This is required for requesting the JWT
