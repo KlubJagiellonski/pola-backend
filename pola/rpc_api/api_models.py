@@ -24,11 +24,13 @@ class SearchResult(TypedDict):
         return cls(
             name=str(product),
             code=product.code,
-            company=CompanyBasicInfo(
-                name=product.company.common_name or product.company.name, score=logic.get_plScore(product.company)
-            )
-            if product.company and (product.company.common_name or product.company.name)
-            else None,
+            company=(
+                CompanyBasicInfo(
+                    name=product.company.common_name or product.company.name, score=logic.get_plScore(product.company)
+                )
+                if product.company and (product.company.common_name or product.company.name)
+                else None
+            ),
             brand=BrandBasicInfo(name=product.brand.name) if product.brand and product.brand.name else None,
         )
 

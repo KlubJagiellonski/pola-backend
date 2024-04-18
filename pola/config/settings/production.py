@@ -7,6 +7,7 @@ Production Configurations
 - Use Redis on Heroku
 
 """
+
 # pylint: disable=unused-wildcard-import
 
 import os
