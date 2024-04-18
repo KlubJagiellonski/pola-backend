@@ -6,6 +6,7 @@ Local settings
 - Add Django Debug Toolbar
 - Add django-extensions as app
 """
+
 # pylint: disable=unused-wildcard-import
 
 from pathlib import Path
