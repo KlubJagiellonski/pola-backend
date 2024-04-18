@@ -1,0 +1,75 @@
+---
+name: Transfer PostgresSQL to BigQuery
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GCP_PROJECT_ID: pola-bi-looker
+  GCP_PROJECT_NUMBER: 354540873199
+  GCP_REGION: europe-west3
+  GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
+  GCP_BIGQUERY_DATASET: pola-bi-looker:pola_bi_looker
+  GCP_IDENTITY_POOL: github
+  GCP_IDENTITY_PROVIDER: pola-backend-repo
+
+jobs:
+  deploy-bi:
+    name: "Transfer PostgresSQL to BQ"
+    runs-on: ubuntu-latest
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      # Use Open ID Connect to authenticate to GCP
+      # For details, see:
+      # https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
+      - id: 'auth'
+        name: 'Authenticate to GCP'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: '${{ env.GCP_PROJECT_ID }}'
+          # yamllint disable-line rule:line-length
+          workload_identity_provider: 'projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.GCP_IDENTITY_POOL }}/providers/${{ env.GCP_IDENTITY_PROVIDER }}'
+          export_environment_variables: true
+          create_credentials_file: true
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: "Set environment env variable"
+        run: |-
+          pip install django-environ
+          source <(python ./pola-bi/dev.py --environment "prod")
+          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
+          printenv | grep POLA_APP >> $GITHUB_ENV;
+      - name: "Download CSV files from PostgresSQL"
+        run: ./pola-bi/postgres_to_gcs/postgres_to_csv.py --output-dir /tmp/csv-files/
+      - name: "List CSV files"
+        run: find /tmp/csv-files/
+      - name: "Transfer CSV files to GCS"
+        run: |-
+          gcloud config set storage/parallel_composite_upload_threshold 10M
+          gsutil -m rsync -d /tmp/csv-files/ "gs://${GCP_BUCKET_NAME}"
+      - name: "List CSV files in GCS"
+        run: gcloud storage ls --recursive "gs://${GCP_BUCKET_NAME}"
+      - name: "Transfer CSV files to BigQuery"
+        run: >-
+          ./pola-bi/postgres_to_gcs/gcs_to_bigquery.py
+          --source "gs://${GCP_BUCKET_NAME}"
+          --target-location "${GCP_REGION}"
+          --target-dataset "${GCP_BIGQUERY_DATASET}"
+      - name: "List BigQuery tables"
+        run: bq ls "${GCP_BIGQUERY_DATASET}"
