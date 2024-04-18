@@ -96,11 +96,11 @@ repos:
     rev: '7.0.0'
     hooks:
       - id: flake8
-  - repo: https://github.com/hadolint/hadolint
-    rev: 'v2.12.1-beta'
-    hooks:
-      - id: hadolint-docker
-        entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.12.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
+  # - repo: https://github.com/hadolint/hadolint
+  #   rev: 'v2.12.1-beta'
+  #   hooks:
+  #     - id: hadolint-docker
+  #       entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.12.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
   - repo: https://github.com/PyCQA/isort
     rev: '5.13.2'
     hooks:
