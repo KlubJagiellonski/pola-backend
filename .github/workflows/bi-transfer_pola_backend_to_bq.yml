@@ -3,6 +3,11 @@ name: Transfer PostgresSQL to BigQuery
 
 on:
   workflow_dispatch:
+    inputs:
+      app_env:
+        description: 'Environment [prod/staging]'
+        required: true
+        default: 'staging'
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -16,9 +21,10 @@ env:
   GCP_PROJECT_NUMBER: 354540873199
   GCP_REGION: europe-west3
   GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
-  GCP_BIGQUERY_DATASET: pola-bi-looker:pola_bi_looker
+  GCP_BIGQUERY_DATASET: pola-bi-looker:pola_backend__${{ github.event.inputs.app_env }}
   GCP_IDENTITY_POOL: github
   GCP_IDENTITY_PROVIDER: pola-backend-repo
+  APP_ENVIRONMENT: ${{ github.event.inputs.app_env }}
 
 jobs:
   deploy-bi:
@@ -52,7 +58,7 @@ jobs:
       - name: "Set environment env variable"
         run: |-
           pip install django-environ
-          source <(python ./pola-bi/dev.py --environment "prod")
+          source <(python ./pola-bi/dev.py --environment "${APP_ENVIRONMENT}")
           printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
           printenv | grep POLA_APP >> $GITHUB_ENV;
       - name: "Download CSV files from PostgresSQL"
@@ -62,13 +68,13 @@ jobs:
       - name: "Transfer CSV files to GCS"
         run: |-
           gcloud config set storage/parallel_composite_upload_threshold 10M
-          gsutil -m rsync -d /tmp/csv-files/ "gs://${GCP_BUCKET_NAME}"
+          gsutil -m rsync -d /tmp/csv-files/ "gs://${GCP_BUCKET_NAME}/${APP_ENVIRONMENT}"
       - name: "List CSV files in GCS"
-        run: gcloud storage ls --recursive "gs://${GCP_BUCKET_NAME}"
+        run: gcloud storage ls --recursive "gs://${GCP_BUCKET_NAME}/${APP_ENVIRONMENT}"
       - name: "Transfer CSV files to BigQuery"
         run: >-
           ./pola-bi/postgres_to_gcs/gcs_to_bigquery.py
-          --source "gs://${GCP_BUCKET_NAME}"
+          --source "gs://${GCP_BUCKET_NAME}/${APP_ENVIRONMENT}"
           --target-location "${GCP_REGION}"
           --target-dataset "${GCP_BIGQUERY_DATASET}"
       - name: "List BigQuery tables"
