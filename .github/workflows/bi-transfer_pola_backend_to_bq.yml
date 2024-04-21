@@ -64,7 +64,6 @@ jobs:
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-          heroku login --api-key "${HEROKU_API_KEY}"
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       - name: Retrieve PostgreSQL credentials
