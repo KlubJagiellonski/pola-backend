@@ -49,7 +49,6 @@ def export_to_file(connection_info, table_name, csv_path, verbose):
 
     file_size = os.path.getsize(csv_path)
     logging.info(f"Exported {rows_exported} rows  ({file_size} bytes).")
-    return rows_exported, file_size
 
 
 def upload_to_gcs(source_file_path, destination_url, verbose):
@@ -121,10 +120,9 @@ def single_table_workflow(connection_info, table_name, dataset_id, staging_url, 
     with NamedTemporaryFile(delete=True, suffix='.csv', mode='w+') as temp_file:
         csv_file_path = temp_file.name
         rows_exported, file_size = export_to_file(connection_info, table_name, csv_file_path, verbose)
-        if rows_exported > 0:
-            gcs_uri = append_file_to_url(staging_url, f'{table_name}.csv')
-            upload_to_gcs(csv_file_path, gcs_uri, verbose)
-            load_to_bigquery(gcs_uri, dataset_id, table_name, verbose)
+        gcs_uri = append_file_to_url(staging_url, f'{table_name}.csv')
+        upload_to_gcs(csv_file_path, gcs_uri, verbose)
+        load_to_bigquery(gcs_uri, dataset_id, table_name, verbose)
 
 
 def setup_arg_parser():
