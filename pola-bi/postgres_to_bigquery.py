@@ -42,7 +42,10 @@ def export_to_file(connection_info, table_name, csv_path, verbose):
         cursor.execute(query)
         writer = csv.writer(file)
         writer.writerow(columns)
-        rows_exported = sum(1 for _ in writer.writerows(cursor))
+        rows_exported = 0
+        for row in cursir:
+            writer.writerow(row)
+            rows_exported = rows_exported + 1
 
     file_size = os.path.getsize(csv_path)
     logging.info(f"Exported {rows_exported} rows  ({file_size} bytes).")
