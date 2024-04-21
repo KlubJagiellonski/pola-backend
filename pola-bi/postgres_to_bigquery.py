@@ -107,6 +107,7 @@ def parse_database_url(database_url):
 def all_operations(connection_info, table_names, dataset_id, staging_url, verbose):
     setup_logging(verbose)
     logging.info("Start replication for tables: %s", table_names)
+    print(table_names, dataset_id, staging_url)
     with ThreadPoolExecutor(max_workers=5) as executor:
         futures = [
             executor.submit(single_table_workflow, connection_info, table_name, dataset_id, staging_url, verbose)
