@@ -4,10 +4,16 @@ name: Transfer PostgresSQL to BigQuery
 on:
   workflow_dispatch:
     inputs:
-      app_env:
-        description: 'Environment [prod/staging]'
+      heroku_app:
+        description: 'Heroku app [pola-app/pola-staging]'
         required: true
-        default: 'staging'
+        default: 'pola-staging'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'pola-bi/**'
+      - '.github/workflows/transfer-postgres-to-bq.yml'
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -17,14 +23,18 @@ env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  HEROKU_APP: ${{ github.event.inputs.heroku_app || 'pola-staging' }}
+
+  ENV_NAME: ${{ env.HEROKU_APP == 'pola-app' && 'prod' || 'staging' }}
+
   GCP_PROJECT_ID: pola-bi-looker
   GCP_PROJECT_NUMBER: 354540873199
   GCP_REGION: europe-west3
   GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
-  GCP_BIGQUERY_DATASET: pola-bi-looker:pola_backend__${{ github.event.inputs.app_env }}
+  GCP_BIGQUERY_DATASET: pola-bi-looker:pola_backend__${{ env.ENV_NAME }}
   GCP_IDENTITY_POOL: github
   GCP_IDENTITY_PROVIDER: pola-backend-repo
-  APP_ENVIRONMENT: ${{ github.event.inputs.app_env }}
 
 jobs:
   deploy-bi:
@@ -51,31 +61,52 @@ jobs:
           create_credentials_file: true
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+          heroku login --api-key "${HEROKU_API_KEY}"
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Retrieve PostgreSQL credentials
+        run: |
+          DATABASE_URL=$(heroku config:get DATABASE_URL --app "${HEROKU_APP}")
+          echo "::add-mask::$DATABASE_URL"
+          echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
       - name: "Setup Python"
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-      - name: "Set environment env variable"
-        run: |-
-          pip install django-environ
-          source <(python ./pola-bi/dev.py --environment "${APP_ENVIRONMENT}")
-          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
-          printenv | grep POLA_APP >> $GITHUB_ENV;
-      - name: "Download CSV files from PostgresSQL"
-        run: ./pola-bi/postgres_to_gcs/postgres_to_csv.py --output-dir /tmp/csv-files/
-      - name: "List CSV files"
-        run: find /tmp/csv-files/
-      - name: "Transfer CSV files to GCS"
-        run: |-
-          gcloud config set storage/parallel_composite_upload_threshold 10M
-          gsutil -m rsync -d /tmp/csv-files/ "gs://${GCP_BUCKET_NAME}/${APP_ENVIRONMENT}"
-      - name: "List CSV files in GCS"
-        run: gcloud storage ls --recursive "gs://${GCP_BUCKET_NAME}/${APP_ENVIRONMENT}"
-      - name: "Transfer CSV files to BigQuery"
-        run: >-
-          ./pola-bi/postgres_to_gcs/gcs_to_bigquery.py
-          --source "gs://${GCP_BUCKET_NAME}/${APP_ENVIRONMENT}"
-          --target-location "${GCP_REGION}"
-          --target-dataset "${GCP_BIGQUERY_DATASET}"
-      - name: "List BigQuery tables"
-        run: bq ls "${GCP_BIGQUERY_DATASET}"
+      - name: "Install dependencies"
+        run: pip install google-python-bigquery google-python-storage
+      - name: Run transfer script
+        env:
+#                     ai_pics_aipics,
+#                     bi_companies_by_query_group,
+#                     bi_companies_with_count_group,
+#                     bi_new_product_by_hour,
+#                     bi_popular_not_verified_products,
+#                     bi_product_by_time,
+#                     bi_queries_by_time,
+#                     bi_queries_stats_intervals,
+#                     bi_stats_queries_uq_users_by_week,
+#                     company_brand,
+#                     company_company,
+#                     gpc_brick,
+#                     gpc_class,
+#                     gpc_family,
+#                     gpc_segment,
+#                     pola_query,
+#                     pola_searchquery,
+#                     pola_stats,
+#                     product_product,
+#                     report_attachment,
+#                     report_report
+          TABLE_NAMES: |
+             ai_pics_aiattachment
+        run: |
+          python ./pola-bi/postgres_to_bigquery.py all \
+            --database-url "${DATABASE_URL}" \
+            --table-names "${TABLE_NAMES}" \
+            --staging-url "gcs://${GCP_BUCKET_NAME}/" \
+            --dataset-id "${GCP_BIGQUERY_DATASET}" \
+            --verbose
