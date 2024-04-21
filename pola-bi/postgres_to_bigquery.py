@@ -172,7 +172,7 @@ def append_file_to_url(url, file_name):
     # Ensure the URL ends with a slash
     if not url.endswith('/'):
         url += '/'
-    r = urlparse.urljoin(url, file_name)
+    r = url + file_name
     print("append_file_to_url", url, file_name, r)
     return r
 
