@@ -76,7 +76,7 @@ jobs:
         with:
           python-version: '3.9'
       - name: "Install dependencies"
-        run: pip install google-cloud-bigquery google-cloud-storage
+        run: pip install google-cloud-bigquery google-cloud-storage psycopg2-binary
       - name: Run transfer script
         env:
 #                     ai_pics_aipics,
