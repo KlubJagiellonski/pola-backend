@@ -38,7 +38,7 @@ def export_to_file(connection_info, table_name, csv_path, verbose):
         csv_path, mode='w', newline=''
     ) as file:
         columns = get_columns(cursor, table_name)
-        query = f"SELECT \"{'", "'.join(columns)}\" FROM {table_name}"
+        query = 'SELECT "'+ '", "'.join(columns)} +'" FROM "{table_name}"'
         cursor.execute(query)
         writer = csv.writer(file)
         writer.writerow(columns)
