@@ -174,6 +174,7 @@ def append_file_to_url(url, file_name):
         url += '/'
     r = urlparse.urljoin(url, file_name)
     print("append_file_to_url", url, file_name, r)
+    return r
 
 
 def main():
