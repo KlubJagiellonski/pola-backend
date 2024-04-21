@@ -87,6 +87,7 @@ def load_to_bigquery(gcs_uri, dataset_id, table_id, verbose):
     job_config.source_format = bigquery.SourceFormat.CSV
     job_config.skip_leading_rows = 1
     job_config.autodetect = True
+    job_config.write_disposition = bigquery.WriteDisposition.WRITE_TRUNCATE
 
     job = client.load_table_from_uri(gcs_uri, table_ref, job_config=job_config)
     job.result()
