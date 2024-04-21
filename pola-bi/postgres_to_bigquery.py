@@ -55,10 +55,10 @@ def upload_to_gcs(source_file_path, destination_url, verbose):
     setup_logging(verbose)
 
     # Parse the destination URL
-    if not destination_url.startswith('gcs://'):
-        raise ValueError(f"URL must start with 'gcs://'. Current url: {destination_url}")
+    if not destination_url.startswith('gs://'):
+        raise ValueError(f"URL must start with 'gs://'. Current url: {destination_url}")
 
-    path_parts = destination_url[len('gcs://') :].split('/', 1)
+    path_parts = destination_url[len('gs://') :].split('/', 1)
     if len(path_parts) < 2:
         raise ValueError(f"URL must include a bucket name and a destination path.  Current url: {destination_url}")
 
