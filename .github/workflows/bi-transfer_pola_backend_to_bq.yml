@@ -103,9 +103,9 @@ jobs:
           TABLE_NAMES: |
              ai_pics_aiattachment
         run: |
-          python ./pola-bi/postgres_to_bigquery.py all \
+          python ./pola-bi/postgres_to_bigquery.py --verbose all \
             --database-url "${DATABASE_URL}" \
             --table-names "${TABLE_NAMES}" \
             --staging-url "gcs://${GCP_BUCKET_NAME}/" \
             --dataset-id "${GCP_BIGQUERY_DATASET}" \
-            --verbose
+
