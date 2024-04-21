@@ -26,22 +26,22 @@ env:
 
   HEROKU_APP: ${{ github.event.inputs.heroku_app || 'pola-staging' }}
 
-  ENV_NAME: ${{ env.HEROKU_APP == 'pola-app' && 'prod' || 'staging' }}
-
-  GCP_PROJECT_ID: pola-bi-looker
-  GCP_PROJECT_NUMBER: 354540873199
-  GCP_REGION: europe-west3
-  GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
-  GCP_BIGQUERY_DATASET: pola-bi-looker:pola_backend__${{ env.ENV_NAME }}
-  GCP_IDENTITY_POOL: github
-  GCP_IDENTITY_PROVIDER: pola-backend-repo
-
 jobs:
   deploy-bi:
     name: "Transfer PostgresSQL to BQ"
     runs-on: ubuntu-latest
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      ENV_NAME: ${{ env.HEROKU_APP == 'pola-app' && 'prod' || 'staging' }}
+
+      GCP_PROJECT_ID: pola-bi-looker
+      GCP_PROJECT_NUMBER: 354540873199
+      GCP_REGION: europe-west3
+      GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
+      GCP_BIGQUERY_DATASET: pola-bi-looker:pola_backend__${{ env.ENV_NAME }}
+      GCP_IDENTITY_POOL: github
+      GCP_IDENTITY_PROVIDER: pola-backend-repo
+
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v4
