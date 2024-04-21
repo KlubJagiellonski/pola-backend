@@ -79,29 +79,29 @@ jobs:
         run: pip install google-cloud-bigquery google-cloud-storage psycopg2-binary
       - name: Run transfer script
         env:
-#                     ai_pics_aipics,
-#                     bi_companies_by_query_group,
-#                     bi_companies_with_count_group,
-#                     bi_new_product_by_hour,
-#                     bi_popular_not_verified_products,
-#                     bi_product_by_time,
-#                     bi_queries_by_time,
-#                     bi_queries_stats_intervals,
-#                     bi_stats_queries_uq_users_by_week,
-#                     company_brand,
-#                     company_company,
-#                     gpc_brick,
-#                     gpc_class,
-#                     gpc_family,
-#                     gpc_segment,
-#                     pola_query,
-#                     pola_searchquery,
-#                     pola_stats,
-#                     product_product,
-#                     report_attachment,
-#                     report_report
           TABLE_NAMES: |
-             ai_pics_aiattachment
+             ai_pics_aiattachment,
+             ai_pics_aipics,
+             bi_companies_by_query_group,
+             bi_companies_with_count_group,
+             bi_new_product_by_hour,
+             bi_popular_not_verified_products,
+             bi_product_by_time,
+             bi_queries_by_time,
+             bi_queries_stats_intervals,
+             bi_stats_queries_uq_users_by_week,
+             company_brand,
+             company_company,
+             gpc_brick,
+             gpc_class,
+             gpc_family,
+             gpc_segment,
+             pola_query,
+             pola_searchquery,
+             pola_stats,
+             product_product,
+             report_attachment,
+             report_report
         run: |
           python ./pola-bi/postgres_to_bigquery.py --verbose all \
             --database-url "${DATABASE_URL}" \
