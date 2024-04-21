@@ -33,7 +33,7 @@ def get_columns(cursor, table_name):
 
 def export_to_file(connection_info, table_name, csv_path, verbose):
     setup_logging(verbose)
-    logging.info('Start exporting data from %s to %s', table_name, csv_path)
+    logging.info('Start exporting data from %s table to %s file', table_name, csv_path)
     with psycopg2.connect(**connection_info) as conn, conn.cursor() as cursor, open(
         csv_path, mode='w', newline=''
     ) as file:
@@ -48,7 +48,7 @@ def export_to_file(connection_info, table_name, csv_path, verbose):
             rows_exported = rows_exported + 1
 
     file_size = os.path.getsize(csv_path)
-    logging.info(f"Exported {rows_exported} rows  ({file_size} bytes).")
+    logging.info(f"Exported {rows_exported} rows ({file_size} bytes).")
 
 
 def upload_to_gcs(source_file_path, destination_url, verbose):
@@ -56,11 +56,11 @@ def upload_to_gcs(source_file_path, destination_url, verbose):
 
     # Parse the destination URL
     if not destination_url.startswith('gcs://'):
-        raise ValueError("URL must start with 'gcs://'")
+        raise ValueError(f"URL must start with 'gcs://'. Current url: {destination_url}")
 
     path_parts = destination_url[len('gcs://') :].split('/', 1)
     if len(path_parts) < 2:
-        raise ValueError("URL must include a bucket name and a destination path")
+        raise ValueError(f"URL must include a bucket name and a destination path.  Current url: {destination_url}")
 
     bucket_name, destination_blob_name = path_parts[0], path_parts[1]
 
