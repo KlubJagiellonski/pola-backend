@@ -43,7 +43,7 @@ def export_to_file(connection_info, table_name, csv_path, verbose):
         writer = csv.writer(file)
         writer.writerow(columns)
         rows_exported = 0
-        for row in cursir:
+        for row in cursor:
             writer.writerow(row)
             rows_exported = rows_exported + 1
 
