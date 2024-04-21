@@ -38,7 +38,7 @@ def export_to_file(connection_info, table_name, csv_path, verbose):
         csv_path, mode='w', newline=''
     ) as file:
         columns = get_columns(cursor, table_name)
-        query = f"SELECT {', '.join(columns)} FROM {table_name}"
+        query = f"SELECT "{'", "'.join(columns)}" FROM {table_name}"
         cursor.execute(query)
         writer = csv.writer(file)
         writer.writerow(columns)
@@ -122,8 +122,8 @@ def single_table_workflow(connection_info, table_name, dataset_id, staging_url, 
         csv_file_path = temp_file.name
         export_to_file(connection_info, table_name, csv_file_path, verbose)
         gcs_uri = append_file_to_url(staging_url, f'{table_name}.csv')
-        # upload_to_gcs(csv_file_path, gcs_uri, verbose)
-        # load_to_bigquery(gcs_uri, dataset_id, table_name, verbose)
+        upload_to_gcs(csv_file_path, gcs_uri, verbose)
+        load_to_bigquery(gcs_uri, dataset_id, table_name, verbose)
 
 
 def setup_arg_parser():
