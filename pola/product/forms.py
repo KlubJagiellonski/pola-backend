@@ -87,7 +87,7 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
     def save(self):
         company = self.cleaned_data['company']
         success = []
-        failed = []
+        errors = []
         row: dict[str, str]
         product_by_code = {
             p.code: p for p in Product.objects.filter(code__in=[row['code'] for row in self.cleaned_data['rows']])
@@ -108,11 +108,11 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
                     p.name = row['name']
                     changed = True
             if not changed:
-                failed.append(p)
+                errors.append(f"Produkt nie wymaga zmiany: {p} ({p.code})")
                 continue
             try:
                 p.save(commit_desc="Bulk import")
                 success.append(p)
             except IntegrityError:
-                failed.append(p)
-        return success, failed
+                errors.append(f"Blad zapisu do bazy: {p} ({p.code})")
+        return success, errors
