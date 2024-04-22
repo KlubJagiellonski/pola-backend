@@ -58,14 +58,12 @@ jobs:
               heroku_app = "pola-staging"
           else:
               raise Exception(f"Unknown event: {event_name}")
-          fi
           if heroku_app == "pola-app":
               env_name = "prod"
           elif heroku_app == "pola-staging":
               env_name = "staging"
           else:
               raise Exception(f"Unknown app: {heroku_app}")
-          fi
           with github_env_file_path.open("a") as file:
               file.write(f"ENV_NAME={env_name}\n")
               file.write(f"HEROKU_APP={heroku_app}\n")
