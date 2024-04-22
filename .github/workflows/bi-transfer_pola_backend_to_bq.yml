@@ -16,7 +16,8 @@ on:
       - '.github/workflows/transfer-postgres-to-bq.yml'
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '12 5 1 * *'
+    # This workflow will be run at 5:12 on the first day of every month.
+    - cron: '12 5= 1 * *'
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -41,48 +42,35 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  #   steps:
-  # HEROKU_APP: ${{ github.event.inputs.heroku_app || 'pola-staging' }}
-
-  # ENV_NAME: ${{ (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging' }}
-
-  # GCP_BIGQUERY_DATASET: pola_backend__${{
-  #   (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging'
-  #   }}
-        # GitHub doesn't allow you to use previously defined variables to create next variables, 
-        # so we'll use Python. We also want to use more complex logic
-
+    steps:
       - name: Set dynamic job variable
         shell: python
         run: |
           import os
           from pathlib import Path
 
-          event_name = os.environ['GITHUB_EVENT_NAME']
-          github_env_file_path = Path(os.environ['GITHUB_ENV'])
-
-          if event_name == 'schedule':
-            heroku_app = 'pola-staging'
-          elif event_name == 'workflow_dispatch':
-            heroku_app = os.environ['INPUT_HEROKU_APP']
-          elif event_name === 'pull_request':
-            heroku_app = 'pola-staging'
+          event_name = os.environ["GITHUB_EVENT_NAME"]
+          github_env_file_path = Path(os.environ["GITHUB_ENV"])
+          if event_name == "schedule":
+              heroku_app = "pola-staging"
+          elif event_name == "workflow_dispatch":
+              heroku_app = os.environ["INPUT_HEROKU_APP"]
+          elif event_name == "pull_request":
+              heroku_app = "pola-staging"
           else:
-            raise Exception(f'Unknown event: {event_name}")
+              raise Exception(f"Unknown event: {event_name}")
           fi
-          if heroku_app == 'pola-app':
-            env_name = 'prod'
-          elif heroku_app == 'pola-staging':
-            env_name = 'staging'
+          if heroku_app == "pola-app":
+              env_name = "prod"
+          elif heroku_app == "pola-staging":
+              env_name = "staging"
           else:
-            raise Exception(f'Unknown app: {heroku_app}")
+              raise Exception(f"Unknown app: {heroku_app}")
           fi
-        
-          with github_env_file_path.open('a') as file:
-            file.write(f"ENV_NAME={env_name}\n")
-            file.write(f"HEROKU_APP={heroku_app}\n")
-            file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{heroku_app}\n")
-
+          with github_env_file_path.open("a") as file:
+              file.write(f"ENV_NAME={env_name}\n")
+              file.write(f"HEROKU_APP={heroku_app}\n")
+              file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{heroku_app}\n")
         env:
           INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
