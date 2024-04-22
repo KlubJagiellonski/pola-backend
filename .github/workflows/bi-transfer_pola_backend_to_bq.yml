@@ -13,7 +13,7 @@ on:
       - master
     paths:
       - 'pola-bi/**'
-      - '.github/workflows/transfer-postgres-to-bq.yml'
+      - '.github/workflows/bi-transfer_pola_backend_to_bq.yml'
   schedule:
     # * is a special character in YAML so you have to quote this string
     # This workflow will be run at 5:12 on the first day of every month.
@@ -27,7 +27,6 @@ env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
   GCP_PROJECT_ID: pola-bi-looker
   GCP_PROJECT_NUMBER: 354540873199
