@@ -6,8 +6,7 @@ from django.views import View
 from django_ratelimit.decorators import ratelimit
 
 from pola import logic, logic_ai
-from pola.constants import DONATE_TEXT, DONATE_URL
-from pola.models import Query, SearchQuery
+from pola.models import AppConfiguration, Query, SearchQuery
 from pola.product.models import Product
 from pola.rpc_api.api_models import SearchResult, SearchResultCollection
 from pola.rpc_api.http import JsonProblemResponse
@@ -55,10 +54,11 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
     if ai_supported:
         result = logic_ai.add_ask_for_pics(product, result)
 
+    app_configuration = AppConfiguration.get_singleton()
     result["donate"] = {
         "show_button": True,
-        "title": DONATE_TEXT,
-        "url": DONATE_URL,
+        "title": app_configuration.donate_text,
+        "url": app_configuration.donate_url,
     }
     return result
 

@@ -4,8 +4,12 @@ from django.core.files.base import ContentFile
 from test_plus import TestCase
 
 from pola.company.factories import BrandFactory, CompanyFactory
-from pola.constants import DONATE_TEXT, DONATE_URL
-from pola.models import SearchQuery
+from pola.models import (
+    DEFAULT_DONATE_TEXT,
+    DEFAULT_DONATE_URL,
+    AppConfiguration,
+    SearchQuery,
+)
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.rpc_api.tests.test_views import JsonRequestMixin
@@ -61,8 +65,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 },
                 'donate': {
                     'show_button': True,
-                    'url': DONATE_URL,
-                    'title': DONATE_TEXT,
+                    'url': DEFAULT_DONATE_URL,
+                    'title': DEFAULT_DONATE_TEXT,
                 },
             },
             json.loads(response.content),
@@ -127,8 +131,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 ],
                 "donate": {
                     "show_button": True,
-                    "url": DONATE_URL,
-                    "title": DONATE_TEXT,
+                    "url": DEFAULT_DONATE_URL,
+                    "title": DEFAULT_DONATE_TEXT,
                 },
             },
             json.loads(response.content),
@@ -206,8 +210,8 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 },
                 'donate': {
                     'show_button': True,
-                    'title': '1,5% podatku na aplikację Pola?',
-                    'url': 'https://www.pola-app.pl/1-5-podatku-na-aplikacje-pola',
+                    'title': DEFAULT_DONATE_TEXT,
+                    'url': DEFAULT_DONATE_URL,
                 },
             },
             response_json,
@@ -309,11 +313,33 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 ],
                 "donate": {
                     "show_button": True,
-                    "url": DONATE_URL,
-                    "title": DONATE_TEXT,
+                    'title': DEFAULT_DONATE_TEXT,
+                    'url': DEFAULT_DONATE_URL,
                 },
             },
             json.loads(response.content),
+        )
+
+    def test_should_return_200_when_custom_donate_text_is_Set(self):
+        p = Product(code=5900049011829)
+        p.name = "test-product"
+        p.save()
+
+        app_config = AppConfiguration.get_singleton()
+        app_config.donate_text = 'TEST-DONATE-TEXT'
+        app_config.donate_url = 'http://example.com/42'
+        app_config.save()
+
+        response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
+        self.assertEqual(200, response.status_code, response.content)
+        self.maxDiff = None
+        self.assertEqual(
+            {
+                'show_button': True,
+                'title': 'TEST-DONATE-TEXT',
+                'url': 'http://example.com/42',
+            },
+            json.loads(response.content)['donate'],
         )
 
 

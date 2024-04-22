@@ -1,9 +1,11 @@
 import os
 from unittest import mock
 
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django_webtest import WebTestMixin
 from test_plus.test import TestCase
 
+from pola.models import AppConfiguration
 from pola.users.factories import StaffFactory
 
 
@@ -86,3 +88,31 @@ class TestReleaseView(TemplateUsedMixin, TestCase):
             resp = self.client.get(self.url)
             self.assertContains(resp, '9e905684bb2cf6bdf074224e50d1c58e43740bba')
             self.assertContains(resp, 'KlubJagiellonski/pola-backend')
+
+
+class TestAppConfigurationUpdateView(TemplateUsedMixin, PermissionMixin, TestCase):
+    template_name = 'pages/app_config_form.html'
+    url = reverse_lazy('app-config')
+
+    def test_template_used(self):
+        self.login()
+        super().test_template_used()
+
+
+class TestAppConfigurationUpdate(WebTestMixin, TestCase):
+    url = reverse_lazy('app-config')
+
+    def setUp(self):
+        super().setUp()
+        self.user = StaffFactory()
+
+    def test_form_success(self):
+        page = self.app.get(self.url, user=self.user)
+        page.form['donate_url'] = "http://example.com"
+        page.form['donate_text'] = "DONATE-TEXT"
+
+        page = page.form.submit(name='action')
+        self.assertRedirects(page, reverse('home-cms'))
+        instance = AppConfiguration.objects.first()
+        self.assertEqual(instance.donate_url, "http://example.com")
+        self.assertEqual(instance.donate_text, "DONATE-TEXT")
