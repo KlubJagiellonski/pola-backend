@@ -126,25 +126,6 @@ services:
       interval: 30s
       retries: 5
 
-  self-control:
-    build:
-      context: self-control
-      dockerfile: Dockerfile
-
-    environment:
-      ENV: local
-      # To get the token, run:
-      # export GITHUB_TOKEN=$(gh auth token)
-      GITHUB_TOKEN: ${GITHUB_TOKEN-}
-
-    env_file: .env
-    volumes:
-      - ./self-control/:/app/
-    ports:
-      - 8501:8501
-    expose:
-      - 5432
-
 
 volumes:
   postgres-data:
