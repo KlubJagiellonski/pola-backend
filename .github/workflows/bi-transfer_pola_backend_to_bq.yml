@@ -17,7 +17,7 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     # This workflow will be run at 5:12 on the first day of every month.
-    - cron: '12 5= 1 * *'
+    - cron: '12 5 1 * *'
 
 permissions:
   id-token: write # This is required for requesting the JWT
