@@ -103,7 +103,8 @@ jobs:
              pola_stats,
              product_product,
              report_attachment,
-             report_report
+             report_report,
+             users_users
         run: |
           python ./pola-bi/postgres_to_bigquery.py --verbose all \
             --database-url "${DATABASE_URL}" \
