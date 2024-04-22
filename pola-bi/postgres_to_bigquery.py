@@ -38,6 +38,8 @@ def export_to_file(connection_info, table_name, csv_path, verbose):
         csv_path, mode='w', newline=''
     ) as file:
         columns = get_columns(cursor, table_name)
+        if not columns:
+            raise ValueError(f"No columns found for table {table_name}.")
         query = 'SELECT "' + '", "'.join(columns) + f'" FROM "{table_name}"'
         cursor.execute(query)
         writer = csv.writer(file)
