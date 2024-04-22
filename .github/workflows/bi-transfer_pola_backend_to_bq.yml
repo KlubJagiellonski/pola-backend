@@ -14,6 +14,9 @@ on:
     paths:
       - 'pola-bi/**'
       - '.github/workflows/transfer-postgres-to-bq.yml'
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '12 5 1 * *'
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -24,17 +27,11 @@ env:
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  HEROKU_APP: ${{ github.event.inputs.heroku_app || 'pola-staging' }}
-
-  ENV_NAME: ${{ (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging' }}
 
   GCP_PROJECT_ID: pola-bi-looker
   GCP_PROJECT_NUMBER: 354540873199
   GCP_REGION: europe-west3
   GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
-  GCP_BIGQUERY_DATASET: pola_backend__${{
-    (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging'
-    }}
   GCP_IDENTITY_POOL: github
   GCP_IDENTITY_PROVIDER: pola-backend-repo
 
@@ -44,7 +41,51 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-    steps:
+  #   steps:
+  # HEROKU_APP: ${{ github.event.inputs.heroku_app || 'pola-staging' }}
+
+  # ENV_NAME: ${{ (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging' }}
+
+  # GCP_BIGQUERY_DATASET: pola_backend__${{
+  #   (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging'
+  #   }}
+        # GitHub doesn't allow you to use previously defined variables to create next variables, 
+        # so we'll use Python. We also want to use more complex logic
+
+      - name: Set dynamic job variable
+        shell: python
+        run: |
+          import os
+          from pathlib import Path
+
+          event_name = os.environ['GITHUB_EVENT_NAME']
+          github_env_file_path = Path(os.environ['GITHUB_ENV'])
+
+          if event_name == 'schedule':
+            heroku_app = 'pola-staging'
+          elif event_name == 'workflow_dispatch':
+            heroku_app = os.environ['INPUT_HEROKU_APP']
+          elif event_name === 'pull_request':
+            heroku_app = 'pola-staging'
+          else:
+            raise Exception(f'Unknown event: {event_name}")
+          fi
+          if heroku_app == 'pola-app':
+            env_name = 'prod'
+          elif heroku_app == 'pola-staging':
+            env_name = 'staging'
+          else:
+            raise Exception(f'Unknown app: {heroku_app}")
+          fi
+        
+          with github_env_file_path.open('a') as file:
+            file.write(f"ENV_NAME={env_name}\n")
+            file.write(f"HEROKU_APP={heroku_app}\n")
+            file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{heroku_app}\n")
+
+        env:
+          INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v4
         with:
