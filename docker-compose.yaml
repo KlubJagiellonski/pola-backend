@@ -126,7 +126,6 @@ services:
       interval: 30s
       retries: 5
 
-
 volumes:
   postgres-data:
   minio-data:
