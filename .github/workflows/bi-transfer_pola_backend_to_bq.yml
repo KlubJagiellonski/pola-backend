@@ -67,7 +67,7 @@ jobs:
           with github_env_file_path.open("a") as file:
               file.write(f"ENV_NAME={env_name}\n")
               file.write(f"HEROKU_APP={heroku_app}\n")
-              file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{heroku_app}\n")
+              file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{env_name}\n")
         env:
           INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
