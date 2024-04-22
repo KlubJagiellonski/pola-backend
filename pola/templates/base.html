@@ -80,6 +80,9 @@
                     {% if perms.ai_pics.view_aipics %}
                         <li><a href="{% url 'ai_pics:list' %}">{% trans "Zdjęcia AI" %}</a></li>
                     {% endif %}
+                    {% if perms.pola.change_appconfiguration %}
+                        <li><a href="{% url 'app-config' %}">{% trans "Konfiguracja aplikacji" %}</a></li>
+                    {% endif %}
                     <li><a href="{% url 'home-stats' %}">{% trans "Statystyki" %}</a></li>
                 </ul>
 

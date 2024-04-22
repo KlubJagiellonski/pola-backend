@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import get_default_timezone
 
@@ -108,3 +109,39 @@ class Stats(models.Model):
             .distinct('id')
             .count()
         )
+
+
+class SingletonModel(models.Model):
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        if not self.pk and self.__class__.objects.exists():
+            raise Exception(f"You can't create more than one instance of {self.__class__.__name__} objects.")
+        return super().save(*args, **kwargs)
+
+
+DEFAULT_DONATE_URL = "https://www.pola-app.pl/1-5-podatku-na-aplikacje-pola"
+DEFAULT_DONATE_TEXT = "1,5% podatku na aplikację Pola?"
+
+
+class AppConfiguration(SingletonModel):
+    donate_url = models.URLField(max_length=100, verbose_name="URL Donacji", default=DEFAULT_DONATE_URL)
+    donate_text = models.CharField(max_length=255, verbose_name="Tekst Donacji", default=DEFAULT_DONATE_TEXT)
+
+    class Meta:
+        verbose_name = 'Konfiguracja aplikacji'
+
+    def __str__(self):
+        return "Konfiguracja aplikacji"
+
+    def get_absolute_url(self):
+        return reverse('app-config')
+
+    @staticmethod
+    def get_singleton():
+        app_config = AppConfiguration.objects.first()
+        if not app_config:
+            app_config = AppConfiguration()
+            app_config.save()
+        return app_config

@@ -1,0 +1,16 @@
+{%extends 'base.html' %}
+
+{% load crispy_forms_tags i18n %}
+
+{% block breadcrumbs_rows %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
+    <li class="active">{% trans 'Aktualizacja' %}</li>
+{% endblock %}
+
+{% block content %}
+    {% crispy form %}
+{% endblock content %}
+
+{% block javascript %}
+    {{ form.media }}
+{% endblock javascript %}

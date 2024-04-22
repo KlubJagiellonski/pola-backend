@@ -3,23 +3,28 @@ from datetime import datetime, timedelta
 from functools import reduce
 from textwrap import dedent
 
+from braces.views import FormValidMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import connection
 from django.db.models import Q
 from django.db.models.functions import Length
 from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.timezone import get_default_timezone
-from django.views.generic import TemplateView
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import TemplateView, UpdateView
 from django.views.generic.detail import (
     BaseDetailView,
     SingleObjectTemplateResponseMixin,
 )
 
 from pola.company.models import Company
-from pola.models import Stats
+from pola.forms import AppConfigurationForm
+from pola.mixins import LoginPermissionRequiredMixin
+from pola.models import AppConfiguration, Stats
 from pola.product.models import Product
 from pola.report.models import Report
 
@@ -257,3 +262,18 @@ class ReleaseView(TemplateView):
             }
         )
         return context
+
+
+class AppConfigurationUpdateView(LoginPermissionRequiredMixin, FormValidMessageMixin, UpdateView):
+    model = AppConfiguration
+    form_class = AppConfigurationForm
+    template_name = 'pages/app_config_form.html'
+    success_url = reverse_lazy("home-cms")
+    permission_required = 'change_appconfiguration'
+    form_valid_message = _("Konfiguracja zaktualizowana!")
+
+    def get_object(self, queryset=None):
+        return AppConfiguration.get_singleton()
+
+    def form_valid(self, form):
+        return super().form_valid(form)

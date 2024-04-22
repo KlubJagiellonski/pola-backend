@@ -5,7 +5,7 @@ from test_plus import TestCase
 
 from pola.ai_pics.models import AIAttachment, AIPics
 from pola.company.factories import CompanyFactory
-from pola.constants import DONATE_TEXT, DONATE_URL
+from pola.models import DEFAULT_DONATE_TEXT, DEFAULT_DONATE_URL
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.report.models import Attachment, Report
@@ -168,8 +168,8 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 "sources": {"TEST": "BBBB"},
                 "donate": {
                     "show_button": True,
-                    "url": DONATE_URL,
-                    "title": DONATE_TEXT,
+                    "url": DEFAULT_DONATE_URL,
+                    "title": DEFAULT_DONATE_TEXT,
                 },
             },
             json.loads(response.content),
@@ -206,8 +206,8 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'description': 'TEST',
                 'donate': {
                     'show_button': True,
-                    'title': DONATE_TEXT,
-                    'url': DONATE_URL,
+                    'title': DEFAULT_DONATE_TEXT,
+                    'url': DEFAULT_DONATE_URL,
                 },
                 'friend_text': 'To jest przyjaciel Poli',
                 'is_friend': True,

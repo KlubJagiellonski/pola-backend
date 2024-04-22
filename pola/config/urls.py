@@ -12,14 +12,8 @@ from django.views.defaults import (
 )
 from django.views.generic import TemplateView
 
+import pola.views as pola_views
 from pola import views_pola_web
-from pola.views import (
-    AdminStatsPageView,
-    EditorsStatsPageView,
-    FrontPageView,
-    ReleaseView,
-    StatsPageView,
-)
 
 urlpatterns = []
 # Add RPC API
@@ -50,11 +44,12 @@ urlpatterns += [
 ]
 # Add CMS views
 urlpatterns += [
-    re_path(r'^release/$', ReleaseView.as_view(), name="release"),
-    re_path(r'^cms/$', FrontPageView.as_view(), name="home-cms"),
-    re_path(r'^cms/stats$', StatsPageView.as_view(), name="home-stats"),
-    re_path(r'^cms/editors-stats$', EditorsStatsPageView.as_view(), name="home-editors-stats"),
-    re_path(r'^cms/admin-stats$', AdminStatsPageView.as_view(), name="home-admin-stats"),
+    re_path(r'^release/$', pola_views.ReleaseView.as_view(), name="release"),
+    re_path(r'^cms/$', pola_views.FrontPageView.as_view(), name="home-cms"),
+    re_path(r'^cms/stats$', pola_views.StatsPageView.as_view(), name="home-stats"),
+    re_path(r'^cms/config$', pola_views.AppConfigurationUpdateView.as_view(), name="app-config"),
+    re_path(r'^cms/editors-stats$', pola_views.EditorsStatsPageView.as_view(), name="home-editors-stats"),
+    re_path(r'^cms/admin-stats$', pola_views.AdminStatsPageView.as_view(), name="home-admin-stats"),
     re_path(
         r'^cms/lang/$',
         login_required(TemplateView.as_view(template_name='pages/lang-cms.html')),
