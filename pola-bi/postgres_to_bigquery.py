@@ -175,6 +175,7 @@ def append_file_to_url(url, file_name):
         url += '/'
     return url + file_name
 
+
 def main():
     args = setup_arg_parser().parse_args()
     verbose = args.verbose

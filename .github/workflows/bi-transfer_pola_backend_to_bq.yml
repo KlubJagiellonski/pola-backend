@@ -32,7 +32,9 @@ env:
   GCP_PROJECT_NUMBER: 354540873199
   GCP_REGION: europe-west3
   GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
-  GCP_BIGQUERY_DATASET: pola_backend__${{ (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging' }}
+  GCP_BIGQUERY_DATASET: pola_backend__${{
+    (github.event.inputs.heroku_app || 'pola-staging') == 'pola-app' && 'prod' || 'staging'
+    }}
   GCP_IDENTITY_POOL: github
   GCP_IDENTITY_PROVIDER: pola-backend-repo
 
@@ -108,4 +110,3 @@ jobs:
             --table-names "${TABLE_NAMES}" \
             --staging-url "gs://${GCP_BUCKET_NAME}/" \
             --dataset-id "${GCP_BIGQUERY_DATASET}" \
-
