@@ -40,6 +40,9 @@
                 <tr>
                     <td>{% trans "Data modyfikacji: " %}</td><td>{{ object.modified | naturaltime }}</td>
                 </tr>
+                <tr>
+                    <td>{% trans "Suma skanowan wszystkich produktow marki: " %}</td><td><span data-testid="total_query_count">{{ total_query_count }}</span></td>
+                </tr>
             </table>
         </div>
     </div>

@@ -165,7 +165,7 @@ class TestCompanyDetailView(CompanyInstanceMixin, PermissionMixin, TemplateUsedM
         super().setUp()
         self.url = reverse('company:detail', kwargs={'pk': self.instance.pk})
 
-    def test_should_products_be_sorted(self):
+    def test_query_count_should_Be_visible(self):
         self.login()
         p1 = ProductFactory(company=self.instance, query_count=100)
         p2 = ProductFactory(company=self.instance, query_count=50)
@@ -213,3 +213,22 @@ class TestBrandDeleteView(BrandInstanceMixin, PermissionMixin, TemplateUsedMixin
         self.assertFalse(Brand.objects.filter(pk=self.brand_instance.pk).exists())
         self.assertTrue(Company.objects.filter(pk=self.brand_instance.company.pk).exists())
         self.assertTrue(Product.objects.filter(pk=product_instance.pk).exists())
+
+
+class TestBrandDetailView(BrandInstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+    template_name = 'company/brand_detail.html'
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('company:brand-detail', kwargs={'pk': self.brand_instance.pk})
+
+    def test_should_products_be_sorted(self):
+        self.login()
+        ProductFactory(company=self.company_instance, query_count=100, brand=self.brand_instance)
+        ProductFactory(company=self.company_instance, query_count=50, brand=self.brand_instance)
+        ProductFactory(company=self.company_instance, query_count=75, brand=self.brand_instance)
+
+        resp = self.client.get(self.url)
+        doc = BeautifulSoup(resp.content, 'html.parser')
+        total_query_count = next(iter(doc.select("[data-testid]"))).text
+        self.assertEqual(total_query_count, str(100 + 50 + 75))
