@@ -165,7 +165,7 @@ class TestCompanyDetailView(CompanyInstanceMixin, PermissionMixin, TemplateUsedM
         super().setUp()
         self.url = reverse('company:detail', kwargs={'pk': self.instance.pk})
 
-    def test_should_products_be_sorted(self):
+    def test_query_count_should_Be_visible(self):
         self.login()
         p1 = ProductFactory(company=self.instance, query_count=100)
         p2 = ProductFactory(company=self.instance, query_count=50)
