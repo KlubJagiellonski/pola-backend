@@ -17,6 +17,3 @@ class TestGetProducts(TestCase):
     def test_should_response(self):
         dd = produkty_w_sieci_client.get_products(gtin_number=TEST_EAN13)
         print(dd)
-
-
-p
