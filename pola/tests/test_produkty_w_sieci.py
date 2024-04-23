@@ -1,13 +1,10 @@
 import os
 
-import django.conf
+from django.test import override_settings
 from test_plus import TestCase
 from vcr import VCR
-from django.test import override_settings
 
 from pola.integrations.produkty_w_sieci import (
-    CompanyBase,
-    ProductBase,
     produkty_w_sieci_client,
 )
 
