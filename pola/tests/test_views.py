@@ -94,7 +94,7 @@ class TestReleaseView(TemplateUsedMixin, TestCase):
             resp = self.client.get(self.url, HTTP_CONTENT_TYPE='application/json')
             self.assertEqual(resp.status_code, 200)
             self.assertEqual(resp['Content-Type'], 'application/json')
-            self.assertEqual(resp.json().keys(), ['release_sha', 'release_link'])
+            self.assertEqual(list(resp.json().keys()), ['release_sha', 'release_link'])
 
 
 class TestAppConfigurationUpdateView(TemplateUsedMixin, PermissionMixin, TestCase):
