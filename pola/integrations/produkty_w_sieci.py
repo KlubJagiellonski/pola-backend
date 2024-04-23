@@ -1,6 +1,6 @@
 from random import random
 from time import sleep
-from typing import Optional, Union
+from typing import Optional
 
 import requests
 from django.conf import settings
@@ -61,8 +61,7 @@ class ProduktyWSieciClient:
         num_retries: Optional[int] = 5,
     ) -> Optional[ProductBase]:
         uri = self._base_url.rstrip("/") + "/products/" + gtin_number + "/"
-        params = {
-        }
+        params = {}
 
         response = self._send_request('get', uri, params=params, num_retries=num_retries)
         return None if response is None else ProductBase.parse_obj(response)
@@ -93,8 +92,8 @@ class ProduktyWSieciClient:
                 response_json = response.json()
                 if 'errors' in response_json:
                     errorTable = response_json['errors']
-                    if (errorTable and isinstance(errorTable, list) and errorTable[0]['message']):
-                        if (errorTable[0]['message'] == NOT_FOUND_ERRORMSG):
+                    if errorTable and isinstance(errorTable, list) and errorTable[0]['message']:
+                        if errorTable[0]['message'] == NOT_FOUND_ERRORMSG:
                             return None
                         else:
                             raise ApiException(errorTable[0]['message'])

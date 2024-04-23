@@ -1,5 +1,4 @@
 import functools
-import os
 from pathlib import Path
 
 from botocore.exceptions import ClientError

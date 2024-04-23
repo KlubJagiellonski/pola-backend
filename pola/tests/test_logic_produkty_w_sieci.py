@@ -1,6 +1,7 @@
+from functools import reduce
+
 from parameterized import parameterized
 from test_plus import TestCase
-from functools import reduce
 
 from pola import logic_produkty_w_sieci
 from pola.gpc.factories import GPCBrickFactory
@@ -82,7 +83,8 @@ class TestCreateFromApi(TestCase):
         logConcat = reduceLogs(log)
         self.assertIn(
             'Result contains information about company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
-            logConcat)
+            logConcat,
+        )
         self.assertIn('Company created: True', logConcat)
         self.assertIn('Result contains information about brand: name=Wawel. Checking db.', logConcat)
         self.assertIn('Brand created: True', logConcat)
@@ -127,7 +129,8 @@ class TestCreateFromApi(TestCase):
         logConcat = reduceLogs(log)
         self.assertIn(
             'Result contains information about company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
-            logConcat)
+            logConcat,
+        )
         self.assertIn('Company created: True', logConcat)
         self.assertIn('Result contains information about brand: name=Wawel. Checking db.', logConcat)
         self.assertIn('Brand created: True', logConcat)
@@ -206,8 +209,9 @@ class TestCreateFromApi(TestCase):
         self.assertEqual(product_db.company.name, product_query_response['company']['name'])
         self.assertEqual(Report.objects.count(), 0)
         logConcat = reduceLogs(log)
-        self.assertIn('Result contains information about company: name=company-name, nip=7792308851. Checking db.',
-                      logConcat)
+        self.assertIn(
+            'Result contains information about company: name=company-name, nip=7792308851. Checking db.', logConcat
+        )
         self.assertIn('Company created: True', logConcat)
         self.assertIn('Result miss information about brand.', logConcat)
         self.assertIn('Product missing. Creating a new product.', logConcat)
@@ -241,8 +245,7 @@ class TestCreateFromApi(TestCase):
         self.assertIsNone(product_db.company)
         self.assertEqual(Report.objects.count(), 0)
         logConcat = reduceLogs(log)
-        self.assertIn(
-            'Result miss information about company.', logConcat)
+        self.assertIn('Result miss information about company.', logConcat)
         self.assertIn('Result contains information about brand: name=4Her. Checking db.', logConcat)
         self.assertIn('Brand created: True', logConcat)
         self.assertIn('Product missing. Creating a new product.', logConcat)
@@ -288,8 +291,8 @@ class TestCreateFromApi(TestCase):
         self.assertEqual(Report.objects.count(), 0)
         logConcat = reduceLogs(log)
         self.assertIn(
-            'Result contains information about company: name=company-name, nip=7792308851. Checking db.',
-            logConcat)
+            'Result contains information about company: name=company-name, nip=7792308851. Checking db.', logConcat
+        )
         self.assertIn('Company created: True', logConcat)
         self.assertIn('Result contains information about brand: name=4Her. Checking db.', logConcat)
         self.assertIn('Brand created: True', logConcat)
@@ -373,8 +376,8 @@ class TestCreateFromApi(TestCase):
         self.assertEqual(Report.objects.count(), 0)
         logConcat = reduceLogs(log)
         self.assertIn(
-            'Result contains information about company: name=company-name, nip=7792308851. Checking db.',
-            logConcat)
+            'Result contains information about company: name=company-name, nip=7792308851. Checking db.', logConcat
+        )
         self.assertIn('Company created: True', logConcat)
         self.assertIn('Result miss information about brand.', logConcat)
         self.assertIn('Product exists. Updating a product.', logConcat)
@@ -428,7 +431,8 @@ class TestCreateFromApi(TestCase):
         logConcat = reduceLogs(log)
         self.assertIn(
             'Result contains information about company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
-            logConcat)
+            logConcat,
+        )
         self.assertIn('Company created: True', logConcat)
         self.assertIn('Result contains information about brand: name=Wawel. Checking db.', logConcat)
         self.assertIn('Brand created: True', logConcat)

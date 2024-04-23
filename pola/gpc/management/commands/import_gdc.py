@@ -255,7 +255,5 @@ class Command(BaseCommand):
         if options['interactive'] and not ask_yes_no(f'Prepared plan \n{repr(plan)}\n. Proceed? (Y/n)'):
             self.stdout.write(self.style.ERROR('Operation cancelled.'))
             return
-
         executor = GDCImportPlanExecutor(output=self.stderr)
         executor.start(plan)
-

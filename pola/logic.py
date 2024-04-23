@@ -90,8 +90,10 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
                 ]
         else:
             result['name'] = 'Nieznany produkt'
-            result['altText'] = ('Produkt nie został znaleziony w bazie i nie udało się go automatycznie utworzyć '
-                                 'na bazie danych zewnętrznych.')
+            result['altText'] = (
+                'Produkt nie został znaleziony w bazie i nie udało się go automatycznie utworzyć '
+                'na bazie danych zewnętrznych.'
+            )
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
         result['name'] = 'Nieprawidłowy kod'

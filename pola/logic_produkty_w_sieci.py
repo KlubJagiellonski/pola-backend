@@ -93,8 +93,12 @@ def create_from_api(code: str, get_products_response: Optional[ProductBase], pro
             product_commit_desc += 'Marka produktu zmieniona na podstawie bazy GS1. '
 
     if product.gpc_brick:
-        if (result_product and result_product.gpc and len(result_product.gpc) > 0 and
-            product.gpc_brick.code != result_product.gpc[0].code):
+        if (
+            result_product
+            and result_product.gpc
+            and len(result_product.gpc) > 0
+            and product.gpc_brick.code != result_product.gpc[0].code
+        ):
             LOGGER.info(
                 "GPC Brick mismatch. Old value: %s, new name: %s, Creating a report.",
                 product.name,
