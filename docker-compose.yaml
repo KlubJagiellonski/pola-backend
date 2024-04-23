@@ -64,6 +64,7 @@ services:
       - "8501:8501"
     expose:
       - 8501
+    restart: always
 
   web-collectstatic:
     <<: *pola-backend-common
