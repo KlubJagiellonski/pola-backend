@@ -9,7 +9,7 @@ from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import connection
 from django.db.models import Q
 from django.db.models.functions import Length
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.encoding import force_str
@@ -249,7 +249,7 @@ class AdminStatsPageView(QueryStatsPageView):
 
 class ReleaseView(TemplateView):
     template_name = "pages/release-info.html"
-    GITHUB_LINK_FORMAT = "https://github.com/KlubJagiellonski/pola-backend/commit/{}"
+    GITHUB_LINK_FORMAT = "https://github.com/KlubJagiellonski/pola-backend/commits/{}"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -262,6 +262,13 @@ class ReleaseView(TemplateView):
             }
         )
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get('Content-Type') == 'application/json':
+            data = {'release_sha': context['release_sha'], 'release_link': context['release_link']}
+            return JsonResponse(data)
+        else:
+            return super().render_to_response(context, **response_kwargs)
 
 
 class AppConfigurationUpdateView(LoginPermissionRequiredMixin, FormValidMessageMixin, UpdateView):

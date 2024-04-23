@@ -89,6 +89,13 @@ class TestReleaseView(TemplateUsedMixin, TestCase):
             self.assertContains(resp, '9e905684bb2cf6bdf074224e50d1c58e43740bba')
             self.assertContains(resp, 'KlubJagiellonski/pola-backend')
 
+    def test_return_json(self):
+        with mock.patch.dict('os.environ', RELEASE_SHA='9e905684bb2cf6bdf074224e50d1c58e43740bba'):
+            resp = self.client.get(self.url, HTTP_CONTENT_TYPE='application/json')
+            self.assertEqual(resp.status_code, 200)
+            self.assertEqual(resp['Content-Type'], 'application/json')
+            self.assertEqual(resp.json().keys(), ['release_sha', 'release_link'])
+
 
 class TestAppConfigurationUpdateView(TemplateUsedMixin, PermissionMixin, TestCase):
     template_name = 'pages/app_config_form.html'
