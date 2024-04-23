@@ -27,7 +27,9 @@ def get_candidates(file_path):
         candidates.append(file_path)
     splited_path = Path(file_path).suffix
     if not splited_path:
-        candidates.append(os.path.join(file_path, "index.html"))
+        candidates.append(file_path + "/index.html")
+        # używamy s3, a nie lokalnego filesystemu, więc nie powinniśmy używać os.path.join
+        # bo i tak separatorem ścieżki na s3 jest zawsze /
     return candidates
 
 
@@ -36,8 +38,11 @@ def head_object(filepath):
     s3_client = create_s3_client()
     for candidate_key in get_candidates(filepath):
         try:
-            s3_obj = s3_client.head_object(Bucket=settings.AWS_STORAGE_WEB_BUCKET_NAME, Key=candidate_key)
-            s3_obj['Key'] = candidate_key
+            hash_key = candidate_key
+            if settings.USE_ESCAPED_S3_PATHS and ('\\' in candidate_key):
+                hash_key = candidate_key.replace("\\", "___")
+            s3_obj = s3_client.head_object(Bucket=settings.AWS_STORAGE_WEB_BUCKET_NAME, Key=hash_key)
+            s3_obj['Key'] = hash_key
             return s3_obj
         except ClientError as ex:
             if ex.response['Error']['Code'] in ('NoSuchKey', '404'):

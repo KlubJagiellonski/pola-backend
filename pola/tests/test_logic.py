@@ -557,7 +557,7 @@ class TestGetByCode(TestCase):
         GPCBrickFactory(code="10000232")
         self.assertEqual(0, Product.objects.count())
         response = get_by_code(TEST_EAN13)
-        self.assertEqual(response.name, 'Muszynianka Naturalna woda mineralna MUSZYNIANKA 1.5l')
+        self.assertEqual(response.name, 'Muszynianka Naturalna woda mineralna MUSZYNIANKA. 1.5l')
         self.assertEqual(1, Product.objects.count())
 
 

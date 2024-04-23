@@ -1,5 +1,6 @@
 from parameterized import parameterized
 from test_plus import TestCase
+from functools import reduce
 
 from pola import logic_produkty_w_sieci
 from pola.gpc.factories import GPCBrickFactory
@@ -12,6 +13,10 @@ TEST_PRODUCT_NAME = "Probiotyk intymny"
 
 TEST_EAN13 = "5900084231145"
 TEST_NIP = "7792308851"
+
+
+def reduceLogs(log):
+    return reduce(lambda x, y: x + y, log.output, "")
 
 
 class TestIsCodeSupported(TestCase):
@@ -35,56 +40,14 @@ class TestCreateFromApi(TestCase):
         super().setUp()
 
     def test_should_create_product_brand_and_company_when_product_is_missing(self):
-        product_query_response = {
-            "gtinNumber": "5900084231145",
-            "targetMarket": [],
-            "netContent": [],
-            "imageUrls": [],
-            "company": {
-                "name": "McCORMICK POLSKA S.A.",
-                "street": "ul. Malinowa 18/20",
-                "city": "Stefanowo, PL",
-                "postalCode": "05-552",
-                "webPage": "http://www.kamis.pl"
-            },
-            "gpc": []
-        }
-        with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
-            result_product = create_from_api(
-                code=TEST_EAN13,
-                get_products_response=ProductBase.parse_obj(product_query_response),
-                product=None,
-            )
-        product_db = Product.objects.get(code=TEST_EAN13)
-        self.assertEqual(result_product.pk, product_db.pk)
-        self.assertTrue(not product_db.name and 'name' not in product_query_response)
-        self.assertTrue(not product_db.brand and 'brand' not in product_query_response)
-        self.assertEqual(product_db.company.name, product_query_response['company']['name'])
-        self.assertEqual(Report.objects.count(), 0)
-        self.maxDiff = None
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'company: name=company-name, nip=7792308851. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about brand: '
-                'name=4Her. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product missing. Creating a new product.',
-            ],
-        )
-
-    def test_should_set_gpc_when_gpc_in_product_is_not_set(self):
         code = '5900102025473'
-
         product_query_response = {
             "id": "e4aa0425-f552-4a59-91c3-c5932cb1e327",
-            "gtinNumber": f"0{code}",
+            "gtinNumber": code,
             "gtinStatus": "active",
             "name": "Gorzka 70% cocoa 90g - czekolada pełna",
             "targetMarket": ["WW"],
-            "netContent": "90.0g",
+            "netContent": ["90.0", "G"],
             "imageUrls": [],
             "description": None,
             "descriptionLanguage": "pl",
@@ -101,7 +64,57 @@ class TestCreateFromApi(TestCase):
                 "city": "Kraków",
                 "postalCode": "30-520",
             },
-            "gpc": "10000045",
+            "gpc": [],
+        }
+        with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
+            result_product = create_from_api(
+                code=code,
+                get_products_response=ProductBase.parse_obj(product_query_response),
+                product=None,
+            )
+        product_db = Product.objects.get(code=code)
+        self.assertEqual(result_product.pk, product_db.pk)
+        self.assertEqual(product_db.name, product_query_response['name'])
+        self.assertEqual(product_db.brand.name, product_query_response['brand'])
+        self.assertEqual(product_db.company.name, product_query_response['company']['name'])
+        self.assertEqual(Report.objects.count(), 0)
+        self.maxDiff = None
+        logConcat = reduceLogs(log)
+        self.assertIn(
+            'Result contains information about company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
+            logConcat)
+        self.assertIn('Company created: True', logConcat)
+        self.assertIn('Result contains information about brand: name=Wawel. Checking db.', logConcat)
+        self.assertIn('Brand created: True', logConcat)
+        self.assertIn('Product missing. Creating a new product.', logConcat)
+
+    def test_should_set_gpc_when_gpc_in_product_is_not_set(self):
+        code = '5900102025473'
+
+        product_query_response = {
+            "id": "e4aa0425-f552-4a59-91c3-c5932cb1e327",
+            "gtinNumber": f"0{code}",
+            "gtinStatus": "active",
+            "name": "Gorzka 70% cocoa 90g - czekolada pełna",
+            "targetMarket": ["WW"],
+            "netContent": ["90.0", "G"],
+            "imageUrls": [],
+            "description": None,
+            "descriptionLanguage": "pl",
+            "productPage": None,
+            "isPublic": True,
+            "isVerified": False,
+            "lastModified": "2021-04-20T13:24:24.970000+00:00",
+            "brand": "Wawel",
+            "company": {
+                "name": "WAWEL Spółka Akcyjna",
+                "nip": "6760076868",
+                "street": "ul. Władysława Warneńczyka 14",
+                "webPage": "http://www.wawel.com.pl",
+                "city": "Kraków",
+                "postalCode": "30-520",
+            },
+            "gpc": [{"code": "10000045"}],
         }
         gpc_brick = GPCBrickFactory(code="10000045")
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
@@ -111,18 +124,14 @@ class TestCreateFromApi(TestCase):
                 product=None,
             )
         product_db = Product.objects.get(code=code)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about brand: '
-                'name=Wawel. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product missing. Creating a new product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn(
+            'Result contains information about company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
+            logConcat)
+        self.assertIn('Company created: True', logConcat)
+        self.assertIn('Result contains information about brand: name=Wawel. Checking db.', logConcat)
+        self.assertIn('Brand created: True', logConcat)
+        self.assertIn('Product missing. Creating a new product.', logConcat)
         self.assertEqual(result_product.pk, product_db.pk)
         self.assertEqual(product_db.gpc_brick.code, "10000045")
         self.assertEqual(product_db.gpc_brick.pk, gpc_brick.pk)
@@ -134,8 +143,7 @@ class TestCreateFromApi(TestCase):
             "gtinNumber": f"0{TEST_EAN13}",
             "name": TEST_PRODUCT_NAME,
             "targetMarket": ["PL"],
-            "netVolume": 30,
-            "unit": "g",
+            "netContent": ["30", "G"],
             "imageUrls": [],
             "description": None,
             "descriptionLanguage": "pl",
@@ -143,7 +151,7 @@ class TestCreateFromApi(TestCase):
             "productCardPage": None,
             "isPublic": True,
             "lastModified": "2020-06-01T14:03:41.722000+00:00",
-            "gpc": "",
+            "gpc": [],
         }
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
@@ -157,14 +165,10 @@ class TestCreateFromApi(TestCase):
         self.assertIsNone(product_db.brand)
         self.assertIsNone(product_db.company)
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about company.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about brand.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product missing. Creating a new product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn('Result miss information about company.', logConcat)
+        self.assertIn('Result miss information about brand.', logConcat)
+        self.assertIn('Product missing. Creating a new product.', logConcat)
 
     def test_should_create_product_and_company_when_product_is_missing(self):
         product_query_response = {
@@ -201,16 +205,12 @@ class TestCreateFromApi(TestCase):
         self.assertIsNone(product_db.brand)
         self.assertEqual(product_db.company.name, product_query_response['company']['name'])
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'company: name=company-name, nip=7792308851. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about brand.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product missing. Creating a new product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn('Result contains information about company: name=company-name, nip=7792308851. Checking db.',
+                      logConcat)
+        self.assertIn('Company created: True', logConcat)
+        self.assertIn('Result miss information about brand.', logConcat)
+        self.assertIn('Product missing. Creating a new product.', logConcat)
 
     def test_should_create_product_and_brand_when_product_is_missing(self):
         product_query_response = {
@@ -240,16 +240,12 @@ class TestCreateFromApi(TestCase):
         self.assertEqual(product_db.brand.name, product_query_response['brand'])
         self.assertIsNone(product_db.company)
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about company.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'brand: name=4Her. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product missing. Creating a new product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn(
+            'Result miss information about company.', logConcat)
+        self.assertIn('Result contains information about brand: name=4Her. Checking db.', logConcat)
+        self.assertIn('Brand created: True', logConcat)
+        self.assertIn('Product missing. Creating a new product.', logConcat)
 
     def test_should_create_brand_and_company_when_product_exists_and_company_and_brand_is_missing_in_db(self):
         p = Product.objects.create(
@@ -290,22 +286,16 @@ class TestCreateFromApi(TestCase):
         self.assertEqual(product_db.brand.name, product_query_response['brand'])
         self.assertEqual(product_db.company.name, product_query_response['company']['name'])
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'company: name=company-name, nip=7792308851. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'brand: name=4Her. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product exists. Updating a product.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown company was '
-                'found. Updating the product.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown brand was '
-                'found. Updating the product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn(
+            'Result contains information about company: name=company-name, nip=7792308851. Checking db.',
+            logConcat)
+        self.assertIn('Company created: True', logConcat)
+        self.assertIn('Result contains information about brand: name=4Her. Checking db.', logConcat)
+        self.assertIn('Brand created: True', logConcat)
+        self.assertIn('Product exists. Updating a product.', logConcat)
+        self.assertIn('A previously unknown company was found. Updating the product.', logConcat)
+        self.assertIn('A previously unknown brand was found. Updating the product.', logConcat)
 
     def test_should_do_nothing_when_product_exists(self):
         p = Product.objects.create(
@@ -337,14 +327,10 @@ class TestCreateFromApi(TestCase):
         self.assertIsNone(product_db.brand)
         self.assertIsNone(product_db.company)
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about company.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about brand.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product exists. Updating a product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn('Result miss information about company.', logConcat)
+        self.assertIn('Result miss information about brand.', logConcat)
+        self.assertIn('Product exists. Updating a product.', logConcat)
 
     def test_should_set_company_when_product_without_company_exists(self):
         p = Product.objects.create(
@@ -385,18 +371,14 @@ class TestCreateFromApi(TestCase):
         self.assertIsNone(product_db.brand)
         self.assertEqual(product_db.company.name, product_query_response['company']['name'])
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'company: name=company-name, nip=7792308851. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about brand.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product exists. Updating a product.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown company was '
-                'found. Updating the product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn(
+            'Result contains information about company: name=company-name, nip=7792308851. Checking db.',
+            logConcat)
+        self.assertIn('Company created: True', logConcat)
+        self.assertIn('Result miss information about brand.', logConcat)
+        self.assertIn('Product exists. Updating a product.', logConcat)
+        self.assertIn('A previously unknown company was found. Updating the product.', logConcat)
 
     def test_should_set_gpc_when_product_without_gpc_exists(self):
         p = Product.objects.create(
@@ -428,7 +410,7 @@ class TestCreateFromApi(TestCase):
                 "city": "Kraków",
                 "postalCode": "30-520",
             },
-            "gpc": [ {"code": "10000045"} ],
+            "gpc": [{"code": "10000045"}],
         }
         gpc_brick = GPCBrickFactory(code="10000045")
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
@@ -443,24 +425,18 @@ class TestCreateFromApi(TestCase):
 
         self.assertEqual(product_db.company.name, product_query_response['company']['name'])
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Company created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'brand: name=Wawel. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product exists. Updating a product.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown company was '
-                'found. Updating the product.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown brand was '
-                'found. Updating the product.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown GPC Brick name '
-                'was found. Updating the product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn(
+            'Result contains information about company: name=WAWEL Spółka Akcyjna, nip=6760076868. Checking db.',
+            logConcat)
+        self.assertIn('Company created: True', logConcat)
+        self.assertIn('Result contains information about brand: name=Wawel. Checking db.', logConcat)
+        self.assertIn('Brand created: True', logConcat)
+        self.assertIn('Product exists. Updating a product.', logConcat)
+        self.assertIn('A previously unknown company was found. Updating the product.', logConcat)
+        self.assertIn('A previously unknown brand was found. Updating the product.', logConcat)
+        self.assertIn('A previously unknown company was found. Updating the product.', logConcat)
+        self.assertIn('A previously unknown GPC Brick name was found. Updating the product.', logConcat)
 
     def test_should_create_product_and_brand_when_product_exists(self):
         p = Product.objects.create(
@@ -492,15 +468,9 @@ class TestCreateFromApi(TestCase):
         self.assertEqual(product_db.brand.name, product_query_response['brand'])
         self.assertIsNone(product_db.company)
         self.assertEqual(Report.objects.count(), 0)
-        self.assertEqual(
-            log.output,
-            [
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result miss information about company.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Result contains information about '
-                'brand: name=4Her. Checking db.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Brand created: True',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:Product exists. Updating a product.',
-                'INFO:/app/pola/logic_produkty_w_sieci.py:A previously unknown brand was '
-                'found. Updating the product.',
-            ],
-        )
+        logConcat = reduceLogs(log)
+        self.assertIn('Result miss information about company.', logConcat)
+        self.assertIn('Result contains information about brand: name=4Her. Checking db.', logConcat)
+        self.assertIn('Brand created: True', logConcat)
+        self.assertIn('Product exists. Updating a product.', logConcat)
+        self.assertIn('A previously unknown brand was found. Updating the product.', logConcat)

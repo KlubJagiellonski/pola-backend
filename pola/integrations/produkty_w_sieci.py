@@ -24,7 +24,7 @@ class CompanyBase(BaseModel):
 
 class GpcBase(BaseModel):
     code: str
-    text: str
+    text: Optional[str]
 
 
 class ProductBase(BaseModel):
