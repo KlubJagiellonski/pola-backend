@@ -277,7 +277,9 @@ class TestProductBulkCreate(PermissionMixin, WebTestMixin, TestCase):
         )
         messages = list(response.context['messages'])
         self.assertEqual(1, len(messages))
-        self.assertEqual(messages[0].message, 'Nie udało się zapisać 1 produktów.\nNiepowodzenia: P1 (123)')
+        self.assertEqual(
+            messages[0].message, 'Nie udało się zapisać 1 produktów.\nBledy: Produkt nie wymaga zmiany: P1 (123)'
+        )
 
     def test_unknown_company(self):
         self.login()
