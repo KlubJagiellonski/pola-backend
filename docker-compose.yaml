@@ -50,6 +50,17 @@ services:
       - "8080:8080"
     restart: always
 
+  self-management:
+    build:
+      context: ./self-management
+      args:
+        - PYTHON_VERSION=${PYTHON_VERSION-3.9}
+    image: pola-backend_web:latest
+
+    env_file: .env
+    volumes:
+      - ./self-management/:/app/
+
   web-collectstatic:
     <<: *pola-backend-common
     restart: "no"
