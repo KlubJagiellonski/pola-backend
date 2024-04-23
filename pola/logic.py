@@ -155,8 +155,6 @@ def handle_multiple_companies(code, companies, result, stats):
         append_brands_if_enabled(company, company_data)
         stats['was_plScore'] = all(get_plScore(c) for c in companies)
         companies_data.append(company_data)
-    if len(companies) > 1:
-        result['name'] = "Marka własna - Sieć Lidl"
     result['companies'] = companies_data
 
 
