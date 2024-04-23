@@ -2,6 +2,7 @@
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.http import HttpResponseRedirect, QueryDict
 from django.urls import reverse, reverse_lazy
 from django.views.generic.detail import DetailView
@@ -141,10 +142,10 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['report_list'] = Report.objects.only_open().filter(product__company=self.get_object())
+        context['report_list'] = Report.objects.only_open().filter(product__company=self.object)
 
-        context['brand_list'] = Brand.objects.filter(company=self.get_object())
-        context['product_list'] = Product.objects.filter(company=self.get_object()).order_by('-query_count')
+        context['brand_list'] = Brand.objects.filter(company=self.object)
+        context['product_list'] = Product.objects.filter(company=self.object).order_by('-query_count')
 
         return context
 
@@ -210,6 +211,15 @@ class BrandDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, DetailVi
         'name',
         'common_name',
     )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['total_query_count'] = Product.objects.filter(brand=self.object).aggregate(total=Sum('query_count'))[
+            'total'
+        ]
+
+        return context
 
 
 class BrandAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
