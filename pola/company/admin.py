@@ -4,6 +4,7 @@ from reversion.admin import VersionAdmin
 from .models import Brand, Company
 
 
+@admin.register(Company)
 class CompanyAdmin(VersionAdmin):
     list_display = (
         'id',
@@ -15,7 +16,5 @@ class CompanyAdmin(VersionAdmin):
     )
     search_fields = ('name',)
 
-
-admin.site.register(Company, CompanyAdmin)
 
 admin.site.register(Brand, admin.ModelAdmin)

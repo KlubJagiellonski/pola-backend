@@ -7,14 +7,13 @@ class AttachmentIline(admin.TabularInline):
     model = Attachment
 
 
+@admin.register(Attachment)
 class AttachmentAdmin(admin.ModelAdmin):
     list_display = ('id', 'report', 'attachment')
     list_filter = ('report',)
 
 
-admin.site.register(Attachment, AttachmentAdmin)
-
-
+@admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -27,6 +26,3 @@ class ReportAdmin(admin.ModelAdmin):
     list_filter = ('product', 'created', 'resolved_at', 'resolved_by')
     date_hierarchy = 'created'
     inlines = (AttachmentIline,)
-
-
-admin.site.register(Report, ReportAdmin)
