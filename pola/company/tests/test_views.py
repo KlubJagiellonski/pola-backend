@@ -50,6 +50,59 @@ class TestCompanyCreateView(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('company:create')
     template_name = 'company/company_form.html'
 
+    def test_form_success(self):
+        self.login()
+        post_data = {
+            "name": "",
+            "official_name": "Test Company",
+            "common_name": "Nazwa dla uzytkownika",
+            "is_friend": "False",
+            "display_brands_in_description": "False",
+            "plCapital": "100",
+            "plWorkers": "100",
+            "plRnD": "100",
+            "plRegistered": "100",
+            "plNotGlobEnt": "100",
+            "description": "",
+            "sources": "",
+            "verified": "False",
+            "Editor_notes": "",
+            "nip": "",
+            "address": "",
+            "logotype": "",
+            "official_url": "",
+            "commit_desc": "Opis zmiany",
+            "brand_set-TOTAL_FORMS": "3",
+            "brand_set-INITIAL_FORMS": "0",
+            "brand_set-MIN_NUM_FORMS": "0",
+            "brand_set-MAX_NUM_FORMS": "1000",
+            "brand_set-__prefix__-name": "",
+            "brand_set-__prefix__-common_name": "",
+            "brand_set-__prefix__-company": "",
+            "brand_set-__prefix__-id": "",
+            "brand_set-__prefix__-DELETE": "on",
+            "brand_set-0-name": "Test Brand",
+            "brand_set-0-common_name": "Nazwa dla uzytkownika marki",
+            "brand_set-0-company": "",
+            "brand_set-0-id": "",
+            "brand_set-1-name": "",
+            "brand_set-1-common_name": "",
+            "brand_set-1-company": "",
+            "brand_set-1-id": "",
+            "brand_set-2-name": "",
+            "brand_set-2-common_name": "",
+            "brand_set-2-company": "",
+            "brand_set-2-id": "",
+            "action": "Save",
+        }
+        response = self.client.post(self.url, post_data)
+
+        self.assertEqual(Company.objects.count(), 1)
+        self.assertEqual(Brand.objects.count(), 1)
+        self.assertEqual(Company.objects.first().official_name, 'Test Company')
+        # self.assertEqual(Brand.objects.first().name, 'Test Brand')
+        self.assertEqual(response.status_code, 302)
+
 
 class TestCompanyCreateFromKRSView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('company:create_from_krs')

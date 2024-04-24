@@ -12,7 +12,26 @@
 {% endblock %}
 
 {% block content %}
-    {% crispy form %}
+    <form
+        method="POST"
+        action="{{ form.helper.form_action }}"
+        {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+        <div class="form-horizontal">
+            {% crispy form %}
+        </div>
+        <div class="brand-formset">
+            {% crispy brand_formset brand_formset_helper %}
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="aab controls col-lg-3"></div>
+                <div class="controls col-lg-9">
+                    <input type="submit" name="action" value="Save" class="btn btn-primary btn-primary" id="submit-id-action">
+                    <input type="reset" name="reset" value="Przywróć poprzednie" class="btn btn-inverse" id="reset-id-reset">
+                </div>
+            </div>
+        </div>
+    </form>
 {% endblock content %}
 
 {% block javascript %}
