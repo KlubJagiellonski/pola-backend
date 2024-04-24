@@ -13,6 +13,7 @@ from reversion import revisions as reversion
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from pola.concurency import concurency
+from pola.logic_score import get_pl_score
 
 
 class IntegerRangeField(models.IntegerField):
@@ -147,6 +148,10 @@ class Company(TimeStampedModel):
     )
 
     objects = CompanyQuerySet.as_manager()
+
+    @property
+    def pl_score(self):
+        return get_pl_score(self)
 
     def increment_query_count(self):
         with connection.cursor() as cursor:

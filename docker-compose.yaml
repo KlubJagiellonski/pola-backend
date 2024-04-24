@@ -82,7 +82,7 @@ services:
       - .:/app
     working_dir: /app
     restart: "no"
-    command: sh -c "npm install && npm run build"
+#    command: sh -c "npm install && npm run build"
 
   minio:
     image: minio/minio:RELEASE.2022-07-30T05-21-40Z

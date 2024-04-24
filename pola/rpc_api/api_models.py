@@ -1,6 +1,6 @@
 from typing import Optional, TypedDict
 
-from pola import logic
+import pola.logic_score
 from pola.product.models import Product
 
 
@@ -26,7 +26,8 @@ class SearchResult(TypedDict):
             code=product.code,
             company=(
                 CompanyBasicInfo(
-                    name=product.company.common_name or product.company.name, score=logic.get_plScore(product.company)
+                    name=product.company.common_name or product.company.name,
+                    score=pola.logic_score.get_pl_score(product.company),
                 )
                 if product.company and (product.company.common_name or product.company.name)
                 else None
