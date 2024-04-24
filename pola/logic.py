@@ -8,6 +8,7 @@ from pola.integrations.produkty_w_sieci import (
     produkty_w_sieci_client,
 )
 from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
+from pola.logic_score import get_pl_score
 from pola.product.models import Product
 from pola.text_utils import strip_urls_newlines
 
@@ -121,7 +122,7 @@ def handle_companies_when_multiple_companies_are_not_supported(
     company_data = serialize_company(company)
     append_ru_by_warning_to_description(code, company_data)
     append_brands_if_enabled(company, company_data)
-    stats['was_plScore'] = bool(get_plScore(company))
+    stats['was_plScore'] = bool(get_pl_score(company))
 
     result.update(company_data)
     stats['was_verified'] = company.verified
@@ -160,7 +161,7 @@ def handle_multiple_companies(code, companies, result, stats):
         company_data = serialize_company(company)
         append_ru_by_warning_to_description(code, company_data)
         append_brands_if_enabled(company, company_data)
-        stats['was_plScore'] = all(get_plScore(c) for c in companies)
+        stats['was_plScore'] = all(get_pl_score(c) for c in companies)
         companies_data.append(company_data)
     result['companies'] = companies_data
 
@@ -226,7 +227,7 @@ def handle_unknown_company(code, report, result, multiple_company_supported):
 
 
 def serialize_company(company):
-    plScore = get_plScore(company)
+    plScore = get_pl_score(company)
     company_data = DEFAULT_COMPANY_DATA.copy()
     # we know the manufacturer of the product
     company_data['name'] = company.common_name or company.official_name or company.name
@@ -279,22 +280,3 @@ def get_by_code(code):
         except ApiException as ex:
             sentry_sdk.capture_exception(ex)
     return Product.objects.create(code=code)
-
-
-def get_plScore(company):
-    if (
-        company.plCapital is not None
-        and company.plWorkers is not None
-        and company.plRnD is not None
-        and company.plRegistered is not None
-        and company.plNotGlobEnt is not None
-    ):
-        return int(
-            0.35 * company.plCapital
-            + 0.30 * company.plWorkers
-            + 0.15 * company.plRnD
-            + 0.10 * company.plRegistered
-            + 0.10 * company.plNotGlobEnt
-        )
-    else:
-        return None

@@ -16,6 +16,13 @@
         {% endif %}
     </div>
 {% endif %}
+
+{% if object.pl_score %}
+    <div class="text-success text-right h3 pull-right">
+        <i class="fa fa-check" title="Zweryfikowana firma"></i>
+        {{ object.pl_score }}
+    </div>
+{% endif %}
 <h1>
     {% if object.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ object.locked_by }}"></i>{% endif %}
     {{ object }}  <small>#{{ object.pk }}</small>
