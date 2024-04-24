@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python_version: ["3.9", "3.10", "3.11"]
+        python_version: ["3.11"]
         django_version: ['current', "4.2.11", "latest"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
