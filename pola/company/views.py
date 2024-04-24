@@ -1,4 +1,6 @@
 # Create your views here.
+import typing
+
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,6 +23,7 @@ from pola.product.models import Product
 from pola.report.models import Report
 from pola.views import ExprAutocompleteMixin
 
+from ..logic import get_plScore
 from .filters import BrandFilter, CompanyFilter
 from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm
 
@@ -115,6 +118,18 @@ class FieldsDisplayMixin:
         return None
 
 
+class CompanyCardModel(typing.NamedTuple):
+    pl_score: int
+    pl_capital: int
+    pl_workers: bool
+    pl_rnd: bool
+    pl_registered: bool
+    pl_not_glob_ent: bool
+    product_count: int
+    product_query_count: int
+    most_popular_code: str
+
+
 class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, DetailView):
     model = Company
     permission_required = 'company.view_company'
@@ -145,8 +160,20 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
         context['report_list'] = Report.objects.only_open().filter(product__company=self.object)
 
         context['brand_list'] = Brand.objects.filter(company=self.object)
-        context['product_list'] = Product.objects.filter(company=self.object).order_by('-query_count')
+        context['product_list'] = Product.objects.filter(company=self.object).order_by('query_count')
 
+        if self.object.verified:
+            context['company_card'] = CompanyCardModel(
+                pl_score=get_plScore(self.object),
+                pl_capital=self.object.plCapital,
+                pl_workers=self.object.plWorkers,
+                pl_rnd=self.object.plRnD,
+                pl_registered=self.object.plRegistered,
+                pl_not_glob_ent=self.object.plNotGlobEnt,
+                product_count=context['product_list'].count(),
+                product_query_count=context['product_list'].aggregate(total=Sum('query_count'))['total'] or 0,
+                most_popular_code=context['product_list'].first().code if context['product_list'] else None,
+            )
         return context
 
 
