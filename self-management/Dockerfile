@@ -1,6 +1,6 @@
 # app/Dockerfile
 
-ARG PYTHON_VERSION="3.9"
+ARG PYTHON_VERSION="3.11"
 FROM python:${PYTHON_VERSION}-slim-bullseye
 
 WORKDIR /app
