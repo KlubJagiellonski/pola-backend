@@ -93,7 +93,7 @@ toml==0.10.2
 tqdm==4.66.2
 traitlets==5.14.3
 typing_extensions==4.11.0
-urllib3==1.26.15
+urllib3==2.2.1
 vcrpy==6.0.1
 waitress==3.0.0
 wcwidth==0.2.13
