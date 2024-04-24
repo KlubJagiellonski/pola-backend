@@ -9,11 +9,8 @@ Local settings
 
 # pylint: disable=unused-wildcard-import
 
-from pathlib import Path
-
 from .tests import *  # noqa: F403
 
-IS_DOCKER = Path('/.dockerenv').exists()
 # DEBUG
 # ------------------------------------------------------------------------------
 DEBUG = env.bool('DJANGO_DEBUG', default=True)  # noqa: F405
@@ -23,7 +20,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'web', '127.0.0.1']
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
-MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware', 'pola.middlewares.SetHostToLocalhost')  # noqa: F405
+MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)  # noqa: F405
 INSTALLED_APPS += ('debug_toolbar',)  # noqa: F405
 
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', '192.168.99.1', '192.168.0.1', '0.0.0.0']
@@ -44,5 +41,8 @@ INSTALLED_APPS += ()
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Your local stuff: Below this line define 3rd party library settings
+MIDDLEWARE += ('pola.middlewares.SetHostToLocalhost',)  # noqa: F405
+USE_X_FORWARDED_HOST = True
+
 AI_SHARED_SECRET = env('AI_SHARED_SECRET', default='')  # noqa: F405
 USE_ESCAPED_S3_PATHS = True

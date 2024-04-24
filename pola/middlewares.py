@@ -53,4 +53,4 @@ class SetHostToLocalhost(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        request.META['HTTP_HOST'] = '127.0.0.1:8080'
+        request.META['HTTP_X_FORWARDED_HOST'] = '127.0.0.1:8080'
