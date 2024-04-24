@@ -208,7 +208,7 @@ class CompanyDetailCompanyCardViewTests(TestCase):
         self.assertEqual(company_card.pl_score, 100)
         self.assertEqual(company_card.product_count, 2)
         self.assertEqual(company_card.product_query_count, 300)
-        self.assertEqual(company_card.most_popular_code, 'ABC123')
+        self.assertEqual(company_card.most_popular_code, 'XYZ789')
 
     def test_verified_company_with_products_and_non_100_score(self):
         self.company.plWorkers = 0

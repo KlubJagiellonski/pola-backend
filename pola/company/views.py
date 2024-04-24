@@ -160,7 +160,7 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
         context['report_list'] = Report.objects.only_open().filter(product__company=self.object)
 
         context['brand_list'] = Brand.objects.filter(company=self.object)
-        context['product_list'] = Product.objects.filter(company=self.object).order_by('query_count')
+        context['product_list'] = Product.objects.filter(company=self.object).order_by('-query_count')
 
         if self.object.verified:
             context['company_card'] = CompanyCardModel(
