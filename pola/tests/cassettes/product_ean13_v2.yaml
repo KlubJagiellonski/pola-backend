@@ -1,0 +1,58 @@
+interactions:
+  - request:
+      body: null
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        User-Agent:
+          - python-requests/2.31.0
+      method: GET
+      uri: https://www.eprodukty.gs1.pl/external_api/v2/products/5901520000059/
+    response:
+      body:
+        string: !!binary |
+          H4sIAAAAAAAAA1VSS27bMBS8CvHWtkxJUGNzF2RV+AOjdlrURhbPIuOypkiCIuEmhk/SY/QIRe/V
+          R7tpEq30hqOZ4TydYB+1XaRupwII4M2El03F89NMYHA5XUWMqQdhkzEDsNgpYs5T//xkNdoDsgWd
+          BzQW2dFJZJ226jrO71ebr4uPt4vpbcHKojGkGDHsVZxjOKgIYgvLGTyQqop3zkZlLxhRZ+tPGdcd
+          7tV9MGS/pVGqvg3aR+3sS5430AztPhGf4vls5YOTqY3LC3Rl636Zdka3IGJIKs+fVdCPWkkQj2h6
+          ggz2ce7kPxAqXtVDXg35h3XJBS9FPSnqyc3NuNqQxS6gle/rILR1nUf7BOL0v67XJtjKF+yZucIV
+          RLXav2TrY1C5E0imYGuUijSRTd2fn62m14NmzTiL60jKMA3k1+JwI8PvX98HjHqkG7s+orlzMnvW
+          9bAec0KPanftAL7F6MVo1L2mLbwZwZkW7amT7YmiX74t8x9Q1VVemPqRQ33Jq/V4cEe0COeH81+w
+          97nVOwIAAA==
+      headers:
+        Allow:
+          - GET, HEAD, OPTIONS
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Language:
+          - en
+        Content-Type:
+          - application/json; charset=utf-8
+        Cross-Origin-Opener-Policy:
+          - same-origin
+        Date:
+          - Sat, 06 Apr 2024 12:30:52 GMT
+        Referrer-Policy:
+          - same-origin
+        Server:
+          - nginx
+        Transfer-Encoding:
+          - chunked
+        Vary:
+          - Accept-Encoding
+          - Accept-Language, origin
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - DENY
+          - SAMEORIGIN
+      status:
+        code: 200
+        message: OK
+version: 1

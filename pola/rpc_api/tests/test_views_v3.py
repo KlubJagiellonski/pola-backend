@@ -1,5 +1,6 @@
 import json
 
+import environ
 import requests
 from test_plus import TestCase
 
@@ -40,7 +41,7 @@ class TestAddAiPics(TestCase, JsonRequestMixin):
         response_data = response.json()
         self.assertEqual(len(response_data['signed_requests']), 1)
         signed_url: str = response_data['signed_requests'][0]
-        self.assertTrue(signed_url.startswith("http://minio:9000"))
+        self.assertTrue(signed_url.startswith(environ.Env().str('POLA_APP_AWS_S3_ENDPOINT_URL')))
 
         # Valid signed URL
         response = requests.put(
@@ -255,7 +256,7 @@ class TestCreateReportV3(TestCase, JsonRequestMixin):
         response_data = response.json()
         self.assertEqual(len(response_data['signed_requests']), 1)
         signed_url: str = response_data['signed_requests'][0]
-        self.assertTrue(signed_url.startswith("http://minio:9000"))
+        self.assertTrue(signed_url.startswith(environ.Env().str('POLA_APP_AWS_S3_ENDPOINT_URL')))
 
         # Valid signed URL
         response = requests.put(signed_url, data=get_dummy_image(), headers={'Content-Type': 'image/jpeg'})

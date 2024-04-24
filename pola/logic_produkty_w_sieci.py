@@ -3,7 +3,7 @@ from typing import Optional
 
 from pola.company.models import Brand, Company
 from pola.gpc.models import GPCBrick
-from pola.integrations.produkty_w_sieci import ProductQueryResult
+from pola.integrations.produkty_w_sieci import ProductBase
 from pola.logic_bot_report import create_bot_report
 from pola.product.models import Product
 from pola.text_utils import strip_dbl_spaces
@@ -16,27 +16,27 @@ def is_code_supported(code: str):
     return code[0:3] == '590' and len(code) == 13
 
 
-def create_from_api(code: str, get_products_response: ProductQueryResult, product: Optional[Product] = None):
+def create_from_api(code: str, get_products_response: Optional[ProductBase], product: Optional[Product] = None):
     if not is_code_supported(code):
         raise Exception(f"Unsupported code: {code}")
-    if get_products_response.count == 1:
-        result_product = get_products_response.results[0]
-    else:
-        result_product = None
-
+    result_product = get_products_response
     result_company = result_product.company if result_product else None
 
     company_created, expected_company = ensure_company_exists(result_company)
     brand_created, expected_brand = ensure_brand_exists(expected_company, result_product)
 
-    if not product:
+    if not result_product:
+        LOGGER.info(f"Did not get a response for product {code}")
+
+    if not product and result_product:
         LOGGER.info("Product missing. Creating a new product.")
         product = Product.objects.create(
             name=result_product.name,
             code=code,
             company=expected_company,
             brand=expected_brand,
-            gpc_brick=GPCBrick.objects.get(code=result_product.gpc) if result_product.gpc else None,
+            # TODO: co jesli jest wiecej niz jeden GPC?
+            gpc_brick=GPCBrick.objects.get(code=result_product.gpc[0].code) if len(result_product.gpc) > 0 else None,
             commit_desc="Produkt utworzony automatycznie na podstawie skanu użytkownika",
         )
         return product
@@ -44,7 +44,7 @@ def create_from_api(code: str, get_products_response: ProductQueryResult, produc
     LOGGER.info("Product exists. Updating a product.")
     product_commit_desc = ""
     if product.name:
-        if result_product.name and product.name != result_product.name:
+        if result_product and result_product.name and product.name != result_product.name:
             LOGGER.info(
                 "Product name mismatch. Old name: %s, new name: %s, Creating a report.",
                 product.name,
@@ -56,7 +56,7 @@ def create_from_api(code: str, get_products_response: ProductQueryResult, produc
                 check_if_already_exists=not company_created,
             )
     else:
-        if result_product.name != code and result_product.name:
+        if result_product and result_product.name != code and result_product.name:
             LOGGER.info("A previously unknown product name was found. Updating the product.")
             product_commit_desc += 'Nazwa produktu zmieniona na podstawie bazy GS1. '
             product.name = result_product.name
@@ -80,7 +80,7 @@ def create_from_api(code: str, get_products_response: ProductQueryResult, produc
 
     if expected_brand:
         if product.brand:
-            if product.brand.name != result_product.brand:
+            if result_product and product.brand.name != result_product.brand:
                 LOGGER.info("Brand name mismatch. Creating a report.")
                 create_bot_report(
                     product,
@@ -93,7 +93,12 @@ def create_from_api(code: str, get_products_response: ProductQueryResult, produc
             product_commit_desc += 'Marka produktu zmieniona na podstawie bazy GS1. '
 
     if product.gpc_brick:
-        if result_product.gpc and product.gpc_brick.code != result_product.gpc:
+        if (
+            result_product
+            and result_product.gpc
+            and len(result_product.gpc) > 0
+            and product.gpc_brick.code != result_product.gpc[0].code
+        ):
             LOGGER.info(
                 "GPC Brick mismatch. Old value: %s, new name: %s, Creating a report.",
                 product.name,
@@ -101,14 +106,14 @@ def create_from_api(code: str, get_products_response: ProductQueryResult, produc
             )
             create_bot_report(
                 product,
-                f"Wg. najnowszego odpytania w bazie ILiM kod GPC tego produktu to: {result_product.gpc}",
+                f"Wg. najnowszego odpytania w bazie ILiM kod GPC tego produktu to: {result_product.gpc[0].code}",
                 check_if_already_exists=not company_created,
             )
     else:
-        if result_product.gpc:
+        if result_product and result_product.gpc:
             LOGGER.info("A previously unknown GPC Brick name was found. Updating the product.")
-            product_commit_desc += 'Kod GPC zmieniona na podstawie bazy GS1. '
-            product.gpc_brick = GPCBrick.objects.get(code=result_product.gpc)
+            product_commit_desc += 'Kod GPC zmieniony na podstawie bazy GS1. '
+            product.gpc_brick = GPCBrick.objects.get(code=result_product.gpc[0].code)
 
     product.gs1_last_response = get_products_response.dict()
     product.save(commit_desc=product_commit_desc)

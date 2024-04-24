@@ -1,10 +1,12 @@
 from random import random
 from time import sleep
-from typing import Optional, Union
+from typing import Optional
 
 import requests
 from django.conf import settings
 from pydantic import BaseModel
+
+NOT_FOUND_ERRORMSG = "not_found"
 
 
 class ApiException(Exception):
@@ -13,28 +15,33 @@ class ApiException(Exception):
 
 class CompanyBase(BaseModel):
     name: str
-    nip: str
-    street: str
-    webPage: str
-    city: str
-    postalCode: str
+    nip: Optional[str]
+    street: Optional[str]
+    webPage: Optional[str]
+    city: Optional[str]
+    postalCode: Optional[str]
+
+
+class GpcBase(BaseModel):
+    code: str
+    text: Optional[str]
 
 
 class ProductBase(BaseModel):
-    id: str
     gtinNumber: str
-    name: str
-    targetMatket: Optional[list[str]]
-    netVolume: Optional[float]
-    unit: Optional[str]
+    gtinStatus: Optional[str]
+    name: Optional[str]
+    targetMarket: list[str]
+    netContent: list[str]
     description: Optional[str]
-    descriptionLanguage: str
-    brand: Optional[str]
-    isPublic: bool
-    gpc: str
-    productPage: Optional[str]
+    descriptionLanguage: Optional[str]
     imageUrls: list[str]
-    lastModified: str
+    productPage: Optional[str]
+    isPublic: Optional[bool]
+    isVerified: Optional[bool]
+    lastModified: Optional[str]
+    gpc: list[GpcBase]
+    brand: Optional[str]
     company: Optional[CompanyBase]
 
 
@@ -42,48 +49,26 @@ class NoResult(BaseModel):
     result: str
 
 
-class ProductQueryResult(BaseModel):
-    count: int
-    next: Optional[str]
-    previous: Optional[str]
-    # fucets:
-    results: Union[list[ProductBase], list[NoResult]]
-
-
 class ProduktyWSieciClient:
-    def __init__(self, api_token: str, base_url: str = "https://www.eprodukty.gs1.pl/external_api/v1/"):
+    def __init__(self, api_token: str, base_url: str = "https://www.eprodukty.gs1.pl/external_api/v2/"):
         self._api_token = api_token
         self._base_url = base_url
 
     def get_products(
         self,
         *,
-        last_modified__gte: Optional[str] = None,
-        name__contains: Optional[str] = None,
-        gtin_number__prefix: Optional[str] = None,
-        brand__contains: Optional[str] = None,
-        gpc_number: Optional[str] = None,
-        limit: Optional[int] = None,
-        offset: Optional[int] = None,
+        gtin_number: str,
         num_retries: Optional[int] = 5,
-    ) -> ProductQueryResult:
-        uri = self._base_url.rstrip("/") + "/products/"
-        params = {
-            "last_modified__gte": last_modified__gte,
-            "name__contains": name__contains,
-            "gtin_number__prefix": gtin_number__prefix,
-            "brand__contains": brand__contains,
-            "gpc_number": gpc_number,
-            "limit": limit,
-            "offset": offset,
-        }
+    ) -> Optional[ProductBase]:
+        uri = self._base_url.rstrip("/") + "/products/" + gtin_number + "/"
+        params = {}
 
         response = self._send_request('get', uri, params=params, num_retries=num_retries)
-        return ProductQueryResult.parse_obj(response)
+        return None if response is None else ProductBase.parse_obj(response)
 
     def _send_request(self, method, url, *, num_retries, **kwargs):
         kwargs.setdefault('headers', {})
-        kwargs['headers']['X-API-Key'] = self._api_token
+        kwargs['headers']['X-API-KEY'] = self._api_token
 
         with requests.Session() as session:
             for retry_num in range(num_retries + 1):
@@ -105,10 +90,16 @@ class ProduktyWSieciClient:
                         continue
 
                 response_json = response.json()
-                if 'message' in response_json:
-                    raise ApiException(response_json['message'])
+                if 'errors' in response_json:
+                    errorTable = response_json['errors']
+                    if errorTable and isinstance(errorTable, list) and errorTable[0]['message']:
+                        if errorTable[0]['message'] == NOT_FOUND_ERRORMSG:
+                            return None
+                        else:
+                            raise ApiException(errorTable[0]['message'])
+                    else:
+                        raise ApiException('Unknown error response: ' + errorTable)
                 break
-
             return response_json
 
 

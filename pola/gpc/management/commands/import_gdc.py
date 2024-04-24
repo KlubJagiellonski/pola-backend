@@ -237,7 +237,7 @@ class Command(BaseCommand):
     help = 'Import GDC data from .xml file'
 
     def add_arguments(self, parser):
-        parser.add_argument('xml_filepath', type=argparse.FileType('r'))
+        parser.add_argument('xml_filepath', type=argparse.FileType(mode='r', encoding='UTF-8'))
         parser.add_argument(
             '--noinput',
             '--no-input',
@@ -255,6 +255,5 @@ class Command(BaseCommand):
         if options['interactive'] and not ask_yes_no(f'Prepared plan \n{repr(plan)}\n. Proceed? (Y/n)'):
             self.stdout.write(self.style.ERROR('Operation cancelled.'))
             return
-
         executor = GDCImportPlanExecutor(output=self.stderr)
         executor.start(plan)

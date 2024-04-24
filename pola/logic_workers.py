@@ -49,11 +49,9 @@ def requery_products(products: Iterable[Product]):
 
         try:
             if is_code_supported(prod.code):
-                products_response = produkty_w_sieci_client.get_products(gtin_number__prefix=f"0{prod.code}")
-
+                products_response = produkty_w_sieci_client.get_products(gtin_number=prod.code)
                 p = create_from_api(prod.code, products_response, product=prod)
-
-                if p.company and p.company.name:
+                if p and p.company and p.company.name:
                     print(p.company.name.encode(), p.brand)
                 else:
                     print(".")

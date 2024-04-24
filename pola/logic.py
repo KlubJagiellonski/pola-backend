@@ -64,29 +64,36 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
     if code.isdigit() and (len(code) == 8 or len(code) == 13):
         # code is EAN8 or EAN13
         product = get_by_code(code)
-        product_company = product.company
-        brand_company = product.brand.company if product.brand else None
-        companies = []
-        if product_company:
-            companies.append(product_company)
-            result['name'] = product_company.common_name or product_company.official_name or product_company.name
-        if brand_company:
-            companies.append(brand_company)
-        companies = list(({c.pk: c for c in companies}).values())
-        result['product_id'] = product.id
-        stats['was_590'] = code.startswith('590')
-        if not product_company:
-            handle_unknown_company(code, report, result, multiple_company_supported)
-        elif multiple_company_supported:
-            handle_multiple_companies(code, companies, result, stats)
+        if product:
+            product_company = product.company
+            brand_company = product.brand.company if product.brand else None
+            companies = []
+            if product_company:
+                companies.append(product_company)
+                result['name'] = product_company.common_name or product_company.official_name or product_company.name
+            if brand_company:
+                companies.append(brand_company)
+            companies = list(({c.pk: c for c in companies}).values())
+            result['product_id'] = product.id
+            stats['was_590'] = code.startswith('590')
+            if not product_company:
+                handle_unknown_company(code, report, result, multiple_company_supported)
+            elif multiple_company_supported:
+                handle_multiple_companies(code, companies, result, stats)
+            else:
+                handle_companies_when_multiple_companies_are_not_supported(
+                    code, companies, multiple_company_supported, result, stats
+                )
+            if product_company:
+                result['all_company_brands'] = [
+                    serialize_brand(brand) for brand in Brand.objects.filter(company=product_company)
+                ]
         else:
-            handle_companies_when_multiple_companies_are_not_supported(
-                code, companies, multiple_company_supported, result, stats
+            result['name'] = 'Nieznany produkt'
+            result['altText'] = (
+                'Produkt nie został znaleziony w bazie i nie udało się go automatycznie utworzyć '
+                'na bazie danych zewnętrznych.'
             )
-        if product_company:
-            result['all_company_brands'] = [
-                serialize_brand(brand) for brand in Brand.objects.filter(company=product_company)
-            ]
     else:
         # not an EAN8 nor EAN13 code. Probably QR code or some error
         result['name'] = 'Nieprawidłowy kod'
@@ -267,8 +274,7 @@ def get_by_code(code):
     except Product.DoesNotExist:
         try:
             if is_code_supported(code) and settings.PRODUKTY_W_SIECI_ENABLE:
-                products_response = produkty_w_sieci_client.get_products(gtin_number__prefix=f"0{code}")
-
+                products_response = produkty_w_sieci_client.get_products(gtin_number=code)
                 return create_from_api(code, products_response, product=None)
         except ApiException as ex:
             sentry_sdk.capture_exception(ex)

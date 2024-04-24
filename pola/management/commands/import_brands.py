@@ -32,7 +32,7 @@ class Command(BaseCommand):
     help = 'Import lidl companies from .tsv file'
 
     def add_arguments(self, parser):
-        parser.add_argument('tsv_filepath', type=argparse.FileType('r'))
+        parser.add_argument('tsv_filepath', type=argparse.FileType(mode='r', encoding='UTF-8'))
         parser.add_argument('company_nip', type=nip_number)
         parser.add_argument(
             '--noinput',
