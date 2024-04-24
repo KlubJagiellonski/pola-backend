@@ -41,7 +41,7 @@ INSTALLED_APPS += ()
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Your local stuff: Below this line define 3rd party library settings
-MIDDLEWARE += ('pola.middlewares.SetHostToLocalhost',)  # noqa: F405
+MIDDLEWARE += ('pola.middlewares.SetHostToLocalhost',)
 USE_X_FORWARDED_HOST = True
 
 AI_SHARED_SECRET = env('AI_SHARED_SECRET', default='')  # noqa: F405
