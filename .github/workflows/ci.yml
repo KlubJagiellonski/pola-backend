@@ -38,8 +38,6 @@ jobs:
         run: |
           latest_version=$(curl 'https://pypi.org/pypi/django/json' | jq .info.version -r)
           echo "DJANGO_VERSION=${latest_version}" | tee "${GITHUB_ENV}";
-        env:
-          DJANGO_VERSION: ${{ matrix.django_version }}
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
