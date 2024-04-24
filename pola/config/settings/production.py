@@ -125,3 +125,5 @@ sentry_sdk.init(
     release=env.str('RELEASE_SHA'),  # noqa: F405
     traces_sample_rate=env.float('SENTRY_TRACES_SAMPLE_RATE', default=0),  # noqa: F405
 )
+
+USE_ESCAPED_S3_PATHS = False
