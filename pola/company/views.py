@@ -23,7 +23,7 @@ from pola.product.models import Product
 from pola.report.models import Report
 from pola.views import ExprAutocompleteMixin
 
-from ..logic import get_plScore
+from ..logic_score import get_pl_score
 from .filters import BrandFilter, CompanyFilter
 from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm
 
@@ -164,7 +164,7 @@ class CompanyDetailView(FieldsDisplayMixin, LoginPermissionRequiredMixin, Detail
 
         if self.object.verified:
             context['company_card'] = CompanyCardModel(
-                pl_score=get_plScore(self.object),
+                pl_score=get_pl_score(self.object),
                 pl_capital=self.object.plCapital,
                 pl_workers=self.object.plWorkers,
                 pl_rnd=self.object.plRnD,
