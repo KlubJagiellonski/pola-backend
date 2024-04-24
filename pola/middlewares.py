@@ -43,3 +43,14 @@ class HostnameRedirectMiddleware(MiddlewareMixin):
             if server_name != catchall:
                 return _get_redirect(catchall, request)
         return None
+
+
+class SetHostToLocalhost(MiddlewareMixin):
+    """
+    Sets the remote host to the local host to bypass OpenAPI-core servers validation.
+
+    For detaisl, see: https://github.com/python-openapi/openapi-core/issues/264
+    """
+
+    def process_request(self, request):
+        request.META['HTTP_X_FORWARDED_HOST'] = '127.0.0.1:8080'
