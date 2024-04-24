@@ -1,5 +1,119 @@
 {%extends 'company/base.html' %}
-{% load i18n humanize %}
+
+{% load i18n humanize pola_extras %}
+
+{% block css %}
+    {{ block.super }}
+    <style>
+        :root {
+            --pola-brand-primary: #d91330;
+            --pola-brand-seconary: #c4c4c4;
+        }
+        .pola-app-company_card {
+            display: flex;
+            align-content: stretch;
+
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+
+        .pola-app-company_card__rating-block {
+            flex: 2;
+        }
+        .pola-app-company_card__stats-block {
+            flex: 1;
+        }
+        .pola-app-company_card__rating-block,
+        .pola-app-company_card__stats-block {
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .pola-app-company_card__score {
+            margin-bottom: 20px;
+        }
+        .pola-app-company_card__score > div:first-child {
+            line-height: 22px;
+            padding: 0;
+            font-weight: 600;
+        }
+
+        .pola-app-company_card__criteria > div {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .pola-app-company_card__stats-block {
+            display: flex;
+            flex-direction: column;
+        }
+        .pola-app-company_card__stats-block > div{
+            flex: 1;
+        }
+
+        .pola-app-company_card__data-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 16px;
+            background-color: var(--pola-brand-primary);
+            color: white;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .pola-app-company_card__data-block > div:first-child {
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .pola-app-company_card__data-block > div:last-child {
+            font-size: 16px;
+        }
+
+        .pola-app__score_bar {
+            width: 100%;
+            height: 26px;
+            background-color: #ddd;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .pola-app__score_bar__score_bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: var(--pola-brand-primary);
+        }
+
+        .pola-app__score_bar__label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            line-height: 26px;
+            padding: 0 10px;
+            color: rgba(0, 0, 0, .8);
+            font-weight: 400;
+        }
+
+        .pola-app-checkmark {
+            display: inline-block;
+            height: 25px;
+            width: 25px;
+            background-color: rgb(160, 160, 160);
+            vertical-align: middle;
+            color: white;
+            font-size: 25px;
+            line-height: 25px;
+        }
+    </style>
+{% endblock css %}
 
 {% block breadcrumbs_rows %}
     <li class="active"><a href="{{ obj.get_absolute_url }}">{{ object }}</a></li>
@@ -140,6 +254,85 @@
             </div>
         </div>
     {% endif %}
-
 </div>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Karta firmy
+    </div>
+    <div class="panel-body">
+        {% if company_card %}
+        <div class="pola-app-company_card">
+            <div class="pola-app-company_card__rating-block">
+                <div class="pola-app-company_card__score">
+                    <div>Punkty w rankingu Poli</div>
+                    <div class="pola-app__score_bar">
+                        <div class="pola-app__score_bar__score_bar" style="width: {{ company_card.pl_score }}%"></div>
+                        <div class="pola-app__score_bar__label">{{ company_card.pl_score }} pkt</div>
+                    </div>
+                </div>
+                <div class="pola-app-company_card__score">
+                    <div>Udział polskiego kapitału:</div>
+                    <div class="pola-app__score_bar">
+                        <div class="pola-app__score_bar__score_bar" style="width: {{ company_card.pl_capital }}%"></div>
+                        <div class="pola-app__score_bar__label">{{ company_card.pl_capital }} %</div>
+                    </div>
+                </div>
+                <div class="pola-app-company_card__criteria">
+                    <div>
+                        <span class="pola-app-checkmark">
+                            {% if company_card.pl_rnd %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}
+                        </span>
+                        produkuje w Polsce
+                    </div>
+                    <div>
+                        <span class="pola-app-checkmark">
+                            {% if company_card.pl_rnd %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}
+                        </span>
+                        prowadzi badania i rozwój w Polsce
+                    </div>
+                    <div>
+                        <span class="pola-app-checkmark">
+                            {% if company_card.pl_registered %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}
+                        </span>
+                        zarejestrowana w Polsce
+                    </div>
+                    <div>
+                        <span class="pola-app-checkmark">
+                            {% if company_card.pl_not_glob_ent %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}
+                        </span>
+                        nie jest częścią zagranicznego koncernu
+                    </div>
+                </div>
+            </div>
+
+            <div class="pola-app-company_card__stats-block">
+                <div class="pola-app-company_card__data-block">
+                    <div>{{ company_card.product_count }}</div>
+                    <div>łączna liczba produktów firmy w bazie aplikacji Pola</div>
+                </div>
+                <div class="pola-app-company_card__data-block">
+                    <div>{{ company_card.product_query_count | intspace }}</div>
+                    <idv>łączna liczba skanowań produktów firmy za pomocą aplikacji Pola</idv>
+                </div>
+                <div class="pola-app-company_card__data-block">
+                    <div>{{ company_card.most_popular_code }}</div>
+                    <div>najczęściej skanowany kod kreskowy firmy</div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            Firma nie jest zweryfikowana
+        {% endif %}
+    </div>
+</div>
+
 {% endblock content %}

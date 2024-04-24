@@ -178,6 +178,69 @@ class TestCompanyDetailView(CompanyInstanceMixin, PermissionMixin, TemplateUsedM
         self.assertEqual([str(p1), str(p3), str(p2)], product_names)
 
 
+class CompanyDetailCompanyCardViewTests(TestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.user = StaffFactory()
+        self.client.login(username=self.user.username, password='pass')
+        self.company = Company.objects.create(
+            name='Test Company',
+            verified=True,
+            plCapital=100,
+            plWorkers=100,
+            plRnD=100,
+            plRegistered=100,
+            plNotGlobEnt=100,
+        )
+        # Assuming Product model and Company have a relationship
+        self.products = [
+            Product.objects.create(company=self.company, code='ABC123', query_count=100),
+            Product.objects.create(company=self.company, code='XYZ789', query_count=200),
+        ]
+        self.url = reverse('company:detail', kwargs={'pk': self.company.pk})
+
+    def test_verified_company_with_products_and_100_score(self):
+        response = self.client.get(self.url)
+
+        self.assertIn('company_card', response.context_data)
+        company_card = response.context_data['company_card']
+        self.assertEqual(company_card.pl_score, 100)
+        self.assertEqual(company_card.product_count, 2)
+        self.assertEqual(company_card.product_query_count, 300)
+        self.assertEqual(company_card.most_popular_code, 'XYZ789')
+
+    def test_verified_company_with_products_and_non_100_score(self):
+        self.company.plWorkers = 0
+        self.company.save()
+
+        response = self.client.get(self.url)
+
+        self.assertIn('company_card', response.context_data)
+        company_card = response.context_data['company_card']
+        self.assertEqual(company_card.pl_score, 70)
+
+    def test_verified_company_no_products(self):
+        # Clear products for this test
+        Product.objects.filter(company=self.company).delete()
+
+        response = self.client.get(self.url)
+
+        self.assertIn('company_card', response.context_data)
+        company_card = response.context_data['company_card']
+        self.assertEqual(company_card.product_count, 0)
+        self.assertEqual(company_card.product_query_count, 0)
+        self.assertIsNone(company_card.most_popular_code)
+
+    def test_unverified_company(self):
+        self.company.verified = False
+        self.company.save()
+
+        response = self.client.get(self.url)
+
+        self.assertNotIn('company_card', response.context_data)
+
+
 class TestCompanyListView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
     url = reverse_lazy('company:list')
     template_name = 'company/company_filter.html'
