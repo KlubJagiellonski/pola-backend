@@ -1,0 +1,42 @@
+name: Generate Date File on Comment
+
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  check-comment:
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/update_constraints')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/merge
+
+      - name: "Login to Githhub Container Registry"
+        run: ./scripts/docker_login_github.py
+      - name: "Copy .env.example to .env"
+        run: cp .env.example .env
+      - name: "Build CI image"
+        run: |
+          ./scripts/ci-docker-image/build_image.sh
+
+      - name: Generate date file
+        run: >
+          docker-compose run --no-deps --entrypoint /bin/bash web -c "pip freeze" |
+          grep -v -i "Django==" |
+          LC_ALL=C sort -f > ./dependencies/constraints-ci.txt
+
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ./dependencies/constraints-ci.txt
+          git commit -m "Update constraints file
+          git push
+
+      - name: Create a comment in PR
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: 'Constraint file has been generated and updated.'
