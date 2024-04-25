@@ -8,6 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
+import django
 import environ
 from boto.s3.connection import OrdinaryCallingFormat
 from django.utils.translation import gettext_lazy as _
@@ -253,15 +254,17 @@ AI_PICS_PAGE_SIZE = 5000
 # ------------------------
 # See: https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
 INSTALLED_APPS += ('storages',)
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STORAGES = {
-    "default": {
-        "BACKEND": 'storages.backends.s3boto3.S3Boto3Storage',
-    },
-    "staticfiles": {
-        "BACKEND": 'storages.backends.s3boto3.S3StaticStorage',
-    },
-}
+if django.VERSION < (4, 0):
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": 'storages.backends.s3boto3.S3Boto3Storage',
+        },
+        "staticfiles": {
+            "BACKEND": 'storages.backends.s3boto3.S3StaticStorage',
+        },
+    }
 
 AWS_ACCESS_KEY_ID = env('POLA_APP_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')
