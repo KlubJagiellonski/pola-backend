@@ -78,6 +78,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'reversion.middleware.RevisionMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 )
 
 # MIGRATIONS CONFIGURATION
