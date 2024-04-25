@@ -61,12 +61,13 @@ ENV PYTHONUNBUFFERED=1 \
     PATH=${PATH}:/root/.local/bin
 RUN mkdir -p /root/.local/bin && pip install --no-cache-dir --upgrade "pip" && pip --version
 
-COPY ./dependencies/constraints-production.txt ./dependencies/requirements-production.txt ${APP_HOME}/dependencies/
+COPY ./dependencies/constraints-production.txt ./dependencies/requirements-production.txt ./dependencies/requirements-production-django.txt ${APP_HOME}/dependencies/
 
 RUN pip install \
       --no-cache-dir \
       --user \
       --requirement "${APP_HOME}/dependencies/requirements-production.txt" \
+      --requirement "${APP_HOME}/dependencies/requirements-production-django.txt" \
       --constraint "${APP_HOME}/dependencies/constraints-production.txt" \
     && pip check \
     && find /root/.local/ -name '*.pyc' -delete \
