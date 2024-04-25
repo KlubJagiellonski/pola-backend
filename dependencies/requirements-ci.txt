@@ -9,5 +9,5 @@ django_debug_toolbar==3.8.1
 factory-boy==3.3.0
 ipdb==0.13.9
 parameterized==0.9.0
-vcrpy==6.0.1
 pytz==2024.1
+vcrpy==6.0.1
