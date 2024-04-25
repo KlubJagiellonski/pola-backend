@@ -140,9 +140,6 @@ SITE_ID = 1
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
-USE_L10N = True
-
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
@@ -281,7 +278,14 @@ AI_PICS_PAGE_SIZE = 5000
 # ------------------------
 # See: https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
 INSTALLED_APPS += ('storages',)
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STORAGES = {
+    "default": {
+        "BACKEND": 'storages.backends.s3boto3.S3Boto3Storage',
+    },
+    "staticfiles": {
+        "BACKEND": 'storages.backends.s3boto3.S3StaticStorage',
+    },
+}
 
 AWS_ACCESS_KEY_ID = env('POLA_APP_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')
@@ -311,7 +315,6 @@ else:
 
 # Static Assets
 # ------------------------
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 STATIC_URL = f'http://localhost:9000/static/{AWS_STORAGE_BUCKET_NAME}/'
 
 # CORS CONFIGURATION

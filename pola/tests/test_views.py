@@ -91,7 +91,7 @@ class TestReleaseView(TemplateUsedMixin, TestCase):
 
     def test_return_json(self):
         with mock.patch.dict('os.environ', RELEASE_SHA='9e905684bb2cf6bdf074224e50d1c58e43740bba'):
-            resp = self.client.get(self.url, HTTP_CONTENT_TYPE='application/json')
+            resp = self.client.get(self.url, headers={"content-type": 'application/json'})
             self.assertEqual(resp.status_code, 200)
             self.assertEqual(resp['Content-Type'], 'application/json')
             self.assertEqual(list(resp.json().keys()), ['release_sha', 'release_link'])

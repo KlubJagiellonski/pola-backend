@@ -35,11 +35,11 @@ urlpatterns += [
 ]
 # Add Admin Views
 urlpatterns += [
-    re_path(r'^grappelli/', include('grappelli.urls')),
+    path('grappelli/', include('grappelli.urls')),
     re_path(r'^admin/', admin.site.urls),
     re_path(r'^users/', ('pola.users.urls', 'pola.users', 'users')),
-    re_path(r'^accounts/', include('allauth.urls')),
-    re_path(r'^i18n/', include('django.conf.urls.i18n')),
+    path('accounts/', include('allauth.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 # Add CMS views
 urlpatterns += [
@@ -67,7 +67,7 @@ if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns += [
-        re_path(r'^__debug__/', include(debug_toolbar.urls)),
+        path('__debug__/', include(debug_toolbar.urls)),
     ]
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
