@@ -65,3 +65,4 @@ runserver.sh
 .pycharm_helpers
 coverage.xml
 pola-bi/postgres_to_gcs/output/
+staticfiles/

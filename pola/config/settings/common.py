@@ -182,31 +182,6 @@ TEMPLATES = [
 # See: http://django-crispy-forms.readthedocs.org/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-# STATIC FILE CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR('staticfiles'))
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = '/static/'
-
-# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [str(APPS_DIR.path('static'))]
-
-# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-
-# MEDIA CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(APPS_DIR('media'))
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = '/media/'
-
 # URL Configuration
 # ------------------------------------------------------------------------------
 ROOT_URLCONF = 'pola.config.urls'
@@ -278,6 +253,7 @@ AI_PICS_PAGE_SIZE = 5000
 # ------------------------
 # See: https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
 INSTALLED_APPS += ('storages',)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STORAGES = {
     "default": {
         "BACKEND": 'storages.backends.s3boto3.S3Boto3Storage',
@@ -303,19 +279,33 @@ AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 AWS_S3_SIGNATURE_VERSION = "s3v4"
-AWS_S3_ENDPOINT_URL = env.str('POLA_APP_AWS_S3_ENDPOINT_URL', default=None)
+AWS_S3_ENDPOINT_URL = env.str('POLA_APP_AWS_S3_ENDPOINT_URL', default='https://s3.amazonaws.com')
 AI_SHARED_SECRET = env('AI_SHARED_SECRET')
 
-# URL that handles the media served from MEDIA_ROOT, used for managing
-# stored files.
-if AWS_S3_ENDPOINT_URL:
-    MEDIA_URL = f'https://s3.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/'
-else:
-    MEDIA_URL = f'http://localhost:9000/{AWS_STORAGE_BUCKET_NAME}/'
+# STATIC FILE CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
-# Static Assets
-# ------------------------
-STATIC_URL = f'http://localhost:9000/static/{AWS_STORAGE_BUCKET_NAME}/'
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+
+# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = [str(APPS_DIR.path('static'))]
+
+# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+# MEDIA CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
+MEDIA_ROOT = str(APPS_DIR('media'))
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
+MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BACKEND_BUCKET_NAME}/'
 
 # CORS CONFIGURATION
 # ------------------------
