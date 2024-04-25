@@ -49,5 +49,6 @@ COPY dependencies/constraints-ci.txt dependencies/requirements-ci.txt dependenci
 
 RUN pip install \
       --no-cache-dir \
+      "django==${DJANGO_VERSION}" \
       --requirement /app/dependencies/requirements-ci.txt \
       --constraint /app/dependencies/constraints-ci.txt && pip check
