@@ -52,7 +52,7 @@ jobs:
               content: '+1',
             });
       - name: "Checkout repo"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "Checkout Pull Request"
         run: gh pr checkout "${ISSUE_NUMBER}"
       - name: "Login to Githhub Container Registry"
