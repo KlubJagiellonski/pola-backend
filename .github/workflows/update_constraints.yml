@@ -8,6 +8,7 @@ env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ISSUE_NUMBER: ${{ github.event.issue.number }}
 
 jobs:
   check-comment:
@@ -17,7 +18,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Checkout Pull Request
-        run: hub pr checkout ${{ github.event.issue.number }}
+        run: gh pr checkout "${ISSUE_NUMBER}"
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.py
       - name: "Copy .env.example to .env"
@@ -38,9 +39,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add ./dependencies/constraints-ci.txt
           git commit -m "Update constraints file"
-          git push origin "HEAD:refs/pull/${ISSUE_NUMBER}/head"
-        env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          git push origin
 
       - name: Create a comment in PR
         uses: peter-evans/create-or-update-comment@v1
