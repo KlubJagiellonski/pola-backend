@@ -1,8 +1,14 @@
-name: Generate Date File on Comment
+name: Generate constraint file on comment
 
 on:
   issue_comment:
     types: [created]
+
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   check-comment:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/update_constraints')
@@ -21,7 +27,7 @@ jobs:
         run: |
           ./scripts/ci-docker-image/build_image.sh
 
-      - name: Generate date file
+      - name: Generate constraint file
         run: >
           docker-compose run --no-deps --entrypoint /bin/bash web -c "pip freeze" |
           grep -v -i "Django==" |
