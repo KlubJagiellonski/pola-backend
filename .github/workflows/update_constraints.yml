@@ -41,7 +41,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          ref: refs/pull/${{ github.event.issue.number }}/merge
+          ref: refs/pull/${{ github.event.issue.number }}/head
 
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.py
@@ -63,7 +63,9 @@ jobs:
           git config --local user.name "GitHub Action"
           git add ./dependencies/constraints-ci.txt
           git commit -m "Update constraints file"
-          git push
+          git push origin "HEAD:refs/pull/${ISSUE_NUMBER}/head"
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
 
       - name: Create a comment in PR
         uses: peter-evans/create-or-update-comment@v1
