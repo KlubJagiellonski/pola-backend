@@ -38,7 +38,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add ./dependencies/constraints-ci.txt
-          git commit -m "Update constraints file
+          git commit -m "Update constraints file"
           git push
 
       - name: Create a comment in PR
