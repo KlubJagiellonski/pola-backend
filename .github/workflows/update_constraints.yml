@@ -79,3 +79,9 @@ jobs:
           git add ./dependencies/constraints-ci.txt
           git commit -m "Update constraints file"
           git push origin
+
+      - name: "Create a comment in PR"
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: '@Mergifyio rebase'
