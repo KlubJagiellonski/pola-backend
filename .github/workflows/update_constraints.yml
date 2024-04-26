@@ -39,6 +39,16 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
+      - name: "Add reaction to comment"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.event.comment.id,
+              content: '+1',
+            });
       - name: "Checkout repo"
         uses: actions/checkout@v2
       - name: "Checkout Pull Request"
@@ -67,9 +77,3 @@ jobs:
           git add ./dependencies/constraints-ci.txt
           git commit -m "Update constraints file"
           git push origin
-
-      - name: "Create a comment in PR"
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: 'Constraint file has been generated and updated.'
