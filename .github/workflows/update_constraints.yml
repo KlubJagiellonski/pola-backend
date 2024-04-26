@@ -15,9 +15,33 @@ jobs:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/update_constraints')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+      - name: "Checkout repo"
         uses: actions/checkout@v2
-      - name: Checkout Pull Request
+      - name: "Checkout Pull Request"
         run: gh pr checkout "${ISSUE_NUMBER}"
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.py
@@ -27,13 +51,16 @@ jobs:
         run: |
           ./scripts/ci-docker-image/build_image.sh
 
-      - name: Generate constraint file
+      - name: "Generate constraint file"
         run: >
           docker-compose run --no-deps --entrypoint /bin/bash web -c "pip freeze" |
-          grep -v -i "Django==" |
-          LC_ALL=C sort -f > ./dependencies/constraints-ci.txt
+          grep -v -i "Django==" > ./dependencies/constraints-ci.txt
 
-      - name: Commit and push
+      - name: "Setup Python dependencies"
+        run: pip install -U pip wheel setuptools virtualenv pre-commit
+      - name: "Run static checks"
+        run: pre-commit run requirements-txt-fixer --all-files --color=always
+      - name: "Commit and push"
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -41,7 +68,7 @@ jobs:
           git commit -m "Update constraints file"
           git push origin
 
-      - name: Create a comment in PR
+      - name: "Create a comment in PR"
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
