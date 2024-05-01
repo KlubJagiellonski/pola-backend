@@ -11,3 +11,4 @@ ipdb==0.13.9
 parameterized==0.9.0
 pytz==2024.1
 vcrpy==6.0.1
+pre-commit==3.7.0
