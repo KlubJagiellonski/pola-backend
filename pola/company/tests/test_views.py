@@ -99,9 +99,11 @@ class TestCompanyCreateView(PermissionMixin, TemplateUsedMixin, TestCase):
 
         self.assertEqual(Company.objects.count(), 1)
         self.assertEqual(Brand.objects.count(), 1)
-        self.assertEqual(Company.objects.first().official_name, 'Test Company')
-        # self.assertEqual(Brand.objects.first().name, 'Test Brand')
+        company = Company.objects.first()
+        self.assertEqual(company.official_name, 'Test Company')
+        self.assertEqual(Brand.objects.first().name, 'Test Brand')
         self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, company.get_absolute_url())
 
 
 class TestCompanyCreateFromKRSView(PermissionMixin, TemplateUsedMixin, WebTestMixin, TestCase):
@@ -109,12 +111,108 @@ class TestCompanyCreateFromKRSView(PermissionMixin, TemplateUsedMixin, WebTestMi
     template_name = 'company/company_from_krs.html'
 
 
-class TestCompanyUpdate(CompanyInstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
+class TestCompanyUpdateView(CompanyInstanceMixin, PermissionMixin, TemplateUsedMixin, TestCase):
     template_name = 'company/company_form.html'
 
     def setUp(self):
         super().setUp()
         self.url = reverse('company:edit', kwargs={'pk': self.instance.pk})
+
+    def test_form_success_with_formset(self):
+        self.brand_instance = BrandFactory(company=self.instance)
+        self.login()
+
+        initial_form_data = {
+            "name": self.instance.name,
+            "official_name": self.instance.official_name,
+            "common_name": self.instance.common_name,
+            "is_friend": "False",
+            "display_brands_in_description": "False",
+            "plCapital": "",
+            "plWorkers": "",
+            "plRnD": "",
+            "plRegistered": "",
+            "plNotGlobEnt": "",
+            "description": self.instance.description,
+            "sources": "",
+            "verified": "False",
+            "Editor_notes": "",
+            "nip": "",
+            "address": "",
+            "logotype": "",
+            "official_url": "",
+            "commit_desc": "",
+            "brand_set-TOTAL_FORMS": "4",
+            "brand_set-INITIAL_FORMS": "1",
+            "brand_set-MIN_NUM_FORMS": "0",
+            "brand_set-MAX_NUM_FORMS": "1000",
+            "brand_set-0-name": self.brand_instance.name,
+            "brand_set-0-common_name": self.brand_instance.common_name,
+            "brand_set-0-company": str(self.instance.pk),
+            "brand_set-0-id": str(self.brand_instance.pk),
+            "brand_set-1-name": "",
+            "brand_set-1-common_name": "",
+            "brand_set-1-company": str(self.instance.pk),
+            "brand_set-1-id": "",
+            "brand_set-2-name": "",
+            "brand_set-2-common_name": "",
+            "brand_set-2-company": str(self.instance.pk),
+            "brand_set-2-id": "",
+            "brand_set-3-name": "",
+            "brand_set-3-common_name": "",
+            "brand_set-3-company": str(self.instance.pk),
+            "brand_set-3-id": "",
+            "action": "Save",
+        }
+
+        # Update company data
+        post_data = initial_form_data.copy()
+        post_data['official_name'] = post_data['official_name'] + "_updated"
+
+        # Set change description
+        post_data['commit_desc'] = 'Commit message'
+
+        # Update brand data
+        post_data['brand_set-0-name'] = post_data['brand_set-0-name'] + "_updated"
+        post_data['brand_set-0-common_name'] = post_data['brand_set-0-common_name'] + "_updated"
+
+        # Add new brand using dynamic formset
+        post_data.update(
+            {
+                "brand_set-4-name": "New brand - name",
+                "brand_set-4-common_name": "New brand - common-name",
+                "brand_set-4-company": str(self.instance.pk),
+                "brand_set-4-id": "",
+            }
+        )
+        post_data["brand_set-TOTAL_FORMS"] = str(int(post_data["brand_set-TOTAL_FORMS"]) + 1)
+
+        response = self.client.post(self.url, post_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.instance.get_absolute_url())
+
+        self.assertEqual(Company.objects.count(), 1)
+        self.assertEqual(Brand.objects.count(), 2)
+
+        company = Company.objects.first()
+        company.refresh_from_db()
+
+        self.assertTrue(
+            company.official_name.endswith('_updated'), f"{company.official_name!r} does not end with '_updated'"
+        )
+
+        existing_brand = Brand.objects.get(pk=self.brand_instance.pk)
+        self.assertTrue(
+            existing_brand.name.endswith('_updated'), f"{existing_brand.name!r} does not end with '_updated'"
+        )
+        self.assertTrue(
+            existing_brand.common_name.endswith('_updated'),
+            f"{existing_brand.common_name!r} does not end with '_updated'",
+        )
+
+        new_brand = Brand.objects.filter(company=company).exclude(pk=self.brand_instance.pk).first()
+        self.assertEqual(new_brand.name, "New brand - name")
+        self.assertEqual(new_brand.common_name, "New brand - common-name")
 
 
 class TestCompanyUpdateWeb(WebTestMixin, TestCase):
