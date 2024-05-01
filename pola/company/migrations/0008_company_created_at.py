@@ -1,7 +1,6 @@
 import datetime
 
 from django.db import migrations, models
-from django.utils.timezone import utc
 
 
 class Migration(migrations.Migration):
@@ -14,7 +13,8 @@ class Migration(migrations.Migration):
             model_name='company',
             name='created_at',
             field=models.DateTimeField(
-                default=datetime.datetime(2015, 10, 25, 10, 59, 15, 308311, tzinfo=utc), auto_now_add=True
+                default=datetime.datetime(2015, 10, 25, 10, 59, 15, 308311, tzinfo=datetime.timezone.utc),
+                auto_now_add=True,
             ),
             preserve_default=False,
         ),

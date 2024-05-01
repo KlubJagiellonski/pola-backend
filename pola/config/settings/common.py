@@ -8,6 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
+import django
 import environ
 from boto.s3.connection import OrdinaryCallingFormat
 from django.utils.translation import gettext_lazy as _
@@ -140,9 +141,6 @@ SITE_ID = 1
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
-USE_L10N = True
-
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
@@ -184,31 +182,6 @@ TEMPLATES = [
 
 # See: http://django-crispy-forms.readthedocs.org/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
-# STATIC FILE CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR('staticfiles'))
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = '/static/'
-
-# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [str(APPS_DIR.path('static'))]
-
-# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-
-# MEDIA CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(APPS_DIR('media'))
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = '/media/'
 
 # URL Configuration
 # ------------------------------------------------------------------------------
@@ -270,7 +243,6 @@ IS_PRODUCTION = env("IS_PRODUCTION", default=False)
 SLACK_TOKEN = env("SLACK_TOKEN", default=None)
 SLACK_CHANNEL_AI_STATS = env("SLACK_CHANNEL_AI_STATS", default=None)
 
-
 WHITELIST_API_IP_ADDRESS = env.list("WHITELIST_API_IP_ADDRESSES", default=['127.0.0.1'])
 
 AI_PICS_PAGE_SIZE = 5000
@@ -281,7 +253,17 @@ AI_PICS_PAGE_SIZE = 5000
 # ------------------------
 # See: https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
 INSTALLED_APPS += ('storages',)
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+if django.VERSION < (4, 0):
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": 'storages.backends.s3boto3.S3Boto3Storage',
+        },
+        "staticfiles": {
+            "BACKEND": 'storages.backends.s3boto3.S3StaticStorage',
+        },
+    }
 
 AWS_ACCESS_KEY_ID = env('POLA_APP_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')
@@ -302,17 +284,35 @@ AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_S3_ENDPOINT_URL = env.str('POLA_APP_AWS_S3_ENDPOINT_URL', default=None)
 AI_SHARED_SECRET = env('AI_SHARED_SECRET')
 
-# URL that handles the media served from MEDIA_ROOT, used for managing
-# stored files.
-if AWS_S3_ENDPOINT_URL:
-    MEDIA_URL = f'https://s3.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/'
-else:
-    MEDIA_URL = f'http://localhost:9000/{AWS_STORAGE_BUCKET_NAME}/'
+# STATIC FILE CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
-# Static Assets
-# ------------------------
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
-STATIC_URL = f'http://localhost:9000/static/{AWS_STORAGE_BUCKET_NAME}/'
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+if AWS_S3_ENDPOINT_URL:
+    STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+else:
+    STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
+# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = [str(APPS_DIR.path('static'))]
+
+# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+# MEDIA CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
+MEDIA_ROOT = str(APPS_DIR('media'))
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
+if AWS_S3_ENDPOINT_URL:
+    MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BACKEND_BUCKET_NAME}/'
+else:
+    MEDIA_URL = f"https://{AWS_STORAGE_BACKEND_BUCKET_NAME}.s3.amazonaws.com/"
 
 # CORS CONFIGURATION
 # ------------------------
