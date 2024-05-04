@@ -1,0 +1,556 @@
+version: 2
+
+sources:
+  - name: public
+    tables:
+      - name: account_emailaddress
+        columns:
+          - name: id
+            data_type: integer
+          - name: email
+            data_type: character varying
+          - name: verified
+            data_type: boolean
+          - name: primary
+            data_type: boolean
+          - name: user_id
+            data_type: integer
+
+      - name: account_emailconfirmation
+        columns:
+          - name: id
+            data_type: integer
+          - name: created
+            data_type: timestamp with time zone
+          - name: sent
+            data_type: timestamp with time zone
+          - name: key
+            data_type: character varying
+          - name: email_address_id
+            data_type: integer
+
+      - name: ai_pics_aiattachment
+        columns:
+          - name: id
+            data_type: integer
+          - name: attachment
+            data_type: character varying
+          - name: ai_pics_id
+            data_type: integer
+          - name: file_no
+            data_type: integer
+
+      - name: ai_pics_aipics
+        columns:
+          - name: id
+            data_type: integer
+          - name: client
+            data_type: character varying
+          - name: created
+            data_type: timestamp with time zone
+          - name: original_width
+            data_type: integer
+          - name: original_height
+            data_type: integer
+          - name: width
+            data_type: integer
+          - name: height
+            data_type: integer
+          - name: device_name
+            data_type: character varying
+          - name: flash_used
+            data_type: boolean
+          - name: was_portrait
+            data_type: boolean
+          - name: product_id
+            data_type: integer
+          - name: is_valid
+            data_type: boolean
+          - name: modified
+            data_type: timestamp with time zone
+
+      - name: auth_group
+        columns:
+          - name: id
+            data_type: integer
+          - name: name
+            data_type: character varying
+
+      - name: auth_group_permissions
+        columns:
+          - name: id
+            data_type: integer
+          - name: group_id
+            data_type: integer
+          - name: permission_id
+            data_type: integer
+
+      - name: auth_permission
+        columns:
+          - name: id
+            data_type: integer
+          - name: name
+            data_type: character varying
+          - name: content_type_id
+            data_type: integer
+          - name: codename
+            data_type: character varying
+
+      - name: company_brand
+        columns:
+          - name: id
+            data_type: integer
+          - name: created
+            data_type: timestamp with time zone
+          - name: name
+            data_type: character varying
+          - name: common_name
+            data_type: character varying
+          - name: company_id
+            data_type: integer
+          - name: modified
+            data_type: timestamp with time zone
+          - name: logotype
+            data_type: character varying
+
+      - name: company_company
+        columns:
+          - name: id
+            data_type: integer
+          - name: nip
+            data_type: character varying
+          - name: name
+            data_type: character varying
+          - name: official_name
+            data_type: character varying
+          - name: common_name
+            data_type: character varying
+          - name: address
+            data_type: text
+          - name: plcapital
+            data_type: integer
+          - name: plcapital_notes
+            data_type: text
+          - name: plrnd
+            data_type: integer
+          - name: plrnd_notes
+            data_type: text
+          - name: plworkers
+            data_type: integer
+          - name: plworkers_notes
+            data_type: text
+          - name: verified
+            data_type: boolean
+          - name: plnotglobent
+            data_type: integer
+          - name: plnotglobent_notes
+            data_type: text
+          - name: plregistered
+            data_type: integer
+          - name: plregistered_notes
+            data_type: text
+          - name: created
+            data_type: timestamp with time zone
+          - name: editor_notes
+            data_type: text
+          - name: description
+            data_type: text
+          - name: sources
+            data_type: text
+          - name: query_count
+            data_type: integer
+          - name: is_friend
+            data_type: boolean
+          - name: modified
+            data_type: timestamp with time zone
+          - name: display_brands_in_description
+            data_type: boolean
+          - name: logotype
+            data_type: character varying
+          - name: official_url
+            data_type: character varying
+
+      - name: django_admin_log
+        columns:
+          - name: id
+            data_type: integer
+          - name: action_time
+            data_type: timestamp with time zone
+          - name: object_id
+            data_type: text
+          - name: object_repr
+            data_type: character varying
+          - name: action_flag
+            data_type: smallint
+          - name: change_message
+            data_type: text
+          - name: content_type_id
+            data_type: integer
+          - name: user_id
+            data_type: integer
+
+      - name: django_content_type
+        columns:
+          - name: id
+            data_type: integer
+          - name: app_label
+            data_type: character varying
+          - name: model
+            data_type: character varying
+
+      - name: django_migrations
+        columns:
+          - name: id
+            data_type: integer
+          - name: app
+            data_type: character varying
+          - name: name
+            data_type: character varying
+          - name: applied
+            data_type: timestamp with time zone
+
+      - name: django_session
+        columns:
+          - name: session_key
+            data_type: character varying
+          - name: session_data
+            data_type: text
+          - name: expire_date
+            data_type: timestamp with time zone
+
+      - name: django_site
+        columns:
+          - name: id
+            data_type: integer
+          - name: domain
+            data_type: character varying
+          - name: name
+            data_type: character varying
+
+      - name: gpc_brick
+        columns:
+          - name: id
+            data_type: integer
+          - name: code
+            data_type: character varying
+          - name: text
+            data_type: character varying
+          - name: definition
+            data_type: text
+          - name: definitionexcludes
+            data_type: text
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: character varying
+          - name: parent_id
+            data_type: integer
+
+      - name: gpc_class
+        columns:
+          - name: id
+            data_type: integer
+          - name: code
+            data_type: character varying
+          - name: text
+            data_type: character varying
+          - name: definition
+            data_type: text
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: character varying
+          - name: parent_id
+            data_type: integer
+
+      - name: gpc_family
+        columns:
+          - name: id
+            data_type: integer
+          - name: code
+            data_type: character varying
+          - name: text
+            data_type: character varying
+          - name: definition
+            data_type: text
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: character varying
+          - name: parent_id
+            data_type: integer
+
+      - name: gpc_segment
+        columns:
+          - name: id
+            data_type: integer
+          - name: code
+            data_type: character varying
+          - name: text
+            data_type: character varying
+          - name: definition
+            data_type: text
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: character varying
+
+      - name: pola_appconfiguration
+        columns:
+          - name: id
+            data_type: integer
+          - name: donate_url
+            data_type: character varying
+          - name: donate_text
+            data_type: character varying
+
+      - name: pola_query
+        columns:
+          - name: id
+            data_type: integer
+          - name: client
+            data_type: character varying
+          - name: timestamp
+            data_type: timestamp with time zone
+          - name: product_id
+            data_type: integer
+          - name: was_590
+            data_type: boolean
+          - name: was_plscore
+            data_type: boolean
+          - name: was_verified
+            data_type: boolean
+
+      - name: pola_searchquery
+        columns:
+          - name: id
+            data_type: integer
+          - name: client
+            data_type: character varying
+          - name: text
+            data_type: character varying
+          - name: timestamp
+            data_type: timestamp with time zone
+
+      - name: pola_stats
+        columns:
+          - name: id
+            data_type: integer
+          - name: year
+            data_type: integer
+          - name: month
+            data_type: integer
+          - name: day
+            data_type: integer
+          - name: calculated_at
+            data_type: timestamp with time zone
+          - name: no_of_queries
+            data_type: integer
+          - name: no_of_clients
+            data_type: integer
+          - name: no_of_verified
+            data_type: integer
+          - name: no_of_plscore
+            data_type: integer
+          - name: no_of_590
+            data_type: integer
+          - name: no_of_new_companies
+            data_type: integer
+          - name: no_of_new_products
+            data_type: integer
+          - name: no_of_new_reports
+            data_type: integer
+          - name: no_of_not_verified_590
+            data_type: integer
+          - name: no_of_not_verified_not_590
+            data_type: integer
+
+      - name: product_product
+        columns:
+          - name: id
+            data_type: integer
+          - name: name
+            data_type: character varying
+          - name: code
+            data_type: character varying
+          - name: created
+            data_type: timestamp with time zone
+          - name: ilim_queried_at
+            data_type: timestamp with time zone
+          - name: query_count
+            data_type: integer
+          - name: ai_pics_count
+            data_type: integer
+          - name: brand_id
+            data_type: integer
+          - name: company_id
+            data_type: integer
+          - name: modified
+            data_type: timestamp with time zone
+          - name: gpc_brick_id
+            data_type: integer
+          - name: gs1_last_response
+            data_type: jsonb
+
+      - name: report_attachment
+        columns:
+          - name: id
+            data_type: integer
+          - name: attachment
+            data_type: character varying
+          - name: report_id
+            data_type: integer
+
+      - name: report_report
+        columns:
+          - name: id
+            data_type: integer
+          - name: client
+            data_type: character varying
+          - name: created
+            data_type: timestamp with time zone
+          - name: resolved_at
+            data_type: timestamp with time zone
+          - name: description
+            data_type: text
+          - name: product_id
+            data_type: integer
+          - name: resolved_by_id
+            data_type: integer
+          - name: modified
+            data_type: timestamp with time zone
+
+      - name: reversion_revision
+        columns:
+          - name: id
+            data_type: integer
+          - name: date_created
+            data_type: timestamp with time zone
+          - name: comment
+            data_type: text
+          - name: user_id
+            data_type: integer
+
+      - name: reversion_version
+        columns:
+          - name: id
+            data_type: integer
+          - name: object_id
+            data_type: character varying
+          - name: format
+            data_type: character varying
+          - name: serialized_data
+            data_type: text
+          - name: object_repr
+            data_type: text
+          - name: content_type_id
+            data_type: integer
+          - name: revision_id
+            data_type: integer
+          - name: db
+            data_type: character varying
+
+      - name: socialaccount_socialaccount
+        columns:
+          - name: id
+            data_type: integer
+          - name: provider
+            data_type: character varying
+          - name: uid
+            data_type: character varying
+          - name: last_login
+            data_type: timestamp with time zone
+          - name: date_joined
+            data_type: timestamp with time zone
+          - name: extra_data
+            data_type: text
+          - name: user_id
+            data_type: integer
+
+      - name: socialaccount_socialapp
+        columns:
+          - name: id
+            data_type: integer
+          - name: provider
+            data_type: character varying
+          - name: name
+            data_type: character varying
+          - name: client_id
+            data_type: character varying
+          - name: secret
+            data_type: character varying
+          - name: key
+            data_type: character varying
+          - name: provider_id
+            data_type: character varying
+          - name: settings
+            data_type: jsonb
+
+      - name: socialaccount_socialapp_sites
+        columns:
+          - name: id
+            data_type: integer
+          - name: socialapp_id
+            data_type: integer
+          - name: site_id
+            data_type: integer
+
+      - name: socialaccount_socialtoken
+        columns:
+          - name: id
+            data_type: integer
+          - name: token
+            data_type: text
+          - name: token_secret
+            data_type: text
+          - name: expires_at
+            data_type: timestamp with time zone
+          - name: account_id
+            data_type: integer
+          - name: app_id
+            data_type: integer
+
+      - name: users_user
+        columns:
+          - name: id
+            data_type: integer
+          - name: password
+            data_type: character varying
+          - name: last_login
+            data_type: timestamp with time zone
+          - name: is_superuser
+            data_type: boolean
+          - name: username
+            data_type: character varying
+          - name: first_name
+            data_type: character varying
+          - name: last_name
+            data_type: character varying
+          - name: email
+            data_type: character varying
+          - name: is_staff
+            data_type: boolean
+          - name: is_active
+            data_type: boolean
+          - name: date_joined
+            data_type: timestamp with time zone
+          - name: name
+            data_type: character varying
+
+      - name: users_user_groups
+        columns:
+          - name: id
+            data_type: integer
+          - name: user_id
+            data_type: integer
+          - name: group_id
+            data_type: integer
+
+      - name: users_user_user_permissions
+        columns:
+          - name: id
+            data_type: integer
+          - name: user_id
+            data_type: integer
+          - name: permission_id
+            data_type: integer

@@ -1,0 +1,531 @@
+version: 2
+
+sources:
+  - name: pola_backend
+    schema: '{{ target.schema }}'
+    tables:
+      - name: ai_pics_aiattachment
+        columns:
+          - name: id
+            data_type: int64
+          - name: attachment
+            data_type: string
+          - name: ai_pics_id
+            data_type: int64
+          - name: file_no
+            data_type: int64
+
+      - name: ai_pics_aipics
+        columns:
+          - name: id
+            data_type: int64
+          - name: client
+            data_type: string
+          - name: created
+            data_type: timestamp
+          - name: original_width
+            data_type: int64
+          - name: original_height
+            data_type: int64
+          - name: width
+            data_type: int64
+          - name: height
+            data_type: int64
+          - name: device_name
+            data_type: string
+          - name: flash_used
+            data_type: boolean
+          - name: was_portrait
+            data_type: boolean
+          - name: product_id
+            data_type: int64
+          - name: is_valid
+            data_type: boolean
+          - name: modified
+            data_type: timestamp
+
+      - name: bi_companies_by_query_group
+        columns:
+          - name: query_count_group
+            data_type: string
+          - name: sum_query_count
+            data_type: int64
+          - name: sum_total
+            data_type: int64
+          - name: sum_verified
+            data_type: int64
+          - name: percentage_verified
+            data_type: float64
+          - name: percentage_query_count
+            data_type: float64
+
+      - name: bi_companies_with_count_group
+        columns:
+          - name: query_count_group
+            data_type: string
+          - name: id
+            data_type: int64
+          - name: nip
+            data_type: int64
+          - name: name
+            data_type: string
+          - name: official_name
+            data_type: string
+          - name: common_name
+            data_type: string
+          - name: address
+            data_type: string
+          - name: plcapital
+            data_type: int64
+          - name: plcapital_notes
+            data_type: string
+          - name: plrnd
+            data_type: int64
+          - name: plrnd_notes
+            data_type: string
+          - name: plworkers
+            data_type: int64
+          - name: plworkers_notes
+            data_type: string
+          - name: verified
+            data_type: boolean
+          - name: plnotglobent
+            data_type: int64
+          - name: plnotglobent_notes
+            data_type: string
+          - name: plregistered
+            data_type: int64
+          - name: plregistered_notes
+            data_type: string
+          - name: created
+            data_type: timestamp
+          - name: editor_notes
+            data_type: string
+          - name: description
+            data_type: string
+          - name: sources
+            data_type: string
+          - name: query_count
+            data_type: int64
+          - name: is_friend
+            data_type: boolean
+          - name: modified
+            data_type: timestamp
+          - name: display_brands_in_description
+            data_type: boolean
+          - name: logotype
+            data_type: string
+          - name: official_url
+            data_type: string
+
+      - name: bi_new_product_by_hour
+        columns:
+          - name: dd
+            data_type: int64
+          - name: rozpoznaana
+            data_type: int64
+          - name: nieroznanaa
+            data_type: int64
+          - name: wszystkie
+            data_type: int64
+
+      - name: bi_popular_not_verified_products
+        columns:
+          - name: id
+            data_type: int64
+          - name: name
+            data_type: string
+          - name: code
+            data_type: int64
+          - name: created
+            data_type: timestamp
+          - name: ilim_queried_at
+            data_type: timestamp
+          - name: query_count
+            data_type: int64
+          - name: ai_pics_count
+            data_type: int64
+          - name: brand_id
+            data_type: string
+          - name: company_id
+            data_type: string
+          - name: modified
+            data_type: timestamp
+          - name: gpc_brick_id
+            data_type: string
+          - name: gs1_last_response
+            data_type: string
+
+      - name: bi_product_by_time
+        columns:
+          - name: seq
+            data_type: timestamp
+          - name: count_total
+            data_type: int64
+          - name: count_with_company
+            data_type: int64
+          - name: count_590
+            data_type: int64
+          - name: count_with_company_and_590
+            data_type: int64
+          - name: count_without_company_and_590
+            data_type: int64
+          - name: percentage_with_company
+            data_type: float64
+          - name: percentage_590
+            data_type: float64
+          - name: percentage_wtih_company_and_590
+            data_type: float64
+          - name: percentage_wtihout_company_and_590
+            data_type: float64
+
+      - name: bi_queries_by_time
+        columns:
+          - name: seq
+            data_type: timestamp
+          - name: request_total
+            data_type: int64
+          - name: request_was_590
+            data_type: int64
+          - name: request_was_plscore
+            data_type: int64
+          - name: request_was_verified
+            data_type: int64
+          - name: percetage_request_was_590
+            data_type: float64
+          - name: percetage_request_was_plscore
+            data_type: float64
+          - name: percetage_request_was_verified
+            data_type: float64
+          - name: uq_user
+            data_type: int64
+
+      - name: bi_queries_stats_intervals
+        columns:
+          - name: request_total
+            data_type: int64
+          - name: request_day
+            data_type: int64
+          - name: request_week
+            data_type: int64
+          - name: request_month
+            data_type: int64
+          - name: request_3_month
+            data_type: int64
+          - name: request_6_month
+            data_type: int64
+          - name: request_day_was_590
+            data_type: int64
+          - name: request_week_was_590
+            data_type: int64
+          - name: request_month_was_590
+            data_type: int64
+          - name: request_3_month_was_590
+            data_type: int64
+          - name: request_6_month_was_590
+            data_type: int64
+          - name: request_total_was_590
+            data_type: int64
+          - name: request_day_was_plscore
+            data_type: int64
+          - name: request_week_was_plscore
+            data_type: int64
+          - name: request_month_was_plscore
+            data_type: int64
+          - name: request_3_month_was_plscore
+            data_type: int64
+          - name: request_6_month_was_plscore
+            data_type: int64
+          - name: request_total_was_plscore
+            data_type: int64
+          - name: request_day_was_verified
+            data_type: int64
+          - name: request_week_was_verified
+            data_type: int64
+          - name: request_month_was_verified
+            data_type: int64
+          - name: request_3_month_was_verified
+            data_type: int64
+          - name: request_6_month_was_verified
+            data_type: int64
+          - name: request_total_was_verified
+            data_type: int64
+          - name: uq_user_total
+            data_type: int64
+          - name: uq_user_day
+            data_type: int64
+          - name: uq_user_week
+            data_type: int64
+          - name: uq_user_month
+            data_type: int64
+          - name: uq_user_3_month
+            data_type: int64
+          - name: uq_user_6_month
+            data_type: int64
+
+      - name: bi_stats_queries_uq_users_by_week
+        columns:
+          - name: seq
+            data_type: date
+          - name: count_uq_user
+            data_type: int64
+          - name: count_request
+            data_type: int64
+
+      - name: company_brand
+        columns:
+          - name: id
+            data_type: int64
+          - name: created
+            data_type: timestamp
+          - name: name
+            data_type: string
+          - name: common_name
+            data_type: string
+          - name: company_id
+            data_type: int64
+          - name: modified
+            data_type: timestamp
+          - name: logotype
+            data_type: string
+
+      - name: company_company
+        columns:
+          - name: id
+            data_type: int64
+          - name: nip
+            data_type: string
+          - name: name
+            data_type: string
+          - name: official_name
+            data_type: string
+          - name: common_name
+            data_type: string
+          - name: address
+            data_type: string
+          - name: plcapital
+            data_type: int64
+          - name: plcapital_notes
+            data_type: string
+          - name: plrnd
+            data_type: int64
+          - name: plrnd_notes
+            data_type: string
+          - name: plworkers
+            data_type: int64
+          - name: plworkers_notes
+            data_type: string
+          - name: verified
+            data_type: boolean
+          - name: plnotglobent
+            data_type: int64
+          - name: plnotglobent_notes
+            data_type: string
+          - name: plregistered
+            data_type: int64
+          - name: plregistered_notes
+            data_type: string
+          - name: created
+            data_type: timestamp
+          - name: editor_notes
+            data_type: string
+          - name: description
+            data_type: string
+          - name: sources
+            data_type: string
+          - name: query_count
+            data_type: int64
+          - name: is_friend
+            data_type: boolean
+          - name: modified
+            data_type: timestamp
+          - name: display_brands_in_description
+            data_type: boolean
+          - name: logotype
+            data_type: string
+          - name: official_url
+            data_type: string
+
+      - name: gpc_brick
+        columns:
+          - name: id
+            data_type: int64
+          - name: code
+            data_type: int64
+          - name: text
+            data_type: string
+          - name: definition
+            data_type: string
+          - name: definitionexcludes
+            data_type: string
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: string
+          - name: parent_id
+            data_type: int64
+
+      - name: gpc_class
+        columns:
+          - name: id
+            data_type: int64
+          - name: code
+            data_type: int64
+          - name: text
+            data_type: string
+          - name: definition
+            data_type: string
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: string
+          - name: parent_id
+            data_type: int64
+
+      - name: gpc_family
+        columns:
+          - name: id
+            data_type: int64
+          - name: code
+            data_type: int64
+          - name: text
+            data_type: string
+          - name: definition
+            data_type: string
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: string
+          - name: parent_id
+            data_type: int64
+
+      - name: gpc_segment
+        columns:
+          - name: id
+            data_type: int64
+          - name: code
+            data_type: int64
+          - name: text
+            data_type: string
+          - name: definition
+            data_type: string
+          - name: active
+            data_type: boolean
+          - name: alias
+            data_type: string
+
+      - name: pola_query
+        columns:
+          - name: id
+            data_type: int64
+          - name: client
+            data_type: string
+          - name: timestamp
+            data_type: timestamp
+          - name: product_id
+            data_type: int64
+          - name: was_590
+            data_type: boolean
+          - name: was_plscore
+            data_type: boolean
+          - name: was_verified
+            data_type: boolean
+
+      - name: pola_searchquery
+        columns:
+          - name: id
+            data_type: int64
+          - name: client
+            data_type: string
+          - name: text
+            data_type: string
+          - name: timestamp
+            data_type: timestamp
+
+      - name: pola_stats
+        columns:
+          - name: id
+            data_type: int64
+          - name: year
+            data_type: int64
+          - name: month
+            data_type: int64
+          - name: day
+            data_type: int64
+          - name: calculated_at
+            data_type: timestamp
+          - name: no_of_queries
+            data_type: int64
+          - name: no_of_clients
+            data_type: int64
+          - name: no_of_verified
+            data_type: int64
+          - name: no_of_plscore
+            data_type: int64
+          - name: no_of_590
+            data_type: int64
+          - name: no_of_new_companies
+            data_type: int64
+          - name: no_of_new_products
+            data_type: int64
+          - name: no_of_new_reports
+            data_type: int64
+          - name: no_of_not_verified_590
+            data_type: int64
+          - name: no_of_not_verified_not_590
+            data_type: int64
+
+      - name: product_product
+        columns:
+          - name: id
+            data_type: int64
+          - name: name
+            data_type: string
+          - name: code
+            data_type: string
+          - name: created
+            data_type: timestamp
+          - name: ilim_queried_at
+            data_type: timestamp
+          - name: query_count
+            data_type: int64
+          - name: ai_pics_count
+            data_type: int64
+          - name: brand_id
+            data_type: int64
+          - name: company_id
+            data_type: int64
+          - name: modified
+            data_type: timestamp
+          - name: gpc_brick_id
+            data_type: int64
+          - name: gs1_last_response
+            data_type: string
+
+      - name: report_attachment
+        columns:
+          - name: id
+            data_type: int64
+          - name: attachment
+            data_type: string
+          - name: report_id
+            data_type: int64
+
+      - name: report_report
+        columns:
+          - name: id
+            data_type: int64
+          - name: client
+            data_type: string
+          - name: created
+            data_type: timestamp
+          - name: resolved_at
+            data_type: timestamp
+          - name: description
+            data_type: string
+          - name: product_id
+            data_type: int64
+          - name: resolved_by_id
+            data_type: int64
+          - name: modified
+            data_type: timestamp
