@@ -1,0 +1,434 @@
+version: 2
+
+models:
+  - name: bi_companies_by_query_group
+    description: ""
+    columns:
+      - name: query_count_group
+        data_type: text
+        description: ""
+
+      - name: sum_query_count
+        data_type: bigint
+        description: ""
+
+      - name: sum_total
+        data_type: bigint
+        description: ""
+
+      - name: sum_verified
+        data_type: bigint
+        description: ""
+
+      - name: percentage_verified
+        data_type: double precision
+        description: ""
+
+      - name: percentage_query_count
+        data_type: double precision
+        description: ""
+
+  - name: bi_companies_with_count_group
+    description: ""
+    columns:
+      - name: query_count_group
+        data_type: text
+        description: ""
+
+      - name: id
+        data_type: integer
+        description: ""
+
+      - name: nip
+        data_type: character varying
+        description: ""
+
+      - name: name
+        data_type: character varying
+        description: ""
+
+      - name: official_name
+        data_type: character varying
+        description: ""
+
+      - name: common_name
+        data_type: character varying
+        description: ""
+
+      - name: address
+        data_type: text
+        description: ""
+
+      - name: plcapital
+        data_type: integer
+        description: ""
+
+      - name: plcapital_notes
+        data_type: text
+        description: ""
+
+      - name: plrnd
+        data_type: integer
+        description: ""
+
+      - name: plrnd_notes
+        data_type: text
+        description: ""
+
+      - name: plworkers
+        data_type: integer
+        description: ""
+
+      - name: plworkers_notes
+        data_type: text
+        description: ""
+
+      - name: verified
+        data_type: boolean
+        description: ""
+
+      - name: plnotglobent
+        data_type: integer
+        description: ""
+
+      - name: plnotglobent_notes
+        data_type: text
+        description: ""
+
+      - name: plregistered
+        data_type: integer
+        description: ""
+
+      - name: plregistered_notes
+        data_type: text
+        description: ""
+
+      - name: created
+        data_type: timestamp with time zone
+        description: ""
+
+      - name: editor_notes
+        data_type: text
+        description: ""
+
+      - name: description
+        data_type: text
+        description: ""
+
+      - name: sources
+        data_type: text
+        description: ""
+
+      - name: query_count
+        data_type: integer
+        description: ""
+
+      - name: is_friend
+        data_type: boolean
+        description: ""
+
+      - name: modified
+        data_type: timestamp with time zone
+        description: ""
+
+      - name: display_brands_in_description
+        data_type: boolean
+        description: ""
+
+      - name: logotype
+        data_type: character varying
+        description: ""
+
+      - name: official_url
+        data_type: character varying
+        description: ""
+
+  - name: bi_queries_by_time
+    description: ""
+    columns:
+      - name: seq
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: request_total
+        data_type: bigint
+        description: ""
+
+      - name: request_was_590
+        data_type: bigint
+        description: ""
+
+      - name: request_was_plscore
+        data_type: bigint
+        description: ""
+
+      - name: request_was_verified
+        data_type: bigint
+        description: ""
+
+      - name: percetage_request_was_590
+        data_type: double precision
+        description: ""
+
+      - name: percetage_request_was_plscore
+        data_type: double precision
+        description: ""
+
+      - name: percetage_request_was_verified
+        data_type: double precision
+        description: ""
+
+      - name: uq_user
+        data_type: bigint
+        description: ""
+
+  - name: bi_queries_stats_intervals
+    description: ""
+    columns:
+      - name: request_total
+        data_type: bigint
+        description: ""
+
+      - name: request_day
+        data_type: bigint
+        description: ""
+
+      - name: request_week
+        data_type: bigint
+        description: ""
+
+      - name: request_month
+        data_type: bigint
+        description: ""
+
+      - name: request_3_month
+        data_type: bigint
+        description: ""
+
+      - name: request_6_month
+        data_type: bigint
+        description: ""
+
+      - name: request_day_was_590
+        data_type: bigint
+        description: ""
+
+      - name: request_week_was_590
+        data_type: bigint
+        description: ""
+
+      - name: request_month_was_590
+        data_type: bigint
+        description: ""
+
+      - name: request_3_month_was_590
+        data_type: bigint
+        description: ""
+
+      - name: request_6_month_was_590
+        data_type: bigint
+        description: ""
+
+      - name: request_total_was_590
+        data_type: bigint
+        description: ""
+
+      - name: request_day_was_plscore
+        data_type: bigint
+        description: ""
+
+      - name: request_week_was_plscore
+        data_type: bigint
+        description: ""
+
+      - name: request_month_was_plscore
+        data_type: bigint
+        description: ""
+
+      - name: request_3_month_was_plscore
+        data_type: bigint
+        description: ""
+
+      - name: request_6_month_was_plscore
+        data_type: bigint
+        description: ""
+
+      - name: request_total_was_plscore
+        data_type: bigint
+        description: ""
+
+      - name: request_day_was_verified
+        data_type: bigint
+        description: ""
+
+      - name: request_week_was_verified
+        data_type: bigint
+        description: ""
+
+      - name: request_month_was_verified
+        data_type: bigint
+        description: ""
+
+      - name: request_3_month_was_verified
+        data_type: bigint
+        description: ""
+
+      - name: request_6_month_was_verified
+        data_type: bigint
+        description: ""
+
+      - name: request_total_was_verified
+        data_type: bigint
+        description: ""
+
+      - name: uq_user_total
+        data_type: bigint
+        description: ""
+
+      - name: uq_user_day
+        data_type: bigint
+        description: ""
+
+      - name: uq_user_week
+        data_type: bigint
+        description: ""
+
+      - name: uq_user_month
+        data_type: bigint
+        description: ""
+
+      - name: uq_user_3_month
+        data_type: bigint
+        description: ""
+
+      - name: uq_user_6_month
+        data_type: bigint
+        description: ""
+
+  - name: bi_stats_queries_uq_users_by_week
+    description: ""
+    columns:
+      - name: seq
+        data_type: date
+        description: ""
+
+      - name: count_uq_user
+        data_type: bigint
+        description: ""
+
+      - name: count_request
+        data_type: bigint
+        description: ""
+
+  - name: bi_new_product_by_hour
+    description: ""
+    columns:
+      - name: dd
+        data_type: double precision
+        description: ""
+
+      - name: rozpoznaana
+        data_type: bigint
+        description: ""
+
+      - name: nieroznanaa
+        data_type: bigint
+        description: ""
+
+      - name: wszystkie
+        data_type: bigint
+        description: ""
+
+  - name: bi_popular_not_verified_products
+    description: ""
+    columns:
+      - name: id
+        data_type: integer
+        description: ""
+
+      - name: name
+        data_type: character varying
+        description: ""
+
+      - name: code
+        data_type: character varying
+        description: ""
+
+      - name: created
+        data_type: timestamp with time zone
+        description: ""
+
+      - name: ilim_queried_at
+        data_type: timestamp with time zone
+        description: ""
+
+      - name: query_count
+        data_type: integer
+        description: ""
+
+      - name: ai_pics_count
+        data_type: integer
+        description: ""
+
+      - name: brand_id
+        data_type: integer
+        description: ""
+
+      - name: company_id
+        data_type: integer
+        description: ""
+
+      - name: modified
+        data_type: timestamp with time zone
+        description: ""
+
+      - name: gpc_brick_id
+        data_type: integer
+        description: ""
+
+      - name: gs1_last_response
+        data_type: jsonb
+        description: ""
+
+  - name: bi_product_by_time
+    description: ""
+    columns:
+      - name: seq
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: count_total
+        data_type: bigint
+        description: ""
+
+      - name: count_with_company
+        data_type: bigint
+        description: ""
+
+      - name: count_590
+        data_type: bigint
+        description: ""
+
+      - name: count_with_company_and_590
+        data_type: bigint
+        description: ""
+
+      - name: count_without_company_and_590
+        data_type: bigint
+        description: ""
+
+      - name: percentage_with_company
+        data_type: double precision
+        description: ""
+
+      - name: percentage_590
+        data_type: double precision
+        description: ""
+
+      - name: percentage_wtih_company_and_590
+        data_type: double precision
+        description: ""
+
+      - name: percentage_wtihout_company_and_590
+        data_type: double precision
+        description: ""

@@ -27,3 +27,19 @@ pola_app_postgres:
       dbname: "{{ env_var('POLA_APP_DB_NAME') }}"
 
   target: dev
+
+pola_app_bigquery:
+  outputs:
+
+    staging:
+      type: bigquery
+      method: oauth
+      location: europe-west3
+      schema: pola_backend__staging
+      threads: 4 # Must be a value of 1 or greater
+
+      # If a query would bill more than a gigabyte of data, then
+      # BigQuery will reject the query
+      maximum_bytes_billed: 1000000000
+
+  target: staging

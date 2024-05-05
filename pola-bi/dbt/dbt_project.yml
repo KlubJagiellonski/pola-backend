@@ -24,14 +24,19 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "target"
     - "dbt_modules"
 
-
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In this example config, we tell dbt to build all models in the example/ directory
-# as tables. These settings can be overridden in the individual model files
-# using the `{{ config(...) }}` macro.
 models:
     pola_app:
-#        +schema: dev
         +materialized: table
+        +persist_docs:
+            relation: true
+            columns: true
+
+        postgres:
+            +enabled: '{{ target.type == "postgres" }}'
+
+        bigquery:
+            +enabled: '{{ target.type == "bigquery" }}'
+            staging:
+                +materialized: view
