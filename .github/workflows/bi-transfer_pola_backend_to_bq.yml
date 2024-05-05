@@ -29,7 +29,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   GCP_PROJECT_ID: pola-bi-looker
-  GCP_PROJECT_NUMBER: 354540873199
+  GCP_PROJECT_NUMBER: "354540873199"
   GCP_REGION: europe-west3
   GCP_BUCKET_NAME: pola-app_pola-backend_postgres_csv-files
   GCP_IDENTITY_POOL: github
@@ -89,6 +89,10 @@ jobs:
           create_credentials_file: true
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
+      - name: Debug OIDC Claims
+        uses: 'github/actions-oidc-debugger@main'
+        with:
+          audience: 'https://github.com/github'
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
@@ -108,32 +112,59 @@ jobs:
       - name: Run transfer script
         env:
           TABLE_NAMES: |
-             ai_pics_aiattachment,
-             ai_pics_aipics,
-             bi_companies_by_query_group,
-             bi_companies_with_count_group,
-             bi_new_product_by_hour,
-             bi_popular_not_verified_products,
-             bi_product_by_time,
-             bi_queries_by_time,
-             bi_queries_stats_intervals,
-             bi_stats_queries_uq_users_by_week,
-             company_brand,
-             company_company,
-             gpc_brick,
-             gpc_class,
-             gpc_family,
-             gpc_segment,
-             pola_query,
-             pola_searchquery,
-             pola_stats,
-             product_product,
-             report_attachment,
-             report_report,
-             users_user
+            ai_pics_aiattachment
         run: |
           python ./pola-bi/postgres_to_bigquery.py --verbose all \
             --database-url "${DATABASE_URL}" \
             --table-names "${TABLE_NAMES}" \
             --staging-url "gs://${GCP_BUCKET_NAME}/" \
             --dataset-id "${GCP_BIGQUERY_DATASET}" \
+      - name: Set up GoLang
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.21"
+          cache: false
+
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          repository: slingdata-io/sling-cli
+          path: sling
+          ref: bigquery-openid
+
+      - run: |
+          cd sling
+          go mod edit -dropreplace='github.com/flarco/g' go.mod
+          go mod edit -dropreplace='github.com/slingdata-io/sling' go.mod
+          go mod edit -droprequire='github.com/slingdata-io/sling' go.mod
+          go mod tidy
+          go get -u golang.org/x/oauth2
+          go get -u cloud.google.com/go
+          go get -u cloud.google.com/go/bigquery
+          go get -u cloud.google.com/go/bigtable
+          go get -u cloud.google.com/go/storage
+          go build -o /usr/local/bin/sling cmd/sling/*.go
+          cd ..
+
+      - name: Run transfer script
+        run: |
+          set -x;
+          date | gcloud storage cp - "gs://${GCP_BUCKET_NAME}/date.txt"
+          gcloud storage cat "gs://${GCP_BUCKET_NAME}/date.txt"
+          gcloud storage ls 'gs://${GCP_BUCKET_NAME}/'
+          sling conns set MY_BIGQUERY \
+            type=bigquery \
+            project="${GCP_PROJECT_ID}" \
+            dataset="${GCP_BIGQUERY_DATASET}" \
+            gc_bucket="${GCP_BUCKET_NAME}" \
+            location="${GCP_REGION}"
+          sling conns test MY_BIGQUERY
+          export "MY_POSTGRES=${DATABASE_URL}"
+          sling conns test MY_POSTGRES
+
+# TODO: Run replication
+#          export "GOOGLE_APPLICATION_CREDENTIALS=$(./scripts/gcloud_generate_temp_creds.sh)"
+#          gcloud storage ls "gs://${GCP_BUCKET_NAME}/"
+#          cat "$(./scripts/gcloud_generate_temp_creds.sh)"
+#          export "GOOGLE_APPLICATION_CREDENTIALS=$(./scripts/gcloud_generate_temp_creds.sh)"
