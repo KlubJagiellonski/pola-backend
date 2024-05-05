@@ -25,7 +25,13 @@ from pola.views import ExprAutocompleteMixin
 
 from ..logic_score import get_pl_score
 from .filters import BrandFilter, CompanyFilter
-from .forms import BrandForm, CompanyCreateFromKRSForm, CompanyForm
+from .forms import (
+    BrandForm,
+    BrandFormSet,
+    BrandFormSetHelper,
+    CompanyCreateFromKRSForm,
+    CompanyForm,
+)
 
 
 class CompanyListView(LoginPermissionRequiredMixin, FilterView):
@@ -47,6 +53,26 @@ class CompanyCreate(GetInitalFormMixin, LoginPermissionRequiredMixin, FormValidM
     model = Company
     form_class = CompanyForm
     form_valid_message = "Firma utworzona!"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['brand_formset'] = BrandFormSet(self.request.POST)
+        else:
+            context['brand_formset'] = BrandFormSet()
+        context['brand_formset_helper'] = BrandFormSetHelper()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        formset = context['brand_formset']
+        if formset.is_valid():
+            response = super().form_valid(form)
+            formset.instance = self.object
+            formset.save()
+            return response
+        else:
+            return super().form_invalid(form)
 
 
 class CompanyCreateFromKRSView(LoginPermissionRequiredMixin, FormView):
@@ -72,6 +98,24 @@ class CompanyUpdate(LoginPermissionRequiredMixin, FormValidMessageMixin, Concure
     form_class = CompanyForm
     concurency_url = reverse_lazy('concurency:lock')
     form_valid_message = "Firma zaktualizowana!"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['brand_formset'] = BrandFormSet(self.request.POST, instance=self.object)
+        else:
+            context['brand_formset'] = BrandFormSet(instance=self.object)
+        context['brand_formset_helper'] = BrandFormSetHelper()
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        formset = BrandFormSet(self.request.POST, instance=self.object)
+        if formset.is_valid():
+            formset.save()
+        else:
+            return super().form_invalid(form)
+        return response
 
 
 class CompanyDelete(LoginPermissionRequiredMixin, FormValidMessageMixin, DeleteView):

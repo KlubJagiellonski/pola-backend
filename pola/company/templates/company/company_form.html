@@ -12,7 +12,30 @@
 {% endblock %}
 
 {% block content %}
-    {% crispy form %}
+    <form
+        id="company-form"
+        method="POST"
+        action="{{ form.helper.form_action }}"
+        {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+        <div class="form-horizontal">
+            {% crispy form %}
+        </div>
+        <div class="brand-formset clearfix">
+            {% crispy brand_formset brand_formset_helper %}
+            <div class="pull-right">
+                <button class="btn add-row" type="button">Add new row</button>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="aab controls col-lg-3"></div>
+                <div class="controls col-lg-9">
+                    <input type="submit" name="action" value="Save" class="btn btn-primary" id="submit-id-action">
+                    <input type="reset" name="reset" value="Przywróć poprzednie" class="btn btn-inverse" id="reset-id-reset">
+                </div>
+            </div>
+        </div>
+    </form>
 {% endblock content %}
 
 {% block javascript %}
@@ -35,5 +58,35 @@
         $('#div_id_commit_desc textarea').text('Nowy opis firmy na podstawie opisów w poprzednim formacie')
     }
     </script>
-    {%  endif %}
+    {% endif %}
+    <script>
+    $('.brand-formset').each(function() {
+        const $formset = $(this);
+        const $addButton = $formset.find('.add-row');
+        const $template = $formset.find('.empty-form').clone();
+        const $rowsContainer = $formset.find('.empty-form').parent()
+        const $totalForms = $formset.find('input[name$=TOTAL_FORMS]');
+
+        console.log({$formset, $addButton, $template, $rowsContainer})
+        $template.removeClass('hidden empty-form')
+        $addButton.click(function () {
+            const $newRow = $template.clone();
+            // -1 because of the empty form
+            const formCount = $rowsContainer.children().length - 1;
+            $newRow.find('input, select, textarea, td').each(function () {
+                const $el = $(this);
+                ['name', 'id'].forEach(function (attr) {
+                    const value = $el.attr(attr);
+                    if (value) {
+                        $el.attr(attr, value.replace('__prefix__', formCount));
+                    }
+                });
+            });
+            $rowsContainer.append($newRow);
+            // +1 because of the added form
+            $totalForms.val(formCount + 1);
+        });
+    })
+
+    </script>
 {% endblock %}
