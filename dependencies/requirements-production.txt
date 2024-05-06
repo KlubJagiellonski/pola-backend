@@ -1,4 +1,4 @@
-Babel==2.14.0
+Babel==2.15.0
 boto==2.49.0
 boto3==1.34.90
 botocore==1.34.90
