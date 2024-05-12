@@ -24,9 +24,9 @@ permissions:
   contents: read  # This is required for actions/checkout
 
 env:
-  # GITHUB_REPOSITORY: ${{ github.repository }}
-  # GITHUB_ORGANIZATION: ${{ github.repository_owner }}
-  # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   GCP_PROJECT_ID: pola-bi-looker
   GCP_PROJECT_NUMBER: "354540873199"
@@ -35,40 +35,41 @@ env:
   GCP_IDENTITY_POOL: github
   GCP_IDENTITY_PROVIDER: pola-backend-repo
 
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 jobs:
   deploy-bi:
     name: "Transfer PostgresSQL to BQ"
     runs-on: ubuntu-latest
     steps:
-      # - name: Set dynamic job variable
-      #   shell: python
-      #   run: |
-      #     import os
-      #     from pathlib import Path
+      - name: Set dynamic job variable
+        shell: python
+        run: |
+          import os
+          from pathlib import Path
 
-      #     event_name = os.environ["GITHUB_EVENT_NAME"]
-      #     github_env_file_path = Path(os.environ["GITHUB_ENV"])
-      #     if event_name == "schedule":
-      #         heroku_app = "pola-staging"
-      #     elif event_name == "workflow_dispatch":
-      #         heroku_app = os.environ["INPUT_HEROKU_APP"]
-      #     elif event_name == "pull_request":
-      #         heroku_app = "pola-staging"
-      #     else:
-      #         raise Exception(f"Unknown event: {event_name}")
-      #     if heroku_app == "pola-app":
-      #         env_name = "prod"
-      #     elif heroku_app == "pola-staging":
-      #         env_name = "staging"
-      #     else:
-      #         raise Exception(f"Unknown app: {heroku_app}")
-      #     with github_env_file_path.open("a") as file:
-      #         file.write(f"ENV_NAME={env_name}\n")
-      #         file.write(f"HEROKU_APP={heroku_app}\n")
-      #         file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{env_name}\n")
-      #   env:
-      #     INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
-      #     GITHUB_EVENT_NAME: ${{ github.event_name }}
+          event_name = os.environ["GITHUB_EVENT_NAME"]
+          github_env_file_path = Path(os.environ["GITHUB_ENV"])
+          if event_name == "schedule":
+              heroku_app = "pola-staging"
+          elif event_name == "workflow_dispatch":
+              heroku_app = os.environ["INPUT_HEROKU_APP"]
+          elif event_name == "pull_request":
+              heroku_app = "pola-staging"
+          else:
+              raise Exception(f"Unknown event: {event_name}")
+          if heroku_app == "pola-app":
+              env_name = "prod"
+          elif heroku_app == "pola-staging":
+              env_name = "staging"
+          else:
+              raise Exception(f"Unknown app: {heroku_app}")
+          with github_env_file_path.open("a") as file:
+              file.write(f"ENV_NAME={env_name}\n")
+              file.write(f"HEROKU_APP={heroku_app}\n")
+              file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{env_name}\n")
+        env:
+          INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v4
         with:
@@ -98,16 +99,14 @@ jobs:
       #   uses: 'github/actions-oidc-debugger@main'
       #   with:
       #     audience: 'https://github.com/github'
-      # - name: Install Heroku CLI
-      #   run: |
-      #     curl https://cli-assets.heroku.com/install.sh | sh
-      #   env:
-      #     HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      # - name: Retrieve PostgreSQL credentials
-      #   run: |
-      #     DATABASE_URL=$(heroku config:get DATABASE_URL --app "${HEROKU_APP}")
-      #     echo "::add-mask::$DATABASE_URL"
-      #     echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Retrieve PostgreSQL credentials
+        run: |
+          DATABASE_URL=$(heroku config:get DATABASE_URL --app "${HEROKU_APP}")
+          echo "::add-mask::$DATABASE_URL"
+          echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
       - name: "Setup Python"
         uses: actions/setup-python@v5
         with:
@@ -117,7 +116,7 @@ jobs:
           set -x;
           date | gcloud storage cp - "gs://${GCP_BUCKET_NAME}/date.txt"
           gcloud storage cat "gs://${GCP_BUCKET_NAME}/date.txt"
-          gcloud storage ls 'gs://${GCP_BUCKET_NAME}/'
+          gcloud storage ls "gs://${GCP_BUCKET_NAME}/"
       - name: "Install dependencies"
         run: pip install google-cloud-bigquery google-cloud-storage psycopg2-binary
       - name: Run transfer script
@@ -161,9 +160,6 @@ jobs:
       - name: Run transfer script
         run: |
           set -x;
-          date | gcloud storage cp - "gs://${GCP_BUCKET_NAME}/date.txt"
-          gcloud storage cat "gs://${GCP_BUCKET_NAME}/date.txt"
-          gcloud storage ls "gs://${GCP_BUCKET_NAME}/"
           sling conns set MY_BIGQUERY \
             type=bigquery \
             project="${GCP_PROJECT_ID}" \
