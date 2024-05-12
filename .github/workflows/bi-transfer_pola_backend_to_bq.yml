@@ -94,10 +94,10 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud auth list'
       
-      - name: Debug OIDC Claims
-        uses: 'github/actions-oidc-debugger@main'
-        with:
-          audience: 'https://github.com/github'
+      # - name: Debug OIDC Claims
+      #   uses: 'github/actions-oidc-debugger@main'
+      #   with:
+      #     audience: 'https://github.com/github'
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
