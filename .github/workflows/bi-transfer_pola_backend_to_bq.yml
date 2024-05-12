@@ -163,7 +163,7 @@ jobs:
           set -x;
           date | gcloud storage cp - "gs://${GCP_BUCKET_NAME}/date.txt"
           gcloud storage cat "gs://${GCP_BUCKET_NAME}/date.txt"
-          gcloud storage ls 'gs://${GCP_BUCKET_NAME}/'
+          gcloud storage ls "gs://${GCP_BUCKET_NAME}/"
           sling conns set MY_BIGQUERY \
             type=bigquery \
             project="${GCP_PROJECT_ID}" \
