@@ -98,20 +98,26 @@ jobs:
       #   uses: 'github/actions-oidc-debugger@main'
       #   with:
       #     audience: 'https://github.com/github'
-      - name: Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      - name: Retrieve PostgreSQL credentials
-        run: |
-          DATABASE_URL=$(heroku config:get DATABASE_URL --app "${HEROKU_APP}")
-          echo "::add-mask::$DATABASE_URL"
-          echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+      # - name: Install Heroku CLI
+      #   run: |
+      #     curl https://cli-assets.heroku.com/install.sh | sh
+      #   env:
+      #     HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      # - name: Retrieve PostgreSQL credentials
+      #   run: |
+      #     DATABASE_URL=$(heroku config:get DATABASE_URL --app "${HEROKU_APP}")
+      #     echo "::add-mask::$DATABASE_URL"
+      #     echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
       - name: "Setup Python"
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
+      - name: Copy file to bucket
+        run: |
+          set -x;
+          date | gcloud storage cp - "gs://${GCP_BUCKET_NAME}/date.txt"
+          gcloud storage cat "gs://${GCP_BUCKET_NAME}/date.txt"
+          gcloud storage ls 'gs://${GCP_BUCKET_NAME}/'
       - name: "Install dependencies"
         run: pip install google-cloud-bigquery google-cloud-storage psycopg2-binary
       - name: Run transfer script
@@ -123,7 +129,7 @@ jobs:
             --database-url "${DATABASE_URL}" \
             --table-names "${TABLE_NAMES}" \
             --staging-url "gs://${GCP_BUCKET_NAME}/" \
-            --dataset-id "${GCP_BIGQUERY_DATASET}" \
+            --dataset-id "${GCP_BIGQUERY_DATASET}"
       - name: Set up GoLang
         uses: actions/setup-go@v3
         with:
