@@ -24,9 +24,9 @@ permissions:
   contents: read  # This is required for actions/checkout
 
 env:
-  GITHUB_REPOSITORY: ${{ github.repository }}
-  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # GITHUB_REPOSITORY: ${{ github.repository }}
+  # GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   GCP_PROJECT_ID: pola-bi-looker
   GCP_PROJECT_NUMBER: "354540873199"
@@ -39,38 +39,36 @@ jobs:
   deploy-bi:
     name: "Transfer PostgresSQL to BQ"
     runs-on: ubuntu-latest
-    env:
-      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
-      - name: Set dynamic job variable
-        shell: python
-        run: |
-          import os
-          from pathlib import Path
+      # - name: Set dynamic job variable
+      #   shell: python
+      #   run: |
+      #     import os
+      #     from pathlib import Path
 
-          event_name = os.environ["GITHUB_EVENT_NAME"]
-          github_env_file_path = Path(os.environ["GITHUB_ENV"])
-          if event_name == "schedule":
-              heroku_app = "pola-staging"
-          elif event_name == "workflow_dispatch":
-              heroku_app = os.environ["INPUT_HEROKU_APP"]
-          elif event_name == "pull_request":
-              heroku_app = "pola-staging"
-          else:
-              raise Exception(f"Unknown event: {event_name}")
-          if heroku_app == "pola-app":
-              env_name = "prod"
-          elif heroku_app == "pola-staging":
-              env_name = "staging"
-          else:
-              raise Exception(f"Unknown app: {heroku_app}")
-          with github_env_file_path.open("a") as file:
-              file.write(f"ENV_NAME={env_name}\n")
-              file.write(f"HEROKU_APP={heroku_app}\n")
-              file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{env_name}\n")
-        env:
-          INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
+      #     event_name = os.environ["GITHUB_EVENT_NAME"]
+      #     github_env_file_path = Path(os.environ["GITHUB_ENV"])
+      #     if event_name == "schedule":
+      #         heroku_app = "pola-staging"
+      #     elif event_name == "workflow_dispatch":
+      #         heroku_app = os.environ["INPUT_HEROKU_APP"]
+      #     elif event_name == "pull_request":
+      #         heroku_app = "pola-staging"
+      #     else:
+      #         raise Exception(f"Unknown event: {event_name}")
+      #     if heroku_app == "pola-app":
+      #         env_name = "prod"
+      #     elif heroku_app == "pola-staging":
+      #         env_name = "staging"
+      #     else:
+      #         raise Exception(f"Unknown app: {heroku_app}")
+      #     with github_env_file_path.open("a") as file:
+      #         file.write(f"ENV_NAME={env_name}\n")
+      #         file.write(f"HEROKU_APP={heroku_app}\n")
+      #         file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{env_name}\n")
+      #   env:
+      #     INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
+      #     GITHUB_EVENT_NAME: ${{ github.event_name }}
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v4
         with:
@@ -88,7 +86,14 @@ jobs:
           export_environment_variables: true
           create_credentials_file: true
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+        uses: 'google-github-actions/setup-gcloud@v2'      
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+      - name: 'Use gcloud CLI'
+        run: 'gcloud auth list --filter=status:ACTIVE --format="value(account)"'
+      - name: 'Use gcloud CLI'
+        run: 'gcloud auth list'
+      
       - name: Debug OIDC Claims
         uses: 'github/actions-oidc-debugger@main'
         with:
