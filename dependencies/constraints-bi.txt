@@ -39,7 +39,7 @@ pytimeparse==1.1.8
 pytz==2024.1
 PyYAML==6.0.1
 referencing==0.35.0
-requests==2.31.0
+requests==2.32.2
 rpds-py==0.18.0
 setuptools==69.5.1
 six==1.16.0
