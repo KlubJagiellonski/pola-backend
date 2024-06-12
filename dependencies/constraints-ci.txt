@@ -58,7 +58,7 @@ openapi-core==0.14.5
 openapi-schema-validator==0.2.3
 openapi-spec-validator==0.4.0
 parameterized==0.9.0
-parse==1.20.1
+parse==1.20.2
 parso==0.8.4
 pexpect==4.9.0
 Pillow==10.1.0
