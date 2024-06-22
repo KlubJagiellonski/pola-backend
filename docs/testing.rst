@@ -13,9 +13,9 @@ Sprawdzenia pre-commit wykonują całą niezbędną instalację, gdy uruchamiasz
 Pre-commit hooki
 ================
 
-Pre-commi hooki pomagają przyspieszyć lokalny cykl rozwoju i zmniejszyć obciążenie infrastruktury CI. Rozważ zainstalowanie narzędzia pre-commit, aby uruchamiał się automatycznie dla każdego commita.
+Pre-commit hooki pomagają przyspieszyć lokalny cykl rozwoju i zmniejszyć obciążenie infrastruktury CI. Rozważ zainstalowanie narzędzia pre-commit, aby uruchamiał się automatycznie dla każdego commita.
 
-Pre-commi hooki domyślnie sprawdzają tylko pliki, nad którymi aktualnie pracujesz, co czynni je szybkimi. Każdy hook jest instalowany w osobnym śroodowisku niezależnym od systemu, a więc może być pewien, że sprawdzenia wykonane lokalne powiodą się również na środowisku CI.
+Pre-commit hooki domyślnie sprawdzają tylko pliki, nad którymi aktualnie pracujesz, co czynni je szybkimi. Każdy hook jest instalowany w osobnym śroodowisku niezależnym od systemu, a więc może być pewien, że sprawdzenia wykonane lokalne powiodą się również na środowisku CI.
 
 Zintegrowaliśmy fantastyczne ramy pre-commit w naszym przepływie pracy programistycznej. Aby go zainstalować i używać, potrzebujesz lokalnie przynajmniej Pythona 3.6.
 
