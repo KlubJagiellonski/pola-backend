@@ -84,7 +84,7 @@ s3transfer==0.10.1
 sentry-sdk==1.45.0
 six==1.16.0
 soupsieve==2.5
-sqlparse==0.5.0
+sqlparse==0.5.1
 stack-data==0.6.3
 toml==0.10.2
 tqdm==4.66.2
