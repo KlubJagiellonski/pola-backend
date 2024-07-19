@@ -412,8 +412,8 @@ class TestGetResultFromCode(TestCase):
         expected_response = (
             {
                 'all_company_brands': [
-                    {'logotype_url': None, 'name': 'brand-2'},
-                    {'logotype_url': None, 'name': 'brand-1'},
+                    {'logotype_url': None, 'name': 'brand-2', 'website_url': 'example.pl'},
+                    {'logotype_url': None, 'name': 'brand-1', 'website_url': 'example.pl'},
                 ],
                 'altText': None,
                 'card_type': 'type_grey',
