@@ -113,7 +113,7 @@ Aby uruchomić wszystkie test uruchom:
 
 .. code-block:: bash
 
-    docker-compose run --rm web manage.py test
+    docker-compose run --rm web ./manage.py test
 
 Możesz określić poszczególne testy do uruchomienia, dostarczając dowolną liczbę „etykiet testowych” do komendy ./manage.py. Każda etykieta testowa może być pełną kropkowaną ścieżką Pythona do pakietu, modułu, podklasy TestCase lub metody testowej. Na przykład:
 
