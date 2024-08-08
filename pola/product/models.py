@@ -5,11 +5,15 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
+from pgvector.django import CosineDistance, VectorField
 from reversion import revisions as reversion
+from sentence_transformers import SentenceTransformer
 
 from pola.company.models import Brand, Company
 from pola.concurency import concurency
 from pola.gpc.models import GPCBrick
+
+sentence_transformer = SentenceTransformer("distiluse-base-multilingual-cased-v1")
 
 
 class ProductQuerySet(models.query.QuerySet):
@@ -41,6 +45,7 @@ class Product(TimeStampedModel):
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
     gs1_last_response = models.JSONField(null=True)
+    embedding = VectorField(dimensions=512, editable=False, null=True)
 
     objects = ProductQuerySet.as_manager()
 
@@ -93,6 +98,11 @@ class Product(TimeStampedModel):
                 'where ai_pics_aipics.product_id=product_product.id and '
                 '(ai_pics_aipics.is_valid=TRUE or ai_pics_aipics.is_valid IS NULL))'
             )
+
+    @classmethod
+    def search(cls, q, dmax=0.5):
+        distance = CosineDistance("embedding", sentence_transformer.encode(q))
+        return cls.objects.alias(distance=distance).filter(distance__lt=dmax).order_by(distance)
 
     class Meta:
         verbose_name = _("Produkt")
