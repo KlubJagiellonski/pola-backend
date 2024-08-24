@@ -18,7 +18,7 @@ Teraz możesz uruchomić sorodowisko:
 
 .. code-block:: bash
 
-    docker-compose up
+    docker compose up
 
 Poczatkowo baza jest pusta, wiec konieczne jest przeprowadzenie migracji:
 
