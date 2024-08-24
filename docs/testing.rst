@@ -6,7 +6,7 @@ Testowanie
 Statyczne kontrola kodu
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Statyczne weryfikacje kodu służy do sprawdzania, czy kod spełnia określone standardy jakości. Wszystkie statyczne kontrole kodu można przeprowadzić za pomocą frameworka `pre-commit <https://pre-commit.com/>`__.
+Statyczna weryfikacja kodu służy do sprawdzenia, czy kod spełnia określone standardy jakości. Wszystkie statyczne kontrole kodu można przeprowadzić za pomocą frameworka `pre-commit <https://pre-commit.com/>`__.
 
 Sprawdzenia pre-commit wykonują całą niezbędną instalację, gdy uruchamiasz je po raz pierwszy.
 
@@ -22,7 +22,7 @@ Zintegrowaliśmy fantastyczne ramy pre-commit w naszym przepływie pracy program
 Instalacja pre-commit hooków
 ============================
 
-Aby zainstalować haki pre-commit uruchom:
+Aby zainstalować pre-commit uruchom:
 
 .. code-block:: bash
 
