@@ -34,32 +34,32 @@ Poczatkowo baza jest pusta, wiec konieczne jest przeprowadzenie migracji:
 
 .. code-block:: bash
 
-    docker-compose run web migrate
+    docker compose run web migrate
 
 Zaimportuj dane GPC
 
 .. code-block:: bash
 
-    docker-compose run web import_gdc pola/gpc/fixtures/GPC_as_of-May_2021_GDSN_v20210723_PL.xml
+    docker compose run web import_gdc pola/gpc/fixtures/GPC_as_of-May_2021_GDSN_v20210723_PL.xml
 
 Zapełnij baze danych przykładowymi danymi:
 
 .. code-block:: bash
 
-    docker-compose run web populate_db
+    docker compose run web populate_db
 
 Warto również utworzyć konto administratora w systemie:
 
 .. code-block:: bash
 
-    docker-compose run web createsuperuser --username admin --email admin@example.org
+    docker compose run web createsuperuser --username admin --email admin@example.org
 
 Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Możę to wyglądać następująco.
 
 
 .. code-block:: console
 
-    $ docker-compose run web createsuperuser --username admin --email admin@example.org
+    $ docker compose run web createsuperuser --username admin --email admin@example.org
     Creating pola-backend_web_run ... done
     Checking environment:
     postgres:  OK.
