@@ -16,7 +16,7 @@ Aplikacja została przygotowana do pracy w środowisku Docker. Przed pierwszym u
 
    - Dla Mac OS: Docker Desktop i Docker Toolbox zawierają już Docker Compose wraz z innymi aplikacjami Docker, więc użytkownicy nie muszą instalować Docker Compose oddzielnie.
 
-Po wykonaniu tych kroków powiniens przygotować plik z zmiennymi środowiskowymi. Niektóre komponenty wykorzystują
+Po wykonaniu tych kroków powinieneś przygotować plik z zmiennymi środowiskowymi. Niektóre komponenty wykorzystują
 prywatne lub komercyjne API, więc możesz mieć problem z dostępem, ale nie powinno to stanowić w problemu w rozwoju aplikacji.
 Zmienne sa przechowywaane w pliku ``.env``. Swój zestaw zmiennych możesz stworzyć bazujac na pliku ``.env.example``.
 
@@ -24,7 +24,7 @@ Zmienne sa przechowywaane w pliku ``.env``. Swój zestaw zmiennych możesz stwor
 
     cp .env.example .env
 
-Teraz możesz uruchomić sorodowisko:
+Teraz możesz uruchomić środowisko:
 
 .. code-block:: bash
 
@@ -54,7 +54,7 @@ Warto również utworzyć konto administratora w systemie:
 
     docker-compose run web createsuperuser --username admin --email admin@example.org
 
-Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Możę to wyglądać następująco.
+Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Może to wyglądać następująco.
 
 
 .. code-block:: console
