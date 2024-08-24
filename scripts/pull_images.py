@@ -33,10 +33,10 @@ def github_action_group(name: str) -> None:
 
 
 def main():
-    service_names = subprocess.check_output(['docker compose', 'ps', '--services']).decode().strip().splitlines()
+    service_names = subprocess.check_output(['docker', 'compose', 'ps', '--services']).decode().strip().splitlines()
     for servie_name in service_names:
         with github_action_group(f"Pulling {servie_name!r} service image"):
-            subprocess.run(['docker compose', 'pull', '--', servie_name], check=True)
+            subprocess.run(['docker', 'compose', 'pull', '--', servie_name], check=True)
 
 
 main()
