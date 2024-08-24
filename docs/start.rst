@@ -1,22 +1,12 @@
 Uruchamianie aplikacji
 ----------------------
 
-Aplikacja została przygotowana do pracy w środowisku Docker. Przed pierwszym uruchomieniem musisz spełnić następujące wymagania wstępne:
-
-1. Ty musisz mieć zainstalowane `Docker <https://docs.docker.com/get-docker/>`__:
+Aplikacja została przygotowana do pracy w środowisku `Docker <https://docs.docker.com/get-docker/>`__, aby zainstalować Docker:
 
    - Dla Linux, uruchom: ``curl https://get.docker.com | bash``
    - Dla Max OS/Windows, skorzystaj z poradnika: [Get docker](https://docs.docker.com/get-docker/)
 
-2. Ty musisz mieć zainstalowane `docker-compose <https://docs.docker.com/compose/install/>`__:
-
-   - Dla Linux, uruchom::
-
-       sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-   - Dla Mac OS: Docker Desktop i Docker Toolbox zawierają już Docker Compose wraz z innymi aplikacjami Docker, więc użytkownicy nie muszą instalować Docker Compose oddzielnie.
-
-Po wykonaniu tych kroków powiniens przygotować plik z zmiennymi środowiskowymi. Niektóre komponenty wykorzystują
+Po instalacji powinieneś przygotować plik z zmiennymi środowiskowymi. Niektóre komponenty wykorzystują
 prywatne lub komercyjne API, więc możesz mieć problem z dostępem, ale nie powinno to stanowić w problemu w rozwoju aplikacji.
 Zmienne sa przechowywaane w pliku ``.env``. Swój zestaw zmiennych możesz stworzyć bazujac na pliku ``.env.example``.
 
