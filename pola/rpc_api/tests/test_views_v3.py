@@ -5,7 +5,7 @@ import requests
 from test_plus import TestCase
 
 from pola.ai_pics.models import AIAttachment, AIPics
-from pola.company.factories import CompanyFactory
+from pola.company.factories import BrandFactory, CompanyFactory
 from pola.models import DEFAULT_DONATE_TEXT, DEFAULT_DONATE_URL
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
@@ -192,8 +192,9 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
             plRegistered_notes="DDD",
             plNotGlobEnt_notes="EEE",
         )
+        brand = BrandFactory(company=CompanyFactory(common_name='common_brand_test_name', name='brand_test_name'))
 
-        p = ProductFactory.create(code=5900049011829, company=c1, brand__company=c1)
+        p = ProductFactory.create(code=5900049011829, company=c1, brand=brand)
         response = self.json_request(self.url + "?device_id=TEST-DEVICE-ID&code=" + str(p.code))
         self.assertEqual(200, response.status_code, response.content)
         self.maxDiff = None
