@@ -141,7 +141,6 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         self.maxDiff = None
         self.assertEqual(
             {
-                'all_company_brands': [],
                 "product_id": p.id,
                 "code": "5900049011829",
                 "name": c.official_name,
@@ -200,7 +199,6 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         self.maxDiff = None
         self.assertEqual(
             {
-                'all_company_brands': [{'logotype_url': None, 'name': p.brand.common_name}],
                 'altText': None,
                 'card_type': 'type_white',
                 'code': '5900049011829',
