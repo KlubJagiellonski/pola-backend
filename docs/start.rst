@@ -14,7 +14,7 @@ Zmienne sa przechowywaane w pliku ``.env``. Swój zestaw zmiennych możesz stwor
 
     cp .env.example .env
 
-Teraz możesz uruchomić sorodowisko:
+Teraz możesz uruchomić środowisko:
 
 .. code-block:: bash
 
@@ -44,7 +44,7 @@ Warto również utworzyć konto administratora w systemie:
 
     docker compose run web createsuperuser --username admin --email admin@example.org
 
-Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Możę to wyglądać następująco.
+Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Może to wyglądać następująco.
 
 
 .. code-block:: console
