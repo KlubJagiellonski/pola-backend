@@ -167,6 +167,8 @@ components:
                     logotype_url:
                       type: string
                       nullable: true
+                    website_url:
+                      type: string
                   required:
                     - name
                     - logotype_url
