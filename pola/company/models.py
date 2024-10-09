@@ -312,6 +312,9 @@ class Brand(TimeStampedModel):
             region_name='eu-central-1',
         ),
     )
+    website_url = models.CharField(
+        max_length=128, null=False, blank=False, verbose_name=_("URL marki"), default="example.pl"
+    )
 
     def __str__(self):
         return self.common_name or self.name
