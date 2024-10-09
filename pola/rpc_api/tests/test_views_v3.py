@@ -200,7 +200,9 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         self.maxDiff = None
         self.assertEqual(
             {
-                'all_company_brands': [{'logotype_url': None, 'name': p.brand.common_name}],
+                'all_company_brands': [
+                    {'logotype_url': None, 'name': p.brand.common_name, 'website_url': p.brand.website_url}
+                ],
                 'altText': None,
                 'card_type': 'type_white',
                 'code': '5900049011829',

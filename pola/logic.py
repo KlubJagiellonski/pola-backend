@@ -112,7 +112,8 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
 
 def serialize_brand(brand):
     logotype_url = brand.logotype.url if brand.logotype else None
-    return {'name': str(brand), 'logotype_url': logotype_url}
+    website_url = brand.website_url if brand.website_url else None
+    return {'name': str(brand), 'logotype_url': logotype_url, 'website_url': website_url}
 
 
 def handle_companies_when_multiple_companies_are_not_supported(
