@@ -404,7 +404,8 @@ class TestGetResultFromCode(TestCase):
         company = CompanyFactory.create(description='test-description', display_brands_in_description=True)
         product = ProductFactory.create(code=current_ean, company=company, brand=None)
         BrandFactory.create(common_name="brand-1", company=company)
-        BrandFactory.create(common_name="brand-2", company=company)
+        BrandFactory.create(common_name="brand-2", company=company, website_url="test.pl")
+        BrandFactory.create(common_name="brand-3", company=company, website_url="moja_domena_testowa_123.com")
 
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
@@ -412,13 +413,14 @@ class TestGetResultFromCode(TestCase):
         expected_response = (
             {
                 'all_company_brands': [
-                    {'logotype_url': None, 'name': 'brand-2', 'website_url': 'example.pl'},
+                    {'logotype_url': None, 'name': 'brand-3', 'website_url': 'moja_domena_testowa_123.com'},
+                    {'logotype_url': None, 'name': 'brand-2', 'website_url': 'test.pl'},
                     {'logotype_url': None, 'name': 'brand-1', 'website_url': 'example.pl'},
                 ],
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': TEST_EAN13,
-                'description': ('test-description\n' 'Ten producent psoiada marki: brand-1, brand-2.'),
+                'description': ('test-description\n' 'Ten producent psoiada marki: brand-1, brand-2, brand-3.'),
                 'is_friend': False,
                 'name': company.official_name,
                 'plCapital': None,
