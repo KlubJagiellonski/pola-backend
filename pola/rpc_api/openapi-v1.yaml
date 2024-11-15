@@ -156,22 +156,6 @@ components:
             type: object
             additionalProperties: false
             properties:
-              all_company_brands:
-                type: array
-                items:
-                  type: object
-                  additionalProperties: false
-                  properties:
-                    name:
-                      type: string
-                    logotype_url:
-                      type: string
-                      nullable: true
-                    website_url:
-                      type: string
-                  required:
-                    - name
-                    - logotype_url
               altText:
                 type: string
                 nullable: true
@@ -252,6 +236,24 @@ components:
                     official_url:
                       type: string
                       nullable: true
+                    brands:
+                      type: array
+                      items:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          name:
+                            type: string
+                          logotype_url:
+                            type: string
+                            nullable: true
+                          website_url:
+                            type: string
+                            nullable: true
+                        required:
+                          - name
+                          - website_url
+                          - logotype_url
                   required:
                     - name
                     - plCapital
@@ -265,6 +267,7 @@ components:
                     - plScore
                     - plWorkers
                     - plWorkers_notes
+                    - brands
               product_id:
                 type: integer
                 nullable: true

@@ -26,7 +26,6 @@ class TestGetResultFromCode(TestCase):
         response = get_result_from_code("ABC")
         expected_response = (
             {
-                "all_company_brands": [],
                 "altText": (
                     "Pola rozpoznaje tylko kody kreskowe typu EAN8 i EAN13. "
                     "Zeskanowany przez Ciebie kod jest innego typu. Spróbuj "
@@ -70,7 +69,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [],
                 "altText": (
                     "Każde skanowanie jest rejestrowane. Najczęściej skanowane firmy i produkty, "
                     "których nie mamy jeszcze w bazie, są weryfikowane w pierwszej kolejności. "
@@ -114,7 +112,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [],
                 "altText": (
                     'Zeskanowany kod jest kodem ISBN/ISSN/ISMN dotyczącym książki,  '
                     'czasopisma lub albumu muzycznego. Wydawnictwa tego typu nie są '
@@ -157,7 +154,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [],
                 "altText": (
                     'Ten produkt został wyprodukowany przez zagraniczną firmę, której '
                     f'miejscem rejestracji jest: {country}. \n'
@@ -213,7 +209,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [],
                 "altText": (
                     f'Ten produkt został wyprodukowany przez zagraniczną firmę, '
                     f'której miejscem rejestracji jest: {country}.'
@@ -255,7 +250,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [],
                 "altText": (
                     'Zeskanowany kod jest wewnętrznym kodem sieci handlowej. Pola nie '
                     'potrafi powiedzieć o nim nic więcej'
@@ -298,7 +292,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [],
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': TEST_EAN13,
@@ -360,7 +353,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [],
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': '4621520000059',
@@ -412,11 +404,6 @@ class TestGetResultFromCode(TestCase):
 
         expected_response = (
             {
-                'all_company_brands': [
-                    {'logotype_url': None, 'name': 'brand-3', 'website_url': 'moja_domena_testowa_123.com'},
-                    {'logotype_url': None, 'name': 'brand-2', 'website_url': 'test.pl'},
-                    {'logotype_url': None, 'name': 'brand-1', 'website_url': 'example.pl'},
-                ],
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': TEST_EAN13,
@@ -461,7 +448,6 @@ class TestGetResultFromCode(TestCase):
         # TODO: Add support for multiple companies in this response
         expected_response = (
             {
-                'all_company_brands': [],
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': TEST_EAN13,
@@ -507,7 +493,6 @@ class TestGetResultFromCode(TestCase):
         # TODO: Add support for multiple companies in this response
         expected_response = (
             {
-                'all_company_brands': [],
                 'altText': None,
                 'card_type': 'type_grey',
                 'code': '4621520000059',
