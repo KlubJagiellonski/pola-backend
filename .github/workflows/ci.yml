@@ -42,8 +42,8 @@ jobs:
         run: cp .env.example .env
       - name: "Build CI image"
         run: |
-          ./scripts/ci-docker-image/build_image.sh
-          ./scripts/ci-docker-image/verify_image.sh
+          ./scripts/ci_docker_image.py build_image
+          ./scripts/ci_docker_image.py verify_image
       - name: Pull images
         run: ./scripts/pull_images.py
       - name: "Run tests"
@@ -62,9 +62,9 @@ jobs:
         env:
           PREPARE_BUILDX_CACHE: true
         run: |
-          ./scripts/ci-docker-image/push_image.sh
+          ./scripts/ci_docker_image.py push_image
           # Push cache
-          ./scripts/ci-docker-image/build_image.sh
+          ./scripts/ci_docker_image.py build_image
       - name: Show logs on fail
         if: ${{ failure() }}
         run: docker compose logs
@@ -105,8 +105,8 @@ jobs:
         run: cp .env.example .env
       - name: "Build CI image"
         run: |
-          ./scripts/ci-docker-image/build_image.sh
-          ./scripts/ci-docker-image/verify_image.sh
+          ./scripts/ci_docker_image.py build_image
+          ./scripts/ci_docker_image.py verify_image
       - name: "Build BI image"
         run: |
           # Build BI image
