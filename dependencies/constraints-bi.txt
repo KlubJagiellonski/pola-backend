@@ -26,7 +26,7 @@ more-itertools==10.2.0
 msgpack==1.0.8
 networkx==3.2.1
 packaging==21.3
-parsedatetime==2.4
+parsedatetime==2.6
 pathspec==0.11.2
 protobuf==4.25.3
 psycopg2-binary==2.9.9
