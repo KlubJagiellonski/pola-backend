@@ -1,3 +1,4 @@
+annotated-types==0.6.0
 asgiref==3.8.1
 asttokens==2.4.1
 attrs==23.2.0
@@ -67,7 +68,8 @@ psycopg2-binary==2.9.9
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pycparser==2.22
-pydantic==1.10.9
+pydantic==2.7.1
+pydantic_core==2.18.2
 Pygments==2.17.2
 PyJWT==2.8.0
 pyrsistent==0.20.0
