@@ -45,7 +45,7 @@ idna==3.7
 ipdb==0.13.9
 ipython==8.18.1
 isodate==0.6.1
-jedi==0.19.0
+jedi==0.19.2
 jmespath==1.0.1
 jsonschema==3.2.0
 lazy-object-proxy==1.10.0
