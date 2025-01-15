@@ -97,5 +97,5 @@ wcwidth==0.2.13
 WebOb==1.8.7
 WebTest==3.0.0
 Werkzeug==3.0.2
-wrapt==1.16.0
+wrapt==1.17.2
 yarl==1.9.4
