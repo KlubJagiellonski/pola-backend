@@ -12,6 +12,7 @@ charset-normalizer==3.3.2
 click==8.1.7
 Collectfast==2.2.0
 coverage==7.5.0
+crispy-bootstrap3==2024.1
 cryptography==42.0.5
 decorator==5.1.1
 defusedxml==0.7.1
@@ -23,7 +24,7 @@ django-autoslug==1.9.9
 django-braces==1.15.0
 django-cors-headers==4.3.1
 django-coverage-plugin==3.1.0
-django-crispy-forms==1.14.0
+django-crispy-forms==2.1
 django-environ==0.11.2
 django-filter==23.5
 django-grappelli==4.0.1
