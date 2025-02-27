@@ -42,7 +42,6 @@ DEFAULT_REPORT_DATA = {
 }
 
 DEFAULT_RESULT = {
-    'all_company_brands': [],
     'product_id': None,
     'code': None,
     'name': None,
@@ -80,15 +79,11 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
             if not product_company:
                 handle_unknown_company(code, report, result, multiple_company_supported)
             elif multiple_company_supported:
-                handle_multiple_companies(code, companies, result, stats)
+                handle_multiple_companies(code, companies, result, stats, product_company)
             else:
                 handle_companies_when_multiple_companies_are_not_supported(
                     code, companies, multiple_company_supported, result, stats
                 )
-            if product_company:
-                result['all_company_brands'] = [
-                    serialize_brand(brand) for brand in Brand.objects.filter(company=product_company)
-                ]
         else:
             result['name'] = 'Nieznany produkt'
             result['altText'] = (
@@ -155,13 +150,19 @@ def append_brands_if_enabled(company, company_data):
     company_data['description'] += f'Ten producent psoiada marki: {brand_list}.'
 
 
-def handle_multiple_companies(code, companies, result, stats):
+def add_brands(company_data, product_company):
+    if product_company:
+        company_data['brands'] = [serialize_brand(brand) for brand in Brand.objects.filter(company=product_company)]
+
+
+def handle_multiple_companies(code, companies, result, stats, product_company):
     companies_data = []
 
     for company in companies:
         company_data = serialize_company(company)
         append_ru_by_warning_to_description(code, company_data)
         append_brands_if_enabled(company, company_data)
+        add_brands(company_data, product_company)
         stats['was_plScore'] = all(get_pl_score(c) for c in companies)
         companies_data.append(company_data)
     result['companies'] = companies_data

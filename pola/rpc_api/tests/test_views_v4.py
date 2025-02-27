@@ -47,7 +47,6 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         self.maxDiff = None
         self.assertEqual(
             {
-                'all_company_brands': [],
                 'product_id': p.pk,
                 'code': '5900049011829',
                 'name': 'Tego produktu nie mamy jeszcze w bazie',
@@ -96,7 +95,6 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         self.maxDiff = None
         self.assertEqual(
             {
-                'all_company_brands': [],
                 "product_id": p.pk,
                 "code": "5900049011829",
                 "name": c.common_name,
@@ -127,6 +125,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         "friend_text": "To jest przyjaciel Poli",
                         "description": "TEST",
                         "sources": {"TEST": "BBBB"},
+                        'brands': [],
                     }
                 ],
                 "donate": {
@@ -165,19 +164,13 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         self.maxDiff = None
         response_json = json.loads(response.content)
 
-        self.assertIn('pola-app-company-logotype', response_json['all_company_brands'][0]['logotype_url'])
-        del response_json['all_company_brands'][0]['logotype_url']
+        self.assertIn('pola-app-company-logotype', response_json['companies'][0]['brands'][0]['logotype_url'])
+        del response_json['companies'][0]['brands'][0]['logotype_url']
 
         self.assertIn('ola-app-company-logotype', response_json['companies'][0]['logotype_url'])
         del response_json['companies'][0]['logotype_url']
         self.assertEqual(
             {
-                'all_company_brands': [
-                    {
-                        'name': b.common_name,
-                        'website_url': 'example.pl',
-                    }
-                ],
                 'product_id': p.pk,
                 'code': '5900049011829',
                 'name': c.common_name,
@@ -202,6 +195,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         'friend_text': 'To jest przyjaciel Poli',
                         'description': 'TEST',
                         'sources': {'TEST': 'BBBB'},
+                        'brands': [{'name': b.common_name, 'website_url': 'example.pl'}],
                     },
                 ],
                 'report': {
@@ -259,7 +253,6 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
 
         self.assertEqual(
             {
-                'all_company_brands': [],
                 "product_id": p.id,
                 "code": "5900049011829",
                 "name": c1.official_name,
@@ -290,6 +283,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         "friend_text": "To jest przyjaciel Poli",
                         "description": "TEST",
                         "sources": {"TEST": "BBBB"},
+                        'brands': [],
                     },
                     {
                         "name": c2.official_name,
@@ -310,6 +304,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                         "friend_text": "To jest przyjaciel Poli",
                         "description": "TEST",
                         "sources": {"TEST": "BBBB"},
+                        'brands': [],
                     },
                 ],
                 "donate": {
