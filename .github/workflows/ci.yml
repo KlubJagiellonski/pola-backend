@@ -237,20 +237,15 @@ jobs:
           # Verify BI image
           ./scripts/bi-docker-image/verify_image.sh
       - run: pip install django-environ
-
-      # Install Heroku CLI
       - name: "Install Heroku CLI"
         run: |
           curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
           echo "export PATH=$PATH:/usr/local/bin" >> $HOME/.bashrc
           source $HOME/.bashrc
           heroku --version
-
-      # Authenticate Heroku CLI
       - name: "Authenticate Heroku CLI"
         run: |
           echo "$HEROKU_API_KEY" | heroku auth:token
-      
       - name: "Set environment env variable"
         if: github.ref == 'refs/heads/prod'
         run: |
