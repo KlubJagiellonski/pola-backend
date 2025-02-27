@@ -4,7 +4,7 @@ boto3==1.34.90
 botocore==1.34.90
 Collectfast==2.2.0
 django-allauth==0.55.2
-django-anymail==10.3
+django-anymail==12.0
 django-autocomplete-light==3.11.0
 django-autoslug==1.9.9
 django-braces==1.15.0
