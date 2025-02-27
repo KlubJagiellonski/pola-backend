@@ -1,0 +1,33 @@
+source: MY_POSTGRES
+target: MY_BIGQUERY
+
+defaults:
+  mode: full-refresh
+  object: '{target_schema}.raw__{stream_table}'
+  primary_key: [id]
+
+streams:
+  public.ai_pics_aiattachment:
+  public.ai_pics_aipics:
+  public.bi_*:
+    primary_key: []
+  public.company_brand:
+  public.company_company:
+  public.gpc_*:
+  public.pola_query:
+    mode: incremental
+    update_key: id
+  public.pola_searchquery:
+  public.pola_stats:
+  public.product_product:
+  public.report_attachment:
+  public.report_report:
+  public.users_user:
+    select: ["-password"]
+
+env:
+  # Adds the _sling_loaded_at timestamp column
+  SLING_LOADED_AT_COLUMN: true
+
+  # Allows create empty tables
+  SLING_ALLOW_EMPTY: TRUE
