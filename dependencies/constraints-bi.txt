@@ -6,10 +6,10 @@ cffi==1.16.0
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
-dbt-core==1.7.13
+dbt-core==1.9.2
 dbt-extractor==0.5.1
-dbt-postgres==1.7.13
-dbt-semantic-interfaces==0.4.4
+dbt-postgres==1.8.2
+dbt-semantic-interfaces==0.8.3
 future==1.0.0
 idna==3.7
 importlib-metadata==6.8.0
