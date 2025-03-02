@@ -40,7 +40,7 @@ pytz==2024.1
 PyYAML==6.0.1
 referencing==0.35.0
 requests==2.31.0
-rpds-py==0.18.0
+rpds-py==0.23.1
 setuptools==69.5.1
 six==1.16.0
 sqlparse==0.5.0
