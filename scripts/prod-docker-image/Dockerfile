@@ -11,7 +11,9 @@ FROM node:16.13.1-alpine3.12 as build-js
 WORKDIR /app/
 
 COPY package.json package-lock.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install --global gulp-cli \
+    && npm install \
+    && npm cache clean --force
 COPY gulpfile.esm.js ./
 COPY pola/assets pola/assets
 RUN npm run build
@@ -63,11 +65,10 @@ ENV APP_UID=${APP_UID} \
     GUNICORN_CMD_ARGS="--worker-tmp-dir /dev/shm"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates dumb-init \
+        ca-certificates dumb-init curl \
         postgresql-client libpq5 \
         # Required by encrypoint.sh
         netcat \
-        curl \
         # Required by Heroku-exec
         openssh-client \
         openssh-server \
