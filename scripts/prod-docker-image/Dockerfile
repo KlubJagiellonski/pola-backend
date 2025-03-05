@@ -78,23 +78,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         openssh-client \
         openssh-server \
         iproute2 \
+    && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* \
     && groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
        --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
     && mkdir -p "${APP_HOME}" \
-    && chown -R pola-backend:root "${APP_USER_HOME_DIR}" "${APP_HOME}"
-
-COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
-
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "${APP_HOME}/pola/static/"
-
-# Enable heroku-exec
-# See: https://devcenter.heroku.com/articles/exec#using-with-docker
-RUN chmod g=u /etc/passwd \
+    && chown -R pola-backend:root "${APP_USER_HOME_DIR}" "${APP_HOME}" \
+    # Enable heroku-exec
+    # See: https://devcenter.heroku.com/articles/exec#using-with-docker
+    && chmod g=u /etc/passwd \
     && rm /bin/sh \
     && ln -s /bin/bash /bin/sh
+
+COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "${APP_HOME}/pola/static/"
 
 COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
 COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
