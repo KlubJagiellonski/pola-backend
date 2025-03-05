@@ -80,7 +80,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         iproute2 \
     && apt-get autoremove -y \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* 
+    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/*
 
 RUN groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
