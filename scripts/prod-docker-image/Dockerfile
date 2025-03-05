@@ -44,7 +44,12 @@ RUN pip install --no-cache-dir --upgrade pip \
        -r ${APP_HOME}/dependencies/requirements-production.txt \
        -r ${APP_HOME}/dependencies/requirements-production-django.txt \
        -c ${APP_HOME}/dependencies/constraints-production.txt \
-    && pip check
+    && pip check \
+    && find /root/.local/ -name '*.pyc' -delete \
+    && find /root/.local/ -type d -name '__pycache__' -delete \
+    # make sure that all directories and files in .local are also group accessible
+    && find /root/.local -executable -print0 | xargs --null chmod g+x  \
+    && find /root/.local -print0 | xargs --null chmod g+rw
 
 ######################### MAIN IMAGE ################################
 
