@@ -6,7 +6,7 @@ ARG BASE_PYTHON_IMAGE="python:3.11-slim-bookworm"
 
 ######################### NODE BUILD IMAGE ##########################
 
-FROM node:16.13.1-alpine3.12 as build-js
+FROM --platform=linux/amd64 node:16.13.1-alpine3.12 as build-js
 
 WORKDIR /app/
 
@@ -20,7 +20,7 @@ RUN npm run build
 
 ######################### PYTHON BUILD IMAGE ########################
 
-FROM ${BASE_PYTHON_IMAGE} as build-py
+FROM --platform=linux/amd64 ${BASE_PYTHON_IMAGE} as build-py
 
 ENV APP_HOME=${APP_HOME} \
     DEBIAN_FRONTEND=noninteractive \
@@ -53,7 +53,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 ######################### MAIN IMAGE ################################
 
-FROM ${BASE_PYTHON_IMAGE} as main
+FROM --platform=linux/amd64 ${BASE_PYTHON_IMAGE} as main
 
 ARG APP_UID
 ARG APP_GID
@@ -73,16 +73,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates dumb-init curl \
         postgresql-client libpq5 \
         # Required by encrypoint.sh
-        netcat \
+        netcat-openbsd \
         # Required by Heroku-exec
         openssh-client \
         openssh-server \
         iproute2 \
-    && apt-get autoremove -y \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/*
-
-RUN groupadd --gid "${APP_GID}" pola-backend \
+    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* \
+    && groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
        --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
     && mkdir -p "${APP_HOME}" \
