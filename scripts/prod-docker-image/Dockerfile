@@ -79,7 +79,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         openssh-server \
         iproute2 \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/log/* /var/cache/*
 
 RUN groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
