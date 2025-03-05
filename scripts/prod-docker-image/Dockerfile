@@ -78,7 +78,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
-       --home "${APP_USER_HOME_DIR}" --create-home pola-backend pola-backend \
+       --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
     && mkdir -p "${APP_HOME}" \
     && chown -R pola-backend:root "${APP_USER_HOME_DIR}" "${APP_HOME}"
 
