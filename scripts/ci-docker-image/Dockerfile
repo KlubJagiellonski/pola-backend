@@ -1,4 +1,6 @@
 ARG PYTHON_VERSION="3.11"
+ENV PYTHON_VERSION=${PYTHON_VERSION}
+
 FROM python:${PYTHON_VERSION}-slim-bullseye
 
 SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
