@@ -71,9 +71,11 @@ function verify_image() {
     echo
     echo "Checking image layers"
     docker run --rm \
-        -e CI=true \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        ghcr.io/joschi/dive:latest "docker://${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+        ghcr.io/joschi/dive:latest "docker://${PROD_IMAGE_NAME}:${IMAGE_TAG} --ci \
+        --lowestEfficiency 0.95 \
+        --highestWastedBytes 20MB \
+        --highestUserWastedPercent 0.25"
     echo
     echo
 }
