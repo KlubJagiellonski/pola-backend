@@ -28,7 +28,7 @@ function build_image() {
     GIT_REF=$(git rev-parse HEAD)
     IMAGE_DESCRIPTION="Pola pomoze Ci odnaleźć polskie wyroby. Zabierając Pole na zakupy odnajdujesz produkty \"z duszą\" i wspierasz polską gospodarkę."
 
-    BASE_PYTHON_IMAGE="python:${PYTHON_VERSION}-slim-bookworm"
+    BASE_PYTHON_IMAGE="python:${PYTHON_VERSION}-slim-bullseye"
     docker pull "${BASE_PYTHON_IMAGE}"
     BASE_PYTHON_IMAGE_DIGEST=$(docker inspect "${BASE_PYTHON_IMAGE}" --format='{{ index (split (index .RepoDigests 0) "@") 1 }}')
 
@@ -73,7 +73,7 @@ function verify_image() {
     docker run --rm \
         -e CI=true \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        wagoodman/dive:latest "docker://${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+        ghcr.io/joschi/dive:latest "docker://${PROD_IMAGE_NAME}:${IMAGE_TAG}"
     echo
     echo
 }
