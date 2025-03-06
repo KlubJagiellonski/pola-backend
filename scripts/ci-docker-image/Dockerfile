@@ -1,6 +1,6 @@
 ARG PYTHON_VERSION="3.11"
 
-FROM python:${PYTHON_VERSION}-slim-bullseye
+FROM python:${PYTHON_VERSION}-slim-bookworm
 
 SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
 
@@ -21,10 +21,12 @@ RUN apt-get update \
         linux-libc-dev \
         lsb-release \
         netcat-openbsd \
-    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
+        libfreetype6-dev \ 
+        libjpeg-dev \       
+        zlib1g-dev \        
+        libpng-dev \        
+        libharfbuzz-dev \   
+        libfribidi-dev \   
         postgresql-client-13 \
         libpq-dev \
         libpq5 \
