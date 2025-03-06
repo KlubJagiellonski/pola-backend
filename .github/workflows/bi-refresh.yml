@@ -39,6 +39,15 @@ jobs:
           ./scripts/bi-docker-image/build_image.sh
           # Verify BI image
           ./scripts/bi-docker-image/verify_image.sh
+      - name: "Install Heroku CLI"
+        run: |
+            curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+            echo "export PATH=$PATH:/usr/local/bin" >> $HOME/.bashrc
+            source $HOME/.bashrc
+            heroku --version
+      - name: "Authenticate Heroku CLI"
+        run: |
+            echo "$HEROKU_API_KEY" | heroku auth:token
       - name: "Set environment env variable"
         run: |-
           pip install django-environ
