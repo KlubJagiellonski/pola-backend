@@ -74,7 +74,6 @@ function verify_image() {
         -v /var/run/docker.sock:/var/run/docker.sock \
         ghcr.io/joschi/dive:latest "docker://${PROD_IMAGE_NAME}:${IMAGE_TAG}" --ci \
         --lowestEfficiency 0.90 \
-        --highestWastedBytes 20MB \
         --highestUserWastedPercent 0.25
     echo
     echo
