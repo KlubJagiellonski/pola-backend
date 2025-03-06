@@ -27,7 +27,7 @@ RUN apt-get update \
         libpng-dev \        
         libharfbuzz-dev \   
         libfribidi-dev \   
-        postgresql-client-13 \
+        postgresql-client \
         libpq-dev \
         libpq5 \
     && apt-get autoremove -yqq --purge \
