@@ -80,7 +80,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         iproute2 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* \
+    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* /usr/share/doc /usr/share/man \
     && groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
        --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
@@ -97,11 +97,10 @@ COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "${APP_HOME}/po
 
 COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
 COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
-COPY ./ ${APP_HOME}
+COPY --chown=pola-backend:root ./ ${APP_HOME}
+RUN chmod -R g+rw "${APP_HOME}"
 
 WORKDIR ${APP_HOME}
-
-RUN chmod -R g+rw "${APP_HOME}"
 
 USER ${APP_UID}
 
