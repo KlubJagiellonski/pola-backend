@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version: ["3.11"]
-        django_version: ['current', "4.2.14"]
+        django_version: ['current', "5.1.7"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
     steps:
