@@ -33,7 +33,7 @@ django-ratelimit==4.1.0
 django-redis-cache==3.0.1
 django-resized==1.0.2
 django-reversion==5.0.12
-django-storages==1.14.2
+django-storages==1.14.5
 django-test-plus==2.2.3
 django-webtest==1.9.11
 executing==2.0.1
