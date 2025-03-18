@@ -34,7 +34,7 @@ django-redis-cache==3.0.1
 django-resized==1.0.2
 django-reversion==5.0.12
 django-storages==1.14.5
-django-test-plus==2.2.3
+django-test-plus==2.2.4
 django-webtest==1.9.12
 executing==2.0.1
 factory-boy==3.3.0
