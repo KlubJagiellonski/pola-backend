@@ -6,7 +6,7 @@ ARG BASE_PYTHON_IMAGE="python:3.11-slim-bookworm"
 
 ######################### NODE BUILD IMAGE ##########################
 
-FROM --platform=linux/amd64 node:16.13.1-alpine3.12 as build-js
+FROM --platform=linux/amd64 node:17.3.0-alpine3.12 as build-js
 
 WORKDIR /app/
 
