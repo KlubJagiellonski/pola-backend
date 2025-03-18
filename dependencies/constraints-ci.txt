@@ -84,7 +84,7 @@ reportlab==4.2.0
 requests==2.32.3
 requests-oauthlib==2.0.0
 rlPyCairo==0.3.0
-rq==1.16.1
+rq==2.1.0
 s3transfer==0.10.1
 sentry-sdk==2.23.1
 six==1.17.0
