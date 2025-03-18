@@ -37,7 +37,7 @@ django-reversion==5.0.12
 django-storages==1.14.5
 django-test-plus==2.2.4
 django-webtest==1.9.12
-executing==2.0.1
+executing==2.2.0
 factory-boy==3.3.0
 Faker==37.0.0
 freetype-py==2.3.0
