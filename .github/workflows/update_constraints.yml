@@ -92,7 +92,7 @@ jobs:
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv pre-commit
       - name: "Run static checks"
-        run: pre-commit run requirements-txt-fixer --all-files --color=always
+        run: pre-commit run requirements-txt-fixer --all-files --show-diff-on-failure --color=always || true
       - name: "Commit and push"
         run: |
           git config --local user.email "action@github.com"
