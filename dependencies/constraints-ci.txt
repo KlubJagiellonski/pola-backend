@@ -91,7 +91,6 @@ six==1.17.0
 soupsieve==2.6
 sqlparse==0.5.3
 stack-data==0.6.3
-toml==0.10.2
 tqdm==4.67.1
 traitlets==5.14.3
 typing_extensions==4.12.2
