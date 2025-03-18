@@ -61,3 +61,9 @@ updates:
     directory: "/scripts/prod-docker-image"
     schedule:
       interval: "daily"
+  - package-ecosystem: "docker-compose"
+    labels:
+      - "dependencies"
+    directory: "/"
+    schedule:
+      interval: "daily"
