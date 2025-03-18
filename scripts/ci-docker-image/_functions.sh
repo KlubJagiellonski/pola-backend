@@ -33,6 +33,10 @@ function build_image() {
 
     docker tag "${CI_IMAGE_NAME}:${IMAGE_TAG}" "pola-backend_web:latest"
     echo
+    echo "Image build completed"
+    echo "Tags:"
+    echo " ${CI_IMAGE_NAME}:${IMAGE_TAG}"
+    echo " pola-backend_web:latest"
     echo
 }
 
@@ -48,6 +52,15 @@ function verify_image() {
       <(LC_ALL=C sort -f < ./dependencies/constraints-ci.txt | grep -v -i "Django==")
     echo "======"
     echo
+    echo
+}
+
+function update_constraints() {
+    echo "Updating constraints"
+    docker run --entrypoint /bin/bash --rm "${CI_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | \
+        grep -v -i "Django==" | LC_ALL=C sort -f > ./dependencies/constraints-ci.txt
+    echo
+    echo "Updated constraints in file: ./dependencies/constraints-ci.txt"
     echo
 }
 

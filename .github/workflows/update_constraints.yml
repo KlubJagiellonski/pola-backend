@@ -43,8 +43,6 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            console.log(context)
-            console.log(context.payload)
             github.rest.reactions.createForIssueComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -52,22 +50,27 @@ jobs:
               content: '+1',
             });
       - name: "Checkout repo"
-        uses: actions/checkout@v4
-      - name: "Checkout Pull Request"
-        run: gh pr checkout "${ISSUE_NUMBER}"
-      - name: "Login to Githhub Container Registry"
+        uses: actions/checkout@v2
+        with:
+          # Pobiera dokładnie tę gałąź, której dotyczy Pull Request
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - name: "Login to GitHub Container Registry"
         run: ./scripts/docker_login_github.py
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
-      - name: "Build CI image"
+      - name: "Update CI image"
         run: |
           ./scripts/ci-docker-image/build_image.sh
-
-      - name: "Generate constraint file"
-        run: >
-          docker compose run --no-deps --entrypoint /bin/bash web -c "pip freeze" |
-          grep -v -i "Django==" > ./dependencies/constraints-ci.txt
-
+          ./scripts/ci-docker-image/update_constraints.sh
+      - name: "Update BI image"
+        run: |
+          ./scripts/bi-docker-image/build_image.sh
+          ./scripts/bi-docker-image/update_constraints.sh
+      - name: "Update PROD image"
+        run: |
+          ./scripts/prod-docker-image/build_image.sh
+          ./scripts/prod-docker-image/update_constraints.sh
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv pre-commit
       - name: "Run static checks"
@@ -76,7 +79,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ./dependencies/constraints-ci.txt
+          git add ./dependencies/
           git commit -m "Update constraints file"
           git push origin
 
@@ -84,4 +87,4 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
-          body: '@Mergifyio rebase'
+          body: 'Constraints files updated.'

@@ -76,6 +76,18 @@ function verify_image() {
         --lowestEfficiency 0.90 \
         --highestUserWastedPercent 0.25
     echo
+    echo "Image build completed"
+    echo "Tags:"
+    echo " ${PROD_IMAGE_NAME}:${IMAGE_TAG}"
+    echo
+}
+
+
+function update_constraints() {
+    echo "Updating constraints"
+    docker run --entrypoint /bin/bash --rm "${PROD_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | LC_ALL=C sort -f > ./dependencies/constraints-production.txt
+    echo
+    echo "Updated constraints in file: ./dependencies/constraints-production.txt"
     echo
 }
 
