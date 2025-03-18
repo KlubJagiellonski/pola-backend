@@ -16,7 +16,7 @@ importlib-metadata==6.8.0
 isodate==0.6.1
 Jinja2==3.1.6
 jsonschema==4.19.2
-jsonschema-specifications==2023.12.1
+jsonschema-specifications==2024.10.1
 leather==0.4.0
 Logbook==1.5.3
 MarkupSafe==2.1.5
