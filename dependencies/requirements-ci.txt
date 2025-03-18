@@ -1,5 +1,5 @@
 -r requirements-production.txt
-beautifulsoup4==4.12.3
+beautifulsoup4==4.13.3
 coverage==7.7.0
 django-coverage-plugin==3.1.0
 django-debug-toolbar==5.0.1
