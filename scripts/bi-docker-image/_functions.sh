@@ -31,6 +31,10 @@ function build_image() {
 
     docker tag "${BI_IMAGE_NAME}:${IMAGE_TAG}" "pola-bi:latest"
     echo
+    echo "Image build completed"
+    echo "Tags:"
+    echo " ${BI_IMAGE_NAME}:${IMAGE_TAG}"
+    echo " pola-bi:latest"
     echo
 }
 
@@ -43,6 +47,14 @@ function verify_image() {
       <(LC_ALL=C sort -f < ./dependencies/constraints-bi.txt)
     echo "======"
     echo
+    echo
+}
+
+function update_constraints() {
+    echo "Updating constraints"
+    docker run --entrypoint /bin/bash --rm "${BI_IMAGE_NAME}:${IMAGE_TAG}" -c "pip freeze" | LC_ALL=C sort -f > ./dependencies/constraints-bi.txt
+    echo
+    echo "Updated constraints in file: ./dependencies/constraints-bi.txt"
     echo
 }
 

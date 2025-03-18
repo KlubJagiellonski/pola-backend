@@ -30,4 +30,4 @@ pydantic==1.10.9
 reportlab[pycairo]==4.2.0
 rq==1.16.1
 sentry-sdk==2.23.1
-tqdm==4.66.2
+tqdm==4.67.1

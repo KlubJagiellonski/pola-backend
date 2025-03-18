@@ -43,40 +43,63 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            console.log(context)
-            console.log(context.payload)
             github.rest.reactions.createForIssueComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: context.payload.comment.id,
               content: '+1',
             });
+
+      - name: "Add comments with link to workflow"
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.issue.number;
+            const repoName = process.env.GITHUB_REPOSITORY;     // np. 'owner/nazwa-repo'
+            const runId = process.env.GITHUB_RUN_ID;            // ID bieżącego runu
+            const linkDoAkcji = `https://github.com/${repoName}/actions/runs/${runId}`;
+
+            const body = `Started workflow. [Workflow run](${linkDoAkcji})`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: body
+            });
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      # Checkout again to create a branch. This is needed because the previous checkout is detached.
       - name: "Checkout Pull Request"
         run: gh pr checkout "${ISSUE_NUMBER}"
-      - name: "Login to Githhub Container Registry"
+      - name: "Login to GitHub Container Registry"
         run: ./scripts/docker_login_github.py
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
-      - name: "Build CI image"
+      - name: "Update CI image"
         run: |
           ./scripts/ci-docker-image/build_image.sh
-
-      - name: "Generate constraint file"
-        run: >
-          docker compose run --no-deps --entrypoint /bin/bash web -c "pip freeze" |
-          grep -v -i "Django==" > ./dependencies/constraints-ci.txt
-
+          ./scripts/ci-docker-image/update_constraints.sh
+      - name: "Update BI image"
+        run: |
+          ./scripts/bi-docker-image/build_image.sh
+          ./scripts/bi-docker-image/update_constraints.sh
+      - name: "Update PROD image"
+        run: |
+          ./scripts/prod-docker-image/build_image.sh
+          ./scripts/prod-docker-image/update_constraints.sh
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv pre-commit
       - name: "Run static checks"
-        run: pre-commit run requirements-txt-fixer --all-files --color=always
+        run: pre-commit run requirements-txt-fixer --all-files --show-diff-on-failure --color=always || true
       - name: "Commit and push"
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ./dependencies/constraints-ci.txt
+          git add ./dependencies/
           git commit -m "Update constraints file"
           git push origin
 
@@ -84,4 +107,12 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
-          body: '@Mergifyio rebase'
+          # Mergifyio is needed to trigger CI build as it is not triggered
+          # by the push event when the push is done by the action
+          body: |
+            Constraints files updated.
+
+            To trigger the CI build, write the message:
+            ```
+            @Mergifyio rebase
+            ```
