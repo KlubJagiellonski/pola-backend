@@ -29,5 +29,5 @@ psycopg2-binary==2.9.9
 pydantic==1.10.9
 reportlab==3.6.13
 rq==1.16.1
-sentry-sdk==1.45.0
+sentry-sdk==2.23.1
 tqdm==4.66.2
