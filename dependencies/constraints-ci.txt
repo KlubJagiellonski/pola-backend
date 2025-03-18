@@ -97,7 +97,7 @@ typing_extensions==4.12.2
 tzdata==2025.1
 urllib3==1.26.15
 vcrpy==6.0.1
-waitress==3.0.0
+waitress==3.0.2
 wcwidth==0.2.13
 WebOb==1.8.9
 WebTest==3.0.0
