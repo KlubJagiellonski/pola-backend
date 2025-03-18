@@ -16,7 +16,7 @@ django-grappelli==4.0.1
 django-model-utils==5.0.0
 django-ratelimit==4.1.0
 django-redis-cache==3.0.1
-django-resized==1.0.2
+django-resized==1.0.3
 django-reversion==5.0.12
 django-storages==1.14.5
 gtin==1.3.1649173518
