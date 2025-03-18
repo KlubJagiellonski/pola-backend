@@ -49,6 +49,24 @@ jobs:
               comment_id: context.payload.comment.id,
               content: '+1',
             });
+
+      - name: "Add comments with link to workflow"
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.issue.number;
+            const repoName = process.env.GITHUB_REPOSITORY;     // np. 'owner/nazwa-repo'
+            const runId = process.env.GITHUB_RUN_ID;            // ID bieżącego runu
+            const linkDoAkcji = `https://github.com/${repoName}/actions/runs/${runId}`;
+
+            const body = `Started workflow. [Workflow run](${linkDoAkcji})`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: body
+            });
       - name: "Checkout repo"
         uses: actions/checkout@v2
         with:
