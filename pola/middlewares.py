@@ -18,7 +18,7 @@ class SetRemoteAddrFromForwardedFor(MiddlewareMixin):
 
     def process_request(self, request):
         try:
-            real_ip = request.META['HTTP_X_FORWARDED_FOR']
+            real_ip = request.headers['x-forwarded-for']
         except KeyError:
             return None
         else:
@@ -35,7 +35,7 @@ def _get_redirect(new_hostname, request):
 
 class HostnameRedirectMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        server_name = request.META['HTTP_HOST']
+        server_name = request.headers['host']
         catchall = getattr(settings, 'SECURE_SSL_HOST', None)
         # if catchall hostname is set, verify that the current
         # hostname is valid, and redirect if not

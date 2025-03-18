@@ -6,23 +6,23 @@ Testowanie
 Statyczne kontrola kodu
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Statyczne weryfikacje kodu służy do sprawdzania, czy kod spełnia określone standardy jakości. Wszystkie statyczne kontrole kodu można przeprowadzić za pomocą frameworka `pre-commit <https://pre-commit.com/>`__.
+Statyczna weryfikacja kodu służy do sprawdzenia, czy kod spełnia określone standardy jakości. Wszystkie statyczne kontrole kodu można przeprowadzić za pomocą frameworka `pre-commit <https://pre-commit.com/>`__.
 
 Sprawdzenia pre-commit wykonują całą niezbędną instalację, gdy uruchamiasz je po raz pierwszy.
 
 Pre-commit hooki
 ================
 
-Pre-commi hooki pomagają przyspieszyć lokalny cykl rozwoju i zmniejszyć obciążenie infrastruktury CI. Rozważ zainstalowanie narzędzia pre-commit, aby uruchamiał się automatycznie dla każdego commita.
+Pre-commit hooki pomagają przyspieszyć lokalny cykl rozwoju i zmniejszyć obciążenie infrastruktury CI. Rozważ zainstalowanie narzędzia pre-commit, aby uruchamiał się automatycznie dla każdego commita.
 
-Pre-commi hooki domyślnie sprawdzają tylko pliki, nad którymi aktualnie pracujesz, co czynni je szybkimi. Każdy hook jest instalowany w osobnym śroodowisku niezależnym od systemu, a więc może być pewien, że sprawdzenia wykonane lokalne powiodą się również na środowisku CI.
+Pre-commit hooki domyślnie sprawdzają tylko pliki, nad którymi aktualnie pracujesz, co czynni je szybkimi. Każdy hook jest instalowany w osobnym śroodowisku niezależnym od systemu, a więc może być pewien, że sprawdzenia wykonane lokalne powiodą się również na środowisku CI.
 
 Zintegrowaliśmy fantastyczne ramy pre-commit w naszym przepływie pracy programistycznej. Aby go zainstalować i używać, potrzebujesz lokalnie przynajmniej Pythona 3.6.
 
 Instalacja pre-commit hooków
 ============================
 
-Aby zainstalować haki pre-commit uruchom:
+Aby zainstalować pre-commit uruchom:
 
 .. code-block:: bash
 
@@ -113,26 +113,26 @@ Aby uruchomić wszystkie test uruchom:
 
 .. code-block:: bash
 
-    docker-compose run --rm web manage.py test
+    docker compose run --rm web ./manage.py test
 
 Możesz określić poszczególne testy do uruchomienia, dostarczając dowolną liczbę „etykiet testowych” do komendy ./manage.py. Każda etykieta testowa może być pełną kropkowaną ścieżką Pythona do pakietu, modułu, podklasy TestCase lub metody testowej. Na przykład:
 
 .. code-block:: bash
 
     # Uruchamia wszystkie testy znalezione w pakiecie pola.company
-    docker-compose run --rm web ./manage.py test pola.company
+    docker compose run --rm web ./manage.py test pola.company
 
     # Uruchom tylko jeden test case
-    docker-compose run --rm web ./manage.py test pola.tests.test_views.TestFrontPageView
+    docker compose run --rm web ./manage.py test pola.tests.test_views.TestFrontPageView
 
     # Uruchamia tylko jedna metode testową
-    docker-compose run --rm web ./manage.py test pola.tests.test_views.TestFrontPageView.test_template_used
+    docker compose run --rm web ./manage.py test pola.tests.test_views.TestFrontPageView.test_template_used
 
 Możesz również podać ścieżkę do katalogu, aby wykryć testy poniżej tego katalogu:
 
 .. code-block:: bash
 
-    docker-compose run --rm web ./manage.py test animals/
+    docker compose run --rm web ./manage.py test animals/
 
 Więcej informacji na temat tesotwnia dostępna jest w dokumenttacji Djangoo: `Testing in Django <https://docs.djangoproject.com/pl/3.2/topics/testing/>`__.
 

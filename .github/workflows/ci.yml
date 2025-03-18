@@ -19,6 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version: ["3.11", "3.12", "3.13"]
+        django_version: ['current', "5.1.7"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
     steps:
@@ -28,6 +29,15 @@ jobs:
           fetch-depth: 2
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.py
+      - if: matrix.django_version != 'latest' && matrix.django_version != 'current'
+        run: |
+          echo "DJANGO_VERSION=${DJANGO_VERSION}" | tee "${GITHUB_ENV}";
+        env:
+          DJANGO_VERSION: ${{ matrix.django_version }}
+      - if: matrix.django_version == 'latest'
+        run: |
+          latest_version=$(curl 'https://pypi.org/pypi/django/json' | jq .info.version -r)
+          echo "DJANGO_VERSION=${latest_version}" | tee "${GITHUB_ENV}";
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
@@ -39,11 +49,11 @@ jobs:
       - name: "Run tests"
         run: ./run_test.sh
       - name: "Check missing migrations"
-        run: docker-compose run web makemigrations --check -v 3
+        run: docker compose run web makemigrations --check -v 3
       - name: "Checks the entire Django project for potential problems"
-        run: docker-compose run web check --fail-level DEBUG -v 3
+        run: docker compose run web check --fail-level DEBUG -v 3
       - name: "Upload coverage"
-        uses: codecov/codecov-action@v4.3.0
+        uses: codecov/codecov-action@v5.4.0
         with:
           fail_ci_if_error: false
           verbose: true
@@ -57,7 +67,7 @@ jobs:
           ./scripts/ci-docker-image/build_image.sh
       - name: Show logs on fail
         if: ${{ failure() }}
-        run: docker-compose logs
+        run: docker compose logs
 
   static-checks:
     name: "Static checks"
@@ -105,8 +115,8 @@ jobs:
           ./scripts/bi-docker-image/verify_image.sh
       - name: Pull images
         run: ./scripts/pull_images.py
-      - run: docker-compose config
-      - run: docker-compose up -d
+      - run: docker compose config
+      - run: docker compose up -d
       - run: ./run_manage.sh migrate
       - run: ./run_manage.sh populate_db
       - run: ./run_dbt.sh dbt deps
@@ -227,6 +237,15 @@ jobs:
           # Verify BI image
           ./scripts/bi-docker-image/verify_image.sh
       - run: pip install django-environ
+      - name: "Install Heroku CLI"
+        run: |
+          curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+          echo "export PATH=$PATH:/usr/local/bin" >> $HOME/.bashrc
+          source $HOME/.bashrc
+          heroku --version
+      - name: "Authenticate Heroku CLI"
+        run: |
+          echo "$HEROKU_API_KEY" | heroku auth:token
       - name: "Set environment env variable"
         if: github.ref == 'refs/heads/prod'
         run: |

@@ -1,22 +1,12 @@
 Uruchamianie aplikacji
 ----------------------
 
-Aplikacja została przygotowana do pracy w środowisku Docker. Przed pierwszym uruchomieniem musisz spełnić następujące wymagania wstępne:
-
-1. Ty musisz mieć zainstalowane `Docker <https://docs.docker.com/get-docker/>`__:
+Aplikacja została przygotowana do pracy w środowisku `Docker <https://docs.docker.com/get-docker/>`__, aby zainstalować Docker:
 
    - Dla Linux, uruchom: ``curl https://get.docker.com | bash``
    - Dla Max OS/Windows, skorzystaj z poradnika: [Get docker](https://docs.docker.com/get-docker/)
 
-2. Ty musisz mieć zainstalowane `docker-compose <https://docs.docker.com/compose/install/>`__:
-
-   - Dla Linux, uruchom::
-
-       sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-   - Dla Mac OS: Docker Desktop i Docker Toolbox zawierają już Docker Compose wraz z innymi aplikacjami Docker, więc użytkownicy nie muszą instalować Docker Compose oddzielnie.
-
-Po wykonaniu tych kroków powiniens przygotować plik z zmiennymi środowiskowymi. Niektóre komponenty wykorzystują
+Po instalacji powinieneś przygotować plik z zmiennymi środowiskowymi. Niektóre komponenty wykorzystują
 prywatne lub komercyjne API, więc możesz mieć problem z dostępem, ale nie powinno to stanowić w problemu w rozwoju aplikacji.
 Zmienne sa przechowywaane w pliku ``.env``. Swój zestaw zmiennych możesz stworzyć bazujac na pliku ``.env.example``.
 
@@ -24,42 +14,42 @@ Zmienne sa przechowywaane w pliku ``.env``. Swój zestaw zmiennych możesz stwor
 
     cp .env.example .env
 
-Teraz możesz uruchomić sorodowisko:
+Teraz możesz uruchomić środowisko:
 
 .. code-block:: bash
 
-    docker-compose up
+    docker compose up
 
 Poczatkowo baza jest pusta, wiec konieczne jest przeprowadzenie migracji:
 
 .. code-block:: bash
 
-    docker-compose run web migrate
+    docker compose run web migrate
 
 Zaimportuj dane GPC
 
 .. code-block:: bash
 
-    docker-compose run web import_gdc pola/gpc/fixtures/GPC_as_of-May_2021_GDSN_v20210723_PL.xml
+    docker compose run web import_gdc pola/gpc/fixtures/GPC_as_of-May_2021_GDSN_v20210723_PL.xml
 
 Zapełnij baze danych przykładowymi danymi:
 
 .. code-block:: bash
 
-    docker-compose run web populate_db
+    docker compose run web populate_db
 
 Warto również utworzyć konto administratora w systemie:
 
 .. code-block:: bash
 
-    docker-compose run web createsuperuser --username admin --email admin@example.org
+    docker compose run web createsuperuser --username admin --email admin@example.org
 
-Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Możę to wyglądać następująco.
+Uruchomi to komendę interaktywną, która będzie oczekiwać podania hasła od użytkownika. Może to wyglądać następująco.
 
 
 .. code-block:: console
 
-    $ docker-compose run web createsuperuser --username admin --email admin@example.org
+    $ docker compose run web createsuperuser --username admin --email admin@example.org
     Creating pola-backend_web_run ... done
     Checking environment:
     postgres:  OK.

@@ -175,6 +175,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 'all_company_brands': [
                     {
                         'name': b.common_name,
+                        'website_url': 'example.pl',
                     }
                 ],
                 'product_id': p.pk,

@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-docker-compose run --rm dbt "${@}"
+docker compose run --rm dbt "${@}"
