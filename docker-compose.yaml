@@ -77,7 +77,7 @@ services:
     command: ./manage.py collectstatic --no-input
 
   web-compile-assets:
-    image: node:16.13.1-alpine3.12
+    image: node:17.3.0-alpine3.12
     volumes:
       - .:/app
     working_dir: /app
