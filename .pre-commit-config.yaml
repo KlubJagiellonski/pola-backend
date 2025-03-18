@@ -1,5 +1,5 @@
 ---
-default_stages: [commit, push]
+default_stages: [pre-commit, pre-push]
 default_language_version:
   # force all unspecified python hooks to run python3
   python: python3
@@ -10,12 +10,12 @@ repos:
     hooks:
       - id: check-hooks-apply
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.1
+    rev: v1.5.5
     hooks:
       - id: remove-tabs
         exclude: ^pola/tests/commands/test_import_brands_fixture\.tsv$
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
         exclude: ^package-lock\.json$|^pola/gpc/fixtures/$
@@ -45,12 +45,12 @@ repos:
         files: ^dependencies/.+\.txt$
       - id: trailing-whitespace
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.2
+    rev: v3.19.1
     hooks:
       - id: pyupgrade
         args: ['--py39-plus']
   - repo: https://github.com/psf/black
-    rev: '24.4.0'
+    rev: '25.1.0'
     hooks:
       - id: black
         args: ["--line-length", "120", "--skip-string-normalization", "--target-version", "py38"]
@@ -68,7 +68,7 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
   - repo: https://github.com/adrienverge/yamllint
-    rev: 'v1.35.1'
+    rev: 'v1.36.2'
     hooks:
       - id: yamllint
         entry: yamllint -c yamllint-config.yml
@@ -93,7 +93,7 @@ repos:
     hooks:
       - id: autoflake
   - repo: https://github.com/PyCQA/flake8
-    rev: '7.0.0'
+    rev: '7.1.2'
     hooks:
       - id: flake8
   # - repo: https://github.com/hadolint/hadolint
@@ -102,7 +102,7 @@ repos:
   #     - id: hadolint-docker
   #       entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.12.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
   - repo: https://github.com/PyCQA/isort
-    rev: '5.13.2'
+    rev: '6.0.1'
     hooks:
       - id: isort
   - repo: local
