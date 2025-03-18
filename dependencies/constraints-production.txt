@@ -38,7 +38,7 @@ isodate==0.6.1
 jmespath==1.0.1
 jsonschema==3.2.0
 lazy-object-proxy==1.10.0
-MarkupSafe==2.1.5
+MarkupSafe==3.0.2
 more-itertools==10.6.0
 oauthlib==3.2.2
 openapi-core==0.14.5
