@@ -47,7 +47,7 @@ openapi-spec-validator==0.4.0
 parse==1.20.2
 Pillow==10.1.0
 psycopg2-binary==2.9.9
-pycairo==1.26.0
+pycairo==1.27.0
 pycparser==2.22
 pydantic==1.10.9
 PyJWT==2.10.1
