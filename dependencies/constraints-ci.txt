@@ -1,5 +1,5 @@
 asgiref==3.8.1
-asttokens==2.4.1
+asttokens==3.0.0
 attrs==25.3.0
 Babel==2.14.0
 beautifulsoup4==4.13.3
