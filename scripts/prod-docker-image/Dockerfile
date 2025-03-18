@@ -30,7 +30,16 @@ ENV APP_HOME=${APP_HOME} \
     PATH="/root/.local/bin:${PATH}"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        gcc g++ git libpq-dev libpq5 gnupg2 libc6-dev libcc1-0 linux-libc-dev\
+        g++ \
+        gcc \
+        git \
+        gnupg2 \
+        libc6-dev \
+        libcairo2-dev \
+        libcc1-0 \
+        libpq-dev \
+        libpq5 \
+        linux-libc-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
