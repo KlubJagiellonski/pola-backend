@@ -68,7 +68,7 @@ jobs:
               body: body
             });
       - name: "Checkout repo"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
           repository: ${{ github.event.pull_request.head.repo.full_name }}
