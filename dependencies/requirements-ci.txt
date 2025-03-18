@@ -6,7 +6,7 @@ django-debug-toolbar==5.0.1
 django-resized==1.0.3
 django-test-plus==2.2.4
 django-webtest==1.9.12
-factory-boy==3.3.0
+factory-boy==3.3.3
 ipdb==0.13.9
 parameterized==0.9.0
 pytz==2025.1
