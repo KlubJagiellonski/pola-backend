@@ -57,6 +57,7 @@ jobs:
         with:
           fail_ci_if_error: false
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: "Push image (push)"
         if: github.event_name == 'push'
         env:
