@@ -12,7 +12,7 @@ charset-normalizer==3.3.2
 click==8.1.7
 Collectfast==2.2.0
 coverage==7.7.0
-cryptography==42.0.5
+cryptography==44.0.2
 decorator==5.1.1
 defusedxml==0.7.1
 dictpath==0.1.3
