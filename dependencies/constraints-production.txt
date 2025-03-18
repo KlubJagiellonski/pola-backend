@@ -61,7 +61,7 @@ s3transfer==0.10.1
 sentry-sdk==2.23.1
 six==1.16.0
 sqlparse==0.5.3
-tqdm==4.66.2
+tqdm==4.67.1
 typing_extensions==4.12.2
 urllib3==1.26.15
 Werkzeug==3.0.2
