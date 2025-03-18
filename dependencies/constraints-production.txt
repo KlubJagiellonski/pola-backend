@@ -64,4 +64,4 @@ sqlparse==0.5.3
 tqdm==4.66.2
 typing_extensions==4.12.2
 urllib3==1.26.15
-Werkzeug==3.0.2
+Werkzeug==3.1.3
