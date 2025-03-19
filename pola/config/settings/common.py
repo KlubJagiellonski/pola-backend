@@ -8,6 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
+from pathlib import Path
+
 import django
 import environ
 from boto.s3.connection import OrdinaryCallingFormat
@@ -329,6 +331,14 @@ CORS_URLS_REGEX = r"^/a/.*$"
 
 # APP CONFIGURATION
 # ------------------------
+
+# OPEN API CORE
+# ---------------
+# https://openapi-core.readthedocs.io/en/latest/integrations/django/#django
+
+from openapi_core import OpenAPI  # noqa: E402
+
+OPENAPI = OpenAPI.from_path(Path(str(ROOT_DIR)) / "pola" / "rpc_api" / "openapi-v1.yaml")
 
 # GET RESPONSE
 # ------------------------------------------------------------------------------
