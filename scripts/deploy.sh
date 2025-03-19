@@ -6,10 +6,10 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
-# shellcheck source=scripts/_base_variables.sh
-source "$SCRIPT_DIR/_base_variables.sh"
+IMAGE_TAG="${IMAGE_TAG:="latest"}"
+PROD_IMAGE_NAME="pola-backend_prod"
 
-IMAGE_NAME="${2:-"${PROD_IMAGE_NAME}"}"
+IMAGE_NAME="${2:-"${PROD_IMAGE_NAME}:${IMAGE_TAG}"}"
 
 function usage() {
 CMDNAME="$(basename -- "$0")"
@@ -19,7 +19,7 @@ Usage: ${CMDNAME} <app_name> [<image_name>]
 
 Deploy docker image to Heroku.
 
-By default, it deploys "${PROD_IMAGE_NAME}" image.
+By default, it deploys "${PROD_IMAGE_NAME}:${IMAGE_TAG}" image.
 
 EOF
 
@@ -40,16 +40,15 @@ if [[ "$(docker images -q "${IMAGE_NAME}" 2> /dev/null)" == "" ]]; then
 fi
 
 HEROKU_REGISTRY_URL="registry.heroku.com/${APP_NAME}"
-IMAGE_TO_DEPLOY="${IMAGE_NAME}:${IMAGE_TAG}"
 
-echo "Start deploying '${IMAGE_TO_DEPLOY}' to '${APP_NAME}' app"
+echo "Start deploying '${IMAGE_NAME}' to '${APP_NAME}' app"
 echo "Preparing images:"
-docker tag "${IMAGE_TO_DEPLOY}" "${HEROKU_REGISTRY_URL}/web"
+docker tag "${IMAGE_NAME}" "${HEROKU_REGISTRY_URL}/web"
 docker build prod-docker-image \
-  --build-arg "BASE_IMAGE=${IMAGE_TO_DEPLOY}" \
+  --build-arg "BASE_IMAGE=${IMAGE_NAME}" \
   --file=prod-docker-image/Dockerfile.release \
   --tag "${HEROKU_REGISTRY_URL}/release"
-docker tag "${IMAGE_TO_DEPLOY}" "${IMAGE_NAME}:${APP_NAME}"
+docker tag "${IMAGE_NAME}" "${PROD_IMAGE_NAME}:${APP_NAME}"
 docker images -a
 
 echo "Publishing images to Heroku registry"
@@ -64,6 +63,8 @@ DOMAIN_LIST=$(\
     | sed "s@^@https://@g"
   )
 
-echo "Tag image in Github Registry"
-docker push "${IMAGE_NAME}:${APP_NAME}"
+echo "Pushing image to GitHub registry"
+GITHUB_REGISTRY_IMAGE_NAME="ghcr.io/klubjagiellonski/pola-backend"
+docker tag "${IMAGE_NAME}" "${GITHUB_REGISTRY_IMAGE_NAME}:${APP_NAME}"
+docker push "${GITHUB_REGISTRY_IMAGE_NAME}:${APP_NAME}"
 echo "App deployed: ${DOMAIN_LIST}"

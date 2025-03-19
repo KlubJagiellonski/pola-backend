@@ -2,6 +2,7 @@
 import os
 import subprocess
 import sys
+from shutil import which
 
 if __name__ not in ("__main__", "__mp_main__"):
     raise SystemExit(
@@ -11,8 +12,11 @@ if __name__ not in ("__main__", "__mp_main__"):
 
 GITHUB_ORGANIZATION = os.environ.get('GITHUB_ORGANIZATION', 'KlubJagiellonski')
 
-GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
-if not GITHUB_TOKEN:
+github_token = os.environ.get('GITHUB_TOKEN')
+if not github_token and which('gh'):
+    # Use the GitHub CLI to login
+    github_token = subprocess.check_output(['gh', 'auth', 'token'], text=True)
+if not github_token:
     print("Missing environment variable: GITHUB_TOKEN", file=sys.stderr)
     sys.exit(1)
 
@@ -29,7 +33,7 @@ subprocess.run(
         '--password-stdin',
         "ghcr.io",
     ],
-    input=GITHUB_TOKEN.encode(),
+    input=github_token.encode(),
     check=True,
 )
 print("Logged in")

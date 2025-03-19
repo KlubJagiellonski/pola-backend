@@ -15,30 +15,6 @@ jobs:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/update_constraints')
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
       - name: "Add reaction to comment"
         uses: actions/github-script@v7
         with:
@@ -49,7 +25,6 @@ jobs:
               comment_id: context.payload.comment.id,
               content: '+1',
             });
-
       - name: "Add comments with link to workflow"
         uses: actions/github-script@v7
         with:
@@ -81,16 +56,16 @@ jobs:
         run: cp .env.example .env
       - name: "Update CI image"
         run: |
-          ./scripts/ci-docker-image/build_image.sh
-          ./scripts/ci-docker-image/update_constraints.sh
+          ./scripts/manage_image.py build --image-type ci
+          ./scripts/manage_image.py update_constraints --image-type ci
       - name: "Update BI image"
         run: |
-          ./scripts/bi-docker-image/build_image.sh
-          ./scripts/bi-docker-image/update_constraints.sh
+          ./scripts/manage_image.py build --image-type bi
+          ./scripts/manage_image.py update_constraints --image-type bi
       - name: "Update PROD image"
         run: |
-          ./scripts/prod-docker-image/build_image.sh
-          ./scripts/prod-docker-image/update_constraints.sh
+          ./scripts/manage_image.py build --image-type prod
+          ./scripts/manage_image.py update_constraints --image-type prod
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv pre-commit
       - name: "Run static checks"

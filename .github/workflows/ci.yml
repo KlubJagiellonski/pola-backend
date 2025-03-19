@@ -41,9 +41,9 @@ jobs:
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
-        run: |
-          ./scripts/ci-docker-image/build_image.sh
-          ./scripts/ci-docker-image/verify_image.sh
+        run: ./scripts/manage_image.py build --image-type ci
+      - name: "Verify CI image"
+        run: ./scripts/manage_image.py verify --image-type ci
       - name: Pull images
         run: ./scripts/pull_images.py
       - name: "Run tests"
@@ -58,14 +58,12 @@ jobs:
           fail_ci_if_error: false
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: "Push image (push)"
-        if: github.event_name == 'push'
-        env:
-          PREPARE_BUILDX_CACHE: true
+      - name: "Push CI image (push)"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          ./scripts/ci-docker-image/push_image.sh
+          ./scripts/manage_image.py push --image-type ci
           # Push cache
-          ./scripts/ci-docker-image/build_image.sh
+          ./scripts/manage_image.py build --image-type ci --prepare-buildx-cache
       - name: Show logs on fail
         if: ${{ failure() }}
         run: docker compose logs
@@ -105,15 +103,13 @@ jobs:
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
-        run: |
-          ./scripts/ci-docker-image/build_image.sh
-          ./scripts/ci-docker-image/verify_image.sh
+        run: ./scripts/manage_image.py build --image-type ci
+      - name: "Verify CI image"
+        run: ./scripts/manage_image.py verify --image-type ci
       - name: "Build BI image"
-        run: |
-          # Build BI image
-          ./scripts/bi-docker-image/build_image.sh
-          # Verify BI image
-          ./scripts/bi-docker-image/verify_image.sh
+        run: ./scripts/manage_image.py build --image-type bi
+      - name: "Verify BI image"
+        run: ./scripts/manage_image.py verify --image-type bi
       - name: Pull images
         run: ./scripts/pull_images.py
       - run: docker compose config
@@ -122,9 +118,12 @@ jobs:
       - run: ./run_manage.sh populate_db
       - run: ./run_dbt.sh dbt deps
       - run: ./run_dbt.sh dbt build
-      - name: "Push image (push)"
-        if: github.event_name == 'push'
-        run: ./scripts/bi-docker-image/push_image.sh
+      - name: "Push BI image (push)"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          ./scripts/manage_image.py push --image-type bi
+          # Push cache
+          ./scripts/manage_image.py build --image-type bi --prepare-buildx-cache
 
   prod-image:
     name: "Build Prod Image"
@@ -133,38 +132,32 @@ jobs:
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v4
-      - name: "Login to Githhub Container Registry"
+      - name: "Login to GitHhub Container Registry"
         run: ./scripts/docker_login_github.py
       - name: "Set image tag"
-        if: |
-          github.event_name == 'push' &&
-          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+        if: github.event_name == 'push'
         run: |
           set -x;
           APP_NAME="$(./scripts/detect_app_name.py)";
           echo "APP_NAME=${APP_NAME}"
           echo "IMAGE_TAG=${APP_NAME}" >> $GITHUB_ENV;
           echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
-      - name: "Build image"
-        run: ./scripts/prod-docker-image/build_image.sh
-      - name: "Verify image"
-        run: ./scripts/prod-docker-image/verify_image.sh
-      - name: "Push image (push)"
-        if: github.event_name == 'push'
-        env:
-          PREPARE_BUILDX_CACHE: true
+      - name: "Build PROD image"
+        run: ./scripts/manage_image.py build --image-type prod
+      - name: "Verify PROD image"
+        run: ./scripts/manage_image.py verify --image-type prod
+      - name: "Push PROD image (push)"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          # Build cache
-          ./scripts/prod-docker-image/build_image.sh
-          ./scripts/prod-docker-image/push_image.sh
+          ./scripts/manage_image.py push --image-type prod
+          # Push cache
+          ./scripts/manage_image.py build --image-type prod --prepare-buildx-cache
 
   deploy-app:
     name: "Deploy app (push) - ${{ github.ref }}"
     runs-on: ubuntu-latest
     needs: [prod-image, bi-validate]
-    if: >-
-      github.event_name == 'push' &&
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+    if: github.event_name == 'push'
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
@@ -191,8 +184,8 @@ jobs:
           target_url: "https://${{ env.HEROKU_DOMAIN }}"
           state: in_progress
           environment: "${{ env.HEROKU_APP }}"
-      - name: "Pull image"
-        run: ./scripts/prod-docker-image/pull_image.sh
+      - name: "Pull PROD image"
+        run: ./scripts/manage_image.py pull --image-type prod
       - name: "Deploy"
         run: './scripts/deploy.sh "${HEROKU_APP}"'
       - name: Update deployment status (success)
@@ -214,9 +207,7 @@ jobs:
     name: "Deploy BI (push) - ${{ github.ref }}"
     runs-on: ubuntu-latest
     needs: [prod-image, bi-validate]
-    if: >-
-      github.event_name == 'push' &&
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod')
+    if: github.event_name == 'push'
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       COMPOSE_FILE: "docker-compose.dbt.yaml"
@@ -233,10 +224,8 @@ jobs:
         run: ./scripts/docker_login_github.py
       - name: "Build BI image"
         run: |
-          # Build BI image
-          ./scripts/bi-docker-image/build_image.sh
-          # Verify BI image
-          ./scripts/bi-docker-image/verify_image.sh
+          ./scripts/manage_image.py build --image-type bi
+          ./scripts/manage_image.py verify --image-type bi
       - run: pip install django-environ
       - name: "Install Heroku CLI"
         run: |
@@ -261,11 +250,3 @@ jobs:
           printenv | grep POLA_APP >> $GITHUB_ENV;
       - run: ./run_dbt.sh dbt deps
       - run: ./run_dbt.sh dbt build
-      - name: "Push image (push)"
-        if: github.event_name == 'push'
-        env:
-          PREPARE_BUILDX_CACHE: true
-        run: |
-          # Build cache
-          ./scripts/bi-docker-image/build_image.sh
-          ./scripts/bi-docker-image/push_image.sh

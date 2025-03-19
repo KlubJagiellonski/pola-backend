@@ -27,8 +27,8 @@ jobs:
         run: ./scripts/docker_login_github.py
       - name: Copy .env.example to .env
         run: cp .env.example .env
-      - name: Build image
-        run: ./scripts/ci-docker-image/build_image.sh
+      - name: Build CI image
+        run: ./scripts/manage_image.py build --image-type ci
       - name: Clear volumes
         run: docker compose down --volumes
       - name: Start PostgresSQL
