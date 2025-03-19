@@ -129,6 +129,8 @@ def side_by_side_diff(a, b, context=3):
     :param context: liczba linii kontekstu z każdej strony różnicy
     :return: lista łańcuchów znaków z porównaniem
     """
+    if a == b:
+        return []
     cruncher = difflib.SequenceMatcher(a=a, b=b)
 
     # Jeśli którakolwiek z list jest pusta, unikamy błędów przy `max`
