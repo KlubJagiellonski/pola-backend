@@ -15,6 +15,7 @@ jobs:
   django-tests:
     name: "Django tests"
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
@@ -22,6 +23,15 @@ jobs:
         python_version: ["current"]
         # For current version, see: dependencies/constraints-production.txt
         django_version: ['current', "5.1.7"]
+        experimental: [false]
+        include:
+          - python_version: "3.12"
+            django_version: "current"
+            experimental: true
+          - python_version: "current"
+            django_version: "latest"
+            experimental: true
+
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
     steps:
@@ -29,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - name: "Login to Githhub Container Registry"
+      - name: "Login to GitHub Container Registry"
         run: ./scripts/docker_login_github.py
       - if: matrix.django_version != 'latest' && matrix.django_version != 'current'
         run: |
