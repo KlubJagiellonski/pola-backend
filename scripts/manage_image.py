@@ -230,8 +230,11 @@ def compute_base_variables():
     container_registry = os.environ.get("CONTAINER_REGISTRY", f"ghcr.io/{github_repository}").lower()
 
     django_version_prod = read_django_version_prod(repo_root / "dependencies/constraints-production.txt")
+    python_version_prod = Path(repo_root / ".python-version").read_text().strip()
     django_version = os.environ.get("DJANGO_VERSION", django_version_prod)
-    python_version = os.environ.get("PYTHON_VERSION", "3.11")
+    python_version = os.environ.get("PYTHON_VERSION", "current")
+    if python_version == "current":
+        python_version = python_version_prod
     image_tag = os.environ.get("IMAGE_TAG", "latest")
     variables = {
         "GITHUB_REPOSITORY": github_repository,
