@@ -42,7 +42,7 @@ lazy-object-proxy==1.10.0
 MarkupSafe==3.0.2
 more-itertools==10.6.0
 oauthlib==3.2.2
-openapi-core==0.19.4
+openapi-core==0.19.5
 openapi-schema-validator==0.6.3
 openapi-spec-validator==0.7.1
 packaging==24.2

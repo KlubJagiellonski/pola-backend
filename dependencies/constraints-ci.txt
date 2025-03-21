@@ -57,7 +57,7 @@ matplotlib-inline==0.1.7
 more-itertools==10.6.0
 multidict==6.2.0
 oauthlib==3.2.2
-openapi-core==0.19.4
+openapi-core==0.19.5
 openapi-schema-validator==0.6.3
 openapi-spec-validator==0.7.1
 packaging==24.2
