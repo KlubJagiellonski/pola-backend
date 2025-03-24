@@ -8,7 +8,7 @@ env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  ISSUE_NUMBER: ${{ github.event.issue.number }}
+  ISSUE_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
   check-comment:
