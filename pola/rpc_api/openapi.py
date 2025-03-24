@@ -42,6 +42,7 @@ class PolaDjangoOpenAPIErrorsHandler(DjangoOpenAPIErrorsHandler):
 
 # Build a single decorator object for the entire application.
 openapi_decorator = DjangoOpenAPIViewDecorator()
+# HACK: Workaround for: https://github.com/python-openapi/openapi-core/pull/979
 openapi_decorator.errors_handler_cls = PolaDjangoOpenAPIErrorsHandler
 
 # For backward compatibility
