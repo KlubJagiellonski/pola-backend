@@ -53,80 +53,10 @@ class PolaDjangoOpenAPIMiddleware(DjangoOpenAPIMiddleware):
     errors_handler = PolaDjangoOpenAPIErrorsHandler()
 
 
-def get_openapi_instance() -> OpenAPI:
-    """
-    Retrieves or initializes the OpenAPI instance based on Django settings
-    (either OPENAPI or OPENAPI_SPEC).
-    This function ensures the spec is only loaded once.
-    """
-    if hasattr(settings, "OPENAPI"):
-        # Recommended (newer) approach
-        return settings.OPENAPI
-    elif hasattr(settings, "OPENAPI_SPEC"):
-        # Backward compatibility
-        warnings.warn(
-            "OPENAPI_SPEC is deprecated. Use OPENAPI in your settings instead.",
-            DeprecationWarning,
-        )
-        return OpenAPI(settings.OPENAPI_SPEC)
-    else:
-        raise ImproperlyConfigured("Neither OPENAPI nor OPENAPI_SPEC is defined in Django settings.")
-
-
-class DjangoOpenAPIDecorator(DjangoIntegration):
-    """
-    A decorator-class that inherits from DjangoIntegration (openapi-core).
-    It takes an OpenAPI object during initialization to avoid multiple
-    instantiations of the same spec.
-
-    Unfortunately, the openapi-core library does not provide a decorator out of the box
-    and decorator_from_middleware is only available with the old style of Django 1.9 middlewares.
-    """
-
-    valid_request_handler_cls = DjangoOpenAPIValidRequestHandler
-    errors_handler = PolaDjangoOpenAPIErrorsHandler()
-
-    def __init__(self, openapi: OpenAPI):
-        super().__init__(openapi)
-
-        # If OPENAPI_RESPONSE_CLS is defined in settings.py (for custom response classes),
-        # set the response_cls accordingly.
-        if hasattr(settings, "OPENAPI_RESPONSE_CLS"):
-            self.response_cls = settings.OPENAPI_RESPONSE_CLS
-
-    def __call__(self, view_func):
-        """
-        Thanks to this method, the class acts as a decorator.
-        Example usage:
-
-            @openapi_decorator
-            def my_view(request): ...
-
-        """
-
-        def _wrapped_view(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-            # get_response is the function that openapi-core treats
-            # as the "next step" in the chain (i.e., our original view).
-            def get_response(r: HttpRequest) -> HttpResponse:
-                return view_func(r, *args, **kwargs)
-
-            # Create a handler that will validate the request.
-            valid_request_handler = self.valid_request_handler_cls(request, get_response)
-
-            # Validate the request (before running the view).
-            response = self.handle_request(request, valid_request_handler, self.errors_handler)
-
-            # Validate the response (after the view) if should_validate_response() returns True.
-            return self.handle_response(request, response, self.errors_handler)
-
-        return _wrapped_view
-
-
-# 1) Load or create a single OpenAPI instance. This will only happen once.
-openapi_instance = get_openapi_instance()
-
-# 2) Build a single decorator object for the entire application.
-openapi_decorator = DjangoOpenAPIDecorator(openapi_instance)
+# Build a single decorator object for the entire application.
+openapi_decorator = DjangoOpenAPIViewDecorator(
+    errors_handler_cls=PolaDjangoOpenAPIErrorsHandler
+)
 
 # For backward compatibility
 validate_pola_openapi_spec = openapi_decorator
