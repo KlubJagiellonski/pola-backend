@@ -11,7 +11,7 @@ from openapi_core.contrib.django.handlers import (
     DjangoOpenAPIValidRequestHandler,
 )
 from openapi_core.contrib.django.integrations import DjangoIntegration
-from openapi_core.contrib.django.middlewares import DjangoOpenAPIMiddleware
+from openapi_core.contrib.django.middlewares import DjangoOpenAPIMiddleware, DjangoOpenAPIViewDecorator
 from openapi_core.validation.schemas.exceptions import InvalidSchemaValue
 
 from pola.rpc_api.http import JsonProblemResponse
