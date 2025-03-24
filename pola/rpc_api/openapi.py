@@ -1,17 +1,12 @@
-import warnings
 from collections.abc import Iterable
 
 import sentry_sdk
-from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from openapi_core import OpenAPI
-from openapi_core.contrib.django.handlers import (
-    DjangoOpenAPIErrorsHandler,
-    DjangoOpenAPIValidRequestHandler,
+from django.http import JsonResponse
+from openapi_core.contrib.django.handlers import DjangoOpenAPIErrorsHandler
+from openapi_core.contrib.django.middlewares import (
+    DjangoOpenAPIMiddleware,
+    DjangoOpenAPIViewDecorator,
 )
-from openapi_core.contrib.django.integrations import DjangoIntegration
-from openapi_core.contrib.django.middlewares import DjangoOpenAPIMiddleware, DjangoOpenAPIViewDecorator
 from openapi_core.validation.schemas.exceptions import InvalidSchemaValue
 
 from pola.rpc_api.http import JsonProblemResponse
@@ -54,9 +49,7 @@ class PolaDjangoOpenAPIMiddleware(DjangoOpenAPIMiddleware):
 
 
 # Build a single decorator object for the entire application.
-openapi_decorator = DjangoOpenAPIViewDecorator(
-    errors_handler_cls=PolaDjangoOpenAPIErrorsHandler
-)
+openapi_decorator = DjangoOpenAPIViewDecorator(errors_handler_cls=PolaDjangoOpenAPIErrorsHandler)
 
 # For backward compatibility
 validate_pola_openapi_spec = openapi_decorator
