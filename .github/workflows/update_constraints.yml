@@ -1,8 +1,8 @@
 name: Generate constraint file on comment
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [labeled]
 
 env:
   GITHUB_REPOSITORY: ${{ github.repository }}
@@ -12,29 +12,19 @@ env:
 
 jobs:
   check-comment:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/update_constraints')
+    if: github.event.label.name == 'update_constraints'
     runs-on: ubuntu-latest
     steps:
-      - name: "Add reaction to comment"
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.reactions.createForIssueComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: context.payload.comment.id,
-              content: '+1',
-            });
       - name: "Add comments with link to workflow"
         uses: actions/github-script@v7
         with:
           script: |
-            const prNumber = context.payload.issue.number;
+            const prNumber = context.payload.pull_request.number;
             const repoName = process.env.GITHUB_REPOSITORY;     // np. 'owner/nazwa-repo'
             const runId = process.env.GITHUB_RUN_ID;            // ID bieżącego runu
-            const linkDoAkcji = `https://github.com/${repoName}/actions/runs/${runId}`;
+            const workflowLink = `https://github.com/${repoName}/actions/runs/${runId}`;
 
-            const body = `Started workflow. [Workflow run](${linkDoAkcji})`;
+            const body = `Started workflow. [Workflow run](${workflowLink})`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -91,3 +81,18 @@ jobs:
             ```
             @Mergifyio rebase
             ```
+
+      - name: "Remove label 'update_constraints'"
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const labelName = 'update_constraints';
+
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              name: labelName
+            });
