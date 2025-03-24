@@ -2,11 +2,8 @@ from collections.abc import Iterable
 
 import sentry_sdk
 from django.http import JsonResponse
+from openapi_core.contrib.django.decorators import DjangoOpenAPIViewDecorator
 from openapi_core.contrib.django.handlers import DjangoOpenAPIErrorsHandler
-from openapi_core.contrib.django.middlewares import (
-    DjangoOpenAPIMiddleware,
-    DjangoOpenAPIViewDecorator,
-)
 from openapi_core.validation.schemas.exceptions import InvalidSchemaValue
 
 from pola.rpc_api.http import JsonProblemResponse
@@ -41,11 +38,6 @@ class PolaDjangoOpenAPIErrorsHandler(DjangoOpenAPIErrorsHandler):
             context_data={'errors': [e['title'] for e in data_errors]},
             status=data_error_max['status'],
         )
-
-
-# For now, it is unused. It is here for future reference.
-class PolaDjangoOpenAPIMiddleware(DjangoOpenAPIMiddleware):
-    errors_handler = PolaDjangoOpenAPIErrorsHandler()
 
 
 # Build a single decorator object for the entire application.
