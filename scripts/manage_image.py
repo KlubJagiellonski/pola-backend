@@ -285,17 +285,25 @@ def build_image(image_type, env, prepare_buildx_cache=False):
         f"--cache-from={image_name}:cache",
     ]
 
+    # We need to use custom builders as we want to use cache from registry
+    # and save cache to registry.
+    # The default docker driver supports the inline, local, registry, and gha cache backends,
+    # but only if you have enabled the containerd image store and we cann't guarantee that.
+    # See: https://docs.docker.com/build/cache/backends/
+    build_command += [
+        f"--cache-to=type=registry,ref={image_name}:cache,mode=max",
+        "--load",
+        "--builder",
+        "pola_cache",
+    ]
+
+    try:
+        run_command(["docker", "buildx", "inspect", "pola_cache"], check=True)
+    except subprocess.CalledProcessError:
+        run_command(["docker", "buildx", "create", "--name=pola_cache", "--driver=docker-container"], check=True)
+
     if prepare_buildx_cache:
-        build_command += [
-            f"--cache-to=type=registry,ref={image_name}:cache,mode=max",
-            "--load",
-            "--builder",
-            "pola_cache",
-        ]
-        try:
-            run_command(["docker", "buildx", "inspect", "pola_cache"], check=True)
-        except subprocess.CalledProcessError:
-            run_command(["docker", "buildx", "create", "--name", "pola_cache"], check=True)
+        build_command += [f"--cache-to=type=registry,ref={image_name}:cache,mode=max"]
 
     if image_type == "prod":
         # Dodajemy informacje o SHA commita
