@@ -1,3 +1,6 @@
+# syntax=docker/dockerfile:1.14.0
+# check=error=true;experimental=all
+
 ARG PYTHON_VERSION="3.11"
 FROM python:${PYTHON_VERSION}-slim-bullseye
 
@@ -33,7 +36,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 RUN mkdir /app
 WORKDIR /app
 

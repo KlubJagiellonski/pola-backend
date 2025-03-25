@@ -1,12 +1,14 @@
+# syntax=docker/dockerfile:1.14.0
+# check=error=true;experimental=all
+
 ARG APP_UID="50000"
 ARG APP_GID="50000"
-ARG APP_HOME=/opt/pola-backend
 
 ARG BASE_PYTHON_IMAGE="python:3.11-slim-bookworm"
 
 ######################### NODE BUILD IMAGE ##########################
-
-FROM --platform=linux/amd64 node:17.3.0-alpine3.12 as build-js
+# build-js builds the frontend assets
+FROM node:17.3.0-alpine3.12 AS build-js
 
 WORKDIR /app/
 
@@ -19,10 +21,10 @@ COPY pola/assets pola/assets
 RUN npm run build
 
 ######################### PYTHON BUILD IMAGE ########################
+# build-py installs the python dependencies
+FROM ${BASE_PYTHON_IMAGE} AS build-py
 
-FROM --platform=linux/amd64 ${BASE_PYTHON_IMAGE} as build-py
-
-ENV APP_HOME=${APP_HOME} \
+ENV APP_HOME=/opt/pola-backend/ \
     DEBIAN_FRONTEND=noninteractive \
     LANGUAGE=C.UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     LC_CTYPE=C.UTF-8 LC_MESSAGES=C.UTF-8 \
@@ -46,13 +48,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY dependencies/constraints-production.txt \
      dependencies/requirements-production.txt \
      dependencies/requirements-production-django.txt \
-     ${APP_HOME}/dependencies/
+     /opt/pola-backend/dependencies/
 
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir --user \
-       -r ${APP_HOME}/dependencies/requirements-production.txt \
-       -r ${APP_HOME}/dependencies/requirements-production-django.txt \
-       -c ${APP_HOME}/dependencies/constraints-production.txt \
+       -r /opt/pola-backend/dependencies/requirements-production.txt \
+       -r /opt/pola-backend/dependencies/requirements-production-django.txt \
+       -c /opt/pola-backend/dependencies/constraints-production.txt \
     && pip check \
     && find /root/.local/ -name '*.pyc' -delete \
     && find /root/.local/ -type d -name '__pycache__' -delete \
@@ -61,17 +63,17 @@ RUN pip install --no-cache-dir --upgrade pip \
     && find /root/.local -print0 | xargs --null chmod g+rw
 
 ######################### MAIN IMAGE ################################
-
-FROM --platform=linux/amd64 ${BASE_PYTHON_IMAGE} as main
+# main is the final image that will be used in production
+FROM ${BASE_PYTHON_IMAGE} AS main
 
 ARG APP_UID
 ARG APP_GID
 ARG APP_USER_HOME_DIR=/home/pola-backend
-ARG APP_HOME
+
 ENV APP_UID=${APP_UID} \
     APP_GID=${APP_GID} \
     APP_USER_HOME_DIR=${APP_USER_HOME_DIR} \
-    APP_HOME=${APP_HOME} \
+    APP_HOME=/opt/pola-backend/ \
     DEBIAN_FRONTEND=noninteractive \
     LANGUAGE=C.UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     LC_CTYPE=C.UTF-8 LC_MESSAGES=C.UTF-8 \
@@ -93,8 +95,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
        --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
-    && mkdir -p "${APP_HOME}" \
-    && chown -R pola-backend:root "${APP_USER_HOME_DIR}" "${APP_HOME}" \
+    && mkdir -p "/opt/pola-backend" \
+    && chown -R pola-backend:root "${APP_USER_HOME_DIR}" "/opt/pola-backend" \
     # Enable heroku-exec
     # See: https://devcenter.heroku.com/articles/exec#using-with-docker
     && chmod g=u /etc/passwd \
@@ -102,14 +104,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && ln -s /bin/bash /bin/sh
 
 COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "${APP_HOME}/pola/static/"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "/opt/pola-backend/pola/static/"
 
 COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
 COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
-COPY --chown=pola-backend:root ./ ${APP_HOME}
-RUN chmod -R g+rw "${APP_HOME}"
+COPY --chown=pola-backend:root ./pola/ /opt/pola-backend/
+RUN chmod -R g+rw "/opt/pola-backend"
 
-WORKDIR ${APP_HOME}
+WORKDIR /opt/pola-backend
 
 USER ${APP_UID}
 

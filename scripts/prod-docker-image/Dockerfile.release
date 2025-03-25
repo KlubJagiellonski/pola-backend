@@ -1,4 +1,7 @@
-ARG BASE_IMAGE
+# syntax=docker/dockerfile:1.14.0
+# check=error=true;experimental=all
+
+ARG BASE_IMAGE=ghcr.io/klubjagiellonski/pola-backend/pola-backend:latest
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
