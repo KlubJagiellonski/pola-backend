@@ -3,6 +3,7 @@
 import argparse
 import difflib
 import itertools
+import json
 import logging
 import os
 import shlex
@@ -10,6 +11,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
 # Konfigurujemy podstawowy logger
 logging.basicConfig(
@@ -108,7 +110,7 @@ def docker_run(image, cmd=None, entrypoint=None, remove=True, capture_output=Fal
     return run_command(command, capture_output=capture_output, check=check)
 
 
-def get_current_commit_sha():
+def get_current_commit_sha() -> str:
     try:
         git_sha = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
     except Exception:
@@ -116,15 +118,23 @@ def get_current_commit_sha():
     return git_sha
 
 
-def get_docker_image_digest(image_name):
+def docker_inspect(image_name: str) -> dict:
     try:
         r = run_command(
-            ["docker", "inspect", image_name, "--format={{ index (split (index .RepoDigests 0) \"@\") 1 }}"],
+            ["docker", "inspect", image_name, "--format={{json .}}"],
             capture_output=True,
         )
-        return r.stdout.strip()
+        return json.loads(r.stdout.strip())
     except Exception:
         return None
+
+
+def get_docker_image_digest(image_name: str) -> Optional[str]:
+    image_info = docker_inspect(image_name)
+    repo_digests = image_info.get("RepoDigests", [])
+    if not repo_digests:
+        raise None
+    return repo_digests[0].split("@")[1]
 
 
 def side_by_side_diff(a, b, context=3):
@@ -333,13 +343,14 @@ def build_image(image_type, env, prepare_buildx_cache=False):
         ]
 
     run_command(build_command)
+    logger.info("Obraz zbudowany pomyślnie.")
 
     # Tag lokalny
     run_command(["docker", "tag", f"{image_name}:{image_tag}", config["local_image_name"]])
 
-    logger.info("Obraz zbudowany pomyślnie.")
+    repo_tags = docker_inspect(f"{image_name}:{image_tag}")["RepoTags"]
     logger.info("Dostępne tagi: ")
-    for full_image_name in [f"{image_name}:{image_tag}", f'{config["local_image_name"]}']:
+    for full_image_name in repo_tags:
         logger.info("  %s", full_image_name)
 
 
