@@ -11,9 +11,9 @@ FROM --platform=linux/amd64 node:17.3.0-alpine3.12 as build-js
 WORKDIR /app/
 
 COPY package.json package-lock.json ./
-RUN npm install --global gulp-cli \
-    && npm install \
-    && npm cache clean --force
+RUN --mount=type=cache,target=/root/.npm \
+    npm install --global gulp-cli \
+    && npm install
 COPY gulpfile.esm.js ./
 COPY pola/assets pola/assets
 RUN npm run build
@@ -29,7 +29,9 @@ ENV APP_HOME=${APP_HOME} \
     PYTHONUNBUFFERED=1 \
     PATH="/root/.local/bin:${PATH}"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
         g++ \
         gcc \
         git \
@@ -39,20 +41,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libcc1-0 \
         libpq-dev \
         libpq5 \
-        linux-libc-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        linux-libc-dev
 
 COPY dependencies/constraints-production.txt \
      dependencies/requirements-production.txt \
      dependencies/requirements-production-django.txt \
      ${APP_HOME}/dependencies/
 
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir --user \
-       -r ${APP_HOME}/dependencies/requirements-production.txt \
-       -r ${APP_HOME}/dependencies/requirements-production-django.txt \
-       -c ${APP_HOME}/dependencies/constraints-production.txt \
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip \
+    && pip install --user \
+       --requirement ${APP_HOME}/dependencies/requirements-production.txt \
+       --requirement ${APP_HOME}/dependencies/requirements-production-django.txt \
+       --constraint ${APP_HOME}/dependencies/constraints-production.txt \
     && pip check \
     && find /root/.local/ -name '*.pyc' -delete \
     && find /root/.local/ -type d -name '__pycache__' -delete \
@@ -78,7 +79,9 @@ ENV APP_UID=${APP_UID} \
     PATH="${APP_USER_HOME_DIR}/.local/bin:${PATH}" \
     GUNICORN_CMD_ARGS="--worker-tmp-dir /dev/shm"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates dumb-init curl \
         postgresql-client libpq5 \
         # Required by encrypoint.sh
@@ -87,9 +90,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         openssh-client \
         openssh-server \
         iproute2 \
-    && apt-get autoremove -yqq --purge \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* /usr/share/doc /usr/share/man \
+    && rm -rf /var/log/* /usr/share/doc /usr/share/man \
     && groupadd --gid "${APP_GID}" pola-backend \
     && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
        --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
