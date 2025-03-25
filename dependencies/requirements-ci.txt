@@ -9,5 +9,5 @@ django-webtest==1.9.12
 factory-boy==3.3.3
 ipdb==0.13.13
 parameterized==0.9.0
-pytz==2025.1
+pytz==2025.2
 vcrpy==7.0.0
