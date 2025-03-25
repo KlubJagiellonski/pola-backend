@@ -36,6 +36,7 @@ django-reversion==5.1.0
 django-storages==1.14.5
 django-test-plus==2.2.4
 django-webtest==1.9.12
+execnet==2.1.1
 executing==2.2.0
 factory_boy==3.3.3
 Faker==37.1.0
@@ -72,6 +73,7 @@ Pillow==10.1.0
 pluggy==1.5.0
 prompt_toolkit==3.0.50
 propcache==0.3.0
+psutil==7.0.0
 psycopg2-binary==2.9.10
 ptyprocess==0.7.0
 pure_eval==0.2.3
@@ -83,6 +85,7 @@ PyJWT==2.10.1
 pytest==8.3.5
 pytest-cov==6.0.0
 pytest-django==4.10.0
+pytest-xdist==3.6.1
 python-dateutil==2.9.0.post0
 python3-openid==3.2.0
 pytz==2025.2

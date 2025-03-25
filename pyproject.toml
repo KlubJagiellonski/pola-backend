@@ -1,0 +1,15 @@
+[tool.coverage.run]
+branch = true
+omit = [
+    "**/migrations/*",
+    "**/tests/*"
+]
+source = ["./pola/"]
+plugins = [
+    "django_coverage_plugin"
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "pola.config.settings.tests"
+python_files = "tests.py test_*.py *_tests.py"
+addopts = "--cov=pola --cov-report html --cov-report xml"
