@@ -1,7 +1,7 @@
 Pola
 ==============================
 
-.. image:: https://github.com/KlubJagiellonski/pola-backend/workflows/CI%20Build/badge.svg
+.. image:: https://github.com/KlubJagiellonski/pola-backend/actions/workflows/ci.yml/badge.svg
      :target: https://github.com/KlubJagiellonski/pola-backend/actions
      :alt: CI Build
 

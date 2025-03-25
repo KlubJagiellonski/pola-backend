@@ -107,32 +107,27 @@ Po więcej informacji na temat użycia hooków pre-commit, zobacz `Witryna Pre-c
 Testy automatyczne dla Pythona
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Kod logiki jest automatycznie testowny z wykorzystaniem frameworka testowego dostarczonego przez Django. Wszystkie testy znajduja się w katalogach: ``pola/*/tests``
+Kod logiki jest automatycznie testowny z uyciem ``pytest`` . Wszystkie testy znajduja się w katalogach: ``pola/*/tests`` lub plikach ``pola/*/tests.py``.
 
 Aby uruchomić wszystkie test uruchom:
 
 .. code-block:: bash
 
-    docker compose run --rm web ./manage.py test
+    docker compose run --rm web pytest
 
 Możesz określić poszczególne testy do uruchomienia, dostarczając dowolną liczbę „etykiet testowych” do komendy ./manage.py. Każda etykieta testowa może być pełną kropkowaną ścieżką Pythona do pakietu, modułu, podklasy TestCase lub metody testowej. Na przykład:
 
 .. code-block:: bash
 
     # Uruchamia wszystkie testy znalezione w pakiecie pola.company
-    docker compose run --rm web ./manage.py test pola.company
+    docker compose run --rm web pytest pola/company
 
     # Uruchom tylko jeden test case
-    docker compose run --rm web ./manage.py test pola.tests.test_views.TestFrontPageView
+    docker compose run --rm web pytest pola/tests/test_views.py -k TestFrontPageView
 
     # Uruchamia tylko jedna metode testową
-    docker compose run --rm web ./manage.py test pola.tests.test_views.TestFrontPageView.test_template_used
+    docker compose run --rm web pytest pola/tests/test_views.py -k TestFrontPageView -k test_template_used
 
-Możesz również podać ścieżkę do katalogu, aby wykryć testy poniżej tego katalogu:
-
-.. code-block:: bash
-
-    docker compose run --rm web ./manage.py test animals/
 
 Więcej informacji na temat tesotwnia dostępna jest w dokumenttacji Djangoo: `Testing in Django <https://docs.djangoproject.com/pl/3.2/topics/testing/>`__.
 
