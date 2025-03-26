@@ -72,7 +72,7 @@ pexpect==4.9.0
 Pillow==10.1.0
 pluggy==1.5.0
 prompt_toolkit==3.0.50
-propcache==0.3.0
+propcache==0.3.1
 psutil==7.0.0
 psycopg2-binary==2.9.10
 ptyprocess==0.7.0
