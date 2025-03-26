@@ -41,7 +41,7 @@ pytz==2025.2
 PyYAML==6.0.2
 referencing==0.36.2
 requests==2.32.3
-rpds-py==0.23.1
+rpds-py==0.24.0
 six==1.17.0
 snowplow-tracker==1.1.0
 sqlparse==0.5.3
