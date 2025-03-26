@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1.14.0
-# check=error=true;experimental=all
+# check=error=true
+# CopyIgnoredFile is broken. It can not detect ./manage.py file, because it is excluded and added again.
 
 ARG APP_UID="50000"
 ARG APP_GID="50000"
