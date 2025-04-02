@@ -109,7 +109,9 @@ COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "/opt/pola-back
 
 COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
 COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
-COPY --chown=pola-backend:root ./pola/ ./manage.py /opt/pola-backend/
+COPY --chown=pola-backend:root ./pola /opt/pola-backend/pola
+COPY --chown=pola-backend:root ./manage.py /opt/pola-backend/
+
 RUN chmod -R g+rw "/opt/pola-backend"
 
 WORKDIR /opt/pola-backend
