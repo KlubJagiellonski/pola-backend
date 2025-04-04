@@ -21,7 +21,7 @@ jobs:
         # For current version, see: .python-version
         python_version: ["current"]
         # For current version, see: dependencies/constraints-production.txt
-        django_version: ['current', "5.1.7"]
+        django_version: ['current', "5.1.8"]
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
     steps:
