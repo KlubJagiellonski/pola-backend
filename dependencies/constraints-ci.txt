@@ -35,7 +35,7 @@ django-resized==1.0.3
 django-reversion==5.1.0
 django-storages==1.14.6
 django-test-plus==2.2.4
-django-webtest==1.9.12
+django-webtest==1.9.13
 execnet==2.1.1
 executing==2.2.0
 factory_boy==3.3.3
