@@ -48,7 +48,7 @@ iniconfig==2.1.0
 ipdb==0.13.13
 ipython==9.1.0
 ipython_pygments_lexers==1.1.1
-isodate==0.6.1
+isodate==0.7.2
 jedi==0.19.2
 jmespath==1.0.1
 jsonschema==4.23.0
