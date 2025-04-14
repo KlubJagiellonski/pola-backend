@@ -1,3 +1,6 @@
+# syntax=docker/dockerfile:1.14.0
+# check=error=true;experimental=all
+
 ARG PYTHON_VERSION="3.11"
 FROM python:${PYTHON_VERSION}-slim-bullseye
 
@@ -32,7 +35,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libpq-dev \
         libpq5
 
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 RUN mkdir /app
 WORKDIR /app
 
