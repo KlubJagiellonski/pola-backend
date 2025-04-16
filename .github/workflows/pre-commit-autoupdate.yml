@@ -1,0 +1,53 @@
+name: Update pre-commit hooks
+
+on:
+  schedule:
+    - cron: '37 21 * * *'
+  workflow_dispatch:
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  auto-update:
+    name: Update pre-commit hooks
+    if: ${{ github.repository == 'KlubJagiellonski/pola-backend' }}
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: '.python-version'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip wheel setuptools virtualenv
+          python -m pip install pre-commit
+
+      - name: Use pre-commit environment cache
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+          path: ~/.cache/pre-commit
+          restore-keys: ${{ runner.os }}-pre-commit-
+
+      - name: Run pre-commit automatic update
+        run: |
+          pre-commit autoupdate
+          pre-commit run --all-files
+
+      - uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e  # v7.0.8
+        with:
+          base: master
+          body: Update pre-commit hooks to their latest versions.
+          branch: update-pre-commit-hooks
+          commit-message: 'Update pre-commit hooks'
+          committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
+          title: Update pre-commit hooks
+          token: ${{ github.token }}
