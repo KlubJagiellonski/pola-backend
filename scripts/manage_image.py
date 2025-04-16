@@ -393,13 +393,9 @@ def verify_image(image_type, env):
                 "--rm",
                 "-v",
                 "/var/run/docker.sock:/var/run/docker.sock",
-                "ghcr.io/joschi/dive:latest",
+                "ghcr.io/wagoodman/dive:latest",
                 f"docker://{image_name}:{image_tag}",
-                "--ci",
-                "--lowestEfficiency",
-                "0.90",
-                "--highestUserWastedPercent",
-                "0.25",
+                "--ci"
             ]
         )
 
