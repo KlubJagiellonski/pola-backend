@@ -36,7 +36,7 @@ repos:
       - id: debug-statements
       - id: destroyed-symlinks
       - id: detect-aws-credentials
-        args: 
+        args:
           - --allow-missing-credentials
       - id: detect-private-key
       - id: end-of-file-fixer
@@ -46,7 +46,7 @@ repos:
           - --remove
       - id: mixed-line-ending
       - id: name-tests-test
-        args: 
+        args:
           - --django
       - id: requirements-txt-fixer
         files: ^dependencies/.+\.txt$
@@ -55,13 +55,13 @@ repos:
     rev: v3.19.1
     hooks:
       - id: pyupgrade
-        args: 
+        args:
           - --py39-plus
   - repo: https://github.com/psf/black
     rev: 25.1.0
     hooks:
       - id: black
-        args: 
+        args:
           - --line-length
           - '120'
           - --skip-string-normalization
@@ -84,8 +84,8 @@ repos:
     rev: 'v1.37.0'
     hooks:
       - id: yamllint
-        args: 
-          - -c 
+        args:
+          - -c
           - yamllint-config.yml
   - repo: https://github.com/ikamensh/flynt
     rev: '1.0.1'
