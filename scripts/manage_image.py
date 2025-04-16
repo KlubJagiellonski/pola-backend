@@ -395,7 +395,7 @@ def verify_image(image_type, env):
                 "/var/run/docker.sock:/var/run/docker.sock",
                 "ghcr.io/wagoodman/dive:latest",
                 f"docker://{image_name}:{image_tag}",
-                "--ci"
+                "--ci",
             ]
         )
 
