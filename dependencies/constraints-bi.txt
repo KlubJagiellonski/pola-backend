@@ -27,7 +27,7 @@ more-itertools==10.6.0
 msgpack==1.1.0
 networkx==3.4.2
 ordered-set==4.1.0
-packaging==24.2
+packaging==25.0
 parsedatetime==2.6
 pathspec==0.12.1
 protobuf==5.29.3
