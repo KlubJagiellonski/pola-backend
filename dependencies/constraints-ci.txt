@@ -53,7 +53,7 @@ jedi==0.19.2
 jmespath==1.0.1
 jsonschema==4.23.0
 jsonschema-path==0.3.4
-jsonschema-specifications==2024.10.1
+jsonschema-specifications==2025.4.1
 lazy-object-proxy==1.11.0
 MarkupSafe==3.0.2
 matplotlib-inline==0.1.7
