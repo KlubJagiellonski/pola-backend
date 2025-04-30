@@ -12,10 +12,10 @@ from pola.integrations.produkty_w_sieci import (
     produkty_w_sieci_client,
 )
 
-
 TEST_EAN13 = "5901520000059"
 
 vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), "cassettes"))
+
 
 # 🔹 Test z użyciem rzeczywistego API (v2)
 @override_settings()
@@ -77,7 +77,6 @@ class TestProduktyWSieciClientMocked:
             mock_response.raise_for_status = mock.Mock()
             mock_request.return_value = mock_response
 
-        
             with pytest.raises(Exception):
                 self.client.get_products(gtin_number=TEST_EAN13, num_retries=0)
 
