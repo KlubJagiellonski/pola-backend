@@ -6,7 +6,12 @@ from django.test import TestCase, override_settings
 from requests.exceptions import HTTPError
 from vcr import VCR
 
-from pola.integrations.produkty_w_sieci import ProduktyWSieciClient, produkty_w_sieci_client, ApiException
+from pola.integrations.produkty_w_sieci import (
+    ApiException,
+    ProduktyWSieciClient,
+    produkty_w_sieci_client,
+)
+
 
 TEST_EAN13 = "5901520000059"
 
