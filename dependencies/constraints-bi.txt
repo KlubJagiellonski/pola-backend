@@ -6,7 +6,7 @@ certifi==2025.4.26
 charset-normalizer==3.4.1
 click==8.1.8
 colorama==0.4.6
-daff==1.3.46
+daff==1.4.2
 dbt-adapters==1.14.5
 dbt-common==1.17.0
 dbt-core==1.9.4
