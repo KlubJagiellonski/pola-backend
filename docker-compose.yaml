@@ -123,7 +123,7 @@ services:
         mc anonymous set public local/pola-app-public || true;
 
   postgres:
-    image: postgres:13.1
+    image: postgres:17.5
     restart: always
     environment:
       POSTGRES_USER: pola_app
