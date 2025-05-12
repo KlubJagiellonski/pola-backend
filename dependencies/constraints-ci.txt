@@ -10,7 +10,7 @@ certifi==2025.4.26
 cffi==1.17.1
 chardet==5.2.0
 charset-normalizer==3.4.2
-click==8.1.8
+click==8.2.0
 Collectfast==2.2.0
 coverage==7.8.0
 cryptography==44.0.3
