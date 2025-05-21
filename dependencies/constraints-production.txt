@@ -8,7 +8,7 @@ certifi==2025.4.26
 cffi==1.17.1
 chardet==5.2.0
 charset-normalizer==3.4.2
-click==8.2.0
+click==8.2.1
 Collectfast==2.2.0
 cryptography==45.0.2
 defusedxml==0.7.1
