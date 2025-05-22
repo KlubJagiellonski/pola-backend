@@ -97,7 +97,7 @@ requests==2.32.3
 requests-oauthlib==2.0.0
 rfc3339-validator==0.1.4
 rlPyCairo==0.3.0
-rpds-py==0.25.0
+rpds-py==0.25.1
 rq==1.16.1
 s3transfer==0.12.0
 sentry-sdk==2.29.1
