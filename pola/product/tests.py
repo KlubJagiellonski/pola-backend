@@ -107,21 +107,22 @@ class TestProductUpdateWeb(PermissionMixin, TestCase):
         self.assertEqual(versions[0].revision.user, self.user)
         self.assertEqual(self.instance.name, "New name")
 
-    @override_settings(LANGUAGE_CODE='en-EN')
-    def test_form_commit_desc_required(self):
-        self.login()
-        page = self.client.post(
-            self.url,
-            data={
-                'code': self.instance.code,
-                'name': "New name",
-                'company': self.company.pk,
-                'commit_desc': "",
-                'action': 'Save',
-            },
-        )
+    # Test commented out as commit desc field set to optional
+    # @override_settings(LANGUAGE_CODE='en-EN')
+    # def test_form_commit_desc_required(self):
+    #     self.login()
+    #     page = self.client.post(
+    #         self.url,
+    #         data={
+    #             'code': self.instance.code,
+    #             'name': "New name",
+    #             'company': self.company.pk,
+    #             'commit_desc': "",
+    #             'action': 'Save',
+    #         },
+    #     )
 
-        self.assertContains(page, "This field is required.")
+    #     self.assertContains(page, "This field is required.")
 
 
 class TestProductDeleteView(PermissionMixin, InstanceMixin, TestCase):
