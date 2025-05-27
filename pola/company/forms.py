@@ -5,7 +5,6 @@ from django import forms
 from django.forms import inlineformset_factory
 
 from pola.forms import (
-    CommitDescriptionMixin,
     FormHorizontalMixin,
     ReadOnlyFieldsMixin,
     SaveButtonMixin,
@@ -15,7 +14,7 @@ from pola.forms import (
 from . import models
 
 
-class CompanyForm(ReadOnlyFieldsMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
+class CompanyForm(ReadOnlyFieldsMixin, FormHorizontalMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper.form_tag = False

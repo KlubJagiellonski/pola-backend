@@ -7,17 +7,13 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
 from pola.company.models import Company
-from pola.forms import (
-    CommitDescriptionMixin,
-    FormHorizontalMixin,
-    SaveButtonMixin,
-)
+from pola.forms import FormHorizontalMixin, SaveButtonMixin
 
 from . import models
 from .models import Product
 
 
-class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
+class ProductForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):
     class Meta:
         model = models.Product
         fields = ['code', 'name', 'code', 'company', 'brand']
