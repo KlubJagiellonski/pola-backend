@@ -4,5 +4,17 @@
 @import 'font-awesome';
 
 .form-group .autocomplete-light-widget {
-    width: 100%;
+  width: 100%;
 }
+
+.sticky {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    gap: 10px; // Space between buttons
+    justify-content: center;
+    width: auto;
+  }
