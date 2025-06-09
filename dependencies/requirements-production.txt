@@ -24,7 +24,7 @@ gunicorn==23.0.0
 jsonschema==4.24.0
 openapi-core==0.19.5
 openapi-schema-validator==0.6.3
-openapi-spec-validator==0.7.1
+openapi-spec-validator==0.7.2
 psycopg2-binary==2.9.10
 pydantic==1.10.9
 reportlab[pycairo]==4.3.1
