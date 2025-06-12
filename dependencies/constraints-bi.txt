@@ -7,12 +7,12 @@ charset-normalizer==3.4.2
 click==8.2.1
 colorama==0.4.6
 daff==1.4.2
-dbt-adapters==1.14.5
-dbt-common==1.17.0
-dbt-core==1.9.4
+dbt-adapters==1.16.0
+dbt-common==1.25.0
+dbt-core==1.9.8
 dbt-extractor==0.6.0
 dbt-postgres==1.8.2
-dbt-semantic-interfaces==0.7.4
+dbt-semantic-interfaces==0.8.3
 deepdiff==7.0.1
 idna==3.10
 importlib-metadata==6.11.0
