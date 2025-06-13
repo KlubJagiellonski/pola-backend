@@ -89,7 +89,7 @@ pytest-xdist==3.6.1
 python-dateutil==2.9.0.post0
 python3-openid==3.2.0
 pytz==2025.2
-PyYAML==6.0.1
+PyYAML==6.0.2
 redis==3.5.3
 referencing==0.36.2
 reportlab==4.3.1
