@@ -12,7 +12,7 @@ chardet==5.2.0
 charset-normalizer==3.4.2
 click==8.2.1
 Collectfast==2.2.0
-coverage==7.9.0
+coverage==7.9.1
 cryptography==45.0.4
 decorator==5.2.1
 defusedxml==0.7.1
