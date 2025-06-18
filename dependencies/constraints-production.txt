@@ -41,7 +41,7 @@ jsonschema-specifications==2025.4.1
 lazy-object-proxy==1.11.0
 MarkupSafe==3.0.2
 more-itertools==10.7.0
-oauthlib==3.2.2
+oauthlib==3.3.0
 openapi-core==0.19.5
 openapi-schema-validator==0.6.3
 openapi-spec-validator==0.7.2
