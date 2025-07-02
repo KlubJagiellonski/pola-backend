@@ -12,6 +12,6 @@ parameterized==0.9.0
 pytest==8.4.1
 pytest-cov==6.2.1
 pytest-django==4.11.1
-pytest-xdist[psutil]==3.6.1
+pytest-xdist[psutil]==3.8.0
 pytz==2025.2
 vcrpy==7.0.0
