@@ -4,7 +4,7 @@ babel==2.17.0
 boto==2.49.0
 boto3==1.39.3
 botocore==1.39.3
-certifi==2025.6.15
+certifi==2025.7.9
 cffi==1.17.1
 chardet==5.2.0
 charset-normalizer==3.4.2
