@@ -25,8 +25,7 @@ class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, 
             'company': autocomplete.ModelSelect2(url='company:company-autocomplete'),
             'brand': autocomplete.ModelSelect2(url='company:brand-autocomplete'),
             'replacements': autocomplete.ModelSelect2Multiple(
-                url='product:product-autocomplete',
-                attrs={'data-minimum-input-length': 3}
+                url='product:product-autocomplete', attrs={'data-minimum-input-length': 3}
             ),
         }
 

@@ -108,11 +108,11 @@
                     {% else %}
                         <p>{% trans "Brak zdefiniowanych zamienników" %}</p>
                     {% endif %}
-                    
+
                     {% if perms.product.change_product %}
-                        <a href="{% url 'product:edit' product.code %}#replacements" 
+                        <a href="{% url 'product:edit' product.code %}#replacements"
                         class="btn btn-sm btn-primary">
-                            <i class="fa fa-pencil"></i> 
+                            <i class="fa fa-pencil"></i>
                             {% trans "Edytuj zamienniki" %}
                         </a>
                     {% endif %}
