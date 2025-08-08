@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.14.0
 # check=error=true;experimental=all
 
-FROM python:3.13.5-slim-bullseye
+FROM python:3.13.6-slim-bullseye
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
