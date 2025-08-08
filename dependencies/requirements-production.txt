@@ -3,7 +3,7 @@ boto==2.49.0
 boto3==1.40.5
 botocore==1.40.5
 Collectfast==2.2.0
-django-allauth==0.55.2
+django-allauth==65.10.0
 django-anymail==13.0.1
 django-autocomplete-light==3.12.1
 django-autoslug==1.9.9
