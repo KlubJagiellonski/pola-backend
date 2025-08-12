@@ -72,7 +72,7 @@ jobs:
           INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2
       # Use Open ID Connect to authenticate to GCP

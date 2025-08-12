@@ -33,7 +33,7 @@ jobs:
               body: body
             });
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/head
           repository: ${{ github.event.pull_request.head.repo.full_name }}
