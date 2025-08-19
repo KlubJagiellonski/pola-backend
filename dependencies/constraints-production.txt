@@ -35,7 +35,7 @@ gunicorn==23.0.0
 idna==3.10
 isodate==0.6.1
 jmespath==1.0.1
-jsonschema==4.25.0
+jsonschema==4.25.1
 jsonschema-path==0.3.4
 jsonschema-specifications==2025.4.1
 lazy-object-proxy==1.11.0
