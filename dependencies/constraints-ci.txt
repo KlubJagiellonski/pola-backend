@@ -92,7 +92,7 @@ pytz==2025.2
 PyYAML==6.0.2
 redis==3.5.3
 referencing==0.36.2
-reportlab==4.3.1
+reportlab==4.4.3
 requests==2.32.5
 requests-oauthlib==2.0.0
 rfc3339-validator==0.1.4
