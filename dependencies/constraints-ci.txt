@@ -2,7 +2,7 @@ asgiref==3.9.1
 asttokens==3.0.0
 attrs==25.3.0
 babel==2.17.0
-beautifulsoup4==4.13.4
+beautifulsoup4==4.13.5
 boto==2.49.0
 boto3==1.40.16
 botocore==1.40.16
