@@ -80,7 +80,7 @@ jobs:
       # https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
       - id: 'auth'
         name: 'Authenticate to GCP'
-        uses: 'google-github-actions/auth@v2'
+        uses: 'google-github-actions/auth@v3'
         with:
           project_id: '${{ env.GCP_PROJECT_ID }}'
           # yamllint disable-line rule:line-length
