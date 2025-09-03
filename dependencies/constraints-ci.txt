@@ -37,7 +37,7 @@ django-storages==1.14.6
 django-test-plus==2.3.0
 django-webtest==1.9.13
 execnet==2.1.1
-executing==2.2.0
+executing==2.2.1
 factory_boy==3.3.3
 Faker==37.6.0
 freetype-py==2.3.0
