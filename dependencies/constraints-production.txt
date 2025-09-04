@@ -12,7 +12,7 @@ click==8.2.1
 Collectfast==2.2.0
 cryptography==45.0.7
 defusedxml==0.7.1
-Django==5.1.8
+Django==5.2.6
 django-allauth==0.55.2
 django-anymail==13.0.1
 django-autocomplete-light==3.12.1
