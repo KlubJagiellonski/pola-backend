@@ -83,7 +83,7 @@ pydantic==1.10.9
 Pygments==2.19.2
 PyJWT==2.10.1
 pytest==8.4.2
-pytest-cov==6.2.1
+pytest-cov==6.3.0
 pytest-django==4.11.1
 pytest-xdist==3.6.1
 python-dateutil==2.9.0.post0
