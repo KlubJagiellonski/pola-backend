@@ -18,7 +18,7 @@ django-anymail==13.1
 django-autocomplete-light==3.12.1
 django-autoslug==1.9.9
 django-braces==1.17.0
-django-cors-headers==4.7.0
+django-cors-headers==4.8.0
 django-crispy-forms==1.14.0
 django-environ==0.12.0
 django-filter==25.1
