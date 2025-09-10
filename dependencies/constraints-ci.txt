@@ -4,8 +4,8 @@ attrs==25.3.0
 babel==2.17.0
 beautifulsoup4==4.13.5
 boto==2.49.0
-boto3==1.40.26
-botocore==1.40.26
+boto3==1.40.27
+botocore==1.40.27
 certifi==2025.8.3
 cffi==2.0.0
 chardet==5.2.0
@@ -99,7 +99,7 @@ rfc3339-validator==0.1.4
 rlPyCairo==0.4.0
 rpds-py==0.27.1
 rq==1.16.1
-s3transfer==0.13.1
+s3transfer==0.14.0
 sentry-sdk==2.37.1
 six==1.17.0
 soupsieve==2.8
