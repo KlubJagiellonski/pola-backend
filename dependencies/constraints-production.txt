@@ -10,7 +10,7 @@ chardet==5.2.0
 charset-normalizer==3.4.3
 click==8.2.1
 Collectfast==2.2.0
-cryptography==45.0.7
+cryptography==46.0.1
 defusedxml==0.7.1
 Django==5.1.8
 django-allauth==0.55.2
