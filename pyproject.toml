@@ -2,11 +2,19 @@
 branch = true
 omit = [
     "**/migrations/*",
-    "**/tests/*"
+    "**/tests/*",
+    "**/templates/*"
 ]
 source = ["./pola/"]
 plugins = [
     "django_coverage_plugin"
+]
+
+[tool.coverage.report]
+omit = [
+    "**/migrations/*",
+    "**/tests/*",
+    "**/templates/*"
 ]
 
 [tool.pytest.ini_options]
