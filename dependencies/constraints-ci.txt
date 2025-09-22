@@ -32,7 +32,7 @@ django-model-utils==5.0.0
 django-ratelimit==4.1.0
 django-redis-cache==3.0.1
 django-resized==1.0.3
-django-reversion==5.1.0
+django-reversion==6.0.0
 django-storages==1.14.6
 django-test-plus==2.3.0
 django-webtest==1.9.13
