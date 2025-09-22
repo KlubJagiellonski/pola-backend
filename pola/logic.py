@@ -84,6 +84,7 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
                 handle_companies_when_multiple_companies_are_not_supported(
                     code, companies, multiple_company_supported, result, stats
                 )
+            handle_product_replacements(product, result, report)
         else:
             result['name'] = 'Nieznany produkt'
             result['altText'] = (
@@ -110,6 +111,25 @@ def serialize_brand(brand):
     website_url = brand.website_url if brand.website_url else None
     return {'name': str(brand), 'logotype_url': logotype_url, 'website_url': website_url}
 
+def handle_product_replacements(product, result, report, topK=3):
+    """If the product has replacements, add them to the result and modify the report text.
+
+    Args:
+        product: Product instance
+        result: results dict to be modified
+        report: report dict to be modified
+        topK: maximum number of replacements to include in the report text
+    """
+    replacements = [
+        {"code": r.code, "name": (r.name or r.code)} for r in product.replacements.order_by("id")
+    ]
+    if replacements:
+        result["replacements"] = replacements
+        if report['text']:
+            old_report_text = report['text']
+            report['text'] = (f"Polskie alternatywy: "
+                    f"{', '.join(r['name'] for r in replacements[:topK])}\n---\n{old_report_text}"
+            )
 
 def handle_companies_when_multiple_companies_are_not_supported(
     code, companies, multiple_company_supported, result, stats

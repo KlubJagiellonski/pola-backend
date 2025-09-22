@@ -163,6 +163,20 @@ components:
                 type: string
               code:
                 type: string
+              replacements:
+                description: List of replacement products for the scanned product
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    code:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                    - code
+                    - name
               donate:
                 type: object
                 additionalProperties: false

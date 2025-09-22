@@ -8,7 +8,7 @@ from vcr import VCR
 
 from pola.company.factories import BrandFactory, CompanyFactory
 from pola.gpc.factories import GPCBrickFactory
-from pola.logic import get_by_code, get_result_from_code
+from pola.logic import get_by_code, get_result_from_code, handle_product_replacements
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.tests.test_utils import get_dummy_image
@@ -281,6 +281,43 @@ class TestGetResultFromCode(TestCase):
         self.maxDiff = None
         self.assertEqual(expected_response[0], response[0])
         self.assertEqual(expected_response, response)
+
+    def test_replacements_are_included_and_report_text_updated(self):
+        current_ean = TEST_EAN13
+        company = CompanyFactory.create(description='desc')
+        product = ProductFactory.create(code=current_ean, company=company, brand=None)
+
+        # Create replacements
+        r1 = ProductFactory.create(name="Alt1")
+        r2 = ProductFactory.create(name="Alt2")
+        r3 = ProductFactory.create(name="Alt3")
+        r4 = ProductFactory.create(name="Alt4")
+        product.replacements.add(r1, r2, r3, r4)
+
+        with mock.patch("pola.logic.get_by_code", return_value=product):
+            response = get_result_from_code(current_ean)
+
+        result = response[0]
+        # Replacements list should be present with all items
+        self.assertIn("replacements", result)
+        self.assertEqual(
+            [
+                {"code": r1.code, "name": "Alt1"},
+                {"code": r2.code, "name": "Alt2"},
+                {"code": r3.code, "name": "Alt3"},
+                {"code": r4.code, "name": "Alt4"},
+            ],
+            result["replacements"],
+        )
+
+        # Report text
+        expected_prefix = "Polskie alternatywy"
+        expected_suffix = (
+            "Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu"
+        )
+
+        self.assertTrue(result["report_text"].startswith(expected_prefix))
+        self.assertTrue(result["report_text"].endswith(expected_suffix))
 
     def test_code_with_one_company(self):
         current_ean = TEST_EAN13
@@ -566,3 +603,76 @@ class TestGetPlScore(TestCase):
 
 class TestShareholdersToStr(TestCase):
     pass
+
+
+class TestHandleProductReplacements(TestCase):
+    def test_no_replacements_keeps_report_unchanged(self):
+        product = ProductFactory.create()
+        result = {}
+        report = {"text": "Original report"}
+
+        handle_product_replacements(product, result, report)
+
+        self.assertNotIn("replacements", result)
+        self.assertEqual("Original report", report["text"])
+
+    def test_adds_replacements_and_updates_report_text_default_topk(self):
+        product = ProductFactory.create()
+        r1 = ProductFactory.create(name="Alt1")
+        r2 = ProductFactory.create(name="Alt2")
+        r3 = ProductFactory.create(name="Alt3")
+        r4 = ProductFactory.create(name="Alt4")
+        product.replacements.add(r1, r2, r3, r4)
+
+        result = {}
+        report = {"text": "Please report updates"}
+
+        handle_product_replacements(product, result, report)
+
+        self.assertIn("replacements", result)
+        self.assertEqual(
+            [
+                {"code": r1.code, "name": "Alt1"},
+                {"code": r2.code, "name": "Alt2"},
+                {"code": r3.code, "name": "Alt3"},
+                {"code": r4.code, "name": "Alt4"},
+            ],
+            result["replacements"],
+        )
+        # Default topK is 3, so only first three should appear in the report prefix
+        self.assertTrue(report["text"].startswith("Polskie alternatywy: Alt1, Alt2, Alt3\n"))
+        self.assertTrue(report["text"].endswith("Please report updates"))
+
+    def test_uses_code_when_replacement_name_missing(self):
+        product = ProductFactory.create()
+        # Create a replacement with no name
+        repl = Product.objects.create(code="1234567890123")
+        product.replacements.add(repl)
+
+        result = {}
+        report = {"text": "Report"}
+
+        handle_product_replacements(product, result, report)
+
+        self.assertEqual(
+            [{"code": repl.code, "name": repl.code}],
+            result["replacements"],
+        )
+        self.assertIn(repl.code, report["text"])  # Listed in alternatives
+
+    def test_does_not_modify_report_text_when_empty(self):
+        product = ProductFactory.create()
+        repl = ProductFactory.create(name="AltX")
+        product.replacements.add(repl)
+
+        result = {}
+        report = {"text": ""}
+
+        handle_product_replacements(product, result, report)
+
+        # Replacements are added, but report text remains empty string
+        self.assertEqual("", report["text"])
+        self.assertEqual(
+            [{"code": repl.code, "name": "AltX"}],
+            result["replacements"],
+        )
