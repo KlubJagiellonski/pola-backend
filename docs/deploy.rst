@@ -59,7 +59,7 @@ Wdrożenie automatyczne
 Aktualnie aplikacja jest wdrażana automatycznie do dwóch śroodowisk przez Github Action. Każda zmiana w odpowiedniej gałeżi powoduje, że uruchamiany jest workflow, który testuje i buduje aplikacje.
 
 ================== =========================== ==============================================
-Gałaż               Nazwa aplikacji Heroku      Adres
+Gałąź               Nazwa aplikacji Heroku      Adres
 ================== =========================== ==============================================
 ``master``          ``pola-app``                 ``hhttps://www.pola-app.pl/``
 ``prod``            ``pola-staging``             ``https://pola-staging.herokuapp.com/``
