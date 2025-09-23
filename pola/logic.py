@@ -124,10 +124,10 @@ def handle_product_replacements(product, result, report, topK=3):
     replacements = [{"code": r.code, "name": (r.name or r.code)} for r in product.replacements.order_by("id")]
     if replacements:
         result["replacements"] = replacements
-        if report['text']:
-            old_report_text = report['text']
+        if 'text' in report:
+            report_text = report['text']
             report['text'] = (
-                f"Polskie alternatywy: " f"{', '.join(r['name'] for r in replacements[:topK])}\n---\n{old_report_text}"
+                f"Polskie alternatywy: " f"{', '.join(r['name'] for r in replacements[:topK])}\n---\n{report_text}"
             )
 
 

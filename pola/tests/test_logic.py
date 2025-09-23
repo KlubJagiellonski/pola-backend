@@ -662,7 +662,7 @@ class TestHandleProductReplacements(TestCase):
         )
         self.assertIn(repl.code, report["text"])  # Listed in alternatives
 
-    def test_does_not_modify_report_text_when_empty(self):
+    def test_does_modify_report_text_when_empty(self):
         product = ProductFactory.create()
         repl = ProductFactory.create(name="AltX")
         product.replacements.add(repl)
@@ -673,7 +673,7 @@ class TestHandleProductReplacements(TestCase):
         handle_product_replacements(product, result, report)
 
         # Replacements are added, but report text remains empty string
-        self.assertEqual("", report["text"])
+        self.assertTrue(report["text"].startswith("Polskie alternatywy:"))
         self.assertEqual(
             [{"code": repl.code, "name": "AltX"}],
             result["replacements"],
