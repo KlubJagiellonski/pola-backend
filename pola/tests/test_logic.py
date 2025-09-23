@@ -8,7 +8,11 @@ from vcr import VCR
 
 from pola.company.factories import BrandFactory, CompanyFactory
 from pola.gpc.factories import GPCBrickFactory
-from pola.logic import get_by_code, get_result_from_code, handle_product_replacements
+from pola.logic import (
+    get_by_code,
+    get_result_from_code,
+    handle_product_replacements,
+)
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.tests.test_utils import get_dummy_image
@@ -312,9 +316,7 @@ class TestGetResultFromCode(TestCase):
 
         # Report text
         expected_prefix = "Polskie alternatywy"
-        expected_suffix = (
-            "Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu"
-        )
+        expected_suffix = "Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu"
 
         self.assertTrue(result["report_text"].startswith(expected_prefix))
         self.assertTrue(result["report_text"].endswith(expected_suffix))
