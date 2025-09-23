@@ -42,11 +42,11 @@ class Product(TimeStampedModel):
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
     gs1_last_response = models.JSONField(null=True)
     replacements = models.ManyToManyField(
-            'self',
-            symmetrical=False,
-            related_name='replaced_by',
-            blank=True,
-            verbose_name="Zamienniki",
+        'self',
+        symmetrical=False,
+        related_name='replaced_by',
+        blank=True,
+        verbose_name="Zamienniki",
     )
 
     objects = ProductQuerySet.as_manager()
