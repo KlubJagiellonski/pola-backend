@@ -23,20 +23,38 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 2
+
+      # Install the Heroku CLI (official script)
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+      # (Optional) sanity check that auth works via HEROKU_API_KEY
+      - name: Verify Heroku auth
+        run: heroku auth:whoami
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
       - name: Login to Github Docker Registry
         run: ./scripts/docker_login_github.py
+
       - name: Copy .env.example to .env
         run: cp .env.example .env
+
       - name: Build CI image
         run: ./scripts/manage_image.py build --image-type ci
+
       - name: Clear volumes
         run: docker compose down --volumes
+
       - name: Start PostgresSQL
         run: docker compose up --detach --no-deps postgres
+
       - name: Download database backup
         run: heroku pg:backups:download --app "${HEROKU_APP}" --output /tmp/latest.dump
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
       - name: Load production dump
         run: |
           set -x;
@@ -63,8 +81,10 @@ jobs:
               -h localhost \
               -U pola_app \
               -d pola_app /tmp/latest.dump
+
       - name: Migrate database
         run: docker compose run --no-deps --rm web /app/manage.py migrate
+
       - name: Remove all data
         run: |
           set -x;
