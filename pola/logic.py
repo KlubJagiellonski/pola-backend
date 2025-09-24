@@ -127,7 +127,7 @@ def handle_product_replacements(product, result, report, topK=3):
         if 'text' in report:
             report_text = report['text']
             report['text'] = (
-                f"Polskie alternatywy: " f"{', '.join(r['name'] for r in replacements[:topK])}\n---\n{report_text}"
+                f"Polskie alternatywy: {', '.join(r['name'] for r in replacements[:topK])}\n---\n{report_text}"
             )
 
 
