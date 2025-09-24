@@ -26,7 +26,7 @@ class ReportListView(LoginPermissionRequiredMixin, FilterView):
         if 'status' not in data:
             data['status'] = 'open'
         return filterset_class(
-            data=data or None,
+            data=data,
             queryset=self.get_queryset(),
             request=self.request,
         )
