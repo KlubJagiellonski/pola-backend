@@ -29,7 +29,13 @@ jobs:
         run: |
           curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 
-      # (Optional) sanity check that auth works via HEROKU_API_KEY
+      - name: "Authenticate Heroku CLI"
+        run: |
+            echo "$HEROKU_API_KEY" | heroku auth:token
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+      # Sanity check that auth works via HEROKU_API_KEY
       - name: Verify Heroku auth
         run: heroku auth:whoami
         env:
