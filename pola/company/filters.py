@@ -20,9 +20,9 @@ class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
         # tuple-mapping retains order
         fields=(
             ('name', _('Nazwa (A-Z)')),
-            ('query_count', _('Liczba zapytań (rosnąco)')),
-            ('modified', _('Data modyfikacji (rosnąco)')),
-            ('created', _('Data utworzenia (rosnąco)')),
+            ('query_count', _('Liczba zapytań')),
+            ('modified', _('Data modyfikacji')),
+            ('created', _('Data utworzenia')),
         )
     )
 

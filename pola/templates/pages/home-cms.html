@@ -28,7 +28,7 @@
                 {% endfor %}
                 </ul>
                 <div class="panel-footer">
-                    <a href="{% url 'company:list' %}?verified=False&o=-query_count">{% trans "More" %}</a>
+                    <a href="{% url 'company:list' %}?verified=False&o=-Liczba+zapytań&filter=Filtruj">{% trans "More" %}</a>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
                 {% endfor %}
                 </ul>
                 <div class="panel-footer">
-                    <a href="{% url 'product:list' %}?code__istartswith=590&company_empty=on&o=-Liczba+zeskanowań+%28rosnąco%29&filter=Filtruj">{% trans "Więcej" %}</a>
+                    <a href="{% url 'product:list' %}?code__istartswith=590&company_empty=on&o=-Liczba+zeskanowań&filter=Filtruj">{% trans "Więcej" %}</a>
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@
                 {% endfor %}
                 </ul>
                 <div class="panel-footer">
-                    <a href="{% url 'product:list' %}?company_empty=on&o=-Liczba+zeskanowań+%28rosnąco%29&filter=Filtruj">{% trans "Więcej" %}</a>
+                    <a href="{% url 'product:list' %}?company_empty=on&o=-Liczba+zeskanowań&filter=Filtruj">{% trans "Więcej" %}</a>
                 </div>
             </div>
         </div>
