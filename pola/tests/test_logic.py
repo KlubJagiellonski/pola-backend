@@ -309,30 +309,38 @@ class TestGetResultFromCode(TestCase):
             (
                 r1.code,
                 "Alt1",
-                (r1.brand.common_name or r1.brand.name)
-                if r1.brand
-                else (r1.company.common_name or r1.company.official_name or r1.company.name),
+                (
+                    (r1.brand.common_name or r1.brand.name)
+                    if r1.brand
+                    else (r1.company.common_name or r1.company.official_name or r1.company.name),
+                ),
             ),
             (
                 r2.code,
                 "Alt2",
-                (r2.brand.common_name or r2.brand.name)
-                if r2.brand
-                else (r2.company.common_name or r2.company.official_name or r2.company.name),
+                (
+                    (r2.brand.common_name or r2.brand.name)
+                    if r2.brand
+                    else (r2.company.common_name or r2.company.official_name or r2.company.name),
+                ),
             ),
             (
                 r3.code,
                 "Alt3",
-                (r3.brand.common_name or r3.brand.name)
-                if r3.brand
-                else (r3.company.common_name or r3.company.official_name or r3.company.name),
+                (
+                    (r3.brand.common_name or r3.brand.name)
+                    if r3.brand
+                    else (r3.company.common_name or r3.company.official_name or r3.company.name),
+                ),
             ),
             (
                 r4.code,
                 "Alt4",
-                (r4.brand.common_name or r4.brand.name)
-                if r4.brand
-                else (r4.company.common_name or r4.company.official_name or r4.company.name),
+                (
+                    (r4.brand.common_name or r4.brand.name)
+                    if r4.brand
+                    else (r4.company.common_name or r4.company.official_name or r4.company.name),
+                ),
             ),
         ]
         actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
@@ -692,29 +700,17 @@ class TestHandleProductReplacements(TestCase):
         c1 = (
             (r1.brand.common_name or r1.brand.name)
             if r1.brand
-            else (
-                r1.company.common_name
-                or r1.company.official_name
-                or r1.company.name
-            )
+            else (r1.company.common_name or r1.company.official_name or r1.company.name)
         )
         c2 = (
             (r2.brand.common_name or r2.brand.name)
             if r2.brand
-            else (
-                r2.company.common_name
-                or r2.company.official_name
-                or r2.company.name
-            )
+            else (r2.company.common_name or r2.company.official_name or r2.company.name)
         )
         c3 = (
             (r3.brand.common_name or r3.brand.name)
             if r3.brand
-            else (
-                r3.company.common_name
-                or r3.company.official_name
-                or r3.company.name
-            )
+            else (r3.company.common_name or r3.company.official_name or r3.company.name)
         )
         expected_prefix = f"Polskie alternatywy: Alt1 ({c1}), Alt2 ({c2}), Alt3 ({c3})\n"
         self.assertTrue(report["text"].startswith(expected_prefix))
@@ -738,11 +734,7 @@ class TestHandleProductReplacements(TestCase):
                 (
                     (repl.brand.common_name or repl.brand.name)
                     if repl.brand
-                    else (
-                        repl.company.common_name
-                        or repl.company.official_name
-                        or repl.company.name
-                    )
+                    else (repl.company.common_name or repl.company.official_name or repl.company.name)
                 ),
             )
         ]
@@ -769,11 +761,7 @@ class TestHandleProductReplacements(TestCase):
                 (
                     (repl.brand.common_name or repl.brand.name)
                     if repl.brand
-                    else (
-                        repl.company.common_name
-                        or repl.company.official_name
-                        or repl.company.name
-                    )
+                    else (repl.company.common_name or repl.company.official_name or repl.company.name)
                 ),
             )
         ]
