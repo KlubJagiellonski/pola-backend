@@ -174,9 +174,20 @@ components:
                       type: string
                     name:
                       type: string
+                    company:
+                      description: Name of the company producing the replacement product
+                      type: string
+                    description:
+                      description: Description of the company producing the replacement product
+                      type: string
+                      nullable: true
+                    display_name:
+                      description: Preferred display name (brand name if available, otherwise company name)
+                      type: string
                   required:
                     - code
                     - name
+                    - company
               donate:
                 type: object
                 additionalProperties: false

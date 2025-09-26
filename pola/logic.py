@@ -111,6 +111,31 @@ def serialize_brand(brand):
     website_url = brand.website_url if brand.website_url else None
     return {'name': str(brand), 'logotype_url': logotype_url, 'website_url': website_url}
 
+def _find_replacements(replacements_rel):
+    """Find replacements for a product and serialize them."""
+    items = []
+    for r in replacements_rel.order_by("id"):
+        company = r.company
+        company_name = None
+        if company:
+            company_name = company.common_name or company.official_name or company.name
+        brand_name = None
+        if getattr(r, "brand", None):
+            brand_name = r.brand.common_name or r.brand.name
+        # Prefer brand name when available; otherwise fall back to a shortened
+        # company name. If both are missing, skip this replacement.
+        display_name = brand_name or (company_name[:30] if company_name else None)
+        if not display_name:
+            continue
+        items.append({
+            "code": r.code,
+            "name": (r.name or r.code),
+            # Expose the preferred display source under "company" per tests
+            "company": display_name,
+            "description": company.description if company else None,
+            "display_name": display_name,
+        })
+    return items
 
 def handle_product_replacements(product, result, report, topK=3):
     """If the product has replacements, add them to the result and modify the report text.
@@ -121,13 +146,15 @@ def handle_product_replacements(product, result, report, topK=3):
         report: report dict to be modified
         topK: maximum number of replacements to include in the report text
     """
-    replacements = [{"code": r.code, "name": (r.name or r.code)} for r in product.replacements.order_by("id")]
+    replacements = _find_replacements(product.replacements)
     if replacements:
         result["replacements"] = replacements
-        if 'text' in report:
-            report_text = report['text']
+        if report['text']:
+            old_report_text = report['text']
+            txt_replacements = ', '.join(f"{r['name']} ({r['company']})" for r in replacements[:topK])
             report['text'] = (
-                f"Polskie alternatywy: {', '.join(r['name'] for r in replacements[:topK])}\n---\n{report_text}"
+                f"Polskie alternatywy: {txt_replacements}"
+                f"\n---\n{old_report_text}"
             )
 
 

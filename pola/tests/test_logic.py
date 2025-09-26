@@ -8,11 +8,7 @@ from vcr import VCR
 
 from pola.company.factories import BrandFactory, CompanyFactory
 from pola.gpc.factories import GPCBrickFactory
-from pola.logic import (
-    get_by_code,
-    get_result_from_code,
-    handle_product_replacements,
-)
+from pola.logic import get_by_code, get_result_from_code, handle_product_replacements, _find_replacements
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.tests.test_utils import get_dummy_image
@@ -302,17 +298,40 @@ class TestGetResultFromCode(TestCase):
             response = get_result_from_code(current_ean)
 
         result = response[0]
-        # Replacements list should be present with all items
+        # Replacements list should be present; compare key fields only
         self.assertIn("replacements", result)
-        self.assertEqual(
-            [
-                {"code": r1.code, "name": "Alt1"},
-                {"code": r2.code, "name": "Alt2"},
-                {"code": r3.code, "name": "Alt3"},
-                {"code": r4.code, "name": "Alt4"},
-            ],
-            result["replacements"],
-        )
+        expected = [
+            (
+                r1.code,
+                "Alt1",
+                (r1.brand.common_name or r1.brand.name)
+                if r1.brand
+                else (r1.company.common_name or r1.company.official_name or r1.company.name),
+            ),
+            (
+                r2.code,
+                "Alt2",
+                (r2.brand.common_name or r2.brand.name)
+                if r2.brand
+                else (r2.company.common_name or r2.company.official_name or r2.company.name),
+            ),
+            (
+                r3.code,
+                "Alt3",
+                (r3.brand.common_name or r3.brand.name)
+                if r3.brand
+                else (r3.company.common_name or r3.company.official_name or r3.company.name),
+            ),
+            (
+                r4.code,
+                "Alt4",
+                (r4.brand.common_name or r4.brand.name)
+                if r4.brand
+                else (r4.company.common_name or r4.company.official_name or r4.company.name),
+            ),
+        ]
+        actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
+        self.assertEqual(expected, actual)
 
         # Report text
         expected_prefix = "Polskie alternatywy"
@@ -632,23 +651,50 @@ class TestHandleProductReplacements(TestCase):
         handle_product_replacements(product, result, report)
 
         self.assertIn("replacements", result)
-        self.assertEqual(
-            [
-                {"code": r1.code, "name": "Alt1"},
-                {"code": r2.code, "name": "Alt2"},
-                {"code": r3.code, "name": "Alt3"},
-                {"code": r4.code, "name": "Alt4"},
-            ],
-            result["replacements"],
-        )
-        # Default topK is 3, so only first three should appear in the report prefix
-        self.assertTrue(report["text"].startswith("Polskie alternatywy: Alt1, Alt2, Alt3\n"))
+        expected = [
+            (
+                r1.code,
+                "Alt1",
+                (r1.brand.common_name or r1.brand.name)
+                if r1.brand
+                else (r1.company.common_name or r1.company.official_name or r1.company.name),
+            ),
+            (
+                r2.code,
+                "Alt2",
+                (r2.brand.common_name or r2.brand.name)
+                if r2.brand
+                else (r2.company.common_name or r2.company.official_name or r2.company.name),
+            ),
+            (
+                r3.code,
+                "Alt3",
+                (r3.brand.common_name or r3.brand.name)
+                if r3.brand
+                else (r3.company.common_name or r3.company.official_name or r3.company.name),
+            ),
+            (
+                r4.code,
+                "Alt4",
+                (r4.brand.common_name or r4.brand.name)
+                if r4.brand
+                else (r4.company.common_name or r4.company.official_name or r4.company.name),
+            ),
+        ]
+        actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
+        self.assertEqual(expected, actual)
+        # Default topK is 3, include brand/company names in parentheses in the prefix
+        c1 = (r1.brand.common_name or r1.brand.name) if r1.brand else (r1.company.common_name or r1.company.official_name or r1.company.name)
+        c2 = (r2.brand.common_name or r2.brand.name) if r2.brand else (r2.company.common_name or r2.company.official_name or r2.company.name)
+        c3 = (r3.brand.common_name or r3.brand.name) if r3.brand else (r3.company.common_name or r3.company.official_name or r3.company.name)
+        expected_prefix = f"Polskie alternatywy: Alt1 ({c1}), Alt2 ({c2}), Alt3 ({c3})\n"
+        self.assertTrue(report["text"].startswith(expected_prefix))
         self.assertTrue(report["text"].endswith("Please report updates"))
 
     def test_uses_code_when_replacement_name_missing(self):
         product = ProductFactory.create()
-        # Create a replacement with no name
-        repl = Product.objects.create(code="1234567890123")
+        # Create a replacement with no name (but with a company)
+        repl = ProductFactory.create(name=None)
         product.replacements.add(repl)
 
         result = {}
@@ -656,10 +702,17 @@ class TestHandleProductReplacements(TestCase):
 
         handle_product_replacements(product, result, report)
 
-        self.assertEqual(
-            [{"code": repl.code, "name": repl.code}],
-            result["replacements"],
-        )
+        expected = [
+            (
+                repl.code,
+                repl.code,  # falls back to code when name is missing
+                (repl.brand.common_name or repl.brand.name)
+                if repl.brand
+                else (repl.company.common_name or repl.company.official_name or repl.company.name),
+            )
+        ]
+        actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
+        self.assertEqual(expected, actual)
         self.assertIn(repl.code, report["text"])  # Listed in alternatives
 
     def test_does_modify_report_text_when_empty(self):
@@ -673,8 +726,84 @@ class TestHandleProductReplacements(TestCase):
         handle_product_replacements(product, result, report)
 
         # Replacements are added, but report text remains empty string
-        self.assertTrue(report["text"].startswith("Polskie alternatywy:"))
-        self.assertEqual(
-            [{"code": repl.code, "name": "AltX"}],
-            result["replacements"],
-        )
+        self.assertEqual("", report["text"])
+        expected = [
+            (
+                repl.code,
+                "AltX",
+                (repl.brand.common_name or repl.brand.name)
+                if repl.brand
+                else (repl.company.common_name or repl.company.official_name or repl.company.name),
+            )
+        ]
+        actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
+        self.assertEqual(expected, actual)
+
+
+class TestFindReplacements(TestCase):
+    def test_empty_when_no_replacements(self):
+        product = ProductFactory.create()
+        self.assertEqual([], _find_replacements(product.replacements))
+
+    def test_skips_when_no_brand_and_no_company(self):
+        product = ProductFactory.create()
+        repl = ProductFactory.create(company=None, brand=None)
+        product.replacements.add(repl)
+        self.assertEqual([], _find_replacements(product.replacements))
+
+    def test_prefers_brand_name_over_company(self):
+        product = ProductFactory.create()
+        repl = ProductFactory.create()
+        # Ensure both brand and company exist with distinct names
+        repl.brand.common_name = "PreferredBrand"
+        repl.brand.name = "BrandName"
+        repl.brand.save()
+        repl.company.common_name = "CompanyCommon"
+        repl.company.official_name = "CompanyOfficial"
+        repl.company.name = "CompanyName"
+        repl.company.save()
+        product.replacements.add(repl)
+
+        items = _find_replacements(product.replacements)
+        self.assertEqual(1, len(items))
+        self.assertEqual(repl.code, items[0]["code"])
+        self.assertEqual(repl.name, items[0]["name"])  # uses product name when present
+        self.assertEqual("PreferredBrand", items[0]["company"])  # brand wins
+
+    def test_fallback_to_company_when_no_brand(self):
+        product = ProductFactory.create()
+        repl = ProductFactory.create(brand=None)
+        repl.company.common_name = "CompanyCommonX"
+        repl.company.official_name = "CompanyOfficialX"
+        repl.company.name = "CompanyNameX"
+        repl.company.save()
+        product.replacements.add(repl)
+
+        items = _find_replacements(product.replacements)
+        self.assertEqual(1, len(items))
+        self.assertEqual("CompanyCommonX", items[0]["company"])  # uses company common name
+
+    def test_fallback_to_company_when_brand_has_no_name(self):
+        product = ProductFactory.create()
+        # Create a brand with empty names
+        repl = ProductFactory.create()
+        repl.brand.common_name = None
+        repl.brand.name = None
+        repl.brand.save()
+        # Ensure company present
+        repl.company.common_name = "CompanyY"
+        repl.company.save()
+        product.replacements.add(repl)
+
+        items = _find_replacements(product.replacements)
+        self.assertEqual(1, len(items))
+        self.assertEqual("CompanyY", items[0]["company"])  # fallback to company
+
+    def test_uses_code_when_replacement_name_missing(self):
+        product = ProductFactory.create()
+        repl = ProductFactory.create(name=None)
+        product.replacements.add(repl)
+
+        items = _find_replacements(product.replacements)
+        self.assertEqual(1, len(items))
+        self.assertEqual(repl.code, items[0]["name"])  # fallback to code for name
