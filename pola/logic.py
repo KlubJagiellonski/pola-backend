@@ -111,6 +111,7 @@ def serialize_brand(brand):
     website_url = brand.website_url if brand.website_url else None
     return {'name': str(brand), 'logotype_url': logotype_url, 'website_url': website_url}
 
+
 def _find_replacements(replacements_rel):
     """Find replacements for a product and serialize them."""
     items = []
@@ -127,15 +128,17 @@ def _find_replacements(replacements_rel):
         display_name = brand_name or (company_name[:30] if company_name else None)
         if not display_name:
             continue
-        items.append({
-            "code": r.code,
-            "name": (r.name or r.code),
-            # Expose the preferred display source under "company" per tests
-            "company": display_name,
-            "description": company.description if company else None,
-            "display_name": display_name,
-        })
+        items.append(
+            {
+                "code": r.code,
+                "name": (r.name or r.code),
+                "company": display_name,
+                "description": company.description if company else None,
+                "display_name": display_name,
+            }
+        )
     return items
+
 
 def handle_product_replacements(product, result, report, topK=3):
     """If the product has replacements, add them to the result and modify the report text.
@@ -150,12 +153,9 @@ def handle_product_replacements(product, result, report, topK=3):
     if replacements:
         result["replacements"] = replacements
         if report['text']:
-            old_report_text = report['text']
+            report_text = report['text']
             txt_replacements = ', '.join(f"{r['name']} ({r['company']})" for r in replacements[:topK])
-            report['text'] = (
-                f"Polskie alternatywy: {txt_replacements}"
-                f"\n---\n{old_report_text}"
-            )
+            report['text'] = f"Polskie alternatywy: {txt_replacements}" f"\n---\n{report_text}"
 
 
 def handle_companies_when_multiple_companies_are_not_supported(

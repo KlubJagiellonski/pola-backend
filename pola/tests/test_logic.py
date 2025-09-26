@@ -8,7 +8,12 @@ from vcr import VCR
 
 from pola.company.factories import BrandFactory, CompanyFactory
 from pola.gpc.factories import GPCBrickFactory
-from pola.logic import get_by_code, get_result_from_code, handle_product_replacements, _find_replacements
+from pola.logic import (
+    _find_replacements,
+    get_by_code,
+    get_result_from_code,
+    handle_product_replacements,
+)
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.tests.test_utils import get_dummy_image
@@ -684,9 +689,33 @@ class TestHandleProductReplacements(TestCase):
         actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
         # Default topK is 3, include brand/company names in parentheses in the prefix
-        c1 = (r1.brand.common_name or r1.brand.name) if r1.brand else (r1.company.common_name or r1.company.official_name or r1.company.name)
-        c2 = (r2.brand.common_name or r2.brand.name) if r2.brand else (r2.company.common_name or r2.company.official_name or r2.company.name)
-        c3 = (r3.brand.common_name or r3.brand.name) if r3.brand else (r3.company.common_name or r3.company.official_name or r3.company.name)
+        c1 = (
+            (r1.brand.common_name or r1.brand.name)
+            if r1.brand
+            else (
+                r1.company.common_name
+                or r1.company.official_name
+                or r1.company.name
+            )
+        )
+        c2 = (
+            (r2.brand.common_name or r2.brand.name)
+            if r2.brand
+            else (
+                r2.company.common_name
+                or r2.company.official_name
+                or r2.company.name
+            )
+        )
+        c3 = (
+            (r3.brand.common_name or r3.brand.name)
+            if r3.brand
+            else (
+                r3.company.common_name
+                or r3.company.official_name
+                or r3.company.name
+            )
+        )
         expected_prefix = f"Polskie alternatywy: Alt1 ({c1}), Alt2 ({c2}), Alt3 ({c3})\n"
         self.assertTrue(report["text"].startswith(expected_prefix))
         self.assertTrue(report["text"].endswith("Please report updates"))
@@ -706,9 +735,15 @@ class TestHandleProductReplacements(TestCase):
             (
                 repl.code,
                 repl.code,  # falls back to code when name is missing
-                (repl.brand.common_name or repl.brand.name)
-                if repl.brand
-                else (repl.company.common_name or repl.company.official_name or repl.company.name),
+                (
+                    (repl.brand.common_name or repl.brand.name)
+                    if repl.brand
+                    else (
+                        repl.company.common_name
+                        or repl.company.official_name
+                        or repl.company.name
+                    )
+                ),
             )
         ]
         actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
@@ -731,9 +766,15 @@ class TestHandleProductReplacements(TestCase):
             (
                 repl.code,
                 "AltX",
-                (repl.brand.common_name or repl.brand.name)
-                if repl.brand
-                else (repl.company.common_name or repl.company.official_name or repl.company.name),
+                (
+                    (repl.brand.common_name or repl.brand.name)
+                    if repl.brand
+                    else (
+                        repl.company.common_name
+                        or repl.company.official_name
+                        or repl.company.name
+                    )
+                ),
             )
         ]
         actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
