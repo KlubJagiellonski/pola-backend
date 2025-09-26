@@ -79,7 +79,7 @@ ptyprocess==0.7.0
 pure_eval==0.2.3
 pycairo==1.28.0
 pycparser==2.23
-pydantic==1.10.9
+pydantic==2.11.9
 Pygments==2.19.2
 PyJWT==2.10.1
 pytest==8.4.2
