@@ -12,4 +12,3 @@ def app_settings(request):
         'IS_PRODUCTION': getattr(settings, 'IS_PRODUCTION', False),
         'CMS_STATS_EXTERNAL_URL': getattr(settings, 'CMS_STATS_EXTERNAL_URL', ''),
     }
-
