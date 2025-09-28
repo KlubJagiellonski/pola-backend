@@ -81,7 +81,11 @@
                     {% if perms.pola.change_appconfiguration %}
                         <li><a href="{% url 'app-config' %}">{% trans "Konfiguracja aplikacji" %}</a></li>
                     {% endif %}
-                    <li><a href="{% url 'home-stats' %}">{% trans "Statystyki" %}</a></li>
+                    {% if IS_PRODUCTION and CMS_STATS_EXTERNAL_URL %}
+                        <li><a href="{{ CMS_STATS_EXTERNAL_URL }}" target="_blank" rel="noopener noreferrer">{% trans "Statystyki" %}</a></li>
+                    {% else %}
+                        <li><a href="{% url 'home-stats' %}">{% trans "Statystyki" %}</a></li>
+                    {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

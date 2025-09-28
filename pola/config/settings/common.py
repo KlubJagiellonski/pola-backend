@@ -177,6 +177,7 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 # Your stuff: custom template context processors go here
+                'pola.context_processors.app_settings',
             ],
         },
     },
@@ -353,3 +354,12 @@ PRODUKTY_W_SIECI_ENABLE = env.bool("POLA_APP_PRODUKTY_W_SIECI_ENABLE", default=T
 PRODUKTY_W_SIECI = {
     'API_TOKEN': env('POLA_APP_PRODUKTY_W_SIECI_API_TOKEN'),
 }
+
+# CMS / Stats configuration
+# ------------------------------------------------------------------------------
+# External URL for the Stats page used in production deployments.
+# Can be overridden via env var POLA_APP_CMS_STATS_EXTERNAL_URL
+CMS_STATS_EXTERNAL_URL = env.str(
+    'POLA_APP_CMS_STATS_EXTERNAL_URL',
+    default='https://lookerstudio.google.com/u/1/reporting/c8d93b03-e89c-4cbe-be4b-7350ac7d6a67/'
+)
