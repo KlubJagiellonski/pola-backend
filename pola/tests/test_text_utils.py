@@ -1,5 +1,3 @@
-import pytest
-
 from pola.text_utils import _shorten_txt, strip_dbl_spaces, strip_urls_newlines
 
 

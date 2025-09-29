@@ -723,14 +723,14 @@ class TestHandleProductReplacements(TestCase):
 
         handle_product_replacements(product, result, report)
 
+        expected_comp = repl.company.common_name or repl.company.official_name or repl.company.name
+        expected_brand = repl.brand.common_name or repl.brand.name
         expected = [
             (
                 repl.code,
                 repl.code,  # falls back to code when name is missing
                 f"{repl.code} "
-                f"("
-                f"{(repl.brand.common_name or repl.brand.name) if repl.brand else (repl.company.common_name or repl.company.official_name or repl.company.name)}"
-                f")",
+                f"({expected_brand if repl.brand else expected_comp})"
             )
         ]
         actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
@@ -749,13 +749,13 @@ class TestHandleProductReplacements(TestCase):
 
         # Replacements are added, but report text remains empty string
         self.assertEqual("", report["text"])
+        expected_comp = repl.company.common_name or repl.company.official_name or repl.company.name
+        expected_brand = repl.brand.common_name or repl.brand.name
         expected = [
             (
                 repl.code,
                 "AltX",
-                f"AltX ("
-                f"{(repl.brand.common_name or repl.brand.name) if repl.brand else (repl.company.common_name or repl.company.official_name or repl.company.name)}"
-                f")",
+                f"AltX ({expected_brand if repl.brand else expected_comp})",
             )
         ]
         actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
