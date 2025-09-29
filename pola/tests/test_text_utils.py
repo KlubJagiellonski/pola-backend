@@ -29,4 +29,3 @@ def test_shorten_txt_no_change_when_short_or_equal():
 
 def test_shorten_txt_truncates_and_adds_ellipsis():
     assert _shorten_txt("abcdefghijklmnopqrstuvwxyz012345", 10) == "abcdefghij..."
-
