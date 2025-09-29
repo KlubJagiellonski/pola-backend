@@ -729,8 +729,7 @@ class TestHandleProductReplacements(TestCase):
             (
                 repl.code,
                 repl.code,  # falls back to code when name is missing
-                f"{repl.code} "
-                f"({expected_brand if repl.brand else expected_comp})"
+                f"{repl.code} ({expected_brand if repl.brand else expected_comp})",
             )
         ]
         actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
