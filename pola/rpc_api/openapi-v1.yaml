@@ -182,7 +182,7 @@ components:
                       type: string
                       nullable: true
                     display_name:
-                      description: Preferred display name (brand name if available, otherwise company name)
+                      description: Display name of product with brand name, or shortened company name
                       type: string
                   required:
                     - code

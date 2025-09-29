@@ -10,7 +10,7 @@ from pola.integrations.produkty_w_sieci import (
 from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
 from pola.logic_score import get_pl_score
 from pola.product.models import Product
-from pola.text_utils import strip_urls_newlines
+from pola.text_utils import _shorten_txt, strip_urls_newlines
 
 WAR_COUNTRIES = ('Federacja Rosyjska', "Białoruś")
 
@@ -123,16 +123,18 @@ def _find_replacements(replacements_rel):
         brand_name = None
         if getattr(r, "brand", None):
             brand_name = r.brand.common_name or r.brand.name
-        # Prefer brand name when available; otherwise fall back to a shortened
-        # company name. If both are missing, skip this replacement.
-        display_name = brand_name or (company_name[:30] if company_name else None)
-        if not display_name:
+        prod_name = r.name or r.code
+        if not prod_name:
             continue
+        # Prefer brand name when available; otherwise fall back to a company name
+        chosen_name = brand_name or company_name
+        display_name = f"{_shorten_txt(prod_name, 40)} ({_shorten_txt(chosen_name, 30)})" if chosen_name else prod_name
         items.append(
             {
                 "code": r.code,
-                "name": (r.name or r.code),
-                "company": display_name,
+                "name": prod_name,
+                # Raw brand/company name expected by tests
+                "company": chosen_name,
                 "description": company.description if company else None,
                 "display_name": display_name,
             }
@@ -154,7 +156,7 @@ def handle_product_replacements(product, result, report, topK=3):
         result["replacements"] = replacements
         if report['text']:
             report_text = report['text']
-            txt_replacements = ', '.join(f"{r['name']} ({r['company']})" for r in replacements[:topK])
+            txt_replacements = ', '.join(f"{r['display_name']}" for r in replacements[:topK])
             report['text'] = f"Polskie alternatywy: {txt_replacements}" f"\n---\n{report_text}"
 
 

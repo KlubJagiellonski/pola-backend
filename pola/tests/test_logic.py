@@ -305,45 +305,33 @@ class TestGetResultFromCode(TestCase):
         result = response[0]
         # Replacements list should be present; compare key fields only
         self.assertIn("replacements", result)
+        c1 = (
+            (r1.brand.common_name or r1.brand.name)
+            if r1.brand
+            else (r1.company.common_name or r1.company.official_name or r1.company.name)
+        )
+        c2 = (
+            (r2.brand.common_name or r2.brand.name)
+            if r2.brand
+            else (r2.company.common_name or r2.company.official_name or r2.company.name)
+        )
+        c3 = (
+            (r3.brand.common_name or r3.brand.name)
+            if r3.brand
+            else (r3.company.common_name or r3.company.official_name or r3.company.name)
+        )
+        c4 = (
+            (r4.brand.common_name or r4.brand.name)
+            if r4.brand
+            else (r4.company.common_name or r4.company.official_name or r4.company.name)
+        )
         expected = [
-            (
-                r1.code,
-                "Alt1",
-                (
-                    (r1.brand.common_name or r1.brand.name)
-                    if r1.brand
-                    else (r1.company.common_name or r1.company.official_name or r1.company.name)
-                ),
-            ),
-            (
-                r2.code,
-                "Alt2",
-                (
-                    (r2.brand.common_name or r2.brand.name)
-                    if r2.brand
-                    else (r2.company.common_name or r2.company.official_name or r2.company.name)
-                ),
-            ),
-            (
-                r3.code,
-                "Alt3",
-                (
-                    (r3.brand.common_name or r3.brand.name)
-                    if r3.brand
-                    else (r3.company.common_name or r3.company.official_name or r3.company.name)
-                ),
-            ),
-            (
-                r4.code,
-                "Alt4",
-                (
-                    (r4.brand.common_name or r4.brand.name)
-                    if r4.brand
-                    else (r4.company.common_name or r4.company.official_name or r4.company.name)
-                ),
-            ),
+            (r1.code, "Alt1", f"Alt1 ({c1})"),
+            (r2.code, "Alt2", f"Alt2 ({c2})"),
+            (r3.code, "Alt3", f"Alt3 ({c3})"),
+            (r4.code, "Alt4", f"Alt4 ({c4})"),
         ]
-        actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
+        actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
 
         # Report text
@@ -739,14 +727,13 @@ class TestHandleProductReplacements(TestCase):
             (
                 repl.code,
                 repl.code,  # falls back to code when name is missing
-                (
-                    (repl.brand.common_name or repl.brand.name)
-                    if repl.brand
-                    else (repl.company.common_name or repl.company.official_name or repl.company.name)
-                ),
+                f"{repl.code} "
+                f"("
+                f"{(repl.brand.common_name or repl.brand.name) if repl.brand else (repl.company.common_name or repl.company.official_name or repl.company.name)}"
+                f")",
             )
         ]
-        actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
+        actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
         self.assertIn(repl.code, report["text"])  # Listed in alternatives
 
@@ -766,14 +753,12 @@ class TestHandleProductReplacements(TestCase):
             (
                 repl.code,
                 "AltX",
-                (
-                    (repl.brand.common_name or repl.brand.name)
-                    if repl.brand
-                    else (repl.company.common_name or repl.company.official_name or repl.company.name)
-                ),
+                f"AltX ("
+                f"{(repl.brand.common_name or repl.brand.name) if repl.brand else (repl.company.common_name or repl.company.official_name or repl.company.name)}"
+                f")",
             )
         ]
-        actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
+        actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
 
 
@@ -786,7 +771,14 @@ class TestFindReplacements(TestCase):
         product = ProductFactory.create()
         repl = ProductFactory.create(company=None, brand=None)
         product.replacements.add(repl)
-        self.assertEqual([], _find_replacements(product.replacements))
+        items = _find_replacements(product.replacements)
+
+        self.assertEqual(1, len(items))
+        self.assertEqual(repl.code, items[0]["code"])
+        # Uses name if present, otherwise code
+        expected_name = repl.name or repl.code
+        self.assertEqual(expected_name, items[0]["name"])
+        self.assertEqual(expected_name, items[0]["display_name"])  # no brand/company to show
 
     def test_prefers_brand_name_over_company(self):
         product = ProductFactory.create()
@@ -805,7 +797,7 @@ class TestFindReplacements(TestCase):
         self.assertEqual(1, len(items))
         self.assertEqual(repl.code, items[0]["code"])
         self.assertEqual(repl.name, items[0]["name"])  # uses product name when present
-        self.assertEqual("PreferredBrand", items[0]["company"])  # brand wins
+        self.assertEqual(f"{repl.name} (PreferredBrand)", items[0]["display_name"])  # brand wins
 
     def test_fallback_to_company_when_no_brand(self):
         product = ProductFactory.create()
@@ -818,7 +810,7 @@ class TestFindReplacements(TestCase):
 
         items = _find_replacements(product.replacements)
         self.assertEqual(1, len(items))
-        self.assertEqual("CompanyCommonX", items[0]["company"])  # uses company common name
+        self.assertEqual(f"{repl.name} (CompanyCommonX)", items[0]["display_name"])  # uses company common name
 
     def test_fallback_to_company_when_brand_has_no_name(self):
         product = ProductFactory.create()
@@ -834,7 +826,7 @@ class TestFindReplacements(TestCase):
 
         items = _find_replacements(product.replacements)
         self.assertEqual(1, len(items))
-        self.assertEqual("CompanyY", items[0]["company"])  # fallback to company
+        self.assertEqual(f"{repl.name} (CompanyY)", items[0]["display_name"])  # fallback to company
 
     def test_uses_code_when_replacement_name_missing(self):
         product = ProductFactory.create()

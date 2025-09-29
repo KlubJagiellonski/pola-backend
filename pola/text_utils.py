@@ -20,3 +20,9 @@ def strip_urls_newlines(str):
     s = rem_dbl_newlines(s)
     s = s.strip(' \t\n\r')
     return s
+
+
+def _shorten_txt(txt: str, n: int = 30) -> str:
+    if len(txt) <= n:
+        return txt
+    return txt[:n] + "..."
