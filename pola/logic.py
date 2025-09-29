@@ -133,7 +133,6 @@ def _find_replacements(replacements_rel):
             {
                 "code": r.code,
                 "name": prod_name,
-                # Raw brand/company name expected by tests
                 "company": chosen_name,
                 "description": company.description if company else None,
                 "display_name": display_name,
