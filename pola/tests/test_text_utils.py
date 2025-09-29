@@ -1,7 +1,6 @@
 import pytest
 
-from pola.text_utils import strip_dbl_spaces, strip_urls_newlines, _shorten_txt
-
+from pola.text_utils import _shorten_txt, strip_dbl_spaces, strip_urls_newlines
 
 def test_strip_dbl_spaces_basic():
     assert strip_dbl_spaces("  Ala   ma   kota  ") == "Ala ma kota"
