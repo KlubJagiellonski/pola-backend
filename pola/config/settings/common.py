@@ -361,5 +361,5 @@ PRODUKTY_W_SIECI = {
 # Can be overridden via env var POLA_APP_CMS_STATS_EXTERNAL_URL
 CMS_STATS_EXTERNAL_URL = env.str(
     'POLA_APP_CMS_STATS_EXTERNAL_URL',
-    default='https://lookerstudio.google.com/u/1/reporting/c8d93b03-e89c-4cbe-be4b-7350ac7d6a67/',
+    default='https://lookerstudio.google.com/reporting/c8d93b03-e89c-4cbe-be4b-7350ac7d6a67/',
 )
