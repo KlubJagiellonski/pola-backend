@@ -108,7 +108,6 @@ class TestProductUpdateWeb(PermissionMixin, TestCase):
         self.assertEqual(self.instance.name, "New name")
 
 
-
 class TestProductDeleteView(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
 
