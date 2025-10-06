@@ -64,7 +64,6 @@ jobs:
               env_name = "staging"
           else:
               raise Exception(f"Unknown app: {heroku_app}")
-            
           bucket_name = os.environ['GCP_BUCKET_NAME']
 
           with github_env_file_path.open("a") as file:
