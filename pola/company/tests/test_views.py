@@ -235,7 +235,6 @@ class TestCompanyUpdateWeb(WebTestMixin, TestCase):
         self.assertEqual(versions[0].revision.user, self.user)
         self.assertEqual(self.instance.official_name, "New name")
 
-
     @override_settings(LANGUAGE_CODE='en-EN')
     def test_form_readonly_fields(self):
         page = self.app.get(self.url, user=self.user)
