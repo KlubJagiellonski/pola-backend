@@ -8,16 +8,18 @@ on:
         description: 'Heroku app [pola-app/pola-staging]'
         required: true
         default: 'pola-staging'
+  workflow_call:
+    inputs:
+      heroku_app:
+        description: 'Heroku app [pola-app/pola-staging]'
+        required: true
+        type: string
   pull_request:
     branches:
       - master
     paths:
       - 'pola-bi/**'
-      - '.github/workflows/bi-transfer_pola_backend_to_bq.yml'
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    # This workflow will be run at 5:12 on the first day of every month.
-    - cron: '12 5 1 * *'
+      - '.github/workflows/bi-transfer*.yml'
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -50,9 +52,7 @@ jobs:
 
           event_name = os.environ["GITHUB_EVENT_NAME"]
           github_env_file_path = Path(os.environ["GITHUB_ENV"])
-          if event_name == "schedule":
-              heroku_app = "pola-staging"
-          elif event_name == "workflow_dispatch":
+          if event_name == "workflow_dispatch" or event_name == "workflow_call":
               heroku_app = os.environ["INPUT_HEROKU_APP"]
           elif event_name == "pull_request":
               heroku_app = "pola-staging"
@@ -64,10 +64,15 @@ jobs:
               env_name = "staging"
           else:
               raise Exception(f"Unknown app: {heroku_app}")
+            
+          bucket_name = os.environ['GCP_BUCKET_NAME']
+
           with github_env_file_path.open("a") as file:
               file.write(f"ENV_NAME={env_name}\n")
               file.write(f"HEROKU_APP={heroku_app}\n")
               file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{env_name}\n")
+              file.write(f"GCP_STAGING_URL=gs://{bucket_name}/{heroku_app}/\n")
+
         env:
           INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
@@ -135,5 +140,5 @@ jobs:
           python ./pola-bi/postgres_to_bigquery.py --verbose all \
             --database-url "${DATABASE_URL}" \
             --table-names "${TABLE_NAMES}" \
-            --staging-url "gs://${GCP_BUCKET_NAME}/" \
+            --staging-url "${GCP_STAGING_URL}" \
             --dataset-id "${GCP_BIGQUERY_DATASET}" \

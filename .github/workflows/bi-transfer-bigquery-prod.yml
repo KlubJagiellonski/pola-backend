@@ -1,0 +1,21 @@
+name: Schedule BI Transfer (prod)
+
+on:
+  schedule:
+    - cron: "22 5 1 * *"
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  HEROKU_APP: pola-app
+
+jobs:
+  call-core:
+    name: "Run transfer for HEROKU_APP=${{ env.HEROKU_APP }}"
+    uses: ./.github/workflows/bi-transfer-bigquery.yml
+    with:
+      heroku_app: ${{ env.HEROKU_APP }}
+    secrets: inherit
