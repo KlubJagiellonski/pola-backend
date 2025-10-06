@@ -184,6 +184,9 @@ components:
                     display_name:
                       description: Display name of product with brand name, or shortened company name
                       type: string
+                    is_friend:
+                      description: Whether the replacement's producing company is a Pola friend
+                      type: boolean
                   required:
                     - code
                     - name

@@ -778,6 +778,8 @@ class TestFindReplacements(TestCase):
         expected_name = repl.name or repl.code
         self.assertEqual(expected_name, items[0]["name"])
         self.assertEqual(expected_name, items[0]["display_name"])  # no brand/company to show
+        self.assertIn("is_friend", items[0])
+        self.assertFalse(items[0]["is_friend"])  # no company -> not a friend
 
     def test_prefers_brand_name_over_company(self):
         product = ProductFactory.create()
@@ -797,6 +799,9 @@ class TestFindReplacements(TestCase):
         self.assertEqual(repl.code, items[0]["code"])
         self.assertEqual(repl.name, items[0]["name"])  # uses product name when present
         self.assertEqual(f"{repl.name} (PreferredBrand)", items[0]["display_name"])  # brand wins
+        self.assertIn("is_friend", items[0])
+        # Reflects company friend flag
+        self.assertEqual(repl.company.is_friend, items[0]["is_friend"])
 
     def test_fallback_to_company_when_no_brand(self):
         product = ProductFactory.create()
@@ -810,6 +815,8 @@ class TestFindReplacements(TestCase):
         items = _find_replacements(product.replacements)
         self.assertEqual(1, len(items))
         self.assertEqual(f"{repl.name} (CompanyCommonX)", items[0]["display_name"])  # uses company common name
+        self.assertIn("is_friend", items[0])
+        self.assertEqual(repl.company.is_friend, items[0]["is_friend"])
 
     def test_fallback_to_company_when_brand_has_no_name(self):
         product = ProductFactory.create()
@@ -826,6 +833,8 @@ class TestFindReplacements(TestCase):
         items = _find_replacements(product.replacements)
         self.assertEqual(1, len(items))
         self.assertEqual(f"{repl.name} (CompanyY)", items[0]["display_name"])  # fallback to company
+        self.assertIn("is_friend", items[0])
+        self.assertEqual(repl.company.is_friend, items[0]["is_friend"])
 
     def test_uses_code_when_replacement_name_missing(self):
         product = ProductFactory.create()
@@ -835,3 +844,5 @@ class TestFindReplacements(TestCase):
         items = _find_replacements(product.replacements)
         self.assertEqual(1, len(items))
         self.assertEqual(repl.code, items[0]["name"])  # fallback to code for name
+        self.assertIn("is_friend", items[0])
+        self.assertEqual(repl.company.is_friend, items[0]["is_friend"])

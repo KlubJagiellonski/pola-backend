@@ -136,6 +136,7 @@ def _find_replacements(replacements_rel):
                 "company": chosen_name,
                 "description": company.description if company else None,
                 "display_name": display_name,
+                "is_friend": bool(company.is_friend) if company else False,
             }
         )
     return items
