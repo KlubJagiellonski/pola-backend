@@ -235,19 +235,6 @@ class TestCompanyUpdateWeb(WebTestMixin, TestCase):
         self.assertEqual(versions[0].revision.user, self.user)
         self.assertEqual(self.instance.official_name, "New name")
 
-    # Test commented out as commit desc field set to optional
-    # @override_settings(LANGUAGE_CODE='en-EN')
-    # def test_form_commit_desc_required(self):
-    #     page = self.app.get(self.url, user=self.user)
-    #     page.form['official_name'] = "New name"
-    #     page = page.form.submit()
-
-    #     self.assertContains(page, "This field is required.")
-
-    #     page.form['commit_desc'] = "AAA"
-    #     page = page.form.submit()
-
-    #     self.assertRedirects(page, self.instance.get_absolute_url())
 
     @override_settings(LANGUAGE_CODE='en-EN')
     def test_form_readonly_fields(self):
