@@ -66,7 +66,7 @@ jobs:
           else:
               raise Exception(f"Unknown app: {heroku_app}")
           bucket_name = os.environ['GCP_BUCKET_NAME']
-          current_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+          current_date = datetime.now().strftime("%Y-%m-%d")
 
           with github_env_file_path.open("a") as file:
               file.write(f"ENV_NAME={env_name}\n")
