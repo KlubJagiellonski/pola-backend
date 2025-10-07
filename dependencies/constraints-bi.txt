@@ -32,7 +32,7 @@ parsedatetime==2.6
 pathspec==0.12.1
 protobuf==5.29.3
 psycopg2-binary==2.9.10
-pydantic==2.10.6
+pydantic==2.11.10
 pydantic_core==2.27.2
 python-dateutil==2.9.0.post0
 python-slugify==8.0.4
