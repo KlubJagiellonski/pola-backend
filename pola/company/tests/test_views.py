@@ -434,3 +434,55 @@ class TestBrandDetailView(BrandInstanceMixin, PermissionMixin, TemplateUsedMixin
         doc = BeautifulSoup(resp.content, 'html.parser')
         total_query_count = next(iter(doc.select("[data-testid]"))).text
         self.assertEqual(total_query_count, str(100 + 50 + 75))
+
+
+class TestCompanyMergeView(PermissionMixin, TemplateUsedMixin, TestCase):
+    url = reverse_lazy('company:merge')
+    template_name = 'company/company_merge.html'
+
+    def test_filter_by_name(self):
+        self.login()
+        c1 = CompanyFactory(name='Alpha Sp. z o.o.')
+        c2 = CompanyFactory(name='Beta SA')
+        c3 = CompanyFactory(name='Gamma LLC')
+        resp = self.client.get(self.url, {'q': 'Al'})
+        self.assertContains(resp, str(c1))
+        self.assertNotContains(resp, str(c2))
+        self.assertNotContains(resp, str(c3))
+
+    def test_merge_success(self):
+        self.login()
+        target = CompanyFactory(common_name='Target')
+        other1 = CompanyFactory(common_name='Other1')
+        other2 = CompanyFactory(common_name='Other2')
+        p1 = ProductFactory(company=other1)
+        p2 = ProductFactory(company=other2)
+        b1 = BrandFactory(company=other1)
+        b2 = BrandFactory(company=other2)
+
+        resp = self.client.post(self.url, {'selected': [str(target.id), str(other1.id), str(other2.id)]})
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, target.get_absolute_url())
+
+        # Products moved to target
+        p1.refresh_from_db()
+        p2.refresh_from_db()
+        self.assertEqual(p1.company_id, target.id)
+        self.assertEqual(p2.company_id, target.id)
+
+        # Brands moved to target
+        b1.refresh_from_db()
+        b2.refresh_from_db()
+        self.assertEqual(b1.company_id, target.id)
+        self.assertEqual(b2.company_id, target.id)
+
+        # Other companies deleted
+        self.assertFalse(Company.objects.filter(id__in=[other1.id, other2.id]).exists())
+
+    def test_merge_requires_two_selected(self):
+        self.login()
+        only = CompanyFactory()
+        resp = self.client.post(self.url, {'selected': [str(only.id)]})
+        # Should render page with error and not redirect
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'Zaznacz co najmniej dwóch producentów')

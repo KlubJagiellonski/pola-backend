@@ -4,6 +4,7 @@ import typing
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, QueryDict
 from django.urls import reverse, reverse_lazy
@@ -15,6 +16,7 @@ from django.views.generic.edit import (
     UpdateView,
 )
 from django_filters.views import FilterView
+from django.contrib import messages
 
 from pola.company.models import Brand, Company
 from pola.concurency import ConcurencyProtectUpdateView
@@ -24,7 +26,7 @@ from pola.report.models import Report
 from pola.views import ExprAutocompleteMixin
 
 from ..logic_score import get_pl_score
-from .filters import BrandFilter, CompanyFilter
+from .filters import BrandFilter, CompanyFilter, CompanyMergeFilter
 from .forms import (
     BrandForm,
     BrandFormSet,
@@ -39,6 +41,38 @@ class CompanyListView(LoginPermissionRequiredMixin, FilterView):
     model = Company
     filterset_class = CompanyFilter
     paginate_by = 25
+
+
+class CompanyMergeView(LoginPermissionRequiredMixin, FilterView):
+    permission_required = 'company.change_company'
+    model = Company
+    filterset_class = CompanyMergeFilter
+    template_name = 'company/company_merge.html'
+    paginate_by = 25
+
+    def post(self, request, *args, **kwargs):
+        selected = request.POST.getlist('selected')
+        if not selected or len(selected) < 2:
+            messages.error(request, 'Zaznacz co najmniej dwóch producentów do połączenia.')
+            return self.get(request, *args, **kwargs)
+
+        try:
+            selected_ids = [int(pk) for pk in selected]
+        except ValueError:
+            messages.error(request, 'Nieprawidłowe identyfikatory producentów.')
+            return self.get(request, *args, **kwargs)
+
+        target_id, others = selected_ids[0], selected_ids[1:]
+
+        with transaction.atomic():
+            # move products to target company
+            Product.objects.filter(company_id__in=others).update(company_id=target_id)
+            # move brands to target company
+            Brand.objects.filter(company_id__in=others).update(company_id=target_id)
+            Company.objects.filter(id__in=others).delete()
+
+        messages.success(request, 'Połączono producentów. Produkty zostały przeniesione do firmy docelowej.')
+        return HttpResponseRedirect(reverse('company:detail', args=[target_id]))
 
 
 class GetInitalFormMixin:

@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     # Comapny
     path('', views.CompanyListView.as_view(), name="list"),
+    path('merge', views.CompanyMergeView.as_view(), name="merge"),
     path('create', views.CompanyCreate.as_view(), name="create"),
     path('create_from_krs', views.CompanyCreateFromKRSView.as_view(), name="create_from_krs"),
     path('<int:pk>/edit', views.CompanyUpdate.as_view(), name="edit"),
