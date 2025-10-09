@@ -3,6 +3,7 @@ import typing
 
 from braces.views import FormValidMessageMixin
 from dal import autocomplete
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Sum
@@ -16,7 +17,6 @@ from django.views.generic.edit import (
     UpdateView,
 )
 from django_filters.views import FilterView
-from django.contrib import messages
 
 from pola.company.models import Brand, Company
 from pola.concurency import ConcurencyProtectUpdateView
