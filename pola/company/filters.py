@@ -2,8 +2,8 @@ from distutils.util import strtobool
 
 import django_filters
 from dal import autocomplete
-from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 
 from pola.filters import CrispyFilterMixin
 
