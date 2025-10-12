@@ -1,0 +1,7 @@
+allow:
+  - roles: ["maintainer"]
+
+policies:
+  - chat:
+      defaultPrompt: >
+        Wszystkie odpowiedzi Copilot Chat powinny być udzielane w języku polskim.
