@@ -74,7 +74,7 @@ pluggy==1.6.0
 prompt_toolkit==3.0.52
 propcache==0.4.1
 psutil==7.1.0
-psycopg2-binary==2.9.10
+psycopg2-binary==2.9.11
 ptyprocess==0.7.0
 pure_eval==0.2.3
 pycairo==1.28.0
