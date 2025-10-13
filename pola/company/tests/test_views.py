@@ -486,3 +486,20 @@ class TestCompanyMergeView(PermissionMixin, TemplateUsedMixin, TestCase):
         # Should render page with error and not redirect
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, 'Zaznacz co najmniej dwóch producentów')
+
+    def test_merge_recalculates_query_count(self):
+        self.login()
+        target = CompanyFactory(common_name='Target')
+        other1 = CompanyFactory(common_name='Other1')
+        other2 = CompanyFactory(common_name='Other2')
+        # existing product on target
+        ProductFactory(company=target, query_count=2)
+        # products to be moved
+        ProductFactory(company=other1, query_count=3)
+        ProductFactory(company=other2, query_count=7)
+
+        resp = self.client.post(self.url, {'selected': [str(target.id), str(other1.id), str(other2.id)]})
+        self.assertEqual(resp.status_code, 302)
+
+        target.refresh_from_db()
+        self.assertEqual(target.query_count, 2 + 3 + 7)

@@ -70,6 +70,8 @@ class CompanyMergeView(LoginPermissionRequiredMixin, FilterView):
             # move brands to target company
             Brand.objects.filter(company_id__in=others).update(company_id=target_id)
             Company.objects.filter(id__in=others).delete()
+            # recalculate query_count for the target company after merge
+            Company.objects.get(id=target_id).recalculate_query_count_for_company()
 
         messages.success(request, 'Połączono producentów. Produkty zostały przeniesione do firmy docelowej.')
         return HttpResponseRedirect(reverse('company:detail', args=[target_id]))
