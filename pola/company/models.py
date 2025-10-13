@@ -158,6 +158,7 @@ class Company(TimeStampedModel):
             cursor.execute('update company_company set query_count = query_count +1 ' 'where id=%s', [self.id])
 
     def recalculate_query_count_for_company(self):
+        """Recalculate the query_count for the specific company."""
         with connection.cursor() as cursor:
             cursor.execute(
                 textwrap.dedent(
