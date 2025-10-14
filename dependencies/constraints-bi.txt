@@ -33,7 +33,7 @@ pathspec==0.12.1
 protobuf==5.29.3
 psycopg2-binary==2.9.11
 pydantic==2.10.6
-pydantic_core==2.27.2
+pydantic_core==2.41.3
 python-dateutil==2.9.0.post0
 python-slugify==8.0.4
 pytimeparse==1.1.8
