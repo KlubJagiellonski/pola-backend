@@ -13,7 +13,7 @@ charset-normalizer==3.4.4
 click==8.3.0
 Collectfast==2.2.0
 coverage==7.11.0
-cryptography==46.0.2
+cryptography==46.0.3
 decorator==5.2.1
 defusedxml==0.7.1
 django-allauth==0.55.2
