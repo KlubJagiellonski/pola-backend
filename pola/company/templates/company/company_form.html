@@ -2,6 +2,33 @@
 
 {% load crispy_forms_tags i18n %}
 
+{% block css %}
+    {{ block.super }}
+    <style>
+        /* Will be set dynamically based on actual sticky height */
+        :root { --sticky-height: 0px; }
+        /* Ensure the action bar is always visible and spans full width */
+        .sticky {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1030; /* above content, below modals */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 16px;
+            min-height: var(--sticky-height);
+            background: #fff;
+            border-top: 1px solid #e5e5e5;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+        }
+        /* Spacer so last form fields aren’t hidden under the bar */
+        .sticky-spacer { height: var(--sticky-height); }
+    </style>
+{% endblock %}
+
 {% block breadcrumbs_rows %}
     {% if object %}
         <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
@@ -30,8 +57,11 @@
             <div class="form-group">
                 <div class="aab controls col-lg-3"></div>
                 <div class="controls col-lg-9">
-                    <input type="submit" name="action" value="Save" class="btn btn-primary" id="submit-id-action">
-                    <input type="reset" name="reset" value="Przywróć poprzednie" class="btn btn-inverse" id="reset-id-reset">
+                    <div class="sticky">
+                        <input type="submit" name="action" value="Save" class="btn btn-primary" id="submit-id-action">
+                        <input type="reset" name="reset" value="Przywróć poprzednie" class="btn btn-inverse" id="reset-id-reset">
+                    </div>
+                    <div class="sticky-spacer" aria-hidden="true"></div>
                 </div>
             </div>
         </div>
@@ -60,6 +90,31 @@
     </script>
     {% endif %}
     <script>
+    // Keep the spacer height in sync with the actual sticky bar height
+    (function() {
+        function updateStickyHeight() {
+            var $sticky = $('.sticky');
+            if (!$sticky.length) return;
+            var h = $sticky.outerHeight();
+            document.documentElement.style.setProperty('--sticky-height', h + 'px');
+        }
+
+        // Initial calculation on DOM ready
+        $(updateStickyHeight);
+        // Recalculate on window resize
+        $(window).on('resize', updateStickyHeight);
+        // Recalculate if sticky content size changes
+        if (window.ResizeObserver) {
+            var el = document.querySelector('.sticky');
+            if (el) {
+                var ro = new ResizeObserver(updateStickyHeight);
+                ro.observe(el);
+            }
+        }
+        // Final pass after assets load (fonts, etc.)
+        $(window).on('load', updateStickyHeight);
+    })();
+
     $('.brand-formset').each(function() {
         const $formset = $(this);
         const $addButton = $formset.find('.add-row');

@@ -1,3 +1,6 @@
+# syntax=docker/dockerfile:1.14.0
+# check=error=true;experimental=all
+
 ARG PYTHON_VERSION="3.11"
 FROM python:${PYTHON_VERSION}-slim-bullseye
 
@@ -20,18 +23,20 @@ RUN apt-get update \
         linux-libc-dev \
         lsb-release \
         netcat-openbsd \
+        pkg-config \
+        libcairo2-dev \
     && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        postgresql-client-13 \
+        postgresql-client-18 \
         libpq-dev \
         libpq5 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 RUN mkdir /app
 WORKDIR /app
 

@@ -89,6 +89,35 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr>
+                <td>{% trans "Zamienniki" %}</td>
+                <td>
+                    {% if object.replacements.all %}
+                        <ul class="list-unstyled">
+                            {% for replacement in object.replacements.all %}
+                                <li>
+                                    <a href="{{ replacement.get_absolute_url }}">
+                                        {{ replacement.code }} - {{ replacement.name }}
+                                    </a>
+                                    {% if replacement.brand %}
+                                        ({{ replacement.brand }})
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>{% trans "Brak zdefiniowanych zamienników" %}</p>
+                    {% endif %}
+
+                    {% if perms.product.change_product %}
+                        <a href="{% url 'product:edit' product.code %}#replacements"
+                        class="btn btn-sm btn-primary">
+                            <i class="fa fa-pencil"></i>
+                            {% trans "Edytuj zamienniki" %}
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
         </table>
     </div>
 

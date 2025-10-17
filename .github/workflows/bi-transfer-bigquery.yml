@@ -2,22 +2,12 @@
 name: Transfer PostgresSQL to BigQuery
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       heroku_app:
         description: 'Heroku app [pola-app/pola-staging]'
         required: true
-        default: 'pola-staging'
-  pull_request:
-    branches:
-      - master
-    paths:
-      - 'pola-bi/**'
-      - '.github/workflows/bi-transfer_pola_backend_to_bq.yml'
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    # This workflow will be run at 5:12 on the first day of every month.
-    - cron: '12 5 1 * *'
+        type: string
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -47,32 +37,32 @@ jobs:
         run: |
           import os
           from pathlib import Path
+          from datetime import datetime
 
           event_name = os.environ["GITHUB_EVENT_NAME"]
           github_env_file_path = Path(os.environ["GITHUB_ENV"])
-          if event_name == "schedule":
-              heroku_app = "pola-staging"
-          elif event_name == "workflow_dispatch":
-              heroku_app = os.environ["INPUT_HEROKU_APP"]
-          elif event_name == "pull_request":
-              heroku_app = "pola-staging"
-          else:
-              raise Exception(f"Unknown event: {event_name}")
+          heroku_app = os.environ["INPUT_HEROKU_APP"]
+
           if heroku_app == "pola-app":
               env_name = "prod"
           elif heroku_app == "pola-staging":
               env_name = "staging"
           else:
               raise Exception(f"Unknown app: {heroku_app}")
+          bucket_name = os.environ['GCP_BUCKET_NAME']
+          current_date = datetime.now().strftime("%Y-%m-%d")
+
           with github_env_file_path.open("a") as file:
               file.write(f"ENV_NAME={env_name}\n")
               file.write(f"HEROKU_APP={heroku_app}\n")
               file.write(f"GCP_BIGQUERY_DATASET=pola_backend__{env_name}\n")
+              file.write(f"GCP_STAGING_URL=gs://{bucket_name}/{heroku_app}/{current_date}/\n")
+
         env:
-          INPUT_HEROKU_APP: ${{ github.event.inputs.heroku_app }}
+          INPUT_HEROKU_APP: ${{ inputs.heroku_app }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2
       # Use Open ID Connect to authenticate to GCP
@@ -80,7 +70,7 @@ jobs:
       # https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
       - id: 'auth'
         name: 'Authenticate to GCP'
-        uses: 'google-github-actions/auth@v2'
+        uses: 'google-github-actions/auth@v3'
         with:
           project_id: '${{ env.GCP_PROJECT_ID }}'
           # yamllint disable-line rule:line-length
@@ -88,7 +78,7 @@ jobs:
           export_environment_variables: true
           create_credentials_file: true
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+        uses: 'google-github-actions/setup-gcloud@v3'
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
@@ -100,7 +90,7 @@ jobs:
           echo "::add-mask::$DATABASE_URL"
           echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
       - name: "Setup Python"
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.9'
       - name: "Install dependencies"
@@ -135,5 +125,5 @@ jobs:
           python ./pola-bi/postgres_to_bigquery.py --verbose all \
             --database-url "${DATABASE_URL}" \
             --table-names "${TABLE_NAMES}" \
-            --staging-url "gs://${GCP_BUCKET_NAME}/" \
+            --staging-url "${GCP_STAGING_URL}" \
             --dataset-id "${GCP_BIGQUERY_DATASET}" \

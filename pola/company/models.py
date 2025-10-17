@@ -157,6 +157,24 @@ class Company(TimeStampedModel):
         with connection.cursor() as cursor:
             cursor.execute('update company_company set query_count = query_count +1 ' 'where id=%s', [self.id])
 
+    def recalculate_query_count_for_company(self):
+        """Recalculate the query_count for the specific company."""
+        with connection.cursor() as cursor:
+            cursor.execute(
+                textwrap.dedent(
+                    """
+                UPDATE company_company AS c
+                SET query_count = (
+                  SELECT coalesce(sum(p.query_count), 0)
+                  FROM product_product AS p
+                  WHERE p.company_id = %s
+                )
+                WHERE c.id = %s
+                """
+                ),
+                [self.id, self.id],
+            )
+
     @staticmethod
     def recalculate_query_count():
         with connection.cursor() as cursor:

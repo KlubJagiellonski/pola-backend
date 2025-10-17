@@ -39,14 +39,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">{% trans "Pola" %}</a>
+                <a class="navbar-brand" href="{% url 'home-cms' %}">{% trans "Pola" %}</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-
-                    <li><a href="{% url 'home-cms' %}">{% trans "Start" %}</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GPC <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -83,7 +81,11 @@
                     {% if perms.pola.change_appconfiguration %}
                         <li><a href="{% url 'app-config' %}">{% trans "Konfiguracja aplikacji" %}</a></li>
                     {% endif %}
-                    <li><a href="{% url 'home-stats' %}">{% trans "Statystyki" %}</a></li>
+                    {% if IS_PRODUCTION and CMS_STATS_EXTERNAL_URL %}
+                        <li><a href="{{ CMS_STATS_EXTERNAL_URL }}" target="_blank" rel="noopener noreferrer">{% trans "Statystyki" %}</a></li>
+                    {% else %}
+                        <li><a href="{% url 'home-stats' %}">{% trans "Statystyki" %}</a></li>
+                    {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -125,8 +127,16 @@
     {% else %}
     <script src="{% static 'js/backend.min.js' %}"></script>
     {% endif %}
+    <script>
+        $(document).ready(function() {
+           $(".navbar-nav>li.dropdown>a:first-child").click(function(){
+               $(this).css({
+                   "color": "white",
+               });
+           })
+        });
+    </script>
     {% block javascript %}
-
     {% endblock javascript %}
     {% include 'partiales/google_analytics.html' %}
 </body>

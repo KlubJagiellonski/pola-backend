@@ -1,0 +1,2 @@
+ignore:
+  - "pola/config/settings/local.py"

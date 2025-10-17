@@ -24,21 +24,28 @@ jobs:
       COMPOSE_FILE: "docker-compose.dbt.yaml"
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2
       - name: "Setup Python"
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.9'
       - name: "Login to Github Docker Registry"
         run: ./scripts/docker_login_github.py
       - name: "Build BI image"
+        run: ./scripts/manage_image.py build --image-type bi
+      - name: "Verify BI image"
+        run: ./scripts/manage_image.py verify --image-type bi
+      - name: "Install Heroku CLI"
         run: |
-          # Build BI image
-          ./scripts/bi-docker-image/build_image.sh
-          # Verify BI image
-          ./scripts/bi-docker-image/verify_image.sh
+            curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+            echo "export PATH=$PATH:/usr/local/bin" >> $HOME/.bashrc
+            source $HOME/.bashrc
+            heroku --version
+      - name: "Authenticate Heroku CLI"
+        run: |
+            echo "$HEROKU_API_KEY" | heroku auth:token
       - name: "Set environment env variable"
         run: |-
           pip install django-environ

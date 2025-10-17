@@ -100,11 +100,15 @@ def get_image(request, code):
 class ProductAutocomplete(LoginRequiredMixin, ExprAutocompleteMixin, autocomplete.Select2QuerySetView):
     search_expr = [
         'name__icontains',
+        'code__icontains',
         'company__name__icontains',
         'company__official_name__icontains',
         'company__common_name__icontains',
     ]
     model = Product
+
+    def get_result_label(self, item):
+        return f"{item.code} - {item.name}"
 
 
 class ProductBulkCreate(LoginPermissionRequiredMixin, MessageMixin, FormView):

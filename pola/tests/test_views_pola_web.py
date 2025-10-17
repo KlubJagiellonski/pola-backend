@@ -1,8 +1,11 @@
 import random
 import string
 from contextlib import ExitStack
+from http import HTTPStatus as st
 
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.urls import reverse
 from django.utils import translation
 from test_plus.test import TestCase
 
@@ -29,14 +32,14 @@ class TestPolaWebView(TestCase):
     def test_should_return_404_for_invalid_cms_view(self):
         with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/cms/invalid')
-            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, st.NOT_FOUND)
             self.assertIn("<title>Nie ma takiej strony</title>", response.content.decode())
             self.assertIn("<h1>Nie ma takiej strony</h1>", response.content.decode())
 
     def test_should_return_404_for_invalid_normal_view(self):
         with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/invalid')
-            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, st.NOT_FOUND)
             self.assertIn("<title>Nie ma takiej strony</title>", response.content.decode())
             self.assertIn("<h1>Nie ma takiej strony</h1>", response.content.decode())
 
@@ -50,7 +53,7 @@ class TestPolaWebView(TestCase):
 
         with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/invalid')
-            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, st.NOT_FOUND)
             self.assertEqual(content, response.content.decode())
 
     def test_should_return_200_when_index_exists(self):
@@ -63,21 +66,20 @@ class TestPolaWebView(TestCase):
 
         with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/article/')
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
 
-    def test_should_return_200_for_home_page(self):
-        content = "index.html"
-        self.s3_client.put_object(
-            Body=content,
-            Bucket=self.bucket_name,
-            Key="index.html",
+    def test_should_redirect_to_home_cms_when_app_starts(self):
+        user = get_user_model().objects.create_user(username="pola", password="pass123")
+        self.client.force_login(user)
+        response = self.client.get(reverse('index'), follow=True)
+
+        self.assertRedirects(
+            response=response,
+            expected_url=reverse('home-cms'),
+            status_code=st.MOVED_PERMANENTLY,
+            target_status_code=st.OK,
         )
-
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
-            response = self.client.get('')
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(content, response.content.decode())
 
     def test_should_return_200_when_file_exists(self):
         content = "test.js"
@@ -89,7 +91,7 @@ class TestPolaWebView(TestCase):
 
         with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/test.js')
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
 
     def test_should_support_caching_based_on_etag(self):
@@ -102,20 +104,20 @@ class TestPolaWebView(TestCase):
 
         with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/test.js')
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
 
             valid_etag = response.headers['ETag']
             invalid_etag = response.headers['ETag'] + "2"
             for method, header_name, etag, expected_code, expected_content in (
-                ('get', 'HTTP_IF_NONE_MATCH', valid_etag, 304, ''),
-                ('head', 'HTTP_IF_NONE_MATCH', valid_etag, 304, ''),
-                ('get', 'HTTP_IF_MATCH', valid_etag, 200, content),
-                ('head', 'HTTP_IF_MATCH', valid_etag, 200, ''),
-                ('get', 'HTTP_IF_NONE_MATCH', invalid_etag, 200, content),
-                ('head', 'HTTP_IF_NONE_MATCH', invalid_etag, 200, ''),
-                ('get', 'HTTP_IF_MATCH', invalid_etag, 200, content),
-                ('head', 'HTTP_IF_MATCH', invalid_etag, 200, ''),
+                ('get', 'HTTP_IF_NONE_MATCH', valid_etag, st.NOT_MODIFIED, ''),
+                ('head', 'HTTP_IF_NONE_MATCH', valid_etag, st.NOT_MODIFIED, ''),
+                ('get', 'HTTP_IF_MATCH', valid_etag, st.OK, content),
+                ('head', 'HTTP_IF_MATCH', valid_etag, st.OK, ''),
+                ('get', 'HTTP_IF_NONE_MATCH', invalid_etag, st.OK, content),
+                ('head', 'HTTP_IF_NONE_MATCH', invalid_etag, st.OK, ''),
+                ('get', 'HTTP_IF_MATCH', invalid_etag, st.OK, content),
+                ('head', 'HTTP_IF_MATCH', invalid_etag, st.OK, ''),
             ):
                 cache.clear()
                 if method == 'get':
@@ -135,13 +137,13 @@ class TestPolaWebView(TestCase):
 
         with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/test.js')
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
 
             response = self.client.get('/test.js', **{'HTTP_IF_MODIFIED_SINCE': response.headers['Last-Modified']})
-            self.assertEqual(response.status_code, 304)
+            self.assertEqual(response.status_code, st.NOT_MODIFIED)
             self.assertEqual('', response.content.decode())
 
             response = self.client.head('/test.js', **{'HTTP_IF_MODIFIED_SINCE': response.headers['Last-Modified']})
-            self.assertEqual(response.status_code, 304)
+            self.assertEqual(response.status_code, st.NOT_MODIFIED)
             self.assertEqual('', response.content.decode())

@@ -28,7 +28,7 @@
                 {% endfor %}
                 </ul>
                 <div class="panel-footer">
-                    <a href="{% url 'company:list' %}?verified=False&o=-query_count">{% trans "More" %}</a>
+                    <a href="{% url 'company:list' %}?verified=False&o=-Liczba+zapytań&filter=Filtruj">{% trans "More" %}</a>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        {% trans "Najpopularniejsze, polskie (590) produkty bez producenta" %}
+                        {% trans "Najpopularniejsze polskie (590) produkty bez producenta" %}
                         (
                         <abbr title="{% trans "Liczba kodów polskich bez producenta" %}">{{ no_of_590_products }}</abbr>
                         )
@@ -73,7 +73,7 @@
                 {% endfor %}
                 </ul>
                 <div class="panel-footer">
-                    <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
+                    <a href="{% url 'product:list' %}?code__istartswith=590&company_empty=on&o=-Liczba+zeskanowań&filter=Filtruj">{% trans "Więcej" %}</a>
                 </div>
             </div>
         </div>
@@ -82,7 +82,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        {% trans "Najpopularniejsze, niepolskie (!590) produkty bez producenta" %}
+                        {% trans "Najpopularniejsze niepolskie (!590) produkty bez producenta" %}
                         (
                         <abbr title="{% trans "Liczba nie polskich produktów bez producenta" %}">{{ no_of_not_590_products }}</abbr>
                         )
@@ -97,7 +97,7 @@
                 {% endfor %}
                 </ul>
                 <div class="panel-footer">
-                    <a href="{% url 'product:list' %}?o=-query_count">{% trans "Więcej" %}</a>
+                    <a href="{% url 'product:list' %}?company_empty=on&o=-Liczba+zeskanowań&filter=Filtruj">{% trans "Więcej" %}</a>
                 </div>
             </div>
         </div>
@@ -168,7 +168,7 @@
                     </li>
                 {% endfor %}
                 <div class="panel-footer">
-                    <a href="{% url 'report:list' %}?status=open&o=-created">{% trans "Więcej" %}</a>
+                    <a href="{% url 'report:list' %}?status=open&o=Data+utworzenia&filter=Filtruj">{% trans "Więcej" %}</a>
                 </div>
             </div>
         </div>

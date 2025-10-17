@@ -8,6 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
+from pathlib import Path
+
 import django
 import environ
 from boto.s3.connection import OrdinaryCallingFormat
@@ -175,6 +177,7 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 # Your stuff: custom template context processors go here
+                'pola.context_processors.app_settings',
             ],
         },
     },
@@ -330,6 +333,14 @@ CORS_URLS_REGEX = r"^/a/.*$"
 # APP CONFIGURATION
 # ------------------------
 
+# OPEN API CORE
+# ---------------
+# https://openapi-core.readthedocs.io/en/latest/integrations/django/#django
+
+from openapi_core import OpenAPI  # noqa: E402
+
+OPENAPI = OpenAPI.from_path(Path(str(ROOT_DIR)) / "pola" / "rpc_api" / "openapi-v1.yaml")
+
 # GET RESPONSE
 # ------------------------------------------------------------------------------
 GET_RESPONSE = {
@@ -343,3 +354,12 @@ PRODUKTY_W_SIECI_ENABLE = env.bool("POLA_APP_PRODUKTY_W_SIECI_ENABLE", default=T
 PRODUKTY_W_SIECI = {
     'API_TOKEN': env('POLA_APP_PRODUKTY_W_SIECI_API_TOKEN'),
 }
+
+# CMS / Stats configuration
+# ------------------------------------------------------------------------------
+# External URL for the Stats page used in production deployments.
+# Can be overridden via env var POLA_APP_CMS_STATS_EXTERNAL_URL
+CMS_STATS_EXTERNAL_URL = env.str(
+    'POLA_APP_CMS_STATS_EXTERNAL_URL',
+    default='https://lookerstudio.google.com/reporting/c8d93b03-e89c-4cbe-be4b-7350ac7d6a67/',
+)

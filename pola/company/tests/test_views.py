@@ -236,19 +236,6 @@ class TestCompanyUpdateWeb(WebTestMixin, TestCase):
         self.assertEqual(self.instance.official_name, "New name")
 
     @override_settings(LANGUAGE_CODE='en-EN')
-    def test_form_commit_desc_required(self):
-        page = self.app.get(self.url, user=self.user)
-        page.form['official_name'] = "New name"
-        page = page.form.submit()
-
-        self.assertContains(page, "This field is required.")
-
-        page.form['commit_desc'] = "AAA"
-        page = page.form.submit()
-
-        self.assertRedirects(page, self.instance.get_absolute_url())
-
-    @override_settings(LANGUAGE_CODE='en-EN')
     def test_form_readonly_fields(self):
         page = self.app.get(self.url, user=self.user)
         self.assertEqual(page.form['name'].attrs['disabled'], 'true')
@@ -447,3 +434,72 @@ class TestBrandDetailView(BrandInstanceMixin, PermissionMixin, TemplateUsedMixin
         doc = BeautifulSoup(resp.content, 'html.parser')
         total_query_count = next(iter(doc.select("[data-testid]"))).text
         self.assertEqual(total_query_count, str(100 + 50 + 75))
+
+
+class TestCompanyMergeView(PermissionMixin, TemplateUsedMixin, TestCase):
+    url = reverse_lazy('company:merge')
+    template_name = 'company/company_merge.html'
+
+    def test_filter_by_name(self):
+        self.login()
+        c1 = CompanyFactory(name='Alpha Sp. z o.o.')
+        c2 = CompanyFactory(name='Beta SA')
+        c3 = CompanyFactory(name='Gamma LLC')
+        resp = self.client.get(self.url, {'q': 'Al'})
+        self.assertContains(resp, str(c1))
+        self.assertNotContains(resp, str(c2))
+        self.assertNotContains(resp, str(c3))
+
+    def test_merge_success(self):
+        self.login()
+        target = CompanyFactory(common_name='Target')
+        other1 = CompanyFactory(common_name='Other1')
+        other2 = CompanyFactory(common_name='Other2')
+        p1 = ProductFactory(company=other1)
+        p2 = ProductFactory(company=other2)
+        b1 = BrandFactory(company=other1)
+        b2 = BrandFactory(company=other2)
+
+        resp = self.client.post(self.url, {'selected': [str(target.id), str(other1.id), str(other2.id)]})
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, target.get_absolute_url())
+
+        # Products moved to target
+        p1.refresh_from_db()
+        p2.refresh_from_db()
+        self.assertEqual(p1.company_id, target.id)
+        self.assertEqual(p2.company_id, target.id)
+
+        # Brands moved to target
+        b1.refresh_from_db()
+        b2.refresh_from_db()
+        self.assertEqual(b1.company_id, target.id)
+        self.assertEqual(b2.company_id, target.id)
+
+        # Other companies deleted
+        self.assertFalse(Company.objects.filter(id__in=[other1.id, other2.id]).exists())
+
+    def test_merge_requires_two_selected(self):
+        self.login()
+        only = CompanyFactory()
+        resp = self.client.post(self.url, {'selected': [str(only.id)]})
+        # Should render page with error and not redirect
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'Zaznacz co najmniej dwóch producentów')
+
+    def test_merge_recalculates_query_count(self):
+        self.login()
+        target = CompanyFactory(common_name='Target')
+        other1 = CompanyFactory(common_name='Other1')
+        other2 = CompanyFactory(common_name='Other2')
+        # existing product on target
+        ProductFactory(company=target, query_count=2)
+        # products to be moved
+        ProductFactory(company=other1, query_count=3)
+        ProductFactory(company=other2, query_count=7)
+
+        resp = self.client.post(self.url, {'selected': [str(target.id), str(other1.id), str(other2.id)]})
+        self.assertEqual(resp.status_code, 302)
+
+        target.refresh_from_db()
+        self.assertEqual(target.query_count, 2 + 3 + 7)

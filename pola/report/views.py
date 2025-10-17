@@ -17,15 +17,26 @@ class ReportListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'report.view_report'
     model = Report
     filterset_class = ReportFilter
-    paginate_by = 25
+    paginate_by = 50
     queryset = Report.objects.prefetch_related('attachment_set').all()
+
+    def get_filterset(self, filterset_class):
+        # Apply default filter (status=open) without redirecting
+        data = self.request.GET.copy()
+        if 'status' not in data:
+            data['status'] = 'open'
+        return filterset_class(
+            data=data,
+            queryset=self.get_queryset(),
+            request=self.request,
+        )
 
 
 class ReportAdvancedListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'report.view_report'
     model = Report
     filterset_class = ReportFilter
-    paginate_by = 25
+    paginate_by = 50
     template_name_suffix = '_filter_adv'
     queryset = Report.objects.all().prefetch_related('attachment_set')
 

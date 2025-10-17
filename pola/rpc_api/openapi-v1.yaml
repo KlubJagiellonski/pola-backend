@@ -156,22 +156,6 @@ components:
             type: object
             additionalProperties: false
             properties:
-              all_company_brands:
-                type: array
-                items:
-                  type: object
-                  additionalProperties: false
-                  properties:
-                    name:
-                      type: string
-                    logotype_url:
-                      type: string
-                      nullable: true
-                    website_url:
-                      type: string
-                  required:
-                    - name
-                    - logotype_url
               altText:
                 type: string
                 nullable: true
@@ -179,6 +163,34 @@ components:
                 type: string
               code:
                 type: string
+              replacements:
+                description: List of replacement products for the scanned product
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    code:
+                      type: string
+                    name:
+                      type: string
+                    company:
+                      description: Name of the company producing the replacement product
+                      type: string
+                    description:
+                      description: Description of the company producing the replacement product
+                      type: string
+                      nullable: true
+                    display_name:
+                      description: Display name of product with brand name, or shortened company name
+                      type: string
+                    is_friend:
+                      description: Whether the replacement's producing company is a Pola friend
+                      type: boolean
+                  required:
+                    - code
+                    - name
+                    - company
               donate:
                 type: object
                 additionalProperties: false
@@ -252,6 +264,24 @@ components:
                     official_url:
                       type: string
                       nullable: true
+                    brands:
+                      type: array
+                      items:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          name:
+                            type: string
+                          logotype_url:
+                            type: string
+                            nullable: true
+                          website_url:
+                            type: string
+                            nullable: true
+                        required:
+                          - name
+                          - website_url
+                          - logotype_url
                   required:
                     - name
                     - plCapital
@@ -265,6 +295,7 @@ components:
                     - plScore
                     - plWorkers
                     - plWorkers_notes
+                    - brands
               product_id:
                 type: integer
                 nullable: true

@@ -1,4 +1,7 @@
-FROM python:3.12.3-slim-bullseye
+# syntax=docker/dockerfile:1.14.0
+# check=error=true;experimental=all
+
+FROM python:3.13.6-slim-bullseye
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -12,7 +15,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/tmp/*
 
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 RUN mkdir /app
 WORKDIR /app
 

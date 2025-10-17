@@ -4,8 +4,8 @@ pull_request_rules:
     conditions:
       - label=automerge
       - check-success=Build Prod Image
-      - check-success=Django tests (3.9)
-      - check-success=Django tests (3.10)
+      - check-success=Django tests (current, 5.1.8)
+      - check-success=Django tests (current, current)
       - check-success=Static checks
       - check-success=BI Validate
     actions:

@@ -33,10 +33,11 @@ def github_action_group(name: str) -> None:
 
 
 def main():
-    service_names = subprocess.check_output(['docker', 'compose', 'ps', '--services']).decode().strip().splitlines()
-    for servie_name in service_names:
-        with github_action_group(f"Pulling {servie_name!r} service image"):
-            subprocess.run(['docker', 'compose', 'pull', '--', servie_name], check=True)
+    image_names = subprocess.check_output(['docker', 'compose', 'config', '--images']).decode().strip().splitlines()
+    image_names = [image_name for image_name in image_names if "pola" not in image_name]
+    for image_name in image_names:
+        with github_action_group(f"Pulling {image_name!r} image"):
+            subprocess.run(['docker', 'pull', image_name], check=True)
 
 
 main()

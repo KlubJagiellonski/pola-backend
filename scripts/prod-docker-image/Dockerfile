@@ -1,74 +1,61 @@
+# syntax=docker/dockerfile:1.14.0
+# check=error=true
+# CopyIgnoredFile is broken. It can not detect ./manage.py file, because it is excluded and added again.
+
 ARG APP_UID="50000"
 ARG APP_GID="50000"
 
-ARG APP_HOME=/opt/pola-backend
-
-ARG BASE_PYTHON_IMAGE="python:3.9-slim-bullseye"
+ARG BASE_PYTHON_IMAGE="python:3.11-slim-bookworm"
 
 ######################### NODE BUILD IMAGE ##########################
-
-FROM node:16.13.1-alpine3.12 as build-js
+# build-js builds the frontend assets
+FROM node:17.3.0-alpine3.12 AS build-js
 
 WORKDIR /app/
-COPY ./package.json  /app/
-COPY ./package-lock.json /app/
-RUN npm install && npm cache clean --force
-COPY ./gulpfile.esm.js /app/
-COPY ./pola/assets /app/pola/assets
+
+COPY package.json package-lock.json ./
+RUN npm install --global gulp-cli \
+    && npm install \
+    && npm cache clean --force
+COPY gulpfile.esm.js ./
+COPY pola/assets pola/assets
 RUN npm run build
 
 ######################### PYTHON BUILD IMAGE ########################
-ARG BASE_PYTHON_IMAGE
-ARG APP_HOME
+# build-py installs the python dependencies
+FROM ${BASE_PYTHON_IMAGE} AS build-py
 
-# hadolint ignore=DL3006
-FROM ${BASE_PYTHON_IMAGE} as build-py
+ENV APP_HOME=/opt/pola-backend/ \
+    DEBIAN_FRONTEND=noninteractive \
+    LANGUAGE=C.UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+    LC_CTYPE=C.UTF-8 LC_MESSAGES=C.UTF-8 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/root/.local/bin:${PATH}"
 
-ARG APP_HOME
-ENV APP_HOME=${APP_HOME}
-
-SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
-
-# Make sure noninteractive debian install is used and language variables set
-ENV DEBIAN_FRONTEND=noninteractive LANGUAGE=C.UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8 \
-    LC_CTYPE=C.UTF-8 LC_MESSAGES=C.UTF-8
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        binutils \
-        binutils-common \
-        binutils-x86-64-linux-gnu \
-        curl \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        g++ \
         gcc \
         git \
         gnupg2 \
         libc6-dev \
+        libcairo2-dev \
         libcc1-0 \
-        linux-libc-dev \
-        lsb-release \
-    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
         libpq-dev \
         libpq5 \
-    && apt-get autoremove -yqq --purge \
+        linux-libc-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# hadolint ignore=DL3044
-ENV PYTHONUNBUFFERED=1 \
-    PATH=${PATH}:/root/.local/bin
-RUN mkdir -p /root/.local/bin && pip install --no-cache-dir --upgrade "pip" && pip --version
+COPY dependencies/constraints-production.txt \
+     dependencies/requirements-production.txt \
+     dependencies/requirements-production-django.txt \
+     /opt/pola-backend/dependencies/
 
-COPY ./dependencies/constraints-production.txt ./dependencies/requirements-production.txt ./dependencies/requirements-production-django.txt ${APP_HOME}/dependencies/
-
-RUN pip install \
-      --no-cache-dir \
-      --user \
-      --requirement "${APP_HOME}/dependencies/requirements-production.txt" \
-      --requirement "${APP_HOME}/dependencies/requirements-production-django.txt" \
-      --constraint "${APP_HOME}/dependencies/constraints-production.txt" \
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir --user \
+       -r /opt/pola-backend/dependencies/requirements-production.txt \
+       -r /opt/pola-backend/dependencies/requirements-production-django.txt \
+       -c /opt/pola-backend/dependencies/constraints-production.txt \
     && pip check \
     && find /root/.local/ -name '*.pyc' -delete \
     && find /root/.local/ -type d -name '__pycache__' -delete \
@@ -77,90 +64,61 @@ RUN pip install \
     && find /root/.local -print0 | xargs --null chmod g+rw
 
 ######################### MAIN IMAGE ################################
-# hadolint ignore=DL3006
-FROM ${BASE_PYTHON_IMAGE} as main
+# main is the final image that will be used in production
+FROM ${BASE_PYTHON_IMAGE} AS main
 
 ARG APP_UID
 ARG APP_GID
 ARG APP_USER_HOME_DIR=/home/pola-backend
-ARG APP_HOME
+
 ENV APP_UID=${APP_UID} \
     APP_GID=${APP_GID} \
     APP_USER_HOME_DIR=${APP_USER_HOME_DIR} \
-    APP_HOME=${APP_HOME}
+    APP_HOME=/opt/pola-backend/ \
+    DEBIAN_FRONTEND=noninteractive \
+    LANGUAGE=C.UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+    LC_CTYPE=C.UTF-8 LC_MESSAGES=C.UTF-8 \
+    PATH="${APP_USER_HOME_DIR}/.local/bin:${PATH}" \
+    GUNICORN_CMD_ARGS="--worker-tmp-dir /dev/shm"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
-
-# Make sure noninteractive debian install is used and language variables set
-ENV DEBIAN_FRONTEND=noninteractive LANGUAGE=C.UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8 \
-    LC_CTYPE=C.UTF-8 LC_MESSAGES=C.UTF-8
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        apt-transport-https \
-        apt-utils \
-        ca-certificates \
-        curl \
-        dumb-init \
-        gnupg2 \
-        locales \
-        lsb-release \
-        sudo \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates dumb-init curl \
+        postgresql-client libpq5 \
         # Required by encrypoint.sh
-        netcat \
+        netcat-openbsd \
         # Required by Heroku-exec
         openssh-client \
         openssh-server \
         iproute2 \
-    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        postgresql-client \
-        libpq5 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && addgroup --gid "${APP_GID}" "pola-backend" \
-    && adduser --quiet "pola-backend" --uid "${APP_UID}" \
-        --gid "${APP_GID}" \
-        --home "${APP_USER_HOME_DIR}" \
-# Make app files belong to the root group and are accessible. This is to accomodate the guidelines from
-# OpenShift https://docs.openshift.com/enterprise/3.0/creating_images/guidelines.html
-    && mkdir -pv "${APP_HOME}" \
-    && chown -R "pola-backend:root" "${APP_USER_HOME_DIR}" "${APP_HOME}" \
-    && find "${APP_HOME}" -executable -print0 | xargs --null chmod g+x  \
-    && find "${APP_HOME}" -print0 | xargs --null chmod g+rw \
-    && rm -rf /var/log/* /var/cache/*
-
-COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/js/ "${APP_HOME}/pola/static/js/"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/fonts/ "${APP_HOME}/pola/static/fonts/"
-COPY --chown=pola-backend:root --from=build-js /app/pola/static/css/ "${APP_HOME}/pola/static/css/"
-
-# Make /etc/passwd root-group-writeable so that user can be dynamically added by OpenShift
-# hadolint ignore=DL4005
-RUN chmod g=u /etc/passwd \
-# Enable heroku-exec
-# See: https://devcenter.heroku.com/articles/exec#using-with-docker
+    && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* /usr/share/doc /usr/share/man \
+    && groupadd --gid "${APP_GID}" pola-backend \
+    && useradd --uid "${APP_UID}" --gid "${APP_GID}" \
+       --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
+    && mkdir -p "/opt/pola-backend" \
+    && chown -R pola-backend:root "${APP_USER_HOME_DIR}" "/opt/pola-backend" \
+    # Enable heroku-exec
+    # See: https://devcenter.heroku.com/articles/exec#using-with-docker
+    && chmod g=u /etc/passwd \
     && rm /bin/sh \
     && ln -s /bin/bash /bin/sh
 
+COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
+COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "/opt/pola-backend/pola/static/"
+
 COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
-
-ENV PATH="${APP_USER_HOME_DIR}/.local/bin:${PATH}" \
-    GUNICORN_CMD_ARGS="--worker-tmp-dir /dev/shm"
-
 COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
-COPY ./ ${APP_HOME}
+COPY --chown=pola-backend:root ./pola /opt/pola-backend/pola
+COPY --chown=pola-backend:root ./manage.py /opt/pola-backend/
 
-WORKDIR ${APP_HOME}
+RUN chmod -R g+rw "/opt/pola-backend"
 
-EXPOSE 8080
-
-RUN usermod -g 0 pola-backend -G "${APP_GID}"
+WORKDIR /opt/pola-backend
 
 USER ${APP_UID}
+
+EXPOSE 8080
 
 ARG RELEASE_SHA
 ENV RELEASE_SHA=${RELEASE_SHA}

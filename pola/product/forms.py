@@ -20,10 +20,13 @@ from .models import Product
 class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
     class Meta:
         model = models.Product
-        fields = ['code', 'name', 'code', 'company', 'brand']
+        fields = ['code', 'name', 'code', 'company', 'brand', 'replacements']
         widgets = {
             'company': autocomplete.ModelSelect2(url='company:company-autocomplete'),
             'brand': autocomplete.ModelSelect2(url='company:brand-autocomplete'),
+            'replacements': autocomplete.ModelSelect2Multiple(
+                url='product:product-autocomplete', attrs={'data-minimum-input-length': 3}
+            ),
         }
 
 

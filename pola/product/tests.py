@@ -107,22 +107,6 @@ class TestProductUpdateWeb(PermissionMixin, TestCase):
         self.assertEqual(versions[0].revision.user, self.user)
         self.assertEqual(self.instance.name, "New name")
 
-    @override_settings(LANGUAGE_CODE='en-EN')
-    def test_form_commit_desc_required(self):
-        self.login()
-        page = self.client.post(
-            self.url,
-            data={
-                'code': self.instance.code,
-                'name': "New name",
-                'company': self.company.pk,
-                'commit_desc': "",
-                'action': 'Save',
-            },
-        )
-
-        self.assertContains(page, "This field is required.")
-
 
 class TestProductDeleteView(PermissionMixin, InstanceMixin, TestCase):
     template_name = 'product/product_detail.html'
@@ -167,26 +151,26 @@ class TestProductAutocomplete(PermissionMixin, TestCase):
 
     def test_filters(self):
         self.login()
-        ProductFactory(id=1, name="A1")
-        ProductFactory(id=2, name="A2", company=CompanyFactory(name="PrefixB2"))
-        ProductFactory(id=3, name="A3", company=CompanyFactory(official_name="B3Suffix"))
-        ProductFactory(id=4, name="A4", company=CompanyFactory(common_name="PefixB4Suffix"))
+        ProductFactory(id=1, name="A1", code="001")
+        ProductFactory(id=2, name="A2", code="002", company=CompanyFactory(name="PrefixB2"))
+        ProductFactory(id=3, name="A3", code="003", company=CompanyFactory(official_name="B3Suffix"))
+        ProductFactory(id=4, name="A4", code="004", company=CompanyFactory(common_name="PefixB4Suffix"))
 
         response = self.client.get(f"{self.url}?q=A1")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), self._get_expected_result([('1', 'A1')]))
+        self.assertEqual(response.json(), self._get_expected_result([('1', '001 - A1')]))
 
         response = self.client.get(f"{self.url}?q=B2")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), self._get_expected_result([('2', 'A2')]))
+        self.assertEqual(response.json(), self._get_expected_result([('2', '002 - A2')]))
 
         response = self.client.get(f"{self.url}?q=B3")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), self._get_expected_result([('3', 'A3')]))
+        self.assertEqual(response.json(), self._get_expected_result([('3', '003 - A3')]))
 
         response = self.client.get(f"{self.url}?q=B4")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), self._get_expected_result([('4', 'A4')]))
+        self.assertEqual(response.json(), self._get_expected_result([('4', '004 - A4')]))
 
     def _get_expected_result(self, elements):
         return {

@@ -12,7 +12,7 @@ W celu zbudowania obrazu produkcyjny, ty możesz uruchomić komendę:
 
 .. code-block:: bash
 
-    ./scripts/prod-docker-image/build_image.sh
+    ./scripts/manage_image.py build --image-type prod
 
 To powinno zbudować obraz ``docker.pkg.github.com/klubjagiellonski/pola-backend/pola-backend:latest``, który można wykorzystać do wdrożenia w środowisku kontenerowym.
 
@@ -44,9 +44,9 @@ Uruchom następujące polecenia, aby wdrożyć projekt w Heroku z wykorzystaniem
 
     heroku config:set PYTHONHASHSEED=random
 
-    ./scripts/prod-docker-image/build_image.sh
+    ./scripts/manage_image.py build --image-type prod
     PROD_IMAGE_NAME="docker.pkg.github.com/klubjagiellonski/pola-backend/pola-backend:latest"
-    ./scripts/deploy.sh <APP_NAME> "${PROD_IMAGE_NAME}"
+    ./scripts/deploy.sh "<APP_NAME>" "${PROD_IMAGE_NAME}"
 
     heroku run python manage.py migrate
     heroku run python manage.py check --deploy
@@ -59,7 +59,7 @@ Wdrożenie automatyczne
 Aktualnie aplikacja jest wdrażana automatycznie do dwóch śroodowisk przez Github Action. Każda zmiana w odpowiedniej gałeżi powoduje, że uruchamiany jest workflow, który testuje i buduje aplikacje.
 
 ================== =========================== ==============================================
-Gałaż               Nazwa aplikacji Heroku      Adres
+Gałąź               Nazwa aplikacji Heroku      Adres
 ================== =========================== ==============================================
 ``master``          ``pola-app``                 ``hhttps://www.pola-app.pl/``
 ``prod``            ``pola-staging``             ``https://pola-staging.herokuapp.com/``

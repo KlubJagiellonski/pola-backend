@@ -1,4 +1,5 @@
-# app/Dockerfile
+# syntax=docker/dockerfile:1.14.0
+# check=error=true;experimental=all
 
 ARG PYTHON_VERSION="3.11"
 FROM python:${PYTHON_VERSION}-slim-bullseye

@@ -1,87 +1,98 @@
 name: Generate constraint file on comment
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [labeled]
 
 env:
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_ORGANIZATION: ${{ github.repository_owner }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  ISSUE_NUMBER: ${{ github.event.issue.number }}
+  ISSUE_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
   check-comment:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/update_constraints')
+    if: github.event.label.name == 'update_constraints'
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
-      - name: "Add reaction to comment"
-        uses: actions/github-script@v7
+      - name: "Add comments with link to workflow"
+        uses: actions/github-script@v8
         with:
           script: |
-            console.log(context)
-            console.log(context.payload)
-            github.rest.reactions.createForIssueComment({
+            const prNumber = context.payload.pull_request.number;
+            const repoName = process.env.GITHUB_REPOSITORY;     // np. 'owner/nazwa-repo'
+            const runId = process.env.GITHUB_RUN_ID;            // ID bieżącego runu
+            const workflowLink = `https://github.com/${repoName}/actions/runs/${runId}`;
+
+            const body = `Started workflow. [Workflow run](${workflowLink})`;
+
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: context.payload.comment.id,
-              content: '+1',
+              issue_number: prNumber,
+              body: body
             });
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/head
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      # Checkout again to create a branch. This is needed because the previous checkout is detached.
       - name: "Checkout Pull Request"
         run: gh pr checkout "${ISSUE_NUMBER}"
-      - name: "Login to Githhub Container Registry"
+      - name: "Login to GitHub Container Registry"
         run: ./scripts/docker_login_github.py
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
-      - name: "Build CI image"
+      - name: "Update CI image"
         run: |
-          ./scripts/ci-docker-image/build_image.sh
-
-      - name: "Generate constraint file"
-        run: >
-          docker compose run --no-deps --entrypoint /bin/bash web -c "pip freeze" |
-          grep -v -i "Django==" > ./dependencies/constraints-ci.txt
-
+          ./scripts/manage_image.py build --image-type ci
+          ./scripts/manage_image.py update_constraints --image-type ci
+      - name: "Update BI image"
+        run: |
+          ./scripts/manage_image.py build --image-type bi
+          ./scripts/manage_image.py update_constraints --image-type bi
+      - name: "Update PROD image"
+        run: |
+          ./scripts/manage_image.py build --image-type prod
+          ./scripts/manage_image.py update_constraints --image-type prod
       - name: "Setup Python dependencies"
         run: pip install -U pip wheel setuptools virtualenv pre-commit
       - name: "Run static checks"
-        run: pre-commit run requirements-txt-fixer --all-files --color=always
+        run: pre-commit run requirements-txt-fixer --all-files --show-diff-on-failure --color=always || true
       - name: "Commit and push"
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ./dependencies/constraints-ci.txt
+          git add ./dependencies/
           git commit -m "Update constraints file"
           git push origin
 
       - name: "Create a comment in PR"
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v5
         with:
-          issue-number: ${{ github.event.issue.number }}
-          body: '@Mergifyio rebase'
+          issue-number: ${{ github.event.pull_request.number }}
+          # Mergifyio is needed to trigger CI build as it is not triggered
+          # by the push event when the push is done by the action
+          body: |
+            Constraints files updated.
+
+            To trigger the CI build, write the message:
+            ```
+            @Mergifyio rebase
+            ```
+
+      - name: "Remove label 'update_constraints'"
+        if: always()
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const labelName = 'update_constraints';
+
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              name: labelName
+            });

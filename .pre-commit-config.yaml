@@ -1,21 +1,26 @@
 ---
-default_stages: [commit, push]
+default_stages: [pre-commit, pre-push]
 default_language_version:
   # force all unspecified python hooks to run python3
   python: python3
-minimum_pre_commit_version: "1.20.0"
-exclude: '^pola/static|^db_kbpoz/'
+minimum_pre_commit_version: 1.20.0
+exclude: >
+  (?x)
+  ^pola/static|
+  ^db_kbpoz/
 repos:
   - repo: meta
     hooks:
       - id: check-hooks-apply
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.1
+    rev: v1.5.5
     hooks:
       - id: remove-tabs
-        exclude: ^pola/tests/commands/test_import_brands_fixture\.tsv$
+        exclude: >
+          (?x)
+          ^pola/tests/commands/test_import_brands_fixture\.tsv$
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
         exclude: ^package-lock\.json$|^pola/gpc/fixtures/$
@@ -31,7 +36,8 @@ repos:
       - id: debug-statements
       - id: destroyed-symlinks
       - id: detect-aws-credentials
-        args: ['--allow-missing-credentials']
+        args:
+          - --allow-missing-credentials
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
@@ -40,20 +46,27 @@ repos:
           - --remove
       - id: mixed-line-ending
       - id: name-tests-test
-        args: ['--django']
+        args:
+          - --django
       - id: requirements-txt-fixer
         files: ^dependencies/.+\.txt$
       - id: trailing-whitespace
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.2
+    rev: v3.19.1
     hooks:
       - id: pyupgrade
-        args: ['--py39-plus']
+        args:
+          - --py39-plus
   - repo: https://github.com/psf/black
-    rev: '24.4.0'
+    rev: 25.1.0
     hooks:
       - id: black
-        args: ["--line-length", "120", "--skip-string-normalization", "--target-version", "py38"]
+        args:
+          - --line-length
+          - '120'
+          - --skip-string-normalization
+          - --target-version
+          - py38
         language_version: python
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
@@ -68,10 +81,12 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
   - repo: https://github.com/adrienverge/yamllint
-    rev: 'v1.35.1'
+    rev: v1.37.1
     hooks:
       - id: yamllint
-        entry: yamllint -c yamllint-config.yml
+        args:
+          - -c
+          - yamllint-config.yml
   - repo: https://github.com/ikamensh/flynt
     rev: '1.0.1'
     hooks:
@@ -93,7 +108,7 @@ repos:
     hooks:
       - id: autoflake
   - repo: https://github.com/PyCQA/flake8
-    rev: '7.0.0'
+    rev: 7.2.0
     hooks:
       - id: flake8
   # - repo: https://github.com/hadolint/hadolint
@@ -102,7 +117,7 @@ repos:
   #     - id: hadolint-docker
   #       entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.12.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
   - repo: https://github.com/PyCQA/isort
-    rev: '5.13.2'
+    rev: 6.0.1
     hooks:
       - id: isort
   - repo: local
@@ -115,9 +130,11 @@ repos:
       - id: version-checks
         name: Checks Django Version in docker-compose.yaml
         language: system
-        entry: scripts/static_checks/django-version-check.py
+        entry: scripts/static_checks/version-check.py
         pass_filenames: false
         files: >
           (?x)
-          ^dependencies/production\.txt$|
-          ^docker-compose.yaml$|
+          ^dependencies/|
+          ^\.python-version$|
+          Dockerfile$|
+          ^docker-compose\.yaml$|

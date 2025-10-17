@@ -10,7 +10,7 @@ from pola.integrations.produkty_w_sieci import (
 from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
 from pola.logic_score import get_pl_score
 from pola.product.models import Product
-from pola.text_utils import strip_urls_newlines
+from pola.text_utils import _shorten_txt, strip_urls_newlines
 
 WAR_COUNTRIES = ('Federacja Rosyjska', "Białoruś")
 
@@ -42,7 +42,6 @@ DEFAULT_REPORT_DATA = {
 }
 
 DEFAULT_RESULT = {
-    'all_company_brands': [],
     'product_id': None,
     'code': None,
     'name': None,
@@ -80,15 +79,12 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
             if not product_company:
                 handle_unknown_company(code, report, result, multiple_company_supported)
             elif multiple_company_supported:
-                handle_multiple_companies(code, companies, result, stats)
+                handle_multiple_companies(code, companies, result, stats, product_company)
             else:
                 handle_companies_when_multiple_companies_are_not_supported(
                     code, companies, multiple_company_supported, result, stats
                 )
-            if product_company:
-                result['all_company_brands'] = [
-                    serialize_brand(brand) for brand in Brand.objects.filter(company=product_company)
-                ]
+            handle_product_replacements(product, result, report)
         else:
             result['name'] = 'Nieznany produkt'
             result['altText'] = (
@@ -114,6 +110,54 @@ def serialize_brand(brand):
     logotype_url = brand.logotype.url if brand.logotype else None
     website_url = brand.website_url if brand.website_url else None
     return {'name': str(brand), 'logotype_url': logotype_url, 'website_url': website_url}
+
+
+def _find_replacements(replacements_rel):
+    """Find replacements for a product and serialize them."""
+    items = []
+    for r in replacements_rel.order_by("id"):
+        company = r.company
+        company_name = None
+        if company:
+            company_name = company.common_name or company.official_name or company.name
+        brand_name = None
+        if getattr(r, "brand", None):
+            brand_name = r.brand.common_name or r.brand.name
+        prod_name = r.name or r.code
+        if not prod_name:
+            continue
+        # Prefer brand name when available; otherwise fall back to a company name
+        chosen_name = brand_name or company_name
+        display_name = f"{_shorten_txt(prod_name, 40)} ({_shorten_txt(chosen_name, 30)})" if chosen_name else prod_name
+        items.append(
+            {
+                "code": r.code,
+                "name": prod_name,
+                "company": chosen_name,
+                "description": company.description if company else None,
+                "display_name": display_name,
+                "is_friend": bool(company.is_friend) if company else False,
+            }
+        )
+    return items
+
+
+def handle_product_replacements(product, result, report, topK=3):
+    """If the product has replacements, add them to the result and modify the report text.
+
+    Args:
+        product: Product instance
+        result: results dict to be modified
+        report: report dict to be modified
+        topK: maximum number of replacements to include in the report text
+    """
+    replacements = _find_replacements(product.replacements)
+    if replacements:
+        result["replacements"] = replacements
+        if report['text']:
+            report_text = report['text']
+            txt_replacements = ', '.join(f"{r['display_name']}" for r in replacements[:topK])
+            report['text'] = f"Polskie alternatywy: {txt_replacements}" f"\n---\n{report_text}"
 
 
 def handle_companies_when_multiple_companies_are_not_supported(
@@ -155,13 +199,19 @@ def append_brands_if_enabled(company, company_data):
     company_data['description'] += f'Ten producent psoiada marki: {brand_list}.'
 
 
-def handle_multiple_companies(code, companies, result, stats):
+def add_brands(company_data, product_company):
+    if product_company:
+        company_data['brands'] = [serialize_brand(brand) for brand in Brand.objects.filter(company=product_company)]
+
+
+def handle_multiple_companies(code, companies, result, stats, product_company):
     companies_data = []
 
     for company in companies:
         company_data = serialize_company(company)
         append_ru_by_warning_to_description(code, company_data)
         append_brands_if_enabled(company, company_data)
+        add_brands(company_data, product_company)
         stats['was_plScore'] = all(get_pl_score(c) for c in companies)
         companies_data.append(company_data)
     result['companies'] = companies_data

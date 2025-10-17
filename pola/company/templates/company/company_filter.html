@@ -16,6 +16,13 @@
             </a>
         </div>
     {% endif %}
+    {% if perms.company.change_company %}
+        <div class="btn-group">
+            <a href="{% url 'company:merge' %}" class="btn btn-default">
+                <i class="fa fa-compress"></i> {% trans "Połącz producentów" %}
+            </a>
+        </div>
+    {% endif %}
 
     <h1>{% trans "Producenci" %}</h1>
 

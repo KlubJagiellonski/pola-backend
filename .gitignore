@@ -30,8 +30,7 @@ pip-log.txt
 
 # Unit test / coverage reports
 .coverage
-.tox
-nosetests.xml
+junit.xml
 
 # Translations
 *.mo
@@ -54,9 +53,6 @@ node_modules/
 
 # virtual environments
 .env
-
-# Bower
-bower_components/
 
 # Media files
 pola/media/

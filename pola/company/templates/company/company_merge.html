@@ -1,0 +1,39 @@
+{%extends 'company/base.html' %}
+
+{% load i18n crispy_forms_tags %}
+
+{% block content %}
+
+    <h1>{% trans "Połącz producentów" %}</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            {% crispy filter.form %}
+            <br>
+            <button type="submit" form="merge-form" class="btn btn-danger btn-block">
+                {% trans "Połącz" %}
+            </button>
+        </div>
+        <div class="col-md-9">
+            <form id="merge-form" method="post" onsubmit="return confirm('Czy jesteś pewien?')">
+                {% csrf_token %}
+                <p class="text-muted">{% trans "Zaznacz producentów do połączenia. Dane zostaną zachowane z pierwszego zaznaczonego, a produkty i marki z pozostałych zostaną do niego przeniesione." %}</p>
+                <ul class="list-unstyled">
+                    {% for obj in object_list %}
+                        <li style="margin-bottom:6px;">
+                            <label style="font-weight: normal;">
+                                <input type="checkbox" name="selected" value="{{ obj.id }}">&nbsp;
+                                <a href="{{ obj.get_absolute_url }}" target="_blank">{{ obj }}</a>
+                                {% if obj.query_count %}<span class="text-muted"> ({{ obj.query_count }})</span>{% endif %}
+                            </label>
+                        </li>
+                    {% empty %}
+                        <li>{% trans "Nie znaleziono producentów spełniających zadane kryteria" %}.</li>
+                    {% endfor %}
+                </ul>
+
+                {% include 'pagination_custom/pager.html' with page=page_obj %}
+            </form>
+        </div>
+    </div>
+{% endblock content %}
