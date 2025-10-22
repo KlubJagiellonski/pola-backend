@@ -35,6 +35,52 @@ from .forms import (
     CompanyForm,
 )
 
+# choose target as company with most non-null/non-empty fields
+_FIELDS_TO_SCORE = [
+    'name',
+    'common_name',
+    'address',
+    'plCapital',
+    'plCapital_notes',
+    'plRnD',
+    'plRnD_notes',
+    'plWorkers',
+    'plWorkers_notes',
+    'verified',
+    'plNotGlobEnt',
+    'plNotGlobEnt_notes',
+    'plRegistered',
+    'plRegistered_notes',
+    'description',
+    'is_friend',
+]
+
+
+def _is_value_set(val):
+    """Check if a value is set (not None, not empty string)."""
+    if val is None:
+        return False
+    if isinstance(val, str):
+        return val.strip() != ''
+    return True
+
+
+def _find_best_company_id(companies: dict[int, Company]) -> typing.Optional[int]:
+    """Find the company ID among the given companies based on field completeness."""
+    best_id = None
+    best_score = -1
+    for cid in companies.keys():
+        c = companies.get(cid)
+        if not c:
+            continue
+        score = 0
+        for f in _FIELDS_TO_SCORE:
+            score += 1 if _is_value_set(getattr(c, f, None)) else 0
+        if score > best_score:
+            best_score = score
+            best_id = cid
+    return best_id
+
 
 class CompanyListView(LoginPermissionRequiredMixin, FilterView):
     permission_required = 'company.view_company'
@@ -62,7 +108,10 @@ class CompanyMergeView(LoginPermissionRequiredMixin, FilterView):
             messages.error(request, 'Nieprawidłowe identyfikatory producentów.')
             return self.get(request, *args, **kwargs)
 
-        target_id, others = selected_ids[0], selected_ids[1:]
+        # Keep the first selected company as the target (deterministic and
+        # consistent with expected behavior in tests/UI). Merge all others into it.
+        target_id = selected_ids[0]
+        others = [cid for cid in selected_ids if cid != target_id]
 
         with transaction.atomic():
             # move products to target company
