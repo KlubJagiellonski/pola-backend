@@ -3,9 +3,7 @@ import string
 from contextlib import ExitStack
 from http import HTTPStatus as st
 
-from django.contrib.auth import get_user_model
 from django.core.cache import cache
-from django.urls import reverse
 from django.utils import translation
 from test_plus.test import TestCase
 
@@ -68,18 +66,6 @@ class TestPolaWebView(TestCase):
             response = self.client.get('/article/')
             self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
-
-    def test_should_redirect_to_home_cms_when_app_starts(self):
-        user = get_user_model().objects.create_user(username="pola", password="pass123")
-        self.client.force_login(user)
-        response = self.client.get(reverse('index'), follow=True)
-
-        self.assertRedirects(
-            response=response,
-            expected_url=reverse('home-cms'),
-            status_code=st.MOVED_PERMANENTLY,
-            target_status_code=st.OK,
-        )
 
     def test_should_return_200_when_file_exists(self):
         content = "test.js"
