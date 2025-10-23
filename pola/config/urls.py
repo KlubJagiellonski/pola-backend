@@ -9,7 +9,7 @@ from django.views.defaults import (
     permission_denied,
     server_error,
 )
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView, TemplateView
 
 import pola.views as pola_views
 from pola import views_pola_web
@@ -43,6 +43,7 @@ urlpatterns += [
 ]
 # Add CMS views
 urlpatterns += [
+    path('', RedirectView.as_view(pattern_name='home-cms', permanent=True), name='index'),
     path(r'release/', pola_views.ReleaseView.as_view(), name="release"),
     path(r'cms/', pola_views.FrontPageView.as_view(), name="home-cms"),
     path(r'cms/stats', pola_views.StatsPageView.as_view(), name="home-stats"),
