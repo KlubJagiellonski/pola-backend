@@ -56,7 +56,7 @@ jsonschema-path==0.3.4
 jsonschema-specifications==2025.9.1
 lazy-object-proxy==1.12.0
 MarkupSafe==3.0.3
-matplotlib-inline==0.1.7
+matplotlib-inline==0.2.1
 more-itertools==10.8.0
 multidict==6.7.0
 oauthlib==3.3.1
