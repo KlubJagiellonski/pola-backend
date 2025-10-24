@@ -503,3 +503,28 @@ class TestCompanyMergeView(PermissionMixin, TemplateUsedMixin, TestCase):
 
         target.refresh_from_db()
         self.assertEqual(target.query_count, 2 + 3 + 7)
+
+    def test_merge_selects_best_target_not_first(self):
+        self.login()
+        # Poorly filled company (few scored fields set)
+        poor = CompanyFactory(name="", official_name="", common_name="", description="")
+        # Well-filled company should be chosen as target regardless of order
+        best = CompanyFactory(
+            address="Some address",
+            plCapital=100,
+            plCapital_notes="note",
+            plRnD=100,
+            plRnD_notes="note",
+            plWorkers=100,
+            plWorkers_notes="note",
+            plNotGlobEnt=100,
+            plNotGlobEnt_notes="note",
+            plRegistered=100,
+            plRegistered_notes="note",
+            description="desc",
+        )
+
+        # First selected is the poorer record, but view should pick 'best'
+        resp = self.client.post(self.url, {'selected': [str(poor.id), str(best.id)]})
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, best.get_absolute_url())

@@ -108,9 +108,10 @@ class CompanyMergeView(LoginPermissionRequiredMixin, FilterView):
             messages.error(request, 'Nieprawidłowe identyfikatory producentów.')
             return self.get(request, *args, **kwargs)
 
-        # Keep the first selected company as the target (deterministic and
-        # consistent with expected behavior in tests/UI). Merge all others into it.
-        target_id = selected_ids[0]
+        # Choose target using field-completeness heuristic
+        bulk = Company.objects.in_bulk(selected_ids)
+        companies = {cid: bulk.get(cid) for cid in selected_ids}
+        target_id = _find_best_company_id(companies) or selected_ids[0]
         others = [cid for cid in selected_ids if cid != target_id]
 
         with transaction.atomic():
