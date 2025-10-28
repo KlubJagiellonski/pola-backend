@@ -66,7 +66,10 @@ def _is_value_set(val):
 
 
 def _find_best_company_id(companies: dict[int, Company]) -> typing.Optional[int]:
-    """Find the company ID among the given companies based on field completeness."""
+    """
+    Returns the company ID with the highest number of non-null/non-empty fields from _FIELDS_TO_SCORE
+    among the given companies. If no valid company exists, returns None.
+    """
     best_id = None
     best_score = -1
     for cid in companies.keys():
