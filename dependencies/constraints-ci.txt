@@ -100,7 +100,7 @@ rlPyCairo==0.4.0
 rpds-py==0.27.1
 rq==1.16.1
 s3transfer==0.14.0
-sentry-sdk==2.42.1
+sentry-sdk==2.43.0
 six==1.17.0
 soupsieve==2.8
 sqlparse==0.5.3
