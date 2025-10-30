@@ -52,7 +52,7 @@ Pillow==10.1.0
 psycopg2-binary==2.9.11
 pycairo==1.28.0
 pycparser==2.23
-pydantic==1.10.9
+pydantic==2.12.3
 PyJWT==2.10.1
 python-dateutil==2.9.0.post0
 python3-openid==3.2.0
