@@ -1,4 +1,5 @@
 from django.core.paginator import InvalidPage
+from django.db import connection
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -29,9 +30,33 @@ def get_by_code_v4(request):
     return response
 
 
+def _extract_barcode_from_query_source(query_source: str) -> str | None:
+    if query_source and query_source.startswith('alt_'):
+        return query_source[4:]
+    return None
+
+
+def _increment_replacements_query_count(barcode_from: str, barcode_to: str):
+    "Increment counters for recorded replacement selection"
+    with connection.cursor() as cursor:
+        cursor.execute(
+            (
+                "UPDATE product_product_replacements r "
+                "SET counts = r.counts + 1 "
+                "FROM product_product pfrom, product_product pto "
+                "WHERE r.from_product_id = pfrom.id "
+                "AND r.to_product_id = pto.id "
+                "AND pfrom.code = %s "
+                "AND pto.code = %s"
+            ),
+            [barcode_from, barcode_to],
+        )
+
+
 def get_by_code_internal(request, ai_supported=False, multiple_company_supported=False, report_as_object=False):
     code = request.GET['code']
     device_id = request.GET['device_id']
+    query_source = request.GET.get('query_source', 'scanner')
 
     result, stats, product = logic.get_result_from_code(
         code, multiple_company_supported=multiple_company_supported, report_as_object=report_as_object
@@ -46,10 +71,15 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
             was_plScore=stats['was_plScore'],
         )
 
-    if product:
+    if product and query_source == 'scanner':
         product.increment_query_count()
         if product.company:
             product.company.increment_query_count()
+    if query_source and query_source.startswith('alt_'):
+        barcode_from = _extract_barcode_from_query_source(query_source)
+        barcode_to = product.code if product else None
+        if barcode_from and barcode_to and barcode_from != barcode_to:
+            _increment_replacements_query_count(barcode_from, barcode_to)
 
     if ai_supported:
         result = logic_ai.add_ask_for_pics(product, result)
