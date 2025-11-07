@@ -96,10 +96,16 @@ class TestCreateReportSchemas(TestCase):
             validate(instance=invalid_response, schema=CREATE_REPORT_V2_RESPONSE_SCHEMA)
 
     def test_v3_schema_only_requires_signed_requests(self):
-        """V3 schema should only require signed_requests"""
-        valid_v3_response = {"signed_requests": ["url1", "url2"]}
+        """V3 schema should only require signed_requests but allow id"""
+        valid_v3_response = {"id": 123, "signed_requests": ["url1", "url2"]}
 
         validate(instance=valid_v3_response, schema=CREATE_REPORT_V3_RESPONSE_SCHEMA)
+
+    def test_v3_schema_works_without_id(self):
+        """V3 schema should work without id field"""
+        valid_response = {"signed_requests": ["url1"]}
+
+        validate(instance=valid_response, schema=CREATE_REPORT_V3_RESPONSE_SCHEMA)
 
     def test_v3_schema_accepts_empty_signed_requests(self):
         """V3 schema should accept empty signed_requests array"""

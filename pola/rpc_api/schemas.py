@@ -71,11 +71,14 @@ CREATE_REPORT_V2_RESPONSE_SCHEMA = {
     "required": ["id", "signed_requests"],
 }
 
-# Schema for create_report response (v3 with only signed_requests)
+# Schema for create_report response (v3 - includes id in response but only signed_requests is required)
 CREATE_REPORT_V3_RESPONSE_SCHEMA = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "properties": {"signed_requests": {"type": "array", "items": {"type": "string"}}},
+    "properties": {
+        "id": {"type": "integer"},
+        "signed_requests": {"type": "array", "items": {"type": "string"}},
+    },
     "required": ["signed_requests"],
 }
 
