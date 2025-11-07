@@ -1,14 +1,13 @@
 import sys
 from datetime import timedelta
 
-from boto.s3.connection import Bucket
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils import timezone
 
+from pola.management.command_utils import load_s3_files_list
 from pola.report.models import Attachment
-from pola.s3 import create_s3_connection
 
 
 class Command(BaseCommand):
@@ -19,12 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print('Loading list of S3 files')
-        conn = create_s3_connection()
-        bucket = Bucket(conn, settings.AWS_STORAGE_BACKEND_BUCKET_NAME)
-
-        s3_files = set()
-        for key in bucket.list():
-            s3_files.add(key.name)
+        s3_files = load_s3_files_list(settings.AWS_STORAGE_BACKEND_BUCKET_NAME)
 
         print(f'Loaded {len(s3_files)} S3 files')
 

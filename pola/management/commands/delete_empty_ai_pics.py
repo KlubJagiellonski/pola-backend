@@ -1,13 +1,12 @@
 from datetime import timedelta
 
-from boto.s3.connection import Bucket
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils import timezone
 
 from pola.ai_pics.models import AIAttachment
-from pola.s3 import create_s3_connection
+from pola.management.command_utils import load_s3_files_list
 
 
 class Command(BaseCommand):
@@ -17,12 +16,7 @@ class Command(BaseCommand):
         parser.add_argument('no_of_days_back')
 
     def handle(self, *args, **options):
-        conn = create_s3_connection()
-        bucket = Bucket(conn, name=settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
-
-        s3_files = set()
-        for key in bucket.list():
-            s3_files.add(key.name)
+        s3_files = load_s3_files_list(settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
 
         startdate = timezone.now() - timedelta(days=int(options["no_of_days_back"]))
         attachments = AIAttachment.objects.select_related('ai_pics').filter(ai_pics__created__gte=startdate)
