@@ -120,7 +120,7 @@ class Company(TimeStampedModel):
 
     logotype = ResizedImageField(
         _("Logotyp"),
-        upload_to='company-logotype/%Y/%m/%d',
+        upload_to='logo/%Y/%m/%d',
         size=[None, 200],
         null=True,
         blank=True,
