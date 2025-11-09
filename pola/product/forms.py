@@ -97,7 +97,7 @@ class AddBulkProductForm(SaveButtonMixin, FormHorizontalMixin, forms.Form):
         }
         for row in self.cleaned_data['rows']:
             code = row['code']
-            name = row['name']
+            name = row['name'][:254]
             p = product_by_code.get(code)
             changed = False
             if p is None:
