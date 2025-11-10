@@ -17,7 +17,7 @@
         <div class="col-md-9">
             <form id="merge-form" method="post" onsubmit="return confirm('Czy jesteś pewien?')">
                 {% csrf_token %}
-                <p class="text-muted">{% trans "Zaznacz producentów do połączenia. Dane zostaną zachowane z pierwszego zaznaczonego, a produkty i marki z pozostałych zostaną do niego przeniesione." %}</p>
+                <p class="text-muted">{% trans "Zaznacz producentów do połączenia. Dane zostaną zachowane z produktu z największą kompletnością danych. Produkty i marki zostaną przeniesione." %}</p>
                 <ul class="list-unstyled">
                     {% for obj in object_list %}
                         <li style="margin-bottom:6px;">
