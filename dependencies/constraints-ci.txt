@@ -36,7 +36,7 @@ django-reversion==6.0.0
 django-storages==1.14.6
 django-test-plus==2.3.0
 django-webtest==1.9.14
-execnet==2.1.1
+execnet==2.1.2
 executing==2.2.1
 factory_boy==3.3.3
 Faker==38.0.0
