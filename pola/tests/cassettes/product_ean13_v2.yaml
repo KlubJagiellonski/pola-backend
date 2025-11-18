@@ -9,20 +9,22 @@ interactions:
         Connection:
           - keep-alive
         User-Agent:
-          - python-requests/2.31.0
+          - python-requests/2.32.5
       method: GET
-      uri: https://www.eprodukty.gs1.pl/external_api/v2/products/5901520000059/
+      uri: https://www.eprodukty.gs1.pl/external_api/v2/products/5901520000059?include_local_data=true
     response:
       body:
         string: !!binary |
-          H4sIAAAAAAAAA1VSS27bMBS8CvHWtkxJUGNzF2RV+AOjdlrURhbPIuOypkiCIuEmhk/SY/QIRe/V
-          R7tpEq30hqOZ4TydYB+1XaRupwII4M2El03F89NMYHA5XUWMqQdhkzEDsNgpYs5T//xkNdoDsgWd
-          BzQW2dFJZJ226jrO71ebr4uPt4vpbcHKojGkGDHsVZxjOKgIYgvLGTyQqop3zkZlLxhRZ+tPGdcd
-          7tV9MGS/pVGqvg3aR+3sS5430AztPhGf4vls5YOTqY3LC3Rl636Zdka3IGJIKs+fVdCPWkkQj2h6
-          ggz2ce7kPxAqXtVDXg35h3XJBS9FPSnqyc3NuNqQxS6gle/rILR1nUf7BOL0v67XJtjKF+yZucIV
-          RLXav2TrY1C5E0imYGuUijSRTd2fn62m14NmzTiL60jKMA3k1+JwI8PvX98HjHqkG7s+orlzMnvW
-          9bAec0KPanftAL7F6MVo1L2mLbwZwZkW7amT7YmiX74t8x9Q1VVemPqRQ33Jq/V4cEe0COeH81+w
-          97nVOwIAAA==
+          H4sIAAAAAAAAA41S247aMBD9FctPrQQhl00heVvRalVxWbSwrQqtqiGZTb04dmQ7SwHxJf2MfkLV
+          /+oY6GXfmofIc2Y853jOHHjlhJq29RoNz3mYZmGUxqH/0ox3Ttm5A9daykLhxBMSqqBGiiet3e+U
+          ALUBNqUaA1IB2+oSWC0UnsPJ/Xz5Yfr2ejq6DlgUpJLuOzAVugmYDTqer/hszD9RV3RDrRyqE0al
+          TLIXUjjz0mdFDRXeG0lCVhSWaAsjGie0IiX/w86iTirZdmf1Ru8vFWKvt0BlStiNVmB3Bf3Z8Db+
+          qO50uYdHphvY+BoBOXt9N/88e7Pgz9jHoKqWpJGKxr+tMbpsCzc7QaqVkqTbWbuWouC5My36+B0a
+          8SCw/I1IsG6iywvG4zBOumHcDV8tojAPozzJgiTr9wfxkhjWBlT5fPyEFrpuQO14fvhjzz9vnzcB
+          2zMd6MDbJxpK95OrJO2nZDRB1hn0XvBWBmwBJVJvYCP981sh6LgRLB14EuGIgY8M8RbQXZbmx/fH
+          DiP/6OHaOpBDXXruJOkmg5DQLa7Po+BfnGvyXq/+qzpoZI8fackaGs3qQE843Y389sVJ7BcFv3pR
+          772pFyOAdckuBKNrcLuzf/zoF8QOaQQSHfV4AGlprJWNxqJAVaAfi/RHi3gznlJP2vTME0VXWeKF
+          nrNCVZNbX1zr6XmKN/OIzbT0Iz8ej78Ao/vNYjADAAA=
       headers:
         Allow:
           - GET, HEAD, OPTIONS
@@ -37,7 +39,7 @@ interactions:
         Cross-Origin-Opener-Policy:
           - same-origin
         Date:
-          - Sat, 06 Apr 2024 12:30:52 GMT
+          - Tue, 18 Nov 2025 21:56:25 GMT
         Referrer-Policy:
           - same-origin
         Server:

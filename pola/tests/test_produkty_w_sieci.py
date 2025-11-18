@@ -24,6 +24,7 @@ class TestGetProductsFromRealAPI(TestCase):
     def test_should_return_product(self):
         product = produkty_w_sieci_client.get_products(gtin_number=TEST_EAN13)
         assert product.gtinNumber.lstrip("0") == TEST_EAN13.lstrip("0")
+        assert product.company.nip is not None
 
 
 # 🔸 Testy mockowane

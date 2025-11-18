@@ -60,7 +60,7 @@ class ProduktyWSieciClient:
         gtin_number: str,
         num_retries: Optional[int] = 5,
     ) -> Optional[ProductBase]:
-        uri = self._base_url.rstrip("/") + "/products/" + gtin_number + "/"
+        uri = self._base_url.rstrip("/") + "/products/" + gtin_number + "?include_local_data=true"
         params = {}
 
         response = self._send_request('get', uri, params=params, num_retries=num_retries)

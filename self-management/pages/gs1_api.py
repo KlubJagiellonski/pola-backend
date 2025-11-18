@@ -19,7 +19,9 @@ def fetch_products(api_key, params):
 
 def fetch_product_details(api_key, gtin_number):
     """Pobieranie szczegółów produktu."""
-    response = requests.get(f"{API_URL}/products/{gtin_number}", headers={**HEADERS, "X-API-KEY": api_key})
+    response = requests.get(
+        f"{API_URL}/products/{gtin_number}?include_local_data=true", headers={**HEADERS, "X-API-KEY": api_key}
+    )
     return response
 
 
