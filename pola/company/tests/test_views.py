@@ -445,10 +445,30 @@ class TestCompanyMergeView(PermissionMixin, TemplateUsedMixin, TestCase):
         c1 = CompanyFactory(name='Alpha Sp. z o.o.')
         c2 = CompanyFactory(name='Beta SA')
         c3 = CompanyFactory(name='Gamma LLC')
-        resp = self.client.get(self.url, {'q': 'Al'})
+        resp = self.client.get(self.url, {'q': 'Alp'})
         self.assertContains(resp, str(c1))
         self.assertNotContains(resp, str(c2))
         self.assertNotContains(resp, str(c3))
+
+    def test_filter_by_all_name_fields_and_unique(self):
+        self.login()
+        # Matches via official_name
+        c_off = CompanyFactory(name='x1', official_name='Mega Delta', common_name='')
+        # Matches via common_name
+        c_com = CompanyFactory(name='x2', official_name='', common_name='SuperMega Epsilon')
+        # Matches via name
+        c_name = CompanyFactory(name='Mega Zeta', official_name='', common_name='')
+        # Does not match
+        c_other = CompanyFactory(name='Other Inc', official_name='Other Official', common_name='Other Common')
+
+        resp = self.client.get(self.url, {'q': 'Mega'})
+
+        # Found across all three fields
+        self.assertContains(resp, str(c_off))
+        self.assertContains(resp, str(c_com))
+        self.assertContains(resp, str(c_name))
+        # Non-matching company excluded
+        self.assertNotContains(resp, str(c_other))
 
     def test_merge_success(self):
         self.login()
