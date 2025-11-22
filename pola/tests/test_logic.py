@@ -599,9 +599,9 @@ class TestGetByCode(TestCase):
         Product(code=TEST_EAN13, name="NAME").save()
         # Existing product without company should still trigger API update
         response = get_by_code(TEST_EAN13)
-        self.assertEqual(response.name, "NAME")  # name not overwritten, only reported
-        self.assertIsNotNone(response.company)  # company populated from API
-        self.assertEqual(1, Product.objects.count())  # no duplicate product created
+        self.assertEqual(response.name, "NAME")
+        self.assertIsNotNone(response.company)
+        self.assertEqual(1, Product.objects.count())
 
     @vcr.use_cassette('product_ean13_v2.yaml', filter_headers=['X-API-KEY'])
     def test_should_create_new_when_missing(self):
