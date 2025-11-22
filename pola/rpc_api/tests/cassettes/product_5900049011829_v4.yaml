@@ -1,0 +1,59 @@
+interactions:
+  - request:
+      body: null
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate
+        Connection:
+          - keep-alive
+        User-Agent:
+          - python-requests/2.32.5
+      method: GET
+      uri: https://www.eprodukty.gs1.pl/external_api/v2/products/5900049011829?include_local_data=true
+    response:
+      body:
+        string: !!binary |
+          H4sIAAAAAAAAA1VSTY/aMBD9K5ZPbbWAHQI0uaFAEdp8adntVqAeTOLNWjh2FDuFLeJQaf9Bb/07
+          3f1fHUNXVaUcMu/NzJt54yOurFBpV295i0NMRgEhxA8IpR+9AF+d2ZVltjPAssKKbxxQxWoOcTKN
+          kymq2Y61KJ+n6RxRz3y3H0aEVOg2u4FMy9qK24S1O25xuMHzO/wV6rmNtLJcnTFIRxV6V7Wsfu9Y
+          UbOK37USJDcQltwUrWis0Ao08X9AzFTVQTYQjQSqaXXZFTY/Q6qTErqZvNtKUeDQth138WfeigfB
+          yzdEMmMTXf7FsEe8UY/AN7klQUhoOAz6wZBO/MkaFLYtU+Xb7hAXum6YesLh8Z8rq3z+BX3Kshla
+          5b9/vv64nqI1yhY303QZrbP05Rllszy7X85n6+U0TrPXX9Hy5dn5KhpoMBpRb+wT3xsDZGzLnXW4
+          k30UPepGKIYoccrCgiy+Z6Xei4JfoTx2DmhjmYx06UYZ+j1KXO6eby+e4EdrGxMOBjUzDT/0YfwB
+          PsGdGzBoc4R1zoVQRcYedS/A8oOTT9yVtXoaXMvO7ATqId2wnd4zJRiqxQGf3OVMBHZIbqHHA5MG
+          zK0MjWE6VXBnkXS/hvNFnLpFAzI8PzhCqA9SF1aoKslccq3Ti6OLFUW5ls740+n0B4MoRbizAgAA
+      headers:
+        Allow:
+          - GET, HEAD, OPTIONS
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Language:
+          - en
+        Content-Type:
+          - application/json; charset=utf-8
+        Cross-Origin-Opener-Policy:
+          - same-origin
+        Date:
+          - Sat, 22 Nov 2025 11:56:31 GMT
+        Referrer-Policy:
+          - same-origin
+        Server:
+          - nginx
+        Transfer-Encoding:
+          - chunked
+        Vary:
+          - Accept-Encoding
+          - Accept-Language, origin
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - DENY
+          - SAMEORIGIN
+      status:
+        code: 200
+        message: OK
+version: 1
