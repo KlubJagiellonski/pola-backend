@@ -478,3 +478,12 @@ class TestCreateFromApi(TestCase):
         self.assertIn('Brand created: True', logConcat)
         self.assertIn('Product exists. Updating a product.', logConcat)
         self.assertIn('A previously unknown brand was found. Updating the product.', logConcat)
+
+
+class TestCreateFromApiUnsupportedCode(TestCase):
+    def test_raises_exception_for_unsupported_code(self):
+        # Use a 13-digit code that doesn't start with 590
+        code = "777" + TEST_EAN13[3:]
+        with self.assertRaises(Exception) as ctx:
+            create_from_api(code=code, get_products_response=None, product=None)
+        self.assertEqual(str(ctx.exception), f"Unsupported code: {code}")
