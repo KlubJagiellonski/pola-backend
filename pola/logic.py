@@ -320,14 +320,27 @@ def serialize_company(company):
     return company_data
 
 
+def _process_with_produkty_w_sieci(code, product=None) -> Product | None:
+    try:
+        if is_code_supported(code) and settings.PRODUKTY_W_SIECI_ENABLE:
+            products_response = produkty_w_sieci_client.get_products(gtin_number=code)
+            return create_from_api(code, products_response, product=product)
+    except ApiException as ex:
+        sentry_sdk.capture_exception(ex)
+    return None
+
+
 def get_by_code(code):
     try:
-        return Product.objects.get(code=code)
+        product = Product.objects.get(code=code)
+        # If product exists but has no assigned company, still try to create from API
+        if not product.company:
+            res = _process_with_produkty_w_sieci(code, product=product)
+            if res:
+                return res
+        return product
     except Product.DoesNotExist:
-        try:
-            if is_code_supported(code) and settings.PRODUKTY_W_SIECI_ENABLE:
-                products_response = produkty_w_sieci_client.get_products(gtin_number=code)
-                return create_from_api(code, products_response, product=None)
-        except ApiException as ex:
-            sentry_sdk.capture_exception(ex)
+        res = _process_with_produkty_w_sieci(code, product=None)
+        if res:
+            return res
     return Product.objects.create(code=code)

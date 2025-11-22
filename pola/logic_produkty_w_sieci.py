@@ -16,7 +16,9 @@ def is_code_supported(code: str):
     return code[0:3] == '590' and len(code) == 13
 
 
-def create_from_api(code: str, get_products_response: Optional[ProductBase], product: Optional[Product] = None):
+def create_from_api(
+    code: str, get_products_response: Optional[ProductBase], product: Optional[Product] = None
+) -> Product | None:
     if not is_code_supported(code):
         raise Exception(f"Unsupported code: {code}")
     result_product = get_products_response
@@ -36,7 +38,11 @@ def create_from_api(code: str, get_products_response: Optional[ProductBase], pro
             company=expected_company,
             brand=expected_brand,
             # TODO: co jesli jest wiecej niz jeden GPC?
-            gpc_brick=GPCBrick.objects.get(code=result_product.gpc[0].code) if len(result_product.gpc) > 0 else None,
+            gpc_brick=(
+                GPCBrick.objects.filter(code=result_product.gpc[0].code).first()
+                if len(result_product.gpc) > 0
+                else None
+            ),
             commit_desc="Produkt utworzony automatycznie na podstawie skanu użytkownika",
         )
         return product
@@ -113,7 +119,7 @@ def create_from_api(code: str, get_products_response: Optional[ProductBase], pro
         if result_product and result_product.gpc:
             LOGGER.info("A previously unknown GPC Brick name was found. Updating the product.")
             product_commit_desc += 'Kod GPC zmieniony na podstawie bazy GS1. '
-            product.gpc_brick = GPCBrick.objects.get(code=result_product.gpc[0].code)
+            product.gpc_brick = GPCBrick.objects.filter(code=result_product.gpc[0].code).first()
 
     product.gs1_last_response = get_products_response.dict()
     product.save(commit_desc=product_commit_desc)
