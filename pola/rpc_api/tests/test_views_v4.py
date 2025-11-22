@@ -1,5 +1,7 @@
 import json
+import unittest
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from test_plus import TestCase
 
@@ -37,6 +39,10 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
         )
         self.assertEqual(200, response.status_code)
 
+    @unittest.skipUnless(
+        settings.PRODUKTY_W_SIECI_ENABLE,
+        "Runs only when PRODUKTY_W_SIECI_ENABLE is True",
+    )
     def test_should_return_200_when_product_without_company(self):
         p = Product(code=5900049011829)
         p.name = "test-product"
@@ -294,6 +300,10 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             json.loads(response.content),
         )
 
+    @unittest.skipUnless(
+        settings.PRODUKTY_W_SIECI_ENABLE,
+        "Runs only when PRODUKTY_W_SIECI_ENABLE is True",
+    )
     def test_should_return_200_when_custom_donate_text_is_Set(self):
         p = Product(code=5900049011829)
         p.name = "test-product"

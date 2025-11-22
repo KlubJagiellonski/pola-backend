@@ -1,7 +1,9 @@
 import json
+import unittest
 
 import environ
 import requests
+from django.conf import settings
 from test_plus import TestCase
 
 from pola.ai_pics.models import AIAttachment, AIPics
@@ -110,6 +112,10 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
         )
         self.assertEqual(200, response.status_code)
 
+    @unittest.skipUnless(
+        settings.PRODUKTY_W_SIECI_ENABLE,
+        "Runs only when PRODUKTY_W_SIECI_ENABLE is True",
+    )
     def test_should_return_200_when_product_without_company(self):
         p = Product(code=5900049011829)
         p.name = "test-product"
