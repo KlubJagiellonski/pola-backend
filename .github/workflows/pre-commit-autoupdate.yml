@@ -2,7 +2,7 @@ name: Update pre-commit hooks
 
 on:
   schedule:
-    - cron: '37 21 * * *'
+    - cron: '37 21 * * 4'
   workflow_dispatch:
 
 env:
