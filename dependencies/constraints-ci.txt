@@ -103,7 +103,7 @@ s3transfer==0.15.0
 sentry-sdk==2.46.0
 six==1.17.0
 soupsieve==2.8
-sqlparse==0.5.3
+sqlparse==0.5.4
 stack-data==0.6.3
 tqdm==4.67.1
 traitlets==5.14.3
