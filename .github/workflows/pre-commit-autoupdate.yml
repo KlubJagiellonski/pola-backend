@@ -30,7 +30,7 @@ jobs:
           python -m pip install pre-commit
 
       - name: Use pre-commit environment cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
           path: ~/.cache/pre-commit
