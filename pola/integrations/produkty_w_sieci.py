@@ -96,6 +96,8 @@ class ProduktyWSieciClient:
                     if NOT_FOUND_ERRORMSG in str(errorTable):  # when product not found in the GS1 API
                         return None
                     if errorTable and isinstance(errorTable, list):
+                        if len(errorTable) == 0:
+                            raise ApiException('Empty error response')
                         error_msg = errorTable[0].get('message') or errorTable[0].get('detail') or UNKNOWN_ERRORMSG
                         raise ApiException(error_msg)
                     else:
