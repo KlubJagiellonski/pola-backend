@@ -65,7 +65,7 @@ class TestProduktyWSieciClientMocked:
             mock_response.raise_for_status = mock.Mock()
             mock_request.return_value = mock_response
 
-            with pytest.raises(KeyError, match="'message'"):
+            with pytest.raises(ApiException):
                 self.client.get_products(gtin_number=TEST_EAN13, num_retries=0)
 
     def test_should_handle_empty_response_json(self):
@@ -101,7 +101,7 @@ class TestProduktyWSieciClientMocked:
         failing_resp.raise_for_status.side_effect = HTTPError("Server error")
 
         with mock.patch("requests.Session.request", return_value=failing_resp):
-            with pytest.raises(HTTPError, match="Server error"):
+            with pytest.raises(ApiException, match="Server error"):
                 self.client.get_products(gtin_number=TEST_EAN13, num_retries=2)
 
     def test_should_retry_on_server_error_then_succeed(self):
@@ -135,11 +135,11 @@ class TestProduktyWSieciClientMocked:
             assert result.gtinNumber == TEST_EAN13
             assert mock_request.call_count == 2
 
-    def test_should_raise_http_error_on_client_error(self):
+    def test_should_raise_api_error_on_client_error(self):
         client_error = mock.Mock()
         client_error.status_code = 404
         client_error.raise_for_status.side_effect = HTTPError("Not found")
 
         with mock.patch("requests.Session.request", return_value=client_error):
-            with pytest.raises(HTTPError, match="Not found"):
+            with pytest.raises(ApiException, match="Not found"):
                 self.client.get_products(gtin_number="BAD-CODE", num_retries=1)

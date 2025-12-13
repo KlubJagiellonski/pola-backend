@@ -7,6 +7,7 @@ from django.conf import settings
 from pydantic import BaseModel
 
 NOT_FOUND_ERRORMSG = "not_found"
+UNKNOWN_ERRORMSG = "unknown_error"
 
 
 class ApiException(Exception):
@@ -92,12 +93,11 @@ class ProduktyWSieciClient:
                 response_json = response.json()
                 if 'errors' in response_json:
                     errorTable = response_json['errors']
+                    if NOT_FOUND_ERRORMSG in str(errorTable):  # when product not found in the GS1 API
+                        return None
                     if errorTable and isinstance(errorTable, list):
-                        error_msg = errorTable[0].get('message') or errorTable[0].get('detail') or NOT_FOUND_ERRORMSG
-                        if error_msg == NOT_FOUND_ERRORMSG:
-                            return None
-                        else:
-                            raise ApiException(error_msg)
+                        error_msg = errorTable[0].get('message') or errorTable[0].get('detail') or UNKNOWN_ERRORMSG
+                        raise ApiException(error_msg)
                     else:
                         raise ApiException('Unknown error response: ' + str(errorTable))
                 break
