@@ -1,5 +1,6 @@
 import sentry_sdk
 from django.conf import settings
+from requests.exceptions import HTTPError
 
 from pola.company.models import Brand
 from pola.countries import get_registration_country
@@ -325,7 +326,7 @@ def _process_with_produkty_w_sieci(code, product=None) -> Product | None:
         if is_code_supported(code) and settings.PRODUKTY_W_SIECI_ENABLE:
             products_response = produkty_w_sieci_client.get_products(gtin_number=code)
             return create_from_api(code, products_response, product=product)
-    except ApiException as ex:
+    except (ApiException, HTTPError) as ex:
         sentry_sdk.capture_exception(ex)
     return None
 

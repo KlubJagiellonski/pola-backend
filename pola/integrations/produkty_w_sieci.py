@@ -80,25 +80,26 @@ class ProduktyWSieciClient:
                     exception = None
                     response = session.request(method, url, **kwargs)
                     response.raise_for_status()
-                except requests.HTTPError as http_error:
+                except requests.exceptions.HTTPError as http_error:
                     exception = http_error
 
                 if exception:
                     if retry_num == num_retries or 400 <= response.status_code < 500:
-                        raise exception
+                        raise ApiException(str(exception))
                     else:
                         continue
 
                 response_json = response.json()
                 if 'errors' in response_json:
                     errorTable = response_json['errors']
-                    if errorTable and isinstance(errorTable, list) and errorTable[0]['message']:
-                        if errorTable[0]['message'] == NOT_FOUND_ERRORMSG:
+                    if errorTable and isinstance(errorTable, list):
+                        error_msg = errorTable[0].get('message') or errorTable[0].get('detail') or NOT_FOUND_ERRORMSG
+                        if error_msg == NOT_FOUND_ERRORMSG:
                             return None
                         else:
-                            raise ApiException(errorTable[0]['message'])
+                            raise ApiException(error_msg)
                     else:
-                        raise ApiException('Unknown error response: ' + errorTable)
+                        raise ApiException('Unknown error response: ' + str(errorTable))
                 break
             return response_json
 
