@@ -1,6 +1,5 @@
 import sentry_sdk
 from django.conf import settings
-from requests.exceptions import HTTPError
 
 from pola.company.models import Brand
 from pola.countries import get_registration_country
