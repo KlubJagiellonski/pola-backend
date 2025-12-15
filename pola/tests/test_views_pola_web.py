@@ -8,6 +8,7 @@ from django.utils import translation
 from test_plus.test import TestCase
 
 from pola.s3 import create_s3_client, create_s3_resource
+from pola.views_pola_web import get_candidates
 
 
 class TestPolaWebView(TestCase):
@@ -133,3 +134,21 @@ class TestPolaWebView(TestCase):
             response = self.client.head('/test.js', **{'HTTP_IF_MODIFIED_SINCE': response.headers['Last-Modified']})
             self.assertEqual(response.status_code, st.NOT_MODIFIED)
             self.assertEqual('', response.content.decode())
+
+
+def test_get_candidates_root_paths():
+    # Empty or root path should resolve to index.html only
+    assert get_candidates("") == ["index.html"]
+    assert get_candidates("/") == ["index.html"]
+
+
+def test_get_candidates_directory_like_paths_without_extension():
+    # Paths without extension should include the path and path/index.html
+    assert get_candidates("about") == ["about", "about/index.html"]
+    assert get_candidates("foo/bar/") == ["foo/bar", "foo/bar/index.html"]
+
+
+def test_get_candidates_file_with_extension_only_self():
+    # Paths with extension should return only the file itself
+    assert get_candidates("index.html") == ["index.html"]
+    assert get_candidates("/assets/app.js") == ["assets/app.js"]

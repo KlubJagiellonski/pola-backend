@@ -21,6 +21,8 @@ CACHE_TIMEOUT = 60 * 15
 
 def get_candidates(file_path):
     file_path = file_path.strip("/")
+    if file_path == "":
+        return ["index.html"]
     candidates = []
     if file_path:
         candidates.append(file_path)
