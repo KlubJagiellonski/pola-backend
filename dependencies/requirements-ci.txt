@@ -14,4 +14,4 @@ pytest-cov==7.0.0
 pytest-django==4.11.1
 pytest-xdist[psutil]==3.6.1
 pytz==2025.2
-vcrpy==7.0.0
+vcrpy==8.1.0
