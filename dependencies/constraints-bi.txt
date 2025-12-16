@@ -20,7 +20,7 @@ isodate==0.6.1
 Jinja2==3.1.6
 jsonschema==4.25.1
 jsonschema-specifications==2025.9.1
-leather==0.4.0
+leather==0.4.1
 MarkupSafe==3.0.3
 mashumaro==3.14
 more-itertools==10.8.0
