@@ -17,7 +17,7 @@ cryptography==46.0.3
 decorator==5.2.1
 defusedxml==0.7.1
 django-allauth==0.55.2
-django-anymail==13.1
+django-anymail==14.0
 django-autocomplete-light==3.12.1
 django-autoslug==1.9.9
 django-braces==1.17.0
