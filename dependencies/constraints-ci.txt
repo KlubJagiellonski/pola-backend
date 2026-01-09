@@ -115,6 +115,6 @@ waitress==3.0.2
 wcwidth==0.2.14
 WebOb==1.8.9
 WebTest==3.0.7
-Werkzeug==3.1.1
+Werkzeug==3.1.5
 wrapt==2.0.1
 yarl==1.22.0
