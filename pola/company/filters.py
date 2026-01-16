@@ -17,6 +17,12 @@ class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
         label=_("Dane zweryfikowane"),
     )
 
+    is_friend = django_filters.TypedChoiceFilter(
+        choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
+        coerce=strtobool,
+        label=_("Przyjaciel Poli"),
+    )
+
     o = django_filters.OrderingFilter(
         # tuple-mapping retains order
         fields=(
