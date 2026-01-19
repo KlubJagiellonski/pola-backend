@@ -102,7 +102,7 @@ rq==1.16.1
 s3transfer==0.16.0
 sentry-sdk==2.49.0
 six==1.17.0
-soupsieve==2.8.1
+soupsieve==2.8.2
 sqlparse==0.5.5
 stack-data==0.6.3
 tqdm==4.67.1
