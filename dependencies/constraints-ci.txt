@@ -50,7 +50,7 @@ ipython==9.9.0
 ipython_pygments_lexers==1.1.1
 isodate==0.6.1
 jedi==0.19.2
-jmespath==1.0.1
+jmespath==1.1.0
 jsonschema==4.25.1
 jsonschema-path==0.3.4
 jsonschema-specifications==2025.9.1
