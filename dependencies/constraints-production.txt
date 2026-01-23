@@ -34,7 +34,7 @@ gtin==1.3.1649173518
 gunicorn==23.0.0
 idna==3.11
 isodate==0.6.1
-jmespath==1.0.1
+jmespath==1.1.0
 jsonschema==4.25.1
 jsonschema-path==0.3.4
 jsonschema-specifications==2025.9.1
