@@ -58,7 +58,7 @@ lazy-object-proxy==1.12.0
 MarkupSafe==3.0.3
 matplotlib-inline==0.2.1
 more-itertools==10.8.0
-multidict==6.7.0
+multidict==6.7.1
 oauthlib==3.3.1
 openapi-core==0.20.0
 openapi-schema-validator==0.6.3
