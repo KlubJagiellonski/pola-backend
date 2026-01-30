@@ -333,8 +333,13 @@ class BrandCreate(GetInitalFormMixin, LoginPermissionRequiredMixin, FormValidMes
     form_valid_message = "Marka utworzona!"
 
     def get_success_url(self):
-        if self.object.company:
-            return reverse("company:brand-detail", args=[self.object.company.pk])
+        # After creating a brand, redirect to the company page indicated
+        # by the GET param (?company=ID) or, if missing, the brand's company.
+        company_id = self.request.GET.get('company')
+        if company_id:
+            return reverse("company:detail", args=[company_id])
+        if self.object.company_id:
+            return reverse("company:detail", args=[self.object.company_id])
         return reverse("company:brand-detail", args=[self.object.pk])
 
 

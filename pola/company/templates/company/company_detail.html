@@ -192,7 +192,12 @@
             {% if brand_list %}
             <ul class="list-group">
                 {% for brand in brand_list %}
-                <li class="list-group-item"><a href="{{ brand.get_absolute_url }}">{{ brand }}</a></li>
+                <li class="list-group-item">
+                    <a href="{{ brand.get_absolute_url }}">{{ brand }}</a>
+                    {% if brand.logotype %}
+                        <i class="fa fa-picture-o" title="Ma logo" aria-hidden="true"></i>
+                    {% endif %}
+                </li>
                 {% endfor %}
             </ul>
             {% else %}

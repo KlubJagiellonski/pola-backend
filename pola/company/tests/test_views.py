@@ -548,3 +548,37 @@ class TestCompanyMergeView(PermissionMixin, TemplateUsedMixin, TestCase):
         resp = self.client.post(self.url, {'selected': [str(poor.id), str(best.id)]})
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, best.get_absolute_url())
+
+
+class TestBrandCreateView(PermissionMixin, TestCase):
+    url = reverse_lazy('company:brand-create')
+
+    def test_redirects_to_company_from_query_param(self):
+        self.login()
+        company = CompanyFactory()
+        post_data = {
+            'name': 'Brand X',
+            'common_name': 'Brand X Common',
+            'company': str(company.pk),
+            'action': 'Save',
+        }
+
+        resp = self.client.post(f"{self.url}?company={company.pk}", post_data)
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, company.get_absolute_url())
+        self.assertTrue(Brand.objects.filter(company=company, name='Brand X').exists())
+
+    def test_redirects_to_company_from_posted_company(self):
+        self.login()
+        company = CompanyFactory()
+        post_data = {
+            'name': 'Brand Y',
+            'common_name': 'Brand Y Common',
+            'company': str(company.pk),
+            'action': 'Save',
+        }
+
+        resp = self.client.post(self.url, post_data)
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, company.get_absolute_url())
+        self.assertTrue(Brand.objects.filter(company=company, name='Brand Y').exists())
