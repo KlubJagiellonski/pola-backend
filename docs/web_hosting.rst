@@ -69,3 +69,4 @@ Uwagi implementacyjne
 - Połączenia z S3 są tworzone przez ``pola/s3.py`` (klient boto3). Jeśli ustawiono ``AWS_S3_ENDPOINT_URL``, klient używa tego endpointu (np. MinIO w docker-compose), w przeciwnym razie łączy się z AWS.
 - Widok opiera się na wywołaniach ``HEAD`` (``head_object``) do sprawdzania istnienia obiektu oraz odczytach ``GET`` (``get_object``) do zwrotu treści.
 - Ścieżki w S3 zawsze używają separatora ``/`` niezależnie od systemu plików hosta.
+- DNS skonfigurowany jest via Cloudflare
