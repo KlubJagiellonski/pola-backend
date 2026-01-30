@@ -76,6 +76,12 @@ class CompanyCreateFromKRSForm(SingleButtonMixin, FormHorizontalMixin, forms.For
 
 
 class BrandForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Allow creating a brand without selecting a company in the form.
+        if 'company' in self.fields:
+            self.fields['company'].required = False
+
     class Meta:
         model = models.Brand
         fields = ['name', 'common_name', 'company', 'logotype']

@@ -582,3 +582,77 @@ class TestBrandCreateView(PermissionMixin, TestCase):
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, company.get_absolute_url())
         self.assertTrue(Brand.objects.filter(company=company, name='Brand Y').exists())
+
+    def test_redirects_to_brand_when_no_company(self):
+        self.login()
+        post_data = {
+            'name': 'Brand Z',
+            'common_name': 'Brand Z Common',
+            # no company in GET nor POST
+            'action': 'Save',
+        }
+
+        resp = self.client.post(self.url, post_data)
+        self.assertEqual(resp.status_code, 302)
+        brand = Brand.objects.get(name='Brand Z')
+        self.assertRedirects(resp, brand.get_absolute_url())
+
+
+class TestBrandUpdateView(PermissionMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.company = CompanyFactory()
+        self.brand_with_company = BrandFactory(company=self.company)
+        self.brand_without_company = Brand.objects.create(name='NoCo', common_name='NoCo Common', company=None)
+        # Provide URL for PermissionMixin.test_anonymous_denied
+        self.url = reverse('company:brand-edit', kwargs={'pk': self.brand_with_company.pk})
+
+    def test_redirects_to_company_when_has_company(self):
+        self.login()
+        url = reverse('company:brand-edit', kwargs={'pk': self.brand_with_company.pk})
+        post_data = {
+            'name': self.brand_with_company.name + ' Updated',
+            'common_name': self.brand_with_company.common_name + ' Updated',
+            'company': str(self.company.pk),
+            'action': 'Save',
+        }
+        resp = self.client.post(url, post_data)
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, self.company.get_absolute_url())
+
+    def test_redirects_to_list_when_no_company(self):
+        self.login()
+        url = reverse('company:brand-edit', kwargs={'pk': self.brand_without_company.pk})
+        post_data = {
+            'name': self.brand_without_company.name + ' Updated',
+            'common_name': self.brand_without_company.common_name + ' Updated',
+            'company': '',
+            'action': 'Save',
+        }
+        resp = self.client.post(url, post_data)
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, reverse('company:brand-list'))
+
+
+class TestBrandDeleteViewRedirects(PermissionMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.company = CompanyFactory()
+        self.brand_with_company = BrandFactory(company=self.company)
+        self.brand_without_company = Brand.objects.create(name='NoCoDel', common_name='NoCoDel Common', company=None)
+        # Provide URL for PermissionMixin.test_anonymous_denied
+        self.url = reverse('company:brand-delete', kwargs={'pk': self.brand_with_company.pk})
+
+    def test_delete_redirects_to_company_when_has_company(self):
+        self.login()
+        url = reverse('company:brand-delete', kwargs={'pk': self.brand_with_company.pk})
+        resp = self.client.post(url)
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, self.company.get_absolute_url())
+
+    def test_delete_redirects_to_list_when_no_company(self):
+        self.login()
+        url = reverse('company:brand-delete', kwargs={'pk': self.brand_without_company.pk})
+        resp = self.client.post(url)
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, reverse('company:brand-list'))
