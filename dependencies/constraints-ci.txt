@@ -110,7 +110,7 @@ traitlets==5.14.3
 typing_extensions==4.15.0
 tzdata==2025.3
 urllib3==1.26.15
-vcrpy==7.0.0
+vcrpy==8.1.1
 waitress==3.0.2
 wcwidth==0.5.3
 WebOb==1.8.9
