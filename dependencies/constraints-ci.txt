@@ -81,7 +81,7 @@ pycairo==1.29.0
 pycparser==3.0
 pydantic==1.10.9
 Pygments==2.19.2
-PyJWT==2.10.1
+PyJWT==2.11.0
 pytest==9.0.2
 pytest-cov==7.0.0
 pytest-django==4.11.1
