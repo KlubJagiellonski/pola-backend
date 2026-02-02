@@ -41,6 +41,12 @@
                             </span>
                         {% endif %}
                         <a href="{{ obj.get_absolute_url }}">{{ obj }} ({{ obj.query_count }})</a>
+                        {% if obj.logotype %}
+                            <i class="fa fa-picture-o" title="Ma logo" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if obj.official_url %}
+                            <i class="fa fa-globe" title="Ma stronę WWW" aria-hidden="true"></i>
+                        {% endif %}
                         {% if obj.locked_by %}<i class="fa fa-lock" title="Edytowane przez: {{ obj.locked_by }}"></i>{% endif %}
                     </li>
                 {% empty %}
