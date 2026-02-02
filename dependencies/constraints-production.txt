@@ -31,7 +31,7 @@ django-reversion==6.1.0
 django-storages==1.14.6
 freetype-py==2.3.0
 gtin==1.3.1649173518
-gunicorn==24.1.1
+gunicorn==25.0.0
 idna==3.11
 isodate==0.6.1
 jmespath==1.1.0
