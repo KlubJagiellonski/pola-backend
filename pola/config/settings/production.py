@@ -2,8 +2,8 @@
 Production Configurations
 
 - Use djangosecure
-- Use Amazon's S3 for storing static files and uploaded media
-- Use mailgun to send emails
+- Use Google Cloud Storage for static files and uploaded media
+- Use SMTP-compatible email backend
 - Use Redis on Heroku
 
 """
@@ -14,9 +14,6 @@ import os
 import tempfile
 from pathlib import Path
 from urllib import parse as urlparse
-
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 from .common import *  # noqa: F403
 
@@ -60,24 +57,11 @@ ALLOWED_HOSTS = ["www.pola-app.pl", "pola-app.pl", "pola-staging.herokuapp.com"]
 
 INSTALLED_APPS += ("gunicorn",)  # noqa: F405
 
-# See: https://github.com/antonagestam/collectfast
-# For Django 1.7+, 'collectfast' should come before
-# 'django.contrib.staticfiles'
-AWS_PRELOAD_METADATA = True
-COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
-COLLECTFAST_THREADS = 20
-
-INSTALLED_APPS = ('collectfast',) + INSTALLED_APPS
+IS_PRODUCTION = True
 
 # EMAIL
 # ------------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')  # noqa: F405
-ANYMAIL = {
-    "MAILGUN_API_KEY": env('DJANGO_MAILGUN_API_KEY'),  # noqa: F405
-    "MAILGUN_API_URL": "https://api.eu.mailgun.net/v3",
-    "MAILGUN_SENDER_DOMAIN": env('DJANGO_MAILGUN_SERVER_NAME'),  # noqa: F405
-}
-EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 EMAIL_SUBJECT_PREFIX = ''
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
@@ -113,17 +97,4 @@ CACHES = {
     },
 }
 
-# Your production stuff: Below this line define 3rd party library settings
-
-
-sentry_sdk.init(
-    integrations=[DjangoIntegration()],
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True,
-    dsn=env.str('SENTRY_DSN'),  # noqa: F405
-    release=env.str('RELEASE_SHA'),  # noqa: F405
-    traces_sample_rate=env.float('SENTRY_TRACES_SAMPLE_RATE', default=0),  # noqa: F405
-)
-
-USE_ESCAPED_S3_PATHS = False
+USE_ESCAPED_GCS_PATHS = False

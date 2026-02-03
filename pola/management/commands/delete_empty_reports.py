@@ -1,14 +1,13 @@
 import sys
 from datetime import timedelta
 
-from boto.s3.connection import Bucket
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils import timezone
 
+from pola.gcs import get_bucket
 from pola.report.models import Attachment
-from pola.s3 import create_s3_connection
 
 
 class Command(BaseCommand):
@@ -18,20 +17,16 @@ class Command(BaseCommand):
         parser.add_argument('no_of_days_back')
 
     def handle(self, *args, **options):
-        print('Loading list of S3 files')
-        conn = create_s3_connection()
-        bucket = Bucket(conn, settings.AWS_STORAGE_BACKEND_BUCKET_NAME)
+        print('Loading list of GCS files')
+        bucket = get_bucket(settings.GCS_BACKEND_BUCKET_NAME)
+        gcs_files = {blob.name for blob in bucket.list_blobs()}
 
-        s3_files = set()
-        for key in bucket.list():
-            s3_files.add(key.name)
-
-        print(f'Loaded {len(s3_files)} S3 files')
+        print(f'Loaded {len(gcs_files)} GCS files')
 
         startdate = timezone.now() - timedelta(days=int(options["no_of_days_back"]))
         attachments = Attachment.objects.select_related('report').filter(report__created__gte=startdate)
         for attachment in attachments:
-            if attachment.attachment not in s3_files:
+            if attachment.attachment.name not in gcs_files:
                 attachment.delete()
                 sys.stdout.write('-')
             else:

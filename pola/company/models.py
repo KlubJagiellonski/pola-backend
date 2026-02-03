@@ -1,6 +1,5 @@
 import textwrap
 
-from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.core.validators import ValidationError
 from django.db import connection, models
@@ -10,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django_resized import ResizedImageField
 from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
-from storages.backends.s3boto3 import S3Boto3Storage
+from pola.storage_backends import CompanyLogotypeStorage
 
 from pola.concurency import concurency
 from pola.logic_score import get_pl_score
@@ -125,12 +124,7 @@ class Company(TimeStampedModel):
         null=True,
         blank=True,
         force_format='PNG',
-        storage=S3Boto3Storage(
-            querystring_auth=False,
-            bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
-            region_name='eu-central-1',
-            default_acl=None,
-        ),
+        storage=CompanyLogotypeStorage(),
     )
     official_url = models.URLField(
         _("Link do strony firmy"),
@@ -324,11 +318,7 @@ class Brand(TimeStampedModel):
         null=True,
         blank=True,
         force_format='PNG',
-        storage=S3Boto3Storage(
-            querystring_auth=False,
-            bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
-            region_name='eu-central-1',
-        ),
+        storage=CompanyLogotypeStorage(),
     )
     website_url = models.CharField(
         max_length=128, null=False, blank=False, verbose_name=_("URL marki"), default="example.pl"

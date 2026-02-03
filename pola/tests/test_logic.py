@@ -1,6 +1,7 @@
 import os
 from unittest import mock
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from parameterized import parameterized
 from test_plus import TestCase
@@ -398,7 +399,8 @@ class TestGetResultFromCode(TestCase):
         with mock.patch("pola.logic.get_by_code", return_value=product):
             response = get_result_from_code(current_ean)
 
-        self.assertIn(os.environ.get("POLA_APP_AWS_S3_ENDPOINT_URL"), response[0]["logotype_url"])
+        expected_prefix = f"{settings.GCS_PUBLIC_BASE_URL}/{settings.GCS_COMPANY_LOGOTYPE_BUCKET_NAME}/"
+        self.assertIn(expected_prefix, response[0]["logotype_url"])
         self.assertEqual("https://google.com/", response[0]["official_url"])
 
     def test_russian_code_with_one_company(self):

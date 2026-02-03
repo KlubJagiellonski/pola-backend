@@ -1,5 +1,5 @@
-import environ
 from bs4 import BeautifulSoup
+from django.conf import settings
 from django.test import override_settings
 from django.urls import reverse, reverse_lazy
 from django_webtest import WebTestMixin
@@ -260,7 +260,8 @@ class TestCompanyUpdateWeb(WebTestMixin, TestCase):
 
         self.assertRedirects(page, self.instance.get_absolute_url())
         self.instance.refresh_from_db()
-        self.assertIn(environ.Env().str('POLA_APP_AWS_S3_ENDPOINT_URL'), self.instance.logotype.url)
+        expected_prefix = f"{settings.GCS_PUBLIC_BASE_URL}/{settings.GCS_COMPANY_LOGOTYPE_BUCKET_NAME}/"
+        self.assertIn(expected_prefix, self.instance.logotype.url)
 
 
 class TestConcurencyComapnyUpdate(TestCase):

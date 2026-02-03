@@ -32,8 +32,12 @@ CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Your local stuff: Below this line define 3rd party library settings
-AWS_STORAGE_BUCKET_AI_NAME = env('DJANGO_AWS_STORAGE_BUCKET_AI_NAME', default=None)  # noqa: F405
+GCS_PUBLIC_BUCKET_NAME = env('DJANGO_GCS_PUBLIC_BUCKET_NAME', default='test-public-bucket')  # noqa: F405
+GCS_BACKEND_BUCKET_NAME = env('DJANGO_GCS_BACKEND_BUCKET_NAME', default='test-backend-bucket')  # noqa: F405
+GCS_AI_PICS_BUCKET_NAME = env('DJANGO_GCS_AI_PICS_BUCKET_NAME', default='test-ai-pics-bucket')  # noqa: F405
+GCS_WEB_BUCKET_NAME = env('DJANGO_GCS_WEB_BUCKET_NAME', default='test-web-bucket')  # noqa: F405
+GCS_COMPANY_LOGOTYPE_BUCKET_NAME = env('DJANGO_GCS_COMPANY_LOGOTYPE_BUCKET_NAME', default='test-logos-bucket')  # noqa: F405
 
 # Disable Rate Limit
 WHITELIST_API_IP_ADDRESS = ['127.0.0.1']
-USE_ESCAPED_S3_PATHS = False
+USE_ESCAPED_GCS_PATHS = False

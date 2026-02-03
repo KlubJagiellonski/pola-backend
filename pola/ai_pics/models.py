@@ -1,12 +1,11 @@
 from pathlib import Path
 
-from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
-from storages.backends.s3boto3 import S3Boto3Storage
+from pola.storage_backends import AiPicsStorage
 
 from pola.product.models import Product
 
@@ -74,9 +73,7 @@ class AIAttachment(models.Model):
     attachment = models.FileField(
         upload_to="ai/%Y/%m/%d",
         verbose_name=_("File"),
-        storage=S3Boto3Storage(
-            querystring_auth=True, bucket_name=settings.AWS_STORAGE_AI_PICS_BUCKET_NAME, region_name='eu-central-1'
-        ),
+        storage=AiPicsStorage(),
     )
 
     @property

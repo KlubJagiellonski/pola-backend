@@ -17,7 +17,6 @@ cryptography==46.0.4
 decorator==5.2.1
 defusedxml==0.7.1
 django-allauth==0.55.2
-django-anymail==14.0
 django-autocomplete-light==3.12.1
 django-autoslug==1.9.9
 django-braces==1.17.0
@@ -100,7 +99,6 @@ rlPyCairo==0.4.0
 rpds-py==0.30.0
 rq==1.16.1
 s3transfer==0.16.0
-sentry-sdk==2.51.0
 six==1.17.0
 soupsieve==2.8.3
 sqlparse==0.5.5

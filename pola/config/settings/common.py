@@ -10,9 +10,8 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 from pathlib import Path
 
-import django
 import environ
-from boto.s3.connection import OrdinaryCallingFormat
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 
 ROOT_DIR = environ.Path(__file__) - 4  # (/a/b/myfile.py - 3 = /)
@@ -254,38 +253,52 @@ AI_PICS_PAGE_SIZE = 5000
 # ------------------------------------------------------------------------------
 # Uploaded Media Files
 # ------------------------
-# See: https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+# See: https://django-storages.readthedocs.io/en/latest/backends/gcloud.html
 INSTALLED_APPS += ('storages',)
-if django.VERSION < (4, 0):
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-else:
-    STORAGES = {
-        "default": {
-            "BACKEND": 'storages.backends.s3boto3.S3Boto3Storage',
-        },
-        "staticfiles": {
-            "BACKEND": 'storages.backends.s3boto3.S3StaticStorage',
-        },
-    }
 
-AWS_ACCESS_KEY_ID = env('POLA_APP_AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('POLA_APP_AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME')
-AWS_STORAGE_BACKEND_BUCKET_NAME = env('POLA_APP_AWS_S3_BACKEND_BUCKET_NAME')
-AWS_STORAGE_AI_PICS_BUCKET_NAME = env('POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME')
-AWS_STORAGE_WEB_BUCKET_NAME = env.str('POLA_APP_AWS_S3_WEB_BUCKET_NAME', '')
-AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME = env('POLA_APP_AWS_S3_COMPANY_LOGOTYPE_BUCKET_NAME')
-# TODO See: https://github.com/jschneier/django-storages/issues/47
-# Revert the following and use str after the above-mentioned bug is fixed in
-# either django-storage-redux or boto
-AWS_EXPIRY = 60 * 60 * 24 * 7
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)}
-AWS_DEFAULT_ACL = 'public-read'
-AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)
-AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
-AWS_S3_SIGNATURE_VERSION = "s3v4"
-AWS_S3_ENDPOINT_URL = env.str('POLA_APP_AWS_S3_ENDPOINT_URL', default=None)
+GCS_PUBLIC_BUCKET_NAME = env.str('POLA_APP_GCS_PUBLIC_BUCKET_NAME', default=None)
+GCS_BACKEND_BUCKET_NAME = env.str('POLA_APP_GCS_BACKEND_BUCKET_NAME', default=None)
+GCS_AI_PICS_BUCKET_NAME = env.str('POLA_APP_GCS_AI_PICS_BUCKET_NAME', default=None)
+GCS_WEB_BUCKET_NAME = env.str('POLA_APP_GCS_WEB_BUCKET_NAME', default=None)
+GCS_COMPANY_LOGOTYPE_BUCKET_NAME = env.str('POLA_APP_GCS_COMPANY_LOGOTYPE_BUCKET_NAME', default=None)
+GCS_PUBLIC_BASE_URL = env.str('POLA_APP_GCS_PUBLIC_BASE_URL', default='https://storage.googleapis.com')
+
+if IS_PRODUCTION:
+    missing_gcs = [
+        name
+        for name, value in {
+            "POLA_APP_GCS_PUBLIC_BUCKET_NAME": GCS_PUBLIC_BUCKET_NAME,
+            "POLA_APP_GCS_BACKEND_BUCKET_NAME": GCS_BACKEND_BUCKET_NAME,
+            "POLA_APP_GCS_AI_PICS_BUCKET_NAME": GCS_AI_PICS_BUCKET_NAME,
+            "POLA_APP_GCS_WEB_BUCKET_NAME": GCS_WEB_BUCKET_NAME,
+            "POLA_APP_GCS_COMPANY_LOGOTYPE_BUCKET_NAME": GCS_COMPANY_LOGOTYPE_BUCKET_NAME,
+        }.items()
+        if not value
+    ]
+    if missing_gcs:
+        raise ImproperlyConfigured(f"Missing GCS configuration: {', '.join(missing_gcs)}")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "bucket_name": GCS_BACKEND_BUCKET_NAME,
+            "default_acl": None,
+            "querystring_auth": True,
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "bucket_name": GCS_PUBLIC_BUCKET_NAME,
+            "default_acl": None,
+            "querystring_auth": False,
+        },
+    },
+}
+
 AI_SHARED_SECRET = env('AI_SHARED_SECRET')
+USE_ESCAPED_GCS_PATHS = env.bool("USE_ESCAPED_GCS_PATHS", default=False)
 
 # STATIC FILE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -293,10 +306,7 @@ AI_SHARED_SECRET = env('AI_SHARED_SECRET')
 STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-if AWS_S3_ENDPOINT_URL:
-    STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
-else:
-    STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
+STATIC_URL = f"{GCS_PUBLIC_BASE_URL}/{GCS_PUBLIC_BUCKET_NAME}/"
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [str(APPS_DIR.path('static'))]
 
@@ -312,10 +322,7 @@ STATICFILES_FINDERS = (
 MEDIA_ROOT = str(APPS_DIR('media'))
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-if AWS_S3_ENDPOINT_URL:
-    MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BACKEND_BUCKET_NAME}/'
-else:
-    MEDIA_URL = f"https://{AWS_STORAGE_BACKEND_BUCKET_NAME}.s3.amazonaws.com/"
+MEDIA_URL = f"{GCS_PUBLIC_BASE_URL}/{GCS_BACKEND_BUCKET_NAME}/"
 
 # CORS CONFIGURATION
 # ------------------------
@@ -325,7 +332,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "https://www.pola-app.pl",
     "https://pola-staging.herokuapp.com",
-    "http://kj-pola-app-web-preview.s3-website.eu-central-1.amazonaws.com",
+    "https://storage.googleapis.com/kj-pola-app-web-preview",
 ]
 
 CORS_URLS_REGEX = r"^/a/.*$"

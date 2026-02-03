@@ -1,7 +1,6 @@
 import functools
 from pathlib import Path
 
-from botocore.exceptions import ClientError
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.cache import add_never_cache_headers
@@ -11,7 +10,9 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
 from django.views.decorators.http import condition
 
-from pola.s3 import create_s3_client
+from google.api_core import exceptions as gcs_exceptions
+
+from pola.gcs import get_bucket
 
 # 256 KB
 MAX_CACHE_KEY_SIZE = int(256 * 1024)
@@ -29,74 +30,64 @@ def get_candidates(file_path):
     splited_path = Path(file_path).suffix
     if not splited_path:
         candidates.append(file_path + "/index.html")
-        # używamy s3, a nie lokalnego filesystemu, więc nie powinniśmy używać os.path.join
-        # bo i tak separatorem ścieżki na s3 jest zawsze /
+        # używamy GCS, a nie lokalnego filesystemu, więc nie powinniśmy używać os.path.join
+        # bo i tak separatorem ścieżki w GCS jest zawsze /
     return candidates
 
 
 @functools.lru_cache
 def head_object(filepath):
-    s3_client = create_s3_client()
+    bucket = get_bucket(settings.GCS_WEB_BUCKET_NAME)
     for candidate_key in get_candidates(filepath):
         try:
             hash_key = candidate_key
-            if settings.USE_ESCAPED_S3_PATHS and ('\\' in candidate_key):
+            if settings.USE_ESCAPED_GCS_PATHS and ('\\' in candidate_key):
                 hash_key = candidate_key.replace("\\", "___")
-            s3_obj = s3_client.head_object(Bucket=settings.AWS_STORAGE_WEB_BUCKET_NAME, Key=hash_key)
-            s3_obj['Key'] = hash_key
-            return s3_obj
-        except ClientError as ex:
-            if ex.response['Error']['Code'] in ('NoSuchKey', '404'):
-                continue
-            else:
-                raise
+            blob = bucket.get_blob(hash_key)
+            if blob:
+                return blob
+        except gcs_exceptions.NotFound:
+            continue
     return None
 
 
 def get_etag(request):
-    s3_obj = head_object(request.path)
-    return s3_obj.get('ETag') if s3_obj else None
+    blob = head_object(request.path)
+    return blob.etag if blob else None
 
 
 def get_last_modified(request):
-    s3_obj = head_object(request.path)
-    return s3_obj.get('LastModified') if s3_obj else None
+    blob = head_object(request.path)
+    return blob.updated if blob else None
 
 
 @method_decorator(gzip_page, name='dispatch')
 @method_decorator(condition(etag_func=get_etag, last_modified_func=get_last_modified), name='dispatch')
 @method_decorator(cache_page(CACHE_TIMEOUT), name='dispatch')
 class PolaWebView(View):
-    def get_s3_response(self, key, status_code=200):
+    def get_gcs_response(self, key, status_code=200):
         try:
-            s3_client = create_s3_client()
-            s3_obj = s3_client.get_object(
-                Bucket=settings.AWS_STORAGE_WEB_BUCKET_NAME,
-                Key=key,
-            )
-            body = s3_obj['Body'].read()
-            content_type = s3_obj.get('ContentType') or 'application/octet-stream'
+            blob = get_bucket(settings.GCS_WEB_BUCKET_NAME).blob(key)
+            body = blob.download_as_bytes()
+            content_type = blob.content_type or 'application/octet-stream'
             return HttpResponse(body, content_type=content_type, status=status_code)
-        except ClientError as ex:
-            if ex.response['Error']['Code'] in ('NoSuchKey', '404'):
-                return None
-            else:
-                raise
+        except gcs_exceptions.NotFound:
+            return None
 
     def get(self, request):
         if request.path.startswith('/cms/'):
             return defaults.page_not_found(request, self.kwargs.get('exception', None))
-        s3_obj = head_object(request.path)
-        if s3_obj:
-            s3_response = self.get_s3_response(s3_obj['Key'], status_code=200)
-            if s3_response:
-                if len(s3_response.content) > MAX_CACHE_KEY_SIZE:
-                    add_never_cache_headers(s3_response)
-                return s3_response
+        blob = head_object(request.path)
+        if blob:
+            gcs_response = self.get_gcs_response(blob.name, status_code=200)
+            if gcs_response:
+                if len(gcs_response.content) > MAX_CACHE_KEY_SIZE:
+                    add_never_cache_headers(gcs_response)
+                return gcs_response
         else:
-            s3_response = self.get_s3_response('404.html', status_code=404)
-            if s3_response:
-                return s3_response
+            gcs_response = self.get_gcs_response('404.html', status_code=404)
+            if gcs_response:
+                return gcs_response
 
         return defaults.page_not_found(request, self.kwargs.get('exception', None))
 

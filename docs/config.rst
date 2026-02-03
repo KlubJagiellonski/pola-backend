@@ -29,14 +29,12 @@ W poniższej tabeli wymieniono ustawienia i ich wartości domyślne dla aplikacj
 ======================================= ======================================= ============================================== ======================================================================
 Zmienna środowiskowa                    Ustawienia Django                       Domyślna wartośc - dewlopment                  Domyślna wartość - produkcja
 ======================================= ======================================= ============================================== ======================================================================
-POLA_APP_AWS_ACCESS_KEY_ID              AWS_ACCESS_KEY_ID                       n/a                                            <zgłasza wyjątek>
-POLA_APP_AWS_SECRET_ACCESS_KEY          AWS_SECRET_ACCESS_KEY                   n/a                                            <zgłasza wyjątek>
-POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME      AWS_STORAGE_BUCKET_NAME                 n/a                                            <zgłasza wyjątek>
-POLA_APP_AWS_S3_WEB_BUCKET_NAME         AWS_STORAGE_WEB_BUCKET_NAME             n/a                                            <zgłasza wyjątek>
-POLA_APP_AWS_S3_BACKEND_BUCKET_NAME     AWS_STORAGE_BACKEND_BUCKET_NAME         n/a                                            <zgłasza wyjątek>
-POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME     AWS_STORAGE_AI_PICS_BUCKET_NAME         n/a                                            <zgłasza wyjątek>
+POLA_APP_GCS_PUBLIC_BUCKET_NAME         GCS_PUBLIC_BUCKET_NAME                  n/a                                            <zgłasza wyjątek>
+POLA_APP_GCS_WEB_BUCKET_NAME            GCS_WEB_BUCKET_NAME                     n/a                                            <zgłasza wyjątek>
+POLA_APP_GCS_BACKEND_BUCKET_NAME        GCS_BACKEND_BUCKET_NAME                 n/a                                            <zgłasza wyjątek>
+POLA_APP_GCS_AI_PICS_BUCKET_NAME        GCS_AI_PICS_BUCKET_NAME                 n/a                                            <zgłasza wyjątek>
+POLA_APP_GCS_COMPANY_LOGOTYPE_BUCKET_NAME GCS_COMPANY_LOGOTYPE_BUCKET_NAME      n/a                                            <zgłasza wyjątek>
+POLA_APP_GCS_PUBLIC_BASE_URL            GCS_PUBLIC_BASE_URL                     https://storage.googleapis.com                https://storage.googleapis.com
 POLA_APP_GET_RESPONSE_API_TOKEN         GET_RESPONSE['API_KEY']                 n/a                                            <zgłasza wyjątek>
 POLA_APP_GET_RESPONSE_CAMPAIGN_ID       GET_RESPONSE['CAMPAIGN_ID']             n/a                                            <zgłasza wyjątek>
-DJANGO_MAILGUN_API_KEY                  MAILGUN_ACCESS_KEY                      n/a                                            <zgłasza wyjątek>
-DJANGO_MAILGUN_SERVER_NAME              MAILGUN_SERVER_NAME                     n/a                                            <zgłasza wyjątek>
 ======================================= ======================================= ============================================== ======================================================================
