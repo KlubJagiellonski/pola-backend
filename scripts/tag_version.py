@@ -7,7 +7,7 @@ import os
 import re
 import subprocess
 import sys
-from typing import Optional, Tuple
+from typing import Optional
 
 if __name__ not in ("__main__", "__mp_main__"):
     raise SystemExit(
@@ -36,10 +36,10 @@ def get_latest_tag() -> Optional[str]:
             check=False,
         )
         tags = [tag.strip() for tag in result.stdout.strip().split("\n") if tag.strip()]
-        
+
         # Filter to only semantic version tags (vX.Y.Z)
         semantic_tags = [tag for tag in tags if re.match(r"^v\d+\.\d+\.\d+$", tag)]
-        
+
         if semantic_tags:
             return semantic_tags[0]
         return None
@@ -48,7 +48,7 @@ def get_latest_tag() -> Optional[str]:
         return None
 
 
-def parse_version(tag: str) -> Tuple[int, int, int]:
+def parse_version(tag: str) -> tuple[int, int, int]:
     """Parse version tag (vX.Y.Z) into (major, minor, patch)."""
     match = re.match(r"^v(\d+)\.(\d+)\.(\d+)$", tag)
     if not match:
@@ -60,7 +60,7 @@ def bump_minor_version(current_tag: Optional[str]) -> str:
     """Bump minor version. If no tag exists, start with v0.1.0."""
     if current_tag is None:
         return "v0.1.0"
-    
+
     major, minor, patch = parse_version(current_tag)
     new_minor = minor + 1
     # Reset patch to 0 when bumping minor
@@ -73,16 +73,16 @@ def create_and_push_tag(tag: str, push_to_all: bool = True) -> bool:
         # Create the tag
         print(f"Creating tag: {tag}")
         run_command(["git", "tag", "-a", tag, "-m", f"Release {tag}"])
-        
+
         # Push to origin
         print(f"Pushing tag {tag} to origin")
         run_command(["git", "push", "origin", tag])
-        
+
         # Optionally push to all remotes
         if push_to_all:
             print(f"Pushing tag {tag} to all remotes")
             run_command(["git", "push", "--tags", "--all"])
-        
+
         return True
     except subprocess.CalledProcessError as e:
         print(f"Error creating/pushing tag: {e}", file=sys.stderr)
@@ -102,25 +102,25 @@ def main():
             print("Continuing anyway...", file=sys.stderr)
     except Exception as e:
         print(f"Warning: Could not determine current branch: {e}", file=sys.stderr)
-    
+
     # Get latest tag
     latest_tag = get_latest_tag()
     print(f"Latest tag: {latest_tag or 'none (starting from v0.1.0)'}")
-    
+
     # Bump minor version
     new_tag = bump_minor_version(latest_tag)
     print(f"New tag: {new_tag}")
-    
+
     # Confirm (optional, can be skipped in CI)
     if os.environ.get("CI") != "true":
         response = input(f"Create and push tag {new_tag}? (y/N): ")
         if response.lower() != "y":
             print("Aborted.")
             sys.exit(0)
-    
+
     # Create and push tag
     success = create_and_push_tag(new_tag, push_to_all=True)
-    
+
     if success:
         print(f"Successfully created and pushed tag: {new_tag}")
         # Output tag for use in GitHub Actions (both old and new format)

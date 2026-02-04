@@ -67,7 +67,10 @@ jobs:
         id: base-image
         run: |
           BASE_IMAGE="python:${{ steps.python-version.outputs.version }}-slim-bookworm"
-          DIGEST=$(docker buildx imagetools inspect "${BASE_IMAGE}" --format "{{json .Manifest.Digest}}" 2>/dev/null || echo "")
+          DIGEST=$(
+            docker buildx imagetools inspect "${BASE_IMAGE}" \
+              --format "{{json .Manifest.Digest}}" 2>/dev/null || echo ""
+          )
           if [ -n "${DIGEST}" ]; then
             BASE_IMAGE_WITH_DIGEST="${BASE_IMAGE}@${DIGEST}"
           else
@@ -139,7 +142,9 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/feature/cloud-run-migration')
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/feature/cloud-run-migration')
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v6
@@ -156,20 +161,23 @@ jobs:
       - name: "Authenticate to Google Cloud"
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
         with:
-          workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.WORKLOAD_IDENTITY_POOL }}/providers/${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          workload_identity_provider: >-
+            projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{
+            env.WORKLOAD_IDENTITY_POOL }}/providers/${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: terraform-runner@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: "Setup Cloud SDK"
         uses: google-github-actions/setup-gcloud@v2
 
       - name: "Configure Docker for GCP Artifact Registry"
-        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+        run: >-
+          gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
 
       - name: "Pull test image"
         run: |
           TEST_IMAGE_GHCR="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}"
           TEST_IMAGE_GCP="${{ env.GCP_REGISTRY }}:test-${{ github.sha }}"
-          
+
           # Try to pull from GitHub Container Registry first, fallback to GCP
           if docker pull "${TEST_IMAGE_GHCR}" 2>/dev/null; then
             echo "Pulled from GitHub Container Registry: ${TEST_IMAGE_GHCR}"
@@ -181,7 +189,7 @@ jobs:
             echo "Error: Could not pull test image from either registry"
             exit 1
           fi
-          
+
           # Tag it as the local image name used by docker-compose
           docker tag "${TEST_IMAGE}" "pola-backend_web:latest"
           echo "IMAGE_TO_TEST=${TEST_IMAGE}" >> $GITHUB_ENV
@@ -205,35 +213,44 @@ jobs:
       - name: "Start services with test image"
         run: |
           # Start postgres, minio, and other dependencies
-          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml up -d postgres minio minio-init
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml \
+            up -d postgres minio minio-init
           # Wait for services to be healthy
-          timeout 60 bash -c 'until docker compose ps postgres | grep -q healthy; do sleep 2; done' || true
-          timeout 60 bash -c 'until docker compose ps minio | grep -q healthy; do sleep 2; done' || true
+          timeout 60 bash -c \
+            'until docker compose ps postgres | grep -q healthy; do sleep 2; done' || true
+          timeout 60 bash -c \
+            'until docker compose ps minio | grep -q healthy; do sleep 2; done' || true
           sleep 5
 
       - name: "Run collectstatic"
         run: |
-          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py collectstatic --noinput || true
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml \
+            run --rm web python manage.py collectstatic --noinput || true
 
       - name: "Run migrations"
         run: |
-          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py migrate
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml \
+            run --rm web python manage.py migrate
 
       - name: "Populate database"
         run: |
-          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py populate_db || true
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml \
+            run --rm web python manage.py populate_db || true
 
       - name: "Run Django tests"
         run: |
-          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web pytest -n auto --junitxml=junit.xml -o junit_family=legacy
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml \
+            run --rm web pytest -n auto --junitxml=junit.xml -o junit_family=legacy
 
       - name: "Check missing migrations"
         run: |
-          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py makemigrations --check -v 3
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml \
+            run --rm web python manage.py makemigrations --check -v 3
 
       - name: "Check Django project for problems"
         run: |
-          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py check --fail-level DEBUG -v 3
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml \
+            run --rm web python manage.py check --fail-level DEBUG -v 3
 
       - name: "Upload coverage"
         uses: codecov/codecov-action@v5.5.2
@@ -261,7 +278,7 @@ jobs:
       id-token: write
       contents: read
     if: |
-      github.event_name == 'push' && 
+      github.event_name == 'push' &&
       (github.ref == 'refs/heads/feature/cloud-run-migration') &&
       needs.test-image.result == 'success'
     steps:
@@ -278,14 +295,17 @@ jobs:
       - name: "Authenticate to Google Cloud"
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
         with:
-          workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.WORKLOAD_IDENTITY_POOL }}/providers/${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          workload_identity_provider: >-
+            projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{
+            env.WORKLOAD_IDENTITY_POOL }}/providers/${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: terraform-runner@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: "Setup Cloud SDK"
         uses: google-github-actions/setup-gcloud@v2
 
       - name: "Configure Docker for GCP Artifact Registry"
-        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+        run: >-
+          gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
 
       - name: "Determine app name and tags"
         id: app-info
@@ -303,32 +323,37 @@ jobs:
         run: |
           TEST_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}"
           APP_NAME="${{ steps.app-info.outputs.app_name }}"
-          
+
           # Tag with app name (for Heroku deployment compatibility) - GitHub Container Registry
           docker tag "${TEST_IMAGE}" "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${APP_NAME}"
           docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${APP_NAME}"
-          
+
           # Tag as latest for feature/cloud-run-migration branch - GitHub Container Registry
           if [ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ]; then
             docker tag "${TEST_IMAGE}" "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
             docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           fi
-          
+
           # Tag and push to GCP Artifact Registry
           GCP_TEST_IMAGE="${{ env.GCP_REGISTRY }}:test-${{ github.sha }}"
           docker pull "${GCP_TEST_IMAGE}" || docker tag "${TEST_IMAGE}" "${GCP_TEST_IMAGE}"
-          
+
           # Tag with app name - GCP Artifact Registry
           docker tag "${GCP_TEST_IMAGE}" "${{ env.GCP_REGISTRY }}:${APP_NAME}"
           docker push "${{ env.GCP_REGISTRY }}:${APP_NAME}"
-          
+
           # Tag as latest for feature/cloud-run-migration branch - GCP Artifact Registry
           if [ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ]; then
             docker tag "${GCP_TEST_IMAGE}" "${{ env.GCP_REGISTRY }}:latest"
             docker push "${{ env.GCP_REGISTRY }}:latest"
           fi
-          
-          echo "Promoted image with tags: ${APP_NAME}, $([ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ] && echo "latest")"
+
+          if [ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ]; then
+            LATEST_TAG="latest"
+          else
+            LATEST_TAG=""
+          fi
+          echo "Promoted image with tags: ${APP_NAME}${LATEST_TAG:+, ${LATEST_TAG}}"
           echo "Pushed to both GitHub Container Registry and GCP Artifact Registry"
 
       - name: "Output promotion info"
