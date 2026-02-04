@@ -333,7 +333,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "https://www.pola-app.pl",
     "https://pola-staging.herokuapp.com",
-    "https://storage.googleapis.com/kj-pola-app-web-preview",
+    "https://storage.googleapis.com",
 ]
 
 CORS_URLS_REGEX = r"^/a/.*$"

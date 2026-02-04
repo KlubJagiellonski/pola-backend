@@ -29,18 +29,23 @@ if USE_GCS_STORAGE:
 
 else:
 
-    class PublicStaticStorage(StaticFilesStorage):
+    class _LocalStorageMixin:
+        def deconstruct(self):
+            path = f"{self.__class__.__module__}.{self.__class__.__name__}"
+            return path, [], {}
+
+    class PublicStaticStorage(_LocalStorageMixin, StaticFilesStorage):
         location = settings.STATIC_ROOT
         base_url = f"{settings.GCS_PUBLIC_BASE_URL}/{settings.GCS_PUBLIC_BUCKET_NAME}/"
 
-    class BackendMediaStorage(FileSystemStorage):
+    class BackendMediaStorage(_LocalStorageMixin, FileSystemStorage):
         location = settings.MEDIA_ROOT
         base_url = f"{settings.GCS_PUBLIC_BASE_URL}/{settings.GCS_BACKEND_BUCKET_NAME}/"
 
-    class AiPicsStorage(FileSystemStorage):
+    class AiPicsStorage(_LocalStorageMixin, FileSystemStorage):
         location = settings.MEDIA_ROOT
         base_url = f"{settings.GCS_PUBLIC_BASE_URL}/{settings.GCS_AI_PICS_BUCKET_NAME}/"
 
-    class CompanyLogotypeStorage(FileSystemStorage):
+    class CompanyLogotypeStorage(_LocalStorageMixin, FileSystemStorage):
         location = settings.MEDIA_ROOT
         base_url = f"{settings.GCS_PUBLIC_BASE_URL}/{settings.GCS_COMPANY_LOGOTYPE_BUCKET_NAME}/"

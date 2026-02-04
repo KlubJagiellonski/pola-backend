@@ -37,9 +37,7 @@ GCS_PUBLIC_BUCKET_NAME = env('DJANGO_GCS_PUBLIC_BUCKET_NAME', default='test-publ
 GCS_BACKEND_BUCKET_NAME = env('DJANGO_GCS_BACKEND_BUCKET_NAME', default='test-backend-bucket')
 GCS_AI_PICS_BUCKET_NAME = env('DJANGO_GCS_AI_PICS_BUCKET_NAME', default='test-ai-pics-bucket')
 GCS_WEB_BUCKET_NAME = env('DJANGO_GCS_WEB_BUCKET_NAME', default='test-web-bucket')
-GCS_COMPANY_LOGOTYPE_BUCKET_NAME = env(
-    'DJANGO_GCS_COMPANY_LOGOTYPE_BUCKET_NAME', default='pola-app-company-logotype'
-)
+GCS_COMPANY_LOGOTYPE_BUCKET_NAME = env('DJANGO_GCS_COMPANY_LOGOTYPE_BUCKET_NAME', default='pola-app-company-logotype')
 GCS_PUBLIC_BASE_URL = env.str('POLA_APP_GCS_PUBLIC_BASE_URL', default='http://127.0.0.1:8765')
 
 # Disable Rate Limit
