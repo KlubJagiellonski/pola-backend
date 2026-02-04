@@ -12,9 +12,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from reversion.models import Revision
-from pola.storage_backends import BackendMediaStorage
 
 from pola.product.models import Product
+from pola.storage_backends import BackendMediaStorage
 
 
 class ReportQuerySet(models.QuerySet):

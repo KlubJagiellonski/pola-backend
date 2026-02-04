@@ -9,10 +9,10 @@ from django.utils.translation import gettext_lazy as _
 from django_resized import ResizedImageField
 from model_utils.models import TimeStampedModel
 from reversion import revisions as reversion
-from pola.storage_backends import CompanyLogotypeStorage
 
 from pola.concurency import concurency
 from pola.logic_score import get_pl_score
+from pola.storage_backends import CompanyLogotypeStorage
 
 
 class IntegerRangeField(models.IntegerField):

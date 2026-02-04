@@ -9,7 +9,6 @@ from django.views import View, defaults
 from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
 from django.views.decorators.http import condition
-
 from google.api_core import exceptions as gcs_exceptions
 
 from pola.gcs import get_bucket

@@ -1,0 +1,355 @@
+---
+name: Build and Promote Image
+
+on:
+  push:
+    branches: ['master', 'prod']
+  pull_request:
+    branches: ['master']
+  workflow_dispatch:
+
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/pola-backend
+  # GCP Artifact Registry configuration
+  GCP_PROJECT_ID: kj-pola-shared-prod
+  GCP_PROJECT_NUMBER: "802307596796"
+  GCP_REGION: europe-central2
+  GCP_REGISTRY: europe-central2-docker.pkg.dev/kj-pola-shared-prod/pola-backend
+  WORKLOAD_IDENTITY_POOL: github-actions-pool
+  WORKLOAD_IDENTITY_PROVIDER: github-actions-provider
+
+jobs:
+  build-image:
+    name: "Build Production Image"
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+      image-id: ${{ steps.build.outputs.id }}
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Need full history for SHA
+
+      - name: "Set up Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.GITHUB_ORGANIZATION }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Extract Python version"
+        id: python-version
+        run: |
+          PYTHON_VERSION=$(cat .python-version | tr -d '\n')
+          echo "version=${PYTHON_VERSION}" >> $GITHUB_OUTPUT
+          echo "Python version: ${PYTHON_VERSION}"
+
+      - name: "Extract Django version"
+        id: django-version
+        run: |
+          DJANGO_VERSION=$(grep -i "^django==" dependencies/constraints-production.txt | cut -d'=' -f3 | tr -d '\n')
+          echo "version=${DJANGO_VERSION}" >> $GITHUB_OUTPUT
+          echo "Django version: ${DJANGO_VERSION}"
+
+      - name: "Get base Python image digest"
+        id: base-image
+        run: |
+          BASE_IMAGE="python:${{ steps.python-version.outputs.version }}-slim-bookworm"
+          DIGEST=$(docker buildx imagetools inspect "${BASE_IMAGE}" --format "{{json .Manifest.Digest}}" 2>/dev/null || echo "")
+          if [ -n "${DIGEST}" ]; then
+            BASE_IMAGE_WITH_DIGEST="${BASE_IMAGE}@${DIGEST}"
+          else
+            BASE_IMAGE_WITH_DIGEST="${BASE_IMAGE}"
+          fi
+          echo "image=${BASE_IMAGE_WITH_DIGEST}" >> $GITHUB_OUTPUT
+          echo "Base image: ${BASE_IMAGE_WITH_DIGEST}"
+
+      - name: "Generate image metadata"
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            ${{ env.GCP_REGISTRY }}
+          tags: |
+            type=sha,prefix={{branch}}-,format=short
+            type=raw,value=test-{{sha}}
+            type=raw,value={{branch}}-{{sha}}
+
+      - name: "Pull cache from registries"
+        run: |
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache || true
+          docker pull ${{ env.GCP_REGISTRY }}:cache || true
+
+      - name: "Get current timestamp"
+        id: timestamp
+        run: |
+          echo "timestamp=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+
+      - name: "Build and push image"
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./scripts/prod-docker-image/Dockerfile
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: |
+            type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache
+            type=registry,ref=${{ env.GCP_REGISTRY }}:cache
+          cache-to: |
+            type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache,mode=max
+            type=registry,ref=${{ env.GCP_REGISTRY }}:cache,mode=max
+          build-args: |
+            BASE_PYTHON_IMAGE=${{ steps.base-image.outputs.image }}
+            RELEASE_SHA=${{ github.sha }}
+            APP_UID=50000
+            APP_GID=50000
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ steps.timestamp.outputs.timestamp }}
+            org.opencontainers.image.description=Pola pomoze Ci odnaleźć polskie wyroby.
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+          platforms: linux/amd64
+
+      - name: "Set test image tag"
+        id: test-tag
+        run: |
+          # Use the first tag from metadata (branch-sha format)
+          TEST_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1 | tr -d ' ')
+          echo "tag=${TEST_TAG}" >> $GITHUB_OUTPUT
+          echo "Test image tag: ${TEST_TAG}"
+
+  test-image:
+    name: "Test Production Image"
+    runs-on: ubuntu-latest
+    needs: build-image
+    permissions:
+      id-token: write
+      contents: read
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.GITHUB_ORGANIZATION }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Authenticate to Google Cloud"
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
+        with:
+          workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.WORKLOAD_IDENTITY_POOL }}/providers/${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: terraform-runner@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+
+      - name: "Setup Cloud SDK"
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: "Configure Docker for GCP Artifact Registry"
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: "Pull test image"
+        run: |
+          TEST_IMAGE_GHCR="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}"
+          TEST_IMAGE_GCP="${{ env.GCP_REGISTRY }}:test-${{ github.sha }}"
+          
+          # Try to pull from GitHub Container Registry first, fallback to GCP
+          if docker pull "${TEST_IMAGE_GHCR}" 2>/dev/null; then
+            echo "Pulled from GitHub Container Registry: ${TEST_IMAGE_GHCR}"
+            TEST_IMAGE="${TEST_IMAGE_GHCR}"
+          elif docker pull "${TEST_IMAGE_GCP}" 2>/dev/null; then
+            echo "Pulled from GCP Artifact Registry: ${TEST_IMAGE_GCP}"
+            TEST_IMAGE="${TEST_IMAGE_GCP}"
+          else
+            echo "Error: Could not pull test image from either registry"
+            exit 1
+          fi
+          
+          # Tag it as the local image name used by docker-compose
+          docker tag "${TEST_IMAGE}" "pola-backend_web:latest"
+          echo "IMAGE_TO_TEST=${TEST_IMAGE}" >> $GITHUB_ENV
+
+      - name: "Create docker-compose override"
+        run: |
+          cat > docker-compose.test-override.yml <<EOF
+          services:
+            web:
+              image: pola-backend_web:latest
+              build: null
+              volumes:
+                - .:/opt/pola-backend
+              working_dir: /opt/pola-backend
+          EOF
+          echo "Created docker-compose override file"
+
+      - name: "Copy .env.example to .env"
+        run: cp .env.example .env
+
+      - name: "Start services with test image"
+        run: |
+          # Start postgres, minio, and other dependencies
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml up -d postgres minio minio-init
+          # Wait for services to be healthy
+          timeout 60 bash -c 'until docker compose ps postgres | grep -q healthy; do sleep 2; done' || true
+          timeout 60 bash -c 'until docker compose ps minio | grep -q healthy; do sleep 2; done' || true
+          sleep 5
+
+      - name: "Run collectstatic"
+        run: |
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py collectstatic --noinput || true
+
+      - name: "Run migrations"
+        run: |
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py migrate
+
+      - name: "Populate database"
+        run: |
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py populate_db || true
+
+      - name: "Run Django tests"
+        run: |
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web pytest -n auto --junitxml=junit.xml -o junit_family=legacy
+
+      - name: "Check missing migrations"
+        run: |
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py makemigrations --check -v 3
+
+      - name: "Check Django project for problems"
+        run: |
+          docker compose -f docker-compose.yaml -f docker-compose.test-override.yml run --rm web python manage.py check --fail-level DEBUG -v 3
+
+      - name: "Upload coverage"
+        uses: codecov/codecov-action@v5.5.2
+        with:
+          fail_ci_if_error: false
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+
+      - name: "Upload test results to Codecov"
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: "Show logs on failure"
+        if: ${{ failure() }}
+        run: docker compose logs
+
+  promote-image:
+    name: "Promote Image to Production"
+    runs-on: ubuntu-latest
+    needs: [build-image, test-image]
+    permissions:
+      id-token: write
+      contents: read
+    if: |
+      github.event_name == 'push' && 
+      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod') &&
+      needs.test-image.result == 'success'
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v6
+
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.GITHUB_ORGANIZATION }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Authenticate to Google Cloud"
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
+        with:
+          workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.WORKLOAD_IDENTITY_POOL }}/providers/${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: terraform-runner@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+
+      - name: "Setup Cloud SDK"
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: "Configure Docker for GCP Artifact Registry"
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: "Determine app name and tags"
+        id: app-info
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/prod" ]; then
+            APP_NAME="pola-app"
+          elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            APP_NAME="pola-staging"
+          else
+            APP_NAME="unknown"
+          fi
+          echo "app_name=${APP_NAME}" >> $GITHUB_OUTPUT
+          echo "App name: ${APP_NAME}"
+
+      - name: "Pull test image"
+        run: |
+          TEST_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}"
+          docker pull "${TEST_IMAGE}"
+
+      - name: "Tag and push promoted image"
+        run: |
+          TEST_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test-${{ github.sha }}"
+          APP_NAME="${{ steps.app-info.outputs.app_name }}"
+          
+          # Tag with app name (for Heroku deployment compatibility) - GitHub Container Registry
+          docker tag "${TEST_IMAGE}" "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${APP_NAME}"
+          docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${APP_NAME}"
+          
+          # Tag as latest for master branch - GitHub Container Registry
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            docker tag "${TEST_IMAGE}" "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+            docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          fi
+          
+          # Tag and push to GCP Artifact Registry
+          GCP_TEST_IMAGE="${{ env.GCP_REGISTRY }}:test-${{ github.sha }}"
+          docker pull "${GCP_TEST_IMAGE}" || docker tag "${TEST_IMAGE}" "${GCP_TEST_IMAGE}"
+          
+          # Tag with app name - GCP Artifact Registry
+          docker tag "${GCP_TEST_IMAGE}" "${{ env.GCP_REGISTRY }}:${APP_NAME}"
+          docker push "${{ env.GCP_REGISTRY }}:${APP_NAME}"
+          
+          # Tag as latest for master branch - GCP Artifact Registry
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            docker tag "${GCP_TEST_IMAGE}" "${{ env.GCP_REGISTRY }}:latest"
+            docker push "${{ env.GCP_REGISTRY }}:latest"
+          fi
+          
+          echo "Promoted image with tags: ${APP_NAME}, $([ "${{ github.ref }}" == "refs/heads/master" ] && echo "latest")"
+          echo "Pushed to both GitHub Container Registry and GCP Artifact Registry"
+
+      - name: "Output promotion info"
+        run: |
+          echo "✅ Image successfully promoted!"
+          echo "App: ${{ steps.app-info.outputs.app_name }}"
+          echo ""
+          echo "GitHub Container Registry:"
+          echo "  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.app-info.outputs.app_name }}"
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            echo "  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          fi
+          echo ""
+          echo "GCP Artifact Registry:"
+          echo "  ${{ env.GCP_REGISTRY }}:${{ steps.app-info.outputs.app_name }}"
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            echo "  ${{ env.GCP_REGISTRY }}:latest"
+          fi

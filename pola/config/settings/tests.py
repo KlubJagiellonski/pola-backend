@@ -36,7 +36,9 @@ GCS_PUBLIC_BUCKET_NAME = env('DJANGO_GCS_PUBLIC_BUCKET_NAME', default='test-publ
 GCS_BACKEND_BUCKET_NAME = env('DJANGO_GCS_BACKEND_BUCKET_NAME', default='test-backend-bucket')  # noqa: F405
 GCS_AI_PICS_BUCKET_NAME = env('DJANGO_GCS_AI_PICS_BUCKET_NAME', default='test-ai-pics-bucket')  # noqa: F405
 GCS_WEB_BUCKET_NAME = env('DJANGO_GCS_WEB_BUCKET_NAME', default='test-web-bucket')  # noqa: F405
-GCS_COMPANY_LOGOTYPE_BUCKET_NAME = env('DJANGO_GCS_COMPANY_LOGOTYPE_BUCKET_NAME', default='test-logos-bucket')  # noqa: F405
+GCS_COMPANY_LOGOTYPE_BUCKET_NAME = env(  # noqa: F405
+    'DJANGO_GCS_COMPANY_LOGOTYPE_BUCKET_NAME', default='test-logos-bucket'
+)
 
 # Disable Rate Limit
 WHITELIST_API_IP_ADDRESS = ['127.0.0.1']

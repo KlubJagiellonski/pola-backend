@@ -5,9 +5,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
-from pola.storage_backends import AiPicsStorage
 
 from pola.product.models import Product
+from pola.storage_backends import AiPicsStorage
 
 
 class AIPics(TimeStampedModel):
