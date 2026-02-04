@@ -1,12 +1,16 @@
 from collections.abc import Iterable
 
-import sentry_sdk
 from django.http import JsonResponse
 from openapi_core.contrib.django.decorators import DjangoOpenAPIViewDecorator
 from openapi_core.contrib.django.handlers import DjangoOpenAPIErrorsHandler
 from openapi_core.validation.schemas.exceptions import InvalidSchemaValue
 
 from pola.rpc_api.http import JsonProblemResponse
+
+try:
+    import sentry_sdk
+except ImportError:  # pragma: no cover - optional dependency
+    sentry_sdk = None
 
 
 class PolaDjangoOpenAPIErrorsHandler(DjangoOpenAPIErrorsHandler):
@@ -17,7 +21,8 @@ class PolaDjangoOpenAPIErrorsHandler(DjangoOpenAPIErrorsHandler):
     ) -> JsonResponse:
         errors = list(errors)
         for error in errors:
-            sentry_sdk.capture_exception(error)
+            if sentry_sdk:
+                sentry_sdk.capture_exception(error)
         if len(errors) == 1 and isinstance(errors[0], InvalidSchemaValue):
             error = errors[0]
             openapi_error = self.format_openapi_error(error)

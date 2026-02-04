@@ -262,6 +262,7 @@ GCS_AI_PICS_BUCKET_NAME = env.str('POLA_APP_GCS_AI_PICS_BUCKET_NAME', default=No
 GCS_WEB_BUCKET_NAME = env.str('POLA_APP_GCS_WEB_BUCKET_NAME', default=None)
 GCS_COMPANY_LOGOTYPE_BUCKET_NAME = env.str('POLA_APP_GCS_COMPANY_LOGOTYPE_BUCKET_NAME', default=None)
 GCS_PUBLIC_BASE_URL = env.str('POLA_APP_GCS_PUBLIC_BASE_URL', default='https://storage.googleapis.com')
+USE_GCS_STORAGE = env.bool("USE_GCS_STORAGE", default=True)
 
 if IS_PRODUCTION:
     missing_gcs = [

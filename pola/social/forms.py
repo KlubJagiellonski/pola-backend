@@ -1,9 +1,13 @@
 import requests.exceptions
-import sentry_sdk
 from django import forms
 from django.conf import settings
 
 from pola.integrations.get_response import get_response_client
+
+try:
+    import sentry_sdk
+except ImportError:  # pragma: no cover - optional dependency
+    sentry_sdk = None
 
 
 class SubscribeNewsletterForm(forms.Form):
@@ -19,5 +23,6 @@ class SubscribeNewsletterForm(forms.Form):
             )
             return True
         except requests.exceptions.HTTPError as error:
-            sentry_sdk.capture_exception(error)
+            if sentry_sdk:
+                sentry_sdk.capture_exception(error)
             return False
