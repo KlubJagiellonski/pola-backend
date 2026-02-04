@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
   pull_request:
     branches:
-      - master
+      - feature/cloud-run-migration
     paths:
       - 'pola-bi/**'
       - '.github/workflows/bi-transfer*.yml'

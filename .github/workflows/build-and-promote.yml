@@ -3,9 +3,9 @@ name: Build and Promote Image
 
 on:
   push:
-    branches: ['master', 'prod']
+    branches: ['feature/cloud-run-migration']
   pull_request:
-    branches: ['master']
+    branches: ['feature/cloud-run-migration']
   workflow_dispatch:
 
 env:
@@ -139,7 +139,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/feature/cloud-run-migration')
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v6
@@ -262,7 +262,7 @@ jobs:
       contents: read
     if: |
       github.event_name == 'push' && 
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/prod') &&
+      (github.ref == 'refs/heads/feature/cloud-run-migration') &&
       needs.test-image.result == 'success'
     steps:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
@@ -290,13 +290,7 @@ jobs:
       - name: "Determine app name and tags"
         id: app-info
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/prod" ]; then
-            APP_NAME="pola-app"
-          elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
-            APP_NAME="pola-staging"
-          else
-            APP_NAME="unknown"
-          fi
+          APP_NAME="pola-staging"
           echo "app_name=${APP_NAME}" >> $GITHUB_OUTPUT
           echo "App name: ${APP_NAME}"
 
@@ -314,8 +308,8 @@ jobs:
           docker tag "${TEST_IMAGE}" "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${APP_NAME}"
           docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${APP_NAME}"
           
-          # Tag as latest for master branch - GitHub Container Registry
-          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+          # Tag as latest for feature/cloud-run-migration branch - GitHub Container Registry
+          if [ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ]; then
             docker tag "${TEST_IMAGE}" "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
             docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           fi
@@ -328,13 +322,13 @@ jobs:
           docker tag "${GCP_TEST_IMAGE}" "${{ env.GCP_REGISTRY }}:${APP_NAME}"
           docker push "${{ env.GCP_REGISTRY }}:${APP_NAME}"
           
-          # Tag as latest for master branch - GCP Artifact Registry
-          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+          # Tag as latest for feature/cloud-run-migration branch - GCP Artifact Registry
+          if [ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ]; then
             docker tag "${GCP_TEST_IMAGE}" "${{ env.GCP_REGISTRY }}:latest"
             docker push "${{ env.GCP_REGISTRY }}:latest"
           fi
           
-          echo "Promoted image with tags: ${APP_NAME}, $([ "${{ github.ref }}" == "refs/heads/master" ] && echo "latest")"
+          echo "Promoted image with tags: ${APP_NAME}, $([ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ] && echo "latest")"
           echo "Pushed to both GitHub Container Registry and GCP Artifact Registry"
 
       - name: "Output promotion info"
@@ -344,12 +338,12 @@ jobs:
           echo ""
           echo "GitHub Container Registry:"
           echo "  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.app-info.outputs.app_name }}"
-          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+          if [ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ]; then
             echo "  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           fi
           echo ""
           echo "GCP Artifact Registry:"
           echo "  ${{ env.GCP_REGISTRY }}:${{ steps.app-info.outputs.app_name }}"
-          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+          if [ "${{ github.ref }}" == "refs/heads/feature/cloud-run-migration" ]; then
             echo "  ${{ env.GCP_REGISTRY }}:latest"
           fi
