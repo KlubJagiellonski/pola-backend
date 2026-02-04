@@ -53,3 +53,15 @@ USE_X_FORWARDED_HOST = True
 
 AI_SHARED_SECRET = env('AI_SHARED_SECRET', default='')
 USE_ESCAPED_GCS_PATHS = True
+
+# Use local filesystem storage for dev/test to avoid GCS credentials.
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"

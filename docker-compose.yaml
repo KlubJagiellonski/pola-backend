@@ -16,16 +16,6 @@ x-pola-backend-common:
     SLACK_CHANNEL_AI_STATS: 'ai-stats'
     WEB_CONCURRENCY: '6'
     WHITELIST_API_IP_ADDRESSES: '10.0.0.1'
-    POLA_APP_AWS_ACCESS_KEY_ID: 'minio'
-    POLA_APP_AWS_SECRET_ACCESS_KEY: 'minio123'
-    POLA_APP_AWS_S3_PUBLIC_BUCKET_NAME: 'pola-app-public'
-    POLA_APP_AWS_S3_BACKEND_BUCKET_NAME: 'pola-app-backend'
-    POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME: 'pola-app-ai-pics'
-    POLA_APP_AWS_S3_COMPANY_LOGOTYPE_BUCKET_NAME: 'pola-app-company-logotype'
-    POLA_APP_AWS_S3_WEB_BUCKET_NAME: 'pola-web-public'
-    POLA_APP_AWS_S3_ENDPOINT_URL: 'http://minio:9000' # Używane do komunikacji backendowej Django -> Minio
-    POLA_APP_AWS_S3_CUSTOM_DOMAIN: '${POLA_APP_AWS_S3_CUSTOM_DOMAIN:-localhost:9000}' # Domena publiczna dla Minio
-    POLA_APP_AWS_LOCATION: '${POLA_APP_AWS_LOCATION:-pola-app-public}' # Prefiks ścieżki w URL i w Minio bucket
 
   env_file: .env
   volumes:
@@ -37,10 +27,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      minio:
-        condition: service_healthy
-      minio-init:
-        condition: service_completed_successfully
       web-collectstatic:
         condition: service_completed_successfully
       web-compile-assets:
@@ -72,8 +58,6 @@ services:
     depends_on:
       web-compile-assets:
         condition: service_completed_successfully
-      minio-init:
-        condition: service_completed_successfully
     command: ./manage.py collectstatic --no-input
 
   web-compile-assets:
@@ -83,46 +67,6 @@ services:
     working_dir: /app
     restart: "no"
     command: sh -c "npm install && npm run build"
-
-  minio:
-    image: minio/minio:RELEASE.2025-03-12T18-04-18Z
-    restart: always
-    ports:
-      - 9000:9000
-      - 9090:9090
-    expose:
-      - 9000
-      - 9090
-    command: server /data --console-address ":9090"
-    volumes:
-      - minio-data:/data
-    environment:
-      MINIO_ROOT_USER: minio
-      MINIO_ROOT_PASSWORD: minio123
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
-
-  minio-init:
-    image: minio/mc
-    environment:
-      MC_HOST_local: 'http://minio:minio123@minio:9000/'
-    restart: "no"
-    depends_on:
-      minio:
-        condition: service_healthy
-    entrypoint: bash
-    command:
-      - -x
-      - -c
-      - mc mb local/pola-app-public || true;
-        mc mb local/pola-app-backend || true;
-        mc mb local/pola-app-ai-pics || true;
-        mc mb local/pola-web-public || true;
-        mc mb local/pola-app-company-logotype || true;
-        mc anonymous set public local/pola-app-public || true;
 
   postgres:
     image: postgres:18.0
@@ -142,4 +86,3 @@ services:
 
 volumes:
   postgres-data:
-  minio-data:
