@@ -80,7 +80,6 @@ pytest==9.0.2
 pytest-cov==7.0.0
 pytest-django==4.11.1
 pytest-xdist==3.6.1
-python-dateutil==2.9.0.post0
 python3-openid==3.2.0
 pytz==2025.2
 PyYAML==6.0.3
