@@ -4,8 +4,8 @@ attrs==25.4.0
 babel==2.18.0
 beautifulsoup4==4.14.3
 boto==2.49.0
-boto3==1.42.42
-botocore==1.42.42
+boto3==1.42.43
+botocore==1.42.43
 certifi==2026.1.4
 cffi==2.0.0
 chardet==5.2.0
