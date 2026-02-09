@@ -64,21 +64,25 @@ urlpatterns += [
 
 # Debug stuff
 if settings.DEBUG:
-    import debug_toolbar
+    try:
+        import debug_toolbar
+    except ImportError:
+        debug_toolbar = None
 
-    urlpatterns += [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ]
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    # This allows the error pages to be debugged during development, just visit
-    # these url in browser to see how these error pages look like.
-    urlpatterns += [
-        path('400/', bad_request, kwargs={'exception': Exception("Bad request")}),
-        path('403/', permission_denied, kwargs={'exception': Exception("Permission Denied")}),
-        path('404/', page_not_found, kwargs={'exception': Exception("Page not found")}),
-        path('500/', server_error),
-    ]
+    if debug_toolbar:
+        urlpatterns += [
+            path('__debug__/', include(debug_toolbar.urls)),
+        ]
+        urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+        # This allows the error pages to be debugged during development, just visit
+        # these url in browser to see how these error pages look like.
+        urlpatterns += [
+            path('400/', bad_request, kwargs={'exception': Exception("Bad request")}),
+            path('403/', permission_denied, kwargs={'exception': Exception("Permission Denied")}),
+            path('404/', page_not_found, kwargs={'exception': Exception("Page not found")}),
+            path('500/', server_error),
+        ]
 
 # All unknown URls fallback to S#
 urlpatterns += [re_path('^.*', views_pola_web.page_not_found_handler)]
