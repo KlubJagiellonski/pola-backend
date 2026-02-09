@@ -12,9 +12,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from reversion.models import Revision
-from storages.backends.s3boto3 import S3Boto3Storage
 
 from pola.product.models import Product
+from pola.storage_backends import BackendMediaStorage
 
 
 class ReportQuerySet(models.QuerySet):
@@ -91,9 +91,7 @@ class Attachment(models.Model):
     attachment = models.FileField(
         upload_to="reports/%Y/%m/%d",
         verbose_name=_("File"),
-        storage=S3Boto3Storage(
-            querystring_auth=True, bucket_name=settings.AWS_STORAGE_BACKEND_BUCKET_NAME, region_name='eu-central-1'
-        ),
+        storage=BackendMediaStorage(),
     )
 
     @property

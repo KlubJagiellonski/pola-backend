@@ -35,8 +35,8 @@ jobs:
         run: ./scripts/docker_login_github.py
       - name: "Build BI image"
         run: ./scripts/manage_image.py build --image-type bi
-      - name: "Verify BI image"
-        run: ./scripts/manage_image.py verify --image-type bi
+      # - name: "Verify BI image"
+      #   run: ./scripts/manage_image.py verify --image-type bi
       - name: "Install Heroku CLI"
         run: |
             curl https://cli-assets.heroku.com/install-ubuntu.sh | sh

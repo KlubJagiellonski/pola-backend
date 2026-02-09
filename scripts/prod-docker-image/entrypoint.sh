@@ -94,10 +94,6 @@ if ! whoami &> /dev/null || [[ "$(whoami)" != "pola-backend" ]] ; then
   export HOME="${APP_USER_HOME_DIR}"
 fi
 
-if [[ -n "${HEROKU_EXEC_URL=}" ]]; then
-  bash /app/.profile.d/heroku-exec.sh
-fi
-
 if command -v "${COMMAND}"; then
   echo "Running: ${*}"
   exec "${@}"

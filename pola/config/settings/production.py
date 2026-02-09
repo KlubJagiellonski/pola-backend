@@ -2,9 +2,9 @@
 Production Configurations
 
 - Use djangosecure
-- Use Amazon's S3 for storing static files and uploaded media
+- Use Google Cloud Storage for storing static files and uploaded media
 - Use mailgun to send emails
-- Use Redis on Heroku
+- Use Redis
 
 """
 
@@ -59,15 +59,7 @@ ALLOWED_HOSTS = ["www.pola-app.pl", "pola-app.pl", "pola-staging.herokuapp.com"]
 # END SITE CONFIGURATION
 
 INSTALLED_APPS += ("gunicorn",)  # noqa: F405
-
-# See: https://github.com/antonagestam/collectfast
-# For Django 1.7+, 'collectfast' should come before
-# 'django.contrib.staticfiles'
-AWS_PRELOAD_METADATA = True
-COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
-COLLECTFAST_THREADS = 20
-
-INSTALLED_APPS = ('collectfast',) + INSTALLED_APPS
+IS_PRODUCTION = True
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -126,4 +118,4 @@ sentry_sdk.init(
     traces_sample_rate=env.float('SENTRY_TRACES_SAMPLE_RATE', default=0),  # noqa: F405
 )
 
-USE_ESCAPED_S3_PATHS = False
+USE_ESCAPED_GCS_PATHS = False
