@@ -87,10 +87,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         postgresql-client libpq5 \
         # Required by encrypoint.sh
         netcat-openbsd \
-        # Required by Heroku-exec
-        openssh-client \
-        openssh-server \
-        iproute2 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* /usr/share/doc /usr/share/man \
@@ -99,8 +95,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
        --home "${APP_USER_HOME_DIR}" --create-home pola-backend \
     && mkdir -p "/opt/pola-backend" \
     && chown -R pola-backend:root "${APP_USER_HOME_DIR}" "/opt/pola-backend" \
-    # Enable heroku-exec
-    # See: https://devcenter.heroku.com/articles/exec#using-with-docker
+    # Allow writing runtime user mapping when needed.
     && chmod g=u /etc/passwd \
     && rm /bin/sh \
     && ln -s /bin/bash /bin/sh
@@ -108,7 +103,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --chown=pola-backend:root --from=build-py /root/.local "${APP_USER_HOME_DIR}/.local"
 COPY --chown=pola-backend:root --from=build-js /app/pola/static/ "/opt/pola-backend/pola/static/"
 
-COPY ./scripts/prod-docker-image/heroku-exec.sh /app/.profile.d/heroku-exec.sh
 COPY --chown=pola-backend:root ./scripts/prod-docker-image/entrypoint.sh /entrypoint
 COPY --chown=pola-backend:root ./pola /opt/pola-backend/pola
 COPY --chown=pola-backend:root ./manage.py /opt/pola-backend/
