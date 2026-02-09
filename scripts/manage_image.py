@@ -437,15 +437,17 @@ def push_image(image_type, env):
     config = IMAGE_CONFIG[image_type]
     image_name = config["image_name_format"].format(**env)
     image_tag = env["IMAGE_TAG"]
+    gcp_tag = f"{image_tag}-gcp"
 
-    logger.info("Pushing image: %s:%s", image_name, image_tag)
+    logger.info("Pushing image: %s:%s", image_name, gcp_tag)
 
-    run_command(["docker", "push", f"{image_name}:{image_tag}"])
+    run_command(["docker", "tag", f"{image_name}:{image_tag}", f"{image_name}:{gcp_tag}"])
+    run_command(["docker", "push", f"{image_name}:{gcp_tag}"])
 
     if image_type == "prod":
         # Tag as latest i push
-        run_command(["docker", "tag", f"{image_name}:{image_tag}", f"{image_name}:latest"])
-        run_command(["docker", "push", f"{image_name}:latest"])
+        run_command(["docker", "tag", f"{image_name}:{image_tag}", f"{image_name}:latest-gcp"])
+        run_command(["docker", "push", f"{image_name}:latest-gcp"])
 
 
 def pull_image(image_type, env):
@@ -456,11 +458,12 @@ def pull_image(image_type, env):
     config = IMAGE_CONFIG[image_type]
     image_name = config["image_name_format"].format(**env)
     image_tag = env["IMAGE_TAG"]
+    gcp_tag = f"{image_tag}-gcp"
 
-    logger.info("Pulling image: %s:%s", image_name, image_tag)
-    run_command(["docker", "pull", f"{image_name}:{image_tag}"])
-    run_command(["docker", "tag", f"{image_name}:{image_tag}", f"{image_name}:latest"])
-    run_command(["docker", "tag", f"{image_name}:{image_tag}", config["local_image_name"]])
+    logger.info("Pulling image: %s:%s", image_name, gcp_tag)
+    run_command(["docker", "pull", f"{image_name}:{gcp_tag}"])
+    run_command(["docker", "tag", f"{image_name}:{gcp_tag}", f"{image_name}:latest"])
+    run_command(["docker", "tag", f"{image_name}:{gcp_tag}", config["local_image_name"]])
 
 
 def update_constraints(image_type, env):

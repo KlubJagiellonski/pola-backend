@@ -6,10 +6,11 @@ ARG APP_UID="50000"
 ARG APP_GID="50000"
 
 ARG BASE_PYTHON_IMAGE="python:3.11-slim-bookworm"
+ARG PLATFORM="linux/amd64"
 
 ######################### NODE BUILD IMAGE ##########################
 # build-js builds the frontend assets
-FROM node:17.3.0-alpine3.12 AS build-js
+FROM --platform=${PLATFORM} node:17.3.0-alpine3.12 AS build-js
 
 WORKDIR /app/
 
@@ -23,7 +24,7 @@ RUN npm run build
 
 ######################### PYTHON BUILD IMAGE ########################
 # build-py installs the python dependencies
-FROM ${BASE_PYTHON_IMAGE} AS build-py
+FROM --platform=${PLATFORM} ${BASE_PYTHON_IMAGE} AS build-py
 
 ENV APP_HOME=/opt/pola-backend/ \
     DEBIAN_FRONTEND=noninteractive \
@@ -65,7 +66,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 ######################### MAIN IMAGE ################################
 # main is the final image that will be used in production
-FROM ${BASE_PYTHON_IMAGE} AS main
+FROM --platform=${PLATFORM} ${BASE_PYTHON_IMAGE} AS main
 
 ARG APP_UID
 ARG APP_GID

@@ -36,11 +36,8 @@ DEBUG_TOOLBAR_CONFIG = {
     # 'SHOW_TOOLBAR_CALLBACK': lambda request: True
 }
 
-# Ustawienia minio dla lokalnego developmentu.
-# Domyślnie host 'minio' jest niedostępny z zewnątrz dockera co powodowało błędy z pobieraniem assetów.
-AWS_S3_CUSTOM_DOMAIN = env.str('POLA_APP_AWS_S3_CUSTOM_DOMAIN')  # 'localhost:9000'
-AWS_LOCATION = env.str('POLA_APP_AWS_LOCATION')  # 'pola-app-public'
-AWS_S3_URL_PROTOCOL = 'http:'
+# Optional: override base URL for local GCS emulator/proxy.
+GCS_PUBLIC_BASE_URL = env.str('POLA_APP_GCS_PUBLIC_BASE_URL', default='https://storage.googleapis.com')
 
 # django-extensions
 # ------------------------------------------------------------------------------
@@ -55,4 +52,18 @@ MIDDLEWARE += ('pola.middlewares.SetHostToLocalhost',)
 USE_X_FORWARDED_HOST = True
 
 AI_SHARED_SECRET = env('AI_SHARED_SECRET', default='')
-USE_ESCAPED_S3_PATHS = True
+USE_ESCAPED_GCS_PATHS = True
+USE_GCS_STORAGE = env.bool("USE_GCS_STORAGE", default=True)
+
+if not USE_GCS_STORAGE:
+    # Fallback mode for local runs without emulator.
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    STATIC_URL = "/static/"
+    MEDIA_URL = "/media/"

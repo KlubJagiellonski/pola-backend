@@ -1,4 +1,3 @@
-import sentry_sdk
 from django.conf import settings
 
 from pola.company.models import Brand
@@ -11,6 +10,11 @@ from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
 from pola.logic_score import get_pl_score
 from pola.product.models import Product
 from pola.text_utils import _shorten_txt, strip_urls_newlines
+
+try:
+    import sentry_sdk
+except ImportError:  # pragma: no cover - optional dependency
+    sentry_sdk = None
 
 WAR_COUNTRIES = ('Federacja Rosyjska', "Białoruś")
 
@@ -326,7 +330,8 @@ def _process_with_produkty_w_sieci(code, product=None) -> Product | None:
             products_response = produkty_w_sieci_client.get_products(gtin_number=code)
             return create_from_api(code, products_response, product=product)
     except ApiException as ex:
-        sentry_sdk.capture_exception(ex)
+        if sentry_sdk:
+            sentry_sdk.capture_exception(ex)
     return None
 
 

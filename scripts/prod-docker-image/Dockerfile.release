@@ -4,6 +4,6 @@
 ARG BASE_IMAGE=ghcr.io/klubjagiellonski/pola-backend/pola-backend:latest
 
 # hadolint ignore=DL3006
-FROM ${BASE_IMAGE}
+FROM --platform=linux/amd64 ${BASE_IMAGE}
 
 CMD ["bash", "-c", "./manage.py migrate --no-input && ./manage.py collectstatic --no-input"]

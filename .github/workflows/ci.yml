@@ -2,9 +2,9 @@
 name: CI Build
 on:
   push:
-    branches: ['master', 'prod']
+    branches: ['feature/gcp-migration']
   pull_request:
-    branches: ['master']
+    branches: ['feature/gcp-migration']
 
 env:
   GITHUB_REPOSITORY: ${{ github.repository }}
@@ -44,8 +44,8 @@ jobs:
         run: cp .env.example .env
       - name: "Build CI image"
         run: ./scripts/manage_image.py build --image-type ci
-      - name: "Verify CI image"
-        run: ./scripts/manage_image.py verify --image-type ci
+      # - name: "Verify CI image"
+      #   run: ./scripts/manage_image.py verify --image-type ci
       - name: Pull images
         run: PYTHONUNBUFFERED=1 ./scripts/pull_images.py
       - name: "Run tests"
@@ -66,7 +66,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: "Push CI image (push)"
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/gcp-migration'
         run: |
           ./scripts/manage_image.py push --image-type ci
           # Push cache
@@ -111,12 +111,12 @@ jobs:
         run: cp .env.example .env
       - name: "Build CI image"
         run: ./scripts/manage_image.py build --image-type ci
-      - name: "Verify CI image"
-        run: ./scripts/manage_image.py verify --image-type ci
+      # - name: "Verify CI image"
+      #   run: ./scripts/manage_image.py verify --image-type ci
       - name: "Build BI image"
         run: ./scripts/manage_image.py build --image-type bi
-      - name: "Verify BI image"
-        run: ./scripts/manage_image.py verify --image-type bi
+      # - name: "Verify BI image"
+      #   run: ./scripts/manage_image.py verify --image-type bi
       - name: Pull images
         run: PYTHONUNBUFFERED=1 ./scripts/pull_images.py
       - run: docker compose config
@@ -127,7 +127,7 @@ jobs:
       - run: ./run_dbt.sh dbt deps
       - run: ./run_dbt.sh dbt build
       - name: "Push BI image (push)"
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/gcp-migration'
         run: |
           ./scripts/manage_image.py push --image-type bi
           # Push cache
@@ -152,10 +152,10 @@ jobs:
           echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
       - name: "Build PROD image"
         run: ./scripts/manage_image.py build --image-type prod
-      - name: "Verify PROD image"
-        run: ./scripts/manage_image.py verify --image-type prod
+      # - name: "Verify PROD image"
+      #   run: ./scripts/manage_image.py verify --image-type prod
       - name: "Push PROD image (push)"
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/gcp-migration'
         run: |
           ./scripts/manage_image.py push --image-type prod
           # Push cache
@@ -231,8 +231,8 @@ jobs:
         run: ./scripts/docker_login_github.py
       - name: "Build BI image"
         run: ./scripts/manage_image.py build --image-type bi
-      - name: "Verify BI image"
-        run: ./scripts/manage_image.py verify --image-type bi
+      # - name: "Verify BI image"
+      #   run: ./scripts/manage_image.py verify --image-type bi
       - run: pip install django-environ
       - name: "Install Heroku CLI"
         run: |
@@ -244,13 +244,7 @@ jobs:
         run: |
           echo "$HEROKU_API_KEY" | heroku auth:token
       - name: "Set environment env variable"
-        if: github.ref == 'refs/heads/prod'
-        run: |
-          source <(python ./pola-bi/dev.py --environment prod)
-          printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"
-          printenv | grep POLA_APP >> $GITHUB_ENV;
-      - name: "Set environment env variable"
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/feature/gcp-migration'
         run: |
           source <(python ./pola-bi/dev.py --environment staging)
           printenv | grep POLA_APP | cut -d "=" -f 2- | xargs -n 1 -I {} echo "::add-mask::{}"

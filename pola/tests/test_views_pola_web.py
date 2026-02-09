@@ -7,7 +7,7 @@ from django.core.cache import cache
 from django.utils import translation
 from test_plus.test import TestCase
 
-from pola.s3 import create_s3_client, create_s3_resource
+from pola.gcs import get_storage_client
 from pola.views_pola_web import get_candidates
 
 
@@ -15,28 +15,29 @@ class TestPolaWebView(TestCase):
     def setUp(self) -> None:
         random_prefix = "".join(random.choices(list(string.ascii_lowercase), k=10))
         self.bucket_name = f"test-bucket-{random_prefix}"
-        self.s3_client = create_s3_client()
-        self.s3_client.create_bucket(Bucket=self.bucket_name)
+        self.storage_client = get_storage_client()
+        self.bucket = self.storage_client.bucket(self.bucket_name)
+        self.storage_client.create_bucket(self.bucket)
 
         self.customization_settings = ExitStack()
         self.customization_settings.enter_context(translation.override('pl'))
         self.customization_settings.__enter__()
 
     def tearDown(self) -> None:
-        bucket = create_s3_resource().Bucket(self.bucket_name)
-        bucket.objects.all().delete()
-        self.s3_client.delete_bucket(Bucket=self.bucket_name)
+        for blob in self.bucket.list_blobs():
+            blob.delete()
+        self.bucket.delete()
         self.customization_settings.close()
 
     def test_should_return_404_for_invalid_cms_view(self):
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(GCS_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/cms/invalid')
             self.assertEqual(response.status_code, st.NOT_FOUND)
             self.assertIn("<title>Nie ma takiej strony</title>", response.content.decode())
             self.assertIn("<h1>Nie ma takiej strony</h1>", response.content.decode())
 
     def test_should_return_404_for_invalid_normal_view(self):
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(GCS_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/invalid')
             self.assertEqual(response.status_code, st.NOT_FOUND)
             self.assertIn("<title>Nie ma takiej strony</title>", response.content.decode())
@@ -44,52 +45,36 @@ class TestPolaWebView(TestCase):
 
     def test_should_return_404_when_404_html_exists(self):
         content = "test-404.html"
-        self.s3_client.put_object(
-            Body=content,
-            Bucket=self.bucket_name,
-            Key="404.html",
-        )
+        self.bucket.blob("404.html").upload_from_string(content, content_type="text/html")
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(GCS_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/invalid')
             self.assertEqual(response.status_code, st.NOT_FOUND)
             self.assertEqual(content, response.content.decode())
 
     def test_should_return_200_when_index_exists(self):
         content = "index.html"
-        self.s3_client.put_object(
-            Body=content,
-            Bucket=self.bucket_name,
-            Key="article/index.html",
-        )
+        self.bucket.blob("article/index.html").upload_from_string(content, content_type="text/html")
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(GCS_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/article/')
             self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
 
     def test_should_return_200_when_file_exists(self):
         content = "test.js"
-        self.s3_client.put_object(
-            Body=content,
-            Bucket=self.bucket_name,
-            Key="test.js",
-        )
+        self.bucket.blob("test.js").upload_from_string(content, content_type="application/javascript")
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(GCS_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/test.js')
             self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
 
     def test_should_support_caching_based_on_etag(self):
         content = "test.js"
-        self.s3_client.put_object(
-            Body=content,
-            Bucket=self.bucket_name,
-            Key="test.js",
-        )
+        self.bucket.blob("test.js").upload_from_string(content, content_type="application/javascript")
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(GCS_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/test.js')
             self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())
@@ -116,13 +101,9 @@ class TestPolaWebView(TestCase):
 
     def test_should_support_conditional_requests(self):
         content = "test.js"
-        self.s3_client.put_object(
-            Body=content,
-            Bucket=self.bucket_name,
-            Key="test.js",
-        )
+        self.bucket.blob("test.js").upload_from_string(content, content_type="application/javascript")
 
-        with self.settings(AWS_STORAGE_WEB_BUCKET_NAME=self.bucket_name):
+        with self.settings(GCS_WEB_BUCKET_NAME=self.bucket_name):
             response = self.client.get('/test.js')
             self.assertEqual(response.status_code, st.OK)
             self.assertEqual(content, response.content.decode())

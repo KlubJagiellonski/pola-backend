@@ -1,4 +1,3 @@
-from boto.s3.connection import Bucket, Key
 from django.conf import settings
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -8,17 +7,16 @@ from django.http import JsonResponse
 from django.utils.functional import cached_property
 from django.views import View
 from django.views.generic import DetailView, ListView
+from google.api_core import exceptions as gcs_exceptions
 
 from pola.ai_pics.models import AIAttachment, AIPics
-from pola.s3 import create_s3_connection
+from pola.gcs import get_bucket
 
 
 class BucketMixin:
     @property
     def _bucket(self):
-        conn = create_s3_connection()
-        bucket = Bucket(conn, settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
-        return bucket
+        return get_bucket(settings.GCS_AI_PICS_BUCKET_NAME)
 
 
 class AIPicsPageView(LoginRequiredMixin, PermissionRequiredMixin, BucketMixin, ListView):
@@ -71,14 +69,15 @@ class ApiDeleteAiPicsView(View, PermissionRequiredMixin, BucketMixin):
     permission_required = 'ai_pics.delete_aipics'
 
     def post(self, request):
-        key = Key(self._bucket)
-
         id = request.POST['id']
 
         attachments = AIAttachment.objects.filter(ai_pics_id=id)
         for attachment in attachments:
-            key.key = attachment.attachment
-            self._bucket.delete_key(key)
+            blob = self._bucket.blob(attachment.attachment.name)
+            try:
+                blob.delete()
+            except gcs_exceptions.NotFound:
+                pass
 
         aipic = AIPics.objects.get(id=id)
         aipic.delete()
@@ -89,13 +88,14 @@ class ApiDeleteAttachmentView(View, PermissionRequiredMixin, BucketMixin):
     permission_required = 'ai_pics.delete_aiattachment'
 
     def post(self, request):
-        key = Key(self._bucket)
-
         id = request.POST['id']
         attachment = AIAttachment.objects.get(id=id)
 
-        key.key = attachment.attachment
-        self._bucket.delete_key(key)
+        blob = self._bucket.blob(attachment.attachment.name)
+        try:
+            blob.delete()
+        except gcs_exceptions.NotFound:
+            pass
 
         attachment.delete()
         return JsonResponse({'ok': True})

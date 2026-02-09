@@ -1,15 +1,13 @@
 import json
 import uuid
-from datetime import timedelta
 
-import boto3
-from botocore.config import Config
 from django.conf import settings
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
 from pola.ai_pics.models import AIAttachment, AIPics
+from pola.gcs import generate_signed_upload_url
 from pola.product.models import Product
 from pola.report.models import Attachment, Report
 from pola.rpc_api.jsonschema import validate_json_response
@@ -77,7 +75,7 @@ def add_ai_pics(request):
 def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
     object_name = f'{str(ai_pics.product.code)}/{str(ai_pics.id)}_{str(file_no)}_{str(uuid.uuid1())}.{file_ext}'
 
-    signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
+    signed_request = create_signed_request_gcs(mime_type, object_name, settings.GCS_AI_PICS_BUCKET_NAME)
 
     attachment = AIAttachment(ai_pics=ai_pics)
     attachment.attachment.name = object_name
@@ -201,7 +199,7 @@ def create_report_internal(request, extra_comma=False):
 def attach_file_internal(report, file_ext, mime_type):
     object_name = f'{str(report.id)}/{str(uuid.uuid1())}.{file_ext}'
 
-    signed_request = create_signed_request_boto3(mime_type, object_name, settings.AWS_STORAGE_BACKEND_BUCKET_NAME)
+    signed_request = create_signed_request_gcs(mime_type, object_name, settings.GCS_BACKEND_BUCKET_NAME)
 
     attachment = Attachment(report=report)
     attachment.attachment.name = object_name
@@ -210,19 +208,5 @@ def attach_file_internal(report, file_ext, mime_type):
     return signed_request
 
 
-def create_signed_request_boto3(mime_type, object_name, bucket_name):
-    expires = int(timedelta(days=1).total_seconds())
-    client = boto3.client(
-        's3',
-        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        config=Config(signature_version='s3v4'),
-        region_name='eu-central-1',
-    )
-    response = client.generate_presigned_url(
-        'put_object',
-        Params=dict(Bucket=bucket_name, Key=object_name, ContentType=mime_type),
-        ExpiresIn=expires,
-    )
-    return response
+def create_signed_request_gcs(mime_type, object_name, bucket_name):
+    return generate_signed_upload_url(bucket_name, object_name, mime_type)

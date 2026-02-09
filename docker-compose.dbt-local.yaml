@@ -4,8 +4,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      minio-init:
-        condition: service_started
       web-collectstatic:
         condition: service_started
     environment:
