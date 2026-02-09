@@ -35,8 +35,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      fake-gcs-init:
-        condition: service_completed_successfully
+      fake-gcs-server:
+        condition: service_started
       web-collectstatic:
         condition: service_completed_successfully
       web-compile-assets:
@@ -68,8 +68,8 @@ services:
     depends_on:
       web-compile-assets:
         condition: service_completed_successfully
-      fake-gcs-init:
-        condition: service_completed_successfully
+      fake-gcs-server:
+        condition: service_started
     command: ./manage.py collectstatic --no-input
 
   web-compile-assets:
@@ -82,30 +82,14 @@ services:
 
   fake-gcs-server:
     image: fsouza/fake-gcs-server:latest
-    command: -scheme http -port 4443 -backend memory
+    command: -scheme http -port 4443 -public-host localhost:4443
     restart: always
     ports:
       - "4443:4443"
     expose:
       - 4443
-
-  fake-gcs-init:
-    image: curlimages/curl:8.17.0
-    restart: "no"
-    depends_on:
-      fake-gcs-server:
-        condition: service_started
-    command:
-      - sh
-      - -ec
-      - |
-        until curl -sS "http://fake-gcs-server:4443/storage/v1/b?project=pola-local" >/dev/null; do sleep 1; done
-        endpoint="http://fake-gcs-server:4443/storage/v1/b?project=pola-local"
-        for bucket in pola-app-public pola-app-backend pola-app-ai-pics pola-web-public pola-app-company-logotype; do
-          curl -sS -X POST "$${endpoint}" \
-            -H "Content-Type: application/json" \
-            -d "{\"name\":\"$${bucket}\"}" || true
-        done
+    volumes:
+      - ./fake-gcs-data:/data
 
   postgres:
     image: postgres:18.0
