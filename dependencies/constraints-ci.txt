@@ -66,7 +66,7 @@ openapi-spec-validator==0.7.2
 packaging==26.0
 parameterized==0.9.0
 parse==1.21.0
-parso==0.8.5
+parso==0.8.6
 pathable==0.4.4
 pexpect==4.9.0
 Pillow==10.1.0
