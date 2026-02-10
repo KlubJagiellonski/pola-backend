@@ -23,6 +23,34 @@ class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
         label=_("Przyjaciel Poli"),
     )
 
+    has_official_url = django_filters.TypedChoiceFilter(
+        choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
+        coerce=strtobool,
+        label=_("Ma stronę WWW"),
+        method='filter_has_official_url',
+    )
+
+    has_logotype = django_filters.TypedChoiceFilter(
+        choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
+        coerce=strtobool,
+        label=_("Ma logo"),
+        method='filter_has_logotype',
+    )
+
+    def filter_has_official_url(self, queryset, name, value):
+        if value is None:
+            return queryset
+        if value:
+            return queryset.exclude(official_url__isnull=True).exclude(official_url='')
+        return queryset.filter(Q(official_url__isnull=True) | Q(official_url=''))
+
+    def filter_has_logotype(self, queryset, name, value):
+        if value is None:
+            return queryset
+        if value:
+            return queryset.exclude(logotype__isnull=True).exclude(logotype='')
+        return queryset.filter(Q(logotype__isnull=True) | Q(logotype=''))
+
     o = django_filters.OrderingFilter(
         # tuple-mapping retains order
         fields=(
