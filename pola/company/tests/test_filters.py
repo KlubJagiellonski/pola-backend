@@ -2,6 +2,8 @@ from django.urls import reverse
 from test_plus.test import TestCase
 
 from pola.company.factories import CompanyFactory
+from pola.company.filters import CompanyFilter
+from pola.company.models import Company
 from pola.users.factories import StaffFactory
 
 
@@ -69,3 +71,27 @@ class TestCompanyListFilters(TestCase):
         self.assertNotContains(resp, str(logo_company))
         self.assertContains(resp, str(no_logo_none))
         self.assertContains(resp, str(no_logo_empty))
+
+    def test_filter_has_official_url_none_returns_queryset(self):
+        # Prepare some data and a base queryset
+        CompanyFactory()
+        qs = Company.objects.all()
+
+        # Call the filter method directly with value=None
+        f = CompanyFilter(data={}, queryset=qs)
+        result = f.filter_has_official_url(qs, 'has_official_url', None)
+
+        # Should return the same queryset instance unchanged
+        self.assertIs(result, qs)
+
+    def test_filter_has_logotype_none_returns_queryset(self):
+        # Prepare some data and a base queryset
+        CompanyFactory()
+        qs = Company.objects.all()
+
+        # Call the filter method directly with value=None
+        f = CompanyFilter(data={}, queryset=qs)
+        result = f.filter_has_logotype(qs, 'has_logotype', None)
+
+        # Should return the same queryset instance unchanged
+        self.assertIs(result, qs)
