@@ -13,7 +13,7 @@ Collectfast==2.2.0
 cryptography==46.0.5
 defusedxml==0.7.1
 Django==5.1.8
-django-allauth==0.55.2
+django-allauth==65.14.1
 django-anymail==14.0
 django-autocomplete-light==3.12.1
 django-autoslug==1.9.9
