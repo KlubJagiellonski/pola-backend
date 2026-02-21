@@ -9,6 +9,7 @@ from pola.integrations.produkty_w_sieci import (
 )
 from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
 from pola.logic_score import get_pl_score
+from pola.models import AppConfiguration
 from pola.product.models import Product
 from pola.text_utils import _shorten_txt, strip_urls_newlines
 
@@ -103,7 +104,72 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
         result['report'] = report
     else:
         result.update({("report_" + k, v) for k, v in report.items()})
+    # Inject default banner/logo and URL when no company/brand logos are present
+    _logo_check(result, product, multiple_company_supported)
     return result, stats, product
+
+
+def _is_empty_url(url: str | None) -> bool:
+    """Treat missing, blank, or placeholder 'example.pl' as empty"""
+    if not url:
+        return True
+    return 'example.pl' in url
+
+
+def _logo_check(result: dict, product: Product | None, multiple_company_supported: bool) -> None:
+    """Ensure a fallback banner/logo for companies when no logos are available.
+
+    - Checks company `logotype_url` and any brand `logotype_url` underneath.
+    - If all are empty, set company's `logotype_url` to `AppConfiguration.default_banner.url`
+      and replace company's `official_url` with `AppConfiguration.banner_url` (if set).
+    - Applies only to company fields (not brand fields).
+    - Runs only when `AppConfiguration.default_banner` is present.
+    """
+    try:
+        app_cfg = AppConfiguration.get_singleton()
+    except Exception:
+        return
+
+    default_banner = getattr(app_cfg, 'default_banner', None)
+    if not default_banner:
+        return
+    banner_url = getattr(app_cfg, 'banner_url', None)
+
+    def _apply_fallback(cd: dict) -> None:
+        """Update a single company data dict"""
+        if default_banner:
+            cd['logotype_url'] = default_banner.url
+        if banner_url:
+            cd['official_url'] = banner_url
+
+    # Build a list of company dicts to inspect/update
+    companies_data: list[dict] = []
+    if multiple_company_supported:
+        companies_data = result.get('companies') or []
+    else:
+        # Only proceed if we have at least some company data
+        if any(k in result for k in ('name', 'plScore', 'description')):
+            companies_data = [result]
+
+    if not companies_data:
+        return
+
+    # Fast path: if any company already has a non-empty logo, skip applying fallback
+    for cd in companies_data:
+        if not _is_empty_url(cd.get('logotype_url')):
+            return
+
+    # Check if any brand underneath has a non-empty logo
+    # Prefer already-serialized brands to avoid extra queries
+    for cd in companies_data:
+        brands = cd.get('brands') or []
+        for b in brands:
+            if not _is_empty_url(b.get('logotype_url')):
+                return
+
+    # All companies and brands appear to have empty logos -> apply fallback to company fields
+    for cd in companies_data:
+        _apply_fallback(cd)
 
 
 def serialize_brand(brand):
