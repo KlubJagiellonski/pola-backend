@@ -115,10 +115,12 @@ class TestAppConfigurationUpdate(WebTestMixin, TestCase):
 
     def test_form_success(self):
         page = self.app.get(self.url, user=self.user)
-        page.form['donate_url'] = "http://example.com"
-        page.form['donate_text'] = "DONATE-TEXT"
+        # Select the main configuration form explicitly (two forms exist on page)
+        form = next(f for f in page.forms.values() if 'donate_url' in f.fields)
+        form['donate_url'] = "http://example.com"
+        form['donate_text'] = "DONATE-TEXT"
 
-        page = page.form.submit(name='action')
+        page = form.submit(name='action')
         self.assertRedirects(page, reverse('home-cms'))
         instance = AppConfiguration.objects.first()
         self.assertEqual(instance.donate_url, "http://example.com")
