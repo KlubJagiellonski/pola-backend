@@ -1,14 +1,18 @@
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import get_default_timezone
+from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 
 from pola.company.models import Company
 from pola.product.models import Product
 from pola.report.models import Report
+from pola.storages import OverwriteS3Boto3Storage
 
 
 class Query(models.Model):
@@ -125,9 +129,29 @@ DEFAULT_DONATE_URL = "https://www.pola-app.pl/1-5-podatku-na-aplikacje-pola"
 DEFAULT_DONATE_TEXT = "1,5% podatku na aplikację Pola?"
 
 
+def app_default_banner_upload_to(instance, filename):
+    return 'main-banner'
+
+
 class AppConfiguration(SingletonModel):
     donate_url = models.URLField(max_length=100, verbose_name="URL Donacji", default=DEFAULT_DONATE_URL)
     donate_text = models.CharField(max_length=255, verbose_name="Tekst Donacji", default=DEFAULT_DONATE_TEXT)
+    banner_url = models.URLField(max_length=255, verbose_name="Baner URL", blank=True, null=True)
+
+    default_banner = ResizedImageField(
+        _("Domyślny baner"),
+        upload_to=app_default_banner_upload_to,
+        size=[1200, None],
+        null=True,
+        blank=True,
+        force_format='PNG',
+        storage=OverwriteS3Boto3Storage(
+            querystring_auth=False,
+            bucket_name=settings.AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME,
+            region_name='eu-central-1',
+            default_acl=None,
+        ),
+    )
 
     class Meta:
         verbose_name = 'Konfiguracja aplikacji'
