@@ -4,6 +4,7 @@ from functools import reduce
 from textwrap import dedent
 
 from braces.views import FormValidMessageMixin
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import connection
@@ -22,7 +23,7 @@ from django.views.generic.detail import (
 )
 
 from pola.company.models import Company
-from pola.forms import AppConfigurationForm
+from pola.forms import AppConfigurationForm, AppDefaultBannerForm
 from pola.mixins import LoginPermissionRequiredMixin
 from pola.models import AppConfiguration, Stats
 from pola.product.models import Product
@@ -284,3 +285,25 @@ class AppConfigurationUpdateView(LoginPermissionRequiredMixin, FormValidMessageM
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Provide separate banner form alongside the main config form
+        if 'banner_form' not in context:
+            context['banner_form'] = AppDefaultBannerForm(instance=self.object)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # Handle banner upload form separately when its submit is used
+        if 'upload_banner' in request.POST or 'default_banner' in request.FILES:
+            banner_form = AppDefaultBannerForm(request.POST, request.FILES, instance=self.object)
+            if banner_form.is_valid():
+                banner_form.save()
+                messages.success(self.request, _("Baner zaktualizowany!"))
+                return HttpResponseRedirect(self.get_success_url())
+            # Render both forms, with banner_form bound and main form unbound
+            context = self.get_context_data(form=self.get_form(self.get_form_class()), banner_form=banner_form)
+            return self.render_to_response(context)
+        # Fallback to default behavior for main configuration form
+        return super().post(request, *args, **kwargs)

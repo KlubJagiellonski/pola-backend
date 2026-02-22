@@ -73,3 +73,17 @@ class AppConfigurationForm(SaveButtonMixin, FormHorizontalMixin, forms.ModelForm
     class Meta:
         model = models.AppConfiguration
         fields = ['donate_text', 'donate_url']
+
+
+class AppDefaultBannerForm(FormHorizontalMixin, forms.ModelForm):
+    class Meta:
+        model = models.AppConfiguration
+        # Render Banner URL under the default banner field
+        fields = ['default_banner', 'banner_url']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Ensure proper enctype for file upload and add dedicated submit button name
+        self.helper.add_input(Submit('upload_banner', _('Zapisz baner'), css_class="btn-primary"))
+        # Ensure multipart encoding for file upload
+        self.helper.form_enctype = 'multipart/form-data'

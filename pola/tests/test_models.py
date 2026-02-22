@@ -1,5 +1,8 @@
-from test_plus import TestCase
+from pola.models import app_default_banner_upload_to
 
 
-class TestStats(TestCase):
-    pass
+def test_app_default_banner_upload_to_returns_static_path():
+    class Dummy:
+        pass
+
+    assert app_default_banner_upload_to(Dummy(), 'file.png') == 'main-banner'

@@ -9,8 +9,11 @@
 
 {% block content %}
     {% crispy form %}
+    <hr/>
+    {% crispy banner_form %}
 {% endblock content %}
 
 {% block javascript %}
     {{ form.media }}
+    {{ banner_form.media }}
 {% endblock javascript %}

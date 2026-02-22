@@ -115,11 +115,44 @@ class TestAppConfigurationUpdate(WebTestMixin, TestCase):
 
     def test_form_success(self):
         page = self.app.get(self.url, user=self.user)
-        page.form['donate_url'] = "http://example.com"
-        page.form['donate_text'] = "DONATE-TEXT"
+        # Select the main configuration form explicitly (two forms exist on page)
+        form = next(f for f in page.forms.values() if 'donate_url' in f.fields)
+        form['donate_url'] = "http://example.com"
+        form['donate_text'] = "DONATE-TEXT"
 
-        page = page.form.submit(name='action')
+        page = form.submit(name='action')
         self.assertRedirects(page, reverse('home-cms'))
         instance = AppConfiguration.objects.first()
         self.assertEqual(instance.donate_url, "http://example.com")
         self.assertEqual(instance.donate_text, "DONATE-TEXT")
+
+
+class TestAppConfigurationUpdateBanner(TestCase):
+    url = reverse_lazy('app-config')
+
+    def setUp(self):
+        super().setUp()
+        # Superuser bypasses permission checks in the view mixin
+        self.user = StaffFactory()
+
+    def test_banner_upload_success_flow(self):
+        # Ensure singleton exists
+        AppConfiguration.get_singleton()
+        self.client.login(username=self.user.username, password='pass')
+
+        # Trigger the banner branch and mock form internals to avoid storage access
+        with mock.patch('pola.views.AppDefaultBannerForm.is_valid', return_value=True) as mock_valid, mock.patch(
+            'pola.views.AppDefaultBannerForm.save'
+        ) as mock_save, mock.patch('pola.views.messages.success') as mock_success:
+
+            resp = self.client.post(self.url, data={'upload_banner': '1'}, follow=False)
+
+            # View should save banner and redirect to home
+            self.assertTrue(mock_valid.called)
+            self.assertTrue(mock_save.called)
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp['Location'], reverse('home-cms'))
+
+            # Success message is emitted with expected text
+            args, kwargs = mock_success.call_args
+            self.assertEqual(str(args[1]), 'Baner zaktualizowany!')
