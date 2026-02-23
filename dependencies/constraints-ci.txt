@@ -67,7 +67,7 @@ packaging==26.0
 parameterized==0.9.0
 parse==1.21.1
 parso==0.8.6
-pathable==0.4.4
+pathable==0.5.0
 pexpect==4.9.0
 Pillow==10.1.0
 pluggy==1.6.0
