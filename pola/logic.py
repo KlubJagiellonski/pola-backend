@@ -125,10 +125,7 @@ def _logo_check(result: dict, product: Product | None, multiple_company_supporte
     - Applies only to company fields (not brand fields).
     - Runs only when `AppConfiguration.default_banner` is present.
     """
-    try:
-        app_cfg = AppConfiguration.get_singleton()
-    except Exception:
-        return
+    app_cfg = AppConfiguration.get_singleton()
 
     default_banner = getattr(app_cfg, 'default_banner', None)
     if not default_banner:
@@ -167,7 +164,7 @@ def _logo_check(result: dict, product: Product | None, multiple_company_supporte
             if not _is_empty_url(b.get('logotype_url')):
                 return
 
-    # All companies and brands appear to have empty logos -> apply fallback to company fields
+    # At this point we know that all companies and brands appear to have empty logos
     for cd in companies_data:
         _apply_fallback(cd)
 
