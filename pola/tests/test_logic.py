@@ -1,5 +1,7 @@
 import os
+from types import SimpleNamespace
 from unittest import mock
+from unittest.mock import patch
 
 from django.core.files.base import ContentFile
 from parameterized import parameterized
@@ -10,6 +12,8 @@ from pola.company.factories import BrandFactory, CompanyFactory
 from pola.gpc.factories import GPCBrickFactory
 from pola.logic import (
     _find_replacements,
+    _is_empty_url,
+    _logo_check,
     get_by_code,
     get_result_from_code,
     handle_product_replacements,
@@ -65,6 +69,158 @@ class TestGetResultFromCode(TestCase):
         response = get_result_from_code("123123")
         expected_response[0]["code"] = "123123"
         self.assertEqual(expected_response, response)
+
+
+class TestIsEmptyUrl(TestCase):
+    def test_is_empty_for_none_and_blank(self):
+        self.assertTrue(_is_empty_url(None))
+        self.assertTrue(_is_empty_url(""))
+
+    @parameterized.expand(
+        [
+            ("example.pl", True),
+            ("http://example.pl/logo.png", True),
+            ("https://www.example.pl/path", True),
+            ("https://acme.com/logo.png", False),
+            ("/media/logo.png", False),
+            ("myexample.pl/logo.png", True),
+        ]
+    )
+    def test_various_urls(self, url, expected):
+        self.assertEqual(expected, _is_empty_url(url))
+
+
+class TestLogoCheck(TestCase):
+    def _mock_app_cfg(self, banner_url="https://promo/link", default_banner_url="https://cdn/banner.png"):
+        default_banner = SimpleNamespace(url=default_banner_url) if default_banner_url else None
+        return SimpleNamespace(default_banner=default_banner, banner_url=banner_url)
+
+    def test_noop_when_default_banner_missing(self):
+        product = ProductFactory.create()
+        result = {
+            'name': 'Acme',
+            'official_url': None,
+            'logotype_url': None,
+        }
+        with patch(
+            'pola.logic.AppConfiguration.get_singleton',
+            return_value=self._mock_app_cfg(banner_url=None, default_banner_url=None),
+        ):
+            _logo_check(result, product, multiple_company_supported=False)
+
+        self.assertIsNone(result['logotype_url'])
+        self.assertIsNone(result['official_url'])
+
+    def test_applies_fallback_for_single_company(self):
+        product = ProductFactory.create()
+        result = {
+            'name': 'Acme',
+            'official_url': None,
+            'logotype_url': None,
+        }
+        with patch('pola.logic.AppConfiguration.get_singleton', return_value=self._mock_app_cfg()):
+            _logo_check(result, product, multiple_company_supported=False)
+
+        self.assertEqual('https://cdn/banner.png', result['logotype_url'])
+        self.assertEqual('https://promo/link', result['official_url'])
+
+    def test_does_not_touch_brands_fields(self):
+        product = ProductFactory.create()
+        brand_entry = {'name': 'B', 'logotype_url': None, 'website_url': 'example.pl'}
+        result = {
+            'name': 'Acme',
+            'official_url': None,
+            'logotype_url': None,
+            'brands': [brand_entry],
+        }
+        with patch('pola.logic.AppConfiguration.get_singleton', return_value=self._mock_app_cfg()):
+            _logo_check(result, product, multiple_company_supported=False)
+
+        # Company updated
+        self.assertEqual('https://cdn/banner.png', result['logotype_url'])
+        self.assertEqual('https://promo/link', result['official_url'])
+        # Brand untouched
+        self.assertIsNone(result['brands'][0]['logotype_url'])
+        self.assertEqual('example.pl', result['brands'][0]['website_url'])
+
+    def test_skip_when_any_company_has_logo(self):
+        result = {
+            'companies': [
+                {'name': 'C1', 'logotype_url': 'https://img/logo1.png', 'official_url': None},
+                {'name': 'C2', 'logotype_url': None, 'official_url': None},
+            ]
+        }
+        with patch('pola.logic.AppConfiguration.get_singleton', return_value=self._mock_app_cfg()):
+            _logo_check(result, product=None, multiple_company_supported=True)
+
+        # No changes applied
+        self.assertEqual('https://img/logo1.png', result['companies'][0]['logotype_url'])
+        self.assertIsNone(result['companies'][0]['official_url'])
+        self.assertIsNone(result['companies'][1]['logotype_url'])
+        self.assertIsNone(result['companies'][1]['official_url'])
+
+    def test_skip_when_any_brand_has_logo_serialized(self):
+        result = {
+            'companies': [
+                {
+                    'name': 'C1',
+                    'logotype_url': None,
+                    'official_url': None,
+                    'brands': [{'name': 'B1', 'logotype_url': 'https://img/brand.png', 'website_url': 'site'}],
+                }
+            ]
+        }
+        with patch('pola.logic.AppConfiguration.get_singleton', return_value=self._mock_app_cfg()):
+            _logo_check(result, product=None, multiple_company_supported=True)
+
+        # No changes applied because brand has a logo
+        self.assertIsNone(result['companies'][0]['logotype_url'])
+        self.assertIsNone(result['companies'][0]['official_url'])
+
+    def test_multi_company_applies_to_all(self):
+        result = {
+            'companies': [
+                {'name': 'C1', 'logotype_url': None, 'official_url': None, 'brands': []},
+                {'name': 'C2', 'logotype_url': None, 'official_url': None},
+            ]
+        }
+        with patch('pola.logic.AppConfiguration.get_singleton', return_value=self._mock_app_cfg()):
+            _logo_check(result, product=None, multiple_company_supported=True)
+
+        self.assertEqual('https://cdn/banner.png', result['companies'][0]['logotype_url'])
+        self.assertEqual('https://promo/link', result['companies'][0]['official_url'])
+        self.assertEqual('https://cdn/banner.png', result['companies'][1]['logotype_url'])
+        self.assertEqual('https://promo/link', result['companies'][1]['official_url'])
+
+    def test_only_set_logo_when_banner_url_missing(self):
+        result = {
+            'companies': [
+                {'name': 'C1', 'logotype_url': None, 'official_url': 'https://keep.me'},
+                {'name': 'C2', 'logotype_url': None, 'official_url': None},
+            ]
+        }
+        app_cfg = self._mock_app_cfg(banner_url=None, default_banner_url='https://cdn/banner.png')
+        with patch('pola.logic.AppConfiguration.get_singleton', return_value=app_cfg):
+            _logo_check(result, product=None, multiple_company_supported=True)
+
+        self.assertEqual('https://cdn/banner.png', result['companies'][0]['logotype_url'])
+        self.assertEqual('https://keep.me', result['companies'][0]['official_url'])  # unchanged
+        self.assertEqual('https://cdn/banner.png', result['companies'][1]['logotype_url'])
+        self.assertIsNone(result['companies'][1]['official_url'])
+
+    def test_treats_example_pl_logo_as_empty(self):
+        result = {
+            'companies': [
+                {'name': 'C1', 'logotype_url': 'http://example.pl/logo.png', 'official_url': None},
+                {'name': 'C2', 'logotype_url': None, 'official_url': None},
+            ]
+        }
+        with patch('pola.logic.AppConfiguration.get_singleton', return_value=self._mock_app_cfg()):
+            _logo_check(result, product=None, multiple_company_supported=True)
+
+        # Fallback applied because example.pl counts as empty
+        self.assertEqual('https://cdn/banner.png', result['companies'][0]['logotype_url'])
+        self.assertEqual('https://promo/link', result['companies'][0]['official_url'])
 
     @mock.patch("pola.logic.get_by_code")
     def test_missing_company_and_590(self, mock_get_by_code):
