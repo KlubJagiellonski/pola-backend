@@ -130,7 +130,7 @@ DEFAULT_DONATE_TEXT = "1,5% podatku na aplikację Pola?"
 
 
 def app_default_banner_upload_to(instance, filename):
-    return 'main-banner'
+    return 'main-banner.png'
 
 
 class AppConfiguration(SingletonModel):
