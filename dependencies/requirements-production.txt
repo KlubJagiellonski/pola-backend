@@ -27,7 +27,7 @@ openapi-schema-validator==0.6.3
 openapi-spec-validator==0.7.2
 psycopg2-binary==2.9.11
 pydantic==1.10.9
-reportlab[pycairo]==4.3.1
+reportlab[pycairo]==4.4.10
 rq==1.16.1
 sentry-sdk==2.54.0
 tqdm==4.67.3
