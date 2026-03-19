@@ -13,7 +13,7 @@ dbt-core==1.9.4
 dbt-extractor==0.6.0
 dbt-postgres==1.8.2
 dbt-semantic-interfaces==0.7.4
-deepdiff==7.0.1
+deepdiff==8.6.2
 idna==3.11
 importlib-metadata==6.11.0
 isodate==0.6.1
