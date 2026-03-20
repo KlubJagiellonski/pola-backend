@@ -1,4 +1,4 @@
-agate==1.9.1
+agate==1.14.2
 annotated-types==0.7.0
 attrs==26.1.0
 babel==2.18.0
