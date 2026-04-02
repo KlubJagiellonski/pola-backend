@@ -375,8 +375,7 @@ def serialize_company(company):
 
         company_data['description'] = desc
     company_data['sources'] = company.get_sources(raise_exp=False)
-    if plScore:
-        company_data['plScore'] = plScore
+    company_data['plScore'] = plScore
     company_data['official_url'] = company.official_url
     if company.logotype:
         company_data['logotype_url'] = company.logotype.url
