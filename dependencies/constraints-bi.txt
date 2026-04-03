@@ -23,7 +23,7 @@ jsonschema-specifications==2025.9.1
 leather==0.4.1
 MarkupSafe==3.0.3
 mashumaro==3.14
-more-itertools==10.8.0
+more-itertools==11.0.1
 msgpack==1.1.2
 networkx==3.6.1
 ordered-set==4.1.0
