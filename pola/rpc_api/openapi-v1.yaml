@@ -6,17 +6,20 @@ info:
   version: '-'
 
   description: |
-    # Wprowadzenie
+    # Introduction
+    Pola API allows access to data about products and companies that are part of the Pola database.
+    It also allows you to report information about products, which can then be moderated
+    by the application's editorial staff.
 
+    # Operations
+    Available operations are: get_by_code, create_report, search and subscribe_newsletter. Details below.
 
-    # Operacje
+    # Auth
     N/A
 
-    # Konwencje
-    N/A
-
-    # Błędy
-    N/A
+    # Errors
+    Handled errors are returned with appropriate HTTP status codes and a response body
+    compliant with [RFC7807](https://tools.ietf.org/html/rfc7807).
 
 servers:
   - url: https://www.pola-app.pl/
@@ -49,6 +52,30 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/getByCodeV4'
+
+  /a/v4/create_report:
+    post:
+      parameters:
+        - $ref: '#/components/parameters/DeviceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReportRequest'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReportResponse'
+        '403':
+          description: The files_count limit has been exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /a/v4/search:
     get:
@@ -318,6 +345,45 @@ components:
               - product_id
 
   schemas:
+    CreateReportRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+          description: Description of the report
+        product_id:
+          type: integer
+          nullable: true
+          description: ID of the related product (optional)
+        files_count:
+          type: integer
+          minimum: 0
+          maximum: 10
+          description: Number of files to upload (optional)
+        file_ext:
+          type: string
+          description: File extension for uploaded files (e.g. jpg) (optional)
+        mime_type:
+          type: string
+          description: MIME type for uploaded files (e.g. image/jpeg) (optional)
+      required:
+        - description
+
+    CreateReportResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+        signed_requests:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - signed_requests
+
     SearchResultCollection:
       type: object
       additionalProperties: false
