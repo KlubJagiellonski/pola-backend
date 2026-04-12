@@ -18,9 +18,20 @@ from .models import Product
 
 
 class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Ensure the empty option is labeled clearly
+        if 'ingredients' in self.fields:
+            field = self.fields['ingredients']
+            field.required = False
+            choices = list(field.choices)
+            # Remove any existing empty display first
+            choices = [(v, l) for (v, l) in choices if v not in (None, '')]
+            field.choices = [('', 'Brak danych')] + choices
+
     class Meta:
         model = models.Product
-        fields = ['code', 'name', 'code', 'company', 'brand', 'replacements']
+        fields = ['code', 'name', 'code', 'company', 'brand', 'ingredients', 'replacements']
         widgets = {
             'company': autocomplete.ModelSelect2(url='company:company-autocomplete'),
             'brand': autocomplete.ModelSelect2(url='company:brand-autocomplete'),

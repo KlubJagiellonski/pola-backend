@@ -113,6 +113,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /a/v4/set_ingredients:
+    post:
+      summary: Set ingredients for a product
+      description: |
+        Sets the "Surowce" (ingredients) property for a product identified by its code.
+        Accepts only the values "PL" (Polskie surowce) and "NPL" (Nie polskie surowce).
+        Any other value will clear the field (equivalent to "Brak danych").
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetIngredientsRequest'
+      responses:
+        '200':
+          description: Updated product ingredients
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  code:
+                    type: string
+                  ingredients:
+                    type: string
+                    nullable: true
+                    description: PL, NPL or null when cleared
+                required:
+                  - code
+                  - ingredients
         '500':
           description: The server error.
           content:
@@ -476,3 +508,17 @@ components:
           type: string
       required:
         - contact_email
+
+    SetIngredientsRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+          description: Product code (EAN)
+        ingredients:
+          type: string
+          description: 'PL for Polskie surowce, NPL for Nie polskie surowce; any other value clears the field'
+      required:
+        - code
+        - ingredients

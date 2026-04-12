@@ -599,3 +599,37 @@ class TestSearchV4(TestCase):
         response_data = json.loads(response.content)
         self.assertEqual(1, len(response_data['products']))
         self.assertEqual(11, response_data['totalItems'])
+
+
+class TestSetIngredientsV4(TestCase, JsonRequestMixin):
+    url = '/a/v4/set_ingredients'
+
+    def test_sets_ingredients_pl(self):
+        p = ProductFactory()
+        payload = {"code": p.code, "ingredients": "PL"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(200, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual({"code": p.code, "ingredients": "PL"}, body)
+        p.refresh_from_db()
+        self.assertEqual("PL", p.ingredients)
+
+    def test_sets_ingredients_npl(self):
+        p = ProductFactory()
+        payload = {"code": p.code, "ingredients": "NPL"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(200, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual({"code": p.code, "ingredients": "NPL"}, body)
+        p.refresh_from_db()
+        self.assertEqual("NPL", p.ingredients)
+
+    def test_invalid_value_nullifies_ingredients(self):
+        p = ProductFactory(ingredients="PL")
+        payload = {"code": p.code, "ingredients": "OTHER"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(200, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual({"code": p.code, "ingredients": None}, body)
+        p.refresh_from_db()
+        self.assertIsNone(p.ingredients)

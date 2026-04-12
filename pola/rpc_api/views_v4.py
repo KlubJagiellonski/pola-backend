@@ -1,8 +1,11 @@
+import json
+
 from django.core.paginator import InvalidPage
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
 from pola import logic, logic_ai
@@ -94,3 +97,47 @@ class SearchV4ApiView(View):
             pred = pred | Q(code=query)
         qs = Product.objects.filter(pred).order_by('pk')
         return qs
+
+
+@csrf_exempt
+@ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+def set_product_ingredients_v4(request):
+    """Set Product.ingredients by product code.
+
+    Accepts POST with JSON body: {"code": "<ean>", "ingredients": "PL|NPL|<other>"}
+    - When value is "PL" or "NPL", store that value.
+    - Any other value (including missing) sets the field to null ("Brak danych").
+    Returns updated state: {"code": ..., "ingredients": <value or null>}.
+    """
+    if request.method != 'POST':
+        return JsonResponse({"detail": "Method not allowed"}, status=405)
+
+    try:
+        data = json.loads(request.body.decode("utf-8")) if request.body else {}
+    except Exception:
+        return JsonResponse({"detail": "Invalid JSON"}, status=400)
+
+    code = data.get('code') or request.GET.get('code')
+    value = data.get('ingredients') or request.GET.get('ingredients')
+    if not code:
+        return JsonResponse({"detail": "Missing 'code'"}, status=400)
+
+    try:
+        product = Product.objects.get(code=code)
+    except Product.DoesNotExist:
+        return JsonResponse({"detail": "Product not found"}, status=404)
+
+    normalized = (value or '').upper()
+    if normalized in {'PL', 'NPL'}:
+        product.ingredients = normalized
+    else:
+        product.ingredients = None
+
+    product.save()
+
+    return JsonResponse(
+        {
+            "code": product.code,
+            "ingredients": product.ingredients,
+        }
+    )
