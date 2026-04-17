@@ -363,3 +363,9 @@ CMS_STATS_EXTERNAL_URL = env.str(
     'POLA_APP_CMS_STATS_EXTERNAL_URL',
     default='https://lookerstudio.google.com/reporting/c8d93b03-e89c-4cbe-be4b-7350ac7d6a67/',
 )
+
+# API auth tokens
+# ------------------------
+# Static Bearer token protecting selected admin-like endpoints.
+# Configure via env var: POLA_APP_SET_BEARER_TOKEN
+SET_BEARER_TOKEN = env.str('POLA_APP_SET_BEARER_TOKEN', default=None)

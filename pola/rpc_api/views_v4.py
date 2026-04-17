@@ -12,6 +12,7 @@ from pola import logic, logic_ai
 from pola.models import AppConfiguration, Query, SearchQuery
 from pola.product.models import Product
 from pola.rpc_api.api_models import SearchResult, SearchResultCollection
+from pola.rpc_api.auth import require_static_bearer_token
 from pola.rpc_api.http import JsonProblemResponse
 from pola.rpc_api.openapi import validate_pola_openapi_spec
 from pola.rpc_api.paginator import TokenizedPaginator
@@ -109,6 +110,10 @@ def set_product_ingredients_v4(request):
     - Any other value (including missing) sets the field to null ("Brak danych").
     Returns updated state: {"code": ..., "ingredients": <value or null>}.
     """
+    unauthorized = require_static_bearer_token(request)
+    if unauthorized is not None:
+        return unauthorized
+
     if request.method != 'POST':
         return JsonResponse({"detail": "Method not allowed"}, status=405)
 
