@@ -1,7 +1,7 @@
 Babel==2.18.0
 boto==2.49.0
-boto3==1.42.92
-botocore==1.42.92
+boto3==1.42.93
+botocore==1.42.93
 Collectfast==2.2.0
 django-allauth==0.55.2
 django-anymail==15.0
