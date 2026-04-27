@@ -32,6 +32,7 @@ class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, 
     def clean_ingredients(self):
         ingredients = self.cleaned_data.get('ingredients')
         return None if ingredients == '' else ingredients
+
     class Meta:
         model = models.Product
         fields = ['code', 'name', 'company', 'brand', 'ingredients', 'replacements']
