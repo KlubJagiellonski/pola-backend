@@ -90,6 +90,16 @@
                 </td>
             </tr>
             <tr>
+                <td>{% trans "Surowce" %}</td>
+                <td>
+                    {% if object.ingredients %}
+                        {{ object.get_ingredients_display }}
+                    {% else %}
+                        {% trans "Brak danych" %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
                 <td>{% trans "Zamienniki" %}</td>
                 <td>
                     {% if object.replacements.all %}

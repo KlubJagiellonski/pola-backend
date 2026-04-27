@@ -599,3 +599,75 @@ class TestSearchV4(TestCase):
         response_data = json.loads(response.content)
         self.assertEqual(1, len(response_data['products']))
         self.assertEqual(11, response_data['totalItems'])
+
+
+class TestSetIngredientsV4(TestCase, JsonRequestMixin):
+    url = '/a/v4/set_ingredients'
+
+    def test_sets_ingredients_pl(self):
+        p = ProductFactory()
+        payload = {"code": p.code, "ingredients": "PL"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(200, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual({"code": p.code, "ingredients": "PL"}, body)
+        p.refresh_from_db()
+        self.assertEqual("PL", p.ingredients)
+
+    def test_sets_ingredients_npl(self):
+        p = ProductFactory()
+        payload = {"code": p.code, "ingredients": "NPL"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(200, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual({"code": p.code, "ingredients": "NPL"}, body)
+        p.refresh_from_db()
+        self.assertEqual("NPL", p.ingredients)
+
+    def test_invalid_value_nullifies_ingredients(self):
+        p = ProductFactory(ingredients="PL")
+        payload = {"code": p.code, "ingredients": "OTHER"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(200, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual({"code": p.code, "ingredients": None}, body)
+        p.refresh_from_db()
+        self.assertIsNone(p.ingredients)
+
+    def _auth_headers(self):
+        token = getattr(settings, 'SET_BEARER_TOKEN', None)
+        return {'HTTP_AUTHORIZATION': f'Bearer {token}'} if token else {}
+
+    def test_rejects_non_post_method(self):
+        response = self.client.get(self.url, content_type="application/json", **self._auth_headers())
+        self.assertEqual(405, response.status_code, response.content)
+        self.assertEqual({"detail": "Method not allowed"}, json.loads(response.content))
+
+    def test_invalid_json_returns_400(self):
+        response = self.client.post(self.url, "not-json", content_type="application/json", **self._auth_headers())
+        self.assertEqual(400, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual('OpenAPI Spec validation failed', body.get('title'))
+
+    def test_missing_code_returns_400(self):
+        # Missing 'code' in body should be caught by OpenAPI validation
+        payload = {"ingredients": "PL"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(400, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual('OpenAPI Spec validation failed', body.get('title'))
+
+    def test_product_not_found_returns_404(self):
+        payload = {"code": "9999999999999", "ingredients": "PL"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(404, response.status_code, response.content)
+        self.assertEqual({"detail": "Product not found"}, json.loads(response.content))
+
+    def test_rejects_params_in_query_string_when_body_missing(self):
+        # Required requestBody; empty body with query params should be rejected by OpenAPI validation
+        p = ProductFactory()
+        url = f"{self.url}?code={p.code}&ingredients=PL"
+        response = self.client.post(url, "", content_type="application/json", **self._auth_headers())
+        self.assertEqual(400, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual('OpenAPI Spec validation failed', body.get('title'))

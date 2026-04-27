@@ -10,6 +10,7 @@ class ProductAdmin(VersionAdmin):
         'id',
         'name',
         'code',
+        'ingredients',
     )
     list_filter = ('company',)
     search_fields = ('name',)

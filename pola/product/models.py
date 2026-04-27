@@ -41,6 +41,20 @@ class Product(TimeStampedModel):
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
     ai_pics_count = models.PositiveIntegerField(null=False, default=0)
     gs1_last_response = models.JSONField(null=True)
+
+    class Ingredients(models.TextChoices):
+        POLISH = 'PL', _('Polskie surowce')
+        NON_POLISH = 'NPL', _('Nie polskie surowce')
+
+    ingredients = models.CharField(
+        max_length=3,
+        choices=Ingredients.choices,
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name=_('Surowce'),
+        help_text=_('Wybierz pochodzenie surowców; brak danych oznacza pustą wartość.'),
+    )
     replacements = models.ManyToManyField(
         'self',
         symmetrical=False,

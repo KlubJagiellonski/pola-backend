@@ -120,6 +120,52 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /a/v4/set_ingredients:
+    post:
+      summary: Set ingredients for a product
+      description: |
+        Sets the "Surowce" (ingredients) property for a product identified by its code.
+        Accepts only the values "PL" (Polskie surowce) and "NPL" (Nie polskie surowce).
+        Any other value will clear the field (equivalent to "Brak danych").
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetIngredientsRequest'
+      responses:
+        '200':
+          description: Updated product ingredients
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  code:
+                    type: string
+                  ingredients:
+                    type: string
+                    nullable: true
+                    description: PL, NPL or null when cleared
+                required:
+                  - code
+                  - ingredients
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          description: The server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   parameters:
     NoAI:
@@ -170,6 +216,35 @@ components:
     # 400
     BadRequest:
       description: Client specified an invalid argument.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or failed.
+      headers:
+        WWW-Authenticate:
+          description: Challenge indicating required authentication scheme
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              detail:
+                type: string
+            required:
+              - detail
+    NotFound:
+      description: Requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: The method is not allowed for the requested URL.
       content:
         application/json:
           schema:
@@ -476,3 +551,17 @@ components:
           type: string
       required:
         - contact_email
+
+    SetIngredientsRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+          description: Product code (EAN)
+        ingredients:
+          type: string
+          description: 'PL for Polskie surowce, NPL for Nie polskie surowce; any other value clears the field'
+      required:
+        - code
+        - ingredients
