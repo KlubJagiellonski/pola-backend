@@ -31,7 +31,7 @@ class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, 
 
     class Meta:
         model = models.Product
-        fields = ['code', 'name', 'code', 'company', 'brand', 'ingredients', 'replacements']
+        fields = ['code', 'name', 'company', 'brand', 'ingredients', 'replacements']
         widgets = {
             'company': autocomplete.ModelSelect2(url='company:company-autocomplete'),
             'brand': autocomplete.ModelSelect2(url='company:brand-autocomplete'),
