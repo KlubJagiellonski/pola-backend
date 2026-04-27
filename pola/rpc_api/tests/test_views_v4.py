@@ -646,14 +646,16 @@ class TestSetIngredientsV4(TestCase, JsonRequestMixin):
     def test_invalid_json_returns_400(self):
         response = self.client.post(self.url, "not-json", content_type="application/json", **self._auth_headers())
         self.assertEqual(400, response.status_code, response.content)
-        self.assertEqual({"detail": "Invalid JSON"}, json.loads(response.content))
+        body = json.loads(response.content)
+        self.assertEqual('OpenAPI Spec validation failed', body.get('title'))
 
     def test_missing_code_returns_400(self):
-        # Missing 'code' in body
+        # Missing 'code' in body should be caught by OpenAPI validation
         payload = {"ingredients": "PL"}
         response = self.json_request(self.url, data=payload)
         self.assertEqual(400, response.status_code, response.content)
-        self.assertEqual({"detail": "Missing 'code'"}, json.loads(response.content))
+        body = json.loads(response.content)
+        self.assertEqual('OpenAPI Spec validation failed', body.get('title'))
 
     def test_product_not_found_returns_404(self):
         payload = {"code": "9999999999999", "ingredients": "PL"}
@@ -661,12 +663,11 @@ class TestSetIngredientsV4(TestCase, JsonRequestMixin):
         self.assertEqual(404, response.status_code, response.content)
         self.assertEqual({"detail": "Product not found"}, json.loads(response.content))
 
-    def test_accepts_params_in_query_string(self):
-        # Empty body + code/ingredients in query string should be accepted
+    def test_rejects_params_in_query_string_when_body_missing(self):
+        # Required requestBody; empty body with query params should be rejected by OpenAPI validation
         p = ProductFactory()
         url = f"{self.url}?code={p.code}&ingredients=PL"
         response = self.client.post(url, "", content_type="application/json", **self._auth_headers())
-        self.assertEqual(200, response.status_code, response.content)
-        self.assertEqual({"code": p.code, "ingredients": "PL"}, json.loads(response.content))
-        p.refresh_from_db()
-        self.assertEqual("PL", p.ingredients)
+        self.assertEqual(400, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual('OpenAPI Spec validation failed', body.get('title'))

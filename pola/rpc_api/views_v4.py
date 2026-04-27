@@ -102,6 +102,7 @@ class SearchV4ApiView(View):
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
+@validate_pola_openapi_spec
 def set_product_ingredients_v4(request):
     """Set Product.ingredients by product code.
 
@@ -115,22 +116,23 @@ def set_product_ingredients_v4(request):
         return unauthorized
 
     if request.method != 'POST':
-        return JsonResponse({"detail": "Method not allowed"}, status=405)
+        return JsonProblemResponse(status=405, title="Method Not Allowed", detail="Only POST is supported")
 
     try:
         data = json.loads(request.body.decode("utf-8")) if request.body else {}
     except Exception:
-        return JsonResponse({"detail": "Invalid JSON"}, status=400)
+        return JsonProblemResponse(status=400, title="Invalid JSON", detail="Request body is not valid JSON")
 
-    code = data.get('code') or request.GET.get('code')
-    value = data.get('ingredients') or request.GET.get('ingredients')
+    # Inputs must come from JSON body as per OpenAPI; do not accept query params.
+    code = data.get('code')
+    value = data.get('ingredients')
     if not code:
-        return JsonResponse({"detail": "Missing 'code'"}, status=400)
+        return JsonProblemResponse(status=400, title="Missing required field", detail="Missing 'code'")
 
     try:
         product = Product.objects.get(code=code)
     except Product.DoesNotExist:
-        return JsonResponse({"detail": "Product not found"}, status=404)
+        return JsonProblemResponse(status=404, title="Product not found", detail=f"No product with code {code}")
 
     normalized = (value or '').strip().upper()
     if normalized in {'PL', 'NPL'}:

@@ -151,6 +151,14 @@ paths:
                 required:
                   - code
                   - ingredients
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
         '500':
           description: The server error.
           content:
@@ -208,6 +216,35 @@ components:
     # 400
     BadRequest:
       description: Client specified an invalid argument.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or failed.
+      headers:
+        WWW-Authenticate:
+          description: Challenge indicating required authentication scheme
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              detail:
+                type: string
+            required:
+              - detail
+    NotFound:
+      description: Requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: The method is not allowed for the requested URL.
       content:
         application/json:
           schema:
