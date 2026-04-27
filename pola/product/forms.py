@@ -29,6 +29,9 @@ class ProductForm(SaveButtonMixin, FormHorizontalMixin, CommitDescriptionMixin, 
             choices = [(v, l) for (v, l) in choices if v not in (None, '')]
             field.choices = [('', 'Brak danych')] + choices
 
+    def clean_ingredients(self):
+        ingredients = self.cleaned_data.get('ingredients')
+        return None if ingredients == '' else ingredients
     class Meta:
         model = models.Product
         fields = ['code', 'name', 'company', 'brand', 'ingredients', 'replacements']
