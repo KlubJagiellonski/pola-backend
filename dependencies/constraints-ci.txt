@@ -49,7 +49,7 @@ ipdb==0.13.13
 ipython==9.10.1
 ipython_pygments_lexers==1.1.1
 isodate==0.6.1
-jedi==0.19.2
+jedi==0.20.0
 jmespath==1.1.0
 jsonschema==4.25.1
 jsonschema-path==0.3.4
