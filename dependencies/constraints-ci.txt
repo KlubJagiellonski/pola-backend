@@ -43,7 +43,7 @@ Faker==40.1.0
 freetype-py==2.3.0
 gtin==1.3.1649173518
 gunicorn==25.3.0
-idna==3.12
+idna==3.14
 iniconfig==2.3.0
 ipdb==0.13.13
 ipython==9.10.1
