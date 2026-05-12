@@ -40,7 +40,7 @@ pytimeparse==1.1.8
 pytz==2026.1.post1
 PyYAML==6.0.3
 referencing==0.36.2
-requests==2.33.1
+requests==2.34.0
 rpds-py==0.30.0
 six==1.17.0
 snowplow-tracker==1.1.0
