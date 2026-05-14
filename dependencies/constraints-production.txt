@@ -2,8 +2,8 @@ asgiref==3.11.1
 attrs==26.1.0
 babel==2.18.0
 boto==2.49.0
-boto3==1.43.6
-botocore==1.43.6
+boto3==1.43.7
+botocore==1.43.7
 certifi==2026.4.22
 cffi==2.0.0
 chardet==7.4.3
