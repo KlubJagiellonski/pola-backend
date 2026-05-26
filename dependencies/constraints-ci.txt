@@ -65,7 +65,7 @@ openapi-schema-validator==0.6.3
 openapi-spec-validator==0.7.2
 packaging==26.2
 parameterized==0.9.0
-parse==1.22.0
+parse==1.22.1
 parso==0.8.7
 pathable==0.4.4
 pexpect==4.9.0
