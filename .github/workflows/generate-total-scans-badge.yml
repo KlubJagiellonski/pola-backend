@@ -1,0 +1,91 @@
+---
+name: Generate Total Scans Badge
+
+"on":
+  schedule:
+    - cron: "17 4 * * *"  # daily at 04:17 UTC
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment (prod|staging)"
+        required: false
+        default: "prod"
+        type: choice
+        options: ["prod", "staging"]
+      dataset_id:
+        description: "Override BigQuery dataset ID (optional)"
+        required: false
+        type: string
+
+permissions:
+  id-token: write   # for GCP OIDC auth
+  contents: write   # to push badge updates
+
+env:
+  # Reuse the same GCP configuration pattern as existing BI workflows
+  GCP_PROJECT_ID: pola-bi-looker
+  GCP_PROJECT_NUMBER: 354540873199
+  GCP_REGION: europe-west3
+  GCP_IDENTITY_POOL: github
+  GCP_IDENTITY_PROVIDER: pola-backend-repo
+  # Helper to keep provider string lines short for yamllint
+  # Computed later in the job to avoid long YAML lines
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select dataset based on environment
+        id: select
+        run: |
+          env_name="${{ inputs.environment || 'prod' }}"
+          if [[ -n "${{ inputs.dataset_id }}" ]]; then
+            dataset="${{ inputs.dataset_id }}"
+          else
+            case "$env_name" in
+              prod) dataset="pola_backend__prod";;
+              staging) dataset="pola_backend__staging";;
+              *) echo "Unknown environment: $env_name" >&2; exit 1;;
+            esac
+          fi
+          echo "BQ_DATASET=$dataset" >> "$GITHUB_ENV"
+          echo "ENV_NAME=$env_name" >> "$GITHUB_ENV"
+          # Precompute WIP base to keep YAML lines short and avoid expression-in-env pitfalls
+          base="projects/${GCP_PROJECT_NUMBER}/locations/global"
+          pool="workloadIdentityPools/${GCP_IDENTITY_POOL}/providers"
+          echo "GCP_WIP_BASE=${base}/${pool}" >> "$GITHUB_ENV"
+
+      - id: auth
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ env.GCP_WIP_BASE }}/${{ env.GCP_IDENTITY_PROVIDER }}
+          export_environment_variables: true
+          create_credentials_file: true
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Generate SVG badge from BigQuery
+        env:
+          GCP_PROJECT_ID: ${{ env.GCP_PROJECT_ID }}
+        run: |
+          bash scripts/generate_scans_svg.sh "$BQ_DATASET" docs/badges/total_scans.svg
+
+      - name: Commit and push badge (if changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/badges/total_scans.svg
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(badge): update total scans badge [skip ci]"
+          git push
