@@ -113,7 +113,7 @@ urllib3==1.26.15
 vcrpy==7.0.0
 waitress==3.0.2
 wcwidth==0.7.0
-WebOb==1.8.9
+WebOb==1.8.10
 WebTest==3.0.7
 Werkzeug==3.1.8
 wrapt==2.2.1
