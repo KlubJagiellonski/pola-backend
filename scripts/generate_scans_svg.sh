@@ -24,16 +24,23 @@ DATASET_ID="$1"
 OUTPUT_PATH="${2:-docs/badges/total_scans.svg}"
 TABLE_ID="${3:-pola_query}"
 
-# Run the query using Standard SQL and CSV output; take the last line (value row).
+# Ensure BigQuery CLI is available.
+command -v bq >/dev/null 2>&1 || { echo "bq CLI not found (install Google Cloud SDK / bq component)" >&2; exit 1; }
+
+# Run the query using Standard SQL and CSV output.
 TOTAL_SCANS=$(bq query \
   --use_legacy_sql=false \
   --quiet \
   --format=csv \
+  --project_id="${GCP_PROJECT_ID}" \
   "SELECT COUNT(1) AS total_scans FROM \`${GCP_PROJECT_ID}.${DATASET_ID}.${TABLE_ID}\`")
 
-# Extract the numeric value (skip header)
-TOTAL_SCANS=$(echo "${TOTAL_SCANS}" | tail -n 1 | tr -d '\r\n ')
-
+# Extract the numeric value (skip header) and validate it.
+TOTAL_SCANS=$(echo "${TOTAL_SCANS}" | sed -n '2p' | tr -d '\r\n ')
+if [[ ! "${TOTAL_SCANS}" =~ ^[0-9]+$ ]]; then
+  echo "Unexpected BigQuery output for total scans: ${TOTAL_SCANS}" >&2
+  exit 1
+fi
 mkdir -p "$(dirname "${OUTPUT_PATH}")"
 
 # Basic badge styling
