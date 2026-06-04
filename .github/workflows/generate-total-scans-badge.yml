@@ -79,13 +79,17 @@ jobs:
           bash scripts/generate_scans_svg.sh "$BQ_DATASET" docs/badges/total_scans.svg
 
       - name: Commit and push badge (if changed)
-        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Ensure we're on a branch (checkout can be detached) and up to date before committing.
+          git checkout -B "${GITHUB_REF_NAME}"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+
           git add docs/badges/total_scans.svg
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
           git commit -m "chore(badge): update total scans badge [skip ci]"
-          git push
+          git push origin "HEAD:${GITHUB_REF_NAME}"
