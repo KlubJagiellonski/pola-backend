@@ -79,6 +79,7 @@ jobs:
           bash scripts/generate_scans_svg.sh "$BQ_DATASET" docs/badges/total_scans.svg
 
       - name: Commit and push badge (if changed)
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
