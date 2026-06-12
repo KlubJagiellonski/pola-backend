@@ -24,7 +24,7 @@ leather==0.4.1
 MarkupSafe==3.0.3
 mashumaro==3.14
 more-itertools==10.8.0
-msgpack==1.1.2
+msgpack==1.2.0
 networkx==3.6.1
 ordered-set==4.1.0
 packaging==26.2
