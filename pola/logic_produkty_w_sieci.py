@@ -136,14 +136,23 @@ def ensure_company_exists(result_company):
             result_company.name,
             result_company.nip,
         )
-        expected_company, company_created = Company.objects.get_or_create(
-            nip=result_company.nip,
-            defaults={
-                'name': result_company.name,
-            },
-            commit_desc='Firma utworzona automatycznie na podstawie API - Produkty w sieci',
-        )
-        LOGGER.info("Company created: %s", company_created)
+        try:
+            expected_company, company_created = Company.objects.get_or_create(
+                nip=result_company.nip,
+                defaults={
+                    'name': result_company.name,
+                },
+                commit_desc='Firma utworzona automatycznie na podstawie API - Produkty w sieci',
+            )
+            LOGGER.info("Company created: %s", company_created)
+        except Company.MultipleObjectsReturned:
+            LOGGER.warning(
+                "Multiple Company records found for NIP=%s or non-unique name=%r; proceeding without selecting one.",
+                result_company.nip,
+                result_company.name,
+            )
+            expected_company = None
+            company_created = False
     else:
         LOGGER.info("Result miss information about company.")
         expected_company = None
@@ -155,12 +164,21 @@ def ensure_brand_exists(expected_company, result_product):
 
     if result_product.brand:
         LOGGER.info("Result contains information about brand: name=%s. Checking db.", result_product.brand)
-        expected_brand, brand_created = Brand.objects.get_or_create(
-            name=result_product.brand,
-            company=expected_company,
-            commit_desc='Marka utworzona automatycznie na podstawie API ILiM',
-        )
-        LOGGER.info("Brand created: %s", brand_created)
+        try:
+            expected_brand, brand_created = Brand.objects.get_or_create(
+                name=result_product.brand,
+                company=expected_company,
+                commit_desc='Marka utworzona automatycznie na podstawie API ILiM',
+            )
+            LOGGER.info("Brand created: %s", brand_created)
+        except Brand.MultipleObjectsReturned:
+            LOGGER.warning(
+                "Multiple Brand records found for name=%r and company_id=%s; skipping brand assignment.",
+                result_product.brand,
+                getattr(expected_company, 'id', None),
+            )
+            expected_brand = None
+            brand_created = False
     else:
         LOGGER.info("Result miss information about brand.")
         expected_brand = None
