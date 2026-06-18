@@ -148,7 +148,7 @@ def set_product_ingredients_v4(request):
         return JsonResponse({"detail": "Product not found"}, status=404)
 
     normalized = (value or '').strip().upper()
-    if normalized in {'PL', 'NPL', 'DW'}:
+    if normalized in Product.Ingredients.values:
         product.ingredients = normalized
     else:
         product.ingredients = None
