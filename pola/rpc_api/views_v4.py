@@ -105,8 +105,8 @@ class SearchV4ApiView(View):
 def set_product_ingredients_v4(request):
     """Set Product.ingredients by product code.
 
-    Accepts POST with JSON body: {"code": "<ean>", "ingredients": "PL|NPL|<other>"}
-    - When value is "PL" or "NPL", store that value.
+    Accepts POST with JSON body: {"code": "<ean>", "ingredients": "PL|NPL|DW|<other>"}
+    - When value is "PL", "NPL" or "DW", store that value.
     - Any other value (including missing) sets the field to null ("Brak danych").
     Returns updated state: {"code": ..., "ingredients": <value or null>}.
     """
@@ -148,7 +148,7 @@ def set_product_ingredients_v4(request):
         return JsonResponse({"detail": "Product not found"}, status=404)
 
     normalized = (value or '').strip().upper()
-    if normalized in {'PL', 'NPL'}:
+    if normalized in {'PL', 'NPL', 'DW'}:
         product.ingredients = normalized
     else:
         product.ingredients = None

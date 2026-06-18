@@ -45,6 +45,7 @@ class Product(TimeStampedModel):
     class Ingredients(models.TextChoices):
         POLISH = 'PL', _('Polskie surowce')
         NON_POLISH = 'NPL', _('Nie polskie surowce')
+        TO_VERIFY = 'DW', _('Do weryfikacji')
 
     ingredients = models.CharField(
         max_length=3,
@@ -53,7 +54,6 @@ class Product(TimeStampedModel):
         blank=True,
         default=None,
         verbose_name=_('Surowce'),
-        help_text=_('Wybierz pochodzenie surowców; brak danych oznacza pustą wartość.'),
     )
     replacements = models.ManyToManyField(
         'self',
