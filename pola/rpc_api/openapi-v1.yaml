@@ -125,7 +125,7 @@ paths:
       summary: Set ingredients for a product
       description: |
         Sets the "Surowce" (ingredients) property for a product identified by its code.
-        Accepts only the values "PL" (Polskie surowce) and "NPL" (Nie polskie surowce).
+        Accepts the values "PL" (Polskie surowce), "NPL" (Nie polskie surowce) and "DW" (Do weryfikacji).
         Any other value will clear the field (equivalent to "Brak danych").
       requestBody:
         required: true
@@ -147,7 +147,7 @@ paths:
                   ingredients:
                     type: string
                     nullable: true
-                    description: PL, NPL or null when cleared
+                    description: PL, NPL, DW or null when cleared
                 required:
                   - code
                   - ingredients
@@ -561,7 +561,9 @@ components:
           description: Product code (EAN)
         ingredients:
           type: string
-          description: 'PL for Polskie surowce, NPL for Nie polskie surowce; any other value clears the field'
+          description: |
+            PL for Polskie surowce, NPL for Nie polskie surowce,
+            DW for Do weryfikacji; any other value clears the field'
       required:
         - code
         - ingredients

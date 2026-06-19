@@ -624,6 +624,16 @@ class TestSetIngredientsV4(TestCase, JsonRequestMixin):
         p.refresh_from_db()
         self.assertEqual("NPL", p.ingredients)
 
+    def test_sets_ingredients_dw(self):
+        p = ProductFactory()
+        payload = {"code": p.code, "ingredients": "DW"}
+        response = self.json_request(self.url, data=payload)
+        self.assertEqual(200, response.status_code, response.content)
+        body = json.loads(response.content)
+        self.assertEqual({"code": p.code, "ingredients": "DW"}, body)
+        p.refresh_from_db()
+        self.assertEqual("DW", p.ingredients)
+
     def test_invalid_value_nullifies_ingredients(self):
         p = ProductFactory(ingredients="PL")
         payload = {"code": p.code, "ingredients": "OTHER"}
