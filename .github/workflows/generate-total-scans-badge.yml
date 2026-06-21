@@ -4,6 +4,9 @@ name: Generate Total Scans Badge
 "on":
   schedule:
     - cron: "17 4 * * *"  # daily at 04:17 UTC
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       environment:
@@ -43,7 +46,7 @@ jobs:
       - name: Select dataset based on environment
         id: select
         run: |
-          env_name="${{ inputs.environment || 'prod' }}"
+          env_name="${{ github.event_name == 'pull_request' && 'staging' || (inputs.environment || 'prod') }}"
           if [[ -n "${{ inputs.dataset_id }}" ]]; then
             dataset="${{ inputs.dataset_id }}"
           else
@@ -79,6 +82,7 @@ jobs:
           bash scripts/generate_scans_svg.sh "$BQ_DATASET" docs/badges/total_scans.svg
 
       - name: Commit and push badge (if changed)
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
