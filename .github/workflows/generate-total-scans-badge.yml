@@ -4,9 +4,6 @@ name: Generate Total Scans Badge
 "on":
   schedule:
     - cron: "17 4 * * *"  # daily at 04:17 UTC
-  push:
-    branches:
-      - scans-workflow
   workflow_dispatch:
     inputs:
       environment:
@@ -46,7 +43,7 @@ jobs:
       - name: Select dataset based on environment
         id: select
         run: |
-          env_name="${{ github.ref == 'refs/heads/scans-workflow' && 'staging' || (inputs.environment || 'prod') }}"
+          env_name="${{ inputs.environment || 'prod' }}"
           if [[ -n "${{ inputs.dataset_id }}" ]]; then
             dataset="${{ inputs.dataset_id }}"
           else
