@@ -98,8 +98,9 @@ class SearchV4ApiView(View):
         if len(query) in (13, 9) and query.isnumeric():
             pred = pred | Q(code=query)
 
-        # Also include products whose company's raw name matches the query
-        company_name_pred = Q(company__name__icontains=query)
+        # Also include products whose company's display name matches the query
+        # API serializes company as common_name or name, so search both
+        company_name_pred = Q(company__common_name__icontains=query) | Q(company__name__icontains=query)
 
         qs = Product.objects.filter(pred | company_name_pred).order_by('pk').distinct()
         return qs
