@@ -6,7 +6,7 @@ name: Generate Total Scans Badge
     - cron: "17 4 * * *"  # daily at 04:17 UTC
   push:
     branches:
-      - scans-workflow  
+      - scans-workflow
   workflow_dispatch:
     inputs:
       environment:
