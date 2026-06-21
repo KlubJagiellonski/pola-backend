@@ -62,8 +62,11 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7.0.0
         with:
+          report_type: test_results
+          files: ./junit.xml
+          fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: "Push CI image (push)"
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -86,9 +89,14 @@ jobs:
         with:
           python-version-file: '.python-version'
       - name: "Setup Python dependencies"
-        run: pip install -U pip wheel setuptools virtualenv
+        run: pip install -U pip wheel setuptools virtualenv pre-commit
+      - name: "Use pre-commit environment cache"
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
       - name: "Run static checks"
-        uses: pre-commit/action@v3.0.1
+        run: pre-commit run --show-diff-on-failure --color=always --all-files
 
   bi-validate:
     name: "BI Validate"
@@ -166,6 +174,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [prod-image, bi-validate]
     if: github.event_name == 'push'
+    permissions:
+      deployments: write
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
@@ -183,13 +193,13 @@ jobs:
           echo "APP_NAME=${APP_NAME}"
           echo "HEROKU_APP=${APP_NAME}" >> $GITHUB_ENV;
           echo "HEROKU_DOMAIN=$(./scripts/fetch_domain.py "${APP_NAME}")" >> $GITHUB_ENV;
-      - uses: chrnorm/deployment-action@releases/v1
+      - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
         id: deployment
         with:
           token: "${{ github.token }}"
-          target_url: "https://${{ env.HEROKU_DOMAIN }}"
-          state: in_progress
+          environment-url: "https://${{ env.HEROKU_DOMAIN }}"
+          initial-status: in_progress
           environment: "${{ env.HEROKU_APP }}"
       - name: "Build PROD image"
         run: ./scripts/manage_image.py build --image-type prod
@@ -197,18 +207,20 @@ jobs:
         run: './scripts/deploy.sh "${HEROKU_APP}"'
       - name: Update deployment status (success)
         if: success()
-        uses: chrnorm/deployment-status@releases/v1
+        uses: chrnorm/deployment-status@v2
         with:
           token: "${{ github.token }}"
           state: "success"
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          environment-url: "https://${{ env.HEROKU_DOMAIN }}"
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
       - name: Update deployment status (failure)
         if: failure()
-        uses: chrnorm/deployment-status@releases/v1
+        uses: chrnorm/deployment-status@v2
         with:
           token: "${{ github.token }}"
           state: "failure"
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          environment-url: "https://${{ env.HEROKU_DOMAIN }}"
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
   deploy-bi:
     name: "Deploy BI (push) - ${{ github.ref }}"
