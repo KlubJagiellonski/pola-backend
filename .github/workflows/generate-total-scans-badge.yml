@@ -85,9 +85,7 @@ jobs:
 
           branch="${GITHUB_REF_NAME}"
 
-          # Ensure we're on a branch (checkout can be detached) and up to date before committing.
           git checkout -B "${branch}"
-          git pull --rebase origin "${branch}"
 
           git add docs/badges/total_scans.svg
           if git diff --cached --quiet; then
@@ -95,4 +93,5 @@ jobs:
             exit 0
           fi
           git commit -m "chore(badge): update total scans badge [skip ci]"
+          git pull --rebase origin "${branch}"
           git push origin "HEAD:${branch}"
