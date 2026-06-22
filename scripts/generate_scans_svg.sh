@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Generate a simple SVG badge with total scans from BigQuery.
+# Generate a minimal SVG with the total scans number (large sans-serif on transparent background).
 #
 # Usage:
 #   scripts/generate_scans_svg.sh <dataset_id> [<output_path>] [<table_id>]
@@ -11,7 +11,7 @@ set -euo pipefail
 #
 # Example:
 #   GCP_PROJECT_ID=pola-bi-looker \
-#   scripts/generate_scans_svg.sh pola_backend__prod docs/badges/total_scans.svg
+#   scripts/generate_scans_svg.sh pola_backend__prod docs/total_scans.svg
 
 if [[ ${#} -lt 1 ]]; then
   echo "Usage: $0 <dataset_id> [<output_path>] [<table_id>]" >&2
@@ -21,7 +21,7 @@ fi
 : "${GCP_PROJECT_ID:?GCP_PROJECT_ID is required in environment}"
 
 DATASET_ID="$1"
-OUTPUT_PATH="${2:-docs/badges/total_scans.svg}"
+OUTPUT_PATH="${2:-docs/total_scans.svg}"
 TABLE_ID="${3:-pola_query}"
 
 # Ensure BigQuery CLI is available.
@@ -43,39 +43,26 @@ if [[ ! "${TOTAL_SCANS}" =~ ^[0-9]+$ ]]; then
 fi
 mkdir -p "$(dirname "${OUTPUT_PATH}")"
 
-# Basic badge styling
-LABEL="scans"
-LABEL_COLOR="#555"      # dark grey
-VALUE_COLOR="#4c1"      # green
-FONT_FAMILY="DejaVu Sans,Verdana,Geneva,sans-serif"
+# Minimal, large-number SVG styling (transparent background by default)
+# You can tweak FONT_SIZE or FONT_FAMILY if desired.
+FONT_SIZE=72                                  # px
+FONT_FAMILY="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"
+H_PADDING=16                                   # px left/right padding
 
-# Fixed widths to keep things simple (px)
-LABEL_WIDTH=60
-VALUE_WIDTH=110
-HEIGHT=20
-TOTAL_WIDTH=$((LABEL_WIDTH + VALUE_WIDTH))
+# Rough per-digit width estimate as a percentage of font size (digits are typically ~0.6em wide)
+CHAR_WIDTH_X100=62                             # 0.62 * font-size
+
+NUM_LEN=${#TOTAL_SCANS}
+TEXT_WIDTH=$(( NUM_LEN * FONT_SIZE * CHAR_WIDTH_X100 / 100 ))
+WIDTH=$(( TEXT_WIDTH + 2 * H_PADDING ))
+# Add some headroom so glyphs aren't clipped
+HEIGHT=$(( FONT_SIZE + FONT_SIZE / 3 ))        # ~1.33 line-height
 
 cat >"${OUTPUT_PATH}" <<SVG
-<svg xmlns="http://www.w3.org/2000/svg" width="${TOTAL_WIDTH}" height="${HEIGHT}" role="img" aria-label="${LABEL}: ${TOTAL_SCANS}">
-  <title>${LABEL}: ${TOTAL_SCANS}</title>
-  <linearGradient id="s" x2="0" y2="100%">
-    <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
-    <stop offset=".1" stop-opacity=".1"/>
-    <stop offset=".9" stop-opacity=".3"/>
-    <stop offset="1" stop-opacity=".5"/>
-  </linearGradient>
-  <mask id="m"><rect width="${TOTAL_WIDTH}" height="${HEIGHT}" rx="3" fill="#fff"/></mask>
-  <g mask="url(#m)">
-    <rect width="${LABEL_WIDTH}" height="${HEIGHT}" fill="${LABEL_COLOR}"/>
-    <rect x="${LABEL_WIDTH}" width="${VALUE_WIDTH}" height="${HEIGHT}" fill="${VALUE_COLOR}"/>
-    <rect width="${TOTAL_WIDTH}" height="${HEIGHT}" fill="url(#s)"/>
-  </g>
-  <g fill="#fff" text-anchor="middle" font-family="${FONT_FAMILY}" font-size="11">
-    <text x="$((LABEL_WIDTH/2))" y="14" fill="#010101" fill-opacity=".3">${LABEL}</text>
-    <text x="$((LABEL_WIDTH/2))" y="14">${LABEL}</text>
-    <text x="$((LABEL_WIDTH + VALUE_WIDTH/2))" y="14" fill="#010101" fill-opacity=".3">${TOTAL_SCANS}</text>
-    <text x="$((LABEL_WIDTH + VALUE_WIDTH/2))" y="14">${TOTAL_SCANS}</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="total scans: ${TOTAL_SCANS}">
+  <title>total scans: ${TOTAL_SCANS}</title>
+  <text x="${H_PADDING}" y="${FONT_SIZE}" font-family="${FONT_FAMILY}" font-size="${FONT_SIZE}" fill="#000">${TOTAL_SCANS}</text>
+  <!-- Transparent background by default (no rects). -->
 </svg>
 SVG
 
