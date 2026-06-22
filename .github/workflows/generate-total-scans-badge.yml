@@ -3,7 +3,7 @@ name: Generate Total Scans Badge
 
 "on":
   schedule:
-    - cron: "17 4 * * *"  # daily at 04:17 UTC
+    - cron: "17 4 * * 0,3"  # Wed and Sun at 04:17 UTC (UTC)
   workflow_dispatch:
     inputs:
       environment:
