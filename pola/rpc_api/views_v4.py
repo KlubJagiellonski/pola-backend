@@ -93,10 +93,16 @@ class SearchV4ApiView(View):
         )
 
     def get_queryset(self, query):
+        # Match by product name or exact code (EAN-13 or EAN-9)
         pred = Q(name__icontains=query)
         if len(query) in (13, 9) and query.isnumeric():
             pred = pred | Q(code=query)
-        qs = Product.objects.filter(pred).order_by('pk')
+
+        # Also include products whose company's display name matches the query
+        # API serializes company as common_name or name, so search both
+        company_name_pred = Q(company__common_name__icontains=query) | Q(company__name__icontains=query)
+
+        qs = Product.objects.filter(pred | company_name_pred).order_by('pk').distinct()
         return qs
 
 
