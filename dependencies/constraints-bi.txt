@@ -31,7 +31,7 @@ orderly-set==5.5.0
 packaging==26.2
 parsedatetime==2.6
 pathspec==0.12.1
-protobuf==6.33.6
+protobuf==7.35.1
 psycopg2-binary==2.9.12
 pydantic==2.13.4
 pydantic_core==2.46.4
