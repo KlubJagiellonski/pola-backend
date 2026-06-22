@@ -1,21 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="170" height="20" role="img" aria-label="scans: 13556081">
-  <title>scans: 13556081</title>
-  <linearGradient id="s" x2="0" y2="100%">
-    <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
-    <stop offset=".1" stop-opacity=".1"/>
-    <stop offset=".9" stop-opacity=".3"/>
-    <stop offset="1" stop-opacity=".5"/>
-  </linearGradient>
-  <mask id="m"><rect width="170" height="20" rx="3" fill="#fff"/></mask>
-  <g mask="url(#m)">
-    <rect width="60" height="20" fill="#555"/>
-    <rect x="60" width="110" height="20" fill="#4c1"/>
-    <rect width="170" height="20" fill="url(#s)"/>
-  </g>
-  <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-    <text x="30" y="14" fill="#010101" fill-opacity=".3">scans</text>
-    <text x="30" y="14">scans</text>
-    <text x="115" y="14" fill="#010101" fill-opacity=".3">13556081</text>
-    <text x="115" y="14">13556081</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="389" height="96" viewBox="0 0 389 96" role="img" aria-label="total scans: 13556081">
+  <title>total scans: 13556081</title>
+  <text x="16" y="72" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="72" fill="#000">13556081</text>
+  <!-- Transparent background by default (no rects). -->
 </svg>
