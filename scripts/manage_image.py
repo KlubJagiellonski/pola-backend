@@ -268,9 +268,9 @@ def before_build(image_type, env):
         except subprocess.CalledProcessError:
             logger.warning("Pulling %s:latest nie powiodło się. Kontynuuję...", image_name)
 
-    # PROD: docker pull python:<PYTHON_VERSION>-slim-bookworm
-    if image_type == "prod":
-        base_python = f"python:{env['PYTHON_VERSION']}-slim-bookworm"
+    # Pull base Python image for prod and bi builds.
+    if image_type in ("prod", "bi"):
+        base_python = f"python:{env['PYTHON_VERSION']}-slim-trixie"
         try:
             run_command(["docker", "pull", base_python], check=True)
         except subprocess.CalledProcessError:
@@ -325,7 +325,7 @@ def build_image(image_type, env, prepare_buildx_cache=False):
         ]
 
         # Dodajemy informacje o bazowym obrazie Pythona
-        base_img = f"python:{env['PYTHON_VERSION']}-slim-bookworm"
+        base_img = f"python:{env['PYTHON_VERSION']}-slim-trixie"
         base_img_digest = get_docker_image_digest(base_img)
         base_python_arg = f"{base_img}@{base_img_digest}" if base_img_digest else base_img
         build_command += [
@@ -341,13 +341,16 @@ def build_image(image_type, env, prepare_buildx_cache=False):
             "--label",
             f"org.opencontainers.image.description={image_description}",
         ]
-    elif image_type == "ci":
+    elif image_type in ("ci", "bi"):
         build_command += [
             "--build-arg",
             f"PYTHON_VERSION={env['PYTHON_VERSION']}",
-            "--build-arg",
-            f"DJANGO_VERSION={env['DJANGO_VERSION']}",
         ]
+        if image_type == "ci":
+            build_command += [
+                "--build-arg",
+                f"DJANGO_VERSION={env['DJANGO_VERSION']}",
+            ]
 
     run_command(build_command)
     logger.info("Obraz zbudowany pomyślnie.")

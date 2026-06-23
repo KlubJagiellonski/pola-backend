@@ -5,7 +5,7 @@
 ARG APP_UID="50000"
 ARG APP_GID="50000"
 
-ARG BASE_PYTHON_IMAGE="python:3.11-slim-bookworm"
+ARG BASE_PYTHON_IMAGE="python:3.13.14-slim-trixie"
 
 ######################### NODE BUILD IMAGE ##########################
 # build-js builds the frontend assets
