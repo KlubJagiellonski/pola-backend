@@ -3,7 +3,6 @@ asttokens==3.0.1
 attrs==26.1.0
 babel==2.18.0
 beautifulsoup4==4.15.0
-boto==2.49.0
 boto3==1.43.36
 botocore==1.43.36
 certifi==2026.6.17

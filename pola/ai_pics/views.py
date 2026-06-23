@@ -1,4 +1,3 @@
-from boto.s3.connection import Bucket, Key
 from django.conf import settings
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -10,15 +9,13 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 
 from pola.ai_pics.models import AIAttachment, AIPics
-from pola.s3 import create_s3_connection
+from pola.s3 import delete_bucket_key
 
 
 class BucketMixin:
     @property
-    def _bucket(self):
-        conn = create_s3_connection()
-        bucket = Bucket(conn, settings.AWS_STORAGE_AI_PICS_BUCKET_NAME)
-        return bucket
+    def _bucket_name(self):
+        return settings.AWS_STORAGE_AI_PICS_BUCKET_NAME
 
 
 class AIPicsPageView(LoginRequiredMixin, PermissionRequiredMixin, BucketMixin, ListView):
@@ -71,14 +68,11 @@ class ApiDeleteAiPicsView(View, PermissionRequiredMixin, BucketMixin):
     permission_required = 'ai_pics.delete_aipics'
 
     def post(self, request):
-        key = Key(self._bucket)
-
         id = request.POST['id']
 
         attachments = AIAttachment.objects.filter(ai_pics_id=id)
         for attachment in attachments:
-            key.key = attachment.attachment
-            self._bucket.delete_key(key)
+            delete_bucket_key(self._bucket_name, attachment.attachment.name)
 
         aipic = AIPics.objects.get(id=id)
         aipic.delete()
@@ -89,13 +83,10 @@ class ApiDeleteAttachmentView(View, PermissionRequiredMixin, BucketMixin):
     permission_required = 'ai_pics.delete_aiattachment'
 
     def post(self, request):
-        key = Key(self._bucket)
-
         id = request.POST['id']
         attachment = AIAttachment.objects.get(id=id)
 
-        key.key = attachment.attachment
-        self._bucket.delete_key(key)
+        delete_bucket_key(self._bucket_name, attachment.attachment.name)
 
         attachment.delete()
         return JsonResponse({'ok': True})
