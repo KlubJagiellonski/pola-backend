@@ -1,5 +1,3 @@
-from distutils.util import strtobool
-
 import django_filters
 from dal import autocomplete
 from django.db.models import Q
@@ -10,16 +8,28 @@ from pola.filters import CrispyFilterMixin
 from .models import Brand, Company
 
 
+def _strtobool(value):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        value = value.lower()
+    if value in {'y', 'yes', 't', 'true', 'on', '1'}:
+        return True
+    if value in {'n', 'no', 'f', 'false', 'off', '0'}:
+        return False
+    raise ValueError(f'invalid truth value {value!r}')
+
+
 class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
     verified = django_filters.TypedChoiceFilter(
         choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
-        coerce=strtobool,
+        coerce=_strtobool,
         label=_("Dane zweryfikowane"),
     )
 
     is_friend = django_filters.TypedChoiceFilter(
         choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
-        coerce=strtobool,
+        coerce=_strtobool,
         label=_("Przyjaciel Poli"),
     )
 
