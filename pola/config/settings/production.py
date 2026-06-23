@@ -13,7 +13,6 @@ Production Configurations
 import os
 import tempfile
 from pathlib import Path
-from urllib import parse as urlparse
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -99,7 +98,7 @@ DATABASES['default'] = env.db("DATABASE_URL")  # noqa: F405
 
 # CACHING
 # ------------------------------------------------------------------------------
-redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost:6959'))
+redis_cache_url = os.environ.get('REDISTOGO_URL', 'redis://localhost:6959/0')
 
 CACHES = {
     'default': {
@@ -107,9 +106,8 @@ CACHES = {
         'LOCATION': Path(tempfile.gettempdir()) / 'pola-app-cache',
     },
     'redis': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': f'{redis_url.hostname}:{redis_url.port}',
-        'OPTIONS': {'DB': 0, 'PASSWORD': redis_url.password},
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': redis_cache_url,
     },
 }
 
