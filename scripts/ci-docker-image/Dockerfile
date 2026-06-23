@@ -16,7 +16,6 @@ RUN apt-get update \
         ca-certificates \
         curl \
         gcc \
-        gnupg2 \
         libc6-dev \
         libcc1-0 \
         libffi-dev \
@@ -25,8 +24,9 @@ RUN apt-get update \
         netcat-openbsd \
         pkg-config \
         libcairo2-dev \
-    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && install -d /usr/share/postgresql-common/pgdg \
+    && curl --fail -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         postgresql-client-18 \

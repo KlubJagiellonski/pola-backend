@@ -6,12 +6,19 @@ FROM python:${PYTHON_VERSION}-slim-trixie
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        git \
-        software-properties-common \
-        make \
         build-essential \
         ca-certificates \
+        curl \
+        git \
+        lsb-release \
+        make \
+    && install -d /usr/share/postgresql-common/pgdg \
+    && curl --fail -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
         libpq-dev \
+        libpq5 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/tmp/*
