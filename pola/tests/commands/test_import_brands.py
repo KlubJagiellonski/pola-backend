@@ -25,8 +25,9 @@ class ImportBrandsTestCase(TestCase):
     @parameterized.expand([("1",), ("A",), ("123456678A",)])
     def test_invalid_company(self, ivalid_code):
         out = StringIO()
-        with NamedTemporaryFile() as tmp_file, self.assertRaisesMessage(
-            CommandError, f"Error: argument company_nip: Invalid NIP number: '{ivalid_code}'"
+        with (
+            NamedTemporaryFile() as tmp_file,
+            self.assertRaisesMessage(CommandError, f"Error: argument company_nip: Invalid NIP number: '{ivalid_code}'"),
         ):
             call_command('import_brands', tmp_file.name, ivalid_code, interactive=False, stdout=out)
 

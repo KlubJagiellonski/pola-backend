@@ -155,7 +155,7 @@ class Company(TimeStampedModel):
 
     def increment_query_count(self):
         with connection.cursor() as cursor:
-            cursor.execute('update company_company set query_count = query_count +1 ' 'where id=%s', [self.id])
+            cursor.execute('update company_company set query_count = query_count +1 where id=%s', [self.id])
 
     def recalculate_query_count_for_company(self):
         """Recalculate the query_count for the specific company."""
@@ -249,9 +249,7 @@ class Company(TimeStampedModel):
 
     def clean(self, *args, **kwargs):
         if self.verified:
-            YOU_CANT_SET_VERIFIED = (
-                'Nie możesz oznaczyć producenta jako ' 'zweryfikowany jeśli pole >{}< jest nieustalone'
-            )
+            YOU_CANT_SET_VERIFIED = 'Nie możesz oznaczyć producenta jako zweryfikowany jeśli pole >{}< jest nieustalone'
             if self.plCapital is None:
                 raise ValidationError(YOU_CANT_SET_VERIFIED.format('udział kapitału polskiego'))
             if self.plWorkers is None:

@@ -317,7 +317,6 @@ class TestCompanyDetailView(CompanyInstanceMixin, PermissionMixin, TemplateUsedM
 
 
 class CompanyDetailCompanyCardViewTests(TestCase):
-
     def setUp(self):
         super().setUp()
         self.user = StaffFactory()

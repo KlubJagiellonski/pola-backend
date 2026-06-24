@@ -21,3 +21,38 @@ omit = [
 DJANGO_SETTINGS_MODULE = "pola.config.settings.tests"
 python_files = "tests.py test_*.py *_tests.py"
 addopts = "--cov=pola --cov-report html --cov-report xml"
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+exclude = [
+    ".tox",
+    ".git",
+    "*/migrations/*",
+    "*/static/CACHE/*",
+    "docs",
+    "pola/static",
+    "db_kbpoz",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "UP",     # pyupgrade
+    "S307",   # python-no-eval
+    "G010",   # wykrywa przestarzały logging.warn()
+    "RUF100", # python-check-blanket-noqa
+]
+ignore = [
+    "E203",   # biały znak przed ':' # konflikt z black
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ai_pics", "api", "company", "config", "db_kbpoz", "pola", "product", "report"]
+force-single-line = false
+
+[tool.ruff.format]
+quote-style = "preserve"

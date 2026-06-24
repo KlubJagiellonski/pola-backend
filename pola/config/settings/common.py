@@ -279,7 +279,7 @@ AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME = env('POLA_APP_AWS_S3_COMPANY_LOGOTYPE
 # Revert the following and use str after the above-mentioned bug is fixed in
 # either django-storage-redux or boto
 AWS_EXPIRY = 60 * 60 * 24 * 7
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)}
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': f'max-age={AWS_EXPIRY}, s-maxage={AWS_EXPIRY}, must-revalidate'}
 AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()

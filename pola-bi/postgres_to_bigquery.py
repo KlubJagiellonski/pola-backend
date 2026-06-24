@@ -34,9 +34,11 @@ def get_columns(cursor, table_name):
 def export_to_file(connection_info, table_name, csv_path, verbose):
     setup_logging(verbose)
     logging.info('Start exporting data from %s table to %s file', table_name, csv_path)
-    with psycopg2.connect(**connection_info) as conn, conn.cursor() as cursor, open(
-        csv_path, mode='w', newline=''
-    ) as file:
+    with (
+        psycopg2.connect(**connection_info) as conn,
+        conn.cursor() as cursor,
+        open(csv_path, mode='w', newline='') as file,
+    ):
         columns = get_columns(cursor, table_name)
         if not columns:
             raise ValueError(f"No columns found for table {table_name}.")

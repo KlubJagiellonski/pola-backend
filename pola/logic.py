@@ -220,7 +220,7 @@ def handle_product_replacements(product, result, report, topK=3):
         if report['text']:
             report_text = report['text']
             txt_replacements = ', '.join(f"{r['display_name']}" for r in replacements[:topK])
-            report['text'] = f"Polskie alternatywy: {txt_replacements}" f"\n---\n{report_text}"
+            report['text'] = f"Polskie alternatywy: {txt_replacements}\n---\n{report_text}"
 
 
 def handle_companies_when_multiple_companies_are_not_supported(
@@ -334,9 +334,7 @@ def handle_unknown_company(code, report, result, multiple_company_supported):
             # Ups. It seems to be an internal code
             result['name'] = 'Kod wewnętrzny'
             result['altText'] = (
-                'Zeskanowany kod jest wewnętrznym '
-                'kodem sieci handlowej. Pola nie '
-                'potrafi powiedzieć o nim nic więcej'
+                'Zeskanowany kod jest wewnętrznym kodem sieci handlowej. Pola nie potrafi powiedzieć o nim nic więcej'
             )
 
 

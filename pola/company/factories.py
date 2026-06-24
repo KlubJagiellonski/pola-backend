@@ -6,9 +6,9 @@ class CompanyFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'company.Company'
 
-    name = factory.Sequence(lambda n: 'company%d' % n)
-    official_name = factory.Sequence(lambda n: 'company_official_%d' % n)
-    common_name = factory.Sequence(lambda n: 'company_official_%d' % n)
+    name = factory.Sequence(lambda n: f'company{n}')
+    official_name = factory.Sequence(lambda n: f'company_official_{n}')
+    common_name = factory.Sequence(lambda n: f'company_official_{n}')
     description = factory.fuzzy.FuzzyText()
 
 
@@ -17,5 +17,5 @@ class BrandFactory(factory.django.DjangoModelFactory):
         model = 'company.Brand'
 
     company = factory.SubFactory(CompanyFactory)
-    name = factory.Sequence(lambda n: 'brand%d' % n)
-    common_name = factory.Sequence(lambda n: 'common_brand_name%d' % n)
+    name = factory.Sequence(lambda n: f'brand{n}')
+    common_name = factory.Sequence(lambda n: f'common_brand_name{n}')

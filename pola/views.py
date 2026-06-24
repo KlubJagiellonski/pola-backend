@@ -106,9 +106,8 @@ class ExprAutocompleteMixin:
     def get_search_expr(self):
         if not hasattr(self, 'search_expr'):
             raise ImproperlyConfigured(
-                '{0} is missing a {0}.search_expr. Define '
-                '{0}.search_expr or override {0}.get_search_expr().'
-                ''.format(self.__class__.__name__)
+                f'{self.__class__.__name__} is missing a {self.__class__.__name__}.search_expr. Define '
+                f'{self.__class__.__name__}.search_expr or override {self.__class__.__name__}.get_search_expr().'
             )
         return self.search_expr
 
@@ -200,14 +199,14 @@ class EditorsStatsPageView(QueryStatsPageView):
 
     def query_log(self, id):
         return self.execute_query(
-            "select to_char(reversion_revision.date_created, \'YYYY-MM\'),"
+            "select to_char(reversion_revision.date_created, 'YYYY-MM'),"
             "username, count(*) "
             "from users_user "
             "join reversion_revision on users_user.id=user_id "
             "join reversion_version on reversion_revision.id = "
             "reversion_version.revision_id "
             "where reversion_version.content_type_id=%s "
-            "group by to_char(reversion_revision.date_created, \'YYYY-MM\'), "
+            "group by to_char(reversion_revision.date_created, 'YYYY-MM'), "
             "username "
             "order by 1 desc, 3 desc;",
             [id],

@@ -90,11 +90,11 @@ class Product(TimeStampedModel):
 
     def increment_query_count(self):
         with connection.cursor() as cursor:
-            cursor.execute('update product_product set query_count = query_count +1 ' 'where id=%s', [self.id])
+            cursor.execute('update product_product set query_count = query_count +1 where id=%s', [self.id])
 
     def increment_ai_pics_count(self):
         with connection.cursor() as cursor:
-            cursor.execute('update product_product set ai_pics_count = ai_pics_count +1 ' 'where id=%s', [self.id])
+            cursor.execute('update product_product set ai_pics_count = ai_pics_count +1 where id=%s', [self.id])
 
     @staticmethod
     def recalculate_query_count():

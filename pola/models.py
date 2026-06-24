@@ -55,10 +55,8 @@ class Stats(models.Model):
     no_of_new_reports = models.IntegerField()
 
     def get_date(self):
-        return '%d %s' % (
-            self.day,
-            datetime(self.year, self.month, self.day, tzinfo=get_default_timezone()).strftime('%b'),
-        )
+        month_abbr = datetime(self.year, self.month, self.day, tzinfo=get_default_timezone()).strftime('%b')
+        return f'{self.day} {month_abbr}'
 
     class Meta:
         unique_together = ('year', 'month', 'day')

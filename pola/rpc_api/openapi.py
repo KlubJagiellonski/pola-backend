@@ -10,7 +10,6 @@ from pola.rpc_api.http import JsonProblemResponse
 
 
 class PolaDjangoOpenAPIErrorsHandler(DjangoOpenAPIErrorsHandler):
-
     def __call__(
         self,
         errors: Iterable[Exception],

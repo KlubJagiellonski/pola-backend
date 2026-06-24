@@ -48,31 +48,17 @@ repos:
       - id: requirements-txt-fixer
         files: ^dependencies/.+\.txt$
       - id: trailing-whitespace
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.4
     hooks:
-      - id: pyupgrade
-        args:
-          - --py39-plus
-  - repo: https://github.com/psf/black
-    rev: 25.1.0
-    hooks:
-      - id: black
-        args:
-          - --line-length
-          - '120'
-          - --skip-string-normalization
-          - --target-version
-          - py38
-        language_version: python
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
-      - id: python-check-blanket-noqa
+      # Zachowane - brak odpowiednika w ruff
       - id: python-check-mock-methods
-      - id: python-no-eval
-      - id: python-no-log-warn
-      - id: python-use-type-annotations
       - id: rst-backticks
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
@@ -84,39 +70,11 @@ repos:
         args:
           - -c
           - yamllint-config.yml
-  - repo: https://github.com/ikamensh/flynt
-    rev: '1.0.6'
-    hooks:
-      - id: flynt
-        args:
-          # If flynt detects too long text it ignores it. So we set a very large limit to make it easy
-          # to split the text by hand. Too long lines are detected by flake8 (below),
-          # so the user is informed to take action.
-          - --line-length
-          - '99999'
-  - repo: https://github.com/asottile/yesqa
-    rev: v1.5.0
-    hooks:
-      - id: yesqa
-        name: Remove unnecessary noqa statements
-        additional_dependencies: ['flake8>=4.0.1']
-  - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.1
-    hooks:
-      - id: autoflake
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
-    hooks:
-      - id: flake8
   # - repo: https://github.com/hadolint/hadolint
   #   rev: 'v2.12.1-beta'
   #   hooks:
   #     - id: hadolint-docker
   #       entry: --entrypoint /bin/hadolint hadolint/hadolint:v2.12.0 --ignore DL3013 --ignore DL3018 --ignore DL3008 -
-  - repo: https://github.com/PyCQA/isort
-    rev: 6.0.1
-    hooks:
-      - id: isort
   - repo: local
     hooks:
       - id: shellcheck
