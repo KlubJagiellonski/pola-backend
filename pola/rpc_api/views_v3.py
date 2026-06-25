@@ -14,19 +14,13 @@ from pola.product.models import Product
 from pola.report.models import Attachment, Report
 from pola.rpc_api.jsonschema import validate_json_response
 from pola.rpc_api.rates import whitelist
+from pola.rpc_api.schemas import ADD_AI_PICS_RESPONSE_SCHEMA, CREATE_REPORT_V3_RESPONSE_SCHEMA, GET_BY_CODE_RESPONSE_SCHEMA
 from pola.rpc_api.views_v4 import get_by_code_internal
 
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {"signed_requests": {"type": "array", "items": {"type": "string"}}},
-        "required": ["signed_requests"],
-    }
-)
+@validate_json_response(ADD_AI_PICS_RESPONSE_SCHEMA)
 def add_ai_pics(request):
     device_id = request.GET['device_id']
 
@@ -88,64 +82,7 @@ def attach_pic_internal(ai_pics, file_no, file_ext, mime_type):
 
 
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-            "altText": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-            "card_type": {"type": "string"},
-            "code": {"type": "string"},
-            "donate": {
-                "type": "object",
-                "properties": {
-                    "show_button": {"type": "boolean"},
-                    "title": {"type": "string"},
-                    "url": {"type": "string"},
-                },
-                "required": ["show_button", "title", "url"],
-            },
-            "name": {"type": "string"},
-            "plCapital": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "plCapital_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-            "plNotGlobEnt": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "plNotGlobEnt_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-            "plRegistered": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "plRegistered_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-            "plRnD": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "plRnD_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-            "plScore": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "plWorkers": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "plWorkers_notes": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-            "product_id": {"oneOf": [{"type": "null"}, {"type": "integer"}]},
-            "report_button_text": {"type": "string"},
-            "report_button_type": {"type": "string"},
-            "report_text": {"type": "string"},
-        },
-        "required": [
-            "altText",
-            "card_type",
-            "code",
-            "donate",
-            "name",
-            "plCapital",
-            "plCapital_notes",
-            "plNotGlobEnt",
-            "plNotGlobEnt_notes",
-            "plRegistered",
-            "plRegistered_notes",
-            "plRnD",
-            "plRnD_notes",
-            "plScore",
-            "plWorkers",
-            "plWorkers_notes",
-            "product_id",
-            "report_button_text",
-            "report_button_type",
-            "report_text",
-        ],
-    }
-)
+@validate_json_response(GET_BY_CODE_RESPONSE_SCHEMA)
 def get_by_code_v3(request):
     noai = request.GET.get('noai')
     result = get_by_code_internal(request, ai_supported=noai is None)
@@ -158,14 +95,7 @@ def get_by_code_v3(request):
 
 @csrf_exempt
 @ratelimit(key='ip', rate=whitelist('2/s'), block=True)
-@validate_json_response(
-    {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {"signed_requests": {"type": "array", "items": {"type": "string"}}},
-        "required": ["signed_requests"],
-    }
-)
+@validate_json_response(CREATE_REPORT_V3_RESPONSE_SCHEMA)
 def create_report_v3(request):
     return create_report_internal(request)
 
