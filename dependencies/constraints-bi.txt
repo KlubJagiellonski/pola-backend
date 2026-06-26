@@ -11,9 +11,9 @@ dbt-adapters==1.24.2
 dbt-common==1.38.0
 dbt-core==1.11.11
 dbt-extractor==0.6.0
-dbt-postgres==1.10.1
+dbt-postgres==1.10.2
 dbt-protos==1.0.514
-dbt-semantic-interfaces==0.9.0
+dbt-semantic-interfaces==0.10.5
 deepdiff==8.6.2
 idna==3.18
 importlib_metadata==8.9.0
