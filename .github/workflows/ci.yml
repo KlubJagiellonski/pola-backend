@@ -50,7 +50,8 @@ jobs:
         run: |
           latest_version=$(
             curl -s 'https://pypi.org/pypi/django/json' | jq -r '
-              [.releases | keys[] | select(test("^6\\."))] | sort_by(split(".") | map(tonumber)) | last
+              [.releases | keys[] | select(test("^6\\.[0-9]+\\.[0-9]+$"))]
+              | sort_by(split(".") | map(tonumber)) | last
             '
           )
           echo "DJANGO_VERSION=${latest_version}" | tee "${GITHUB_ENV}";
