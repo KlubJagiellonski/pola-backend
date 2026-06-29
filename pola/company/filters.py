@@ -31,7 +31,7 @@ class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
     )
 
     has_logotype = django_filters.TypedChoiceFilter(
-        choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
+        choices=(('', _("----")), (True, _("Tak")), (False, _("Nie"))),
         coerce=strtobool,
         label=_("Ma logo"),
         method='filter_has_logotype',
