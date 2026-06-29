@@ -14,10 +14,7 @@ from pola.integrations.produkty_w_sieci import (
 
 TEST_EAN13 = "5901520000059"
 
-vcr = VCR(
-    cassette_library_dir=os.path.join(os.path.dirname(__file__), "cassettes"),
-    decode_compressed_response=True,
-)
+vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), "cassettes"))
 
 
 # 🔹 Test z użyciem rzeczywistego API (v2)

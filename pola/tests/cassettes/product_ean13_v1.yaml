@@ -15,13 +15,23 @@ interactions:
       uri: https://www.eprodukty.gs1.pl/external_api/v1/products/?gtin_number__prefix=05901520000059
     response:
       body:
-        string: |
-          {"count":1,"next":null,"previous":null,"facets":{},"results":[{"id":"3830ebdb-cad0-482b-8e78-285de7a3ed0d","gtinNumber":"05901520000059","name":"Muszynianka Naturalna woda mineralna MUSZYNIANKA 1.5l","targetMarket":["PL"],"netContent":["1.5l"],"imageUrls":[],"description":"Naturalna woda mineralna MUSZYNIANKA 1,5l wysokozmineralizowana niskonasycona CO2","descriptionLanguage":"pl","productPage":null,"isPublic":true,"isVerified":false,"lastModified":"2022-03-31T09:10:30.834000+00:00","brand":"Muszynianka","company":{"name":"MUSZYNIANKA Sp. z o.o.","nip":"7343575005","street":"ul. Tadeusza Kościuszki 58","webPage":"http://muszynianka.pl/","city":"Krynica-Zdrój","postalCode":"33-380"},"gpc":"10000232"}]}
+        string: !!binary |
+          H4sIAAAAAAAAA41SS27bMBC9CsFtLZkSLVjWLvCqcOwaSFKgCbIYibTLmiIFfurahk/SY/QIQe/V
+          oZ1+sisXBN/jDGfeG55oZ6MJtClG1MhveDBR6xEdnPyqbPS/8QY6GRCdziPqpI86gacTVYI2lNec
+          yVa0WQeCZZO6bLNaTuusrCshp8ClYIKO6DYos4p9Kx3msGrGiqpkaVUzvDXQS+SX0R8PRoHZAVlB
+          iA60AbK3AkivjLzC5cPd46fV+5vV4oYUeaUxPYDbyrAEt5Mo4omub+lzkhTm1gRpLtwlFFnVw1Y+
+          OJ0kIBTSd04NQVmDDfxf0VGlyf7g7c4eXyPU0e4Bw4zyO2vAHzrcyfxDSd9UuAWzjVgeKw2p78FZ
+          EbuwvlBXr5Vfx1arjjbBRZnwR+nURkn0egPaI6XBh6UVryQtWVlmjGe8uGezpmANZ3nNJ2jtO8Ya
+          xrBO68CIt/4i29l+AHPAuf7x/x+Vd0NOjsTmNk/zUQNeT/mEV9MKZ4aUD04mt2nUObkHIfFtIAv7
+          83un8LhTpKoxbC/bqzz6OYShGY/7vz3kgx6nPlTAJujCId1B9ijcy48vyR3rA+i5FSmbo8CaUfyB
+          2wHNoUX6OyUv6fn5/As19ovAyAIAAA==
       headers:
         Allow:
           - GET, HEAD, OPTIONS
         Connection:
           - keep-alive
+        Content-Encoding:
+          - gzip
         Content-Language:
           - pl
         Content-Type:

@@ -1,3 +1,5 @@
+import gzip
+import json
 from random import random
 from time import sleep
 from typing import Optional
@@ -12,6 +14,13 @@ UNKNOWN_ERRORMSG = "unknown_error"
 
 class ApiException(Exception):
     pass
+
+
+def _parse_response_json(response: requests.Response) -> dict:
+    content = response.content
+    if content[:2] == b'\x1f\x8b':
+        content = gzip.decompress(content)
+    return json.loads(content.decode())
 
 
 class CompanyBase(BaseModel):
@@ -92,7 +101,7 @@ class ProduktyWSieciClient:
                     else:
                         continue
 
-                response_json = response.json()
+                response_json = _parse_response_json(response)
                 if 'errors' in response_json:
                     errorTable = response_json['errors']
                     if NOT_FOUND_ERRORMSG in str(errorTable):  # when product not found in the GS1 API

@@ -14,13 +14,22 @@ interactions:
       uri: https://www.eprodukty.gs1.pl/external_api/v1/products/?gtin_number__prefix=05900049011829
     response:
       body:
-        string: |
-          {"count":1,"next":null,"previous":null,"facets":{},"results":[{"id":"8eba0309-951a-48a9-8a7a-c6c80182bcab","gtinNumber":"05900049011829","name":"MALMA makar PENNE 12szt*500g TOR","targetMarket":["EU"],"netContent":"500.0g","imageUrls":[],"description":"","descriptionLanguage":"en","productPage":null,"isPublic":true,"isVerified":false,"lastModified":"2020-04-01T00:00:00+00:00","brand":"MALMA","company":{"name":"PZZ Lubella GMW Sp. z o.o. Sp.k.","nip":"5472147612","street":"ul. Wrotkowska 1","webPage":"https://lubella.pl/","city":"Lublin","postalCode":"20-469"},"gpc":"10006219"}]}
+        string: !!binary |
+          H4sIAAAAAAAAA1VSy27bMBD8FWKPrSWTqvyQb0Fg5GK5Rps0QIIcVhKtEKZIgY+mjZF/z1KuDwUE
+          gjM7lGaGOkNrowmwETMw8g9tTNR6BqOTv5WN/oqP2MpA6PwxAyd91Ak8n0F1sIG1bJB/41VWLQRm
+          5RqrbI0rzNplu+ZiXTQtNjCDPiizj0MjHZ3hi4pzXlZckKCiqcFBEl/f7OobNuAJHTts9/stE4V/
+          D18WnPfs/vsPUgZ0vQw1upMkv8+wfYCX5D7cWhNkCgOkznlPWjVgLx+cTm5J1EnfOjUGZQ2p4D9i
+          h6aPpKaBNJAqsF1sw2GiLi0of4iNVi1sgosy4V/SqaOS1MIRtSdKow+17f6RUPCCZ7zMuLjnfDM9
+          X6eVPtA4NN01MuHWDiOav1TytYzD0xPbxUZqjeyufmQ/x5y9M5vbPG1PeapNjSlvuSpEuVqKgigf
+          nEzNQNQ5e3Q2nOybPyETNHuTzSUQvIYw+s18ri/vz0c9Tx5UIAOwSzGnEqwPqG9tJ6cwWbmsgH6B
+          fqQOQNANLgtBzMvHJ0Dtg7BJAgAA
       headers:
         Allow:
           - GET, HEAD, OPTIONS
         Connection:
           - keep-alive
+        Content-Encoding:
+          - gzip
         Content-Language:
           - pl
         Content-Type:
