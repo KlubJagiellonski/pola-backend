@@ -12,7 +12,6 @@ from pathlib import Path
 
 import django
 import environ
-from boto.s3.connection import OrdinaryCallingFormat
 from django.utils.translation import gettext_lazy as _
 
 ROOT_DIR = environ.Path(__file__) - 4  # (/a/b/myfile.py - 3 = /)
@@ -276,15 +275,15 @@ AWS_STORAGE_AI_PICS_BUCKET_NAME = env('POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME')
 AWS_STORAGE_WEB_BUCKET_NAME = env.str('POLA_APP_AWS_S3_WEB_BUCKET_NAME', '')
 AWS_STORAGE_COMPANY_LOGOTYPE_BUCKET_NAME = env('POLA_APP_AWS_S3_COMPANY_LOGOTYPE_BUCKET_NAME')
 # TODO See: https://github.com/jschneier/django-storages/issues/47
-# Revert the following and use str after the above-mentioned bug is fixed in
-# either django-storage-redux or boto
+# Revert the following and use str after the above-mentioned bug is fixed in django-storages
 AWS_EXPIRY = 60 * 60 * 24 * 7
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)}
 AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)
-AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_S3_ENDPOINT_URL = env.str('POLA_APP_AWS_S3_ENDPOINT_URL', default=None)
+if AWS_S3_ENDPOINT_URL:
+    AWS_S3_ADDRESSING_STYLE = 'path'
 AI_SHARED_SECRET = env('AI_SHARED_SECRET')
 
 # STATIC FILE CONFIGURATION

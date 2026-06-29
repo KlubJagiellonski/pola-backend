@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.14.0
 # check=error=true;experimental=all
 
-ARG PYTHON_VERSION="3.11"
-FROM python:${PYTHON_VERSION}-slim-bullseye
+ARG PYTHON_VERSION="3.13.14"
+FROM python:${PYTHON_VERSION}-slim-trixie
 
 WORKDIR /app
 

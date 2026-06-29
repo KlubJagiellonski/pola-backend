@@ -3,7 +3,6 @@ asttokens==3.0.1
 attrs==26.1.0
 babel==2.18.0
 beautifulsoup4==4.15.0
-boto==2.49.0
 boto3==1.43.36
 botocore==1.43.36
 certifi==2026.6.17
@@ -30,7 +29,6 @@ django-filter==25.1
 django-grappelli==4.0.3
 django-model-utils==5.0.0
 django-ratelimit==4.1.0
-django-redis-cache==3.0.1
 django-resized==1.0.3
 django-reversion==6.3.0
 django-storages==1.14.6
@@ -55,6 +53,7 @@ jsonschema==4.25.1
 jsonschema-path==0.3.4
 jsonschema-specifications==2025.9.1
 lazy-object-proxy==1.12.0
+legacy-cgi==2.6.4
 MarkupSafe==3.0.3
 matplotlib-inline==0.2.2
 more-itertools==10.8.0
@@ -69,7 +68,7 @@ parse==1.22.1
 parso==0.8.7
 pathable==0.4.4
 pexpect==4.9.0
-Pillow==10.1.0
+pillow==11.2.1
 pluggy==1.6.0
 prompt_toolkit==3.0.52
 propcache==0.5.2
@@ -90,7 +89,7 @@ python-dateutil==2.9.0.post0
 python3-openid==3.2.0
 pytz==2026.2
 PyYAML==6.0.3
-redis==3.5.3
+redis==5.2.1
 referencing==0.36.2
 reportlab==4.3.1
 requests==2.34.2

@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-docker compose run --rm web pytest -n auto --junitxml=junit.xml -o junit_family=legacy
+docker compose run --rm web pytest -n auto --junitxml=/app/junit.xml -o junit_family=legacy

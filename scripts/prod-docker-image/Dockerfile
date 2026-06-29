@@ -5,7 +5,7 @@
 ARG APP_UID="50000"
 ARG APP_GID="50000"
 
-ARG BASE_PYTHON_IMAGE="python:3.11-slim-bookworm"
+ARG BASE_PYTHON_IMAGE="python:3.13.14-slim-trixie"
 
 ######################### NODE BUILD IMAGE ##########################
 # build-js builds the frontend assets
@@ -33,16 +33,23 @@ ENV APP_HOME=/opt/pola-backend/ \
     PATH="/root/.local/bin:${PATH}"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
         g++ \
         gcc \
         git \
-        gnupg2 \
         libc6-dev \
         libcairo2-dev \
         libcc1-0 \
+        linux-libc-dev \
+        lsb-release \
+    && install -d /usr/share/postgresql-common/pgdg \
+    && curl --fail -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
         libpq-dev \
         libpq5 \
-        linux-libc-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -82,14 +89,21 @@ ENV APP_UID=${APP_UID} \
     GUNICORN_CMD_ARGS="--worker-tmp-dir /dev/shm"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates dumb-init curl \
-        postgresql-client libpq5 \
-        # Required by encrypoint.sh
+        ca-certificates \
+        curl \
+        dumb-init \
+        lsb-release \
         netcat-openbsd \
-        # Required by Heroku-exec
         openssh-client \
         openssh-server \
         iproute2 \
+    && install -d /usr/share/postgresql-common/pgdg \
+    && curl --fail -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client-18 \
+        libpq5 \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/* /usr/share/doc /usr/share/man \

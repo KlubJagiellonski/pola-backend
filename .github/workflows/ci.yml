@@ -15,13 +15,19 @@ jobs:
   django-tests:
     name: "Django tests"
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
-        # For current version, see: .python-version
-        python_version: ["current"]
-        # For current version, see: dependencies/constraints-production.txt
-        django_version: ['current', "5.1.8"]
+        include:
+          # Blocking: current production stack (.python-version + constraints-production.txt)
+          - python_version: current
+            django_version: current
+            experimental: false
+          # Non-blocking: track upcoming Python/Django compatibility
+          - python_version: "3.14"
+            django_version: "6"
+            experimental: true
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
     steps:
@@ -31,7 +37,7 @@ jobs:
           fetch-depth: 2
       - name: "Login to Githhub Container Registry"
         run: ./scripts/docker_login_github.py
-      - if: matrix.django_version != 'latest' && matrix.django_version != 'current'
+      - if: matrix.django_version != 'latest' && matrix.django_version != 'current' && matrix.django_version != '6'
         run: |
           echo "DJANGO_VERSION=${DJANGO_VERSION}" | tee "${GITHUB_ENV}";
         env:
@@ -40,6 +46,22 @@ jobs:
         run: |
           latest_version=$(curl 'https://pypi.org/pypi/django/json' | jq .info.version -r)
           echo "DJANGO_VERSION=${latest_version}" | tee "${GITHUB_ENV}";
+      - if: matrix.django_version == '6'
+        run: |
+          latest_version=$(
+            curl -s 'https://pypi.org/pypi/django/json' | jq -r '
+              [.releases | keys[] | select(test("^6\\.[0-9]+\\.[0-9]+$"))]
+              | sort_by(split(".") | map(tonumber)) | last
+            '
+          )
+          echo "DJANGO_VERSION=${latest_version}" | tee "${GITHUB_ENV}";
+      - name: "Log test matrix versions"
+        run: |
+          echo "Python: ${PYTHON_VERSION}"
+          echo "Django: ${DJANGO_VERSION:-current (from constraints)}"
+          echo "Experimental (non-blocking): ${{ matrix.experimental }}"
+        env:
+          DJANGO_VERSION: ${{ env.DJANGO_VERSION }}
       - name: "Copy .env.example to .env"
         run: cp .env.example .env
       - name: "Build CI image"
@@ -55,21 +77,25 @@ jobs:
       - name: "Checks the entire Django project for potential problems"
         run: docker compose run web check --fail-level DEBUG -v 3
       - name: "Upload coverage"
+        if: ${{ !matrix.experimental }}
         uses: codecov/codecov-action@v7.0.0
         with:
+          files: coverage.xml
+          disable_search: true
           fail_ci_if_error: false
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        if: ${{ !matrix.experimental && !cancelled() }}
         uses: codecov/codecov-action@v7.0.0
         with:
           report_type: test_results
-          files: ./junit.xml
+          files: junit.xml
+          disable_search: true
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: "Push CI image (push)"
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && !matrix.experimental
         run: |
           ./scripts/manage_image.py push --image-type ci
           # Push cache

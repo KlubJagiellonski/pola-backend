@@ -11,10 +11,14 @@ DJANGO_VERSION = next(
 ).split("==")[1]
 
 PYTHON_VERSION = Path(ROOT_DIR / ".python-version").read_text().strip()
+DEBIAN_VARIANT = "trixie"
 
 files_to_check = [
     ROOT_DIR / "docker-compose.yaml",
+    ROOT_DIR / "docker-compose.dbt.yaml",
     ROOT_DIR / "scripts/ci-docker-image/Dockerfile",
+    ROOT_DIR / "scripts/bi-docker-image/Dockerfile",
+    ROOT_DIR / "scripts/prod-docker-image/Dockerfile",
     ROOT_DIR / "self-management/Dockerfile",
 ]
 
@@ -22,6 +26,14 @@ patterns = [
     (r'DJANGO_VERSION=\${DJANGO_VERSION-.*}', f'DJANGO_VERSION=${{DJANGO_VERSION-{DJANGO_VERSION}}}'),
     (r'PYTHON_VERSION=\${PYTHON_VERSION-.*}', f'PYTHON_VERSION=${{PYTHON_VERSION-{PYTHON_VERSION}}}'),
     (r'ARG PYTHON_VERSION=.*', f'ARG PYTHON_VERSION="{PYTHON_VERSION}"'),
+    (
+        r'FROM python:\$\{PYTHON_VERSION\}-slim-.*',
+        f'FROM python:${{PYTHON_VERSION}}-slim-{DEBIAN_VARIANT}',
+    ),
+    (
+        r'ARG BASE_PYTHON_IMAGE="python:.*-slim-.*"',
+        f'ARG BASE_PYTHON_IMAGE="python:{PYTHON_VERSION}-slim-{DEBIAN_VARIANT}"',
+    ),
 ]
 
 has_changes = False
