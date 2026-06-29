@@ -68,7 +68,7 @@ parse==1.22.1
 parso==0.8.7
 pathable==0.4.4
 pexpect==4.9.0
-pillow==11.2.1
+pillow==12.2.0
 pluggy==1.6.0
 prompt_toolkit==3.0.52
 propcache==0.5.2
@@ -108,7 +108,7 @@ tqdm==4.68.3
 traitlets==5.15.1
 typing_extensions==4.15.0
 tzdata==2026.2
-urllib3==1.26.15
+urllib3==2.7.0
 vcrpy==7.0.0
 waitress==3.0.2
 wcwidth==0.8.1

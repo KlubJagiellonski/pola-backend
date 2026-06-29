@@ -46,7 +46,7 @@ openapi-spec-validator==0.7.2
 packaging==26.2
 parse==1.22.1
 pathable==0.4.4
-pillow==11.2.1
+pillow==12.2.0
 psycopg2-binary==2.9.12
 pycairo==1.29.0
 pycparser==3.0
