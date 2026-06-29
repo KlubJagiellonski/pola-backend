@@ -1,4 +1,5 @@
 asgiref==3.11.1
+annotated-types==0.7.0
 attrs==26.1.0
 babel==2.18.0
 boto3==1.43.36
@@ -50,7 +51,8 @@ pillow==12.2.0
 psycopg2-binary==2.9.12
 pycairo==1.29.0
 pycparser==3.0
-pydantic==1.10.9
+pydantic==2.13.4
+pydantic_core==2.46.4
 PyJWT==2.13.0
 python-dateutil==2.9.0.post0
 python3-openid==3.2.0
@@ -69,6 +71,7 @@ sentry-sdk==2.63.0
 six==1.17.0
 sqlparse==0.5.5
 tqdm==4.68.3
+typing-inspection==0.4.2
 typing_extensions==4.15.0
 urllib3==2.7.0
 Werkzeug==3.1.8

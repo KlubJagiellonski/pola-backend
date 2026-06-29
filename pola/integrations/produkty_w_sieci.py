@@ -4,7 +4,7 @@ from typing import Optional
 
 import requests
 from django.conf import settings
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 NOT_FOUND_ERRORMSG = "not_found"
 UNKNOWN_ERRORMSG = "unknown_error"
@@ -15,39 +15,41 @@ class ApiException(Exception):
 
 
 class CompanyBase(BaseModel):
+    model_config = ConfigDict(extra='ignore')
+
     name: str
-    nip: Optional[str]
-    street: Optional[str]
-    webPage: Optional[str]
-    city: Optional[str]
-    postalCode: Optional[str]
+    nip: Optional[str] = None
+    street: Optional[str] = None
+    webPage: Optional[str] = None
+    city: Optional[str] = None
+    postalCode: Optional[str] = None
 
 
 class GpcBase(BaseModel):
+    model_config = ConfigDict(extra='ignore')
+
     code: str
-    text: Optional[str]
+    text: Optional[str] = None
 
 
 class ProductBase(BaseModel):
+    model_config = ConfigDict(extra='ignore')
+
     gtinNumber: str
-    gtinStatus: Optional[str]
-    name: Optional[str]
+    gtinStatus: Optional[str] = None
+    name: Optional[str] = None
     targetMarket: list[str]
     netContent: list[str]
-    description: Optional[str]
-    descriptionLanguage: Optional[str]
+    description: Optional[str] = None
+    descriptionLanguage: Optional[str] = None
     imageUrls: list[str]
-    productPage: Optional[str]
-    isPublic: Optional[bool]
-    isVerified: Optional[bool]
-    lastModified: Optional[str]
+    productPage: Optional[str] = None
+    isPublic: Optional[bool] = None
+    isVerified: Optional[bool] = None
+    lastModified: Optional[str] = None
     gpc: list[GpcBase]
-    brand: Optional[str]
-    company: Optional[CompanyBase]
-
-
-class NoResult(BaseModel):
-    result: str
+    brand: Optional[str] = None
+    company: Optional[CompanyBase] = None
 
 
 class ProduktyWSieciClient:
@@ -65,7 +67,7 @@ class ProduktyWSieciClient:
         params = {}
 
         response = self._send_request('get', uri, params=params, num_retries=num_retries)
-        return None if response is None else ProductBase.parse_obj(response)
+        return None if response is None else ProductBase.model_validate(response)
 
     def _send_request(self, method, url, *, num_retries, **kwargs):
         kwargs.setdefault('headers', {})

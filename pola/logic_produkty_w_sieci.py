@@ -121,7 +121,7 @@ def create_from_api(
             product_commit_desc += 'Kod GPC zmieniony na podstawie bazy GS1. '
             product.gpc_brick = GPCBrick.objects.filter(code=result_product.gpc[0].code).first()
 
-    product.gs1_last_response = get_products_response.dict()
+    product.gs1_last_response = get_products_response.model_dump()
     product.save(commit_desc=product_commit_desc)
 
     return product
