@@ -6,7 +6,12 @@ from test_plus import TestCase
 from pola import logic_produkty_w_sieci
 from pola.gpc.factories import GPCBrickFactory
 from pola.integrations.produkty_w_sieci import ProductBase
-from pola.logic_produkty_w_sieci import create_from_api, is_code_supported
+from pola.logic_produkty_w_sieci import (
+    create_from_api,
+    ensure_brand_exists,
+    ensure_company_exists,
+    is_code_supported,
+)
 from pola.product.models import Product
 from pola.report.models import Report
 
@@ -487,3 +492,53 @@ class TestCreateFromApiUnsupportedCode(TestCase):
         with self.assertRaises(Exception) as ctx:
             create_from_api(code=code, get_products_response=None, product=None)
         self.assertEqual(str(ctx.exception), f"Unsupported code: {code}")
+
+
+class TestEnsureTryCatchHandlers(TestCase):
+    def test_ensure_company_exists_handles_multiple_objects(self):
+        # Arrange: create duplicate companies with the same NIP to trigger MultipleObjectsReturned
+        from pola.company.models import Company
+
+        dup_nip = "1234567890"
+        Company.objects.create(name="Alpha Corp", nip=dup_nip)
+        Company.objects.create(name="Alpha Corp 2", nip=dup_nip)
+
+        class _ResultCompany:
+            def __init__(self, name, nip):
+                self.name = name
+                self.nip = nip
+
+        result_company = _ResultCompany(name="Alpha Corp", nip=dup_nip)
+
+        # Act + Assert logs
+        with self.assertLogs(level='WARNING', logger=logic_produkty_w_sieci.LOGGER) as log:
+            company_created, expected_company = ensure_company_exists(result_company)
+
+        self.assertFalse(company_created)
+        self.assertIsNone(expected_company)
+        log_concat = reduceLogs(log)
+        self.assertIn("Multiple Company records found for NIP=1234567890", log_concat)
+
+    def test_ensure_brand_exists_handles_multiple_objects(self):
+        # Arrange: create duplicate brands with the same name and company
+        from pola.company.models import Brand, Company
+
+        company = Company.objects.create(name="Brand Owner", nip="9988776655")
+        brand_name = "ClashBrand"
+        Brand.objects.create(name=brand_name, company=company)
+        Brand.objects.create(name=brand_name, company=company)
+
+        class _ResultProduct:
+            def __init__(self, brand):
+                self.brand = brand
+
+        result_product = _ResultProduct(brand=brand_name)
+
+        # Act + Assert logs
+        with self.assertLogs(level='WARNING', logger=logic_produkty_w_sieci.LOGGER) as log:
+            brand_created, expected_brand = ensure_brand_exists(company, result_product)
+
+        self.assertFalse(brand_created)
+        self.assertIsNone(expected_brand)
+        log_concat = reduceLogs(log)
+        self.assertIn("Multiple Brand records found for name='ClashBrand'", log_concat)
