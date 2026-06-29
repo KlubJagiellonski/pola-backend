@@ -24,7 +24,7 @@ from pola.tests.test_utils import get_dummy_image
 
 TEST_EAN13 = "5901520000059"
 
-vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), 'cassettes'))
+vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), 'cassettes'), decode_compressed_response=True)
 
 
 class TestGetResultFromCode(TestCase):

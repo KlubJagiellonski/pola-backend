@@ -14,24 +14,13 @@ interactions:
       uri: https://www.eprodukty.gs1.pl/external_api/v2/products/5901520000059?include_local_data=true
     response:
       body:
-        string: !!binary |
-          H4sIAAAAAAAAA41S247aMBD9FctPrQQhl00heVvRalVxWbSwrQqtqiGZTb04dmQ7SwHxJf2MfkLV
-          /+oY6GXfmofIc2Y853jOHHjlhJq29RoNz3mYZmGUxqH/0ox3Ttm5A9daykLhxBMSqqBGiiet3e+U
-          ALUBNqUaA1IB2+oSWC0UnsPJ/Xz5Yfr2ejq6DlgUpJLuOzAVugmYDTqer/hszD9RV3RDrRyqE0al
-          TLIXUjjz0mdFDRXeG0lCVhSWaAsjGie0IiX/w86iTirZdmf1Ru8vFWKvt0BlStiNVmB3Bf3Z8Db+
-          qO50uYdHphvY+BoBOXt9N/88e7Pgz9jHoKqWpJGKxr+tMbpsCzc7QaqVkqTbWbuWouC5My36+B0a
-          8SCw/I1IsG6iywvG4zBOumHcDV8tojAPozzJgiTr9wfxkhjWBlT5fPyEFrpuQO14fvhjzz9vnzcB
-          2zMd6MDbJxpK95OrJO2nZDRB1hn0XvBWBmwBJVJvYCP981sh6LgRLB14EuGIgY8M8RbQXZbmx/fH
-          DiP/6OHaOpBDXXruJOkmg5DQLa7Po+BfnGvyXq/+qzpoZI8fackaGs3qQE843Y389sVJ7BcFv3pR
-          772pFyOAdckuBKNrcLuzf/zoF8QOaQQSHfV4AGlprJWNxqJAVaAfi/RHi3gznlJP2vTME0VXWeKF
-          nrNCVZNbX1zr6XmKN/OIzbT0Iz8ej78Ao/vNYjADAAA=
+        string: |
+          {"gtinNumber":"05901520000059","gtinStatus":"active","name":"Muszynianka Naturalna woda mineralna MUSZYNIANKA. 1.5l","targetMarket":["PL"],"netContent":["1.5 l (litr)"],"imageUrls":[],"description":"Naturalna woda mineralna MUSZYNIANKA 1,5l wysokozmineralizowana niskonasycona CO2\nRodzaj opakowania: DRS_PET","descriptionLanguage":"pl","productPage":null,"isPublic":true,"isVerified":true,"lastModified":"2023-02-06T10:01:39.397782Z","brand":"Muszynianka","company":{"name":"MUSZYNIANKA Sp. z o.o.","nip":"7343575005","street":"ul. Tadeusza Kościuszki 58","city":"Krynica-Zdrój, PL","postalCode":"33-380","webPage":"http://muszynianka.pl/"},"gpc":[{"code":"10000232","text":"Woda pakowana - niearomatyzowana"}],"isComplete":false,"gs1Licence":{"licenseeGLN":"5909000014930","licensingMO":{"moName":"GS1 Poland"}}}
       headers:
         Allow:
           - GET, HEAD, OPTIONS
         Connection:
           - keep-alive
-        Content-Encoding:
-          - gzip
         Content-Language:
           - en
         Content-Type:

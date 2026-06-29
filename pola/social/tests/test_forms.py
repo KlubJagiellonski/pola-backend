@@ -8,7 +8,7 @@ from vcr import VCR
 
 from pola.social.forms import SubscribeNewsletterForm
 
-vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), 'cassettes'))
+vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), 'cassettes'), decode_compressed_response=True)
 fake = Faker()
 
 

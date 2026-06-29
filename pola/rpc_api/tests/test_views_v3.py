@@ -17,7 +17,10 @@ from pola.report.models import Attachment, Report
 from pola.rpc_api.tests.test_views import JsonRequestMixin
 from pola.tests.test_utils import get_dummy_image
 
-vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), "cassettes"))
+vcr = VCR(
+    cassette_library_dir=os.path.join(os.path.dirname(__file__), "cassettes"),
+    decode_compressed_response=True,
+)
 
 
 class TestAddAiPics(TestCase, JsonRequestMixin):
