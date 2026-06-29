@@ -201,7 +201,9 @@ jobs:
     needs: [prod-image, bi-validate]
     if: github.event_name == 'push'
     permissions:
+      contents: read
       deployments: write
+      packages: write
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
