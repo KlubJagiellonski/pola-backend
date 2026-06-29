@@ -24,7 +24,7 @@ class CompanyFilter(CrispyFilterMixin, django_filters.FilterSet):
     )
 
     has_official_url = django_filters.TypedChoiceFilter(
-        choices=((None, _("----")), (True, _("Tak")), (False, _("Nie"))),
+        choices=(('', _("----")), (True, _("Tak")), (False, _("Nie"))),
         coerce=strtobool,
         label=_("Ma stronę WWW"),
         method='filter_has_official_url',
