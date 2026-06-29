@@ -18,7 +18,9 @@ class ApiException(Exception):
 
 def _parse_response_json(response: requests.Response) -> dict:
     content = response.content
-    if content[:2] == b'\x1f\x8b':
+    if not isinstance(content, (bytes, bytearray)):
+        return response.json()
+    if len(content) >= 2 and content[:2] == b'\x1f\x8b':
         content = gzip.decompress(content)
     return json.loads(content.decode())
 
