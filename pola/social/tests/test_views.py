@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from test_plus.test import TestCase
 from vcr import VCR
 
-vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), 'cassettes'))
+vcr = VCR(cassette_library_dir=os.path.join(os.path.dirname(__file__), 'cassettes'), decode_compressed_response=True)
 
 
 class TestSubscribeNewsletterFormView(TestCase):

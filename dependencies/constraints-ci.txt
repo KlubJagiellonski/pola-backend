@@ -1,3 +1,4 @@
+annotated-types==0.7.0
 asgiref==3.11.1
 asttokens==3.0.1
 attrs==26.1.0
@@ -68,7 +69,7 @@ parse==1.22.1
 parso==0.8.7
 pathable==0.4.4
 pexpect==4.9.0
-pillow==11.2.1
+pillow==12.2.0
 pluggy==1.6.0
 prompt_toolkit==3.0.52
 propcache==0.5.2
@@ -78,7 +79,8 @@ ptyprocess==0.7.0
 pure_eval==0.2.3
 pycairo==1.29.0
 pycparser==3.0
-pydantic==1.10.9
+pydantic==2.13.4
+pydantic_core==2.46.4
 Pygments==2.20.0
 PyJWT==2.13.0
 pytest==9.1.1
@@ -106,9 +108,10 @@ sqlparse==0.5.5
 stack-data==0.6.3
 tqdm==4.68.3
 traitlets==5.15.1
+typing-inspection==0.4.2
 typing_extensions==4.15.0
 tzdata==2026.2
-urllib3==1.26.15
+urllib3==2.7.0
 vcrpy==7.0.0
 waitress==3.0.2
 wcwidth==0.8.1
