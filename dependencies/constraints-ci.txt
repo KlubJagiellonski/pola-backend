@@ -110,7 +110,7 @@ tqdm==4.68.3
 traitlets==5.15.1
 typing-inspection==0.4.2
 typing_extensions==4.15.0
-tzdata==2026.2
+tzdata==2026.3
 urllib3==2.7.0
 vcrpy==7.0.0
 waitress==3.0.2
