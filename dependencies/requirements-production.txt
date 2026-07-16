@@ -28,5 +28,5 @@ pydantic==2.13.4
 redis==5.2.1
 reportlab[pycairo]==4.3.1
 rq==1.16.1
-sentry-sdk==2.63.0
+sentry-sdk==2.65.0
 tqdm==4.68.3
