@@ -75,7 +75,7 @@ class TestCreateFromApi(TestCase):
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
                 code=code,
-                get_products_response=ProductBase.parse_obj(product_query_response),
+                get_products_response=ProductBase.model_validate(product_query_response),
                 product=None,
             )
         product_db = Product.objects.get(code=code)
@@ -127,7 +127,7 @@ class TestCreateFromApi(TestCase):
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
                 code=code,
-                get_products_response=ProductBase.parse_obj(product_query_response),
+                get_products_response=ProductBase.model_validate(product_query_response),
                 product=None,
             )
         product_db = Product.objects.get(code=code)
@@ -164,7 +164,7 @@ class TestCreateFromApi(TestCase):
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
                 code=TEST_EAN13,
-                get_products_response=ProductBase.parse_obj(product_query_response),
+                get_products_response=ProductBase.model_validate(product_query_response),
                 product=None,
             )
         product_db = Product.objects.get(code=TEST_EAN13)
@@ -204,7 +204,7 @@ class TestCreateFromApi(TestCase):
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
                 code=TEST_EAN13,
-                get_products_response=ProductBase.parse_obj(product_query_response),
+                get_products_response=ProductBase.model_validate(product_query_response),
                 product=None,
             )
         product_db = Product.objects.get(code=TEST_EAN13)
@@ -240,7 +240,7 @@ class TestCreateFromApi(TestCase):
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
                 code=TEST_EAN13,
-                get_products_response=ProductBase.parse_obj(product_query_response),
+                get_products_response=ProductBase.model_validate(product_query_response),
                 product=None,
             )
         product_db = Product.objects.get(code=TEST_EAN13)
@@ -286,7 +286,7 @@ class TestCreateFromApi(TestCase):
         }
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
-                code=TEST_EAN13, get_products_response=ProductBase.parse_obj(product_query_response), product=p
+                code=TEST_EAN13, get_products_response=ProductBase.model_validate(product_query_response), product=p
             )
         product_db = Product.objects.get(code=TEST_EAN13)
         self.assertEqual(result_product.pk, product_db.pk)
@@ -327,7 +327,7 @@ class TestCreateFromApi(TestCase):
         }
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
-                code=TEST_EAN13, get_products_response=ProductBase.parse_obj(product_query_response), product=p
+                code=TEST_EAN13, get_products_response=ProductBase.model_validate(product_query_response), product=p
             )
         product_db = Product.objects.get(code=TEST_EAN13)
         self.assertEqual(result_product.pk, product_db.pk)
@@ -371,7 +371,7 @@ class TestCreateFromApi(TestCase):
         }
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
-                code=TEST_EAN13, get_products_response=ProductBase.parse_obj(product_query_response), product=p
+                code=TEST_EAN13, get_products_response=ProductBase.model_validate(product_query_response), product=p
             )
         product_db = Product.objects.get(code=TEST_EAN13)
         self.assertEqual(result_product.pk, product_db.pk)
@@ -423,7 +423,7 @@ class TestCreateFromApi(TestCase):
         gpc_brick = GPCBrickFactory(code="10000045")
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
-                code=TEST_EAN13, get_products_response=ProductBase.parse_obj(product_query_response), product=p
+                code=TEST_EAN13, get_products_response=ProductBase.model_validate(product_query_response), product=p
             )
         product_db = Product.objects.get(code=TEST_EAN13)
         self.assertEqual(result_product.pk, product_db.pk)
@@ -469,7 +469,7 @@ class TestCreateFromApi(TestCase):
         }
         with self.assertLogs(level='INFO', logger=logic_produkty_w_sieci.LOGGER) as log:
             result_product = create_from_api(
-                code=TEST_EAN13, get_products_response=ProductBase.parse_obj(product_query_response), product=p
+                code=TEST_EAN13, get_products_response=ProductBase.model_validate(product_query_response), product=p
             )
         product_db = Product.objects.get(code=TEST_EAN13)
         self.assertEqual(result_product.pk, product_db.pk)

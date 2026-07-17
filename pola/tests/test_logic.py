@@ -443,7 +443,7 @@ class TestLogoCheck(TestCase):
         self.assertEqual(expected_response[0], response[0])
         self.assertEqual(expected_response, response)
 
-    def test_replacements_are_included_and_report_text_updated(self):
+    def test_replacements_are_included_and_report_text_unchanged(self):
         current_ean = TEST_EAN13
         company = CompanyFactory.create(description='desc')
         product = ProductFactory.create(code=current_ean, company=company, brand=None)
@@ -490,12 +490,9 @@ class TestLogoCheck(TestCase):
         actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
 
-        # Report text
-        expected_prefix = "Polskie alternatywy"
-        expected_suffix = "Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu"
-
-        self.assertTrue(result["report_text"].startswith(expected_prefix))
-        self.assertTrue(result["report_text"].endswith(expected_suffix))
+        # Report text should remain the default (no alternatives prepended)
+        expected_report_text = "Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu"
+        self.assertEqual(expected_report_text, result["report_text"])
 
     def test_code_with_one_company(self):
         current_ean = TEST_EAN13
@@ -789,17 +786,15 @@ class TestShareholdersToStr(TestCase):
 
 
 class TestHandleProductReplacements(TestCase):
-    def test_no_replacements_keeps_report_unchanged(self):
+    def test_no_replacements_does_not_add_key(self):
         product = ProductFactory.create()
         result = {}
-        report = {"text": "Original report"}
 
-        handle_product_replacements(product, result, report)
+        handle_product_replacements(product, result)
 
         self.assertNotIn("replacements", result)
-        self.assertEqual("Original report", report["text"])
 
-    def test_adds_replacements_and_updates_report_text_default_topk(self):
+    def test_adds_replacements(self):
         product = ProductFactory.create()
         r1 = ProductFactory.create(name="Alt1")
         r2 = ProductFactory.create(name="Alt2")
@@ -808,9 +803,8 @@ class TestHandleProductReplacements(TestCase):
         product.replacements.add(r1, r2, r3, r4)
 
         result = {}
-        report = {"text": "Please report updates"}
 
-        handle_product_replacements(product, result, report)
+        handle_product_replacements(product, result)
 
         self.assertIn("replacements", result)
         expected = [
@@ -853,25 +847,6 @@ class TestHandleProductReplacements(TestCase):
         ]
         actual = [(d["code"], d["name"], d["company"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
-        # Default topK is 3, include brand/company names in parentheses in the prefix
-        c1 = (
-            (r1.brand.common_name or r1.brand.name)
-            if r1.brand
-            else (r1.company.common_name or r1.company.official_name or r1.company.name)
-        )
-        c2 = (
-            (r2.brand.common_name or r2.brand.name)
-            if r2.brand
-            else (r2.company.common_name or r2.company.official_name or r2.company.name)
-        )
-        c3 = (
-            (r3.brand.common_name or r3.brand.name)
-            if r3.brand
-            else (r3.company.common_name or r3.company.official_name or r3.company.name)
-        )
-        expected_prefix = f"Polskie alternatywy: Alt1 ({c1}), Alt2 ({c2}), Alt3 ({c3})\n"
-        self.assertTrue(report["text"].startswith(expected_prefix))
-        self.assertTrue(report["text"].endswith("Please report updates"))
 
     def test_uses_code_when_replacement_name_missing(self):
         product = ProductFactory.create()
@@ -880,9 +855,8 @@ class TestHandleProductReplacements(TestCase):
         product.replacements.add(repl)
 
         result = {}
-        report = {"text": "Report"}
 
-        handle_product_replacements(product, result, report)
+        handle_product_replacements(product, result)
 
         expected_comp = repl.company.common_name or repl.company.official_name or repl.company.name
         expected_brand = repl.brand.common_name or repl.brand.name
@@ -895,20 +869,16 @@ class TestHandleProductReplacements(TestCase):
         ]
         actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
-        self.assertIn(repl.code, report["text"])  # Listed in alternatives
 
-    def test_does_modify_report_text_when_empty(self):
+    def test_adds_replacements_display_name_format(self):
         product = ProductFactory.create()
         repl = ProductFactory.create(name="AltX")
         product.replacements.add(repl)
 
         result = {}
-        report = {"text": ""}
 
-        handle_product_replacements(product, result, report)
+        handle_product_replacements(product, result)
 
-        # Replacements are added, but report text remains empty string
-        self.assertEqual("", report["text"])
         expected_comp = repl.company.common_name or repl.company.official_name or repl.company.name
         expected_brand = repl.brand.common_name or repl.brand.name
         expected = [

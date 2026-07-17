@@ -1,6 +1,9 @@
 ---
 extends: default
 
+ignore: |
+  **/cassettes/
+
 rules:
   line-length:
     max: 120
