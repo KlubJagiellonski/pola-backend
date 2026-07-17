@@ -1,5 +1,5 @@
 annotated-types==0.7.0
-asgiref==3.11.1
+asgiref==3.12.1
 asttokens==3.0.1
 attrs==26.1.0
 babel==2.18.0
