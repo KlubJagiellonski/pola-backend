@@ -69,7 +69,7 @@ parse==1.22.1
 parso==0.8.7
 pathable==0.4.4
 pexpect==4.9.0
-pillow==12.2.0
+pillow==12.3.0
 pluggy==1.6.0
 prompt_toolkit==3.0.52
 propcache==0.5.2
