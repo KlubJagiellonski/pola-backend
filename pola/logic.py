@@ -85,7 +85,7 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
                 handle_companies_when_multiple_companies_are_not_supported(
                     code, companies, multiple_company_supported, result, stats
                 )
-            handle_product_replacements(product, result, report)
+            handle_product_replacements(product, result)
         else:
             result['name'] = 'Nieznany produkt'
             result['altText'] = (
@@ -205,22 +205,16 @@ def _find_replacements(replacements_rel):
     return items
 
 
-def handle_product_replacements(product, result, report, topK=3):
-    """If the product has replacements, add them to the result and modify the report text.
+def handle_product_replacements(product, result):
+    """If the product has replacements, add them to the result.
 
     Args:
         product: Product instance
         result: results dict to be modified
-        report: report dict to be modified
-        topK: maximum number of replacements to include in the report text
     """
     replacements = _find_replacements(product.replacements)
     if replacements:
         result["replacements"] = replacements
-        if report['text']:
-            report_text = report['text']
-            txt_replacements = ', '.join(f"{r['display_name']}" for r in replacements[:topK])
-            report['text'] = f"Polskie alternatywy: {txt_replacements}" f"\n---\n{report_text}"
 
 
 def handle_companies_when_multiple_companies_are_not_supported(
