@@ -51,7 +51,7 @@ isodate==0.6.1
 jedi==0.20.0
 jmespath==1.1.0
 jsonschema==4.26.0
-jsonschema-path==0.3.4
+jsonschema-path==0.4.6
 jsonschema-specifications==2025.9.1
 lazy-object-proxy==1.12.0
 legacy-cgi==2.6.4
@@ -61,13 +61,13 @@ more-itertools==10.8.0
 multidict==6.7.1
 oauthlib==3.3.1
 openapi-core==0.23.1
-openapi-schema-validator==0.9.0
-openapi-spec-validator==0.9.0
+openapi-schema-validator==0.8.1
+openapi-spec-validator==0.8.5
 packaging==26.2
 parameterized==0.9.0
 parse==1.22.1
 parso==0.8.7
-pathable==0.4.4
+pathable==0.5.0
 pexpect==4.9.0
 pillow==12.3.0
 pluggy==1.6.0
@@ -80,6 +80,7 @@ pure_eval==0.2.3
 pycairo==1.29.0
 pycparser==3.0
 pydantic==2.13.4
+pydantic-settings==2.14.2
 pydantic_core==2.46.4
 Pygments==2.20.0
 PyJWT==2.13.0
@@ -92,7 +93,7 @@ python3-openid==3.2.0
 pytz==2026.2
 PyYAML==6.0.3
 redis==5.2.1
-referencing==0.36.2
+referencing==0.37.0
 reportlab==4.3.1
 requests==2.34.2
 requests-oauthlib==2.0.0
