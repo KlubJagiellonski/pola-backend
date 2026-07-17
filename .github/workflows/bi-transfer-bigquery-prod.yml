@@ -2,7 +2,7 @@ name: Schedule BI Transfer (prod)
 
 on:
   schedule:
-    - cron: "22 5 1 * *"
+    - cron: "30 5 * * *"  # daily, 05:30 UTC
   workflow_dispatch: {}
 
 permissions:
