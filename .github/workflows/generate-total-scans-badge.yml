@@ -28,6 +28,8 @@ env:
   GCP_REGION: europe-west3
   GCP_IDENTITY_POOL: github
   GCP_IDENTITY_PROVIDER: pola-backend-repo
+  # Branch for committing generated badges
+  BADGE_BRANCH: badges
   # Helper to keep provider string lines short for yamllint
   # Computed later in the job to avoid long YAML lines
 
@@ -39,6 +41,18 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Switch to badge branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          branch="${BADGE_BRANCH}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git fetch origin "$branch":"$branch"
+            git checkout -B "$branch" "origin/$branch"
+          else
+            git checkout -B "$branch"
+          fi
 
       - name: Select dataset based on environment
         id: select
@@ -82,10 +96,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          branch="${GITHUB_REF_NAME}"
-
-          git checkout -B "${branch}"
+          branch="${BADGE_BRANCH}"
 
           git add docs/badges/total_scans.svg
           if git diff --cached --quiet; then
