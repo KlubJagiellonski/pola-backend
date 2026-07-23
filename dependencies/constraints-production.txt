@@ -2,8 +2,8 @@ annotated-types==0.7.0
 asgiref==3.12.1
 attrs==26.1.0
 babel==2.18.0
-boto3==1.43.53
-botocore==1.43.53
+boto3==1.43.54
+botocore==1.43.54
 certifi==2026.7.22
 cffi==2.1.0
 chardet==7.4.3
@@ -66,7 +66,7 @@ rfc3339-validator==0.1.4
 rlPyCairo==0.4.0
 rpds-py==2026.6.3
 rq==1.16.1
-s3transfer==0.19.1
+s3transfer==0.19.2
 sentry-sdk==2.66.1
 six==1.17.0
 sqlparse==0.5.5
