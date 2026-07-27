@@ -71,7 +71,7 @@ pathable==0.4.4
 pexpect==4.9.0
 pillow==12.3.0
 pluggy==1.6.0
-prompt_toolkit==3.0.52
+prompt_toolkit==3.0.53
 propcache==0.5.2
 psutil==7.2.2
 psycopg2-binary==2.9.12
