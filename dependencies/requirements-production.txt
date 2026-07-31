@@ -29,4 +29,4 @@ redis==5.2.1
 reportlab[pycairo]==4.3.1
 rq==1.16.1
 sentry-sdk==2.66.1
-tqdm==4.69.0
+tqdm==4.70.0
