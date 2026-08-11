@@ -49,7 +49,7 @@ parse==1.22.1
 pathable==0.4.4
 pillow==12.3.0
 psycopg2-binary==2.9.12
-pycairo==1.29.0
+pycairo==1.29.1
 pycparser==3.0
 pydantic==2.13.4
 pydantic_core==2.46.4
