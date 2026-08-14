@@ -108,7 +108,7 @@ sqlparse==0.5.5
 stack-data==0.6.3
 tqdm==4.70.0
 traitlets==5.16.0
-typing-inspection==0.4.2
+typing-inspection==0.4.3
 typing_extensions==4.16.0
 urllib3==2.7.0
 vcrpy==7.0.0
