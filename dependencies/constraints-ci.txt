@@ -16,7 +16,7 @@ coverage==7.15.3
 cryptography==50.0.0
 decorator==5.3.1
 defusedxml==0.7.1
-django-allauth==0.55.2
+django-allauth==65.19.1
 django-anymail==15.1
 django-autocomplete-light==3.12.1
 django-autoslug==1.9.9
