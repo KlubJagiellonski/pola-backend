@@ -27,6 +27,6 @@ psycopg2-binary==2.9.12
 pydantic==2.13.4
 redis==8.1.0
 reportlab[pycairo]==4.3.1
-rq==1.16.1
+rq==2.11.0
 sentry-sdk==2.66.1
 tqdm==4.70.0
