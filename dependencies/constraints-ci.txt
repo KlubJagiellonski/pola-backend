@@ -113,7 +113,7 @@ typing_extensions==4.16.0
 urllib3==2.7.0
 vcrpy==7.0.0
 waitress==3.0.2
-wcwidth==0.8.2
+wcwidth==0.8.3
 WebOb==1.8.11
 WebTest==3.0.7
 Werkzeug==3.1.8
