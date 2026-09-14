@@ -23,7 +23,7 @@ jsonschema==4.25.1
 openapi-core==0.20.0
 openapi-schema-validator==0.6.3
 openapi-spec-validator==0.7.2
-psycopg2-binary==2.9.12
+psycopg2-binary==2.9.13
 pydantic==2.13.4
 redis==8.1.0
 reportlab[pycairo]==4.3.1
