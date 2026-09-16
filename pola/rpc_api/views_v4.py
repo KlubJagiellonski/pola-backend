@@ -64,6 +64,7 @@ def get_by_code_internal(request, ai_supported=False, multiple_company_supported
         "title": app_configuration.donate_text,
         "url": app_configuration.donate_url,
     }
+    result["ingredients"] = product.ingredients if product is not None else None
     return result
 
 
