@@ -78,7 +78,7 @@ jobs:
         run: docker compose run web check --fail-level DEBUG -v 3
       - name: "Upload coverage"
         if: ${{ !matrix.experimental }}
-        uses: codecov/codecov-action@v7.0.0
+        uses: codecov/codecov-action@v7.1.0
         with:
           files: coverage.xml
           disable_search: true
@@ -87,7 +87,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload test results to Codecov
         if: ${{ !matrix.experimental && !cancelled() }}
-        uses: codecov/codecov-action@v7.0.0
+        uses: codecov/codecov-action@v7.1.0
         with:
           report_type: test_results
           files: junit.xml
