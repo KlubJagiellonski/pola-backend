@@ -24,7 +24,7 @@ openapi-core==0.20.0
 openapi-schema-validator==0.6.3
 openapi-spec-validator==0.7.2
 psycopg2-binary==2.9.12
-pydantic==2.13.4
+pydantic==2.13.5
 redis==8.1.0
 reportlab[pycairo]==4.3.1
 rq==1.16.1
