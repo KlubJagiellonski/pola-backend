@@ -111,7 +111,7 @@ jobs:
       - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
         uses: actions/checkout@v7
       - name: "Setup Python"
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version-file: '.python-version'
       - name: "Setup Python dependencies"
@@ -136,7 +136,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: "Setup Python"
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
@@ -264,7 +264,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: "Setup Python"
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version-file: '.python-version'
       - name: "Login to Githhub Container Registry"
