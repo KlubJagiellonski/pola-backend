@@ -158,6 +158,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 "card_type": "type_white",
                 "plScore": 70,
                 "altText": None,
+                "ingredients": None,
                 "plCapital": 100,
                 "plCapital_notes": "AAA",
                 "plWorkers": 0,
@@ -214,6 +215,7 @@ class TestGetByCodeV3(TestCase, JsonRequestMixin):
                 'altText': None,
                 'card_type': 'type_white',
                 'code': '5900049011829',
+                'ingredients': None,
                 'description': 'TEST',
                 'donate': {
                     'show_button': True,

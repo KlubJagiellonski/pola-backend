@@ -89,6 +89,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "name": c.common_name,
                 "card_type": "type_white",
                 "altText": None,
+                "ingredients": None,
                 "report": {
                     "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
                     "button_text": "Zg\u0142o\u015b",
@@ -165,6 +166,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 'name': c.common_name,
                 'card_type': 'type_white',
                 'altText': None,
+                'ingredients': None,
                 'companies': [
                     {
                         'name': c.official_name,
@@ -247,6 +249,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "name": c1.official_name,
                 "card_type": "type_white",
                 "altText": None,
+                "ingredients": None,
                 "report": {
                     "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
                     "button_text": "Zg\u0142o\u015b",
