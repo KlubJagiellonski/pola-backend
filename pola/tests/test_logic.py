@@ -489,6 +489,7 @@ class TestLogoCheck(TestCase):
         ]
         actual = [(d["code"], d["name"], d["display_name"]) for d in result["replacements"]]
         self.assertEqual(expected, actual)
+        self.assertTrue(all("origin_code" not in replacement for replacement in result["replacements"]))
 
         # Report text should remain the default (no alternatives prepended)
         expected_report_text = "Zgłoś jeśli posiadasz bardziej aktualne dane na temat tego produktu"
