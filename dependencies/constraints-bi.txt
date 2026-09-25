@@ -26,7 +26,7 @@ MarkupSafe==3.0.3
 mashumaro==3.14
 more-itertools==10.8.0
 msgpack==1.2.1
-networkx==3.6.1
+networkx==3.7
 orderly-set==5.5.0
 packaging==26.2
 parsedatetime==2.6
