@@ -60,6 +60,9 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
     product = None
 
     result['code'] = code
+    # Default high_tax flag only for REST-style responses
+    if multiple_company_supported or report_as_object:
+        result['high_tax'] = 'no'
     if not multiple_company_supported:
         result.update(DEFAULT_COMPANY_DATA)
     if code.isdigit() and (len(code) == 8 or len(code) == 13):
@@ -77,6 +80,14 @@ def get_result_from_code(code, multiple_company_supported=False, report_as_objec
             companies = list(({c.pk: c for c in companies}).values())
             result['product_id'] = product.id
             stats['was_590'] = code.startswith('590')
+            # Update high_tax if any related company's NIP is present in mgbidatamodel
+            if multiple_company_supported or report_as_object:
+                # Mark as high_tax if any related company has the flag enabled
+                try:
+                    if any(getattr(c, 'high_tax', False) for c in companies if c):
+                        result['high_tax'] = 'yes'
+                except Exception as _ex:
+                    sentry_sdk.capture_exception(_ex)
             if not product_company:
                 handle_unknown_company(code, report, result, multiple_company_supported)
             elif multiple_company_supported:

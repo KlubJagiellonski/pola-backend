@@ -13,8 +13,10 @@ class CompanyAdmin(VersionAdmin):
         'address',
         'plCapital',
         'plCapital_notes',
+        'high_tax',
     )
     search_fields = ('name',)
+    readonly_fields = ('high_tax',)
 
 
 admin.site.register(Brand, admin.ModelAdmin)

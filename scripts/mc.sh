@@ -18,11 +18,13 @@ if [ -t 0 ] ; then
   )
 fi
 
+IMAGE="pgsty/minio:latest"
+
 if [[ "$#" -eq 0 ]]; then
-  docker run "${DOCKER_ARGS[@]}" \
-    minio/mc
+  docker run --entrypoint mc "${DOCKER_ARGS[@]}" \
+    "$IMAGE"
 else
-  docker run "${DOCKER_ARGS[@]}" \
-    minio/mc \
+  docker run --entrypoint mc "${DOCKER_ARGS[@]}" \
+    "$IMAGE" \
       "${@}"
 fi

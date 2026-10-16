@@ -89,6 +89,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "name": c.common_name,
                 "card_type": "type_white",
                 "altText": None,
+                "high_tax": "no",
                 "ingredients": None,
                 "report": {
                     "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
@@ -166,6 +167,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 'name': c.common_name,
                 'card_type': 'type_white',
                 'altText': None,
+                'high_tax': 'no',
                 'ingredients': None,
                 'companies': [
                     {
@@ -249,6 +251,7 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
                 "name": c1.official_name,
                 "card_type": "type_white",
                 "altText": None,
+                "high_tax": "no",
                 "ingredients": None,
                 "report": {
                     "text": "Zg\u0142o\u015b je\u015bli posiadasz bardziej aktualne dane na temat tego produktu",
@@ -307,6 +310,18 @@ class TestGetByCodeV4(TestCase, JsonRequestMixin):
             },
             json.loads(response.content),
         )
+
+    def test_high_tax_yes_when_company_flag_true(self):
+        # Company marked as high taxpayer should yield high_tax = yes
+        c = CompanyFactory()
+        c.high_tax = True
+        c.save()
+        p = ProductFactory.create(code=5900049011829, company=c, brand=None)
+
+        response = self.json_request(self.url + f"?device_id=TEST-DEVICE-ID&code={p.code}")
+        self.assertEqual(200, response.status_code, response.content)
+        data = json.loads(response.content)
+        self.assertEqual("yes", data.get("high_tax"))
 
     @unittest.skipUnless(
         settings.PRODUKTY_W_SIECI_ENABLE,

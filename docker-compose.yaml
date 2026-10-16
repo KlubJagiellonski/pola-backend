@@ -23,9 +23,9 @@ x-pola-backend-common:
     POLA_APP_AWS_S3_AI_PICS_BUCKET_NAME: 'pola-app-ai-pics'
     POLA_APP_AWS_S3_COMPANY_LOGOTYPE_BUCKET_NAME: 'pola-app-company-logotype'
     POLA_APP_AWS_S3_WEB_BUCKET_NAME: 'pola-web-public'
-    POLA_APP_AWS_S3_ENDPOINT_URL: 'http://minio:9000' # Używane do komunikacji backendowej Django -> Minio
-    POLA_APP_AWS_S3_CUSTOM_DOMAIN: '${POLA_APP_AWS_S3_CUSTOM_DOMAIN:-localhost:9000}' # Domena publiczna dla Minio
-    POLA_APP_AWS_LOCATION: '${POLA_APP_AWS_LOCATION:-pola-app-public}' # Prefiks ścieżki w URL i w Minio bucket
+    POLA_APP_AWS_S3_ENDPOINT_URL: 'http://minio:9000'  # Używane do komunikacji backendowej Django -> Minio
+    POLA_APP_AWS_S3_CUSTOM_DOMAIN: '${POLA_APP_AWS_S3_CUSTOM_DOMAIN:-localhost:9000}'  # Domena publiczna dla Minio
+    POLA_APP_AWS_LOCATION: '${POLA_APP_AWS_LOCATION:-pola-app-public}'  # Prefiks ścieżki w URL i w Minio bucket
 
   env_file: .env
   volumes:
@@ -85,7 +85,7 @@ services:
     command: sh -c "npm install && npm run build"
 
   minio:
-    image: quay.io/minio/minio:latest
+    image: pgsty/minio:latest
     restart: always
     ports:
       - 9000:9000
@@ -106,7 +106,7 @@ services:
       retries: 3
 
   minio-init:
-    image: quay.io/minio/mc:latest
+    image: pgsty/minio:latest
     environment:
       MC_HOST_local: 'http://minio:minio123@minio:9000/'
     restart: "no"
