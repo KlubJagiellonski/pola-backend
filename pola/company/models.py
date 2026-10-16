@@ -118,6 +118,8 @@ class Company(TimeStampedModel):
     address = models.TextField(null=True, blank=True, verbose_name=_("Adres"))
     query_count = models.PositiveIntegerField(null=False, default=0, db_index=True)
 
+    high_tax = models.BooleanField(default=False)
+
     logotype = ResizedImageField(
         _("Logotyp"),
         upload_to='logo/%Y/%m/%d',

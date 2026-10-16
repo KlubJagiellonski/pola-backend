@@ -265,6 +265,10 @@ components:
                 type: string
               code:
                 type: string
+              high_tax:
+                description: Whether the producing company is among highest paying taxpayers (mgbidatamodel)
+                type: string
+                enum: ["yes", "no"]
               ingredients:
                 description: |
                   Classification of product ingredients ("Surowce").
