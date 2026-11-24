@@ -18,8 +18,18 @@ class NullProductFilter(django_filters.Filter):
         return qs
 
 
+class HasReplacementsFilter(django_filters.Filter):
+    field_class = forms.BooleanField
+
+    def filter(self, qs, value):
+        if value:
+            return qs.filter(replacements__isnull=False).distinct()
+        return qs
+
+
 class ProductFilter(CrispyFilterMixin, django_filters.FilterSet):
     company_empty = NullProductFilter(label="Tylko produkty bez producenta")
+    has_replacements = HasReplacementsFilter(label="Tylko produkty z zamiennikami")
 
     company = django_filters.ModelChoiceFilter(
         queryset=Company.objects.all(), widget=autocomplete.ModelSelect2(url='company:company-autocomplete')
