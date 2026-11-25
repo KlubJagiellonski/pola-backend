@@ -63,6 +63,7 @@ LOCAL_APPS = (
     'pola.rpc_api',
     'pola.bi_export',
     'pola.social',
+    'pola.openfoodfacts',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
