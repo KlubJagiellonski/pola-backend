@@ -280,6 +280,6 @@ class LocalFileTests(unittest.TestCase):
 
 class FetchTextTests(unittest.TestCase):
     def test_fetch_text_decodes_utf8(self):
-        script = _Script([_Body('mleko'.encode())])
+        script = _Script([_Body(b'mleko')])
         with mock.patch('pola.openfoodfacts.http.urllib.request.urlopen', side_effect=script):
             self.assertEqual(fetch_text(URL), 'mleko')
