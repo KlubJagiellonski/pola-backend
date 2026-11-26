@@ -26,6 +26,8 @@ Poczatkowo baza jest pusta, wiec konieczne jest przeprowadzenie migracji:
 
     docker compose run web migrate
 
+Migracja tworzy schemat ``openfoodfacts`` w tej samej bazie. Nie pobiera katalogu Open Food Facts.
+
 Zaimportuj dane GPC
 
 .. code-block:: bash
@@ -37,6 +39,8 @@ Zapełnij baze danych przykładowymi danymi:
 .. code-block:: bash
 
     docker compose run web populate_db
+
+Ta komenda dodaje 100 przykładowych produktów do ``openfoodfacts.product``.
 
 Warto również utworzyć konto administratora w systemie:
 

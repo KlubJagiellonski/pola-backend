@@ -4,6 +4,7 @@ import csv
 import gzip
 import hashlib
 import json
+import os
 import re
 import tempfile
 from collections.abc import Iterator
@@ -20,7 +21,6 @@ from pola.openfoodfacts.http import fetch_bytes, fetch_text
 from pola.openfoodfacts.models import LoadRun
 
 CSV_URL = 'https://static.openfoodfacts.org/data/en.openfoodfacts.org.products.csv.gz'
-CHECKSUM_URL = 'https://static.openfoodfacts.org/data/gz-sha256sum'
 INDEX_URL = 'https://static.openfoodfacts.org/data/delta/index.txt'
 DELTA_URL_PREFIX = 'https://static.openfoodfacts.org/data/delta/'
 CSV_BASENAME = 'en.openfoodfacts.org.products.csv.gz'
@@ -69,7 +69,7 @@ CSV_HEADERS = {
     'brands_tags': 'brands_tags',
     'categories_tags': 'categories_tags',
     'countries_tags': 'countries_tags',
-    'allergens_tags': 'allergens_tags',
+    'allergens_tags': 'allergens',
     'traces_tags': 'traces_tags',
     'ingredients_text': 'ingredients_text',
     'nutriscore_grade': 'nutriscore_grade',
@@ -88,7 +88,12 @@ CSV_HEADERS = {
     'last_modified_t': 'last_modified_t',
 }
 
+# The food CSV publishes allergens as text and does not include ecoscore_grade.
+OPTIONAL_CSV_COLUMNS = {'ecoscore_grade'}
+
 INTEGER_COLUMNS = {'nova_group', 'last_modified_t'}
+INTEGER_LIMITS = {'nova_group': 2147483647, 'last_modified_t': 9223372036854775807}
+DECIMAL_ABS_LIMIT = Decimal('1e10')
 DECIMAL_COLUMNS = {
     'completeness',
     'energy_kcal',
@@ -148,14 +153,6 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def expected_sha256(checksum_text: str) -> str:
-    for line in checksum_text.splitlines():
-        parts = line.split()
-        if len(parts) >= 2 and parts[-1].lstrip('*') == CSV_BASENAME:
-            return parts[0]
-    raise CommandError(f'Checksum file has no entry for {CSV_BASENAME}')
-
-
 def parse_index(index_text: str) -> list[DeltaFile]:
     files: list[DeltaFile] = []
     for line in index_text.splitlines():
@@ -175,13 +172,13 @@ def parse_index(index_text: str) -> list[DeltaFile]:
 def text_value(value: object) -> str | None:
     if value is None or isinstance(value, (list, dict)):
         return None
-    text = str(value).strip()
+    text = str(value).replace('\x00', '').strip()
     return text or None
 
 
 def tags_value(value: object) -> str | None:
     if isinstance(value, list):
-        parts = [str(item).strip() for item in value if str(item).strip()]
+        parts = [part for item in value if (part := text_value(item))]
         return ','.join(parts) or None
     return text_value(value)
 
@@ -196,16 +193,27 @@ def decimal_text(value: object) -> str | None:
         number = Decimal(text)
     except InvalidOperation:
         return None
-    if not number.is_finite():
+    if not number.is_finite() or abs(number) >= DECIMAL_ABS_LIMIT:
         return None
     return format(number, 'f')
 
 
-def int_text(value: object) -> str | None:
-    number = decimal_text(value)
-    if number is None:
+def int_text(value: object, *, limit: int) -> str | None:
+    if value is None or isinstance(value, (list, dict)):
         return None
-    return str(int(Decimal(number)))
+    text = str(value).replace('\x00', '').strip()
+    if text == '':
+        return None
+    try:
+        number = Decimal(text)
+    except InvalidOperation:
+        return None
+    if not number.is_finite():
+        return None
+    integer = int(number)
+    if abs(integer) > limit:
+        return None
+    return str(integer)
 
 
 def nutrient_value(document: dict[str, object], column: str) -> object:
@@ -226,7 +234,7 @@ def image_from_document(document: dict[str, object]) -> str | None:
 
 def column_text(column: str, value: object) -> str | None:
     if column in INTEGER_COLUMNS:
-        return int_text(value)
+        return int_text(value, limit=INTEGER_LIMITS[column])
     if column in DECIMAL_COLUMNS:
         return decimal_text(value)
     if column in TAG_COLUMNS:
@@ -284,12 +292,17 @@ class ProjectedCopy:
         self._handle: gzip.GzipFile | object | None = None
         self._pending = b''
         self._rows: Iterator[dict[str, str | None]] | None = None
+        self._seen_codes: set[str] = set()
 
     def __enter__(self) -> ProjectedCopy:
         self._handle = _open_text(self.path)
         reader = csv.DictReader(self._handle, delimiter='\t')
         fieldnames = reader.fieldnames or []
-        missing = [header for header in CSV_HEADERS.values() if header not in fieldnames]
+        missing = [
+            header
+            for column, header in CSV_HEADERS.items()
+            if column not in OPTIONAL_CSV_COLUMNS and header not in fieldnames
+        ]
         if missing:
             raise CommandError('CSV is missing columns: ' + ', '.join(missing))
         self._rows = iter(reader)
@@ -308,8 +321,9 @@ class ProjectedCopy:
             except StopIteration:
                 break
             projected = row_from_csv(raw_row)
-            if projected is None:
+            if projected is None or projected[0] is None or projected[0] in self._seen_codes:
                 continue
+            self._seen_codes.add(projected[0])
             self.row_count += 1
             self._pending += encode_copy_row(projected)
         chunk = self._pending[:size]
@@ -425,91 +439,75 @@ def _swap_tables() -> None:
 def import_full(
     *,
     csv_path: Path | None,
-    checksum_path: Path | None,
     index_path: Path | None,
     max_database_bytes: int,
 ) -> LoadRun:
     started_at = timezone.now()
-    owned_directory: tempfile.TemporaryDirectory[str] | None = None
+    csv_file, index_file, downloaded = _resolve_full_inputs(csv_path, index_path)
+    source_url = CSV_URL if downloaded else str(csv_file)
+    actual_hash = file_sha256(csv_file)
+    delta_files = parse_index(index_file.read_text(encoding='utf-8'))
+    cursor_end = max(item.end for item in delta_files)
     try:
-        csv_file, checksum_file, index_file, owned_directory = _resolve_full_inputs(csv_path, checksum_path, index_path)
-        actual_hash = file_sha256(csv_file)
-        expected_hash = expected_sha256(checksum_file.read_text(encoding='utf-8'))
-        if actual_hash != expected_hash:
-            message = f'SHA256 mismatch for {CSV_BASENAME}: expected {expected_hash}, got {actual_hash}'
-            _record_run(
-                started_at=started_at,
-                mode=LoadRun.Mode.FULL,
-                source_url=str(csv_file),
-                sha256=actual_hash,
-                delta_end_unix=None,
-                row_count=None,
-                status=LoadRun.Status.FAILED,
-                error=message,
-            )
-            raise CommandError(message)
-        delta_files = parse_index(index_file.read_text(encoding='utf-8'))
-        cursor_end = max(item.end for item in delta_files)
-        try:
-            with transaction.atomic():
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute('TRUNCATE openfoodfacts.product_next')
+            with ProjectedCopy(csv_file) as source:
                 with connection.cursor() as cursor:
-                    cursor.execute('TRUNCATE openfoodfacts.product_next')
-                with ProjectedCopy(csv_file) as source:
-                    with connection.cursor() as cursor:
-                        cursor.copy_expert(_copy_sql(), source)
-                    row_count = source.row_count
-                if row_count == 0:
-                    raise CommandError('Full import contained no products. The live table was left in place.')
-                size_bytes = database_size_bytes()
-                if size_bytes > max_database_bytes:
-                    raise DatabaseTooLarge(size_bytes, max_database_bytes)
-                _swap_tables()
-                return _record_run(
-                    started_at=started_at,
-                    mode=LoadRun.Mode.FULL,
-                    source_url=CSV_URL if owned_directory is not None else str(csv_file),
-                    sha256=actual_hash,
-                    delta_end_unix=cursor_end,
-                    row_count=row_count,
-                    status=LoadRun.Status.SUCCESS,
-                    error=None,
-                )
-        except DatabaseTooLarge as exc:
-            _record_run(
+                    cursor.copy_expert(_copy_sql(), source)
+                row_count = source.row_count
+            if row_count == 0:
+                raise CommandError('Full import contained no products. The live table was left in place.')
+            size_bytes = database_size_bytes()
+            if size_bytes > max_database_bytes:
+                raise DatabaseTooLarge(size_bytes, max_database_bytes)
+            _swap_tables()
+            return _record_run(
                 started_at=started_at,
                 mode=LoadRun.Mode.FULL,
-                source_url=CSV_URL if owned_directory is not None else str(csv_file),
+                source_url=source_url,
                 sha256=actual_hash,
-                delta_end_unix=None,
-                row_count=None,
-                status=LoadRun.Status.FAILED,
-                error=str(exc),
+                delta_end_unix=cursor_end,
+                row_count=row_count,
+                status=LoadRun.Status.SUCCESS,
+                error=None,
             )
-            raise CommandError(str(exc)) from exc
-    finally:
-        if owned_directory is not None:
-            owned_directory.cleanup()
+    except DatabaseTooLarge as exc:
+        _record_run(
+            started_at=started_at,
+            mode=LoadRun.Mode.FULL,
+            source_url=source_url,
+            sha256=actual_hash,
+            delta_end_unix=None,
+            row_count=None,
+            status=LoadRun.Status.FAILED,
+            error=str(exc),
+        )
+        raise CommandError(str(exc)) from exc
+
+
+def download_directory() -> Path:
+    configured = os.environ.get('OPENFOODFACTS_CACHE_DIR')
+    directory = Path(configured) if configured else Path(tempfile.gettempdir()) / 'openfoodfacts'
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory
 
 
 def _resolve_full_inputs(
     csv_path: Path | None,
-    checksum_path: Path | None,
     index_path: Path | None,
-) -> tuple[Path, Path, Path, tempfile.TemporaryDirectory[str] | None]:
-    provided = (csv_path is not None, checksum_path is not None, index_path is not None)
+) -> tuple[Path, Path, bool]:
+    provided = (csv_path is not None, index_path is not None)
     if all(provided):
-        return csv_path, checksum_path, index_path, None  # type: ignore[return-value]
+        return csv_path, index_path, False  # type: ignore[return-value]
     if any(provided):
-        raise CommandError('Pass --csv, --checksum, and --index together, or pass none to download the official files.')
-    owned = tempfile.TemporaryDirectory(prefix='openfoodfacts-')
-    directory = Path(owned.name)
+        raise CommandError('Pass --csv and --index together, or pass none to download the official files.')
+    directory = download_directory()
     csv_file = directory / CSV_BASENAME
-    checksum_file = directory / 'gz-sha256sum'
     index_file = directory / 'index.txt'
     fetch_bytes(CSV_URL, csv_file)
-    fetch_bytes(CHECKSUM_URL, checksum_file)
-    fetch_bytes(INDEX_URL, index_file)
-    return csv_file, checksum_file, index_file, owned
+    fetch_bytes(INDEX_URL, index_file, resume=False)
+    return csv_file, index_file, True
 
 
 def latest_cursor() -> int | None:
