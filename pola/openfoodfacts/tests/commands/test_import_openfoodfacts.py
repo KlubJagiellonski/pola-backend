@@ -11,7 +11,12 @@ from django.core.management import CommandError, call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from pola.openfoodfacts.loading import CSV_HEADERS, CSV_URL, INDEX_URL, OPTIONAL_CSV_COLUMNS
+from pola.openfoodfacts.loading import (
+    CSV_HEADERS,
+    CSV_URL,
+    INDEX_URL,
+    OPTIONAL_CSV_COLUMNS,
+)
 from pola.openfoodfacts.models import LoadRun, Product, ProductNext
 
 INDEX_TEXT = 'openfoodfacts_products_100_200.json.gz\n' 'openfoodfacts_products_200_300.json.gz\n'
@@ -117,6 +122,7 @@ class ImportOpenFoodFactsTests(TestCase):
             self._write_delta(
                 directory / 'openfoodfacts_products_100_200.json.gz',
                 [
+                    {'product_name': 'skip-me'},
                     {'code': '111', 'product_name': 'from-first'},
                     {'code': '222', 'product_name': 'created', 'brands_tags': ['en:a', 'en:b']},
                 ],
@@ -181,6 +187,107 @@ class ImportOpenFoodFactsTests(TestCase):
 
         self.assertEqual(Product.objects.get().product_name, 'stay')
         self.assertFalse(Product.objects.filter(code='999').exists())
+
+    def test_full_import_with_no_products_leaves_the_live_table(self):
+        Product.objects.create(code='keep', product_name='stay')
+        with self._full_files([self._csv_row(code=' ', product_name='Nope')]) as paths:
+            with self.assertRaisesRegex(CommandError, 'no products'):
+                call_command('import_openfoodfacts_full', csv=paths['csv'], index=paths['index'])
+
+        self.assertEqual(Product.objects.get().product_name, 'stay')
+        self.assertFalse(LoadRun.objects.exists())
+
+    def test_csv_and_index_must_be_passed_together(self):
+        with self.assertRaisesRegex(CommandError, 'together'):
+            call_command('import_openfoodfacts_full', csv='products.csv.gz')
+        with self.assertRaisesRegex(CommandError, 'together'):
+            call_command('import_openfoodfacts_full', index='index.txt')
+
+    def test_delta_already_applied_records_zero_rows(self):
+        self._cursor(300)
+        Product.objects.create(code='keep', product_name='stay')
+        with self._delta_dir() as directory:
+            call_command('import_openfoodfacts_delta', index=directory / 'index.txt', delta_dir=directory)
+
+        self.assertEqual(Product.objects.get().product_name, 'stay')
+        run = LoadRun.objects.order_by('id').last()
+        self.assertEqual(run.row_count, 0)
+        self.assertEqual(run.delta_end_unix, 300)
+        self.assertEqual(run.status, LoadRun.Status.SUCCESS)
+
+    def test_missing_delta_file_is_recorded(self):
+        self._cursor(100)
+        with self._delta_dir() as directory:
+            with self.assertRaisesRegex(CommandError, 'Missing delta file'):
+                call_command('import_openfoodfacts_delta', index=directory / 'index.txt', delta_dir=directory)
+
+        run = LoadRun.objects.get(status=LoadRun.Status.FAILED)
+        self.assertIn('Missing delta file', run.error)
+
+    def test_empty_delta_file_records_zero_rows(self):
+        self._cursor(100)
+        with self._delta_dir() as directory:
+            empty = gzip.compress(b'\n')
+            (directory / 'openfoodfacts_products_100_200.json.gz').write_bytes(empty)
+            (directory / 'openfoodfacts_products_200_300.json.gz').write_bytes(empty)
+            call_command('import_openfoodfacts_delta', index=directory / 'index.txt', delta_dir=directory)
+
+        counts = list(
+            LoadRun.objects.filter(mode=LoadRun.Mode.DELTA, status=LoadRun.Status.SUCCESS)
+            .order_by('id')
+            .values_list('row_count', flat=True)
+        )
+        self.assertEqual(counts, [0, 0])
+
+    def test_invalid_delta_json_is_recorded(self):
+        self._cursor(200)
+        with self._delta_dir() as directory:
+            (directory / 'openfoodfacts_products_200_300.json.gz').write_bytes(gzip.compress(b'{\n'))
+            with self.assertRaisesRegex(CommandError, 'Invalid delta JSON'):
+                call_command('import_openfoodfacts_delta', index=directory / 'index.txt', delta_dir=directory)
+
+        self.assertTrue(LoadRun.objects.filter(status=LoadRun.Status.FAILED).exists())
+
+    def test_delta_fetches_the_index_when_it_is_not_local(self):
+        self._cursor(300)
+        with (
+            mock.patch('pola.openfoodfacts.loading.fetch_text', return_value=INDEX_TEXT) as fetch_text,
+            mock.patch('pola.openfoodfacts.loading.fetch_bytes', side_effect=AssertionError('csv downloaded')),
+        ):
+            call_command('import_openfoodfacts_delta')
+
+        fetch_text.assert_called_once_with(INDEX_URL)
+        run = LoadRun.objects.order_by('id').last()
+        self.assertEqual(run.row_count, 0)
+        self.assertEqual(run.status, LoadRun.Status.SUCCESS)
+
+    def test_delta_download_reads_the_official_url(self):
+        self._cursor(100)
+
+        def fetch(url: str, dest: Path, **_kwargs: object) -> None:
+            if url.endswith('openfoodfacts_products_100_200.json.gz'):
+                payload = '{"code": "111", "product_name": "from-url"}\n'
+            elif url.endswith('openfoodfacts_products_200_300.json.gz'):
+                payload = '{"code": "111", "product_name": "from-second-url"}\n'
+            else:
+                raise AssertionError(url)
+            dest.write_bytes(gzip.compress(payload.encode()))
+
+        with self._delta_dir() as directory:
+            with mock.patch('pola.openfoodfacts.loading.fetch_bytes', side_effect=fetch):
+                call_command('import_openfoodfacts_delta', index=directory / 'index.txt')
+
+        self.assertEqual(Product.objects.get().product_name, 'from-second-url')
+
+    def test_delta_download_failure_is_recorded(self):
+        self._cursor(100)
+        with self._delta_dir() as directory:
+            with mock.patch('pola.openfoodfacts.loading.fetch_bytes', side_effect=OSError('disk')):
+                with self.assertRaises(OSError):
+                    call_command('import_openfoodfacts_delta', index=directory / 'index.txt')
+
+        run = LoadRun.objects.get(status=LoadRun.Status.FAILED)
+        self.assertIn('disk', run.error)
 
     def _cursor(self, delta_end_unix: int) -> None:
         now = timezone.now()
