@@ -3,6 +3,7 @@ from django.db import IntegrityError
 
 from pola.company.factories import CompanyFactory
 from pola.company.models import Company
+from pola.openfoodfacts.samples import delete_samples, load_samples
 from pola.product.factories import ProductFactory
 from pola.product.models import Product
 from pola.report.factories import (
@@ -29,6 +30,7 @@ class Command(BaseCommand):
             Company.objects.all().delete()
             Product.objects.all().delete()
             Report.objects.all().delete()
+            delete_samples()
             self.stdout.write(self.style.SUCCESS('Successfully emptied the database'))
         else:
             try:
@@ -50,6 +52,8 @@ class Command(BaseCommand):
                 )
                 ReportFactory.create(product=product)
                 self.stdout.write(self.style.SUCCESS(f"Product with user and bot report: {product.name}"))
+                sample_count = load_samples()
+                self.stdout.write(self.style.SUCCESS(f'Loaded {sample_count} Open Food Facts sample products'))
                 self.stdout.write(self.style.SUCCESS('Successfully populated the database'))
             except IntegrityError:
                 self.stdout.write(

@@ -10,3 +10,5 @@
 !package.json
 !package-lock.json
 !gulpfile.esm.js
+# import_gdc seed. Local compose and tests read it from the bind mount.
+pola/gpc/fixtures/*.xml

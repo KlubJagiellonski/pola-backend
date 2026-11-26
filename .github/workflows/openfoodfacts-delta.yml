@@ -1,0 +1,33 @@
+---
+name: Open Food Facts delta
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ORGANIZATION: ${{ github.repository_owner }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  delta:
+    name: Apply Open Food Facts deltas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+      - name: Authenticate Heroku CLI
+        run: |
+          echo "$HEROKU_API_KEY" | heroku auth:token
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+      - name: Apply delta files on pola-staging
+        run: |
+          heroku run --exit-code --no-tty -a pola-staging -- python manage.py import_openfoodfacts_delta
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
