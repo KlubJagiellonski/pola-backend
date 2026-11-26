@@ -57,6 +57,30 @@ class TestProductListView(PermissionMixin, WebTestMixin, TestCase):
         page2 = page.click("Następne")
         page2.click("Poprzednie")
 
+    def test_filter_products_with_replacements(self):
+        product = ProductFactory(name='Product with replacements')
+        replacement, another_replacement = ProductFactory.create_batch(2)
+        product.replacements.add(replacement, another_replacement)
+        self.login()
+
+        response = self.client.get(self.url, {'has_replacements': 'on'})
+
+        self.assertContains(response, 'Tylko produkty z zamiennikami')
+        self.assertQuerySetEqual(response.context['object_list'], [product])
+
+        response = self.client.get(self.url, {'has_replacements': 'on', 'name__icontains': 'missing'})
+        self.assertQuerySetEqual(response.context['object_list'], [])
+
+    def test_replacements_filter_unchecked_shows_all_products(self):
+        product, replacement = ProductFactory.create_batch(2)
+        product.replacements.add(replacement)
+        self.login()
+
+        for params in ({}, {'has_replacements': ''}):
+            with self.subTest(params=params):
+                response = self.client.get(self.url, params)
+                self.assertCountEqual(response.context['object_list'], [product, replacement])
+
 
 class TestProductCreate(PermissionMixin, TemplateUsedMixin, TestCase):
     url = reverse_lazy('product:create')
