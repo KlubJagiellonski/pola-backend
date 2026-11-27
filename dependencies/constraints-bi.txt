@@ -39,7 +39,7 @@ python-dateutil==2.9.0.post0
 python-slugify==8.0.4
 pytimeparse==1.1.8
 pytz==2026.3.post1
-PyYAML==6.0.3
+PyYAML==6.0.4
 referencing==0.37.0
 requests==2.34.2
 rpds-py==2026.6.3
